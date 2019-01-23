@@ -1,0 +1,60 @@
+//
+//  Prateek, a library that is "bien pratique"
+//
+//  Copyright © 2017—2018 Benjamin “Touky” Huet <huet.benjamin@gmail.com>
+//
+//  Prateek is free software. It comes without any warranty, to
+//  the extent permitted by applicable law. You can redistribute it
+//  and/or modify it under the terms of the Do What the Fuck You Want
+//  to Public License, Version 2, as published by the WTFPL Task Force.
+//  See http://www.wtfpl.net/ for more details.
+//
+
+#region Namespaces
+#if UNITY_EDITOR && !PRATEEK_DEBUG
+#define PRATEEK_DEBUG
+#endif //UNITY_EDITOR && !PRATEEK_DEBUG
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Serialization;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif //UNITY_EDITOR
+
+#if UNITY_PROFILING
+using UnityEngine.Profiling;
+#endif //UNITY_PROFILING
+
+using Prateek;
+using Prateek.Base;
+using Prateek.Helpers;
+using Prateek.Attributes;
+
+#if PRATEEK_DEBUG
+using Prateek.Debug;
+#endif //PRATEEK_DEBUG
+#endregion Namespaces
+
+//-----------------------------------------------------------------------------
+namespace Prateek.Extensions
+{
+    //-------------------------------------------------------------------------
+    public static partial class VectorExt
+    {
+		PRTK_CODEGEN_STARTS_HERE
+        PRTK_SWIZZLE_DEFINITION(Vector2, x, y)
+        PRTK_SWIZZLE_DEFINITION(Vector3, x, y, z)
+        PRTK_SWIZZLE_DEFINITION(Vector4, x, y, z, w)
+        PRTK_SWIZZLE_INIT(float, 0)
+        //---------------------------------------------------------------------
+		#region Swizzle PRTK_SRC_CLASS
+		public static PRTK_DST_CLASS PRTK_SWIZZLE_CALL(this PRTK_SRC_CLASS PRTK_SWIZZLE_ARGS) { return new PRTK_DST_CLASS(PRTK_SWIZZLE_VARS); }
+		#endregion Swizzle PRTK_SRC_CLASS
+
+		PRTK_CODEGEN_STOPS_HERE
+    }
+}
