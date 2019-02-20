@@ -208,6 +208,15 @@ namespace Prateek.Helpers
         }
 
         //---------------------------------------------------------------------
+        public static string RemoveExtension(this string left)
+        {
+            var index = left.LastIndexOf(fileExtension[0]);
+            if (index < 0)
+                return left;
+            return left.Substring(0, index);
+        }
+
+        //---------------------------------------------------------------------
         public static string TextParse(this string left)
         {
             return left + textParse[0];
