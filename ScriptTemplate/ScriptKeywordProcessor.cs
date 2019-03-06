@@ -1,8 +1,59 @@
-﻿// Tips from https://forum.unity3d.com/threads/c-script-template-how-to-make-custom-changes.273191/
-using UnityEngine;
-using UnityEditor;
+// -BEGIN_PRATEEK_COPYRIGHT-
+//
+//  Prateek, a library that is "bien pratique"
+//  Header last update date: 05/03/19
+//
+//  Copyright © 2017—2019 Benjamin "Touky" Huet <huet.benjamin@gmail.com>
+//
+//  Prateek is free software. It comes without any warranty, to
+//  the extent permitted by applicable law. You can redistribute it
+//  and/or modify it under the terms of the Do What the Fuck You Want
+//  to Public License, Version 2, as published by the WTFPL Task Force.
+//  See http://www.wtfpl.net/ for more details.
+//
+// -END_PRATEEK_COPYRIGHT-
+
+// -BEGIN_PRATEEK_CSHARP_NAMESPACE-
+//
+#region C# Prateek Namespaces
+#if UNITY_EDITOR && !PRATEEK_DEBUG
+#define PRATEEK_DEBUG
+#endif //UNITY_EDITOR && !PRATEEK_DEBUG
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Serialization;
+using Unity.Collections;
+using Unity.Jobs;
+using UnityEngine.Jobs;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif //UNITY_EDITOR
+
+#if UNITY_PROFILING
+using UnityEngine.Profiling;
+#endif //UNITY_PROFILING
+
+using Prateek;
+using Prateek.Base;
+using Prateek.Extensions;
+using Prateek.Helpers;
+using Prateek.Attributes;
+
+#if PRATEEK_DEBUGS
+using Prateek.Debug;
+#endif //PRATEEK_DEBUG
+#endregion C# Prateek Namespaces
+//
+// -END_PRATEEK_CSHARP_NAMESPACE-
+
+//-----------------------------------------------------------------------------
+#region File namespaces
+using System.IO;
+#endregion File namespaces
 
 namespace ScriptTemplating
 {
@@ -29,7 +80,7 @@ namespace ScriptTemplating
                 for (int c = 0; c < content.Length; c++)
                 {
                     if (c > 0)
-                        data.content += "\n";
+                        data.content = data.content.NewLine(true);
                     data.content += content[c];
                 }
                 return data;
@@ -46,8 +97,6 @@ namespace ScriptTemplating
         public struct Keyword
         {
             public string extension;
-            public Vector2Int refUpdate;
-            public Vector2Int bakUpdate;
             public string keyword;
             public List<string> lines;
 
@@ -60,7 +109,7 @@ namespace ScriptTemplating
                     for (int c = 0; c < lines.Count; c++)
                     {
                         if (c > 0)
-                            result += "\n";
+                            result = result.NewLine(true);
                         result += lines[c];
                     }
                     return result;
@@ -71,23 +120,37 @@ namespace ScriptTemplating
             public Keyword(Keyword other)
             {
                 extension = other.extension;
-                refUpdate = other.refUpdate;
-                bakUpdate = other.bakUpdate;
                 keyword = other.keyword;
                 lines = other.lines;
+            }
+
+            //-----------------------------------------------------------------
+            public int IndexOf(string content, ref int end)
+            {
+                end = -1;
+                if (lines.Count == 0)
+                    return -1;
+
+                var start = content.IndexOf(lines[0]);
+                var startb = content.IndexOf("\"" + lines[0] + "\"");
+                if (start >= 0 && (start != startb + 1 || startb < 0))
+                {
+                    end = content.IndexOf(lines[lines.Count - 1]);
+                    var endb = content.IndexOf("\"" + lines[lines.Count - 1] + "\"");
+                    if (end < 0 || (end == endb + 1 && endb >= 0))
+                        return -1;
+
+                    end += lines[lines.Count - 1].Length;
+                    return start;
+                }
+
+                return -1;
             }
 
             //-----------------------------------------------------------------
             public Keyword SetKeyword(string keyword)
             {
                 return new Keyword(this) { keyword = keyword };
-            }
-
-            //-----------------------------------------------------------------
-            public Keyword SetUpdateIndex(int refStart, int refEnd, int bakStart, int bakEnd)
-            {
-                return new Keyword(this) { refUpdate = new Vector2Int(refStart, refEnd),
-                                           bakUpdate = new Vector2Int(bakStart, bakEnd) };
             }
 
             //-----------------------------------------------------------------
@@ -186,30 +249,113 @@ namespace ScriptTemplating
                 return;
 
             fileContent = fileContent.Replace("#SCRIPTNAME#", fileName);
-            for (int r = 0; r < keywordReplacements.Count; r++)
-            {
-                var replacement = keywordReplacements[r];
-                var keyword = string.Format("#{0}#", replacement.keyword);
-                if ((replacement.extension == string.Empty || replacement.extension == fileExtension)
-                    && fileContent.Contains(keyword))
-                {
-                    fileContent = fileContent.Replace(keyword, replacement.Content);
-                    r = -1;
-                }
-            }
+            ApplyKeywords(ref fileContent, fileExtension);
 
             System.IO.File.WriteAllText(path, fileContent);
             AssetDatabase.Refresh();
         }
 
         //---------------------------------------------------------------------
-        [MenuItem("Prateek/Update templates")]
+        private static void ApplyKeywords(ref string fileContent, string fileExtension)
+        {
+            for (int r = 0; r < keywordReplacements.Count; r++)
+            {
+                var replacement = keywordReplacements[r];
+                var keyword = string.Format("#{0}#", replacement.keyword);
+                if (replacement.extension == string.Empty || replacement.extension == fileExtension)
+                {
+                    var keywordb = "\"" + keyword + "\"";
+                    var start = fileContent.IndexOf(keyword);
+                    var startb = fileContent.IndexOf(keywordb);
+                    while (start >= 0)
+                    {
+                        if (start != startb + 1 || startb < 0)
+                        {
+                            fileContent = fileContent.Substring(0, start)
+                                        + replacement.Content
+                                        + fileContent.Substring(start + keyword.Length);
+                            r = -1;
+                        }
+
+                        start += keyword.Length;
+                        startb = fileContent.IndexOf(keywordb, start);
+                        start = fileContent.IndexOf(keyword, start);
+                    }
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------
+#if PRATEEK_ALLOW_INTERNAL_TOOLS
+        [MenuItem("Prateek/Internal/Update prateek templates")]
         private static void UpdateTemplate()
         {
-            var path = Application.dataPath + "/Scripts";
-            if (!System.IO.Directory.Exists(path))
+            var path = Application.dataPath;
+            if (!Directory.Exists(path))
                 return;
+
+            var files = new List<string>();
+            var directories = new List<string>(Directory.GetDirectories(path));
+            while (directories.Count > 0)
+            {
+                var directory = directories[0];
+                {
+                    directories.AddRange(Directory.GetDirectories(directory));
+                    files.AddRange(Directory.GetFiles(directory));
+                }
+                directories.RemoveAt(0);
+            }
+
+            for (int f = 0; f < files.Count; f++)
+            {
+                var file = files[f];
+                if (file.EndsWith(".meta"))
+                    continue;
+
+                int index = file.LastIndexOf(".");
+                if (index < 0)
+                    continue;
+
+                bool isValid = false;
+                var fileExtension = file.Substring(index);
+                for (int r = 0; r < keywordReplacements.Count; r++)
+                {
+                    var replacement = keywordReplacements[r];
+                    if (replacement.extension != fileExtension)
+                        continue;
+
+                    isValid = true;
+                    break;
+                }
+
+                if (!isValid)
+                    continue;
+
+                var fileContent = File.ReadAllText(file);
+                for (int r = 0; r < keywordReplacements.Count; r++)
+                {
+                    var replacement = keywordReplacements[r];
+                    if (replacement.extension != fileExtension)
+                        continue;
+
+                    var end = -1;
+                    var start = replacement.IndexOf(fileContent, ref end);
+                    if (start < 0)
+                        continue;
+
+                    fileContent = fileContent.Substring(0, start)
+                                + replacement.Content
+                                + fileContent.Substring(end);
+                }
+
+                ApplyKeywords(ref fileContent, fileExtension);
+
+                File.WriteAllText(file, fileContent);
+            }
+
+            AssetDatabase.Refresh();
         }
+#endif //PRATEEK_ALLOW_INTERNAL_TOOLS
     }
 
     //-------------------------------------------------------------------------
@@ -220,14 +366,13 @@ namespace ScriptTemplating
         {
             NewKeyword(".cs")
             .SetKeyword("PRATEEK_COPYRIGHT")
-            .SetUpdateIndex(0, 0, 2, -2)
             .SetContent(
 "// -BEGIN_PRATEEK_COPYRIGHT-",
 "//",
 "//  Prateek, a library that is \"bien pratique\"",
-"//  #PRATEEK_DATE_UPDATE#",
+"//  Header last update date: 05/03/19",
 "//",
-"//  Copyright © 2017—#PRATEEK_DATE_YEAR# Benjamin \"Touky\" Huet <huet.benjamin@gmail.com>",
+"//  Copyright © 2017—2019 Benjamin \"Touky\" Huet <huet.benjamin@gmail.com>",
 "//",
 "//  Prateek is free software. It comes without any warranty, to",
 "//  the extent permitted by applicable law. You can redistribute it",
@@ -240,13 +385,11 @@ namespace ScriptTemplating
 
             NewKeyword(string.Empty)
             .SetKeyword("PRATEEK_DATE_YEAR")
-            .SetUpdateIndex(-1, 0, -1, 0)
             .SetContent(System.DateTime.Now.ToString("yyyy"))
             .Submit();
 
             NewKeyword(string.Empty)
             .SetKeyword("PRATEEK_DATE_UPDATE")
-            .SetUpdateIndex(-1, 0, -1, 0)
             .SetContent(string.Format("Header last update date: {0}", System.DateTime.Now.ToString("dd/MM/yy")))
             .Submit();
         }

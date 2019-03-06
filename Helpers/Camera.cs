@@ -1,7 +1,9 @@
+// -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
+//  Header last update date: 05/03/19
 //
-//  Copyright © 2017—2018 Benjamin “Touky” Huet <huet.benjamin@gmail.com>
+//  Copyright © 2017—2019 Benjamin "Touky" Huet <huet.benjamin@gmail.com>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -9,6 +11,7 @@
 //  to Public License, Version 2, as published by the WTFPL Task Force.
 //  See http://www.wtfpl.net/ for more details.
 //
+// -END_PRATEEK_COPYRIGHT-
 
 #region Namespaces
 #if UNITY_EDITOR && !PRATEEK_DEBUG

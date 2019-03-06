@@ -1,8 +1,9 @@
-﻿// -PRATEEK_COPYRIGHT_START-
+// -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
+//  Header last update date: 05/03/19
 //
-//  Copyright © 2017—2018 Benjamin “Touky” Huet <huet.benjamin@gmail.com>
+//  Copyright � 2017�2019 Benjamin "Touky" Huet <huet.benjamin@gmail.com>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -10,11 +11,11 @@
 //  to Public License, Version 2, as published by the WTFPL Task Force.
 //  See http://www.wtfpl.net/ for more details.
 //
-// -PRATEEK_COPYRIGHT_END-
+// -END_PRATEEK_COPYRIGHT-
 
 // -BEGIN_PRATEEK_CSHARP_NAMESPACE-
 //
-#region Namespaces
+#region C# Prateek Namespaces
 #if UNITY_EDITOR && !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
@@ -45,7 +46,7 @@ using Prateek.Attributes;
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
 #endif //PRATEEK_DEBUG
-#endregion Namespaces
+#endregion C# Prateek Namespaces
 //
 // -END_PRATEEK_CSHARP_NAMESPACE-
 
@@ -123,7 +124,6 @@ namespace ScriptTemplating
 
             NewKeyword(".cs")
                 .SetKeyword("PRATEEK_CSHARP_NAMESPACE")
-                .SetUpdateIndex(0, 0, 2, -2)
                 .SetContent(
 "// -BEGIN_PRATEEK_CSHARP_NAMESPACE-",
 "//",
