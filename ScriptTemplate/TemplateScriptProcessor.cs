@@ -102,12 +102,11 @@ namespace Prateek.ScriptTemplating
                     break;
             }
 
-            return;
-
             if (fileContent == string.Empty)
                 return;
 
             fileContent = fileContent.Replace("#SCRIPTNAME#", fileName);
+
             TemplateHelpers.ApplyKeywords(ref fileContent, fileExtension);
 
             System.IO.File.WriteAllText(path, fileContent.ApplyCRLF());

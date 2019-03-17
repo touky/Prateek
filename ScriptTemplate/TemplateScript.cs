@@ -93,15 +93,6 @@ namespace Prateek.ScriptTemplating
 
 #if UNITY_EDITOR
                 return MatchTemplate(templateFile, extension, content);
-                //var path = FileHelpers.GetScriptTemplateFolder();
-                //if (path == string.Empty)
-                //    return false;
-
-                //var otherContent = FileHelpers.ReadAllTextCleaned(path + templateFile);
-                //if (otherContent == string.Empty)
-                //    return false;
-
-                //return otherContent == content;
 #endif //UNITY_EDITOR
                 return false;
             }
