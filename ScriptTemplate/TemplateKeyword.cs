@@ -67,7 +67,16 @@ namespace Prateek.ScriptTemplating
         public class Keyword : TemplateBase
         {
             //-----------------------------------------------------------------
+            public enum TagStyle
+            {
+                KeywordOnly,
+                ZoneDelimiter,
+
+                MAX
+            }
+            //-----------------------------------------------------------------
             protected string tag;
+            protected TagStyle tagStyle;
 
             //-----------------------------------------------------------------
             public string Tag { get { return tag.Keyword(); } }
@@ -78,9 +87,10 @@ namespace Prateek.ScriptTemplating
             public Keyword(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
-            public Keyword SetTag(string tag)
+            public Keyword SetTag(string tag, TagStyle tagStyle = TagStyle.KeywordOnly)
             {
                 this.tag = tag;
+                this.tagStyle = tagStyle;
                 return this;
             }
 
@@ -89,7 +99,13 @@ namespace Prateek.ScriptTemplating
             {
                 base.SetContent(content);
 
-                this.content = tag.KeywordBegin() + this.Content + tag.KeywordEnd();
+                this.content = string.Empty;
+
+                if (tagStyle == TagStyle.ZoneDelimiter)
+                    this.content += tag.KeywordBegin();
+                this.content = this.Content;
+                if (tagStyle == TagStyle.ZoneDelimiter)
+                    this.content += tag.KeywordEnd();
                 return this;
             }
 

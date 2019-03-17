@@ -67,9 +67,8 @@ namespace Prateek.ScriptTemplating
         static PrateekDefaultTemplate()
         {
             NewKeyword("cs")
-            .SetTag("PRATEEK_COPYRIGHT")
-            .SetContent(
-@"
+            .SetTag("PRATEEK_COPYRIGHT", Keyword.TagStyle.ZoneDelimiter)
+            .SetContent(@"
 //
 //  Prateek, a library that is ""bien pratique""
 //  Header last update date: #PRATEEK_DATE_UPDATE#
