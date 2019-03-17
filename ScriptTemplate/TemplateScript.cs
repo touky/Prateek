@@ -93,8 +93,9 @@ namespace Prateek.ScriptTemplating
 
 #if UNITY_EDITOR
                 return MatchTemplate(templateFile, extension, content);
-#endif //UNITY_EDITOR
+#else //!UNITY_EDITOR
                 return false;
+#endif //UNITY_EDITOR
             }
         }
 
