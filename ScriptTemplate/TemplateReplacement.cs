@@ -90,7 +90,7 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public virtual bool Match(string extension, string content)
             {
-                if (this.extension == extension)
+                if (this.extension == string.Empty || this.extension == extension)
                     return true;
                 return false;
             }

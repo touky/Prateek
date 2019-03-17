@@ -122,11 +122,13 @@ namespace Prateek.ScriptTemplating
                 //-------------------------------------------------------------
                 public void Add(Extent extent)
                 {
+                    if (extends == null)
+                        extends = new List<Extent>();
                     extends.Add(extent);
                 }
 
                 //-------------------------------------------------------------
-                public int AdvanceToSafety(int index, Style type = Style.MAX)
+                public int AdvanceToSafety(int index, Style style = Style.MAX)
                 {
                     if (extends == null)
                         return index;
@@ -134,7 +136,7 @@ namespace Prateek.ScriptTemplating
                     for (int e = 0; e < extends.Count; e++)
                     {
                         var extent = extends[e];
-                        if (extent.Contains(index))
+                        if (extent.Style == style && extent.Contains(index))
                         {
                             return extent.OverEnd;
                         }

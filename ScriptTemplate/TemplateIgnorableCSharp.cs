@@ -64,7 +64,7 @@ namespace Prateek.ScriptTemplating
     public partial class TemplateReplacement
     {
         //---------------------------------------------------------------------
-        public abstract class IgnorableCSharp : Ignorable
+        public class IgnorableCSharp : Ignorable
         {
             //-----------------------------------------------------------------
             private struct MatchData
@@ -110,10 +110,10 @@ namespace Prateek.ScriptTemplating
             public override BuildResult Build(string content)
             {
                 var result = default(BuildResult);
-                while (true)
+                var position = 0;
+                while (position < content.Length)
                 {
                     var start = int.MaxValue;
-                    var position = 0;
                     var foundD = -1;
                     for (int d = 0; d < datas.Length; d++)
                     {
@@ -135,14 +135,32 @@ namespace Prateek.ScriptTemplating
 
                     if (ignore >= 0 && ignore <= end)
                     {
-                        position += Mathf.Max(ignore + data.ignore.Length, end + data.end.Length);
+                        position = Mathf.Max(ignore + data.ignore.Length, end + data.end.Length);
                         continue;
                     }
 
+                    position = end + data.end.Length;
                     result.Add(new Extent(data.type, data.isLine, start, end + (data.end.Length - 1)));
                 }
                 return result;
             }
         }
+
+        //---------------------------------------------------------------------
+        protected static IgnorableCSharp NewIgnorableCSharp(string extension)
+        {
+            return new IgnorableCSharp(extension);
+        }
+
+        //-------------------------------------------------------------------------
+        [InitializeOnLoad]
+        class CSharpIgnorableTemplate : TemplateReplacement
+        {
+            static CSharpIgnorableTemplate()
+            {
+                NewIgnorableCSharp("cs").Commit();
+            }
+        }
     }
 }
+
