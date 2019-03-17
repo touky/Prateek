@@ -65,11 +65,9 @@ namespace Prateek.ScriptTemplating
     internal sealed class ScriptKeywordProcessor : UnityEditor.AssetModificationProcessor
     {
         //---------------------------------------------------------------------
-#if WELL_FUCK
+#if true || WELL_FUCK
         public static void OnWillCreateAsset(string path)
         {
-            path = EditorApplication.applicationPath;
-            return;
             path = path.Replace(".meta", "");
             int index = path.LastIndexOf(".");
             if (index < 0)
@@ -89,10 +87,11 @@ namespace Prateek.ScriptTemplating
                 return;
 
             var fileContent = string.Empty;
+            var scripts = TemplateReplacement.Scripts;
             //Look for the correct script remplacement
-            for (int r = 0; r < script.Count; r++)
+            for (int r = 0; r < scripts.Count; r++)
             {
-                var replacement = script[r];
+                var replacement = scripts[r];
                 if (replacement.Match(fileExtension, originalContent))
                 {
                     fileContent = replacement.Content.CleanText();
@@ -103,11 +102,13 @@ namespace Prateek.ScriptTemplating
                     break;
             }
 
+            return;
+
             if (fileContent == string.Empty)
                 return;
 
             fileContent = fileContent.Replace("#SCRIPTNAME#", fileName);
-            ApplyKeywords(ref fileContent, fileExtension);
+            TemplateHelpers.ApplyKeywords(ref fileContent, fileExtension);
 
             System.IO.File.WriteAllText(path, fileContent.ApplyCRLF());
             AssetDatabase.Refresh();

@@ -139,5 +139,41 @@ namespace Prateek.IO
         {
             File.WriteAllText(path, content.ApplyCRLF());
         }
+
+        //---------------------------------------------------------------------
+        public static string GetAppFolder()
+        {
+#if UNITY_EDITOR
+            var appPath = EditorApplication.applicationPath;
+            if (!appPath.EndsWith(".exe"))
+                return string.Empty;
+
+            var last = appPath.LastIndexOf(Strings.Separator.Directory.C()[0]);
+            if (last < 0)
+                return string.Empty;
+
+            return appPath.Substring(0, last + 1);
+#else //!UNITY_EDITOR
+            return string.Empty;
+#endif //UNITY_EDITOR
+        }
+
+        //---------------------------------------------------------------------
+        public static string GetScriptTemplateFolder()
+        {
+#if UNITY_EDITOR
+            var appPath = GetAppFolder();
+            if (appPath == string.Empty)
+                return string.Empty;
+
+            appPath = appPath + "Data/Resources/ScriptTemplates/";
+            if (!Directory.Exists(appPath))
+                return string.Empty;
+
+            return appPath;
+#else //!UNITY_EDITOR
+            return string.Empty;
+#endif //UNITY_EDITOR
+        }
     }
 }

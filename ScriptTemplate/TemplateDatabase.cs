@@ -96,5 +96,21 @@ namespace Prateek.ScriptTemplating
         private static List<Ignorable> ignorables = new List<Ignorable>();
         public static Group<Ignorable> Ignorables { get { return new Group<Ignorable>(ignorables); } }
         public static void Add(Ignorable data) { ignorables.Add(data); }
+
+        //---------------------------------------------------------------------
+        private static List<TemplateUnity> templates = new List<TemplateUnity>();
+        public static void Add(TemplateUnity data) { templates.Add(data); }
+        public static bool MatchTemplate(string filePath, string extension, string content)
+        {
+            for (int t = 0; t < templates.Count; t++)
+            {
+                var template = templates[t];
+                if (template.Path != filePath)
+                    continue;
+
+                return template.Match(extension, content);
+            }
+            return false;
+        }
     }
 }
