@@ -81,6 +81,7 @@ namespace Prateek.Helpers
             Brace = 1 << 6,
             Bracket = 1 << 7,
             Tabs = 1 << 8,
+            Keyword = 1 << 9,
 
             ALL = ~0
         }
@@ -95,6 +96,7 @@ namespace Prateek.Helpers
         private static readonly char[] brace = { '{', '}' };
         private static readonly char[] bracket = { '[', ']' };
         private static readonly char[] textParse = { '|', ',', ';' };
+        private static readonly char[] keyword = { '#' };
 
         //---------------------------------------------------------------------
         private static Dictionary<Separator, char[]> dictionnary = new Dictionary<Separator, char[]>();
@@ -113,6 +115,7 @@ namespace Prateek.Helpers
                 case Separator.Brace: { return brace; }
                 case Separator.Bracket: { return bracket; }
                 case Separator.TextParse: { return textParse; }
+                case Separator.Keyword: { return keyword; }
             }
             return null;
         }
@@ -166,25 +169,52 @@ namespace Prateek.Helpers
         }
 
         //---------------------------------------------------------------------
+        public static string CleanText(this string left)
+        {
+            return left.TabToSpaces().SimplifyNewLines();
+        }
+
+        //---------------------------------------------------------------------
+        public static string SimplifyNewLines(this string left)
+        {
+            var cr = Separator.NewLine.C()[1].ToString();
+            if (!left.Contains(cr))
+                return left;
+
+            var lf = Separator.NewLine.C()[0].ToString();
+            var lfcr = lf + cr;
+            var crlf = cr + lf;
+
+            var result = left;
+            result = result.Replace(lfcr, lf);
+            result = result.Replace(crlf, lf);
+            result = result.Replace(cr, lf);
+            return result;
+        }
+
+        //---------------------------------------------------------------------
+        public static string ApplyCRLF(this string left)
+        {
+            return left.Replace(Separator.NewLine.C()[0].ToString(), string.Empty + Separator.NewLine.C()[1] + Separator.NewLine.C()[0]);
+        }
+
+        //---------------------------------------------------------------------
         public static string[] SplitLines(this string left)
         {
-            var newLine = Separator.NewLine.C()[0].ToString();
-            var s = string.Empty;
-            s = string.Empty + Separator.NewLine.C()[0] + Separator.NewLine.C()[1];
-            left = left.Replace(s, newLine);
-            s = string.Empty + Separator.NewLine.C()[1] + Separator.NewLine.C()[0];
-            left = left.Replace(s, newLine);
-
-            return left.Split(Separator.NewLine.C());
+            return left.SimplifyNewLines().Split(Separator.NewLine.C());
         }
 
         //---------------------------------------------------------------------
         public static string TabToSpaces(this string left, int spaceCount = 4)
         {
+            if (!left.Contains(Separator.Tabs.C()[0].ToString()))
+                return left;
+
             var s = string.Empty;
             for (int c = 0; c < spaceCount; c++)
                 s += ' ';
-            return left.Replace(Separator.Tabs.C().ToString(), s);
+            var tab = Separator.Tabs.C()[0].ToString();
+            return left.Replace(tab, s);
         }
 
         //---------------------------------------------------------------------
@@ -267,6 +297,24 @@ namespace Prateek.Helpers
         public static string TextParse(this string left, int typeIndex, bool addSpace, string right)
         {
             return left + textParse[Math.Max(0, Math.Min(typeIndex, directory.Length - 1))] + space[0] + right;
+        }
+
+        //---------------------------------------------------------------------
+        public static string Keyword(this string left)
+        {
+            return string.Format("{0}{1}{2}", keyword[0], left, keyword[0]);
+        }
+
+        //---------------------------------------------------------------------
+        public static string KeywordBegin(this string left)
+        {
+            return string.Format("// -BEGIN_{0}-", left);
+        }
+
+        //---------------------------------------------------------------------
+        public static string KeywordEnd(this string left)
+        {
+            return string.Format("// -END_{0}-", left);
         }
     }
 }

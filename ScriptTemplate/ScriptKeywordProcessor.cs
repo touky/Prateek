@@ -53,150 +53,24 @@ using Prateek.Debug;
 //-----------------------------------------------------------------------------
 #region File namespaces
 using System.IO;
+using Prateek.IO;
+using System.Text.RegularExpressions;
 #endregion File namespaces
 
 namespace ScriptTemplating
 {
     //-------------------------------------------------------------------------
-    public class ScriptTemplateReplacement
-    {
-        //---------------------------------------------------------------------
-        public struct Script
-        {
-            public string extension;
-            public List<string> matchingContents;
-            public string content;
-
-            //-----------------------------------------------------------------
-            public Script SetMatching(params string[] matchingContents)
-            {
-                return new Script() { extension = this.extension, matchingContents = new List<string>(matchingContents) };
-            }
-
-            //-----------------------------------------------------------------
-            public Script SetContent(params string[] content)
-            {
-                var data = new Script() { extension = this.extension, matchingContents = this.matchingContents };
-                for (int c = 0; c < content.Length; c++)
-                {
-                    if (c > 0)
-                        data.content = data.content.NewLine(true);
-                    data.content += content[c];
-                }
-                return data;
-            }
-
-            //-----------------------------------------------------------------
-            public void Submit()
-            {
-                ScriptKeywordProcessor.Add(this);
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public struct Keyword
-        {
-            public string extension;
-            public string keyword;
-            public List<string> lines;
-
-            //-----------------------------------------------------------------
-            public string Content
-            {
-                get
-                {
-                    var result = string.Empty;
-                    for (int c = 0; c < lines.Count; c++)
-                    {
-                        if (c > 0)
-                            result = result.NewLine(true);
-                        result += lines[c];
-                    }
-                    return result;
-                }
-            }
-
-            //-----------------------------------------------------------------
-            public Keyword(Keyword other)
-            {
-                extension = other.extension;
-                keyword = other.keyword;
-                lines = other.lines;
-            }
-
-            //-----------------------------------------------------------------
-            public int IndexOf(string content, ref int end)
-            {
-                end = -1;
-                if (lines.Count == 0)
-                    return -1;
-
-                var start = content.IndexOf(lines[0]);
-                var startb = content.IndexOf("\"" + lines[0] + "\"");
-                if (start >= 0 && (start != startb + 1 || startb < 0))
-                {
-                    end = content.IndexOf(lines[lines.Count - 1]);
-                    var endb = content.IndexOf("\"" + lines[lines.Count - 1] + "\"");
-                    if (end < 0 || (end == endb + 1 && endb >= 0))
-                        return -1;
-
-                    end += lines[lines.Count - 1].Length;
-                    return start;
-                }
-
-                return -1;
-            }
-
-            //-----------------------------------------------------------------
-            public Keyword SetKeyword(string keyword)
-            {
-                return new Keyword(this) { keyword = keyword };
-            }
-
-            //-----------------------------------------------------------------
-            public Keyword SetContent(params string[] lines)
-            {
-                return new Keyword(this) { lines = new List<string>(lines) };
-            }
-
-            //-----------------------------------------------------------------
-            public void Submit()
-            {
-                ScriptKeywordProcessor.Add(this);
-            }
-        }
-
-        //---------------------------------------------------------------------
-        protected static Script NewData(string extension)
-        {
-            return new Script() { extension = extension };
-        }
-
-        //---------------------------------------------------------------------
-        protected static Keyword NewKeyword(string extension)
-        {
-            return new Keyword() { extension = extension };
-        }
-    }
-
-    //-------------------------------------------------------------------------
     internal sealed class ScriptKeywordProcessor : UnityEditor.AssetModificationProcessor
     {
         //---------------------------------------------------------------------
-        private static List<ScriptTemplateReplacement.Script> scriptReplacements = new List<ScriptTemplateReplacement.Script>();
-        private static List<ScriptTemplateReplacement.Keyword> keywordReplacements = new List<ScriptTemplateReplacement.Keyword>();
+        private static List<Replacement.Script> script = new List<Replacement.Script>();
+        private static List<Replacement.Keyword> keywords = new List<Replacement.Keyword>();
+        private static List<Replacement.Ignorable> gnorables = new List<Replacement.Ignorable>();
 
         //---------------------------------------------------------------------
-        public static void Add(ScriptTemplateReplacement.Script data)
-        {
-            scriptReplacements.Add(data);
-        }
-
-        //---------------------------------------------------------------------
-        public static void Add(ScriptTemplateReplacement.Keyword data)
-        {
-            keywordReplacements.Add(data);
-        }
+        public static void Add(Replacement.Script data) { script.Add(data); }
+        public static void Add(Replacement.Keyword data) { keywords.Add(data); }
+        public static void Add(Replacement.Ignorable data) { gnorables.Add(data); }
 
         //---------------------------------------------------------------------
         public static void OnWillCreateAsset(string path)
@@ -206,7 +80,7 @@ namespace ScriptTemplating
             if (index < 0)
                 return;
 
-            var fileExtension = path.Substring(index);
+            var fileExtension = path.Substring(index + 1);
             var slashIdx = Mathf.Max(0, path.LastIndexOf("/"));
             var fileName = path.Substring(slashIdx + 1, index - (slashIdx + 1));
 
@@ -215,30 +89,19 @@ namespace ScriptTemplating
             if (!System.IO.File.Exists(path))
                 return;
 
-            string originalContent = System.IO.File.ReadAllText(path);
+            var originalContent = FileHelpers.ReadAllTextCleaned(path);
+            if (originalContent == string.Empty)
+                return;
 
             var fileContent = string.Empty;
-            for (int r = 0; r < scriptReplacements.Count; r++)
+            //Look for the correct script remplacement
+            for (int r = 0; r < script.Count; r++)
             {
-                var replacement = scriptReplacements[r];
-                if (replacement.extension == fileExtension)
+                var replacement = script[r];
+                if (replacement.Match(fileExtension, originalContent))
                 {
-                    bool isMatching = true;
-                    for (int m = 0; m < replacement.matchingContents.Count; m++)
-                    {
-                        var matching = replacement.matchingContents[m];
-                        if (!originalContent.Contains(matching))
-                        {
-                            isMatching = false;
-                            break;
-                        }
-                    }
-
-                    if (isMatching)
-                    {
-                        fileContent = replacement.content;
-                        break;
-                    }
+                    fileContent = replacement.Content.CleanText();
+                    break;
                 }
 
                 if (fileContent != string.Empty)
@@ -251,36 +114,58 @@ namespace ScriptTemplating
             fileContent = fileContent.Replace("#SCRIPTNAME#", fileName);
             ApplyKeywords(ref fileContent, fileExtension);
 
-            System.IO.File.WriteAllText(path, fileContent);
+            System.IO.File.WriteAllText(path, fileContent.ApplyCRLF());
             AssetDatabase.Refresh();
         }
 
         //---------------------------------------------------------------------
-        private static void ApplyKeywords(ref string fileContent, string fileExtension)
+        private static Replacement.Ignorable.BuildResult GatherValidIgnorables(string fileContent, string fileExtension)
         {
-            for (int r = 0; r < keywordReplacements.Count; r++)
+            var results = new Replacement.Ignorable.BuildResult();
+            for (int i = 0; i < gnorables.Count; i++)
             {
-                var replacement = keywordReplacements[r];
-                var keyword = string.Format("#{0}#", replacement.keyword);
-                if (replacement.extension == string.Empty || replacement.extension == fileExtension)
-                {
-                    var keywordb = "\"" + keyword + "\"";
-                    var start = fileContent.IndexOf(keyword);
-                    var startb = fileContent.IndexOf(keywordb);
-                    while (start >= 0)
-                    {
-                        if (start != startb + 1 || startb < 0)
-                        {
-                            fileContent = fileContent.Substring(0, start)
-                                        + replacement.Content
-                                        + fileContent.Substring(start + keyword.Length);
-                            r = -1;
-                        }
+                var ignorable = gnorables[i];
+                if (!ignorable.Match(fileExtension, fileContent))
+                    continue;
 
-                        start += keyword.Length;
-                        startb = fileContent.IndexOf(keywordb, start);
-                        start = fileContent.IndexOf(keyword, start);
+                var result = ignorable.Build(fileContent);
+                if (!result.IsValid)
+                    continue;
+
+                if (!results.Merge(result))
+                    return new Replacement.Ignorable.BuildResult();
+            }
+
+            return results;
+        }
+
+        //---------------------------------------------------------------------
+        public static void ApplyKeywords(ref string fileContent, string fileExtension)
+        {
+            var ignorers = GatherValidIgnorables(fileContent, fileExtension);
+            for (int r = 0; r < keywords.Count; r++)
+            {
+                var replacement = keywords[r];
+                var keyword = replacement.Tag;
+                if (!replacement.Match(fileExtension, fileContent))
+                    continue;
+
+                var start = 0;
+                while ((start = fileContent.IndexOf(keyword, start)) >= 0)
+                {
+                    var safety = ignorers.AdvanceToSafety(start, Replacement.Ignorable.Extent.StyleType.Text);
+                    if (safety != start)
+                    {
+                        start = safety;
+                        continue;
                     }
+
+                    fileContent = fileContent.Substring(0, start)
+                                + replacement.Content.CleanText()
+                                + fileContent.Substring(start + keyword.Length);
+                    r = -1;
+
+                    start += keyword.Length;
                 }
             }
         }
@@ -295,57 +180,42 @@ namespace ScriptTemplating
                 return;
 
             var files = new List<string>();
-            var directories = new List<string>(Directory.GetDirectories(path));
-            while (directories.Count > 0)
-            {
-                var directory = directories[0];
-                {
-                    directories.AddRange(Directory.GetDirectories(directory));
-                    files.AddRange(Directory.GetFiles(directory));
-                }
-                directories.RemoveAt(0);
-            }
+            FileHelpers.GatherFilesAt(path, files, FileHelpers.BuildExtensionMatch(keywords), true);
 
             for (int f = 0; f < files.Count; f++)
             {
                 var file = files[f];
-                if (file.EndsWith(".meta"))
-                    continue;
-
-                int index = file.LastIndexOf(".");
-                if (index < 0)
-                    continue;
-
-                bool isValid = false;
-                var fileExtension = file.Substring(index);
-                for (int r = 0; r < keywordReplacements.Count; r++)
+                var fileExtension = file.Substring(file.LastIndexOf(".") + 1);
+                var fileContent = FileHelpers.ReadAllTextCleaned(file);
+                var ignorers = GatherValidIgnorables(fileContent, fileExtension);
+                for (int r = 0; r < keywords.Count; r++)
                 {
-                    var replacement = keywordReplacements[r];
-                    if (replacement.extension != fileExtension)
+                    var replacement = keywords[r];
+                    if (!replacement.Match(fileExtension, fileContent))
                         continue;
 
-                    isValid = true;
-                    break;
-                }
+                    var start = 0;
+                    while ((start = fileContent.IndexOf(replacement.TagBegin, start)) >= 0)
+                    {
+                        var safety = ignorers.AdvanceToSafety(start, Replacement.Ignorable.Extent.StyleType.Text);
+                        if (safety != start)
+                        {
+                            start = safety;
+                            continue;
+                        }
 
-                if (!isValid)
-                    continue;
+                        var tagEnd = replacement.TagEnd;
+                        var end = fileContent.IndexOf(tagEnd, start);
+                        if (end < 0)
+                            break;
 
-                var fileContent = File.ReadAllText(file);
-                for (int r = 0; r < keywordReplacements.Count; r++)
-                {
-                    var replacement = keywordReplacements[r];
-                    if (replacement.extension != fileExtension)
-                        continue;
+                        end += tagEnd.Length;
+                        fileContent = fileContent.Substring(0, start)
+                                    + replacement.Content.CleanText()
+                                    + fileContent.Substring(end);
 
-                    var end = -1;
-                    var start = replacement.IndexOf(fileContent, ref end);
-                    if (start < 0)
-                        continue;
-
-                    fileContent = fileContent.Substring(0, start)
-                                + replacement.Content
-                                + fileContent.Substring(end);
+                        start = end;
+                    }
                 }
 
                 ApplyKeywords(ref fileContent, fileExtension);
@@ -356,42 +226,5 @@ namespace ScriptTemplating
             AssetDatabase.Refresh();
         }
 #endif //PRATEEK_ALLOW_INTERNAL_TOOLS
-    }
-
-    //-------------------------------------------------------------------------
-    [InitializeOnLoad]
-    class PrateekDefaultTemplate : ScriptTemplateReplacement
-    {
-        static PrateekDefaultTemplate()
-        {
-            NewKeyword(".cs")
-            .SetKeyword("PRATEEK_COPYRIGHT")
-            .SetContent(
-"// -BEGIN_PRATEEK_COPYRIGHT-",
-"//",
-"//  Prateek, a library that is \"bien pratique\"",
-"//  Header last update date: 05/03/19",
-"//",
-"//  Copyright © 2017—2019 Benjamin \"Touky\" Huet <huet.benjamin@gmail.com>",
-"//",
-"//  Prateek is free software. It comes without any warranty, to",
-"//  the extent permitted by applicable law. You can redistribute it",
-"//  and/or modify it under the terms of the Do What the Fuck You Want",
-"//  to Public License, Version 2, as published by the WTFPL Task Force.",
-"//  See http://www.wtfpl.net/ for more details.",
-"//",
-"// -END_PRATEEK_COPYRIGHT-")
-            .Submit();
-
-            NewKeyword(string.Empty)
-            .SetKeyword("PRATEEK_DATE_YEAR")
-            .SetContent(System.DateTime.Now.ToString("yyyy"))
-            .Submit();
-
-            NewKeyword(string.Empty)
-            .SetKeyword("PRATEEK_DATE_UPDATE")
-            .SetContent(string.Format("Header last update date: {0}", System.DateTime.Now.ToString("dd/MM/yy")))
-            .Submit();
-        }
     }
 }

@@ -1,58 +1,30 @@
-//
-//  Prateek, a library that is "bien pratique"
-//
-//  Copyright © 2017—2018 Benjamin “Touky” Huet <huet.benjamin@gmail.com>
-//
-//  Prateek is free software. It comes without any warranty, to
-//  the extent permitted by applicable law. You can redistribute it
-//  and/or modify it under the terms of the Do What the Fuck You Want
-//  to Public License, Version 2, as published by the WTFPL Task Force.
-//  See http://www.wtfpl.net/ for more details.
-//
-
-#region Namespaces
-#if UNITY_EDITOR && !PRATEEK_DEBUG
-#define PRATEEK_DEBUG
-#endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Serialization;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif //UNITY_EDITOR
-
-#if UNITY_PROFILING
-using UnityEngine.Profiling;
-#endif //UNITY_PROFILING
-
-using Prateek;
-using Prateek.Base;
-using Prateek.Helpers;
-using Prateek.Attributes;
-
-#if PRATEEK_DEBUG
-using Prateek.Debug;
-#endif //PRATEEK_DEBUG
-#endregion Namespaces
-
-//-----------------------------------------------------------------------------
-namespace Prateek.Extensions
+/*
+    Color swizzle
+*/
+PRATEEK_CODEGEN_FILE_INFO(Colors, cs)
 {
-    //-------------------------------------------------------------------------
-    public static partial class ColorExt
+    // Color swizzle
+    PRATEEK_CODEGEN_BLOCK_SWIZZLE(ColorExt)
     {
-		PRTK_CODEGEN_STARTS_HERE
-        PRTK_SWIZZLE_DEFINITION(Color, r, g, b, a)
-        PRTK_SWIZZLE_INIT(float, 0)
-        //---------------------------------------------------------------------
-		#region Swizzle PRTK_SRC_CLASS
-		public static PRTK_DST_CLASS PRTK_SWIZZLE_CALL(this PRTK_SRC_CLASS PRTK_SWIZZLE_ARGS) { return new PRTK_DST_CLASS(PRTK_SWIZZLE_VARS); }
-		#endregion Swizzle PRTK_SRC_CLASS
+        PRATEEK_CODEGEN_CLASS(Color, r, g, b, a)
 
-		PRTK_CODEGEN_STOPS_HERE
+        PRATEEK_CODEGEN_TYPE(float, 0)
+
+        PRATEEK_CODEGEN_CODE_PREFIX
+        {
+        @    //---------------------------------------------------------------------
+		@    #region Swizzle SRC_CLASS
+        }
+        
+        PRATEEK_CODEGEN_CODE_MAIN
+        {
+		@    public static DST_CLASS SWIZZLE_CALL(this SRC_CLASS SWIZZLE_ARGS) { return new DST_CLASS(SWIZZLE_VARS); }
+        }
+
+        PRATEEK_CODEGEN_CODE_SUFFIX
+        {
+    	@	#endregion Swizzle PRTK_SRC_CLASS
+        @
+        }
     }
 }
