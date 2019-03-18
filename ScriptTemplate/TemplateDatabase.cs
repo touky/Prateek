@@ -66,13 +66,11 @@ namespace Prateek.ScriptTemplating
         public struct Group<T> where T: TemplateReplacement.TemplateBase
         {
             //-----------------------------------------------------------------
-            private int position;
             private List<T> list;
 
             //-----------------------------------------------------------------
             public Group(List<T> list)
             {
-                position = 0;
                 this.list = list;
             }
 

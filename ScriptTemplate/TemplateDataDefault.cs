@@ -67,7 +67,7 @@ namespace Prateek.ScriptTemplating
         static PrateekDefaultTemplate()
         {
             NewKeyword("cs")
-            .SetTag("PRATEEK_COPYRIGHT", Keyword.TagStyle.ZoneDelimiter)
+            .SetTag("PRATEEK_COPYRIGHT", KeywordMode.ZoneDelimiter)
             .SetContent(@"
 //
 //  Prateek, a library that is ""bien pratique""
@@ -90,7 +90,7 @@ namespace Prateek.ScriptTemplating
 
             NewKeyword(string.Empty)
             .SetTag("PRATEEK_DATE_UPDATE")
-            .SetContent(string.Format("Header last update date: {0}", System.DateTime.Now.ToString("dd/MM/yy")))
+            .SetContent(string.Format("{0}", System.DateTime.Now.ToString("dd/MM/yy")))
             .Commit();
         }
     }

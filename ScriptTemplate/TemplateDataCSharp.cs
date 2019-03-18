@@ -129,7 +129,7 @@ namespace Gameplay
 ").Commit();
 
             NewKeyword("cs")
-                .SetTag("PRATEEK_CSHARP_NAMESPACE", Keyword.TagStyle.ZoneDelimiter)
+                .SetTag("PRATEEK_CSHARP_NAMESPACE", KeywordMode.ZoneDelimiter)
                 .SetContent(@"
 //
 #region C# Prateek Namespaces

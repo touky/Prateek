@@ -64,21 +64,23 @@ namespace Prateek.ScriptTemplating
     public partial class TemplateReplacement
     {
         //---------------------------------------------------------------------
+        public enum KeywordMode
+        {
+            KeywordOnly,
+            ZoneDelimiter,
+
+            MAX
+        }
+
+        //---------------------------------------------------------------------
         public class Keyword : TemplateBase
         {
             //-----------------------------------------------------------------
-            public enum TagStyle
-            {
-                KeywordOnly,
-                ZoneDelimiter,
-
-                MAX
-            }
-            //-----------------------------------------------------------------
             protected string tag;
-            protected TagStyle tagStyle;
+            protected KeywordMode mode;
 
             //-----------------------------------------------------------------
+            public KeywordMode Mode { get { return mode; } }
             public string Tag { get { return tag.Keyword(); } }
             public string TagBegin { get { return tag.KeywordBegin(); } }
             public string TagEnd { get { return tag.KeywordEnd(); } }
@@ -87,10 +89,10 @@ namespace Prateek.ScriptTemplating
             public Keyword(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
-            public Keyword SetTag(string tag, TagStyle tagStyle = TagStyle.KeywordOnly)
+            public Keyword SetTag(string tag, KeywordMode tagStyle = KeywordMode.KeywordOnly)
             {
                 this.tag = tag;
-                this.tagStyle = tagStyle;
+                this.mode = tagStyle;
                 return this;
             }
 
@@ -99,13 +101,10 @@ namespace Prateek.ScriptTemplating
             {
                 base.SetContent(content);
 
-                this.content = string.Empty;
-
-                if (tagStyle == TagStyle.ZoneDelimiter)
-                    this.content += tag.KeywordBegin();
-                this.content = this.Content;
-                if (tagStyle == TagStyle.ZoneDelimiter)
-                    this.content += tag.KeywordEnd();
+                if (mode == KeywordMode.ZoneDelimiter)
+                {
+                    this.content = tag.KeywordBegin() + this.content + tag.KeywordEnd();
+                }
                 return this;
             }
 
@@ -120,6 +119,60 @@ namespace Prateek.ScriptTemplating
         protected static Keyword NewKeyword(string extension)
         {
             return new Keyword(extension);
+        }
+
+        //---------------------------------------------------------------------
+        public struct KeywordStack
+        {
+            //-----------------------------------------------------------------
+            public struct SwapInfo
+            {
+                public Keyword operation;
+                public int start;
+                public int end;
+            }
+
+            //-----------------------------------------------------------------
+            private KeywordMode tagType;
+            private string content;
+            private List<SwapInfo> stack;
+
+            //-----------------------------------------------------------------
+            public KeywordStack(KeywordMode tagType, string content)
+            {
+                this.tagType = tagType;
+                this.content = content;
+                this.stack = new List<SwapInfo>();
+            }
+
+            //-----------------------------------------------------------------
+            public void Add(Keyword operation, int start, int end)
+            {
+                stack.Add(new SwapInfo() { operation = operation, start = start, end = end });
+            }
+
+            //-----------------------------------------------------------------
+            public void Reset()
+            {
+                content = string.Empty;
+                stack.Clear();
+            }
+
+            //-----------------------------------------------------------------
+            public string Apply()
+            {
+                stack.Sort((a, b) => { return a.start - b.start; });
+
+                var result = content;
+                for (int s = stack.Count - 1; s >= 0; s--)
+                {
+                    var data = stack[s];
+                    result = result.Substring(0, data.start)
+                           + data.operation.Content.CleanText()
+                           + result.Substring(data.end);
+                }
+                return result;
+            }
         }
     }
 }

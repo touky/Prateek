@@ -84,14 +84,19 @@ namespace Prateek.ScriptTemplating
                 var fileExtension = file.Substring(file.LastIndexOf(".") + 1);
                 var fileContent = FileHelpers.ReadAllTextCleaned(file);
                 var ignorers = TemplateHelpers.GatherValidIgnorables(fileContent, fileExtension);
+                var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.ZoneDelimiter, fileContent);
+
                 for (int r = 0; r < keywords.Count; r++)
                 {
-                    var replacement = keywords[r];
-                    if (!replacement.Match(fileExtension, fileContent))
+                    var keyword = keywords[r];
+                    if (!keyword.Match(fileExtension, fileContent))
+                        continue;
+
+                    if (keyword.Mode == TemplateReplacement.KeywordMode.KeywordOnly)
                         continue;
 
                     var start = 0;
-                    while ((start = fileContent.IndexOf(replacement.TagBegin, start)) >= 0)
+                    while ((start = fileContent.IndexOf(keyword.TagBegin, start)) >= 0)
                     {
                         var safety = ignorers.AdvanceToSafety(start, TemplateReplacement.Ignorable.Style.Text);
                         if (safety != start)
@@ -100,23 +105,24 @@ namespace Prateek.ScriptTemplating
                             continue;
                         }
 
-                        var tagEnd = replacement.TagEnd;
+                        var tagEnd = keyword.TagEnd;
                         var end = fileContent.IndexOf(tagEnd, start);
                         if (end < 0)
                             break;
 
                         end += tagEnd.Length;
-                        fileContent = fileContent.Substring(0, start)
-                                    + replacement.Content.CleanText()
-                                    + fileContent.Substring(end);
+
+                        stack.Add(keyword, start, end);
 
                         start = end;
                     }
                 }
 
+                fileContent = stack.Apply();
+
                 TemplateHelpers.ApplyKeywords(ref fileContent, fileExtension);
 
-                File.WriteAllText(file, fileContent);
+                File.WriteAllText(file + ".txt", fileContent);
             }
 
             AssetDatabase.Refresh();

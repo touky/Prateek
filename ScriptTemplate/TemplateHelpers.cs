@@ -88,32 +88,40 @@ namespace Prateek.ScriptTemplating
         //---------------------------------------------------------------------
         public static void ApplyKeywords(ref string fileContent, string fileExtension)
         {
-            var ignorers = GatherValidIgnorables(fileContent, fileExtension);
             var keywords = TemplateReplacement.Keywords;
-            for (int r = 0; r < keywords.Count; r++)
+            var doAnotherPass = true;
+            while (doAnotherPass)
             {
-                var container = keywords[r];
-                var keyword = container.Tag;
-                if (!container.Match(fileExtension, fileContent))
-                    continue;
-
-                var start = 0;
-                while ((start = fileContent.IndexOf(keyword, start)) >= 0)
+                doAnotherPass = false;
+                var ignorers = GatherValidIgnorables(fileContent, fileExtension);
+                var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.KeywordOnly, fileContent);
+                for (int r = 0; r < keywords.Count; r++)
                 {
-                    var safety = ignorers.AdvanceToSafety(start, TemplateReplacement.Ignorable.Style.Text);
-                    if (safety != start)
-                    {
-                        start = safety;
+                    var keyword = keywords[r];
+                    var tag = keyword.Tag;
+                    if (!keyword.Match(fileExtension, fileContent))
                         continue;
+
+                    var start = 0;
+                    while ((start = fileContent.IndexOf(tag, start)) >= 0)
+                    {
+                        var safety = ignorers.AdvanceToSafety(start, TemplateReplacement.Ignorable.Style.Text);
+                        if (safety != start)
+                        {
+                            start = safety;
+                            continue;
+                        }
+
+                        var end = start + tag.Length;
+
+                        doAnotherPass = true;
+                        stack.Add(keyword, start, end);
+
+                        start = end;
                     }
-
-                    fileContent = fileContent.Substring(0, start)
-                                + container.Content.CleanText()
-                                + fileContent.Substring(start + keyword.Length);
-                    r = -1;
-
-                    start += keyword.Length;
                 }
+
+                fileContent = stack.Apply();
             }
         }
     }
