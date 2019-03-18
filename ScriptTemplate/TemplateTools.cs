@@ -81,6 +81,9 @@ namespace Prateek.ScriptTemplating
             for (int f = 0; f < files.Count; f++)
             {
                 var file = files[f];
+                //if (!file.Contains("TemplateDataDefault.cs"))
+                //    continue;
+
                 var fileExtension = file.Substring(file.LastIndexOf(".") + 1);
                 var fileContent = FileHelpers.ReadAllTextCleaned(file);
                 var ignorers = TemplateHelpers.GatherValidIgnorables(fileContent, fileExtension);

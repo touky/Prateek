@@ -128,15 +128,22 @@ namespace Prateek.ScriptTemplating
                     if (foundD < 0)
                         break;
 
-                    position = start;
                     var data = datas[foundD];
-                    var ignore = data.ignore == string.Empty ? -1 : content.IndexOf(data.ignore, position);
-                    var end = content.IndexOf(data.end, position);
+                    position = start + data.start.Length;
 
-                    if (ignore >= 0 && ignore <= end)
+                    var end = position;
+                    while (true)
                     {
-                        position = Mathf.Max(ignore + data.ignore.Length, end + data.end.Length);
-                        continue;
+                        var ignore = data.ignore == string.Empty ? -1 : content.IndexOf(data.ignore, position);
+                        end = content.IndexOf(data.end, position);
+
+                        if (ignore >= 0 && ignore <= end)
+                        {
+                            position = Mathf.Max(ignore + data.ignore.Length, end + data.end.Length);
+                            continue;
+                        }
+
+                        break;
                     }
 
                     position = end + data.end.Length;
