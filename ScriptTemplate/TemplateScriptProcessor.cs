@@ -74,7 +74,6 @@ namespace Prateek.ScriptTemplating
     internal sealed class ScriptKeywordProcessor : UnityEditor.AssetModificationProcessor
     {
         //---------------------------------------------------------------------
-#if true || WELL_FUCK
         public static void OnWillCreateAsset(string path)
         {
             path = path.Replace(".meta", "");
@@ -88,7 +87,7 @@ namespace Prateek.ScriptTemplating
 
             index = Application.dataPath.LastIndexOf("Assets");
             path = Application.dataPath.Substring(0, index) + path;
-            if (!System.IO.File.Exists(path))
+            if (!File.Exists(path))
                 return;
 
             var originalContent = FileHelpers.ReadAllTextCleaned(path);
@@ -121,6 +120,5 @@ namespace Prateek.ScriptTemplating
             System.IO.File.WriteAllText(path, fileContent.ApplyCRLF());
             AssetDatabase.Refresh();
         }
-#endif
     }
 }
