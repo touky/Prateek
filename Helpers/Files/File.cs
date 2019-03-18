@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
-//  Prateek, a library that is bien "pratique"
-//  Header last update date: 05/03/19
+//  Prateek, a library that is "bien pratique"
+//  Header last update date: 18/03/19
 //
-//  Copyright © 2017—2019 Benjamin "Touky" Huet <huet.benjamin@gmail.com>
+//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it

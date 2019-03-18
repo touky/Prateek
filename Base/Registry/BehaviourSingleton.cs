@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 05/03/19
+//  Header last update date: 18/03/19
 //
-//  Copyright © 2017—2019 Benjamin "Touky" Huet <huet.benjamin@gmail.com>
+//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -20,23 +20,30 @@
 #define PRATEEK_DEBUG
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
+#region System
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Serialization;
-using Unity.Collections;
-using Unity.Jobs;
-using UnityEngine.Jobs;
+#endregion System
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif //UNITY_EDITOR
+#region Unity
+using UnityEngine;
+using UnityEngine.Jobs;
+using UnityEngine.Serialization;
 
 #if UNITY_PROFILING
 using UnityEngine.Profiling;
 #endif //UNITY_PROFILING
 
+using Unity.Jobs;
+using Unity.Collections;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif //UNITY_EDITOR
+#endregion Unity
+
+#region Prateek
 using Prateek;
 using Prateek.Base;
 using Prateek.Extensions;
@@ -46,6 +53,8 @@ using Prateek.Attributes;
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
 #endif //PRATEEK_DEBUG
+#endregion Prateek
+
 #endregion C# Prateek Namespaces
 //
 // -END_PRATEEK_CSHARP_NAMESPACE-
@@ -80,7 +89,7 @@ namespace Prateek.Base
 
                     if (Application.isPlaying)
                     {
-					    DontDestroyOnLoad(m_instance.gameObject);
+                        DontDestroyOnLoad(m_instance.gameObject);
                     }
                 }
                 return m_instance;
@@ -89,21 +98,21 @@ namespace Prateek.Base
 
         //---------------------------------------------------------------------
         protected virtual void Awake()
-		{
-			if (m_instance == null)
-			{
-				m_instance = this as T;
-				if (transform.parent == null && Application.isPlaying)
+        {
+            if (m_instance == null)
+            {
+                m_instance = this as T;
+                if (transform.parent == null && Application.isPlaying)
                 {
-					DontDestroyOnLoad(m_instance.gameObject);
+                    DontDestroyOnLoad(m_instance.gameObject);
                 }
             }
-			else if (this != m_instance)
-			{
+            else if (this != m_instance)
+            {
                 UnityEngine.Debug.LogError(String.Format("Singleton for {0} already exists. Destroying {1}.", typeof(T).ToString(), name));
-				Destroy(gameObject);
-			}
-		}
+                Destroy(gameObject);
+            }
+        }
 
         //---------------------------------------------------------------------
         protected virtual void OnApplicationQuit()
