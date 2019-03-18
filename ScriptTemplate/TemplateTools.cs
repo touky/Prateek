@@ -122,7 +122,7 @@ namespace Prateek.ScriptTemplating
 
                 TemplateHelpers.ApplyKeywords(ref fileContent, fileExtension);
 
-                File.WriteAllText(file + ".txt", fileContent);
+                File.WriteAllText(file, fileContent);
             }
 
             AssetDatabase.Refresh();
