@@ -12,19 +12,18 @@ PRATEEK_CODEGEN_FILE_INFO(Colors, cs)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
-        @    //---------------------------------------------------------------------
-		@    #region Swizzle SRC_CLASS
+        @//---------------------------------------------------------------------
+		@#region Swizzle SRC_CLASS
         }
         
         PRATEEK_CODEGEN_CODE_MAIN
         {
-		@    public static DST_CLASS SWIZZLE_CALL(this SRC_CLASS SWIZZLE_ARGS) { return new DST_CLASS(SWIZZLE_VARS); }
+		@public static DST_CLASS SWIZZLE_CALL(this SRC_CLASS SWIZZLE_ARGS) { return new DST_CLASS(SWIZZLE_VARS); }
         }
 
         PRATEEK_CODEGEN_CODE_SUFFIX
         {
-    	@	#endregion Swizzle PRTK_SRC_CLASS
-        @
+    	@#endregion Swizzle PRTK_SRC_CLASS
         }
     }
 }

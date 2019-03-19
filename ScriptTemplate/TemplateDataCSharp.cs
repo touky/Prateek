@@ -176,6 +176,10 @@ using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
 
+#if UNITY_EDITOR
+using Prateek.ScriptTemplating;
+#endif //UNITY_EDITOR
+
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
 #endif //PRATEEK_DEBUG
