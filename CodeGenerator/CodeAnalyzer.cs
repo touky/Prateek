@@ -73,7 +73,6 @@ using System.Text.RegularExpressions;
 //-----------------------------------------------------------------------------
 namespace Prateek.ScriptTemplating
 {
-
     //---------------------------------------------------------------------
     public static partial class Code
     {

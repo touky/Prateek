@@ -1,0 +1,24 @@
+//-----------------------------------------------------------------------------
+// Refresh template             //- Standard template generation -
+//  Find files w.extension      // 1) - Find files w.extension
+//  Foreach files               //    - Feed file data
+//   Find Ignored + Zone        //    - Find single file
+//   Replace Zone               // 2) Foreach File data
+//   ApplyKeywords              //    {
+//   Write file                 //      3) - Find template + apply new datas
+//                              //         - Analyze + Generate new datas
+// Script creation              //         - Find Ignored + Zone + Replace in datas
+//  Receive file                //      4) Apply keywords on datas
+//  Find + apply template       //      5) Write datas in (new) File
+//  ApplyKeywords               //    }
+//  Write file                  //
+//                              //
+// Code generation              //
+//  Find files w.extension      //
+//  Foreach files               //
+//   Analyze                    //
+//   Generate                   //
+//   Find + Apply Template      //
+//   ApplyKeywords              //
+//   Write file                 //
+//-----------------------------------------------------------------------------
