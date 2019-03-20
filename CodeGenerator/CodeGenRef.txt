@@ -5,11 +5,11 @@
 //   Find Ignored + Zone        //    - Find single file                                //
 //   Replace Zone               // 2) Foreach File data                                 //
 //   ApplyKeywords              // {                                                    //
-//   Write file                 //   3) - Find template + apply new datas               //
-//                              //      - Analyze + Generate new datas                  //
-// Script creation              //      - Find Ignored + Zone + Replace in datas        //
-//  Receive file                //   4) Apply keywords on datas                         //
-//  Find + apply template       //   5) Write datas in (new) File                       //
+//   Write file                 //   3) (opt) Analyze + Generate new datas              //
+//                              //   3) Find template + apply new datas                 //
+// Script creation              //   4) Find Ignored + Zone + Replace in datas          //
+//  Receive file                //   5) Apply keywords on datas                         //
+//  Find + apply template       //   6) Write datas in (new) File                       //
 //  ApplyKeywords               // }                                                    //
 //  Write file                  //                                                      //
 //                              //                                                      //

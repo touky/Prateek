@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 18/03/19
+//  Header last update date: 19/03/19
 //
 //  Copyright © 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -1315,6 +1315,6 @@ namespace Prateek.Extensions
         public static Vector4 nnnz(this Vector4 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.z); }
         public static Vector4 nnnw(this Vector4 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.w); }
         #endregion Swizzle Vector4 to Vector4
-
+        
     }
 }

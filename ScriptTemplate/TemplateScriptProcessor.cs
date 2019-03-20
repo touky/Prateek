@@ -76,11 +76,19 @@ namespace Prateek.ScriptTemplating
         //---------------------------------------------------------------------
         public static void OnWillCreateAsset(string path)
         {
-            path = path.Replace(".meta", "");
-            int index = path.LastIndexOf(".");
+            path = path.Replace(".meta", string.Empty);
+            int index = path.LastIndexOf(Strings.Separator.FileExtension.C()[0]);
             if (index < 0)
                 return;
 
+            var builder = new Codebuilder();
+
+            builder.AddFile(new Codebuilder.FileData(path, string.Empty));
+
+            builder.Init();
+            builder.StartWork();
+
+            /*
             var fileExtension = path.Substring(index + 1);
             var slashIdx = Mathf.Max(0, path.LastIndexOf("/"));
             var fileName = path.Substring(slashIdx + 1, index - (slashIdx + 1));
@@ -119,6 +127,7 @@ namespace Prateek.ScriptTemplating
 
             System.IO.File.WriteAllText(path, fileContent.ApplyCRLF());
             AssetDatabase.Refresh();
+            */
         }
     }
 }

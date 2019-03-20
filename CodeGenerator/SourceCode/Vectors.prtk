@@ -22,6 +22,7 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
         PRATEEK_CODEGEN_CODE_SUFFIX
         {
         @#endregion Swizzle SRC_CLASS to DST_CLASS
+		@
         }
     }
 }

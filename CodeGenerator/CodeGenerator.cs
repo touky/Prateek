@@ -261,7 +261,7 @@ namespace Prateek.ScriptTemplating
                 { // Build the actual code
                     codeFile.Generate();
 
-                    File.WriteAllText(destinationDirectory + codeFile.fileName + ".txt", codeFile.CodeGenerated.ApplyCRLF());
+                    File.WriteAllText(destinationDirectory + codeFile.fileName + "." + codeFile.fileExtension, codeFile.CodeGenerated.ApplyCRLF());
 
                     for (int i = 0; i < codeFile.DataCount; i++)
                     {

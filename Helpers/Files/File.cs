@@ -175,5 +175,37 @@ namespace Prateek.IO
             return string.Empty;
 #endif //UNITY_EDITOR
         }
+
+        //---------------------------------------------------------------------
+        public static string GetValidDirectory(string path) { return GetValidIO(path, false); }
+        public static string GetValidFile(string path) { return GetValidIO(path, true); }
+
+        //---------------------------------------------------------------------
+        private static string GetValidIO(string path, bool isFile)
+        {
+            for (int p = 0; ; p++)
+            {
+                var tempPath = path;
+                switch (p)
+                {
+                    case 0: { break; }
+                    case 1: { tempPath = Application.dataPath + tempPath; break; }
+                    case 2: { tempPath = Application.streamingAssetsPath + tempPath; break; }
+                    case 3: { tempPath = Application.persistentDataPath + tempPath; break; }
+                    case 4: { tempPath = Application.temporaryCachePath + tempPath; break; }
+#if UNITY_EDITOR
+                    case 5: { tempPath = EditorApplication.applicationContentsPath + tempPath; break; }
+                    case 6: { tempPath = EditorApplication.applicationPath + tempPath; break; }
+#endif //UNITY_EDITOR
+                    default: { return string.Empty; }
+                }
+
+                if ((isFile && File.Exists(tempPath))
+                || (!isFile && Directory.Exists(tempPath)))
+                {
+                    return tempPath;
+                }
+            }
+        }
     }
 }

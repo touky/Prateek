@@ -76,7 +76,7 @@ namespace Prateek.ScriptTemplating
         public class Script : TemplateBase
         {
             //-----------------------------------------------------------------
-            private string templateFile;
+            private string templateFile = string.Empty;
 
             //-----------------------------------------------------------------
             public Script(string extension) : base(extension) { }
@@ -101,7 +101,9 @@ namespace Prateek.ScriptTemplating
                     return false;
 
 #if UNITY_EDITOR
-                return MatchTemplate(templateFile, extension, content);
+                if (templateFile != string.Empty)
+                    return MatchTemplate(templateFile, extension, content);
+                return true;
 #else //!UNITY_EDITOR
                 return false;
 #endif //UNITY_EDITOR
