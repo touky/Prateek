@@ -78,64 +78,71 @@ namespace Prateek.ScriptTemplating
         [MenuItem("Prateek/Internal/Update prateek templates")]
         private static void UpdateTemplate()
         {
-            //EditorApplication.applicationPath
-            var path = Application.dataPath;
+            var path = Application.dataPath + "/Scripts";
             if (!Directory.Exists(path))
                 return;
 
-            var files = new List<string>();
-            var keywords = TemplateReplacement.Keywords;
-            FileHelpers.GatherFilesAt(path, files, FileHelpers.BuildExtensionMatch(keywords.List), true);
+            var builder = new Codebuilder();
 
-            for (int f = 0; f < files.Count; f++)
-            {
-                var file = files[f];
+            builder.AddDirectory(path);
 
-                var fileExtension = file.Substring(file.LastIndexOf(".") + 1);
-                var fileContent = FileHelpers.ReadAllTextCleaned(file);
-                var ignorers = TemplateHelpers.GatherValidIgnorables(fileContent, fileExtension);
-                var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.ZoneDelimiter, fileContent);
+            builder.Init();
+            builder.StartWork();
 
-                for (int r = 0; r < keywords.Count; r++)
-                {
-                    var keyword = keywords[r];
-                    if (!keyword.Match(fileExtension, fileContent))
-                        continue;
 
-                    if (keyword.Mode == TemplateReplacement.KeywordMode.KeywordOnly)
-                        continue;
+            //var files = new List<string>();
+            //var keywords = TemplateReplacement.Keywords;
+            //FileHelpers.GatherFilesAt(path, files, FileHelpers.BuildExtensionMatch(keywords.List), true);
 
-                    var start = 0;
-                    while ((start = fileContent.IndexOf(keyword.TagBegin, start)) >= 0)
-                    {
-                        var safety = ignorers.AdvanceToSafety(start, TemplateReplacement.Ignorable.Style.Text);
-                        if (safety != start)
-                        {
-                            start = safety;
-                            continue;
-                        }
+            //for (int f = 0; f < files.Count; f++)
+            //{
+            //    var file = files[f];
 
-                        var tagEnd = keyword.TagEnd;
-                        var end = fileContent.IndexOf(tagEnd, start);
-                        if (end < 0)
-                            break;
+            //    var fileExtension = file.Substring(file.LastIndexOf(".") + 1);
+            //    var fileContent = FileHelpers.ReadAllTextCleaned(file);
+            //    var ignorers = TemplateHelpers.GatherValidIgnorables(fileContent, fileExtension);
+            //    var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.ZoneDelimiter, fileContent);
 
-                        end += tagEnd.Length;
+            //    for (int r = 0; r < keywords.Count; r++)
+            //    {
+            //        var keyword = keywords[r];
+            //        if (!keyword.Match(fileExtension, fileContent))
+            //            continue;
 
-                        stack.Add(keyword, start, end);
+            //        if (keyword.Mode == TemplateReplacement.KeywordMode.KeywordOnly)
+            //            continue;
 
-                        start = end;
-                    }
-                }
+            //        var start = 0;
+            //        while ((start = fileContent.IndexOf(keyword.TagBegin, start)) >= 0)
+            //        {
+            //            var safety = ignorers.AdvanceToSafety(start, TemplateReplacement.Ignorable.Style.Text);
+            //            if (safety != start)
+            //            {
+            //                start = safety;
+            //                continue;
+            //            }
 
-                fileContent = stack.Apply();
+            //            var tagEnd = keyword.TagEnd;
+            //            var end = fileContent.IndexOf(tagEnd, start);
+            //            if (end < 0)
+            //                break;
 
-                TemplateHelpers.ApplyKeywords(ref fileContent, fileExtension);
+            //            end += tagEnd.Length;
 
-                File.WriteAllText(file, fileContent);
-            }
+            //            stack.Add(keyword, start, end);
 
-            AssetDatabase.Refresh();
+            //            start = end;
+            //        }
+            //    }
+
+            //    fileContent = stack.Apply();
+
+            //    TemplateHelpers.ApplyKeywords(ref fileContent, fileExtension);
+
+            //    File.WriteAllText(file, fileContent);
+            //}
+
+            //AssetDatabase.Refresh();
         }
 #endif //PRATEEK_ALLOW_INTERNAL_TOOLS
     }

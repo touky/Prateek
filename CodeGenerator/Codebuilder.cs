@@ -95,16 +95,25 @@ namespace Prateek.ScriptTemplating
             public Infos destination;
 
             //----
-            public FileData(string file, string sourceDir)
+            public FileData(string file, string sourceDir) : this(file, sourceDir, null) { }
+            public FileData(string file, string sourceDir, string content)
             {
+                file = FileHelpers.GetValidFile(file);
+                if (file == string.Empty)
+                {
+                    source = default(Infos);
+                    destination = default(Infos);
+                    return;
+                }
+
                 var iExt = file.LastIndexOf(Strings.Separator.FileExtension.C()[0]);
                 var iName = Mathf.Max(file.LastIndexOf(Strings.Separator.Directory.C()[0]), file.LastIndexOf(Strings.Separator.Directory.C()[1]));
 
                 source.absPath = file;
-                source.relPath = file.Replace(sourceDir, string.Empty);
+                source.relPath = sourceDir == string.Empty ? file : file.Replace(sourceDir, string.Empty);
                 source.extension = file.Substring(iExt + 1);
                 source.name = file.Substring(iName + 1, iExt - (iName + 1));
-                source.content = null;
+                source.content = content;
 
                 destination = source;
             }
@@ -178,8 +187,9 @@ namespace Prateek.ScriptTemplating
 
         //---------------------------------------------------------------------
         #region Behaviour
-        public void AddDirectories(params string[] directories) { workDirectories.AddRange(directories); }
-        public void AddDirectories(List<string> directories) { workDirectories.AddRange(directories); }
+        public void AddDirectory(string path) { workDirectories.Add(path); }
+        public void AddDirectories(params string[] paths) { workDirectories.AddRange(paths); }
+        public void AddDirectories(List<string> paths) { workDirectories.AddRange(paths); }
 
         //---------------------------------------------------------------------
         public void AddFiles(string sourceDir, params string[] files) { AddFiles(sourceDir, new List<string>(files)); }
@@ -374,7 +384,7 @@ namespace Prateek.ScriptTemplating
         {
             var path = (destinationDirectory + fileData.destination.relPath)
                             .Replace(fileData.source.name.Extension(fileData.source.extension),
-                                     fileData.source.name.Extension(fileData.source.extension));
+                                     fileData.destination.name.Extension(fileData.destination.extension));
             path = FileHelpers.GetValidFile(path);
             if (path == string.Empty)
                 return false;
