@@ -181,13 +181,19 @@ namespace Prateek.ScriptTemplating
 
         //---------------------------------------------------------------------
         #region Properties
+        public string DestinationDirectory { get { return destinationDirectory; } set { destinationDirectory = value; } }
         public OperationApplied Operations { get { return operations; } set { operations = value; } }
         protected virtual string SearchPattern { get { return FileHelpers.BuildExtensionMatch(TemplateReplacement.Keywords.List); } private set { } }
         #endregion Properties
 
         //---------------------------------------------------------------------
         #region Behaviour
-        public void AddDirectory(string path) { workDirectories.Add(path); }
+        public void AddDirectory(string path)
+        {
+            if (destinationDirectory == string.Empty)
+                destinationDirectory = path;
+            workDirectories.Add(path);
+        }
         public void AddDirectories(params string[] paths) { workDirectories.AddRange(paths); }
         public void AddDirectories(List<string> paths) { workDirectories.AddRange(paths); }
 
