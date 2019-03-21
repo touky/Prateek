@@ -215,13 +215,21 @@ namespace Prateek.ScriptTemplating
         //---------------------------------------------------------------------
         public void Init()
         {
-            for (int d = 0; d < sourceDirectories.Count; d++)
+            workDirectories.AddRange(sourceDirectories);
+
+            var files = new List<string>();
+            for (int d = 0; d < workDirectories.Count; d++)
             {
-                var dir = FileHelpers.GetValidDirectory(sourceDirectories[d]);
+                var dir = FileHelpers.GetValidDirectory(workDirectories[d]);
                 if (dir != string.Empty)
                     continue;
 
-                AddFiles(dir, Directory.GetFiles(dir, SearchPattern));
+                if (!FileHelpers.GatherFilesAt(dir, files, SearchPattern))
+                    continue;
+
+                AddFiles(dir, files);
+
+                files.Clear();
             }
 
             AddFiles(string.Empty, sourceFiles);
