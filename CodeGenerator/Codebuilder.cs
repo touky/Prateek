@@ -221,10 +221,10 @@ namespace Prateek.ScriptTemplating
             for (int d = 0; d < workDirectories.Count; d++)
             {
                 var dir = FileHelpers.GetValidDirectory(workDirectories[d]);
-                if (dir != string.Empty)
+                if (dir == string.Empty)
                     continue;
 
-                if (!FileHelpers.GatherFilesAt(dir, files, SearchPattern))
+                if (!FileHelpers.GatherFilesAt(dir, files, SearchPattern, true))
                     continue;
 
                 AddFiles(dir, files);
@@ -352,7 +352,7 @@ namespace Prateek.ScriptTemplating
                     continue;
 
                 var start = 0;
-                while ((start = fileData.destination.extension.IndexOf(keyword.TagBegin, start)) >= 0)
+                while ((start = fileData.destination.content.IndexOf(keyword.TagBegin, start)) >= 0)
                 {
                     var safety = ignorers.AdvanceToSafety(start, TemplateReplacement.Ignorable.Style.Text);
                     if (safety != start)
@@ -362,7 +362,7 @@ namespace Prateek.ScriptTemplating
                     }
 
                     var tagEnd = keyword.TagEnd;
-                    var end = fileData.destination.extension.IndexOf(tagEnd, start);
+                    var end = fileData.destination.content.IndexOf(tagEnd, start);
                     if (end < 0)
                         break;
 
