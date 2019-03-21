@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 18/03/19
+//  Header last update date: 20/03/2019
 //
 //  Copyright © 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -49,6 +49,10 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+
+#if UNITY_EDITOR
+using Prateek.ScriptTemplating;
+#endif //UNITY_EDITOR
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
@@ -110,24 +114,22 @@ namespace Gameplay
 
         //---------------------------------------------------------------------
         #region Unity Defaults
-        private void Awake()
-        {
-        }
+        private void Awake() { }
 
         //---------------------------------------------------------------------
-        private void OnDestroy()
-        {
-        }
+        private void OnDestroy() { }
 
         //---------------------------------------------------------------------
-        private void Start()
-        {
-        }
+        private void OnEnable() { }
 
         //---------------------------------------------------------------------
-        private void Update()
-        {
-        }
+        private void OnDisable() { }
+
+        //---------------------------------------------------------------------
+        private void Start() { }
+
+        //---------------------------------------------------------------------
+        private void Update() { }
         #endregion Unity Defaults
 
         //---------------------------------------------------------------------

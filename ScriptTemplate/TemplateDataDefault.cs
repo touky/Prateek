@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 18/03/19
+//  Header last update date: 20/03/2019
 //
 //  Copyright © 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -49,6 +49,10 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+
+#if UNITY_EDITOR
+using Prateek.ScriptTemplating;
+#endif //UNITY_EDITOR
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
@@ -99,7 +103,7 @@ namespace Prateek.ScriptTemplating
 
             NewKeyword(string.Empty)
             .SetTag("PRATEEK_DATE_UPDATE")
-            .SetContent(string.Format("{0}", System.DateTime.Now.ToString("dd/MM/yy")))
+            .SetContent(string.Format("{0}", System.DateTime.Now.ToString("dd/MM/yyyy")))
             .Commit();
         }
     }
