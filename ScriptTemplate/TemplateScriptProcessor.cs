@@ -91,47 +91,6 @@ namespace Prateek.ScriptTemplating
 
             builder.Init();
             builder.StartWork();
-
-            /*
-            var fileExtension = path.Substring(index + 1);
-            var slashIdx = Mathf.Max(0, path.LastIndexOf("/"));
-            var fileName = path.Substring(slashIdx + 1, index - (slashIdx + 1));
-
-            index = Application.dataPath.LastIndexOf("Assets");
-            path = Application.dataPath.Substring(0, index) + path;
-            if (!File.Exists(path))
-                return;
-
-            var originalContent = FileHelpers.ReadAllTextCleaned(path);
-            if (originalContent == string.Empty)
-                return;
-
-            var fileContent = string.Empty;
-            var scripts = TemplateReplacement.Scripts;
-            //Look for the correct script remplacement
-            for (int r = 0; r < scripts.Count; r++)
-            {
-                var replacement = scripts[r];
-                if (replacement.Match(fileExtension, originalContent))
-                {
-                    fileContent = replacement.Content.CleanText();
-                    break;
-                }
-
-                if (fileContent != string.Empty)
-                    break;
-            }
-
-            if (fileContent == string.Empty)
-                return;
-
-            fileContent = fileContent.Replace("#SCRIPTNAME#", fileName);
-
-            TemplateHelpers.ApplyKeywords(ref fileContent, fileExtension);
-
-            System.IO.File.WriteAllText(path, fileContent.ApplyCRLF());
-            AssetDatabase.Refresh();
-            */
         }
     }
 }

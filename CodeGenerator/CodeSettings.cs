@@ -73,130 +73,95 @@ using System.Text.RegularExpressions;
 //-----------------------------------------------------------------------------
 namespace Prateek.ScriptTemplating
 {
-    //---------------------------------------------------------------------
-    public abstract class CodeSettings
+    //-------------------------------------------------------------------------
+    public partial class TemplateReplacement
     {
-        //-----------------------------------------------------------------
-        public abstract string ScopeTag { get; }
-
-        //-----------------------------------------------------------------
-        private List<string> data = new List<string>();
-
-        //-----------------------------------------------------------------
-        public string CodeBlock { get { return data[0]; } }
-        private string DataCall { get { return data[1]; } }
-        private string DataArgs { get { return data[2]; } }
-        private string DataVars { get { return data[3]; } }
-
-        //-----------------------------------------------------------------
-        public Code.Tag.SwapInfo ClassDst { get { return Code.Tag.Macro.dstClass; } }
-        public Code.Tag.SwapInfo ClassSrc { get { return Code.Tag.Macro.srcClass; } }
-        public Code.Tag.SwapInfo CodeCall { get { return DataCall; } }
-        public Code.Tag.SwapInfo CodeArgs { get { return DataArgs; } }
-        public Code.Tag.SwapInfo CodeVars { get { return DataVars; } }
-
-        //-----------------------------------------------------------------
-        protected CodeSettings()
+        //---------------------------------------------------------------------
+        public abstract class CodeRule : TemplateBase
         {
-            Init();
-        }
+            //-----------------------------------------------------------------
+            public abstract string ScopeTag { get; }
 
-        //-----------------------------------------------------------------
-        private void Init()
-        {
-            data.Add(string.Format("{0}_{1}_{2}", Code.Tag.Macro.prefix, Code.Tag.Macro.To(Code.Tag.Macro.Content.BLOCK), ScopeTag));
-            data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.CALL)));
-            data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.ARGS)));
-            data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.VARS)));
-        }
+            //-----------------------------------------------------------------
+            private List<string> data = new List<string>();
 
-        //-----------------------------------------------------------------
-        protected void Submit()
-        {
-            CodeGenerator.Add(this);
-        }
+            //-----------------------------------------------------------------
+            public string CodeBlock { get { return data[0]; } }
+            private string DataCall { get { return data[1]; } }
+            private string DataArgs { get { return data[2]; } }
+            private string DataVars { get { return data[3]; } }
 
-        //-----------------------------------------------------------------
-        public virtual Code.Tag.Keyword GetSetup(string keyword, int codeDepth)
-        {
-            if (keyword == CodeBlock)
+            //-----------------------------------------------------------------
+            public Code.Tag.SwapInfo ClassDst { get { return Code.Tag.Macro.dstClass; } }
+            public Code.Tag.SwapInfo ClassSrc { get { return Code.Tag.Macro.srcClass; } }
+            public Code.Tag.SwapInfo CodeCall { get { return DataCall; } }
+            public Code.Tag.SwapInfo CodeArgs { get { return DataArgs; } }
+            public Code.Tag.SwapInfo CodeVars { get { return DataVars; } }
+
+            //-----------------------------------------------------------------
+            protected CodeRule(string extension) : base(extension)
             {
-                return new Code.Tag.Keyword(keyword, codeDepth == 1) { minArgCount = 1, maxArgCount = 1, needOpenScope = true };
-            }
-            else if (keyword == Code.Tag.Macro.OperationClass)
-            {
-                return new Code.Tag.Keyword(keyword, codeDepth == 2) { minArgCount = 1 };
-            }
-            else if (keyword == Code.Tag.Macro.TypeInfo)
-            {
-                return new Code.Tag.Keyword(keyword, codeDepth == 2) { minArgCount = 2, maxArgCount = 2 };
-            }
-            else if (keyword == Code.Tag.Macro.CodePartPrefix || keyword == Code.Tag.Macro.CodePartMain || keyword == Code.Tag.Macro.CodePartSuffix)
-            {
-                return new Code.Tag.Keyword(keyword, codeDepth == 2) { minArgCount = 0, maxArgCount = 0, needOpenScope = true, needScopeData = true };
+                Init();
             }
 
-            return new Code.Tag.Keyword() { usage = Code.Tag.Keyword.Usage.Ignore };
-        }
-
-        //-----------------------------------------------------------------
-        public abstract bool TreatData(Code.File codeFile, Code.Tag.Keyword keyword, List<string> args, string data);
-
-        //-----------------------------------------------------------------
-        public virtual bool CloseScope(Code.File codeFile, string scope)
-        {
-            if (scope == CodeBlock)
+            //-----------------------------------------------------------------
+            public override void Commit()
             {
-                codeFile.Submit();
-                return true;
+                TemplateReplacement.Add(this);
             }
-            else if (scope == Code.Tag.Macro.CodePartMain || scope == Code.Tag.Macro.CodePartPrefix || scope == Code.Tag.Macro.CodePartSuffix)
+
+            //-----------------------------------------------------------------
+            private void Init()
             {
-                return true;
+                data.Add(string.Format("{0}_{1}_{2}", Code.Tag.Macro.prefix, Code.Tag.Macro.To(Code.Tag.Macro.Content.BLOCK), ScopeTag));
+                data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.CALL)));
+                data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.ARGS)));
+                data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.VARS)));
             }
-            return false;
+
+            //-----------------------------------------------------------------
+            public virtual Code.Tag.Keyword GetSetup(string keyword, int codeDepth)
+            {
+                if (keyword == CodeBlock)
+                {
+                    return new Code.Tag.Keyword(keyword, codeDepth == 1) { minArgCount = 2, maxArgCount = 2, needOpenScope = true };
+                }
+                else if (keyword == Code.Tag.Macro.OperationClass)
+                {
+                    return new Code.Tag.Keyword(keyword, codeDepth == 2) { minArgCount = 1 };
+                }
+                else if (keyword == Code.Tag.Macro.TypeInfo)
+                {
+                    return new Code.Tag.Keyword(keyword, codeDepth == 2) { minArgCount = 2, maxArgCount = 2 };
+                }
+                else if (keyword == Code.Tag.Macro.CodePartPrefix || keyword == Code.Tag.Macro.CodePartMain || keyword == Code.Tag.Macro.CodePartSuffix)
+                {
+                    return new Code.Tag.Keyword(keyword, codeDepth == 2) { minArgCount = 0, maxArgCount = 0, needOpenScope = true, needScopeData = true };
+                }
+
+                return new Code.Tag.Keyword() { usage = Code.Tag.Keyword.Usage.Ignore };
+            }
+
+            //-----------------------------------------------------------------
+            public virtual bool CloseScope(Code.File codeFile, string scope)
+            {
+                if (scope == CodeBlock)
+                {
+                    codeFile.Submit();
+                    return true;
+                }
+                else if (scope == Code.Tag.Macro.CodePartMain || scope == Code.Tag.Macro.CodePartPrefix || scope == Code.Tag.Macro.CodePartSuffix)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            //-----------------------------------------------------------------
+            public abstract bool TreatData(Code.File codeFile, Code.Tag.Keyword keyword, List<string> args, string data);
+
+            //-----------------------------------------------------------------
+            public abstract void Generate(Code.File.Data data);
         }
-
-        //-----------------------------------------------------------------
-        public abstract void Generate(Code.File.Data data);
-
-
-
-        //-----------------------------------------------------------------
-        public class CodeClasses
-        {
-            public string className;
-            public string[] callComponents;
-        }
-
-        //-----------------------------------------------------------------
-        public List<CodeClasses> codeClasses = new List<CodeClasses>();
-
-        public string codePrefix;
-        public string codeSource;
-        public string codePostfix;
-
-        public string codeCall;
-        public string codeArgs;
-        public string codeType;
-        public string codeDefault;
-        public string codeVars;
-
-        //-----------------------------------------------------------------
-        public virtual bool Load(string line)
-        {
-            return false;
-        }
-
-        //-----------------------------------------------------------------
-        public virtual string ReplaceAdditional(string code)
-        {
-            return code;
-        }
-
-        ////-----------------------------------------------------------------
-        //public virtual void GetSlottedCode(CodeData srcCode, CodeClasses srcDef)
-        //{
-        //}
     }
 }

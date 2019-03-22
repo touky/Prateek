@@ -89,8 +89,9 @@ namespace Prateek.ScriptTemplating
                     public List<string> variables;
                 }
 
-                public CodeSettings settings;
-                public string blockName;
+                public TemplateReplacement.CodeRule settings;
+                public string blockNamespace;
+                public string blockClassName;
 
                 public List<ClassInfo> classInfos = new List<ClassInfo>();
                 public string classContentType;
@@ -106,6 +107,7 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public string fileName;
             public string fileExtension;
+            public string fileNamespace;
 
             //-----------------------------------------------------------------
             private Data activeData;
@@ -119,7 +121,7 @@ namespace Prateek.ScriptTemplating
             public Data this[int index] { get { return datas[index]; } }
 
             //-----------------------------------------------------------------
-            public Data NewData(CodeSettings codeSettings)
+            public Data NewData(TemplateReplacement.CodeRule codeSettings)
             {
                 if (activeData != null)
                     return null;
@@ -143,6 +145,7 @@ namespace Prateek.ScriptTemplating
             {
                 var genHeader = Code.Tag.fileHeader.SimplifyNewLines().TabToSpaces();
                 var genCode = Code.Tag.fileCode.SimplifyNewLines().TabToSpaces();
+                var genNSpc = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenNSpc.Keyword();
                 var genExtn = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenExtn.Keyword();
                 var genData = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenData.Keyword();
                 var genTabs = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenTabs.Keyword();
@@ -159,12 +162,14 @@ namespace Prateek.ScriptTemplating
                 for (int d = 0; d < datas.Count; d++)
                 {
                     var data = datas[d];
+
                     data.settings.Generate(data);
 
                     var code = genTabs.Apply(data.codeGenerated);
-                    genExtn += data.blockName;
+                    genNSpc += data.blockNamespace;
+                    genExtn += data.blockClassName;
                     genData += code;
-                    codeGenerated += genExtn.Apply(genData.Apply(genCode));
+                    codeGenerated += genExtn.Apply(genData.Apply(genNSpc.Apply(genCode)));
                 }
 
                 TemplateHelpers.ApplyKeywords(ref codeGenerated, fileExtension);

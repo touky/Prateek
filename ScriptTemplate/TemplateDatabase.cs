@@ -94,21 +94,28 @@ namespace Prateek.ScriptTemplating
         }
 
         //---------------------------------------------------------------------
+        #region Scripts
         private static List<Script> scripts = new List<Script>();
         public static Group<Script> Scripts { get { return new Group<Script>(scripts); } }
         public static void Add(Script data) { scripts.Add(data); }
+        #endregion Scripts
 
         //---------------------------------------------------------------------
+        #region Keywords
         private static List<Keyword> keywords = new List<Keyword>();
         public static Group<Keyword> Keywords { get { return new Group<Keyword>(keywords); } }
         public static void Add(Keyword data) { keywords.Add(data); }
+        #endregion Keywords
 
         //---------------------------------------------------------------------
+        #region Ignorables
         private static List<Ignorable> ignorables = new List<Ignorable>();
         public static Group<Ignorable> Ignorables { get { return new Group<Ignorable>(ignorables); } }
         public static void Add(Ignorable data) { ignorables.Add(data); }
+        #endregion Ignorables
 
         //---------------------------------------------------------------------
+        #region Unity templates
         private static List<TemplateUnity> templates = new List<TemplateUnity>();
         public static void Add(TemplateUnity data) { templates.Add(data); }
         public static bool MatchTemplate(string filePath, string extension, string content)
@@ -123,5 +130,13 @@ namespace Prateek.ScriptTemplating
             }
             return false;
         }
+        #endregion Unity templates
+
+        //---------------------------------------------------------------------
+        #region Code rules
+        private static List<CodeRule> rules = new List<CodeRule>();
+        public static Group<CodeRule> CodeRules { get { return new Group<CodeRule>(rules); } }
+        public static void Add(CodeRule data) { rules.Add(data); }
+        #endregion Code rules
     }
 }

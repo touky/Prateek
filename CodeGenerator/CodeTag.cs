@@ -73,201 +73,199 @@ using System.Text.RegularExpressions;
 //-----------------------------------------------------------------------------
 namespace Prateek.ScriptTemplating
 {
-
     //---------------------------------------------------------------------
     public static partial class Code
     {
         //---------------------------------------------------------------------
         public static class Tag
-    {
-        //Default datas ---------------------------------------------------
-        public const string sourceExtension = "prtk";
-        public const string destinationExtension = "cs";
+        {
+            //Default datas ---------------------------------------------------
+            public const string sourceExtension = "prtk";
+            public const string destinationExtension = "cs";
 
-        public const string fileHeader =
-@"#PRATEEK_COPYRIGHT#
+            public const string fileHeader = @"#PRATEEK_COPYRIGHT#
 
 #PRATEEK_CSHARP_NAMESPACE#
 ";
-        public const string fileCode =
-@"
+            public const string fileCode = @"
 //-----------------------------------------------------------------------------
-namespace Prateek.Extensions
+namespace PRATEEK_EXTENSION_NAMESPACE
 {
     //-------------------------------------------------------------------------
-    public static partial class #PRATEEK_STATIC_EXTENSION_CLASS#
+    public static partial class #PRATEEK_EXTENSION_STATIC_CLASS#
     {
         #PRATEEK_CODEGEN_DATA#
     }
 }
 ";
 
-        //-----------------------------------------------------------------
-        public struct SwapInfo
-        {
-            //-------------------------------------------------------------
-            private string original;
-            private string replacement;
-
-            //-------------------------------------------------------------
-            public string Original { get { return original; } }
-            public string Replacement { get { return replacement; } }
-
-            //-------------------------------------------------------------
-            public SwapInfo(string original)
+            //-----------------------------------------------------------------
+            public struct SwapInfo
             {
-                this.original = original;
-                this.replacement = string.Empty;
+                //-------------------------------------------------------------
+                private string original;
+                private string replacement;
+
+                //-------------------------------------------------------------
+                public string Original { get { return original; } }
+                public string Replacement { get { return replacement; } }
+
+                //-------------------------------------------------------------
+                public SwapInfo(string original)
+                {
+                    this.original = original;
+                    this.replacement = string.Empty;
+                }
+
+                //-------------------------------------------------------------
+                public static implicit operator SwapInfo(string original)
+                {
+                    return new SwapInfo(original);
+                }
+
+                //-------------------------------------------------------------
+                public static SwapInfo operator +(SwapInfo info, string other)
+                {
+                    return new SwapInfo() { original = info.original, replacement = other };
+                }
+
+                //-------------------------------------------------------------
+                public string Apply(string text)
+                {
+                    return text.Replace(original, replacement);
+                }
             }
 
-            //-------------------------------------------------------------
-            public static implicit operator SwapInfo(string original)
+            //-----------------------------------------------------------------
+            public struct Keyword
             {
-                return new SwapInfo(original);
-            }
+                public enum Usage
+                {
+                    Match,
+                    Forbidden,
+                    Ignore,
 
-            //-------------------------------------------------------------
-            public static SwapInfo operator +(SwapInfo info, string other)
-            {
-                return new SwapInfo() { original = info.original, replacement = other };
-            }
+                    MAX
+                }
 
-            //-------------------------------------------------------------
-            public string Apply(string text)
-            {
-                return text.Replace(original, replacement);
-            }
-        }
+                public string keyword;
+                public Usage usage;
+                public int minArgCount;
+                public int maxArgCount;
+                public bool needOpenScope;
+                public bool needScopeData;
 
-        //-----------------------------------------------------------------
-        public struct Keyword
-        {
-            public enum Usage
-            {
-                Match,
-                Forbidden,
-                Ignore,
+                public Keyword(string keyword, bool doesMatch)
+                {
+                    this.keyword = keyword;
+                    usage = doesMatch ? Usage.Match : Usage.Forbidden;
+                    minArgCount = -1;
+                    maxArgCount = -1;
+                    needOpenScope = false;
+                    needScopeData = false;
+                }
 
-                MAX
-            }
+                public bool NoArgNeeded { get { return minArgCount <= 0 && maxArgCount <= 0; } }
+                public bool CheckArgCount(int count)
+                {
+                    if (minArgCount < 0)
+                        return true;
 
-            public string keyword;
-            public Usage usage;
-            public int minArgCount;
-            public int maxArgCount;
-            public bool needOpenScope;
-            public bool needScopeData;
+                    if (count < minArgCount)
+                        return false;
 
-            public Keyword(string keyword, bool doesMatch)
-            {
-                this.keyword = keyword;
-                usage = doesMatch ? Usage.Match : Usage.Forbidden;
-                minArgCount = -1;
-                maxArgCount = -1;
-                needOpenScope = false;
-                needScopeData = false;
-            }
-
-            public bool NoArgNeeded { get { return minArgCount <= 0 && maxArgCount <= 0; } }
-            public bool CheckArgCount(int count)
-            {
-                if (minArgCount < 0)
+                    if (maxArgCount >= 0)
+                        return count <= maxArgCount;
                     return true;
-
-                if (count < minArgCount)
-                    return false;
-
-                if (maxArgCount >= 0)
-                    return count <= maxArgCount;
-                return true;
+                }
             }
-        }
 
-        //-----------------------------------------------------------------
-        public static class Macro
-        {
-            public static string codeGenExtn = "PRATEEK_STATIC_EXTENSION_CLASS";
-            public static string codeGenData = "PRATEEK_CODEGEN_DATA";
-            public static string codeGenTabs = "PRATEEK_CODEGEN_TABS";
-            public static string extractFuncRegex = @"\b[^()]+\((.*)\)$";
-            public static string extractArgsRegex = @"([^,]+\(.+?\))|([^,]+)";
-
-            public static string macroMatch0 =
-            //@"(^\s*\w+\s*[^\(])";
-            //@"([^\(]+\s*\w+\s*[^,]+)";
-            //@"(\b\w+\b)+";
-            @"([a-zA-Z0-9]+)\((([a-zA-Z0-9]+)(,)(([a-zA-Z0-9])+)*?)*?\)";
-
-            public static string macroMatch = @"^\s*({0})\(.*\)\s*$";
-            public static string argsCountMatch = "[^(]*\\(([^)]*)\\)";
-            public static string prefix = "PRATEEK_CODEGEN";
-            public static string codeData = "CODE";
-
-            //-------------------------------------------------------------
-            public enum Content
+            //-----------------------------------------------------------------
+            public static class Macro
             {
-                FILE_INFO,  //PRATEEK_CODEGEN_FILE_INFO(MyFile, Extension)
-                BLOCK,      //PRATEEK_CODEGEN_BLOCK_[OPERATION](StaticClass)
-                PREFIX,     //PRATEEK_CODEGEN_CODE_PREFIX
-                MAIN,       //PRATEEK_CODEGEN_CODE_MAIN
-                SUFFIX,     //PRATEEK_CODEGEN_CODE_SUFFIX
-                CLASS,      //PRATEEK_CODEGEN_CLASS(*****)
-                TYPE,       //PRATEEK_CODEGEN_TYPE(*****)
+                public static string codeGenNSpc = "PRATEEK_EXTENSION_NAMESPACE";
+                public static string codeGenExtn = "PRATEEK_EXTENSION_STATIC_CLASS";
+                public static string codeGenData = "PRATEEK_CODEGEN_DATA";
+                public static string codeGenTabs = "PRATEEK_CODEGEN_TABS";
+                public static string extractFuncRegex = @"\b[^()]+\((.*)\)$";
+                public static string extractArgsRegex = @"([^,]+\(.+?\))|([^,]+)";
 
-                MAX
+                public static string macroMatch0 =
+                //@"(^\s*\w+\s*[^\(])";
+                //@"([^\(]+\s*\w+\s*[^,]+)";
+                //@"(\b\w+\b)+";
+                @"([a-zA-Z0-9]+)\((([a-zA-Z0-9]+)(,)(([a-zA-Z0-9])+)*?)*?\)";
+
+                public static string macroMatch = @"^\s*({0})\(.*\)\s*$";
+                public static string argsCountMatch = "[^(]*\\(([^)]*)\\)";
+                public static string prefix = "PRATEEK_CODEGEN";
+                public static string codeData = "CODE";
+
+                //-------------------------------------------------------------
+                public enum Content
+                {
+                    FILE_INFO,  //PRATEEK_CODEGEN_FILE_INFO(MyFile, Extension)
+                    BLOCK,      //PRATEEK_CODEGEN_BLOCK_[OPERATION](StaticClass)
+                    PREFIX,     //PRATEEK_CODEGEN_CODE_PREFIX
+                    MAIN,       //PRATEEK_CODEGEN_CODE_MAIN
+                    SUFFIX,     //PRATEEK_CODEGEN_CODE_SUFFIX
+                    CLASS,      //PRATEEK_CODEGEN_CLASS(*****)
+                    TYPE,       //PRATEEK_CODEGEN_TYPE(*****)
+
+                    MAX
+                }
+
+                //-------------------------------------------------------------
+                public static string srcClass = "SRC_CLASS";
+                public static string dstClass = "DST_CLASS";
+
+                //-------------------------------------------------------------
+                public enum Code
+                {
+                    CALL,    //[OPERATION]_CALL
+                    ARGS,    //[OPERATION]_ARGS
+                    VARS,    //[OPERATION]_VARS
+
+                    MAX
+                }
+
+                //-------------------------------------------------------------
+                private static List<string> data = new List<string>();
+
+                //-------------------------------------------------------------
+                public static string FileInfo /***/ { get { return data[0]; } }
+                public static string CodePartPrefix { get { return data[1]; } }
+                public static string CodePartMain { get { return data[2]; } }
+                public static string CodePartSuffix { get { return data[3]; } }
+                public static string OperationClass { get { return data[4]; } }
+                public static string TypeInfo /***/ { get { return data[5]; } }
+
+                //-------------------------------------------------------------
+                public static string To(Content value) { return Enum.GetNames(typeof(Content))[(int)value]; }
+                public static string To(Code value) { return Enum.GetNames(typeof(Code))[(int)value]; }
+
+                //-------------------------------------------------------------
+                public static void Init()
+                {
+                    data.Add(string.Format("{0}_{1}", prefix, To(Content.FILE_INFO)));
+                    data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.PREFIX)));
+                    data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.MAIN)));
+                    data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.SUFFIX)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(Content.CLASS)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(Content.TYPE)));
+                }
             }
 
-            //-------------------------------------------------------------
-            public static string srcClass = "SRC_CLASS";
-            public static string dstClass = "DST_CLASS";
-
-            //-------------------------------------------------------------
-            public enum Code
+            //Code generation data
+            public static class Code
             {
-                CALL,    //[OPERATION]_CALL
-                ARGS,    //[OPERATION]_ARGS
-                VARS,    //[OPERATION]_VARS
-
-                MAX
+                public const string argVarSeparator = ", ";
+                public const string callN = "n";
+                public const string argsV = "v";
+                public const string argsN = ", {0} n_{1} = {2}";
+                public const string varsN = "n_{0}";
+                public const string varsV = "v.{0}";
             }
-
-            //-------------------------------------------------------------
-            private static List<string> data = new List<string>();
-
-            //-------------------------------------------------------------
-            public static string FileInfo /***/ { get { return data[0]; } }
-            public static string CodePartPrefix { get { return data[1]; } }
-            public static string CodePartMain { get { return data[2]; } }
-            public static string CodePartSuffix { get { return data[3]; } }
-            public static string OperationClass { get { return data[4]; } }
-            public static string TypeInfo /***/ { get { return data[5]; } }
-
-            //-------------------------------------------------------------
-            public static string To(Content value) { return Enum.GetNames(typeof(Content))[(int)value]; }
-            public static string To(Code value) { return Enum.GetNames(typeof(Code))[(int)value]; }
-
-            //-------------------------------------------------------------
-            public static void Init()
-            {
-                data.Add(string.Format("{0}_{1}", prefix, To(Content.FILE_INFO)));
-                data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.PREFIX)));
-                data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.MAIN)));
-                data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.SUFFIX)));
-                data.Add(string.Format("{0}_{1}", prefix, To(Content.CLASS)));
-                data.Add(string.Format("{0}_{1}", prefix, To(Content.TYPE)));
-            }
-        }
-
-        //Code generation data
-        public static class Code
-        {
-            public const string argVarSeparator = ", ";
-            public const string callN = "n";
-            public const string argsV = "v";
-            public const string argsN = ", {0} n_{1} = {2}";
-            public const string varsN = "n_{0}";
-            public const string varsV = "v.{0}";
         }
     }
-}
 }

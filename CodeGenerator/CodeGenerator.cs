@@ -86,11 +86,6 @@ namespace Prateek.ScriptTemplating
         #endregion Settings
 
         //---------------------------------------------------------------------
-        #region Fields
-        private static List<CodeSettings> settings = new List<CodeSettings>();
-        #endregion Fields
-
-        //---------------------------------------------------------------------
         #region Unity Defaults
         [ContextMenu("Generate code")]
         public void StartGeneration()
@@ -116,12 +111,6 @@ namespace Prateek.ScriptTemplating
                     break;
                 }
             }
-        }
-
-        //---------------------------------------------------------------------
-        public static void Add(CodeSettings setting)
-        {
-            settings.Add(setting);
         }
 
         //---------------------------------------------------------------------
@@ -179,10 +168,11 @@ namespace Prateek.ScriptTemplating
                     else
                     {
                         var foundMatch = false;
-                        for (int s = 0; s < settings.Count; s++)
+                        var rules = TemplateReplacement.CodeRules;
+                        for (int s = 0; s < rules.Count; s++)
                         {
-                            var setting = settings[s];
-                            var setup = setting.GetSetup(keyword, codeDepth);
+                            var rule = rules[s];
+                            var setup = rule.GetSetup(keyword, codeDepth);
                             if (setup.usage != Code.Tag.Keyword.Usage.Match)
                                 continue;
 
@@ -192,7 +182,7 @@ namespace Prateek.ScriptTemplating
                             if (!analyzer.FindData(ref data, setup))
                                 break;
 
-                            if (!setting.TreatData(activeCodeFile, setup, args, data))
+                            if (!rule.TreatData(activeCodeFile, setup, args, data))
                                 break;
 
                             foundMatch = true;

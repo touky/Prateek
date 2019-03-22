@@ -92,61 +92,6 @@ namespace Prateek.ScriptTemplating
 
             builder.Init();
             builder.StartWork();
-
-
-            //var files = new List<string>();
-            //var keywords = TemplateReplacement.Keywords;
-            //FileHelpers.GatherFilesAt(path, files, FileHelpers.BuildExtensionMatch(keywords.List), true);
-
-            //for (int f = 0; f < files.Count; f++)
-            //{
-            //    var file = files[f];
-
-            //    var fileExtension = file.Substring(file.LastIndexOf(".") + 1);
-            //    var fileContent = FileHelpers.ReadAllTextCleaned(file);
-            //    var ignorers = TemplateHelpers.GatherValidIgnorables(fileContent, fileExtension);
-            //    var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.ZoneDelimiter, fileContent);
-
-            //    for (int r = 0; r < keywords.Count; r++)
-            //    {
-            //        var keyword = keywords[r];
-            //        if (!keyword.Match(fileExtension, fileContent))
-            //            continue;
-
-            //        if (keyword.Mode == TemplateReplacement.KeywordMode.KeywordOnly)
-            //            continue;
-
-            //        var start = 0;
-            //        while ((start = fileContent.IndexOf(keyword.TagBegin, start)) >= 0)
-            //        {
-            //            var safety = ignorers.AdvanceToSafety(start, TemplateReplacement.Ignorable.Style.Text);
-            //            if (safety != start)
-            //            {
-            //                start = safety;
-            //                continue;
-            //            }
-
-            //            var tagEnd = keyword.TagEnd;
-            //            var end = fileContent.IndexOf(tagEnd, start);
-            //            if (end < 0)
-            //                break;
-
-            //            end += tagEnd.Length;
-
-            //            stack.Add(keyword, start, end);
-
-            //            start = end;
-            //        }
-            //    }
-
-            //    fileContent = stack.Apply();
-
-            //    TemplateHelpers.ApplyKeywords(ref fileContent, fileExtension);
-
-            //    File.WriteAllText(file, fileContent);
-            //}
-
-            //AssetDatabase.Refresh();
         }
 #endif //PRATEEK_ALLOW_INTERNAL_TOOLS
     }
