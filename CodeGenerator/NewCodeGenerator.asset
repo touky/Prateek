@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: NewCodeGenerator
   m_EditorClassIdentifier: 
   sourceDirectories:
-  - C:\Dev\PrateekUnityProject\Assets\Scripts\Prateek\CodeGenerator
+  - C:\Dev\PrateekUnityProject\Assets\Scripts\Prateek\CodeGenerator\SourceCode\
   destinationDirectory: C:\Dev\PrateekUnityProject\Assets\Scripts\Prateek\CodeGenerator\GeneratedCode\

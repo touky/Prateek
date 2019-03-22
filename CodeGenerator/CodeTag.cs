@@ -80,24 +80,8 @@ namespace Prateek.ScriptTemplating
         public static class Tag
         {
             //Default datas ---------------------------------------------------
-            public const string sourceExtension = "prtk";
-            public const string destinationExtension = "cs";
-
-            public const string fileHeader = @"#PRATEEK_COPYRIGHT#
-
-#PRATEEK_CSHARP_NAMESPACE#
-";
-            public const string fileCode = @"
-//-----------------------------------------------------------------------------
-namespace PRATEEK_EXTENSION_NAMESPACE
-{
-    //-------------------------------------------------------------------------
-    public static partial class #PRATEEK_EXTENSION_STATIC_CLASS#
-    {
-        #PRATEEK_CODEGEN_DATA#
-    }
-}
-";
+            public const string importExtension = "prtk";
+            public const string exportExtension = "cs";
 
             //-----------------------------------------------------------------
             public struct SwapInfo
@@ -183,21 +167,12 @@ namespace PRATEEK_EXTENSION_NAMESPACE
             //-----------------------------------------------------------------
             public static class Macro
             {
+                public static string codeGenStart = "PRATEEK_SCRIPT_STARTS_HERE";
                 public static string codeGenNSpc = "PRATEEK_EXTENSION_NAMESPACE";
                 public static string codeGenExtn = "PRATEEK_EXTENSION_STATIC_CLASS";
                 public static string codeGenData = "PRATEEK_CODEGEN_DATA";
                 public static string codeGenTabs = "PRATEEK_CODEGEN_TABS";
-                public static string extractFuncRegex = @"\b[^()]+\((.*)\)$";
-                public static string extractArgsRegex = @"([^,]+\(.+?\))|([^,]+)";
 
-                public static string macroMatch0 =
-                //@"(^\s*\w+\s*[^\(])";
-                //@"([^\(]+\s*\w+\s*[^,]+)";
-                //@"(\b\w+\b)+";
-                @"([a-zA-Z0-9]+)\((([a-zA-Z0-9]+)(,)(([a-zA-Z0-9])+)*?)*?\)";
-
-                public static string macroMatch = @"^\s*({0})\(.*\)\s*$";
-                public static string argsCountMatch = "[^(]*\\(([^)]*)\\)";
                 public static string prefix = "PRATEEK_CODEGEN";
                 public static string codeData = "CODE";
 

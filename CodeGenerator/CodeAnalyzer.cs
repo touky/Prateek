@@ -106,7 +106,7 @@ namespace Prateek.ScriptTemplating
             private List<string> scopes = new List<string>();
 
             //-----------------------------------------------------------------
-            private char[] charUnder = new char[1] { '_' };
+            private char[] charAllow = new char[] { '_', '.' };
             private char[] charLiteral = new char[1] { '@' };
             private char[] charIgnore = new char[2] { ' ', '\n' };
             private char[] charCalls = new char[2] { '(', ')' };
@@ -487,8 +487,14 @@ namespace Prateek.ScriptTemplating
                 if (Char.IsNumber(value))
                     return SymbolType.Numeric;
 
-                if (Char.IsLetter(value) || value == charUnder[0])
+                if (Char.IsLetter(value))
                     return SymbolType.Letter;
+
+                for (int c = 0; c < charAllow.Length; c++)
+                {
+                    if (value == charAllow[c])
+                        return SymbolType.Letter;
+                }
 
                 return SymbolType.MAX;
             }

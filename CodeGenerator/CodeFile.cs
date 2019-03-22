@@ -141,10 +141,8 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public bool Generate()
+            public bool Generate(string genHeader, string genCode)
             {
-                var genHeader = Code.Tag.fileHeader.SimplifyNewLines().TabToSpaces();
-                var genCode = Code.Tag.fileCode.SimplifyNewLines().TabToSpaces();
                 var genNSpc = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenNSpc.Keyword();
                 var genExtn = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenExtn.Keyword();
                 var genData = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenData.Keyword();

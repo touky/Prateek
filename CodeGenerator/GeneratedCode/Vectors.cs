@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 20/03/2019
+//  Header last update date: 22/03/2019
 //
 //  Copyright © 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -80,6 +80,7 @@ namespace Prateek.Extensions
         public static Vector2 nx(this Vector2 v, float n_0 = 0) { return new Vector2(n_0, v.x); }
         public static Vector2 ny(this Vector2 v, float n_0 = 0) { return new Vector2(n_0, v.y); }
         #endregion Swizzle Vector2 to Vector2
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector2 to Vector3
         public static Vector3 xxx(this Vector2 v) { return new Vector3(v.x, v.x, v.x); }
@@ -109,6 +110,7 @@ namespace Prateek.Extensions
         public static Vector3 nnx(this Vector2 v, float n_0 = 0, float n_1 = 0) { return new Vector3(n_0, n_1, v.x); }
         public static Vector3 nny(this Vector2 v, float n_0 = 0, float n_1 = 0) { return new Vector3(n_0, n_1, v.y); }
         #endregion Swizzle Vector2 to Vector3
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector2 to Vector4
         public static Vector4 xxxx(this Vector2 v) { return new Vector4(v.x, v.x, v.x, v.x); }
@@ -192,6 +194,7 @@ namespace Prateek.Extensions
         public static Vector4 nnnx(this Vector2 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.x); }
         public static Vector4 nnny(this Vector2 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.y); }
         #endregion Swizzle Vector2 to Vector4
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector3 to Vector2
         public static Vector2 xx(this Vector3 v) { return new Vector2(v.x, v.x); }
@@ -210,6 +213,7 @@ namespace Prateek.Extensions
         public static Vector2 ny(this Vector3 v, float n_0 = 0) { return new Vector2(n_0, v.y); }
         public static Vector2 nz(this Vector3 v, float n_0 = 0) { return new Vector2(n_0, v.z); }
         #endregion Swizzle Vector3 to Vector2
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector3 to Vector3
         public static Vector3 xxx(this Vector3 v) { return new Vector3(v.x, v.x, v.x); }
@@ -276,6 +280,7 @@ namespace Prateek.Extensions
         public static Vector3 nny(this Vector3 v, float n_0 = 0, float n_1 = 0) { return new Vector3(n_0, n_1, v.y); }
         public static Vector3 nnz(this Vector3 v, float n_0 = 0, float n_1 = 0) { return new Vector3(n_0, n_1, v.z); }
         #endregion Swizzle Vector3 to Vector3
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector3 to Vector4
         public static Vector4 xxxx(this Vector3 v) { return new Vector4(v.x, v.x, v.x, v.x); }
@@ -534,6 +539,7 @@ namespace Prateek.Extensions
         public static Vector4 nnny(this Vector3 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.y); }
         public static Vector4 nnnz(this Vector3 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.z); }
         #endregion Swizzle Vector3 to Vector4
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector4 to Vector2
         public static Vector2 xx(this Vector4 v) { return new Vector2(v.x, v.x); }
@@ -561,6 +567,7 @@ namespace Prateek.Extensions
         public static Vector2 nz(this Vector4 v, float n_0 = 0) { return new Vector2(n_0, v.z); }
         public static Vector2 nw(this Vector4 v, float n_0 = 0) { return new Vector2(n_0, v.w); }
         #endregion Swizzle Vector4 to Vector2
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector4 to Vector3
         public static Vector3 xxx(this Vector4 v) { return new Vector3(v.x, v.x, v.x); }
@@ -688,6 +695,7 @@ namespace Prateek.Extensions
         public static Vector3 nnz(this Vector4 v, float n_0 = 0, float n_1 = 0) { return new Vector3(n_0, n_1, v.z); }
         public static Vector3 nnw(this Vector4 v, float n_0 = 0, float n_1 = 0) { return new Vector3(n_0, n_1, v.w); }
         #endregion Swizzle Vector4 to Vector3
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector4 to Vector4
         public static Vector4 xxxx(this Vector4 v) { return new Vector4(v.x, v.x, v.x, v.x); }
@@ -1315,6 +1323,7 @@ namespace Prateek.Extensions
         public static Vector4 nnnz(this Vector4 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.z); }
         public static Vector4 nnnw(this Vector4 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.w); }
         #endregion Swizzle Vector4 to Vector4
+        
         
     }
 }

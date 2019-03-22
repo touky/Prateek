@@ -95,14 +95,14 @@ namespace Prateek.ScriptTemplating
             public Infos destination;
 
             //----
-            public bool IsLoaded { get { return source.content != string.Empty; } }
+            public bool IsLoaded { get { return source.content != null && source.content != string.Empty; } }
 
             //----
             public FileData(string file, string sourceDir) : this(file, sourceDir, null) { }
             public FileData(string file, string sourceDir, string content)
             {
                 file = FileHelpers.GetValidFile(file);
-                if (file == string.Empty)
+                if ((content == null || content == string.Empty) && file == string.Empty)
                 {
                     source = default(Infos);
                     destination = default(Infos);
@@ -253,11 +253,14 @@ namespace Prateek.ScriptTemplating
 
                 if (LoadData(ref file))
                 {
-                    ApplyValidTemplate(ref file);
+                    if (!ApplyValidTemplate(ref file))
+                        continue;
 
-                    ApplyZonedScript(ref file);
+                    if (!ApplyZonedScript(ref file))
+                        continue;
 
-                    ApplyKeyword(ref file);
+                    if (!ApplyKeyword(ref file))
+                        continue;
 
                     WriteData(ref file);
                 }
@@ -343,6 +346,13 @@ namespace Prateek.ScriptTemplating
             content = content.Replace("#SCRIPTNAME#", fileData.source.name);
 
             fileData.destination.extension = extension;
+            fileData.destination.relPath = fileData.destination.relPath
+                        .Replace(fileData.source.name.Extension(fileData.source.extension),
+                                 fileData.destination.name.Extension(fileData.destination.extension));
+            fileData.destination.absPath = fileData.destination.absPath
+                        .Replace(fileData.source.name.Extension(fileData.source.extension),
+                                 fileData.destination.name.Extension(fileData.destination.extension));
+
             fileData.destination.content = content;
 
             return true;
@@ -403,9 +413,7 @@ namespace Prateek.ScriptTemplating
         //---------------------------------------------------------------------
         protected virtual bool DoWriteData(ref FileData fileData)
         {
-            var path = (destinationDirectory + fileData.destination.relPath)
-                            .Replace(fileData.source.name.Extension(fileData.source.extension),
-                                     fileData.destination.name.Extension(fileData.destination.extension));
+            var path = destinationDirectory + fileData.destination.relPath;
             path = FileHelpers.GetValidFile(path);
             if (path == string.Empty)
                 return false;

@@ -77,15 +77,22 @@ namespace Prateek.ScriptTemplating
     public class PrateekScriptBuilder : CodeBuilder
     {
         //--
-        protected override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Code.Tag.sourceExtension); } }
+        protected override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Code.Tag.importExtension); } }
 
         //--
-        protected override bool DoLoadData(ref FileData fileData)
+        protected override bool DoApplyValidTemplate(ref FileData fileData)
         {
-            if (fileData.IsLoaded)
+            if (fileData.source.extension != Code.Tag.importExtension)
                 return true;
 
-            DoLoadData(ref fileData);
+            base.DoApplyValidTemplate(ref fileData);
+
+            var genStart = Code.Tag.Macro.codeGenStart.Keyword();
+            var startIndex = fileData.destination.content.IndexOf(genStart);
+            if (startIndex < 0)
+                return false;
+            var genHeader = fileData.destination.content.Substring(0, startIndex);
+            var genCode = fileData.destination.content.Substring(startIndex + genStart.Length);
 
             var analyzer = new Code.Analyzer();
             var activeCodeFile = (Code.File)null;
@@ -203,9 +210,12 @@ namespace Prateek.ScriptTemplating
                 }
 
                 { // Build the actual code
-                    codeFile.Generate();
+                    codeFile.Generate(genHeader, genCode);
 
-                    AddFile(new FileData(codeFile.fileName + "." + codeFile.fileExtension, string.Empty, codeFile.CodeGenerated));
+                    var newData = fileData;
+                    newData.destination.content = codeFile.CodeGenerated;
+                    newData.source = newData.destination;
+                    AddFile(newData);
 
                     for (int i = 0; i < codeFile.DataCount; i++)
                     {
@@ -220,9 +230,6 @@ namespace Prateek.ScriptTemplating
 
             return false;
         }
-
-        //--
-        protected override bool DoApplyValidTemplate(ref FileData fileData) { return true; }
     }
 
     //-------------------------------------------------------------------------
@@ -251,179 +258,6 @@ namespace Prateek.ScriptTemplating
 
             builder.Init();
             builder.StartWork();
-
-            //var files = new List<string>();
-            //if (!FindSources(files))
-            //{
-            //    UnityEngine.Debug.LogError("No files found");
-            //}
-
-            ////Start the generating
-            //for (int f = 0; f < files.Count; f++)
-            //{
-            //    var path = files[f];
-            //    if (!File.Exists(path))
-            //        continue;
-
-            //    if (!GenerateFile(path))
-            //    {
-            //        UnityEngine.Debug.LogError("Code generation failed");
-            //        break;
-            //    }
-            //}
-        }
-
-        //---------------------------------------------------------------------
-        //private bool FindSources(List<string> files)
-        //{
-        //    for (int d = 0; d < sourceDirectories.Count; d++)
-        //    {
-        //        if (!Directory.Exists(sourceDirectories[d]))
-        //            continue;
-
-        //        FileHelpers.GatherFilesAt(sourceDirectories[d], files, FileHelpers.BuildExtensionMatch(Code.Tag.sourceExtension), true);
-        //    }
-        //    return files.Count > 0;
-        //}
-
-        //---------------------------------------------------------------------
-        private bool GenerateFile(string path)
-        {
-            var sources = FileHelpers.ReadAllTextCleaned(path);
-            if (sources == string.Empty)
-                return false;
-
-            //var analyzer = new Code.Analyzer();
-            //var activeCodeFile = (Code.File)null;
-            //var codeFiles = new List<Code.File>();
-            //var codeDepth = 0;
-
-            //analyzer.Init(sources);
-
-            //var args = new List<string>();
-            //var keyword = string.Empty;
-            //var data = String.Empty;
-            //while (analyzer.ShouldContinue)
-            //{
-            //    if (analyzer.FindKeyword(ref keyword))
-            //    {
-            //        if (codeDepth == 0)
-            //        {
-            //            if (keyword == Code.Tag.Macro.FileInfo)
-            //            {
-            //                var setup = new Code.Tag.Keyword(keyword, true) { minArgCount = 2, maxArgCount = 2, needOpenScope = true };
-            //                if (!analyzer.FindArgs(args, setup))
-            //                    break;
-
-            //                activeCodeFile = codeFiles.Find((x) => { return x.fileName == args[0] && x.fileExtension == args[1]; });
-            //                if (activeCodeFile == null)
-            //                {
-            //                    activeCodeFile = new Code.File() { fileName = args[0], fileExtension = args[1] };
-            //                    codeFiles.Add(activeCodeFile);
-            //                }
-
-            //                codeDepth++;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            var foundMatch = false;
-            //            var rules = TemplateReplacement.CodeRules;
-            //            for (int s = 0; s < rules.Count; s++)
-            //            {
-            //                var rule = rules[s];
-            //                var setup = rule.GetSetup(keyword, codeDepth);
-            //                if (setup.usage != Code.Tag.Keyword.Usage.Match)
-            //                    continue;
-
-            //                if (!analyzer.FindArgs(args, setup))
-            //                    break;
-
-            //                if (!analyzer.FindData(ref data, setup))
-            //                    break;
-
-            //                if (!rule.TreatData(activeCodeFile, setup, args, data))
-            //                    break;
-
-            //                foundMatch = true;
-            //                if (setup.needOpenScope)
-            //                    codeDepth++;
-            //                break;
-            //            }
-
-            //            if (!foundMatch)
-            //                break;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        var scopeName = string.Empty;
-            //        if (analyzer.FindScopeEnd(ref scopeName))
-            //        {
-            //            if (activeCodeFile != null)
-            //            {
-            //                if (activeCodeFile.ActiveData != null)
-            //                {
-            //                    if (activeCodeFile.ActiveData.settings == null)
-            //                        break;
-
-            //                    if (activeCodeFile.ActiveData.settings.CloseScope(activeCodeFile, scopeName))
-            //                        codeDepth--;
-            //                }
-            //                else if (codeDepth == 1 && scopeName == Code.Tag.Macro.FileInfo)
-            //                {
-            //                    activeCodeFile = null;
-            //                    codeDepth--;
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-
-            ////code files have been filled
-            //for (int f = 0; f < codeFiles.Count; f++)
-            //{
-            //    var codeFile = codeFiles[f];
-            //    { // Log shit
-            //        var log = String.Format("FOUND: {0}.{1}\n", codeFile.fileName, codeFile.fileExtension);
-            //        for (int d = 0; d < codeFile.DataCount; d++)
-            //        {
-            //            var fileData = codeFile[d];
-            //            for (int i = 0; i < fileData.classInfos.Count; i++)
-            //            {
-            //                var info = fileData.classInfos[i];
-            //                log += String.Format("  - CLASS: {0} ", info.name);
-            //                for (int v = 0; v < info.variables.Count; v++)
-            //                {
-            //                    log += " " + info.variables[v];
-            //                }
-            //                log += "\n";
-            //            }
-
-            //            log += String.Format("  - TYPE: {0} = {1}\n", fileData.classContentType, fileData.classContentValue);
-            //            log += String.Format("  - CODE PREFIX:\n > {0}\n", fileData.codePrefix.Replace("\n", "\n> "));
-            //            log += String.Format("  - CODE MAIN:\n > {0}\n", fileData.codeMain.Replace("\n", "\n> "));
-            //            log += String.Format("  - CODE POSTFIX:\n > {0}\n", fileData.codePostfix.Replace("\n", "\n> "));
-            //        }
-            //        UnityEngine.Debug.Log(log);
-            //    }
-
-            //    { // Build the actual code
-            //        codeFile.Generate();
-
-            //        File.WriteAllText(destinationDirectory + codeFile.fileName + "." + codeFile.fileExtension, codeFile.CodeGenerated.ApplyCRLF());
-
-            //        for (int i = 0; i < codeFile.DataCount; i++)
-            //        {
-            //            var code = codeFile[i];
-            //            UnityEngine.Debug.Log(code.codeGenerated);
-            //        }
-
-            //        UnityEngine.Debug.Log(codeFile.CodeGenerated);
-            //    }
-            //}
-
-            return true;
         }
 #endregion Unity Defaults
     }

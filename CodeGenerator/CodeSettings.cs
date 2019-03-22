@@ -171,11 +171,21 @@ namespace Prateek.ScriptTemplating
     {
         static PrateekScriptTemplate()
         {
-            NewScript("prtk", "cs")
+            NewScript(Code.Tag.importExtension, Code.Tag.exportExtension)
                 .SetTemplateFile(String.Empty)
                 .SetContent(@"#PRATEEK_COPYRIGHT#
 
 #PRATEEK_CSHARP_NAMESPACE#
+#PRATEEK_SCRIPT_STARTS_HERE#
+//-----------------------------------------------------------------------------
+namespace #PRATEEK_EXTENSION_NAMESPACE#
+{
+    //-------------------------------------------------------------------------
+    public static partial class #PRATEEK_EXTENSION_STATIC_CLASS#
+    {
+        #PRATEEK_CODEGEN_DATA#
+    }
+}
 ").Commit();
         }
     }

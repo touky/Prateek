@@ -75,6 +75,16 @@ namespace Prateek.ScriptTemplating
 {
 
     //-------------------------------------------------------------------------
+    [InitializeOnLoad]
+    class SwizzleScriptTemplate : TemplateReplacement
+    {
+        static SwizzleScriptTemplate()
+        {
+            NewSwizzle(Code.Tag.importExtension).Commit();
+        }
+    }
+
+    //-------------------------------------------------------------------------
     public partial class TemplateReplacement
     {
         //---------------------------------------------------------------------
