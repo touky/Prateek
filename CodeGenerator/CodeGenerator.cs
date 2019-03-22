@@ -185,48 +185,48 @@ namespace Prateek.ScriptTemplating
             for (int f = 0; f < codeFiles.Count; f++)
             {
                 var codeFile = codeFiles[f];
-                { // Log shit
-                    var log = String.Format("FOUND: {0}.{1}\n", codeFile.fileName, codeFile.fileExtension);
-                    for (int d = 0; d < codeFile.DataCount; d++)
-                    {
-                        var codeData = codeFile[d];
-                        for (int i = 0; i < codeData.classInfos.Count; i++)
-                        {
-                            var info = codeData.classInfos[i];
-                            log += String.Format("  - CLASS: {0} ", info.name);
-                            for (int v = 0; v < info.variables.Count; v++)
-                            {
-                                log += " " + info.variables[v];
-                            }
-                            log += "\n";
-                        }
+                //{ // Log shit
+                //    var log = String.Format("FOUND: {0}.{1}\n", codeFile.fileName, codeFile.fileExtension);
+                //    for (int d = 0; d < codeFile.DataCount; d++)
+                //    {
+                //        var codeData = codeFile[d];
+                //        for (int i = 0; i < codeData.classInfos.Count; i++)
+                //        {
+                //            var info = codeData.classInfos[i];
+                //            log += String.Format("  - CLASS: {0} ", info.name);
+                //            for (int v = 0; v < info.variables.Count; v++)
+                //            {
+                //                log += " " + info.variables[v];
+                //            }
+                //            log += "\n";
+                //        }
 
-                        log += String.Format("  - TYPE: {0} = {1}\n", codeData.classContentType, codeData.classContentValue);
-                        log += String.Format("  - CODE PREFIX:\n > {0}\n", codeData.codePrefix.Replace("\n", "\n> "));
-                        log += String.Format("  - CODE MAIN:\n > {0}\n", codeData.codeMain.Replace("\n", "\n> "));
-                        log += String.Format("  - CODE POSTFIX:\n > {0}\n", codeData.codePostfix.Replace("\n", "\n> "));
-                    }
-                    UnityEngine.Debug.Log(log);
-                }
+                //        log += String.Format("  - TYPE: {0} = {1}\n", codeData.classContentType, codeData.classContentValue);
+                //        log += String.Format("  - CODE PREFIX:\n > {0}\n", codeData.codePrefix.Replace("\n", "\n> "));
+                //        log += String.Format("  - CODE MAIN:\n > {0}\n", codeData.codeMain.Replace("\n", "\n> "));
+                //        log += String.Format("  - CODE POSTFIX:\n > {0}\n", codeData.codePostfix.Replace("\n", "\n> "));
+                //    }
+                //    UnityEngine.Debug.Log(log);
+                //}
 
-                { // Build the actual code
-                    codeFile.Generate(genHeader, genCode);
+                // Build the actual code
+                codeFile.Generate(genHeader, genCode);
 
-                    var newData = fileData;
-                    newData.destination.content = codeFile.CodeGenerated;
-                    newData.source = newData.destination;
-                    AddFile(newData);
+                var newData = fileData;
+                newData.destination.content = codeFile.CodeGenerated;
+                newData.source = newData.destination;
+                AddFile(newData);
 
-                    for (int i = 0; i < codeFile.DataCount; i++)
-                    {
-                        var code = codeFile[i];
-                        UnityEngine.Debug.Log(code.codeGenerated);
-                    }
+                //{ // Log shit
+                //    for (int i = 0; i < codeFile.DataCount; i++)
+                //    {
+                //        var code = codeFile[i];
+                //        UnityEngine.Debug.Log(code.codeGenerated);
+                //    }
 
-                    UnityEngine.Debug.Log(codeFile.CodeGenerated);
-                }
+                //    UnityEngine.Debug.Log(codeFile.CodeGenerated);
+                //}
             }
-
 
             return false;
         }
