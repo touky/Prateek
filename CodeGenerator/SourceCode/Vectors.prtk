@@ -6,7 +6,7 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
         PRATEEK_CODEGEN_CLASS(Vector3, x, y, z)
         PRATEEK_CODEGEN_CLASS(Vector4, x, y, z, w)
 
-        PRATEEK_CODEGEN_TYPE(float, 0)
+        PRATEEK_CODEGEN_DEFAULT(float, 0)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
@@ -27,7 +27,9 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
     }
 
 //Mixed constructors
-//public static SRC_CLASS MIX_CTOR_CALL(MIX_CTOR_ARGS) { return new SRC_CLASS(MIX_CTOR_VARS); }
+//
+//public static SRC_CLASS MIXED_CTOR_CALL(MIXED_CTOR_ARGS) { return new SRC_CLASS(MIXED_CTOR_VARS); }
+//
 //public static Vector2 vec2(float n_0, float n_1) { return new Vector2(n_0, n_1); }
 
 //namespace ShaderTo

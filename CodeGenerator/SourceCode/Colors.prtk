@@ -8,7 +8,7 @@ PRATEEK_CODEGEN_FILE_INFO(Colors, cs)
     {
         PRATEEK_CODEGEN_CLASS(Color, r, g, b, a)
 
-        PRATEEK_CODEGEN_TYPE(float, 0)
+        PRATEEK_CODEGEN_DEFAULT(float, 0)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {

@@ -94,8 +94,8 @@ namespace Prateek.ScriptTemplating
                 public string blockClassName;
 
                 public List<ClassInfo> classInfos = new List<ClassInfo>();
-                public string classContentType;
-                public string classContentValue;
+                public string classDefaultType;
+                public string classDefaultValue;
 
                 public string codePrefix;
                 public string codeMain;

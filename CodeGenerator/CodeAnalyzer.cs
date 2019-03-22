@@ -172,7 +172,7 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public bool FindArgs(List<string> args, Code.Tag.Keyword setup)
+            public bool FindArgs(List<string> args, Code.Tag.KeyRule setup)
             {
                 args.Clear();
 
@@ -250,7 +250,7 @@ namespace Prateek.ScriptTemplating
                         }
                         case SymbolType.ScopeStart:
                         {
-                            scopes.Add(setup.needOpenScope ? setup.keyword : string.Empty);
+                            scopes.Add(setup.needOpenScope ? setup.key : string.Empty);
 
                             foundScope = true;
                             allowContinue = false;
@@ -279,7 +279,7 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public bool FindData(ref string data, Code.Tag.Keyword setup)
+            public bool FindData(ref string data, Code.Tag.KeyRule setup)
             {
                 if (!setup.needScopeData)
                     return true;

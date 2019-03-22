@@ -121,8 +121,9 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public struct Keyword
+            public struct KeyRule
             {
+                //----------------------------------------------------------
                 public enum Usage
                 {
                     Match,
@@ -132,24 +133,29 @@ namespace Prateek.ScriptTemplating
                     MAX
                 }
 
-                public string keyword;
+                //----------------------------------------------------------
+                public string key;
                 public Usage usage;
                 public int minArgCount;
                 public int maxArgCount;
                 public bool needOpenScope;
                 public bool needScopeData;
 
-                public Keyword(string keyword, bool doesMatch)
+                //----------------------------------------------------------
+                public bool NoArgNeeded { get { return minArgCount <= 0 && maxArgCount <= 0; } }
+
+                //----------------------------------------------------------
+                public KeyRule(string key, bool doesMatch)
                 {
-                    this.keyword = keyword;
+                    this.key = key;
                     usage = doesMatch ? Usage.Match : Usage.Forbidden;
                     minArgCount = -1;
                     maxArgCount = -1;
                     needOpenScope = false;
                     needScopeData = false;
                 }
-
-                public bool NoArgNeeded { get { return minArgCount <= 0 && maxArgCount <= 0; } }
+                
+                //----------------------------------------------------------
                 public bool CheckArgCount(int count)
                 {
                     if (minArgCount < 0)
@@ -167,6 +173,7 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public static class Macro
             {
+                //----------------------------------------------------------
                 public static string codeGenStart = "PRATEEK_SCRIPT_STARTS_HERE";
                 public static string codeGenNSpc = "PRATEEK_EXTENSION_NAMESPACE";
                 public static string codeGenExtn = "PRATEEK_EXTENSION_STATIC_CLASS";
@@ -185,7 +192,7 @@ namespace Prateek.ScriptTemplating
                     MAIN,       //PRATEEK_CODEGEN_CODE_MAIN
                     SUFFIX,     //PRATEEK_CODEGEN_CODE_SUFFIX
                     CLASS,      //PRATEEK_CODEGEN_CLASS(*****)
-                    TYPE,       //PRATEEK_CODEGEN_TYPE(*****)
+                    DEFAULT,    //PRATEEK_CODEGEN_DEFAULT(*****)
 
                     MAX
                 }
@@ -208,12 +215,12 @@ namespace Prateek.ScriptTemplating
                 private static List<string> data = new List<string>();
 
                 //-------------------------------------------------------------
-                public static string FileInfo /***/ { get { return data[0]; } }
+                public static string FileInfo       { get { return data[0]; } }
                 public static string CodePartPrefix { get { return data[1]; } }
-                public static string CodePartMain { get { return data[2]; } }
+                public static string CodePartMain   { get { return data[2]; } }
                 public static string CodePartSuffix { get { return data[3]; } }
                 public static string OperationClass { get { return data[4]; } }
-                public static string TypeInfo /***/ { get { return data[5]; } }
+                public static string DefaultInfo    { get { return data[5]; } }
 
                 //-------------------------------------------------------------
                 public static string To(Content value) { return Enum.GetNames(typeof(Content))[(int)value]; }
@@ -227,11 +234,11 @@ namespace Prateek.ScriptTemplating
                     data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.MAIN)));
                     data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.SUFFIX)));
                     data.Add(string.Format("{0}_{1}", prefix, To(Content.CLASS)));
-                    data.Add(string.Format("{0}_{1}", prefix, To(Content.TYPE)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(Content.DEFAULT)));
                 }
             }
 
-            //Code generation data
+            //Code generation data -------------------------------------
             public static class Code
             {
                 public const string argVarSeparator = ", ";

@@ -97,116 +97,14 @@ namespace Prateek.ScriptTemplating
         public partial class SwizzleRule : CodeRule
         {
             //-----------------------------------------------------------------
-            public struct Variant
-            {
-                public string call;
-                public string args;
-                public string vars;
-
-                public Variant(string value)
-                {
-                    call = value;
-                    args = value;
-                    vars = value;
-                }
-            }
-
-            //-----------------------------------------------------------------
             public override string ScopeTag { get { return "SWIZZLE"; } }
 
             //-----------------------------------------------------------------
             public SwizzleRule(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
-            #region CodeRule override
-            public override bool TreatData(Code.File codeFile, Code.Tag.Keyword setup, List<string> args, string data)
-            {
-                var activeData = codeFile.ActiveData;
-                if (activeData == null)
-                {
-                    activeData = codeFile.NewData(this);
-                }
-
-                if (activeData.settings == null || activeData.settings != this)
-                    return false;
-
-                if (setup.keyword == CodeBlock)
-                {
-                    activeData.blockNamespace = args[0];
-                    activeData.blockClassName = args[1];
-                }
-                else if (setup.keyword == Code.Tag.Macro.OperationClass)
-                {
-                    activeData.classInfos.Add(new Code.File.Data.ClassInfo()
-                    {
-                        name = args[0],
-                        variables = args.GetRange(1, args.Count - 1)
-                    });
-                }
-                else if (setup.keyword == Code.Tag.Macro.TypeInfo)
-                {
-                    activeData.classContentType = args[0];
-                    activeData.classContentValue = args[1];
-                }
-                else if (setup.keyword == Code.Tag.Macro.CodePartPrefix)
-                {
-                    activeData.codePrefix = data;
-                }
-                else if (setup.keyword == Code.Tag.Macro.CodePartMain)
-                {
-                    activeData.codeMain = data;
-                }
-                else if (setup.keyword == Code.Tag.Macro.CodePartSuffix)
-                {
-                    activeData.codePostfix = data;
-                }
-                return true;
-            }
-
-            //-----------------------------------------------------------------
-            public override void Generate(Code.File.Data data)
-            {
-                var variants = new List<Variant>();
-                for (int iSrc = 0; iSrc < data.classInfos.Count; iSrc++)
-                {
-                    var infoSrc = data.classInfos[iSrc];
-                    for (int iSDst = 0; iSDst < data.classInfos.Count; iSDst++)
-                    {
-                        var infoDst = data.classInfos[iSDst];
-
-                        GatherVariants(variants, data, infoSrc, infoDst);
-
-                        var swapSrc = ClassSrc + infoSrc.name;
-                        var swapDst = ClassDst + infoDst.name;
-                        AddCode(data.codePrefix, data, swapSrc, swapDst);
-                        for (int v = 0; v < variants.Count; v++)
-                        {
-                            var variant = variants[v];
-                            var code = data.codeMain;
-                            code = (CodeCall + variant.call).Apply(code);
-                            code = (CodeArgs + variant.args).Apply(code);
-                            code = (CodeVars + variant.vars).Apply(code);
-                            AddCode(code, data, swapSrc, swapDst);
-                        }
-                        AddCode(data.codePostfix, data, swapSrc, swapDst);
-                    }
-                }
-
-                data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Code.Tag.Macro.codeGenTabs.Keyword());
-            }
-            #endregion CodeRule override
-
-            //-----------------------------------------------------------------
             #region SwizzleRule internal
-            private void AddCode(string code, Code.File.Data data, Code.Tag.SwapInfo swapSrc, Code.Tag.SwapInfo swapDst)
-            {
-                code = swapSrc.Apply(code);
-                code = swapDst.Apply(code);
-                data.codeGenerated += code;
-            }
-
-            //-----------------------------------------------------------------
-            private void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
+            protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
             {
                 var slots = new int[infoDst.variables.Count];
                 for (int s = 0; s < slots.Length; s++)
@@ -249,7 +147,7 @@ namespace Prateek.ScriptTemplating
                             else
                             {
                                 variant.call += Code.Tag.Code.callN;
-                                variant.args += string.Format(Code.Tag.Code.argsN, data.classContentType, sn, data.classContentValue);
+                                variant.args += string.Format(Code.Tag.Code.argsN, data.classDefaultType, sn, data.classDefaultValue);
                                 variant.vars += string.Format(Code.Tag.Code.varsN, sn);
                                 sn++;
                             }

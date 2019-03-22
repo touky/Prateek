@@ -80,6 +80,21 @@ namespace Prateek.ScriptTemplating
         public abstract class CodeRule : TemplateBase
         {
             //-----------------------------------------------------------------
+            public struct Variant
+            {
+                public string call;
+                public string args;
+                public string vars;
+
+                public Variant(string value)
+                {
+                    call = value;
+                    args = value;
+                    vars = value;
+                }
+            }
+
+            //-----------------------------------------------------------------
             public abstract string ScopeTag { get; }
 
             //-----------------------------------------------------------------
@@ -120,26 +135,52 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public virtual Code.Tag.Keyword GetSetup(string keyword, int codeDepth)
+            public bool TreatData(Code.File codeFile, Code.Tag.KeyRule keyRule, List<string> args, string data)
+            {
+                var activeData = codeFile.ActiveData;
+                if (activeData == null)
+                {
+                    activeData = codeFile.NewData(this);
+                }
+
+                if (activeData.settings == null || activeData.settings != this)
+                    return false;
+
+                return DoTreatData(activeData, keyRule, args, data);
+            }
+
+            //-----------------------------------------------------------------
+            #region Utils
+            protected void AddCode(string code, Code.File.Data data, Code.Tag.SwapInfo swapSrc, Code.Tag.SwapInfo swapDst)
+            {
+                code = swapSrc.Apply(code);
+                code = swapDst.Apply(code);
+                data.codeGenerated += code;
+            }
+            #endregion Utils
+
+            //-----------------------------------------------------------------
+            #region CodeRule overridable
+            public virtual Code.Tag.KeyRule GetKeyRule(string keyword, int codeDepth)
             {
                 if (keyword == CodeBlock)
                 {
-                    return new Code.Tag.Keyword(keyword, codeDepth == 1) { minArgCount = 2, maxArgCount = 2, needOpenScope = true };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 1) { minArgCount = 2, maxArgCount = 2, needOpenScope = true };
                 }
                 else if (keyword == Code.Tag.Macro.OperationClass)
                 {
-                    return new Code.Tag.Keyword(keyword, codeDepth == 2) { minArgCount = 1 };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 1 };
                 }
-                else if (keyword == Code.Tag.Macro.TypeInfo)
+                else if (keyword == Code.Tag.Macro.DefaultInfo)
                 {
-                    return new Code.Tag.Keyword(keyword, codeDepth == 2) { minArgCount = 2, maxArgCount = 2 };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 2, maxArgCount = 2 };
                 }
                 else if (keyword == Code.Tag.Macro.CodePartPrefix || keyword == Code.Tag.Macro.CodePartMain || keyword == Code.Tag.Macro.CodePartSuffix)
                 {
-                    return new Code.Tag.Keyword(keyword, codeDepth == 2) { minArgCount = 0, maxArgCount = 0, needOpenScope = true, needScopeData = true };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 0, maxArgCount = 0, needOpenScope = true, needScopeData = true };
                 }
 
-                return new Code.Tag.Keyword() { usage = Code.Tag.Keyword.Usage.Ignore };
+                return new Code.Tag.KeyRule() { usage = Code.Tag.KeyRule.Usage.Ignore };
             }
 
             //-----------------------------------------------------------------
@@ -158,10 +199,78 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public abstract bool TreatData(Code.File codeFile, Code.Tag.Keyword keyword, List<string> args, string data);
+            protected virtual bool DoTreatData(Code.File.Data activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
+            {
+                if (keyRule.key == CodeBlock)
+                {
+                    activeData.blockNamespace = args[0];
+                    activeData.blockClassName = args[1];
+                }
+                else if (keyRule.key == Code.Tag.Macro.OperationClass)
+                {
+                    activeData.classInfos.Add(new Code.File.Data.ClassInfo()
+                    {
+                        name = args[0],
+                        variables = args.GetRange(1, args.Count - 1)
+                    });
+                }
+                else if (keyRule.key == Code.Tag.Macro.DefaultInfo)
+                {
+                    activeData.classDefaultType = args[0];
+                    activeData.classDefaultValue = args[1];
+                }
+                else if (keyRule.key == Code.Tag.Macro.CodePartPrefix)
+                {
+                    activeData.codePrefix = data;
+                }
+                else if (keyRule.key == Code.Tag.Macro.CodePartMain)
+                {
+                    activeData.codeMain = data;
+                }
+                else if (keyRule.key == Code.Tag.Macro.CodePartSuffix)
+                {
+                    activeData.codePostfix = data;
+                }
+                return true;
+            }
 
             //-----------------------------------------------------------------
-            public abstract void Generate(Code.File.Data data);
+            public virtual void Generate(Code.File.Data data)
+            {
+                var variants = new List<Variant>();
+                for (int iSrc = 0; iSrc < data.classInfos.Count; iSrc++)
+                {
+                    var infoSrc = data.classInfos[iSrc];
+                    for (int iSDst = 0; iSDst < data.classInfos.Count; iSDst++)
+                    {
+                        var infoDst = data.classInfos[iSDst];
+
+                        GatherVariants(variants, data, infoSrc, infoDst);
+
+                        var swapSrc = ClassSrc + infoSrc.name;
+                        var swapDst = ClassDst + infoDst.name;
+                        AddCode(data.codePrefix, data, swapSrc, swapDst);
+                        for (int v = 0; v < variants.Count; v++)
+                        {
+                            var variant = variants[v];
+                            var code = data.codeMain;
+                            code = (CodeCall + variant.call).Apply(code);
+                            code = (CodeArgs + variant.args).Apply(code);
+                            code = (CodeVars + variant.vars).Apply(code);
+                            AddCode(code, data, swapSrc, swapDst);
+                        }
+                        AddCode(data.codePostfix, data, swapSrc, swapDst);
+                    }
+                }
+
+                data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Code.Tag.Macro.codeGenTabs.Keyword());
+            }
+            #endregion CodeRule override
+
+            //-----------------------------------------------------------------
+            #region CodeRule abstract
+            protected abstract void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst);
+            #endregion CodeRule abstract
         }
     }
 

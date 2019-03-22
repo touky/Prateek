@@ -112,7 +112,7 @@ namespace Prateek.ScriptTemplating
                     {
                         if (keyword == Code.Tag.Macro.FileInfo)
                         {
-                            var setup = new Code.Tag.Keyword(keyword, true) { minArgCount = 2, maxArgCount = 2, needOpenScope = true };
+                            var setup = new Code.Tag.KeyRule(keyword, true) { minArgCount = 2, maxArgCount = 2, needOpenScope = true };
                             if (!analyzer.FindArgs(args, setup))
                                 break;
 
@@ -133,8 +133,8 @@ namespace Prateek.ScriptTemplating
                         for (int s = 0; s < rules.Count; s++)
                         {
                             var rule = rules[s];
-                            var setup = rule.GetSetup(keyword, codeDepth);
-                            if (setup.usage != Code.Tag.Keyword.Usage.Match)
+                            var setup = rule.GetKeyRule(keyword, codeDepth);
+                            if (setup.usage != Code.Tag.KeyRule.Usage.Match)
                                 continue;
 
                             if (!analyzer.FindArgs(args, setup))
