@@ -73,7 +73,7 @@ using Prateek.IO;
 namespace Prateek.ScriptTemplating
 {
     //-------------------------------------------------------------------------
-    public class Codebuilder
+    public class CodeBuilder
     {
         //---------------------------------------------------------------------
         #region Declarations
@@ -93,6 +93,9 @@ namespace Prateek.ScriptTemplating
             //----
             public Infos source;
             public Infos destination;
+
+            //----
+            public bool IsLoaded { get { return source.content != string.Empty; } }
 
             //----
             public FileData(string file, string sourceDir) : this(file, sourceDir, null) { }
@@ -248,15 +251,16 @@ namespace Prateek.ScriptTemplating
             {
                 var file = workFiles[f];
 
-                LoadData(ref file);
+                if (LoadData(ref file))
                 {
                     ApplyValidTemplate(ref file);
 
                     ApplyZonedScript(ref file);
 
                     ApplyKeyword(ref file);
+
+                    WriteData(ref file);
                 }
-                WriteData(ref file);
             }
 
             AssetDatabase.Refresh();
@@ -315,6 +319,7 @@ namespace Prateek.ScriptTemplating
         protected virtual bool DoApplyValidTemplate(ref FileData fileData)
         {
             var content = string.Empty;
+            var extension = string.Empty;
 
             //Look for the correct script remplacement
             var scripts = TemplateReplacement.Scripts;
@@ -324,6 +329,7 @@ namespace Prateek.ScriptTemplating
                 if (script.Match(fileData.source.extension, fileData.source.content))
                 {
                     content = script.Content.CleanText();
+                    extension = script.ExportExtension;
                     break;
                 }
 
@@ -336,6 +342,7 @@ namespace Prateek.ScriptTemplating
 
             content = content.Replace("#SCRIPTNAME#", fileData.source.name);
 
+            fileData.destination.extension = extension;
             fileData.destination.content = content;
 
             return true;

@@ -86,7 +86,7 @@ namespace Prateek.ScriptTemplating
             if (!Directory.Exists(path))
                 return;
 
-            var builder = new Codebuilder();
+            var builder = new CodeBuilder();
 
             builder.AddDirectory(path);
 

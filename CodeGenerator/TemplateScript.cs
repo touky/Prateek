@@ -80,10 +80,17 @@ namespace Prateek.ScriptTemplating
         public class Script : TemplateBase
         {
             //-----------------------------------------------------------------
+            private string exportExtension = string.Empty;
             private string templateFile = string.Empty;
 
             //-----------------------------------------------------------------
-            public Script(string extension) : base(extension) { }
+            public string ExportExtension { get { return exportExtension; } }
+
+            //-----------------------------------------------------------------
+            public Script(string extension, string exportExtension) : base(extension)
+            {
+                this.exportExtension = exportExtension;
+            }
 
             //-----------------------------------------------------------------
             public Script SetTemplateFile(string file)
@@ -115,9 +122,10 @@ namespace Prateek.ScriptTemplating
         }
 
         //---------------------------------------------------------------------
-        protected static Script NewScript(string extension)
+        protected static Script NewScript(string extension) { return NewScript(extension, extension); }
+        protected static Script NewScript(string extension, string exportExtension)
         {
-            return new Script(extension);
+            return new Script(extension, exportExtension);
         }
     }
 }

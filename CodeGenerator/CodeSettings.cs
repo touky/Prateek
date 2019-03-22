@@ -164,4 +164,19 @@ namespace Prateek.ScriptTemplating
             public abstract void Generate(Code.File.Data data);
         }
     }
+
+    //-------------------------------------------------------------------------
+    [InitializeOnLoad]
+    class PrateekScriptTemplate : TemplateReplacement
+    {
+        static PrateekScriptTemplate()
+        {
+            NewScript("prtk", "cs")
+                .SetTemplateFile(String.Empty)
+                .SetContent(@"#PRATEEK_COPYRIGHT#
+
+#PRATEEK_CSHARP_NAMESPACE#
+").Commit();
+        }
+    }
 }

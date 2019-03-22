@@ -172,8 +172,6 @@ namespace Prateek.ScriptTemplating
                     codeGenerated += genExtn.Apply(genData.Apply(genNSpc.Apply(genCode)));
                 }
 
-                TemplateHelpers.ApplyKeywords(ref codeGenerated, fileExtension);
-
                 return true;
             }
         }

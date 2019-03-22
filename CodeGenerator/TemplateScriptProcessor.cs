@@ -85,9 +85,9 @@ namespace Prateek.ScriptTemplating
             if (index < 0)
                 return;
 
-            var builder = new Codebuilder();
+            var builder = new CodeBuilder();
 
-            builder.AddFile(new Codebuilder.FileData(path, string.Empty));
+            builder.AddFile(new CodeBuilder.FileData(path, string.Empty));
 
             builder.Init();
             builder.StartWork();
