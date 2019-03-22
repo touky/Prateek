@@ -73,7 +73,6 @@ using System.Text.RegularExpressions;
 //-----------------------------------------------------------------------------
 namespace Prateek.ScriptTemplating
 {
-
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
     class SwizzleScriptTemplate : TemplateReplacement
@@ -119,6 +118,7 @@ namespace Prateek.ScriptTemplating
             public SwizzleRule(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
+            #region CodeRule override
             public override bool TreatData(Code.File codeFile, Code.Tag.Keyword setup, List<string> args, string data)
             {
                 var activeData = codeFile.ActiveData;
@@ -194,8 +194,10 @@ namespace Prateek.ScriptTemplating
 
                 data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Code.Tag.Macro.codeGenTabs.Keyword());
             }
+            #endregion CodeRule override
 
             //-----------------------------------------------------------------
+            #region SwizzleRule internal
             private void AddCode(string code, Code.File.Data data, Code.Tag.SwapInfo swapSrc, Code.Tag.SwapInfo swapDst)
             {
                 code = swapSrc.Apply(code);
@@ -260,6 +262,7 @@ namespace Prateek.ScriptTemplating
                     }
                 }
             }
+            #endregion SwizzleRule internal
         }
     }
 }
