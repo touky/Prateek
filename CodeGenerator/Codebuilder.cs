@@ -173,6 +173,9 @@ namespace Prateek.ScriptTemplating
 
         [SerializeField]
         private List<string> sourceFiles = new List<string>();
+
+        [SerializeField]
+        private bool runInTestMode = false;
         #endregion Settings
 
         //---------------------------------------------------------------------
@@ -187,6 +190,7 @@ namespace Prateek.ScriptTemplating
         public string DestinationDirectory { get { return destinationDirectory; } set { destinationDirectory = value; } }
         public OperationApplied Operations { get { return operations; } set { operations = value; } }
         protected virtual string SearchPattern { get { return FileHelpers.BuildExtensionMatch(TemplateReplacement.Keywords.List); } private set { } }
+        public bool RunInTestMode { get { return runInTestMode; } set { runInTestMode = value; } }
         #endregion Properties
 
         //---------------------------------------------------------------------
@@ -418,7 +422,7 @@ namespace Prateek.ScriptTemplating
             if (path == string.Empty)
                 return false;
 
-            File.WriteAllText(path, fileData.destination.content.ApplyCRLF());
+            File.WriteAllText(path + (runInTestMode ? ".txt" : String.Empty), fileData.destination.content.ApplyCRLF());
 
             return true;
         }

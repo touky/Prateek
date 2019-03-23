@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 22/03/2019
+//  Header last update date: 23/03/2019
 //
 //  Copyright © 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -1323,6 +1323,42 @@ namespace Prateek.Extensions
         public static Vector4 nnnz(this Vector4 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.z); }
         public static Vector4 nnnw(this Vector4 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.w); }
         #endregion Swizzle Vector4 to Vector4
+        
+        
+    }
+}
+
+//-----------------------------------------------------------------------------
+namespace Prateek.ShaderTo
+{
+    //-------------------------------------------------------------------------
+    public static partial class CSharp
+    {
+        //---------------------------------------------------------------------
+        #region Swizzle Vector2 to DST_CLASS
+        public static Vector2 vec2(float n_0, float n_1) { return new Vector2(n_0, n_1); }
+        public static Vector2 vec2(Vector2 v_0) { return new Vector2(v_0.x, v_0.y); }
+        #endregion Swizzle Vector2 to DST_CLASS
+        
+        //---------------------------------------------------------------------
+        #region Swizzle Vector3 to DST_CLASS
+        public static Vector3 vec3(float n_0, float n_1, float n_2) { return new Vector3(n_0, n_1, n_2); }
+        public static Vector3 vec3(float n_0, Vector2 v_0) { return new Vector3(n_0, v_0.x, v_0.y); }
+        public static Vector3 vec3(Vector2 v_0, float n_0) { return new Vector3(v_0.x, v_0.y, n_0); }
+        public static Vector3 vec3(Vector3 v_0) { return new Vector3(v_0.x, v_0.y, v_0.z); }
+        #endregion Swizzle Vector3 to DST_CLASS
+        
+        //---------------------------------------------------------------------
+        #region Swizzle Vector4 to DST_CLASS
+        public static Vector4 vec4(float n_0, float n_1, float n_2, float n_3) { return new Vector4(n_0, n_1, n_2, n_3); }
+        public static Vector4 vec4(float n_0, float n_1, Vector2 v_0) { return new Vector4(n_0, n_1, v_0.x, v_0.y); }
+        public static Vector4 vec4(float n_0, Vector2 v_0, float n_1) { return new Vector4(n_0, v_0.x, v_0.y, n_1); }
+        public static Vector4 vec4(float n_0, Vector3 v_0) { return new Vector4(n_0, v_0.x, v_0.y, v_0.z); }
+        public static Vector4 vec4(Vector2 v_0, float n_0, float n_1) { return new Vector4(v_0.x, v_0.y, n_0, n_1); }
+        public static Vector4 vec4(Vector2 v_0, Vector2 v_1) { return new Vector4(v_0.x, v_0.y, v_1.x, v_1.y); }
+        public static Vector4 vec4(Vector3 v_0, float n_0) { return new Vector4(v_0.x, v_0.y, v_0.z, n_0); }
+        public static Vector4 vec4(Vector4 v_0) { return new Vector4(v_0.x, v_0.y, v_0.z, v_0.w); }
+        #endregion Swizzle Vector4 to DST_CLASS
         
         
     }

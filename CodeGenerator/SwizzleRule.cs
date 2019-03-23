@@ -104,7 +104,39 @@ namespace Prateek.ScriptTemplating
 
             //-----------------------------------------------------------------
             #region SwizzleRule internal
-            protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
+            public override void Generate(Code.File.Data data)
+            {
+                var variants = new List<Variant>();
+                for (int iSrc = 0; iSrc < data.classInfos.Count; iSrc++)
+                {
+                    var infoSrc = data.classInfos[iSrc];
+                    for (int iSDst = 0; iSDst < data.classInfos.Count; iSDst++)
+                    {
+                        var infoDst = data.classInfos[iSDst];
+
+                        GatherVariants(variants, data, infoSrc, infoDst);
+
+                        var swapSrc = ClassSrc + infoSrc.names[0];
+                        var swapDst = ClassDst + infoDst.names[0];
+                        AddCode(data.codePrefix, data, swapSrc, swapDst);
+                        for (int v = 0; v < variants.Count; v++)
+                        {
+                            var variant = variants[v];
+                            var code = data.codeMain;
+                            code = (CodeCall + variant.Call).Apply(code);
+                            code = (CodeArgs + variant.Args).Apply(code);
+                            code = (CodeVars + variant.Vars).Apply(code);
+                            AddCode(code, data, swapSrc, swapDst);
+                        }
+                        AddCode(data.codePostfix, data, swapSrc, swapDst);
+                    }
+                }
+
+                data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Code.Tag.Macro.codeGenTabs.Keyword());
+            }
+
+            //-----------------------------------------------------------------
+            private void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
             {
                 var slots = new int[infoDst.variables.Count];
                 for (int s = 0; s < slots.Length; s++)
@@ -131,24 +163,21 @@ namespace Prateek.ScriptTemplating
                     {
                         var sn = 0;
                         var variant = new Variant(string.Empty);
-                        variant.args += Code.Tag.Code.argsV;
+                        variant.Args += Code.Tag.Code.argsV;
                         for (int v = 0; v < slots.Length; v++)
                         {
                             var sv = slots[v];
-                            if (variant.vars.Length > 0)
-                                variant.vars += Code.Tag.Code.argVarSeparator;
-
                             if (sv < infoSrc.variables.Count)
                             {
                                 var variable = infoSrc.variables[sv];
-                                variant.call += variable;
-                                variant.vars += string.Format(Code.Tag.Code.varsV, variable);
+                                variant.Call = variable;
+                                variant.Vars = string.Format(Code.Tag.Code.varsV, variable);
                             }
                             else
                             {
-                                variant.call += Code.Tag.Code.callN;
-                                variant.args += string.Format(Code.Tag.Code.argsN, data.classDefaultType, sn, data.classDefaultValue);
-                                variant.vars += string.Format(Code.Tag.Code.varsN, sn);
+                                variant.Call = Code.Tag.Code.callN;
+                                variant.Args = string.Format(Code.Tag.Code.argsNOpt, data.classDefaultType, sn, data.classDefaultValue);
+                                variant.Vars = string.Format(Code.Tag.Code.varsN, sn);
                                 sn++;
                             }
                         }

@@ -116,6 +116,8 @@ namespace Prateek.ScriptTemplating
                 //-------------------------------------------------------------
                 public string Apply(string text)
                 {
+                    if (original == null)
+                        return text;
                     return text.Replace(original, replacement);
                 }
             }
@@ -244,9 +246,12 @@ namespace Prateek.ScriptTemplating
                 public const string argVarSeparator = ", ";
                 public const string callN = "n";
                 public const string argsV = "v";
-                public const string argsN = ", {0} n_{1} = {2}";
+                public const string argsV_ = "{0} v_{1}";
+                public const string argsN = "{0} n_{1}";
+                public const string argsNOpt = "{0} n_{1} = {2}";
                 public const string varsN = "n_{0}";
                 public const string varsV = "v.{0}";
+                public const string varsV_ = "v_{0}.{1}";
             }
         }
     }

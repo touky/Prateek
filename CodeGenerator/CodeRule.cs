@@ -82,15 +82,30 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public struct Variant
             {
+                //-----------------------------------------------------------------
                 public string call;
                 public string args;
                 public string vars;
 
+                //-----------------------------------------------------------------
+                public string Call { get { return call; } set { call += value; } }
+                public string Args { get { return args; } set { Set(ref args, value); } }
+                public string Vars { get { return vars; } set { Set(ref vars, value); } }
+
+                //-----------------------------------------------------------------
                 public Variant(string value)
                 {
                     call = value;
                     args = value;
                     vars = value;
+                }
+
+                //-----------------------------------------------------------------
+                private void Set(ref string dst, string value)
+                {
+                    if (dst != null && dst.Length > 0)
+                        dst += Code.Tag.Code.argVarSeparator;
+                    dst += value;
                 }
             }
 
@@ -143,7 +158,7 @@ namespace Prateek.ScriptTemplating
                     activeData = codeFile.NewData(this);
                 }
 
-                if (activeData.settings == null || activeData.settings != this)
+                if (activeData.activeRule == null || activeData.activeRule != this)
                     return false;
 
                 return DoTreatData(activeData, keyRule, args, data);
@@ -151,6 +166,12 @@ namespace Prateek.ScriptTemplating
 
             //-----------------------------------------------------------------
             #region Utils
+            protected void AddCode(string code, Code.File.Data data, Code.Tag.SwapInfo swapSrc)
+            {
+                AddCode(code, data, swapSrc, new Code.Tag.SwapInfo());
+            }
+
+            //-----------------------------------------------------------------
             protected void AddCode(string code, Code.File.Data data, Code.Tag.SwapInfo swapSrc, Code.Tag.SwapInfo swapDst)
             {
                 code = swapSrc.Apply(code);
@@ -210,7 +231,7 @@ namespace Prateek.ScriptTemplating
                 {
                     activeData.classInfos.Add(new Code.File.Data.ClassInfo()
                     {
-                        name = args[0],
+                        names = args.GetRange(0, 1),
                         variables = args.GetRange(1, args.Count - 1)
                     });
                 }
@@ -233,43 +254,11 @@ namespace Prateek.ScriptTemplating
                 }
                 return true;
             }
-
-            //-----------------------------------------------------------------
-            public virtual void Generate(Code.File.Data data)
-            {
-                var variants = new List<Variant>();
-                for (int iSrc = 0; iSrc < data.classInfos.Count; iSrc++)
-                {
-                    var infoSrc = data.classInfos[iSrc];
-                    for (int iSDst = 0; iSDst < data.classInfos.Count; iSDst++)
-                    {
-                        var infoDst = data.classInfos[iSDst];
-
-                        GatherVariants(variants, data, infoSrc, infoDst);
-
-                        var swapSrc = ClassSrc + infoSrc.name;
-                        var swapDst = ClassDst + infoDst.name;
-                        AddCode(data.codePrefix, data, swapSrc, swapDst);
-                        for (int v = 0; v < variants.Count; v++)
-                        {
-                            var variant = variants[v];
-                            var code = data.codeMain;
-                            code = (CodeCall + variant.call).Apply(code);
-                            code = (CodeArgs + variant.args).Apply(code);
-                            code = (CodeVars + variant.vars).Apply(code);
-                            AddCode(code, data, swapSrc, swapDst);
-                        }
-                        AddCode(data.codePostfix, data, swapSrc, swapDst);
-                    }
-                }
-
-                data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Code.Tag.Macro.codeGenTabs.Keyword());
-            }
             #endregion CodeRule override
 
             //-----------------------------------------------------------------
             #region CodeRule abstract
-            protected abstract void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst);
+            public abstract void Generate(Code.File.Data data);
             #endregion CodeRule abstract
         }
     }

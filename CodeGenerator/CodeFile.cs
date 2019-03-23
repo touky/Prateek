@@ -85,11 +85,11 @@ namespace Prateek.ScriptTemplating
             {
                 public struct ClassInfo
                 {
-                    public string name;
+                    public List<string> names;
                     public List<string> variables;
                 }
 
-                public TemplateReplacement.CodeRule settings;
+                public TemplateReplacement.CodeRule activeRule;
                 public string blockNamespace;
                 public string blockClassName;
 
@@ -121,11 +121,23 @@ namespace Prateek.ScriptTemplating
             public Data this[int index] { get { return datas[index]; } }
 
             //-----------------------------------------------------------------
+            public bool AllowRule(TemplateReplacement.CodeRule rule)
+            {
+                if (activeData == null)
+                    return true;
+
+                if (activeData.activeRule == null)
+                    return true;
+
+                return activeData.activeRule == rule;
+            }
+
+            //-----------------------------------------------------------------
             public Data NewData(TemplateReplacement.CodeRule codeSettings)
             {
                 if (activeData != null)
                     return null;
-                activeData = new Data() { settings = codeSettings };
+                activeData = new Data() { activeRule = codeSettings };
                 return activeData;
             }
 
@@ -161,7 +173,7 @@ namespace Prateek.ScriptTemplating
                 {
                     var data = datas[d];
 
-                    data.settings.Generate(data);
+                    data.activeRule.Generate(data);
 
                     var code = genTabs.Apply(data.codeGenerated);
                     genNSpc += data.blockNamespace;

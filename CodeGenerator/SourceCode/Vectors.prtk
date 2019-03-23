@@ -26,6 +26,31 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
         }
     }
 
+    PRATEEK_CODEGEN_BLOCK_MIXED_CTOR(Prateek.ShaderTo, CSharp)
+    {
+        PRATEEK_CODEGEN_CLASS(Vector2, vec2, x, y)
+        PRATEEK_CODEGEN_CLASS(Vector3, vec3, x, y, z)
+        PRATEEK_CODEGEN_CLASS(Vector4, vec4, x, y, z, w)
+
+        PRATEEK_CODEGEN_DEFAULT(float, 0)
+
+        PRATEEK_CODEGEN_CODE_PREFIX
+        {
+        @//---------------------------------------------------------------------
+        @#region Mixed Ctor SRC_CLASS
+        }
+
+        PRATEEK_CODEGEN_CODE_MAIN
+        {
+        @public static SRC_CLASS MIXED_CTOR_CALL(MIXED_CTOR_ARGS) { return new SRC_CLASS(MIXED_CTOR_VARS); }
+        }
+        
+        PRATEEK_CODEGEN_CODE_SUFFIX
+        {
+        @#endregion Mixed Ctor SRC_CLASS
+		@
+        }
+    }
 //Mixed constructors
 //
 //public static SRC_CLASS MIXED_CTOR_CALL(MIXED_CTOR_ARGS) { return new SRC_CLASS(MIXED_CTOR_VARS); }

@@ -133,18 +133,21 @@ namespace Prateek.ScriptTemplating
                         for (int s = 0; s < rules.Count; s++)
                         {
                             var rule = rules[s];
+                            if (!activeCodeFile.AllowRule(rule))
+                                continue;
+
                             var setup = rule.GetKeyRule(keyword, codeDepth);
                             if (setup.usage != Code.Tag.KeyRule.Usage.Match)
                                 continue;
 
                             if (!analyzer.FindArgs(args, setup))
-                                break;
+                                return false;
 
                             if (!analyzer.FindData(ref data, setup))
-                                break;
+                                return false;
 
                             if (!rule.TreatData(activeCodeFile, setup, args, data))
-                                break;
+                                return false;
 
                             foundMatch = true;
                             if (setup.needOpenScope)
@@ -153,7 +156,7 @@ namespace Prateek.ScriptTemplating
                         }
 
                         if (!foundMatch)
-                            break;
+                            return false;
                     }
                 }
                 else
@@ -165,10 +168,10 @@ namespace Prateek.ScriptTemplating
                         {
                             if (activeCodeFile.ActiveData != null)
                             {
-                                if (activeCodeFile.ActiveData.settings == null)
+                                if (activeCodeFile.ActiveData.activeRule == null)
                                     break;
 
-                                if (activeCodeFile.ActiveData.settings.CloseScope(activeCodeFile, scopeName))
+                                if (activeCodeFile.ActiveData.activeRule.CloseScope(activeCodeFile, scopeName))
                                     codeDepth--;
                             }
                             else if (codeDepth == 1 && scopeName == Code.Tag.Macro.FileInfo)
