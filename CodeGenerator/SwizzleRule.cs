@@ -98,45 +98,14 @@ namespace Prateek.ScriptTemplating
         {
             //-----------------------------------------------------------------
             public override string ScopeTag { get { return "SWIZZLE"; } }
+            public override GenerationMode GenMode { get { return GenerationMode.ForeachSrcXDest; } }
 
             //-----------------------------------------------------------------
             public SwizzleRule(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
             #region SwizzleRule internal
-            public override void Generate(Code.File.Data data)
-            {
-                var variants = new List<Variant>();
-                for (int iSrc = 0; iSrc < data.classInfos.Count; iSrc++)
-                {
-                    var infoSrc = data.classInfos[iSrc];
-                    for (int iSDst = 0; iSDst < data.classInfos.Count; iSDst++)
-                    {
-                        var infoDst = data.classInfos[iSDst];
-
-                        GatherVariants(variants, data, infoSrc, infoDst);
-
-                        var swapSrc = ClassSrc + infoSrc.names[0];
-                        var swapDst = ClassDst + infoDst.names[0];
-                        AddCode(data.codePrefix, data, swapSrc, swapDst);
-                        for (int v = 0; v < variants.Count; v++)
-                        {
-                            var variant = variants[v];
-                            var code = data.codeMain;
-                            code = (CodeCall + variant.Call).Apply(code);
-                            code = (CodeArgs + variant.Args).Apply(code);
-                            code = (CodeVars + variant.Vars).Apply(code);
-                            AddCode(code, data, swapSrc, swapDst);
-                        }
-                        AddCode(data.codePostfix, data, swapSrc, swapDst);
-                    }
-                }
-
-                data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Code.Tag.Macro.codeGenTabs.Keyword());
-            }
-
-            //-----------------------------------------------------------------
-            private void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
+            protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
             {
                 var slots = new int[infoDst.variables.Count];
                 for (int s = 0; s < slots.Length; s++)

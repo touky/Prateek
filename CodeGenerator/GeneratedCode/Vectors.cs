@@ -27,6 +27,10 @@ using System.Collections.Generic;
 #endregion System
 
 #region Unity
+using Unity.Jobs;
+using Unity.Collections;
+
+#region Engine
 using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.Serialization;
@@ -34,13 +38,13 @@ using UnityEngine.Serialization;
 #if UNITY_PROFILING
 using UnityEngine.Profiling;
 #endif //UNITY_PROFILING
+#endregion Engine
 
-using Unity.Jobs;
-using Unity.Collections;
-
+#region Editor
 #if UNITY_EDITOR
 using UnityEditor;
 #endif //UNITY_EDITOR
+#endregion Editor
 #endregion Unity
 
 #region Prateek
@@ -50,9 +54,15 @@ using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
 
+#region Using static
+using static Prateek.ShaderTo.CSharp;
+#endregion Using static
+
+#region Editor
 #if UNITY_EDITOR
 using Prateek.ScriptTemplating;
 #endif //UNITY_EDITOR
+#endregion Editor
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
@@ -1335,21 +1345,21 @@ namespace Prateek.ShaderTo
     public static partial class CSharp
     {
         //---------------------------------------------------------------------
-        #region Swizzle Vector2 to DST_CLASS
+        #region Mixed Ctor Vector2
         public static Vector2 vec2(float n_0, float n_1) { return new Vector2(n_0, n_1); }
         public static Vector2 vec2(Vector2 v_0) { return new Vector2(v_0.x, v_0.y); }
-        #endregion Swizzle Vector2 to DST_CLASS
+        #endregion Mixed Ctor Vector2
         
         //---------------------------------------------------------------------
-        #region Swizzle Vector3 to DST_CLASS
+        #region Mixed Ctor Vector3
         public static Vector3 vec3(float n_0, float n_1, float n_2) { return new Vector3(n_0, n_1, n_2); }
         public static Vector3 vec3(float n_0, Vector2 v_0) { return new Vector3(n_0, v_0.x, v_0.y); }
         public static Vector3 vec3(Vector2 v_0, float n_0) { return new Vector3(v_0.x, v_0.y, n_0); }
         public static Vector3 vec3(Vector3 v_0) { return new Vector3(v_0.x, v_0.y, v_0.z); }
-        #endregion Swizzle Vector3 to DST_CLASS
+        #endregion Mixed Ctor Vector3
         
         //---------------------------------------------------------------------
-        #region Swizzle Vector4 to DST_CLASS
+        #region Mixed Ctor Vector4
         public static Vector4 vec4(float n_0, float n_1, float n_2, float n_3) { return new Vector4(n_0, n_1, n_2, n_3); }
         public static Vector4 vec4(float n_0, float n_1, Vector2 v_0) { return new Vector4(n_0, n_1, v_0.x, v_0.y); }
         public static Vector4 vec4(float n_0, Vector2 v_0, float n_1) { return new Vector4(n_0, v_0.x, v_0.y, n_1); }
@@ -1358,7 +1368,7 @@ namespace Prateek.ShaderTo
         public static Vector4 vec4(Vector2 v_0, Vector2 v_1) { return new Vector4(v_0.x, v_0.y, v_1.x, v_1.y); }
         public static Vector4 vec4(Vector3 v_0, float n_0) { return new Vector4(v_0.x, v_0.y, v_0.z, n_0); }
         public static Vector4 vec4(Vector4 v_0) { return new Vector4(v_0.x, v_0.y, v_0.z, v_0.w); }
-        #endregion Swizzle Vector4 to DST_CLASS
+        #endregion Mixed Ctor Vector4
         
         
     }

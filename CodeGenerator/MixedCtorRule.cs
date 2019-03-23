@@ -98,6 +98,7 @@ namespace Prateek.ScriptTemplating
         {
             //-----------------------------------------------------------------
             public override string ScopeTag { get { return "MIXED_CTOR"; } }
+            public override GenerationMode GenMode { get { return GenerationMode.ForeachSrc; } }
 
             //-----------------------------------------------------------------
             public MixedCTorRule(string extension) : base(extension) { }
@@ -137,34 +138,7 @@ namespace Prateek.ScriptTemplating
 
             //-----------------------------------------------------------------
             #region SwizzleRule internal
-            public override void Generate(Code.File.Data data)
-            {
-                var variants = new List<Variant>();
-                for (int iSrc = 0; iSrc < data.classInfos.Count; iSrc++)
-                {
-                    var infoSrc = data.classInfos[iSrc];
-
-                    GatherVariants(variants, data, infoSrc);
-
-                    var swapSrc = ClassSrc + infoSrc.names[0];
-                    AddCode(data.codePrefix, data, swapSrc);
-                    for (int v = 0; v < variants.Count; v++)
-                    {
-                        var variant = variants[v];
-                        var code = data.codeMain;
-                        code = (CodeCall + variant.Call).Apply(code);
-                        code = (CodeArgs + variant.Args).Apply(code);
-                        code = (CodeVars + variant.Vars).Apply(code);
-                        AddCode(code, data, swapSrc);
-                    }
-                    AddCode(data.codePostfix, data, swapSrc);
-                }
-
-                data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Code.Tag.Macro.codeGenTabs.Keyword());
-            }
-
-            //-----------------------------------------------------------------
-            private void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc)
+            protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
             {
                 var slots = new int[infoSrc.variables.Count];
                 for (int s = 0; s < slots.Length; s++)

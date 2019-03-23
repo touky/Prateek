@@ -110,7 +110,17 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
+            public enum GenerationMode
+            {
+                ForeachSrc,
+                ForeachSrcXDest,
+
+                MAX
+            }
+
+            //-----------------------------------------------------------------
             public abstract string ScopeTag { get; }
+            public abstract GenerationMode GenMode { get; }
 
             //-----------------------------------------------------------------
             private List<string> data = new List<string>();
@@ -182,6 +192,67 @@ namespace Prateek.ScriptTemplating
 
             //-----------------------------------------------------------------
             #region CodeRule overridable
+            public void Generate(Code.File.Data data)
+            {
+                var variants = new List<Variant>();
+                var maxSrc = data.classInfos.Count;
+                var maxDst = GenMode == GenerationMode.ForeachSrcXDest ? data.classInfos.Count : 1;
+                var infoSrc = new Code.File.Data.ClassInfo();
+                var infoDst = new Code.File.Data.ClassInfo();
+                for (int iSrc = 0; iSrc < maxSrc; iSrc++)
+                {
+                    infoSrc = data.classInfos[iSrc];
+                    for (int iSDst = 0; iSDst < maxDst; iSDst++)
+                    {
+                        if (GenMode == GenerationMode.ForeachSrcXDest)
+                            infoDst = data.classInfos[iSDst];
+
+                        GatherVariants(variants, data, infoSrc, infoDst);
+
+                        var swapSrc = ClassSrc + infoSrc.names[0];
+                        var swapDst = ClassDst;
+                        if (GenMode == GenerationMode.ForeachSrcXDest)
+                        {
+                            swapDst = swapDst + infoDst.names[0];
+                            AddCode(data.codePrefix, data, swapSrc, swapDst);
+                        }
+                        else
+                        {
+                            AddCode(data.codePrefix, data, swapSrc);
+                        }
+
+                        for (int v = 0; v < variants.Count; v++)
+                        {
+                            var variant = variants[v];
+                            var code = data.codeMain;
+                            code = (CodeCall + variant.Call).Apply(code);
+                            code = (CodeArgs + variant.Args).Apply(code);
+                            code = (CodeVars + variant.Vars).Apply(code);
+                            if (GenMode == GenerationMode.ForeachSrcXDest)
+                            {
+                                AddCode(code, data, swapSrc, swapDst);
+                            }
+                            else
+                            {
+                                AddCode(code, data, swapSrc);
+                            }
+                        }
+
+                        if (GenMode == GenerationMode.ForeachSrcXDest)
+                        {
+                            AddCode(data.codePostfix, data, swapSrc, swapDst);
+                        }
+                        else
+                        {
+                            AddCode(data.codePostfix, data, swapSrc);
+                        }
+                    }
+                }
+
+                data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Code.Tag.Macro.codeGenTabs.Keyword());
+            }
+
+            //-----------------------------------------------------------------
             public virtual Code.Tag.KeyRule GetKeyRule(string keyword, int codeDepth)
             {
                 if (keyword == CodeBlock)
@@ -258,7 +329,7 @@ namespace Prateek.ScriptTemplating
 
             //-----------------------------------------------------------------
             #region CodeRule abstract
-            public abstract void Generate(Code.File.Data data);
+            protected abstract void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst);
             #endregion CodeRule abstract
         }
     }

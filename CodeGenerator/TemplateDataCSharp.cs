@@ -190,7 +190,7 @@ using static Prateek.ShaderTo.CSharp;
 #if UNITY_EDITOR
 using Prateek.ScriptTemplating;
 #endif //UNITY_EDITOR
-#region Editor
+#endregion Editor
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
