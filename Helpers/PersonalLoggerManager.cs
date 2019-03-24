@@ -231,7 +231,7 @@ namespace Prateek.Debug
             }
         }
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public class RegisteredLogger
         {
             public Helpers.PersonalLogger logger;
@@ -241,7 +241,7 @@ namespace Prateek.Debug
         }
         #endregion //Declarations
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Fields
         private PersonalLoggerManager.GUISetup m_gui_setup = new PersonalLoggerManager.GUISetup();
         private List<PersonalLoggerManager.RegisteredLogger> m_loggers = new List<PersonalLoggerManager.RegisteredLogger>();
@@ -251,7 +251,7 @@ namespace Prateek.Debug
         {
         }
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Registering
         public void Register(Helpers.PersonalLogger box)
         {
@@ -267,7 +267,7 @@ namespace Prateek.Debug
             m_loggers.Add(new RegisteredLogger() { logger = box, show = false });
         }
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public void Unregister(Helpers.PersonalLogger logger)
         {
             if (logger == null)
@@ -284,7 +284,7 @@ namespace Prateek.Debug
         }
         #endregion Registering
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region GUI
         public void DisplayDebug()
         {
@@ -312,7 +312,7 @@ namespace Prateek.Debug
             }
         }
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public void DisplayGUI()
         {
             if (m_gui_setup != null)

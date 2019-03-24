@@ -108,7 +108,7 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public struct LogData
         {
-            //-----------------------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public struct OwnerData
             {
                 public object Owner0;
@@ -143,7 +143,7 @@ namespace Prateek.Helpers
                     }
                 }
 
-                //-----------------------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public void Copy(OwnerData other)
                 {
                     Owner0 = other.Owner0;
@@ -152,13 +152,13 @@ namespace Prateek.Helpers
                 }
             }
 
-            //-----------------------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public LogType Type;
             public OwnerData Owners;
             public Helpers.StringBlurp Log;
             public float Timestamp;
 
-            //-----------------------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public LogData(object owner0, object owner1, object owner2, LogType type, Helpers.StringBlurp log)
             {
                 Owners = new OwnerData() { Owner0 = owner0, Owner1 = owner1, Owner2 = owner2 };

@@ -293,7 +293,7 @@ namespace Prateek.Extensions
             return 0;
         }
 
-        ////---------------------------------------------------------------------
+        ////-------------------------------------------------------------------
         //public static void Resize<T>(this List<T> list, int new_size, T default_value = default(T))
         //{
         //    int count = list.Count;

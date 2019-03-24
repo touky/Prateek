@@ -125,7 +125,7 @@ namespace Prateek.Helpers
         [Serializable]
         public class EditorData
         {
-            //---------------------------------------------------------------------------------------------
+            //-----------------------------------------------------------------
             [Serializable]
             public class IdSetup
             {

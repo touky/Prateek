@@ -144,7 +144,10 @@ namespace Prateek.ScriptTemplating
                     }
                 }
 
-                fileContent = stack.Apply();
+                if (stack.CanApply)
+                {
+                    fileContent = stack.Apply();
+                }
             }
         }
     }

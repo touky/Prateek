@@ -83,7 +83,7 @@ using System.Text.RegularExpressions;
 //-----------------------------------------------------------------------------
 namespace Prateek.ScriptTemplating
 {
-    //---------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     public static partial class Code
     {
         //---------------------------------------------------------------------
@@ -135,7 +135,7 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public struct KeyRule
             {
-                //----------------------------------------------------------
+                //-------------------------------------------------------------
                 public enum Usage
                 {
                     Match,
@@ -145,23 +145,23 @@ namespace Prateek.ScriptTemplating
                     MAX
                 }
 
-                //----------------------------------------------------------
+                //-------------------------------------------------------------
                 public struct ArgRange
                 {
-                    //--
+                    //---------------------------------------------------------
                     private int min;
                     private int max;
 
-                    //--
+                    //---------------------------------------------------------
                     public bool NoneNeeded { get { return min <= 0 && max <= 0; } }
 
-                    //-------------------------------------------------------------
+                    //---------------------------------------------------------
                     public static implicit operator ArgRange(int value)
                     {
                         return new ArgRange(value);
                     }
 
-                    //----------------------------------------------------------
+                    //---------------------------------------------------------
                     public ArgRange(int min) : this(min, min) { }
                     public ArgRange(int min, int max)
                     {
@@ -169,7 +169,7 @@ namespace Prateek.ScriptTemplating
                         this.max = max;
                     }
 
-                    //----------------------------------------------------------
+                    //---------------------------------------------------------
                     public bool Check(int count)
                     {
                         if (min < 0)
@@ -184,14 +184,14 @@ namespace Prateek.ScriptTemplating
                     }
                 }
 
-                //----------------------------------------------------------
+                //-------------------------------------------------------------
                 public string key;
                 public Usage usage;
                 public ArgRange args;
                 public bool needOpenScope;
                 public bool needScopeData;
 
-                //----------------------------------------------------------
+                //-------------------------------------------------------------
                 public KeyRule(string key, bool doesMatch)
                 {
                     this.key = key;
@@ -205,7 +205,7 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public static class Macro
             {
-                //----------------------------------------------------------
+                //-------------------------------------------------------------
                 public static string codeGenStart = "PRATEEK_SCRIPT_STARTS_HERE";
                 public static string codeGenNSpc = "PRATEEK_EXTENSION_NAMESPACE";
                 public static string codeGenExtn = "PRATEEK_EXTENSION_STATIC_CLASS";

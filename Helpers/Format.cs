@@ -160,7 +160,7 @@ namespace Prateek.Helpers
             return "<color=#" + col.r.ToString("X2") + col.g.ToString("X2") + col.b.ToString("X2") + col.a.ToString("X2") + ">";
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public static string Color(this string text, Color32 col)
         {
             return ToRichText(col) + text + "</color>";

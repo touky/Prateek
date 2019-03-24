@@ -97,7 +97,7 @@ namespace Prateek.Debug
             return null;
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         protected bool IsWrongType<T>() where T : struct, IConvertible
         {
             if (m_enum == null)
@@ -120,7 +120,7 @@ namespace Prateek.Debug
             return (m_mask.data & mask) != 0;
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         protected MaskFlag ToMask<T>(T value) where T : struct, IConvertible
         {
             if (IsWrongType<T>())

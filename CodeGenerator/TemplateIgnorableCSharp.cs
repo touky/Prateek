@@ -182,7 +182,7 @@ namespace Prateek.ScriptTemplating
             return new IgnorableCSharp(extension);
         }
 
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         [InitializeOnLoad]
         class CSharpIgnorableTemplate : TemplateReplacement
         {

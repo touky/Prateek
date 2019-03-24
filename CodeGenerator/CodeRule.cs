@@ -92,17 +92,17 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public struct Variant
             {
-                //-----------------------------------------------------------------
+                //-------------------------------------------------------------
                 private string call;
                 private string args;
                 private string vars;
 
-                //-----------------------------------------------------------------
+                //-------------------------------------------------------------
                 public string Call { get { return call; } set { call += value; } }
                 public string Args { get { return args; } set { Set(ref args, value); } }
                 public string Vars { get { return vars; } set { Set(ref vars, value); } }
 
-                //-----------------------------------------------------------------
+                //-------------------------------------------------------------
                 public Variant(string value)
                 {
                     call = value;
@@ -110,7 +110,7 @@ namespace Prateek.ScriptTemplating
                     vars = string.Empty;
                 }
 
-                //-----------------------------------------------------------------
+                //-------------------------------------------------------------
                 private void Set(ref string dst, string value)
                 {
                     if (dst != null && dst.Length > 0)

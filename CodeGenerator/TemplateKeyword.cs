@@ -162,6 +162,9 @@ namespace Prateek.ScriptTemplating
             private List<SwapInfo> stack;
 
             //-----------------------------------------------------------------
+            public bool CanApply { get { return stack.Count > 0; } }
+
+            //-----------------------------------------------------------------
             public KeywordStack(KeywordMode tagType, string content)
             {
                 this.tagType = tagType;

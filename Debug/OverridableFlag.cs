@@ -81,7 +81,7 @@ using Prateek.Debug;
 #if PRATEEK_DEBUG
 namespace Prateek.Debug
 {
-    //---------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     [Serializable]
     public class Flag
     {

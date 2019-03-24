@@ -285,7 +285,7 @@ namespace Prateek.Base
             }
         }
 
-        ////---------------------------------------------------------------------
+        ////-------------------------------------------------------------------
         //public NoAllocIterator<T> GetRegistered<T>() where T : MonoBehaviour
         //{
         //    List<MonoBehaviour> behaviours;

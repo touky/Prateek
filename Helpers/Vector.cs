@@ -92,7 +92,7 @@ namespace Prateek.Helpers
                 && -epsilon < d.y && d.y < epsilon;
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public static float Area(this Vector2 v)
         {
             return v.x * v.y;
@@ -104,7 +104,7 @@ namespace Prateek.Helpers
             return (int)v.x + (int)v.y * (int)dimensions.x;
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public static Vector2 FromIndex(int index2D, Vector2 dimensions)
         {
             return new Vector2(index2D % (int)dimensions.x, index2D / (int)dimensions.x);
@@ -133,7 +133,7 @@ namespace Prateek.Helpers
             return (int)v.x + (int)v.y * (int)dimensions.x + (int)v.z * (int)dimensions.xy().Area();
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public static Vector3 FromIndex(int index3D, Vector3 dimensions)
         {
             var area2D = dimensions.xy().Area();
@@ -153,7 +153,7 @@ namespace Prateek.Helpers
                 && -epsilon < d.w && d.w < epsilon;
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public static float Area(this Vector4 v)
         {
             return v.x * v.y * v.z * v.w;
@@ -165,7 +165,7 @@ namespace Prateek.Helpers
             return (int)v.x + (int)v.y * (int)dimensions.x + (int)v.z * (int)dimensions.xy().Area() + (int)v.w * (int)dimensions.xyz().Area();
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public static Vector4 FromIndex(int index4D, Vector4 dimensions)
         {
             var area3D = dimensions.xyz().Area();

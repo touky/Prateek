@@ -89,7 +89,7 @@ namespace Prateek.ScriptTemplating
         #region Declarations
         public struct FileData
         {
-            //----
+            //-----------------------------------------------------------------
             public struct Infos
             {
                 public string absPath;
@@ -100,14 +100,14 @@ namespace Prateek.ScriptTemplating
                 public string content;
             }
 
-            //----
+            //-----------------------------------------------------------------
             public Infos source;
             public Infos destination;
 
-            //----
+            //-----------------------------------------------------------------
             public bool IsLoaded { get { return source.content != null && source.content != string.Empty; } }
 
-            //----
+            //-----------------------------------------------------------------
             public FileData(string file, string sourceDir) : this(file, sourceDir, null) { }
             public FileData(string file, string sourceDir, string content)
             {
@@ -131,7 +131,7 @@ namespace Prateek.ScriptTemplating
                 destination = source;
             }
 
-            //----
+            //-----------------------------------------------------------------
             public bool Load(bool forceReload = false)
             {
                 if (source.content != null)
@@ -423,7 +423,10 @@ namespace Prateek.ScriptTemplating
                 }
             }
 
-            fileData.destination.content = stack.Apply();
+            if (stack.CanApply)
+            {
+                fileData.destination.content = stack.Apply();
+            }
 
             return true;
         }
@@ -464,27 +467,30 @@ namespace Prateek.ScriptTemplating
 
                 start++;
                 var line = fileData.destination.content.Substring(start, end - start);
-                if (line.Length != 80)
+                if (line.Length != 79)
                 {
-                    while (line.Length > 80)
+                    while (line.Length > 79)
                     {
-                        if (line[end - 1] != '-')
+                        if (line[line.Length - 1] != '-')
                             break;
-                        line = line.Remove(end - 1);
+                        line = line.Remove(line.Length - 1);
                     }
 
-                    while (line.Length < 80)
+                    while (line.Length < 79)
                     {
                         line += '-';
                     }
 
                     stack.Add(line, start, end);
-
-                    position = end;
                 }
+
+                position = end;
             }
 
-            fileData.destination.content = stack.Apply();
+            if (stack.CanApply)
+            {
+                fileData.destination.content = stack.Apply();
+            }
 
             return true;
         }

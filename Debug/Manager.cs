@@ -83,7 +83,7 @@ namespace Prateek.Debug
 {
     public class DebugDisplayManager : MonoBehaviour
     {
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Declarations
         public struct LineData
         {
@@ -92,7 +92,7 @@ namespace Prateek.Debug
         }
         #endregion //Declarations
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Fields
         private PersonalLoggerManager m_logger_manager = new PersonalLoggerManager();
 
@@ -106,19 +106,19 @@ namespace Prateek.Debug
 
         #endregion //Fields
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Settings
         [SerializeField]
         private float m_debug_line_renderer_width = 0.0025f;
         #endregion //Settings
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Properties
         public float DebugLineRendererWidth { get { return m_debug_line_renderer_width; } }
         #endregion //Properties
 
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Unity Defaults
         void LateUpdate()
         {
@@ -132,14 +132,14 @@ namespace Prateek.Debug
             m_logger_manager.DisplayDebug();
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         void OnGUI()
         {
             m_logger_manager.DisplayGUI();
         }
         #endregion //Unity Defaults
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region OCP Black Box
         public void Register(Helpers.PersonalLogger logger)
         {
@@ -148,14 +148,14 @@ namespace Prateek.Debug
             m_logger_manager.Register(logger);
         }
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public void Unregister(Helpers.PersonalLogger logger)
         {
             m_logger_manager.Unregister(logger);
         }
         #endregion //OCP Black Box
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Lines Pool
         public IEnumerator RefreshPool()
         {
@@ -170,7 +170,7 @@ namespace Prateek.Debug
             }
         }
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public LineRenderer GetLine()
         {
             if (m_line_shader == null)
@@ -207,14 +207,14 @@ namespace Prateek.Debug
 
     public static class LineRendererUtils
     {
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public static void SetColor(this LineRenderer line, Color color)
         {
             line.startColor = color;
             line.endColor = color;
         }
 
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public static void SetDebugLine(this LineRenderer line, Vector3 start, Vector3 end)
         {
             line.SetPosition(0, start);

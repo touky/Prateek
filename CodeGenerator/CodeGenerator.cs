@@ -86,10 +86,10 @@ namespace Prateek.ScriptTemplating
     //-------------------------------------------------------------------------
     public class PrateekScriptBuilder : CodeBuilder
     {
-        //--
+        //---------------------------------------------------------------------
         protected override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Code.Tag.importExtension); } }
 
-        //--
+        //---------------------------------------------------------------------
         protected override bool DoApplyValidTemplate(ref FileData fileData)
         {
             if (fileData.source.extension != Code.Tag.importExtension)
@@ -237,7 +237,7 @@ namespace Prateek.ScriptTemplating
             return false;
         }
 
-        //--
+        //---------------------------------------------------------------------
         private int CheckGenericData(ref int codeDepth, string keyword, Code.Analyzer analyzer, ref Code.File activeCodeFile, List<Code.File> codeFiles, List<string> args)
         {
             if (keyword == Code.Tag.Macro.FileInfo)

@@ -101,13 +101,13 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public struct Extent
             {
-                //---------------------------------------------------------
+                //-------------------------------------------------------------
                 private Style style;
                 private bool isLine;
                 private int start;
                 private int end;
 
-                //---------------------------------------------------------
+                //-------------------------------------------------------------
                 public Style Style { get { return style; } }
                 public bool IsLine { get { return isLine; } }
                 public int Start { get { return start; } }
@@ -115,7 +115,7 @@ namespace Prateek.ScriptTemplating
                 public int OverStart { get { return start - 1; } }
                 public int OverEnd { get { return end + 1; } }
 
-                //---------------------------------------------------------
+                //-------------------------------------------------------------
                 public Extent(Style type, bool isLine, int start, int end)
                 {
                     this.style = type;
@@ -124,7 +124,7 @@ namespace Prateek.ScriptTemplating
                     this.end = end;
                 }
 
-                //---------------------------------------------------------
+                //-------------------------------------------------------------
                 public bool Contains(int index)
                 {
                     if (start <= index && index <= end)

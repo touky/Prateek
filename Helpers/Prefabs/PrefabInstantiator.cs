@@ -122,7 +122,7 @@ namespace Helpers
             }
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public static void CreateChildrenInstances(GameObject gameObject)
         {
             if (Application.isPlaying == false || gameObject == null)
@@ -135,7 +135,7 @@ namespace Helpers
             }
         }
 
-        //-----------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public virtual GameObject CreateInstance()
         {
             if (!Application.isPlaying || instance != null || prefab == null)
