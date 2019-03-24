@@ -60,10 +60,12 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
 
         PRATEEK_CODEGEN_DEFAULT(float, 0)
 
-        PRATEEK_CODEGEN_FUNC(max) { @Mathf.Max(VARS_0, VARS_1)$ }
-        PRATEEK_CODEGEN_FUNC(min) { @Mathf.Min(VARS_0, VARS_1)$ }
-        PRATEEK_CODEGEN_FUNC(mul) { @VARS_0 * VARS_1$ }
-        PRATEEK_CODEGEN_FUNC(div) { @VARS_0 / VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(max)   { @Mathf.Max(VARS_0, VARS_1)$ }
+        PRATEEK_CODEGEN_FUNC(min)   { @Mathf.Min(VARS_0, VARS_1)$ }
+        PRATEEK_CODEGEN_FUNC(mul)   { @VARS_0 * VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(div)   { @VARS_0 / VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(mod)   { @(VARS_0 + VARS_1) % VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(fract) { @VARS_0 - floor(VARS_0)$ }
         PRATEEK_CODEGEN_FUNC(abs)   { @Mathf.Abs(VARS_0)$ }
         PRATEEK_CODEGEN_FUNC(sign)  { @Mathf.Sign(VARS_0)$ }
         PRATEEK_CODEGEN_FUNC(exp)   { @Mathf.Exp(VARS_0)$ }
@@ -72,8 +74,6 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
         PRATEEK_CODEGEN_FUNC(ceil)  { @Mathf.Ceil(VARS_0)$ }
         PRATEEK_CODEGEN_FUNC(floor) { @Mathf.Floor(VARS_0)$ }
         PRATEEK_CODEGEN_FUNC(sqrt)  { @Mathf.Sqrt(VARS_0)$ }
-        PRATEEK_CODEGEN_FUNC(fract) { @VARS_0 - floor(VARS_0)$ }
-        PRATEEK_CODEGEN_FUNC(mod)   { @(VARS_0 + VARS_1) % VARS_1$ }
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
@@ -153,14 +153,14 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
 
         PRATEEK_CODEGEN_DEFAULT(int, 0)
 
-        PRATEEK_CODEGEN_FUNC(max) { @Mathf.Max(VARS_0, VARS_1)$ }
-        PRATEEK_CODEGEN_FUNC(min) { @Mathf.Min(VARS_0, VARS_1)$ }
-        PRATEEK_CODEGEN_FUNC(mul) { @VARS_0 * VARS_1$ }
-        PRATEEK_CODEGEN_FUNC(div) { @VARS_0 / VARS_1$ }
-        PRATEEK_CODEGEN_FUNC(abs)   { @Mathf.Abs(VARS_0)$ }
-        PRATEEK_CODEGEN_FUNC(sign)  { @System.Math.Sign(VARS_0)$ }
-        PRATEEK_CODEGEN_FUNC(exp)   { @(int)Mathf.Exp(VARS_0)$ }
-        PRATEEK_CODEGEN_FUNC(mod)   { @(VARS_0 + VARS_1) % VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(max)  { @Mathf.Max(VARS_0, VARS_1)$ }
+        PRATEEK_CODEGEN_FUNC(min)  { @Mathf.Min(VARS_0, VARS_1)$ }
+        PRATEEK_CODEGEN_FUNC(mul)  { @VARS_0 * VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(div)  { @VARS_0 / VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(mod)  { @(VARS_0 + VARS_1) % VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(abs)  { @Mathf.Abs(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(sign) { @System.Math.Sign(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(exp)  { @(int)Mathf.Exp(VARS_0)$ }
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {

@@ -247,34 +247,44 @@ namespace Prateek.ShaderTo
         public static int min(int n_0, int n_1) { return Mathf.Min(n_0, n_1); }
         public static int mul(int n_0, int n_1) { return n_0 * n_1; }
         public static int div(int n_0, int n_1) { return n_0 / n_1; }
+        public static int mod(int n_0, int n_1) { return (n_0 + n_1) % n_1; }
         public static int abs(int n_0) { return Mathf.Abs(n_0); }
         public static int sign(int n_0) { return System.Math.Sign(n_0); }
         public static int exp(int n_0) { return (int)Mathf.Exp(n_0); }
-        public static int mod(int n_0, int n_1) { return (n_0 + n_1) % n_1; }
         #endregion Mixed Func int
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector2Int
         public static Vector2Int max(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y)); }
+        public static Vector2Int max(Vector2Int v_0, int n_1) { return new Vector2Int(Mathf.Max(v_0.x, n_1), Mathf.Max(v_0.y, n_1)); }
         public static Vector2Int min(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int(Mathf.Min(v_0.x, v_1.x), Mathf.Min(v_0.y, v_1.y)); }
+        public static Vector2Int min(Vector2Int v_0, int n_1) { return new Vector2Int(Mathf.Min(v_0.x, n_1), Mathf.Min(v_0.y, n_1)); }
         public static Vector2Int mul(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int(v_0.x * v_1.x, v_0.y * v_1.y); }
+        public static Vector2Int mul(Vector2Int v_0, int n_1) { return new Vector2Int(v_0.x * n_1, v_0.y * n_1); }
         public static Vector2Int div(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int(v_0.x / v_1.x, v_0.y / v_1.y); }
+        public static Vector2Int div(Vector2Int v_0, int n_1) { return new Vector2Int(v_0.x / n_1, v_0.y / n_1); }
+        public static Vector2Int mod(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int((v_0.x + v_1.x) % v_1.x, (v_0.y + v_1.y) % v_1.y); }
+        public static Vector2Int mod(Vector2Int v_0, int n_1) { return new Vector2Int((v_0.x + n_1) % n_1, (v_0.y + n_1) % n_1); }
         public static Vector2Int abs(Vector2Int v_0) { return new Vector2Int(Mathf.Abs(v_0.x), Mathf.Abs(v_0.y)); }
         public static Vector2Int sign(Vector2Int v_0) { return new Vector2Int(System.Math.Sign(v_0.x), System.Math.Sign(v_0.y)); }
         public static Vector2Int exp(Vector2Int v_0) { return new Vector2Int((int)Mathf.Exp(v_0.x), (int)Mathf.Exp(v_0.y)); }
-        public static Vector2Int mod(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int((v_0.x + v_1.x) % v_1.x, (v_0.y + v_1.y) % v_1.y); }
         #endregion Mixed Func Vector2Int
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector3Int
         public static Vector3Int max(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y), Mathf.Max(v_0.z, v_1.z)); }
+        public static Vector3Int max(Vector3Int v_0, int n_1) { return new Vector3Int(Mathf.Max(v_0.x, n_1), Mathf.Max(v_0.y, n_1), Mathf.Max(v_0.z, n_1)); }
         public static Vector3Int min(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int(Mathf.Min(v_0.x, v_1.x), Mathf.Min(v_0.y, v_1.y), Mathf.Min(v_0.z, v_1.z)); }
+        public static Vector3Int min(Vector3Int v_0, int n_1) { return new Vector3Int(Mathf.Min(v_0.x, n_1), Mathf.Min(v_0.y, n_1), Mathf.Min(v_0.z, n_1)); }
         public static Vector3Int mul(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int(v_0.x * v_1.x, v_0.y * v_1.y, v_0.z * v_1.z); }
+        public static Vector3Int mul(Vector3Int v_0, int n_1) { return new Vector3Int(v_0.x * n_1, v_0.y * n_1, v_0.z * n_1); }
         public static Vector3Int div(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int(v_0.x / v_1.x, v_0.y / v_1.y, v_0.z / v_1.z); }
+        public static Vector3Int div(Vector3Int v_0, int n_1) { return new Vector3Int(v_0.x / n_1, v_0.y / n_1, v_0.z / n_1); }
+        public static Vector3Int mod(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int((v_0.x + v_1.x) % v_1.x, (v_0.y + v_1.y) % v_1.y, (v_0.z + v_1.z) % v_1.z); }
+        public static Vector3Int mod(Vector3Int v_0, int n_1) { return new Vector3Int((v_0.x + n_1) % n_1, (v_0.y + n_1) % n_1, (v_0.z + n_1) % n_1); }
         public static Vector3Int abs(Vector3Int v_0) { return new Vector3Int(Mathf.Abs(v_0.x), Mathf.Abs(v_0.y), Mathf.Abs(v_0.z)); }
         public static Vector3Int sign(Vector3Int v_0) { return new Vector3Int(System.Math.Sign(v_0.x), System.Math.Sign(v_0.y), System.Math.Sign(v_0.z)); }
         public static Vector3Int exp(Vector3Int v_0) { return new Vector3Int((int)Mathf.Exp(v_0.x), (int)Mathf.Exp(v_0.y), (int)Mathf.Exp(v_0.z)); }
-        public static Vector3Int mod(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int((v_0.x + v_1.x) % v_1.x, (v_0.y + v_1.y) % v_1.y, (v_0.z + v_1.z) % v_1.z); }
         #endregion Mixed Func Vector3Int
         
         

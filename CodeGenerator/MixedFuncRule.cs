@@ -143,56 +143,67 @@ namespace Prateek.ScriptTemplating
             {
                 variants.Clear();
 
+                var isDefault = infoSrc.variables == null || infoSrc.variables.Count == 0;
                 for (int d = 0; d < data.funcInfos.Count; d++)
                 {
-                    var funcInfo = data.funcInfos[d];
-                    var variant = new Variant(funcInfo.name);
-                    var argCount = 0;
-
-                    for (int v = 0; v < VarCount; v++)
+                    for (int p = 0; p < (isDefault ? 1 : 2); p++)
                     {
-                        if (funcInfo.data.Contains(this[v].Original))
-                            argCount++;
-                    }
+                        var funcInfo = data.funcInfos[d];
+                        var variant = new Variant(funcInfo.name);
+                        var argCount = 0;
 
-                    var vars = funcInfo.data;
-                    for (int a = 0; a < argCount; a++)
-                    {
-                        if (infoSrc.variables == null || infoSrc.variables.Count == 0)
+                        for (int v = 0; v < VarCount; v++)
                         {
-                            variant.Args = string.Format(Code.Tag.Code.argsN, data.classDefaultType, a);
-                            vars = (this[a] + string.Format(Code.Tag.Code.varsN, a)).Apply(vars);
+                            if (funcInfo.data.Contains(this[v].Original))
+                                argCount++;
+                        }
+
+                        if (p == 1 && argCount == 1)
+                            continue;
+
+                        var vars = funcInfo.data;
+                        for (int a = 0; a < argCount; a++)
+                        {
+                            if (isDefault)
+                            {
+                                variant.Args = string.Format(Code.Tag.Code.argsN, data.classDefaultType, a);
+                                vars = (this[a] + string.Format(Code.Tag.Code.varsN, a)).Apply(vars);
+                            }
+                            else
+                            {
+                                variant.Args = (p == 1 && a != 0)
+                                                ? string.Format(Code.Tag.Code.argsN, data.classDefaultType, a)
+                                                : string.Format(Code.Tag.Code.argsV_, infoSrc.names[0], a);
+                            }
+                        }
+
+                        if (isDefault)
+                        {
+                            variant.Vars = vars;
                         }
                         else
                         {
-                            variant.Args = string.Format(Code.Tag.Code.argsV_, infoSrc.names[0], a);
-                        }
-                    }
-
-                    if (infoSrc.variables == null || infoSrc.variables.Count == 0)
-                    {
-                        variant.Vars = vars;
-                    }
-                    else
-                    {
-                        for (int v = 0; v < infoSrc.variables.Count; v++)
-                        {
-                            var varsA = vars;
-                            for (int a = 0; a < argCount; a++)
+                            for (int v = 0; v < infoSrc.variables.Count; v++)
                             {
-                                varsA = (this[a] + string.Format(Code.Tag.Code.varsV_, a, infoSrc.variables[v])).Apply(varsA);
+                                var varsA = vars;
+                                for (int a = 0; a < argCount; a++)
+                                {
+                                    varsA = (p == 1 && a != 0)
+                                             ? (this[a] + string.Format(Code.Tag.Code.varsN, a)).Apply(varsA)
+                                             : (this[a] + string.Format(Code.Tag.Code.varsV_, a, infoSrc.variables[v])).Apply(varsA);
+                                }
+                                variant.Vars = varsA;
                             }
-                            variant.Vars = varsA;
+
+                            variant = new Variant(variant.Call)
+                            {
+                                Args = variant.Args,
+                                Vars = Code.Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.Parenthesis.C()[0] + variant.Vars + Strings.Separator.Parenthesis.C()[1]
+                            };
                         }
 
-                        variant = new Variant(variant.Call)
-                        {
-                            Args = variant.Args,
-                            Vars = Code.Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.Parenthesis.C()[0] + variant.Vars + Strings.Separator.Parenthesis.C()[1]
-                        };
+                        variants.Add(variant);
                     }
-
-                    variants.Add(variant);
                 }
             }
             #endregion SwizzleRule internal
