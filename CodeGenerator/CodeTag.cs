@@ -136,39 +136,59 @@ namespace Prateek.ScriptTemplating
                 }
 
                 //----------------------------------------------------------
-                public string key;
-                public Usage usage;
-                public int minArgCount;
-                public int maxArgCount;
-                public bool needOpenScope;
-                public bool needScopeData;
+                public struct ArgRange
+                {
+                    //--
+                    private int min;
+                    private int max;
+
+                    //--
+                    public bool NoneNeeded { get { return min <= 0 && max <= 0; } }
+
+                    //-------------------------------------------------------------
+                    public static implicit operator ArgRange(int value)
+                    {
+                        return new ArgRange(value);
+                    }
+
+                    //----------------------------------------------------------
+                    public ArgRange(int min) : this(min, min) { }
+                    public ArgRange(int min, int max)
+                    {
+                        this.min = min;
+                        this.max = max;
+                    }
+
+                    //----------------------------------------------------------
+                    public bool Check(int count)
+                    {
+                        if (min < 0)
+                            return true;
+
+                        if (count < min)
+                            return false;
+
+                        if (max >= 0)
+                            return count <= max;
+                        return true;
+                    }
+                }
 
                 //----------------------------------------------------------
-                public bool NoArgNeeded { get { return minArgCount <= 0 && maxArgCount <= 0; } }
+                public string key;
+                public Usage usage;
+                public ArgRange args;
+                public bool needOpenScope;
+                public bool needScopeData;
 
                 //----------------------------------------------------------
                 public KeyRule(string key, bool doesMatch)
                 {
                     this.key = key;
                     usage = doesMatch ? Usage.Match : Usage.Forbidden;
-                    minArgCount = -1;
-                    maxArgCount = -1;
+                    args = new ArgRange(0);
                     needOpenScope = false;
                     needScopeData = false;
-                }
-                
-                //----------------------------------------------------------
-                public bool CheckArgCount(int count)
-                {
-                    if (minArgCount < 0)
-                        return true;
-
-                    if (count < minArgCount)
-                        return false;
-
-                    if (maxArgCount >= 0)
-                        return count <= maxArgCount;
-                    return true;
                 }
             }
 

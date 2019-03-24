@@ -173,7 +173,7 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public bool FindArgs(List<string> args, Code.Tag.KeyRule setup)
+            public bool FindArgs(List<string> args, Code.Tag.KeyRule keyRule)
             {
                 args.Clear();
 
@@ -189,7 +189,7 @@ namespace Prateek.ScriptTemplating
                     {
                         case SymbolType.CallStart:
                         {
-                            if (setup.NoArgNeeded)
+                            if (keyRule.args.NoneNeeded)
                                 return false;
 
                             if (argScope != SymbolType.MAX)
@@ -201,7 +201,7 @@ namespace Prateek.ScriptTemplating
                         }
                         case SymbolType.CallEnd:
                         {
-                            if (setup.NoArgNeeded)
+                            if (keyRule.args.NoneNeeded)
                                 return false;
 
                             if (argScope != SymbolType.CallStart)
@@ -210,7 +210,7 @@ namespace Prateek.ScriptTemplating
                             argSplit = SymbolType.ArgSplit;
                             argScope = SymbolType.CallEnd;
 
-                            allowContinue = setup.needOpenScope;
+                            allowContinue = keyRule.needOpenScope;
                             if (keyword.Length > 0)
                             {
                                 args.Add(keyword);
@@ -221,7 +221,7 @@ namespace Prateek.ScriptTemplating
                         case SymbolType.Numeric:
                         case SymbolType.Letter:
                         {
-                            if (setup.NoArgNeeded)
+                            if (keyRule.args.NoneNeeded)
                                 return false;
 
                             keyword += content[position];
@@ -234,7 +234,7 @@ namespace Prateek.ScriptTemplating
                         {
                             if (type == SymbolType.ArgSplit)
                             {
-                                if (setup.NoArgNeeded)
+                                if (keyRule.args.NoneNeeded)
                                     return false;
 
                                 if (argSplit == SymbolType.ArgSplit)
@@ -251,11 +251,11 @@ namespace Prateek.ScriptTemplating
                         }
                         case SymbolType.ScopeStart:
                         {
-                            scopes.Add(setup.needOpenScope ? setup.key : string.Empty);
+                            scopes.Add(keyRule.needOpenScope ? keyRule.key : string.Empty);
 
                             foundScope = true;
                             allowContinue = false;
-                            if (!setup.needOpenScope)
+                            if (!keyRule.needOpenScope)
                                 break;
 
                             if (argSplit == SymbolType.ArgSplit)
@@ -274,9 +274,9 @@ namespace Prateek.ScriptTemplating
                     position++;
                 }
 
-                if (setup.needOpenScope && !foundScope)
+                if (keyRule.needOpenScope && !foundScope)
                     return false;
-                return setup.CheckArgCount(args.Count);
+                return keyRule.args.Check(args.Count);
             }
 
             //-----------------------------------------------------------------

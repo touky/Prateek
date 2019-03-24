@@ -71,8 +71,9 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
         PRATEEK_CODEGEN_FUNC(sin)   { @Mathf.Sin(VARS_0)$ }
         PRATEEK_CODEGEN_FUNC(ceil)  { @Mathf.Ceil(VARS_0)$ }
         PRATEEK_CODEGEN_FUNC(floor) { @Mathf.Floor(VARS_0)$ }
-        PRATEEK_CODEGEN_FUNC(fract) { @VARS_0 - floor(VARS_0)$ }
         PRATEEK_CODEGEN_FUNC(sqrt)  { @Mathf.Sqrt(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(fract) { @VARS_0 - floor(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(mod)   { @(VARS_0 + VARS_1) % VARS_1$ }
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
@@ -91,35 +92,91 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
 		@
         }
     }
+}
 
-//namespace ShaderTo
-//{
-//    public static class CSharp
-//    {
-//        public static float max(float v0, float v1) { return Mathf.Max(v0, v1); }
-//        public static float min(float v0, float v1) { return Mathf.Min(v); }
-//        public static float mul(float v0, float v1) { return v0 * v1; }
-//        public static float div(float v0, float v1) { return v0 / v1; }
+PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
+{
+    PRATEEK_CODEGEN_BLOCK_SWIZZLE(Prateek.Extensions, VectorExt)
+    {
+        PRATEEK_CODEGEN_CLASS(Vector2Int, x, y)
+        PRATEEK_CODEGEN_CLASS(Vector3Int, x, y, z)
 
-//        public static float abs(float v) { return Mathf.Abs(v); }
-//        public static float sign(float v) { return Mathf.Sign(v); }
-//        public static float exp(float v) { return Mathf.Exp(v); }
-//        public static float cos(float v) { return Mathf.Cos(v); }
-//        public static float sin(float v) { return Mathf.Sin(v); }
-//        public static float ceil(float v) { return Mathf.Ceil(v); }
-//        public static float floor(float v) { return Mathf.Floor(v); }
-//        public static float fract(float v) { return v - floor(v); }
-//        public static float sqrt(float v) { return Mathf.Sqrt(v); }
+        PRATEEK_CODEGEN_DEFAULT(int, 0)
 
-//        public static float area(float v) { return v * v; }
-//
-//        public static float hash(float seed) { return fract(sin(seed) * 43758.5453f); }
-//
-//        public static Vector2 normalize(Vector2 v) { return v.normalized; }
-//        public static Vector3 normalize(Vector3 v) { return v.normalized; }
-//        public static Vector4 normalize(Vector4 v) { return v.normalized; }
-//
-//        public static int index(float v) { return v * v; }
-//    }
-//}
+        PRATEEK_CODEGEN_CODE_PREFIX
+        {
+        @//---------------------------------------------------------------------
+        @#region Swizzle SRC_CLASS to DST_CLASS
+        }
+
+        PRATEEK_CODEGEN_CODE_MAIN
+        {
+        @public static DST_CLASS SWIZZLE_CALL(this SRC_CLASS SWIZZLE_ARGS) { return new DST_CLASS(SWIZZLE_VARS); }
+        }
+        
+        PRATEEK_CODEGEN_CODE_SUFFIX
+        {
+        @#endregion Swizzle SRC_CLASS to DST_CLASS
+		@
+        }
+    }
+
+    PRATEEK_CODEGEN_BLOCK_MIXED_CTOR(Prateek.ShaderTo, CSharp)
+    {
+        PRATEEK_CODEGEN_CLASS(Vector2Int, vec2i, x, y)
+        PRATEEK_CODEGEN_CLASS(Vector3Int, vec3i, x, y, z)
+
+        PRATEEK_CODEGEN_DEFAULT(int, 0)
+
+        PRATEEK_CODEGEN_CODE_PREFIX
+        {
+        @//---------------------------------------------------------------------
+        @#region Mixed Ctor SRC_CLASS
+        }
+
+        PRATEEK_CODEGEN_CODE_MAIN
+        {
+        @public static SRC_CLASS MIXED_CTOR_CALL(MIXED_CTOR_ARGS) { return new SRC_CLASS(MIXED_CTOR_VARS); }
+        }
+        
+        PRATEEK_CODEGEN_CODE_SUFFIX
+        {
+        @#endregion Mixed Ctor SRC_CLASS
+		@
+        }
+    }
+
+    PRATEEK_CODEGEN_BLOCK_MIXED_FUNC(Prateek.ShaderTo, CSharp)
+    {
+        PRATEEK_CODEGEN_CLASS(Vector2Int, x, y)
+        PRATEEK_CODEGEN_CLASS(Vector3Int, x, y, z)
+
+        PRATEEK_CODEGEN_DEFAULT(int, 0)
+
+        PRATEEK_CODEGEN_FUNC(max) { @Mathf.Max(VARS_0, VARS_1)$ }
+        PRATEEK_CODEGEN_FUNC(min) { @Mathf.Min(VARS_0, VARS_1)$ }
+        PRATEEK_CODEGEN_FUNC(mul) { @VARS_0 * VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(div) { @VARS_0 / VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(abs)   { @Mathf.Abs(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(sign)  { @System.Math.Sign(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(exp)   { @(int)Mathf.Exp(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(mod)   { @(VARS_0 + VARS_1) % VARS_1$ }
+
+        PRATEEK_CODEGEN_CODE_PREFIX
+        {
+        @//---------------------------------------------------------------------
+        @#region Mixed Func SRC_CLASS
+        }
+
+        PRATEEK_CODEGEN_CODE_MAIN
+        {
+        @public static SRC_CLASS MIXED_FUNC_CALL(MIXED_FUNC_ARGS) { return MIXED_FUNC_VARS; }
+        }
+        
+        PRATEEK_CODEGEN_CODE_SUFFIX
+        {
+        @#endregion Mixed Func SRC_CLASS
+		@
+        }
+    }
 }

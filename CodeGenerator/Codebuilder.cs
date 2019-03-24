@@ -417,12 +417,15 @@ namespace Prateek.ScriptTemplating
         //---------------------------------------------------------------------
         protected virtual bool DoWriteData(ref FileData fileData)
         {
-            var path = destinationDirectory + fileData.destination.relPath;
-            path = FileHelpers.GetValidFile(path);
-            if (path == string.Empty)
+            var dst = fileData.destination;
+            var path = destinationDirectory + dst.relPath;
+            var dir = path.Replace(dst.name.Extension(dst.extension), string.Empty);
+            dir = FileHelpers.GetValidDirectory(dir);
+            if (dir == string.Empty)
                 return false;
 
-            File.WriteAllText(path + (runInTestMode ? ".txt" : String.Empty), fileData.destination.content.ApplyCRLF());
+            path = dir + dst.name.Extension(dst.extension);
+            File.WriteAllText(path + (runInTestMode ? ".txt" : String.Empty), dst.content.ApplyCRLF());
 
             return true;
         }

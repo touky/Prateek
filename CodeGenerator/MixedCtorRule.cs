@@ -109,7 +109,7 @@ namespace Prateek.ScriptTemplating
             {
                 if (keyword == Code.Tag.Macro.OperationClass)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 2 };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { args = new Code.Tag.KeyRule.ArgRange(2, -1) };
                 }
                 else
                 {

@@ -276,19 +276,19 @@ namespace Prateek.ScriptTemplating
             {
                 if (keyword == CodeBlock)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 1) { minArgCount = 2, maxArgCount = 2, needOpenScope = true };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 1) { args = 2, needOpenScope = true };
                 }
                 else if (keyword == Code.Tag.Macro.OperationClass)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 1 };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { args = new Code.Tag.KeyRule.ArgRange(1, -1) };
                 }
                 else if (keyword == Code.Tag.Macro.DefaultInfo)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 2, maxArgCount = 2 };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { args = 2 };
                 }
                 else if (keyword == Code.Tag.Macro.CodePartPrefix || keyword == Code.Tag.Macro.CodePartMain || keyword == Code.Tag.Macro.CodePartSuffix)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 0, maxArgCount = 0, needOpenScope = true, needScopeData = true };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { args = 0, needOpenScope = true, needScopeData = true };
                 }
 
                 return new Code.Tag.KeyRule() { usage = Code.Tag.KeyRule.Usage.Ignore };

@@ -110,7 +110,7 @@ namespace Prateek.ScriptTemplating
             {
                 if (keyword == Code.Tag.Macro.Func)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 1, maxArgCount = 1, needOpenScope = true, needScopeData = true };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { args = 1, needOpenScope = true, needScopeData = true };
                 }
                 else
                 {

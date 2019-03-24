@@ -108,23 +108,11 @@ namespace Prateek.ScriptTemplating
             {
                 if (analyzer.FindKeyword(ref keyword))
                 {
-                    if (codeDepth == 0)
+                    var result = CheckGenericData(ref codeDepth, keyword, analyzer, ref activeCodeFile, codeFiles, args);
+                    if (result < 1)
                     {
-                        if (keyword == Code.Tag.Macro.FileInfo)
-                        {
-                            var setup = new Code.Tag.KeyRule(keyword, true) { minArgCount = 2, maxArgCount = 2, needOpenScope = true };
-                            if (!analyzer.FindArgs(args, setup))
-                                break;
-
-                            activeCodeFile = codeFiles.Find((x) => { return x.fileName == args[0] && x.fileExtension == args[1]; });
-                            if (activeCodeFile == null)
-                            {
-                                activeCodeFile = new Code.File() { fileName = args[0], fileExtension = args[1] };
-                                codeFiles.Add(activeCodeFile);
-                            }
-
-                            codeDepth++;
-                        }
+                        if (result < 0)
+                            break;
                     }
                     else
                     {
@@ -216,6 +204,11 @@ namespace Prateek.ScriptTemplating
                 codeFile.Generate(genHeader, genCode);
 
                 var newData = fileData;
+                var swap = new Code.Tag.SwapInfo(newData.destination.name.Extension(newData.destination.extension)) + codeFile.fileName.Extension(codeFile.fileExtension);
+                newData.destination.name = codeFile.fileName;
+                newData.destination.extension = codeFile.fileExtension;
+                newData.destination.absPath = swap.Apply(newData.destination.absPath);
+                newData.destination.relPath = swap.Apply(newData.destination.relPath);
                 newData.destination.content = codeFile.CodeGenerated;
                 newData.source = newData.destination;
                 AddFile(newData);
@@ -232,6 +225,33 @@ namespace Prateek.ScriptTemplating
             }
 
             return false;
+        }
+
+        //--
+        private int CheckGenericData(ref int codeDepth, string keyword, Code.Analyzer analyzer, ref Code.File activeCodeFile, List<Code.File> codeFiles, List<string> args)
+        {
+            if (keyword == Code.Tag.Macro.FileInfo)
+            {
+                if (codeDepth != 0)
+                    return -1;
+
+                var keyRule = new Code.Tag.KeyRule(keyword, true) { args = 2, needOpenScope = true };
+                if (!analyzer.FindArgs(args, keyRule))
+                    return -1;
+
+                activeCodeFile = codeFiles.Find((x) => { return x.fileName == args[0] && x.fileExtension == args[1]; });
+                if (activeCodeFile == null)
+                {
+                    activeCodeFile = new Code.File() { fileName = args[0], fileExtension = args[1] };
+                    codeFiles.Add(activeCodeFile);
+                }
+
+                codeDepth++;
+
+                return 0;
+            }
+
+            return 1;
         }
     }
 

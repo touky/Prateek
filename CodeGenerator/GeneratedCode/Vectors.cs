@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 23/03/2019
+//  Header last update date: 24/03/2019
 //
 //  Copyright © 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -1393,8 +1393,9 @@ namespace Prateek.ShaderTo
         public static float sin(float n_0) { return Mathf.Sin(n_0); }
         public static float ceil(float n_0) { return Mathf.Ceil(n_0); }
         public static float floor(float n_0) { return Mathf.Floor(n_0); }
-        public static float fract(float n_0) { return n_0 - floor(n_0); }
         public static float sqrt(float n_0) { return Mathf.Sqrt(n_0); }
+        public static float fract(float n_0) { return n_0 - floor(n_0); }
+        public static float mod(float n_0, float n_1) { return (n_0 + n_1) % n_1; }
         #endregion Mixed Func float
         
         //---------------------------------------------------------------------
@@ -1410,8 +1411,9 @@ namespace Prateek.ShaderTo
         public static Vector2 sin(Vector2 v_0) { return new Vector2(Mathf.Sin(v_0.x), Mathf.Sin(v_0.y)); }
         public static Vector2 ceil(Vector2 v_0) { return new Vector2(Mathf.Ceil(v_0.x), Mathf.Ceil(v_0.y)); }
         public static Vector2 floor(Vector2 v_0) { return new Vector2(Mathf.Floor(v_0.x), Mathf.Floor(v_0.y)); }
-        public static Vector2 fract(Vector2 v_0) { return new Vector2(v_0.x - floor(v_0.x), v_0.y - floor(v_0.y)); }
         public static Vector2 sqrt(Vector2 v_0) { return new Vector2(Mathf.Sqrt(v_0.x), Mathf.Sqrt(v_0.y)); }
+        public static Vector2 fract(Vector2 v_0) { return new Vector2(v_0.x - floor(v_0.x), v_0.y - floor(v_0.y)); }
+        public static Vector2 mod(Vector2 v_0, Vector2 v_1) { return new Vector2((v_0.x + v_1.x) % v_1.x, (v_0.y + v_1.y) % v_1.y); }
         #endregion Mixed Func Vector2
         
         //---------------------------------------------------------------------
@@ -1427,8 +1429,9 @@ namespace Prateek.ShaderTo
         public static Vector3 sin(Vector3 v_0) { return new Vector3(Mathf.Sin(v_0.x), Mathf.Sin(v_0.y), Mathf.Sin(v_0.z)); }
         public static Vector3 ceil(Vector3 v_0) { return new Vector3(Mathf.Ceil(v_0.x), Mathf.Ceil(v_0.y), Mathf.Ceil(v_0.z)); }
         public static Vector3 floor(Vector3 v_0) { return new Vector3(Mathf.Floor(v_0.x), Mathf.Floor(v_0.y), Mathf.Floor(v_0.z)); }
-        public static Vector3 fract(Vector3 v_0) { return new Vector3(v_0.x - floor(v_0.x), v_0.y - floor(v_0.y), v_0.z - floor(v_0.z)); }
         public static Vector3 sqrt(Vector3 v_0) { return new Vector3(Mathf.Sqrt(v_0.x), Mathf.Sqrt(v_0.y), Mathf.Sqrt(v_0.z)); }
+        public static Vector3 fract(Vector3 v_0) { return new Vector3(v_0.x - floor(v_0.x), v_0.y - floor(v_0.y), v_0.z - floor(v_0.z)); }
+        public static Vector3 mod(Vector3 v_0, Vector3 v_1) { return new Vector3((v_0.x + v_1.x) % v_1.x, (v_0.y + v_1.y) % v_1.y, (v_0.z + v_1.z) % v_1.z); }
         #endregion Mixed Func Vector3
         
         //---------------------------------------------------------------------
@@ -1444,8 +1447,9 @@ namespace Prateek.ShaderTo
         public static Vector4 sin(Vector4 v_0) { return new Vector4(Mathf.Sin(v_0.x), Mathf.Sin(v_0.y), Mathf.Sin(v_0.z), Mathf.Sin(v_0.w)); }
         public static Vector4 ceil(Vector4 v_0) { return new Vector4(Mathf.Ceil(v_0.x), Mathf.Ceil(v_0.y), Mathf.Ceil(v_0.z), Mathf.Ceil(v_0.w)); }
         public static Vector4 floor(Vector4 v_0) { return new Vector4(Mathf.Floor(v_0.x), Mathf.Floor(v_0.y), Mathf.Floor(v_0.z), Mathf.Floor(v_0.w)); }
-        public static Vector4 fract(Vector4 v_0) { return new Vector4(v_0.x - floor(v_0.x), v_0.y - floor(v_0.y), v_0.z - floor(v_0.z), v_0.w - floor(v_0.w)); }
         public static Vector4 sqrt(Vector4 v_0) { return new Vector4(Mathf.Sqrt(v_0.x), Mathf.Sqrt(v_0.y), Mathf.Sqrt(v_0.z), Mathf.Sqrt(v_0.w)); }
+        public static Vector4 fract(Vector4 v_0) { return new Vector4(v_0.x - floor(v_0.x), v_0.y - floor(v_0.y), v_0.z - floor(v_0.z), v_0.w - floor(v_0.w)); }
+        public static Vector4 mod(Vector4 v_0, Vector4 v_1) { return new Vector4((v_0.x + v_1.x) % v_1.x, (v_0.y + v_1.y) % v_1.y, (v_0.z + v_1.z) % v_1.z, (v_0.w + v_1.w) % v_1.w); }
         #endregion Mixed Func Vector4
         
         
