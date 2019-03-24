@@ -243,6 +243,7 @@ namespace Prateek.ShaderTo
     {
         //---------------------------------------------------------------------
         #region Mixed Func int
+        public static int random(int n_0, int n_1) { return UnityEngine.Random.Range(n_0, n_1); }
         public static int max(int n_0, int n_1) { return Mathf.Max(n_0, n_1); }
         public static int min(int n_0, int n_1) { return Mathf.Min(n_0, n_1); }
         public static int mul(int n_0, int n_1) { return n_0 * n_1; }
@@ -255,6 +256,8 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector2Int
+        public static Vector2Int random(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y)); }
+        public static Vector2Int random(Vector2Int v_0, int n_1) { return new Vector2Int(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1)); }
         public static Vector2Int max(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y)); }
         public static Vector2Int max(Vector2Int v_0, int n_1) { return new Vector2Int(Mathf.Max(v_0.x, n_1), Mathf.Max(v_0.y, n_1)); }
         public static Vector2Int min(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int(Mathf.Min(v_0.x, v_1.x), Mathf.Min(v_0.y, v_1.y)); }
@@ -272,6 +275,8 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector3Int
+        public static Vector3Int random(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y), UnityEngine.Random.Range(v_0.z, v_1.z)); }
+        public static Vector3Int random(Vector3Int v_0, int n_1) { return new Vector3Int(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1), UnityEngine.Random.Range(v_0.z, n_1)); }
         public static Vector3Int max(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y), Mathf.Max(v_0.z, v_1.z)); }
         public static Vector3Int max(Vector3Int v_0, int n_1) { return new Vector3Int(Mathf.Max(v_0.x, n_1), Mathf.Max(v_0.y, n_1), Mathf.Max(v_0.z, n_1)); }
         public static Vector3Int min(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int(Mathf.Min(v_0.x, v_1.x), Mathf.Min(v_0.y, v_1.y), Mathf.Min(v_0.z, v_1.z)); }

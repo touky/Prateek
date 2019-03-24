@@ -75,19 +75,23 @@ namespace Prateek.Helpers
     {
         //---------------------------------------------------------------------
         #region Vector2
-        public static Vector2 Random(Vector2 min, Vector2 max)
-        {
-            var x = UnityEngine.Random.Range(min.x, max.x);
-            var y = UnityEngine.Random.Range(min.y, max.y);
-            return new Vector2(x, y);
-        }
-
-        //-----------------------------------------------------------------------------------------
         public static bool Test(Vector2 v0, Vector2 v1, float epsilon = Vector2.kEpsilon)
         {
             var d = v0 - v1;
             return -epsilon < d.x && d.x < epsilon
                 && -epsilon < d.y && d.y < epsilon;
+        }
+
+        //-----------------------------------------------------------------------------------------
+        public static float Area(this Vector2 v)
+        {
+            return v.x * v.y;
+        }
+
+        //---------------------------------------------------------------------
+        public static int ToIndex(this Vector2 v, Vector2 dimensions)
+        {
+            return (int)v.x + (int)v.y * (int)dimensions.x;
         }
 
         //-----------------------------------------------------------------------------------------
@@ -99,21 +103,24 @@ namespace Prateek.Helpers
 
         //---------------------------------------------------------------------
         #region Vector3
-        public static Vector3 Random(Vector3 min, Vector3 max)
-        {
-            var x = UnityEngine.Random.Range(min.x, max.x);
-            var y = UnityEngine.Random.Range(min.y, max.y);
-            var z = UnityEngine.Random.Range(min.z, max.z);
-            return new Vector3(x, y, z);
-        }
-
-        //-----------------------------------------------------------------------------------------
         public static bool Test(Vector3 v0, Vector3 v1, float epsilon = Vector3.kEpsilon)
         {
             var d = v0 - v1;
             return -epsilon < d.x && d.x < epsilon
                 && -epsilon < d.y && d.y < epsilon
                 && -epsilon < d.z && d.z < epsilon;
+        }
+
+        //---------------------------------------------------------------------
+        public static float Area(this Vector3 v)
+        {
+            return v.x * v.y * v.z;
+        }
+
+        //---------------------------------------------------------------------
+        public static int ToIndex(this Vector3 v, Vector3 dimensions)
+        {
+            return (int)v.x + (int)v.y * (int)dimensions.x + (int)v.z * (int)dimensions.xy().Area();
         }
 
         //-----------------------------------------------------------------------------------------
@@ -127,16 +134,6 @@ namespace Prateek.Helpers
 
         //---------------------------------------------------------------------
         #region Vector4
-        public static Vector4 Random(Vector4 min, Vector4 max)
-        {
-            var x = UnityEngine.Random.Range(min.x, max.x);
-            var y = UnityEngine.Random.Range(min.y, max.y);
-            var z = UnityEngine.Random.Range(min.z, max.z);
-            var w = UnityEngine.Random.Range(min.w, max.w);
-            return new Vector4(x, y, z, w);
-        }
-
-        //-----------------------------------------------------------------------------------------
         public static bool Test(Vector4 v0, Vector4 v1, float epsilon = Vector4.kEpsilon)
         {
             var d = v0 - v1;
@@ -144,6 +141,18 @@ namespace Prateek.Helpers
                 && -epsilon < d.y && d.y < epsilon
                 && -epsilon < d.z && d.z < epsilon
                 && -epsilon < d.w && d.w < epsilon;
+        }
+
+        //-----------------------------------------------------------------------------------------
+        public static float Area(this Vector4 v)
+        {
+            return v.x * v.y * v.z * v.w;
+        }
+
+        //---------------------------------------------------------------------
+        public static int ToIndex(this Vector4 v, Vector4 dimensions)
+        {
+            return (int)v.x + (int)v.y * (int)dimensions.x + (int)v.z * (int)dimensions.xy().Area() + (int)v.w * (int)dimensions.xyz().Area();
         }
 
         //-----------------------------------------------------------------------------------------

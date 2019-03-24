@@ -49,6 +49,7 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+using static Prateek.ShaderTo.CSharp;
 
 #if UNITY_EDITOR
 using Prateek.ScriptTemplating;
@@ -352,14 +353,14 @@ namespace Prateek.Debug
             style.WindowRect.size = new Vector2(windowDefaultRect.width, windowDefaultRect.height);
 
             //Resize to fit the screen
-            style.WindowRect.size = ((style.WindowRect.position + style.WindowRect.size).Min(new Vector2(Screen.width, Screen.height)) - style.WindowRect.position);
-            style.WindowRect.size = style.WindowRect.size.Min(style.WindowRect.size - (style.WindowRect.position.Max(0) - style.WindowRect.position));
-            style.WindowRect.position = style.WindowRect.position.Max(0);
+            style.WindowRect.size = (min(style.WindowRect.position + style.WindowRect.size, new Vector2(Screen.width, Screen.height)) - style.WindowRect.position);
+            style.WindowRect.size = min(style.WindowRect.size, style.WindowRect.size - (max(style.WindowRect.position, 0) - style.WindowRect.position));
+            style.WindowRect.position = max(style.WindowRect.position, 0);
 
             //Build rects
-            var buttonsRect = new Rect(style.WindowRect.position + (Vector2.right * (style.WindowRect.width - buttonsSize.x)).Max(0), buttonsSize);
-            var headerRect = new Rect(style.WindowRect.position, new Vector2(style.WindowRect.width - (buttonsRect.width + 10), headerSize.y).Max(0));
-            var scrollViewRect = new Rect(style.WindowRect.position + Vector2.up * headerRect.height, (style.WindowRect.size - Vector2.up * headerSize.y).Max(0));
+            var buttonsRect = new Rect(style.WindowRect.position + max(Vector2.right * (style.WindowRect.width - buttonsSize.x), 0), buttonsSize);
+            var headerRect = new Rect(style.WindowRect.position, max(vec2(style.WindowRect.width - (buttonsRect.width + 10), headerSize.y), 0));
+            var scrollViewRect = new Rect(style.WindowRect.position + Vector2.up * headerRect.height, max(style.WindowRect.size - Vector2.up * headerSize.y, 0));
 
             GUI.Box(style.WindowRect, GUIContent.none, style.BGBoxStyle);
 
@@ -379,7 +380,7 @@ namespace Prateek.Debug
                             //Draw selection Tabs
                             content.text = m_loggers[i].logger.name;
                             content.tooltip = m_loggers[i].logger.name;
-                            var nameSize = style.ToolbarActive.CalcSize(content).Max(minNameSize).Min(headerRect.width).x;
+                            var nameSize = min(max(style.ToolbarActive.CalcSize(content), minNameSize), headerRect.width).x;
                             var toggleRect = new Rect(cursorRect.position, new Vector2(nameSize, cursorRect.height));
 
                             if (GUI.Toggle(toggleRect, isToggled, content, isToggled ? style.ToolbarActive : style.ToolbarInactive) != isToggled)
@@ -387,7 +388,7 @@ namespace Prateek.Debug
                                 newActiveBox = i;
                             }
 
-                            var offset = (Vector2.right * toggleRect.width).Min(headerRect.width);
+                            var offset = min(Vector2.right * toggleRect.width, headerRect.width);
                             cursorRect.position += offset;
                             headerRect.size -= offset;
                             headerRect.position += offset;
@@ -455,7 +456,7 @@ namespace Prateek.Debug
                     }
             }
 
-            windowPosition = windowPosition.Min(new Vector2(Screen.width, Screen.height) - Vector2.one * headerRect.height * 4f).Max(-(windowDefaultRect.size - Vector2.one * headerRect.height * 2f));
+            windowPosition = max(min(windowPosition, new Vector2(Screen.width, Screen.height) - Vector2.one * headerRect.height * 4f), -(windowDefaultRect.size - Vector2.one * headerRect.height * 2f));
             style.ActiveBox = newActiveBox;
 
             //Set position after moving the mouse

@@ -1382,6 +1382,7 @@ namespace Prateek.ShaderTo
     {
         //---------------------------------------------------------------------
         #region Mixed Func float
+        public static float random(float n_0, float n_1) { return UnityEngine.Random.Range(n_0, n_1); }
         public static float max(float n_0, float n_1) { return Mathf.Max(n_0, n_1); }
         public static float min(float n_0, float n_1) { return Mathf.Min(n_0, n_1); }
         public static float mul(float n_0, float n_1) { return n_0 * n_1; }
@@ -1400,6 +1401,8 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector2
+        public static Vector2 random(Vector2 v_0, Vector2 v_1) { return new Vector2(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y)); }
+        public static Vector2 random(Vector2 v_0, float n_1) { return new Vector2(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1)); }
         public static Vector2 max(Vector2 v_0, Vector2 v_1) { return new Vector2(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y)); }
         public static Vector2 max(Vector2 v_0, float n_1) { return new Vector2(Mathf.Max(v_0.x, n_1), Mathf.Max(v_0.y, n_1)); }
         public static Vector2 min(Vector2 v_0, Vector2 v_1) { return new Vector2(Mathf.Min(v_0.x, v_1.x), Mathf.Min(v_0.y, v_1.y)); }
@@ -1423,6 +1426,8 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector3
+        public static Vector3 random(Vector3 v_0, Vector3 v_1) { return new Vector3(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y), UnityEngine.Random.Range(v_0.z, v_1.z)); }
+        public static Vector3 random(Vector3 v_0, float n_1) { return new Vector3(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1), UnityEngine.Random.Range(v_0.z, n_1)); }
         public static Vector3 max(Vector3 v_0, Vector3 v_1) { return new Vector3(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y), Mathf.Max(v_0.z, v_1.z)); }
         public static Vector3 max(Vector3 v_0, float n_1) { return new Vector3(Mathf.Max(v_0.x, n_1), Mathf.Max(v_0.y, n_1), Mathf.Max(v_0.z, n_1)); }
         public static Vector3 min(Vector3 v_0, Vector3 v_1) { return new Vector3(Mathf.Min(v_0.x, v_1.x), Mathf.Min(v_0.y, v_1.y), Mathf.Min(v_0.z, v_1.z)); }
@@ -1446,6 +1451,8 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector4
+        public static Vector4 random(Vector4 v_0, Vector4 v_1) { return new Vector4(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y), UnityEngine.Random.Range(v_0.z, v_1.z), UnityEngine.Random.Range(v_0.w, v_1.w)); }
+        public static Vector4 random(Vector4 v_0, float n_1) { return new Vector4(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1), UnityEngine.Random.Range(v_0.z, n_1), UnityEngine.Random.Range(v_0.w, n_1)); }
         public static Vector4 max(Vector4 v_0, Vector4 v_1) { return new Vector4(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y), Mathf.Max(v_0.z, v_1.z), Mathf.Max(v_0.w, v_1.w)); }
         public static Vector4 max(Vector4 v_0, float n_1) { return new Vector4(Mathf.Max(v_0.x, n_1), Mathf.Max(v_0.y, n_1), Mathf.Max(v_0.z, n_1), Mathf.Max(v_0.w, n_1)); }
         public static Vector4 min(Vector4 v_0, Vector4 v_1) { return new Vector4(Mathf.Min(v_0.x, v_1.x), Mathf.Min(v_0.y, v_1.y), Mathf.Min(v_0.z, v_1.z), Mathf.Min(v_0.w, v_1.w)); }
