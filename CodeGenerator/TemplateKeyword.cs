@@ -151,6 +151,7 @@ namespace Prateek.ScriptTemplating
             public struct SwapInfo
             {
                 public Keyword operation;
+                public string data;
                 public int start;
                 public int end;
             }
@@ -175,6 +176,12 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
+            public void Add(string data, int start, int end)
+            {
+                stack.Add(new SwapInfo() { data = data, start = start, end = end });
+            }
+
+            //-----------------------------------------------------------------
             public void Reset()
             {
                 content = string.Empty;
@@ -191,7 +198,9 @@ namespace Prateek.ScriptTemplating
                 {
                     var data = stack[s];
                     result = result.Substring(0, data.start)
-                           + data.operation.Content.CleanText()
+                           + (data.operation != null
+                            ? data.operation.Content.CleanText()
+                            : data.data)
                            + result.Substring(data.end);
                 }
                 return result;

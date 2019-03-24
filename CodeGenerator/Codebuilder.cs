@@ -163,8 +163,9 @@ namespace Prateek.ScriptTemplating
             ApplyScriptTemplate = (1 << 2),
             ApplyZonedScript = (1 << 3),
             ApplyKeyword = (1 << 4),
+            ApplyFixUp = (1 << 5),
 
-            WriteData = (1 << 5),
+            WriteData = (1 << 6),
 
             ALL = ~0,
 
@@ -276,6 +277,9 @@ namespace Prateek.ScriptTemplating
                     if (!ApplyKeyword(ref file))
                         continue;
 
+                    if (!ApplyFixups(ref file))
+                        continue;
+
                     WriteData(ref file);
                 }
             }
@@ -314,6 +318,14 @@ namespace Prateek.ScriptTemplating
             if ((operations & OperationApplied.ApplyKeyword) == 0)
                 return true;
             return DoApplyKeyword(ref fileData);
+        }
+
+        //---------------------------------------------------------------------
+        private bool ApplyFixups(ref FileData fileData)
+        {
+            if ((operations & OperationApplied.ApplyFixUp) == 0)
+                return true;
+            return DoApplyFixUps(ref fileData);
         }
 
         //---------------------------------------------------------------------
@@ -420,6 +432,59 @@ namespace Prateek.ScriptTemplating
         protected virtual bool DoApplyKeyword(ref FileData fileData)
         {
             TemplateHelpers.ApplyKeywords(ref fileData.destination.content, fileData.destination.extension);
+
+            return true;
+        }
+
+        //---------------------------------------------------------------------
+        protected virtual bool DoApplyFixUps(ref FileData fileData)
+        {
+            var comment = "//--";
+            var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
+            var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.ZoneDelimiter, fileData.destination.content);
+
+            var position = -1;
+            while ((position = fileData.destination.content.IndexOf(comment, position)) >= 0)
+            {
+                var safety = ignorers.AdvanceToSafety(position, TemplateReplacement.Ignorable.Style.Text);
+                if (safety != position)
+                {
+                    position = safety;
+                    continue;
+                }
+
+                var start = fileData.destination.content.LastIndexOf(Strings.Separator.NewLine.C()[0], position);
+                var end = fileData.destination.content.IndexOf(Strings.Separator.NewLine.C()[0], position);
+
+                if (start < 0 || end < 0)
+                {
+                    position++;
+                    continue;
+                }
+
+                start++;
+                var line = fileData.destination.content.Substring(start, end - start);
+                if (line.Length != 80)
+                {
+                    while (line.Length > 80)
+                    {
+                        if (line[end - 1] != '-')
+                            break;
+                        line = line.Remove(end - 1);
+                    }
+
+                    while (line.Length < 80)
+                    {
+                        line += '-';
+                    }
+
+                    stack.Add(line, start, end);
+
+                    position = end;
+                }
+            }
+
+            fileData.destination.content = stack.Apply();
 
             return true;
         }
