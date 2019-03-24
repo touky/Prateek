@@ -83,9 +83,9 @@ namespace Prateek.ScriptTemplating
             public struct Variant
             {
                 //-----------------------------------------------------------------
-                public string call;
-                public string args;
-                public string vars;
+                private string call;
+                private string args;
+                private string vars;
 
                 //-----------------------------------------------------------------
                 public string Call { get { return call; } set { call += value; } }
@@ -96,8 +96,8 @@ namespace Prateek.ScriptTemplating
                 public Variant(string value)
                 {
                     call = value;
-                    args = value;
-                    vars = value;
+                    args = string.Empty;
+                    vars = string.Empty;
                 }
 
                 //-----------------------------------------------------------------
@@ -121,9 +121,11 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public abstract string ScopeTag { get; }
             public abstract GenerationMode GenMode { get; }
+            public virtual bool GenerateDefault { get { return false; } }
 
             //-----------------------------------------------------------------
             private List<string> data = new List<string>();
+            private List<string> vars = new List<string>();
 
             //-----------------------------------------------------------------
             public string CodeBlock { get { return data[0]; } }
@@ -137,6 +139,8 @@ namespace Prateek.ScriptTemplating
             public Code.Tag.SwapInfo CodeCall { get { return DataCall; } }
             public Code.Tag.SwapInfo CodeArgs { get { return DataArgs; } }
             public Code.Tag.SwapInfo CodeVars { get { return DataVars; } }
+            public Code.Tag.SwapInfo this[int i] { get { if (i < 0 || i > 9) return string.Empty; return vars[i]; } }
+            public int VarCount { get { return vars.Count; } }
 
             //-----------------------------------------------------------------
             protected CodeRule(string extension) : base(extension)
@@ -157,6 +161,11 @@ namespace Prateek.ScriptTemplating
                 data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.CALL)));
                 data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.ARGS)));
                 data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.VARS)));
+
+                for (int v = 0; v < 10; v++)
+                {
+                    vars.Add(string.Format("{0}_{1}", Code.Tag.Macro.Code.VARS, v));
+                }
             }
 
             //-----------------------------------------------------------------
@@ -195,13 +204,23 @@ namespace Prateek.ScriptTemplating
             public void Generate(Code.File.Data data)
             {
                 var variants = new List<Variant>();
-                var maxSrc = data.classInfos.Count;
+                var maxSrc = data.classInfos.Count + (GenerateDefault ? 1 : 0);
                 var maxDst = GenMode == GenerationMode.ForeachSrcXDest ? data.classInfos.Count : 1;
                 var infoSrc = new Code.File.Data.ClassInfo();
                 var infoDst = new Code.File.Data.ClassInfo();
+                var infoDef = new Code.File.Data.ClassInfo();
+                if (GenerateDefault)
+                {
+                    infoDef.names = new List<string>();
+                    infoDef.names.Add(data.classDefaultType);
+                }
+
                 for (int iSrc = 0; iSrc < maxSrc; iSrc++)
                 {
-                    infoSrc = data.classInfos[iSrc];
+                    infoSrc = (GenerateDefault && iSrc == 0)
+                        ? infoDef
+                        : data.classInfos[iSrc + (GenerateDefault ? -1 : 0)];
+
                     for (int iSDst = 0; iSDst < maxDst; iSDst++)
                     {
                         if (GenMode == GenerationMode.ForeachSrcXDest)
@@ -283,7 +302,10 @@ namespace Prateek.ScriptTemplating
                     codeFile.Submit();
                     return true;
                 }
-                else if (scope == Code.Tag.Macro.CodePartMain || scope == Code.Tag.Macro.CodePartPrefix || scope == Code.Tag.Macro.CodePartSuffix)
+                else if (scope == Code.Tag.Macro.Func
+                     || scope == Code.Tag.Macro.CodePartMain
+                     || scope == Code.Tag.Macro.CodePartPrefix
+                     || scope == Code.Tag.Macro.CodePartSuffix)
                 {
                     return true;
                 }

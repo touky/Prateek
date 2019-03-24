@@ -75,11 +75,11 @@ namespace Prateek.ScriptTemplating
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class MixedCTorScriptTemplate : TemplateReplacement
+    class MixedFuncScriptTemplate : TemplateReplacement
     {
-        static MixedCTorScriptTemplate()
+        static MixedFuncScriptTemplate()
         {
-            NewMixedCTor(Code.Tag.importExtension).Commit();
+            NewMixedFunc(Code.Tag.importExtension).Commit();
         }
     }
 
@@ -87,29 +87,30 @@ namespace Prateek.ScriptTemplating
     public partial class TemplateReplacement
     {
         //---------------------------------------------------------------------
-        protected static MixedCTorRule NewMixedCTor(string extension)
+        protected static MixedFuncRule NewMixedFunc(string extension)
         {
-            return new MixedCTorRule(extension);
+            return new MixedFuncRule(extension);
         }
 
         //---------------------------------------------------------------------
         [InitializeOnLoad]
-        public partial class MixedCTorRule : CodeRule
+        public partial class MixedFuncRule : CodeRule
         {
             //-----------------------------------------------------------------
-            public override string ScopeTag { get { return "MIXED_CTOR"; } }
+            public override string ScopeTag { get { return "MIXED_FUNC"; } }
             public override GenerationMode GenMode { get { return GenerationMode.ForeachSrc; } }
+            public override bool GenerateDefault { get { return true; } }
 
             //-----------------------------------------------------------------
-            public MixedCTorRule(string extension) : base(extension) { }
+            public MixedFuncRule(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
             #region CodeRule override
             public override Code.Tag.KeyRule GetKeyRule(string keyword, int codeDepth)
             {
-                if (keyword == Code.Tag.Macro.OperationClass)
+                if (keyword == Code.Tag.Macro.Func)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 2 };
+                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { minArgCount = 1, maxArgCount = 1, needOpenScope = true, needScopeData = true };
                 }
                 else
                 {
@@ -120,12 +121,12 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             protected override bool DoTreatData(Code.File.Data activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
             {
-                if (keyRule.key == Code.Tag.Macro.OperationClass)
+                if (keyRule.key == Code.Tag.Macro.Func)
                 {
-                    activeData.classInfos.Add(new Code.File.Data.ClassInfo()
+                    activeData.funcInfos.Add(new Code.File.Data.FuncInfo()
                     {
-                        names = args.GetRange(0, 2),
-                        variables = args.GetRange(2, args.Count - 2)
+                        name = args[0],
+                        data = data
                     });
                 }
                 else
@@ -140,57 +141,58 @@ namespace Prateek.ScriptTemplating
             #region SwizzleRule internal
             protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
             {
-                var slots = new int[infoSrc.variables.Count];
-                for (int s = 0; s < slots.Length; s++)
-                {
-                    slots[s] = 0;
-                }
-
                 variants.Clear();
-                GatherVariants(0, slots, slots.Length, variants, data, infoSrc);
-            }
 
-            //-----------------------------------------------------------------
-            private void GatherVariants(int s, int[] slots, int count, List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc)
-            {
-                var classCount = data.classInfos.Count + 1;
-                for (int c = 0; c < classCount; c++)
+                for (int d = 0; d < data.funcInfos.Count; d++)
                 {
-                    var varCount = c == 0 ? 1 : data.classInfos[c - 1].variables.Count;
-                    slots[s] = c;
-                    if (count - varCount > 0)
+                    var funcInfo = data.funcInfos[d];
+                    var variant = new Variant(funcInfo.name);
+                    var argCount = 0;
+
+                    for (int v = 0; v < VarCount; v++)
                     {
-                        GatherVariants(s + 1, slots, count - varCount, variants, data, infoSrc);
+                        if (funcInfo.data.Contains(this[v].Original))
+                            argCount++;
                     }
-                    else if (count - varCount == 0)
+
+                    var vars = funcInfo.data;
+                    for (int a = 0; a < argCount; a++)
                     {
-                        var sn = 0;
-                        var sv = 0;
-                        var variant = new Variant(infoSrc.names[1]);
-                        for (int v = 0; v < slots.Length && v < s + 1; v++)
+                        if (infoSrc.variables == null || infoSrc.variables.Count == 0)
                         {
-                            var sl = slots[v];
-                            if (sl == 0)
+                            variant.Args = string.Format(Code.Tag.Code.argsN, data.classDefaultType, a);
+                            vars = (this[a] + string.Format(Code.Tag.Code.varsN, a)).Apply(vars);
+                        }
+                        else
+                        {
+                            variant.Args = string.Format(Code.Tag.Code.argsV_, infoSrc.names[0], a);
+                        }
+                    }
+
+                    if (infoSrc.variables == null || infoSrc.variables.Count == 0)
+                    {
+                        variant.Vars = vars;
+                    }
+                    else
+                    {
+                        for (int v = 0; v < infoSrc.variables.Count; v++)
+                        {
+                            var varsA = vars;
+                            for (int a = 0; a < argCount; a++)
                             {
-                                variant.Args = string.Format(Code.Tag.Code.argsN, data.classDefaultType, sn);
-                                variant.Vars = string.Format(Code.Tag.Code.varsN, sn);
-                                sn++;
+                                varsA = (this[a] + string.Format(Code.Tag.Code.varsV_, a, infoSrc.variables[v])).Apply(varsA);
                             }
-                            else
-                            {
-                                sl -= 1;
-                                var info = data.classInfos[sl];
-                                variant.Args = string.Format(Code.Tag.Code.argsV_, info.names[0], sv);
-                                for (int vr = 0; vr < info.variables.Count; vr++)
-                                {
-                                    variant.Vars = string.Format(Code.Tag.Code.varsV_, sv, info.variables[vr]);
-                                }
-                                sv++;
-                            }
+                            variant.Vars = varsA;
                         }
 
-                        variants.Add(variant);
+                        variant = new Variant(variant.Call)
+                        {
+                            Args = variant.Args,
+                            Vars = Code.Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.Parenthesis.C()[0] + variant.Vars + Strings.Separator.Parenthesis.C()[1]
+                        };
                     }
+
+                    variants.Add(variant);
                 }
             }
             #endregion SwizzleRule internal

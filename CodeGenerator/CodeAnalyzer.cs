@@ -86,6 +86,7 @@ namespace Prateek.ScriptTemplating
                 Numeric,
                 Letter,
                 Literal,
+                LiteralEnd,
                 ScopeStart,
                 ScopeEnd,
                 CallStart,
@@ -107,7 +108,7 @@ namespace Prateek.ScriptTemplating
 
             //-----------------------------------------------------------------
             private char[] charAllow = new char[] { '_', '.' };
-            private char[] charLiteral = new char[1] { '@' };
+            private char[] charLiteral = new char[] { '@', '$' };
             private char[] charIgnore = new char[2] { ' ', '\n' };
             private char[] charCalls = new char[2] { '(', ')' };
             private char[] charArgs = new char[1] { ',' };
@@ -323,11 +324,13 @@ namespace Prateek.ScriptTemplating
                             storeData = true;
                             break;
                         }
+                        case SymbolType.LiteralEnd:
                         case SymbolType.LineFeed:
                         {
                             if (storeData)
                             {
-                                data += content[position];
+                                if (type != SymbolType.LiteralEnd)
+                                    data += content[position];
                                 storeData = false;
                             }
                             break;
@@ -476,6 +479,11 @@ namespace Prateek.ScriptTemplating
                 if (value == charLiteral[0])
                 {
                     return SymbolType.Literal;
+                }
+
+                if (value == charLiteral[1])
+                {
+                    return SymbolType.LiteralEnd;
                 }
 
                 for (int c = 0; c < charArgs.Length; c++)

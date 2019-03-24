@@ -195,6 +195,7 @@ namespace Prateek.ScriptTemplating
                     SUFFIX,     //PRATEEK_CODEGEN_CODE_SUFFIX
                     CLASS,      //PRATEEK_CODEGEN_CLASS(*****)
                     DEFAULT,    //PRATEEK_CODEGEN_DEFAULT(*****)
+                    FUNC,       //PRATEEK_CODEGEN_FUNC(*****) { }
 
                     MAX
                 }
@@ -223,6 +224,7 @@ namespace Prateek.ScriptTemplating
                 public static string CodePartSuffix { get { return data[3]; } }
                 public static string OperationClass { get { return data[4]; } }
                 public static string DefaultInfo    { get { return data[5]; } }
+                public static string Func           { get { return data[6]; } }
 
                 //-------------------------------------------------------------
                 public static string To(Content value) { return Enum.GetNames(typeof(Content))[(int)value]; }
@@ -237,6 +239,7 @@ namespace Prateek.ScriptTemplating
                     data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.SUFFIX)));
                     data.Add(string.Format("{0}_{1}", prefix, To(Content.CLASS)));
                     data.Add(string.Format("{0}_{1}", prefix, To(Content.DEFAULT)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(Content.FUNC)));
                 }
             }
 
@@ -252,6 +255,7 @@ namespace Prateek.ScriptTemplating
                 public const string varsN = "n_{0}";
                 public const string varsV = "v.{0}";
                 public const string varsV_ = "v_{0}.{1}";
+                public const string varNew = "new ";
             }
         }
     }

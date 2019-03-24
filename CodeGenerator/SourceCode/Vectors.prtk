@@ -51,40 +51,75 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
 		@
         }
     }
-//Mixed constructors
-//
-//public static SRC_CLASS MIXED_CTOR_CALL(MIXED_CTOR_ARGS) { return new SRC_CLASS(MIXED_CTOR_VARS); }
-//
-//public static Vector2 vec2(float n_0, float n_1) { return new Vector2(n_0, n_1); }
+
+    PRATEEK_CODEGEN_BLOCK_MIXED_FUNC(Prateek.ShaderTo, CSharp)
+    {
+        PRATEEK_CODEGEN_CLASS(Vector2, x, y)
+        PRATEEK_CODEGEN_CLASS(Vector3, x, y, z)
+        PRATEEK_CODEGEN_CLASS(Vector4, x, y, z, w)
+
+        PRATEEK_CODEGEN_DEFAULT(float, 0)
+
+        PRATEEK_CODEGEN_FUNC(max) { @Mathf.Max(VARS_0, VARS_1)$ }
+        PRATEEK_CODEGEN_FUNC(min) { @Mathf.Min(VARS_0, VARS_1)$ }
+        PRATEEK_CODEGEN_FUNC(mul) { @VARS_0 * VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(div) { @VARS_0 / VARS_1$ }
+        PRATEEK_CODEGEN_FUNC(abs)   { @Mathf.Abs(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(sign)  { @Mathf.Sign(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(exp)   { @Mathf.Exp(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(cos)   { @Mathf.Cos(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(sin)   { @Mathf.Sin(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(ceil)  { @Mathf.Ceil(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(floor) { @Mathf.Floor(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(fract) { @VARS_0 - floor(VARS_0)$ }
+        PRATEEK_CODEGEN_FUNC(sqrt)  { @Mathf.Sqrt(VARS_0)$ }
+
+        PRATEEK_CODEGEN_CODE_PREFIX
+        {
+        @//---------------------------------------------------------------------
+        @#region Mixed Func SRC_CLASS
+        }
+
+        PRATEEK_CODEGEN_CODE_MAIN
+        {
+        @public static SRC_CLASS MIXED_FUNC_CALL(MIXED_FUNC_ARGS) { return MIXED_FUNC_VARS; }
+        }
+        
+        PRATEEK_CODEGEN_CODE_SUFFIX
+        {
+        @#endregion Mixed Func SRC_CLASS
+		@
+        }
+    }
 
 //namespace ShaderTo
 //{
 //    public static class CSharp
 //    {
-//        public static float max(float v) { return Mathf.Max(v); }
-//        public static float min(float v) { return Mathf.Min(v); }
-//        public static float mul(float v, float b) { return v * b; }
-//        public static float div(float v, float b) { return v / b; }
-//        public static float abs(float v, float b) { return Mathf.Abs(v); }
+//        public static float max(float v0, float v1) { return Mathf.Max(v0, v1); }
+//        public static float min(float v0, float v1) { return Mathf.Min(v); }
+//        public static float mul(float v0, float v1) { return v0 * v1; }
+//        public static float div(float v0, float v1) { return v0 / v1; }
+
+//        public static float abs(float v) { return Mathf.Abs(v); }
 //        public static float sign(float v) { return Mathf.Sign(v); }
-//        public static float area(float v) { return v * v; }
-//        public static int index(float v) { return v * v; }
 //        public static float exp(float v) { return Mathf.Exp(v); }
 //        public static float cos(float v) { return Mathf.Cos(v); }
 //        public static float sin(float v) { return Mathf.Sin(v); }
+//        public static float ceil(float v) { return Mathf.Ceil(v); }
 //        public static float floor(float v) { return Mathf.Floor(v); }
 //        public static float fract(float v) { return v - floor(v); }
 //        public static float sqrt(float v) { return Mathf.Sqrt(v); }
+
+//        public static float area(float v) { return v * v; }
 //
-//        public static Vector2 vec2(float v) { return Vector2.one * v; }
-//        public static Vector3 vec3(Vector2 v0, float v1) { return new Vector3(v0.x, v0.y, v1); }
-//        public static Vector4 vec4(Vector2 v0, float v1, float v2) { return new Vector4(v0.x, v0.y, v1, v2); }
+//        public static float hash(float seed) { return fract(sin(seed) * 43758.5453f); }
+//
 //        public static Vector2 normalize(Vector2 v) { return v.normalized; }
 //        public static Vector3 normalize(Vector3 v) { return v.normalized; }
 //        public static Vector4 normalize(Vector4 v) { return v.normalized; }
 //
-//        public static float hash(float seed) { return fract(sin(seed) * 43758.5453f); }
-//
+//        public static int index(float v) { return v * v; }
 //    }
 //}
 }

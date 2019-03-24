@@ -255,6 +255,7 @@ namespace Prateek.ScriptTemplating
             Code.Tag.Macro.Init(); //TODO Auto load
 
             var builder = new PrateekScriptBuilder();
+            //builder.RunInTestMode = true;
 
             builder.AddDirectories(sourceDirectories);
             builder.DestinationDirectory = destinationDirectory;

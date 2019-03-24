@@ -89,11 +89,18 @@ namespace Prateek.ScriptTemplating
                     public List<string> variables;
                 }
 
+                public struct FuncInfo
+                {
+                    public string name;
+                    public string data;
+                }
+
                 public TemplateReplacement.CodeRule activeRule;
                 public string blockNamespace;
                 public string blockClassName;
 
                 public List<ClassInfo> classInfos = new List<ClassInfo>();
+                public List<FuncInfo> funcInfos = new List<FuncInfo>();
                 public string classDefaultType;
                 public string classDefaultValue;
 
