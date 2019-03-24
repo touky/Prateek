@@ -443,7 +443,7 @@ namespace Prateek.ScriptTemplating
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
             var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.ZoneDelimiter, fileData.destination.content);
 
-            var position = -1;
+            var position = 0;
             while ((position = fileData.destination.content.IndexOf(comment, position)) >= 0)
             {
                 var safety = ignorers.AdvanceToSafety(position, TemplateReplacement.Ignorable.Style.Text);
