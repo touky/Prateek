@@ -90,6 +90,7 @@ namespace Prateek.ScriptTemplating
 
             builder.AddDirectory(path);
 
+            builder.Operations = CodeBuilder.OperationApplied.ALL & ~CodeBuilder.OperationApplied.ApplyScriptTemplate;
             builder.Init();
             builder.StartWork();
         }
