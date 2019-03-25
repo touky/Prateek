@@ -85,7 +85,7 @@ namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class MixedCTorRuleLoader : ScriptTemplate
+    class MixedCTorRuleLoader : CodeBuilder
     {
         static MixedCTorRuleLoader()
         {
@@ -94,7 +94,7 @@ namespace Prateek.CodeGeneration
     }
 
     //-------------------------------------------------------------------------
-    public partial class ScriptTemplate
+    public partial class CodeBuilder
     {
         //---------------------------------------------------------------------
         protected static MixedCTorCodeRule NewMixedCTor(string extension)
@@ -128,11 +128,11 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            protected override bool DoTreatData(Code.File.Data activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
+            protected override bool DoTreatData(CodeFile.ContentInfos activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
             {
                 if (keyRule.key == Code.Tag.Macro.OperationClass)
                 {
-                    activeData.classInfos.Add(new Code.File.Data.ClassInfo()
+                    activeData.classInfos.Add(new CodeFile.ClassInfos()
                     {
                         names = args.GetRange(0, 2),
                         variables = args.GetRange(2, args.Count - 2)
@@ -148,7 +148,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region Rule internal
-            protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
+            protected override void GatherVariants(List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 var slots = new int[infoSrc.variables.Count];
                 for (int s = 0; s < slots.Length; s++)
@@ -170,7 +170,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            private void GatherVariants(int s, int[] slots, int count, List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc)
+            private void GatherVariants(int s, int[] slots, int count, List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc)
             {
                 var classCount = data.classInfos.Count + 1;
                 for (int c = 0; c < classCount; c++)

@@ -84,9 +84,9 @@ using System.Text.RegularExpressions;
 namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public static partial class Code
+    public partial class CodeBuilder
     {
-        public class Analyzer
+        protected class Analyzer
         {
             //-----------------------------------------------------------------
             public enum SymbolType

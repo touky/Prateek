@@ -85,7 +85,7 @@ namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class MixedFuncRuleLoader : ScriptTemplate
+    class MixedFuncRuleLoader : CodeBuilder
     {
         static MixedFuncRuleLoader()
         {
@@ -94,7 +94,7 @@ namespace Prateek.CodeGeneration
     }
 
     //-------------------------------------------------------------------------
-    public partial class ScriptTemplate
+    public partial class CodeBuilder
     {
         //---------------------------------------------------------------------
         protected static MixedFuncCodeRule NewMixedFunc(string extension)
@@ -129,11 +129,11 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            protected override bool DoTreatData(Code.File.Data activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
+            protected override bool DoTreatData(CodeFile.ContentInfos activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
             {
                 if (keyRule.key == Code.Tag.Macro.Func)
                 {
-                    activeData.funcInfos.Add(new Code.File.Data.FuncInfo()
+                    activeData.funcInfos.Add(new CodeFile.FuncInfos()
                     {
                         name = args[0],
                         data = data
@@ -149,7 +149,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region Rule internal
-            protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
+            protected override void GatherVariants(List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 variants.Clear();
 

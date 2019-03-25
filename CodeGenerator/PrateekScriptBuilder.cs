@@ -104,9 +104,9 @@ namespace Prateek.CodeGeneration
             var genHeader = fileData.destination.content.Substring(0, startIndex);
             var genCode = fileData.destination.content.Substring(startIndex + genStart.Length);
 
-            var analyzer = new Code.Analyzer();
-            var activeCodeFile = (Code.File)null;
-            var codeFiles = new List<Code.File>();
+            var analyzer = new Analyzer();
+            var activeCodeFile = (CodeFile)null;
+            var codeFiles = new List<CodeFile>();
             var codeDepth = 0;
 
             analyzer.Init(fileData.source.content);
@@ -238,7 +238,7 @@ namespace Prateek.CodeGeneration
         }
 
         //---------------------------------------------------------------------
-        private int CheckGenericData(ref int codeDepth, string keyword, Code.Analyzer analyzer, ref Code.File activeCodeFile, List<Code.File> codeFiles, List<string> args)
+        private int CheckGenericData(ref int codeDepth, string keyword, Analyzer analyzer, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
         {
             if (keyword == Code.Tag.Macro.FileInfo)
             {
@@ -252,7 +252,7 @@ namespace Prateek.CodeGeneration
                 activeCodeFile = codeFiles.Find((x) => { return x.fileName == args[0] && x.fileExtension == args[1]; });
                 if (activeCodeFile == null)
                 {
-                    activeCodeFile = new Code.File() { fileName = args[0], fileExtension = args[1] };
+                    activeCodeFile = new CodeFile() { fileName = args[0], fileExtension = args[1] };
                     codeFiles.Add(activeCodeFile);
                 }
 

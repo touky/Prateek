@@ -85,32 +85,34 @@ namespace Prateek.CodeGeneration
 {
 
     //-------------------------------------------------------------------------
-    public static partial class Code
+    public partial class CodeBuilder
     {
         //---------------------------------------------------------------------
-        public class File
+        public class CodeFile
         {
             //-----------------------------------------------------------------
-            public class Data
+            public struct ClassInfos
             {
-                public struct ClassInfo
-                {
-                    public List<string> names;
-                    public List<string> variables;
-                }
+                public List<string> names;
+                public List<string> variables;
+            }
 
-                public struct FuncInfo
-                {
-                    public string name;
-                    public string data;
-                }
+            //-----------------------------------------------------------------
+            public struct FuncInfos
+            {
+                public string name;
+                public string data;
+            }
 
-                public ScriptTemplate.CodeRule activeRule;
+            //-----------------------------------------------------------------
+            public class ContentInfos
+            {
+                public CodeRule activeRule;
                 public string blockNamespace;
                 public string blockClassName;
 
-                public List<ClassInfo> classInfos = new List<ClassInfo>();
-                public List<FuncInfo> funcInfos = new List<FuncInfo>();
+                public List<ClassInfos> classInfos = new List<ClassInfos>();
+                public List<FuncInfos> funcInfos = new List<FuncInfos>();
                 public string classDefaultType;
                 public string classDefaultValue;
 
@@ -127,18 +129,18 @@ namespace Prateek.CodeGeneration
             public string fileNamespace;
 
             //-----------------------------------------------------------------
-            private Data activeData;
+            private ContentInfos activeData;
             private string codeGenerated;
-            private List<Data> datas = new List<Data>();
+            private List<ContentInfos> datas = new List<ContentInfos>();
 
             //-----------------------------------------------------------------
             public string CodeGenerated { get { return codeGenerated; } }
-            public Data ActiveData { get { return activeData; } }
+            public ContentInfos ActiveData { get { return activeData; } }
             public int DataCount { get { return datas.Count; } }
-            public Data this[int index] { get { return datas[index]; } }
+            public ContentInfos this[int index] { get { return datas[index]; } }
 
             //-----------------------------------------------------------------
-            public bool AllowRule(ScriptTemplate.CodeRule rule)
+            public bool AllowRule(CodeRule rule)
             {
                 if (activeData == null)
                     return true;
@@ -150,11 +152,11 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public Data NewData(ScriptTemplate.CodeRule codeSettings)
+            public ContentInfos NewData(CodeRule codeSettings)
             {
                 if (activeData != null)
                     return null;
-                activeData = new Data() { activeRule = codeSettings };
+                activeData = new ContentInfos() { activeRule = codeSettings };
                 return activeData;
             }
 

@@ -85,7 +85,7 @@ namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class SwizzleRuleLoader : ScriptTemplate
+    class SwizzleRuleLoader : CodeBuilder
     {
         static SwizzleRuleLoader()
         {
@@ -94,7 +94,7 @@ namespace Prateek.CodeGeneration
     }
 
     //-------------------------------------------------------------------------
-    public partial class ScriptTemplate
+    public partial class CodeBuilder
     {
         //---------------------------------------------------------------------
         protected static SwizzleCodeRule NewSwizzle(string extension)
@@ -115,7 +115,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region Rule internal
-            protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
+            protected override void GatherVariants(List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 var slots = new int[infoDst.variables.Count];
                 for (int s = 0; s < slots.Length; s++)
@@ -128,7 +128,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            private void GatherVariantsSlots(int s, int[] slots, List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
+            private void GatherVariantsSlots(int s, int[] slots, List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 var varCount = infoSrc.variables.Count + 1;
                 for (int c = 0; c < varCount; c++)

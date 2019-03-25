@@ -109,11 +109,11 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
     }
 
     //-------------------------------------------------------------------------
-    public partial class ScriptTemplate
+    public partial class CodeBuilder
     {
         //---------------------------------------------------------------------
-        public abstract class CodeRule : BaseTemplate
-        {
+        public abstract class CodeRule : ScriptTemplate.BaseTemplate
+    {
             //-----------------------------------------------------------------
             public struct Variant
             {
@@ -204,7 +204,7 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
             }
 
             //-----------------------------------------------------------------
-            public bool TreatData(Code.File codeFile, Code.Tag.KeyRule keyRule, List<string> args, string data)
+            public bool TreatData(CodeFile codeFile, Code.Tag.KeyRule keyRule, List<string> args, string data)
             {
                 var activeData = codeFile.ActiveData;
                 if (activeData == null)
@@ -220,13 +220,13 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
 
             //-----------------------------------------------------------------
             #region Utils
-            protected void AddCode(string code, Code.File.Data data, Code.Tag.SwapInfo swapSrc)
+            protected void AddCode(string code, CodeFile.ContentInfos data, Code.Tag.SwapInfo swapSrc)
             {
                 AddCode(code, data, swapSrc, new Code.Tag.SwapInfo());
             }
 
             //-----------------------------------------------------------------
-            protected void AddCode(string code, Code.File.Data data, Code.Tag.SwapInfo swapSrc, Code.Tag.SwapInfo swapDst)
+            protected void AddCode(string code, CodeFile.ContentInfos data, Code.Tag.SwapInfo swapSrc, Code.Tag.SwapInfo swapDst)
             {
                 code = swapSrc.Apply(code);
                 code = swapDst.Apply(code);
@@ -236,14 +236,14 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
 
             //-----------------------------------------------------------------
             #region CodeRule overridable
-            public void Generate(Code.File.Data data)
+            public void Generate(CodeFile.ContentInfos data)
             {
                 var variants = new List<Variant>();
                 var maxSrc = data.classInfos.Count + (GenerateDefault ? 1 : 0);
                 var maxDst = GenMode == GenerationMode.ForeachSrcXDest ? data.classInfos.Count : 1;
-                var infoSrc = new Code.File.Data.ClassInfo();
-                var infoDst = new Code.File.Data.ClassInfo();
-                var infoDef = new Code.File.Data.ClassInfo();
+                var infoSrc = new CodeFile.ClassInfos();
+                var infoDst = new CodeFile.ClassInfos();
+                var infoDef = new CodeFile.ClassInfos();
                 if (GenerateDefault)
                 {
                     infoDef.names = new List<string>();
@@ -330,7 +330,7 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
             }
 
             //-----------------------------------------------------------------
-            public virtual bool CloseScope(Code.File codeFile, string scope)
+            public virtual bool CloseScope(CodeFile codeFile, string scope)
             {
                 if (scope == CodeBlock)
                 {
@@ -348,7 +348,7 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
             }
 
             //-----------------------------------------------------------------
-            protected virtual bool DoTreatData(Code.File.Data activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
+            protected virtual bool DoTreatData(CodeFile.ContentInfos activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
             {
                 if (keyRule.key == CodeBlock)
                 {
@@ -357,7 +357,7 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
                 }
                 else if (keyRule.key == Code.Tag.Macro.OperationClass)
                 {
-                    activeData.classInfos.Add(new Code.File.Data.ClassInfo()
+                    activeData.classInfos.Add(new CodeFile.ClassInfos()
                     {
                         names = args.GetRange(0, 1),
                         variables = args.GetRange(1, args.Count - 1)
@@ -386,7 +386,7 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
 
             //-----------------------------------------------------------------
             #region CodeRule abstract
-            protected abstract void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst);
+            protected abstract void GatherVariants(List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst);
             #endregion CodeRule abstract
         }
     }

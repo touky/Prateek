@@ -144,9 +144,9 @@ namespace Prateek.CodeGeneration
 
         //---------------------------------------------------------------------
         #region Code rules
-        private static List<CodeRule> rules = new List<CodeRule>();
-        public static Group<CodeRule> CodeRules { get { return new Group<CodeRule>(rules); } }
-        public static void Add(CodeRule data) { rules.Add(data); }
+        private static List<CodeBuilder.CodeRule> rules = new List<CodeBuilder.CodeRule>();
+        public static Group<CodeBuilder.CodeRule> CodeRules { get { return new Group<CodeBuilder.CodeRule>(rules); } }
+        public static void Add(CodeBuilder.CodeRule data) { rules.Add(data); }
         #endregion Code rules
     }
 }
