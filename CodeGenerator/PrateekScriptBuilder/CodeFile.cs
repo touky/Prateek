@@ -83,7 +83,6 @@ using System.Text.RegularExpressions;
 //-----------------------------------------------------------------------------
 namespace Prateek.CodeGeneration
 {
-
     //-------------------------------------------------------------------------
     public partial class CodeBuilder
     {
