@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,11 +81,17 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    public partial class ScriptTemplate
     {
+        //---------------------------------------------------------------------
+        protected static Keyword NewKeyword(string extension)
+        {
+            return new Keyword(extension);
+        }
+
         //---------------------------------------------------------------------
         public enum KeywordMode
         {
@@ -96,7 +102,7 @@ namespace Prateek.ScriptTemplating
         }
 
         //---------------------------------------------------------------------
-        public class Keyword : TemplateBase
+        public class Keyword : BaseTemplate
         {
             //-----------------------------------------------------------------
             protected string tag;
@@ -120,7 +126,7 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public override TemplateBase SetContent(string content)
+            public override BaseTemplate SetContent(string content)
             {
                 base.SetContent(content);
 
@@ -134,14 +140,8 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                TemplateReplacement.Add(this);
+                ScriptTemplate.Add(this);
             }
-        }
-
-        //---------------------------------------------------------------------
-        protected static Keyword NewKeyword(string extension)
-        {
-            return new Keyword(extension);
         }
 
         //---------------------------------------------------------------------

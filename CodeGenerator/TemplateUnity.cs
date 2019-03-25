@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -79,13 +79,40 @@ using System.IO;
 using Prateek.IO;
 #endregion File namespaces
 
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    [InitializeOnLoad]
+    class UnityFileLoader : ScriptTemplate
+    {
+        static UnityFileLoader()
+        {
+            var path = FileHelpers.GetScriptTemplateFolder();
+            if (path == string.Empty)
+                return;
+
+            var files = Directory.GetFiles(path);
+            for (int f = 0; f < files.Length; f++)
+            {
+                if (!files[f].EndsWith(".txt"))
+                    continue;
+
+                NewUnityTemplate("txt").Load(files[f]).Commit();
+            }
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    public partial class ScriptTemplate
     {
         //---------------------------------------------------------------------
-        public class TemplateUnity : TemplateBase
+        protected static UnityFile NewUnityTemplate(string extension)
+        {
+            return new UnityFile(extension);
+        }
+
+        //---------------------------------------------------------------------
+        public class UnityFile : BaseTemplate
         {
             //-----------------------------------------------------------------
             protected static string[] tags = new string[2] { "#SCRIPTNAME#", "#NOTRIM#" };
@@ -96,12 +123,12 @@ namespace Prateek.ScriptTemplating
             public string Path { get { return path; } }
 
             //-----------------------------------------------------------------
-            public TemplateUnity(string extension) : base(extension) { }
+            public UnityFile(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                TemplateReplacement.Add(this);
+                ScriptTemplate.Add(this);
             }
 
             //-----------------------------------------------------------------
@@ -124,7 +151,7 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public TemplateUnity Load(string path)
+            public UnityFile Load(string path)
             {
                 if (!File.Exists(path))
                     return this;
@@ -147,33 +174,6 @@ namespace Prateek.ScriptTemplating
                 SetContent(FileHelpers.ReadAllTextCleaned(path));
                 parts = new List<string>(content.Split(tags, StringSplitOptions.RemoveEmptyEntries));
                 return this;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        protected static TemplateUnity NewUnityTemplate(string extension)
-        {
-            return new TemplateUnity(extension);
-        }
-    }
-
-    //-------------------------------------------------------------------------
-    [InitializeOnLoad]
-    class UnityTemplateLoader : TemplateReplacement
-    {
-        static UnityTemplateLoader()
-        {
-            var path = FileHelpers.GetScriptTemplateFolder();
-            if (path == string.Empty)
-                return;
-
-            var files = Directory.GetFiles(path);
-            for (int f = 0; f < files.Length; f++)
-            {
-                if (!files[f].EndsWith(".txt"))
-                    continue;
-
-                NewUnityTemplate("txt").Load(files[f]).Commit();
             }
         }
     }

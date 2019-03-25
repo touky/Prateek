@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,13 +81,13 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class CSharpTemplate : TemplateReplacement
+    class CSharpScriptLoader : ScriptTemplate
     {
-        static CSharpTemplate()
+        static CSharpScriptLoader()
         {
             NewScript("cs")
             .SetTemplateFile("81-C# Script-NewBehaviourScript.cs.txt")

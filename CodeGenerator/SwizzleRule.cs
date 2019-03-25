@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,40 +81,40 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class SwizzleScriptTemplate : TemplateReplacement
+    class SwizzleRuleLoader : ScriptTemplate
     {
-        static SwizzleScriptTemplate()
+        static SwizzleRuleLoader()
         {
             NewSwizzle(Code.Tag.importExtension).Commit();
         }
     }
 
     //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    public partial class ScriptTemplate
     {
         //---------------------------------------------------------------------
-        protected static SwizzleRule NewSwizzle(string extension)
+        protected static SwizzleCodeRule NewSwizzle(string extension)
         {
-            return new SwizzleRule(extension);
+            return new SwizzleCodeRule(extension);
         }
 
         //---------------------------------------------------------------------
         [InitializeOnLoad]
-        public partial class SwizzleRule : CodeRule
+        public partial class SwizzleCodeRule : CodeRule
         {
             //-----------------------------------------------------------------
             public override string ScopeTag { get { return "SWIZZLE"; } }
             public override GenerationMode GenMode { get { return GenerationMode.ForeachSrcXDest; } }
 
             //-----------------------------------------------------------------
-            public SwizzleRule(string extension) : base(extension) { }
+            public SwizzleCodeRule(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
-            #region SwizzleRule internal
+            #region Rule internal
             protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
             {
                 var slots = new int[infoDst.variables.Count];
@@ -168,7 +168,7 @@ namespace Prateek.ScriptTemplating
                     }
                 }
             }
-            #endregion SwizzleRule internal
+            #endregion Rule internal
         }
     }
 }

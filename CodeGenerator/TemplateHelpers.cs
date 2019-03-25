@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,16 +81,16 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     public static class TemplateHelpers
     {
         //---------------------------------------------------------------------
-        public static TemplateReplacement.Ignorable.BuildResult GatherValidIgnorables(string fileContent, string fileExtension)
+        public static ScriptTemplate.Ignorable.BuildResult GatherValidIgnorables(string fileContent, string fileExtension)
         {
-            var results = default(TemplateReplacement.Ignorable.BuildResult);
-            var ignorables = TemplateReplacement.Ignorables;
+            var results = default(ScriptTemplate.Ignorable.BuildResult);
+            var ignorables = ScriptTemplate.Ignorables;
             for (int i = 0; i < ignorables.Count; i++)
             {
                 var ignorable = ignorables[i];
@@ -111,13 +111,13 @@ namespace Prateek.ScriptTemplating
         //---------------------------------------------------------------------
         public static void ApplyKeywords(ref string fileContent, string fileExtension)
         {
-            var keywords = TemplateReplacement.Keywords;
+            var keywords = ScriptTemplate.Keywords;
             var doAnotherPass = true;
             while (doAnotherPass)
             {
                 doAnotherPass = false;
                 var ignorers = GatherValidIgnorables(fileContent, fileExtension);
-                var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.KeywordOnly, fileContent);
+                var stack = new ScriptTemplate.KeywordStack(ScriptTemplate.KeywordMode.KeywordOnly, fileContent);
                 for (int r = 0; r < keywords.Count; r++)
                 {
                     var keyword = keywords[r];
@@ -128,7 +128,7 @@ namespace Prateek.ScriptTemplating
                     var start = 0;
                     while ((start = fileContent.IndexOf(tag, start)) >= 0)
                     {
-                        var safety = ignorers.AdvanceToSafety(start, TemplateReplacement.Ignorable.Style.Text);
+                        var safety = ignorers.AdvanceToSafety(start, ScriptTemplate.Ignorable.Style.Text);
                         if (safety != start)
                         {
                             start = safety;

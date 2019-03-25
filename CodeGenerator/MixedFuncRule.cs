@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,30 +81,30 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class MixedFuncScriptTemplate : TemplateReplacement
+    class MixedFuncRuleLoader : ScriptTemplate
     {
-        static MixedFuncScriptTemplate()
+        static MixedFuncRuleLoader()
         {
             NewMixedFunc(Code.Tag.importExtension).Commit();
         }
     }
 
     //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    public partial class ScriptTemplate
     {
         //---------------------------------------------------------------------
-        protected static MixedFuncRule NewMixedFunc(string extension)
+        protected static MixedFuncCodeRule NewMixedFunc(string extension)
         {
-            return new MixedFuncRule(extension);
+            return new MixedFuncCodeRule(extension);
         }
 
         //---------------------------------------------------------------------
         [InitializeOnLoad]
-        public partial class MixedFuncRule : CodeRule
+        public partial class MixedFuncCodeRule : CodeRule
         {
             //-----------------------------------------------------------------
             public override string ScopeTag { get { return "MIXED_FUNC"; } }
@@ -112,7 +112,7 @@ namespace Prateek.ScriptTemplating
             public override bool GenerateDefault { get { return true; } }
 
             //-----------------------------------------------------------------
-            public MixedFuncRule(string extension) : base(extension) { }
+            public MixedFuncCodeRule(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
             #region CodeRule override
@@ -148,7 +148,7 @@ namespace Prateek.ScriptTemplating
             #endregion CodeRule override
 
             //-----------------------------------------------------------------
-            #region SwizzleRule internal
+            #region Rule internal
             protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
             {
                 variants.Clear();
@@ -216,7 +216,7 @@ namespace Prateek.ScriptTemplating
                     }
                 }
             }
-            #endregion SwizzleRule internal
+            #endregion Rule internal
         }
     }
 }

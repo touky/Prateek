@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -80,10 +80,10 @@ using Prateek.IO;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public class CodeBuilder
+    public partial class CodeBuilder
     {
         //---------------------------------------------------------------------
         #region Declarations
@@ -200,7 +200,7 @@ namespace Prateek.ScriptTemplating
         #region Properties
         public string DestinationDirectory { get { return destinationDirectory; } set { destinationDirectory = value; } }
         public OperationApplied Operations { get { return operations; } set { operations = value; } }
-        protected virtual string SearchPattern { get { return FileHelpers.BuildExtensionMatch(TemplateReplacement.Keywords.List); } private set { } }
+        protected virtual string SearchPattern { get { return FileHelpers.BuildExtensionMatch(ScriptTemplate.Keywords.List); } private set { } }
         public bool RunInTestMode { get { return runInTestMode; } set { runInTestMode = value; } }
         #endregion Properties
 
@@ -351,7 +351,7 @@ namespace Prateek.ScriptTemplating
             var extension = string.Empty;
 
             //Look for the correct script remplacement
-            var scripts = TemplateReplacement.Scripts;
+            var scripts = ScriptTemplate.Scripts;
             for (int r = 0; r < scripts.Count; r++)
             {
                 var script = scripts[r];
@@ -387,9 +387,9 @@ namespace Prateek.ScriptTemplating
         //---------------------------------------------------------------------
         protected virtual bool DoApplyZonedScript(ref FileData fileData)
         {
-            var keywords = TemplateReplacement.Keywords;
+            var keywords = ScriptTemplate.Keywords;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
-            var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.ZoneDelimiter, fileData.destination.content);
+            var stack = new ScriptTemplate.KeywordStack(ScriptTemplate.KeywordMode.ZoneDelimiter, fileData.destination.content);
 
             for (int r = 0; r < keywords.Count; r++)
             {
@@ -397,13 +397,13 @@ namespace Prateek.ScriptTemplating
                 if (!keyword.Match(fileData.destination.extension, fileData.destination.content))
                     continue;
 
-                if (keyword.Mode == TemplateReplacement.KeywordMode.KeywordOnly)
+                if (keyword.Mode == ScriptTemplate.KeywordMode.KeywordOnly)
                     continue;
 
                 var start = 0;
                 while ((start = fileData.destination.content.IndexOf(keyword.TagBegin, start)) >= 0)
                 {
-                    var safety = ignorers.AdvanceToSafety(start, TemplateReplacement.Ignorable.Style.Text);
+                    var safety = ignorers.AdvanceToSafety(start, ScriptTemplate.Ignorable.Style.Text);
                     if (safety != start)
                     {
                         start = safety;
@@ -444,12 +444,12 @@ namespace Prateek.ScriptTemplating
         {
             var comment = Strings.Comment;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
-            var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.ZoneDelimiter, fileData.destination.content);
+            var stack = new ScriptTemplate.KeywordStack(ScriptTemplate.KeywordMode.ZoneDelimiter, fileData.destination.content);
 
             var position = 0;
             while ((position = fileData.destination.content.IndexOf(comment, position)) >= 0)
             {
-                var safety = ignorers.AdvanceToSafety(position, TemplateReplacement.Ignorable.Style.Text);
+                var safety = ignorers.AdvanceToSafety(position, ScriptTemplate.Ignorable.Style.Text);
                 if (safety != position)
                 {
                     position = safety;

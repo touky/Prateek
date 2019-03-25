@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -80,13 +80,13 @@ using Prateek.IO;
 using System.Text.RegularExpressions;
 #endregion File namespaces
 
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    public partial class ScriptTemplate
     {
         //---------------------------------------------------------------------
-        public struct Group<T> where T: TemplateReplacement.TemplateBase
+        public struct Group<T> where T: ScriptTemplate.BaseTemplate
         {
             //-----------------------------------------------------------------
             private List<T> list;
@@ -105,9 +105,9 @@ namespace Prateek.ScriptTemplating
 
         //---------------------------------------------------------------------
         #region Scripts
-        private static List<Script> scripts = new List<Script>();
-        public static Group<Script> Scripts { get { return new Group<Script>(scripts); } }
-        public static void Add(Script data) { scripts.Add(data); }
+        private static List<ScriptFile> scripts = new List<ScriptFile>();
+        public static Group<ScriptFile> Scripts { get { return new Group<ScriptFile>(scripts); } }
+        public static void Add(ScriptFile data) { scripts.Add(data); }
         #endregion Scripts
 
         //---------------------------------------------------------------------
@@ -126,8 +126,8 @@ namespace Prateek.ScriptTemplating
 
         //---------------------------------------------------------------------
         #region Unity templates
-        private static List<TemplateUnity> templates = new List<TemplateUnity>();
-        public static void Add(TemplateUnity data) { templates.Add(data); }
+        private static List<UnityFile> templates = new List<UnityFile>();
+        public static void Add(UnityFile data) { templates.Add(data); }
         public static bool MatchTemplate(string filePath, string extension, string content)
         {
             for (int t = 0; t < templates.Count; t++)

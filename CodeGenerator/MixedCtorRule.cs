@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,37 +81,37 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class MixedCTorScriptTemplate : TemplateReplacement
+    class MixedCTorRuleLoader : ScriptTemplate
     {
-        static MixedCTorScriptTemplate()
+        static MixedCTorRuleLoader()
         {
             NewMixedCTor(Code.Tag.importExtension).Commit();
         }
     }
 
     //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    public partial class ScriptTemplate
     {
         //---------------------------------------------------------------------
-        protected static MixedCTorRule NewMixedCTor(string extension)
+        protected static MixedCTorCodeRule NewMixedCTor(string extension)
         {
-            return new MixedCTorRule(extension);
+            return new MixedCTorCodeRule(extension);
         }
 
         //---------------------------------------------------------------------
         [InitializeOnLoad]
-        public partial class MixedCTorRule : CodeRule
+        public partial class MixedCTorCodeRule : CodeRule
         {
             //-----------------------------------------------------------------
             public override string ScopeTag { get { return "MIXED_CTOR"; } }
             public override GenerationMode GenMode { get { return GenerationMode.ForeachSrc; } }
 
             //-----------------------------------------------------------------
-            public MixedCTorRule(string extension) : base(extension) { }
+            public MixedCTorCodeRule(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
             #region CodeRule override
@@ -147,7 +147,7 @@ namespace Prateek.ScriptTemplating
             #endregion CodeRule override
 
             //-----------------------------------------------------------------
-            #region SwizzleRule internal
+            #region Rule internal
             protected override void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst)
             {
                 var slots = new int[infoSrc.variables.Count];
@@ -212,7 +212,7 @@ namespace Prateek.ScriptTemplating
                     }
                 }
             }
-            #endregion SwizzleRule internal
+            #endregion Rule internal
         }
     }
 }

@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,13 +81,13 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    public partial class ScriptTemplate
     {
         //---------------------------------------------------------------------
-        public abstract class TemplateBase : FileHelpers.IExtensionMatcher
+        public abstract class BaseTemplate : FileHelpers.IExtensionMatcher
         {
             //-----------------------------------------------------------------
             protected string extension;
@@ -98,13 +98,13 @@ namespace Prateek.ScriptTemplating
             public string Content { get { return content; } }
 
             //-----------------------------------------------------------------
-            protected TemplateBase(string extension)
+            protected BaseTemplate(string extension)
             {
                 this.extension = extension;
             }
 
             //-----------------------------------------------------------------
-            public virtual TemplateBase SetContent(string content)
+            public virtual BaseTemplate SetContent(string content)
             {
                 this.content = content;
                 return this;

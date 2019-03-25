@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,13 +81,20 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    public partial class ScriptTemplate
     {
         //---------------------------------------------------------------------
-        public class Script : TemplateBase
+        protected static ScriptFile NewScript(string extension) { return NewScript(extension, extension); }
+        protected static ScriptFile NewScript(string extension, string exportExtension)
+        {
+            return new ScriptFile(extension, exportExtension);
+        }
+
+        //---------------------------------------------------------------------
+        public class ScriptFile : BaseTemplate
         {
             //-----------------------------------------------------------------
             private string exportExtension = string.Empty;
@@ -97,13 +104,13 @@ namespace Prateek.ScriptTemplating
             public string ExportExtension { get { return exportExtension; } }
 
             //-----------------------------------------------------------------
-            public Script(string extension, string exportExtension) : base(extension)
+            public ScriptFile(string extension, string exportExtension) : base(extension)
             {
                 this.exportExtension = exportExtension;
             }
 
             //-----------------------------------------------------------------
-            public Script SetTemplateFile(string file)
+            public ScriptFile SetTemplateFile(string file)
             {
                 this.templateFile = file;
                 return this;
@@ -112,7 +119,7 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                TemplateReplacement.Add(this);
+                ScriptTemplate.Add(this);
             }
 
             //-----------------------------------------------------------------
@@ -129,13 +136,6 @@ namespace Prateek.ScriptTemplating
                 return false;
 #endif //UNITY_EDITOR
             }
-        }
-
-        //---------------------------------------------------------------------
-        protected static Script NewScript(string extension) { return NewScript(extension, extension); }
-        protected static Script NewScript(string extension, string exportExtension)
-        {
-            return new Script(extension, exportExtension);
         }
     }
 }

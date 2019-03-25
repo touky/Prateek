@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,11 +81,27 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
-    //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    //---------------------------------------------------------------------
+    [InitializeOnLoad]
+    class CSharpIgnorableLoader : ScriptTemplate
     {
+        static CSharpIgnorableLoader()
+        {
+            NewIgnorableCSharp("cs").Commit();
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    public partial class ScriptTemplate
+    {
+        //---------------------------------------------------------------------
+        protected static IgnorableCSharp NewIgnorableCSharp(string extension)
+        {
+            return new IgnorableCSharp(extension);
+        }
+
         //---------------------------------------------------------------------
         public class IgnorableCSharp : Ignorable
         {
@@ -126,7 +142,7 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                TemplateReplacement.Add(this);
+                ScriptTemplate.Add(this);
             }
 
             //-----------------------------------------------------------------
@@ -173,22 +189,6 @@ namespace Prateek.ScriptTemplating
                     result.Add(new Extent(data.type, data.isLine, start, end + (data.end.Length - 1)));
                 }
                 return result;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        protected static IgnorableCSharp NewIgnorableCSharp(string extension)
-        {
-            return new IgnorableCSharp(extension);
-        }
-
-        //---------------------------------------------------------------------
-        [InitializeOnLoad]
-        class CSharpIgnorableTemplate : TemplateReplacement
-        {
-            static CSharpIgnorableTemplate()
-            {
-                NewIgnorableCSharp("cs").Commit();
             }
         }
     }

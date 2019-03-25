@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -79,31 +79,28 @@ using System.IO;
 using System.Text.RegularExpressions;
 
 using Prateek.IO;
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endregion File namespaces
 
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public static partial class TemplateTools
+    internal sealed class ScriptKeywordProcessor : UnityEditor.AssetModificationProcessor
     {
         //---------------------------------------------------------------------
-#if PRATEEK_ALLOW_INTERNAL_TOOLS
-        [MenuItem("Prateek/Internal/Update prateek templates")]
-        private static void UpdateTemplate()
+        public static void OnWillCreateAsset(string path)
         {
-            var path = Application.dataPath + "/Scripts";
-            if (!Directory.Exists(path))
+            path = path.Replace(".meta", string.Empty);
+            int index = path.LastIndexOf(Strings.Separator.FileExtension.C());
+            if (index < 0)
                 return;
 
             var builder = new CodeBuilder();
 
-            builder.AddDirectory(path);
+            builder.AddFile(new CodeBuilder.FileData(path, string.Empty));
 
-            builder.Operations = CodeBuilder.OperationApplied.ALL & ~CodeBuilder.OperationApplied.ApplyScriptTemplate;
             builder.Init();
             builder.StartWork();
         }
-#endif //PRATEEK_ALLOW_INTERNAL_TOOLS
     }
 }

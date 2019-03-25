@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,13 +81,13 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class PrateekDefaultTemplate : TemplateReplacement
+    class PrateekDefaultLoader : ScriptTemplate
     {
-        static PrateekDefaultTemplate()
+        static PrateekDefaultLoader()
         {
             NewKeyword("cs")
             .SetTag("PRATEEK_COPYRIGHT", KeywordMode.ZoneDelimiter)

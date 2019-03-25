@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,13 +81,38 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public partial class TemplateReplacement
+    [InitializeOnLoad]
+    class PrateekScriptLoader : ScriptTemplate
+    {
+        static PrateekScriptLoader()
+        {
+            NewScript(Code.Tag.importExtension, Code.Tag.exportExtension)
+                .SetTemplateFile(String.Empty)
+                .SetContent(@"#PRATEEK_COPYRIGHT#
+
+#PRATEEK_CSHARP_NAMESPACE#
+#PRATEEK_SCRIPT_STARTS_HERE#
+//-----------------------------------------------------------------------------
+namespace #PRATEEK_EXTENSION_NAMESPACE#
+{
+    //-------------------------------------------------------------------------
+    public static partial class #PRATEEK_EXTENSION_STATIC_CLASS#
+    {
+        #PRATEEK_CODEGEN_DATA#
+    }
+}
+").Commit();
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    public partial class ScriptTemplate
     {
         //---------------------------------------------------------------------
-        public abstract class CodeRule : TemplateBase
+        public abstract class CodeRule : BaseTemplate
         {
             //-----------------------------------------------------------------
             public struct Variant
@@ -161,7 +186,7 @@ namespace Prateek.ScriptTemplating
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                TemplateReplacement.Add(this);
+                ScriptTemplate.Add(this);
             }
 
             //-----------------------------------------------------------------
@@ -363,31 +388,6 @@ namespace Prateek.ScriptTemplating
             #region CodeRule abstract
             protected abstract void GatherVariants(List<Variant> variants, Code.File.Data data, Code.File.Data.ClassInfo infoSrc, Code.File.Data.ClassInfo infoDst);
             #endregion CodeRule abstract
-        }
-    }
-
-    //-------------------------------------------------------------------------
-    [InitializeOnLoad]
-    class PrateekScriptTemplate : TemplateReplacement
-    {
-        static PrateekScriptTemplate()
-        {
-            NewScript(Code.Tag.importExtension, Code.Tag.exportExtension)
-                .SetTemplateFile(String.Empty)
-                .SetContent(@"#PRATEEK_COPYRIGHT#
-
-#PRATEEK_CSHARP_NAMESPACE#
-#PRATEEK_SCRIPT_STARTS_HERE#
-//-----------------------------------------------------------------------------
-namespace #PRATEEK_EXTENSION_NAMESPACE#
-{
-    //-------------------------------------------------------------------------
-    public static partial class #PRATEEK_EXTENSION_STATIC_CLASS#
-    {
-        #PRATEEK_CODEGEN_DATA#
-    }
-}
-").Commit();
         }
     }
 }

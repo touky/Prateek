@@ -60,7 +60,7 @@ using static Prateek.ShaderTo.CSharp;
 
 #region Editor
 #if UNITY_EDITOR
-using Prateek.ScriptTemplating;
+using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
@@ -81,7 +81,7 @@ using System.Text.RegularExpressions;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.ScriptTemplating
+namespace Prateek.CodeGeneration
 {
 
     //-------------------------------------------------------------------------
@@ -105,7 +105,7 @@ namespace Prateek.ScriptTemplating
                     public string data;
                 }
 
-                public TemplateReplacement.CodeRule activeRule;
+                public ScriptTemplate.CodeRule activeRule;
                 public string blockNamespace;
                 public string blockClassName;
 
@@ -138,7 +138,7 @@ namespace Prateek.ScriptTemplating
             public Data this[int index] { get { return datas[index]; } }
 
             //-----------------------------------------------------------------
-            public bool AllowRule(TemplateReplacement.CodeRule rule)
+            public bool AllowRule(ScriptTemplate.CodeRule rule)
             {
                 if (activeData == null)
                     return true;
@@ -150,7 +150,7 @@ namespace Prateek.ScriptTemplating
             }
 
             //-----------------------------------------------------------------
-            public Data NewData(TemplateReplacement.CodeRule codeSettings)
+            public Data NewData(ScriptTemplate.CodeRule codeSettings)
             {
                 if (activeData != null)
                     return null;
