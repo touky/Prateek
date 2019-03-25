@@ -84,8 +84,9 @@ using System.Text.RegularExpressions;
 namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public partial class CodeBuilder
+    public partial class PrateekScriptBuilder
     {
+        //-----------------------------------------------------------------
         protected class Analyzer
         {
             //-----------------------------------------------------------------
@@ -183,7 +184,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public bool FindArgs(List<string> args, Code.Tag.KeyRule keyRule)
+            public bool FindArgs(List<string> args, Utils.KeyRule keyRule)
             {
                 args.Clear();
 
@@ -290,7 +291,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public bool FindData(ref string data, Code.Tag.KeyRule setup)
+            public bool FindData(ref string data, Utils.KeyRule setup)
             {
                 if (!setup.needScopeData)
                     return true;

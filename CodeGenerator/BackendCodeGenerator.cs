@@ -100,7 +100,7 @@ namespace Prateek.CodeGeneration
         [ContextMenu("Generate code")]
         public void StartGeneration()
         {
-            Code.Tag.Macro.Init(); //TODO Auto load
+            CodeBuilder.Tag.Macro.Init(); //TODO Auto load
 
             var builder = new PrateekScriptBuilder();
             //builder.RunInTestMode = true;

@@ -89,7 +89,7 @@ namespace Prateek.CodeGeneration
     {
         static PrateekScriptLoader()
         {
-            NewScript(Code.Tag.importExtension, Code.Tag.exportExtension)
+            NewScript(CodeBuilder.Tag.importExtension, CodeBuilder.Tag.exportExtension)
                 .SetTemplateFile(String.Empty)
                 .SetContent(@"#PRATEEK_COPYRIGHT#
 
@@ -109,7 +109,7 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
     }
 
     //-------------------------------------------------------------------------
-    public partial class CodeBuilder
+    public partial class PrateekScriptBuilder
     {
         //---------------------------------------------------------------------
         public abstract class CodeRule : ScriptTemplate.BaseTemplate
@@ -139,7 +139,7 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
                 private void Set(ref string dst, string value)
                 {
                     if (dst != null && dst.Length > 0)
-                        dst += Code.Tag.Code.argVarSeparator;
+                        dst += Tag.Code.argVarSeparator;
                     dst += value;
                 }
             }
@@ -169,12 +169,12 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
             private string DataVars { get { return data[3]; } }
 
             //-----------------------------------------------------------------
-            public Code.Tag.SwapInfo ClassDst { get { return Code.Tag.Macro.dstClass; } }
-            public Code.Tag.SwapInfo ClassSrc { get { return Code.Tag.Macro.srcClass; } }
-            public Code.Tag.SwapInfo CodeCall { get { return DataCall; } }
-            public Code.Tag.SwapInfo CodeArgs { get { return DataArgs; } }
-            public Code.Tag.SwapInfo CodeVars { get { return DataVars; } }
-            public Code.Tag.SwapInfo this[int i] { get { if (i < 0 || i > 9) return string.Empty; return vars[i]; } }
+            public Utils.SwapInfo ClassDst { get { return Tag.Macro.dstClass; } }
+            public Utils.SwapInfo ClassSrc { get { return Tag.Macro.srcClass; } }
+            public Utils.SwapInfo CodeCall { get { return DataCall; } }
+            public Utils.SwapInfo CodeArgs { get { return DataArgs; } }
+            public Utils.SwapInfo CodeVars { get { return DataVars; } }
+            public Utils.SwapInfo this[int i] { get { if (i < 0 || i > 9) return string.Empty; return vars[i]; } }
             public int VarCount { get { return vars.Count; } }
 
             //-----------------------------------------------------------------
@@ -186,25 +186,25 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                ScriptTemplate.Add(this);
+                Database.Add(this);
             }
 
             //-----------------------------------------------------------------
             private void Init()
             {
-                data.Add(string.Format("{0}_{1}_{2}", Code.Tag.Macro.prefix, Code.Tag.Macro.To(Code.Tag.Macro.Content.BLOCK), ScopeTag));
-                data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.CALL)));
-                data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.ARGS)));
-                data.Add(string.Format("{0}_{1}", ScopeTag, Code.Tag.Macro.To(Code.Tag.Macro.Code.VARS)));
+                data.Add(string.Format("{0}_{1}_{2}", Tag.Macro.prefix, Tag.Macro.To(Tag.Macro.Content.BLOCK), ScopeTag));
+                data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.Code.CALL)));
+                data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.Code.ARGS)));
+                data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.Code.VARS)));
 
                 for (int v = 0; v < 10; v++)
                 {
-                    vars.Add(string.Format("{0}_{1}", Code.Tag.Macro.Code.VARS, v));
+                    vars.Add(string.Format("{0}_{1}", Tag.Macro.Code.VARS, v));
                 }
             }
 
             //-----------------------------------------------------------------
-            public bool TreatData(CodeFile codeFile, Code.Tag.KeyRule keyRule, List<string> args, string data)
+            public bool TreatData(CodeFile codeFile, Utils.KeyRule keyRule, List<string> args, string data)
             {
                 var activeData = codeFile.ActiveData;
                 if (activeData == null)
@@ -220,13 +220,13 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
 
             //-----------------------------------------------------------------
             #region Utils
-            protected void AddCode(string code, CodeFile.ContentInfos data, Code.Tag.SwapInfo swapSrc)
+            protected void AddCode(string code, CodeFile.ContentInfos data, Utils.SwapInfo swapSrc)
             {
-                AddCode(code, data, swapSrc, new Code.Tag.SwapInfo());
+                AddCode(code, data, swapSrc, new Utils.SwapInfo());
             }
 
             //-----------------------------------------------------------------
-            protected void AddCode(string code, CodeFile.ContentInfos data, Code.Tag.SwapInfo swapSrc, Code.Tag.SwapInfo swapDst)
+            protected void AddCode(string code, CodeFile.ContentInfos data, Utils.SwapInfo swapSrc, Utils.SwapInfo swapDst)
             {
                 code = swapSrc.Apply(code);
                 code = swapDst.Apply(code);
@@ -303,30 +303,30 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
                     }
                 }
 
-                data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Code.Tag.Macro.codeGenTabs.Keyword());
+                data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Tag.Macro.codeGenTabs.Keyword());
             }
 
             //-----------------------------------------------------------------
-            public virtual Code.Tag.KeyRule GetKeyRule(string keyword, int codeDepth)
+            public virtual Utils.KeyRule GetKeyRule(string keyword, int codeDepth)
             {
                 if (keyword == CodeBlock)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 1) { args = 2, needOpenScope = true };
+                    return new Utils.KeyRule(keyword, codeDepth == 1) { args = 2, needOpenScope = true };
                 }
-                else if (keyword == Code.Tag.Macro.OperationClass)
+                else if (keyword == Tag.Macro.OperationClass)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { args = new Code.Tag.KeyRule.ArgRange(1, -1) };
+                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = new Utils.KeyRule.ArgRange(1, -1) };
                 }
-                else if (keyword == Code.Tag.Macro.DefaultInfo)
+                else if (keyword == Tag.Macro.DefaultInfo)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { args = 2 };
+                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = 2 };
                 }
-                else if (keyword == Code.Tag.Macro.CodePartPrefix || keyword == Code.Tag.Macro.CodePartMain || keyword == Code.Tag.Macro.CodePartSuffix)
+                else if (keyword == Tag.Macro.CodePartPrefix || keyword == Tag.Macro.CodePartMain || keyword == Tag.Macro.CodePartSuffix)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { args = 0, needOpenScope = true, needScopeData = true };
+                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = 0, needOpenScope = true, needScopeData = true };
                 }
 
-                return new Code.Tag.KeyRule() { usage = Code.Tag.KeyRule.Usage.Ignore };
+                return new Utils.KeyRule() { usage = Utils.KeyRule.Usage.Ignore };
             }
 
             //-----------------------------------------------------------------
@@ -337,10 +337,10 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
                     codeFile.Submit();
                     return true;
                 }
-                else if (scope == Code.Tag.Macro.Func
-                     || scope == Code.Tag.Macro.CodePartMain
-                     || scope == Code.Tag.Macro.CodePartPrefix
-                     || scope == Code.Tag.Macro.CodePartSuffix)
+                else if (scope == Tag.Macro.Func
+                     || scope == Tag.Macro.CodePartMain
+                     || scope == Tag.Macro.CodePartPrefix
+                     || scope == Tag.Macro.CodePartSuffix)
                 {
                     return true;
                 }
@@ -348,14 +348,14 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
             }
 
             //-----------------------------------------------------------------
-            protected virtual bool DoTreatData(CodeFile.ContentInfos activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
+            protected virtual bool DoTreatData(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
             {
                 if (keyRule.key == CodeBlock)
                 {
                     activeData.blockNamespace = args[0];
                     activeData.blockClassName = args[1];
                 }
-                else if (keyRule.key == Code.Tag.Macro.OperationClass)
+                else if (keyRule.key == Tag.Macro.OperationClass)
                 {
                     activeData.classInfos.Add(new CodeFile.ClassInfos()
                     {
@@ -363,20 +363,20 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
                         variables = args.GetRange(1, args.Count - 1)
                     });
                 }
-                else if (keyRule.key == Code.Tag.Macro.DefaultInfo)
+                else if (keyRule.key == Tag.Macro.DefaultInfo)
                 {
                     activeData.classDefaultType = args[0];
                     activeData.classDefaultValue = args[1];
                 }
-                else if (keyRule.key == Code.Tag.Macro.CodePartPrefix)
+                else if (keyRule.key == Tag.Macro.CodePartPrefix)
                 {
                     activeData.codePrefix = data;
                 }
-                else if (keyRule.key == Code.Tag.Macro.CodePartMain)
+                else if (keyRule.key == Tag.Macro.CodePartMain)
                 {
                     activeData.codeMain = data;
                 }
-                else if (keyRule.key == Code.Tag.Macro.CodePartSuffix)
+                else if (keyRule.key == Tag.Macro.CodePartSuffix)
                 {
                     activeData.codePostfix = data;
                 }

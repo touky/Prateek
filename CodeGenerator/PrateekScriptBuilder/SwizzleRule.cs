@@ -85,16 +85,16 @@ namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class SwizzleRuleLoader : CodeBuilder
+    class SwizzleRuleLoader : PrateekScriptBuilder
     {
         static SwizzleRuleLoader()
         {
-            NewSwizzle(Code.Tag.importExtension).Commit();
+            NewSwizzle(Tag.importExtension).Commit();
         }
     }
 
     //-------------------------------------------------------------------------
-    public partial class CodeBuilder
+    public partial class PrateekScriptBuilder
     {
         //---------------------------------------------------------------------
         protected static SwizzleCodeRule NewSwizzle(string extension)
@@ -142,7 +142,7 @@ namespace Prateek.CodeGeneration
                     {
                         var sn = 0;
                         var variant = new Variant(string.Empty);
-                        variant.Args += Code.Tag.Code.argsV;
+                        variant.Args += Tag.Code.argsV;
                         for (int v = 0; v < slots.Length; v++)
                         {
                             var sv = slots[v];
@@ -150,13 +150,13 @@ namespace Prateek.CodeGeneration
                             {
                                 var variable = infoSrc.variables[sv];
                                 variant.Call = variable;
-                                variant.Vars = string.Format(Code.Tag.Code.varsV, variable);
+                                variant.Vars = string.Format(Tag.Code.varsV, variable);
                             }
                             else
                             {
-                                variant.Call = Code.Tag.Code.callN;
-                                variant.Args = string.Format(Code.Tag.Code.argsNOpt, data.classDefaultType, sn, data.classDefaultValue);
-                                variant.Vars = string.Format(Code.Tag.Code.varsN, sn);
+                                variant.Call = Tag.Code.callN;
+                                variant.Args = string.Format(Tag.Code.argsNOpt, data.classDefaultType, sn, data.classDefaultValue);
+                                variant.Vars = string.Format(Tag.Code.varsN, sn);
                                 sn++;
                             }
                         }

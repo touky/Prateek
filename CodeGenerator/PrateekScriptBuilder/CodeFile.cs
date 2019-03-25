@@ -84,7 +84,7 @@ using System.Text.RegularExpressions;
 namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public partial class CodeBuilder
+    public partial class PrateekScriptBuilder
     {
         //---------------------------------------------------------------------
         public class CodeFile
@@ -173,10 +173,10 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public bool Generate(string genHeader, string genCode)
             {
-                var genNSpc = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenNSpc.Keyword();
-                var genExtn = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenExtn.Keyword();
-                var genData = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenData.Keyword();
-                var genTabs = (Code.Tag.SwapInfo)Code.Tag.Macro.codeGenTabs.Keyword();
+                var genNSpc = (Utils.SwapInfo)Tag.Macro.codeGenNSpc.Keyword();
+                var genExtn = (Utils.SwapInfo)Tag.Macro.codeGenExtn.Keyword();
+                var genData = (Utils.SwapInfo)Tag.Macro.codeGenData.Keyword();
+                var genTabs = (Utils.SwapInfo)Tag.Macro.codeGenTabs.Keyword();
 
                 var i = genCode.IndexOf(genData.Original);
                 if (i < 0)

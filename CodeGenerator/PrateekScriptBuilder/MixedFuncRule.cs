@@ -85,16 +85,16 @@ namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class MixedFuncRuleLoader : CodeBuilder
+    class MixedFuncRuleLoader : PrateekScriptBuilder
     {
         static MixedFuncRuleLoader()
         {
-            NewMixedFunc(Code.Tag.importExtension).Commit();
+            NewMixedFunc(Tag.importExtension).Commit();
         }
     }
 
     //-------------------------------------------------------------------------
-    public partial class CodeBuilder
+    public partial class PrateekScriptBuilder
     {
         //---------------------------------------------------------------------
         protected static MixedFuncCodeRule NewMixedFunc(string extension)
@@ -116,11 +116,11 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region CodeRule override
-            public override Code.Tag.KeyRule GetKeyRule(string keyword, int codeDepth)
+            public override Utils.KeyRule GetKeyRule(string keyword, int codeDepth)
             {
-                if (keyword == Code.Tag.Macro.Func)
+                if (keyword == Tag.Macro.Func)
                 {
-                    return new Code.Tag.KeyRule(keyword, codeDepth == 2) { args = 1, needOpenScope = true, needScopeData = true };
+                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = 1, needOpenScope = true, needScopeData = true };
                 }
                 else
                 {
@@ -129,9 +129,9 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            protected override bool DoTreatData(CodeFile.ContentInfos activeData, Code.Tag.KeyRule keyRule, List<string> args, string data)
+            protected override bool DoTreatData(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
             {
-                if (keyRule.key == Code.Tag.Macro.Func)
+                if (keyRule.key == Tag.Macro.Func)
                 {
                     activeData.funcInfos.Add(new CodeFile.FuncInfos()
                     {
@@ -176,14 +176,14 @@ namespace Prateek.CodeGeneration
                         {
                             if (isDefault)
                             {
-                                variant.Args = string.Format(Code.Tag.Code.argsN, data.classDefaultType, a);
-                                vars = (this[a] + string.Format(Code.Tag.Code.varsN, a)).Apply(vars);
+                                variant.Args = string.Format(Tag.Code.argsN, data.classDefaultType, a);
+                                vars = (this[a] + string.Format(Tag.Code.varsN, a)).Apply(vars);
                             }
                             else
                             {
                                 variant.Args = (p == 1 && a != 0)
-                                                ? string.Format(Code.Tag.Code.argsN, data.classDefaultType, a)
-                                                : string.Format(Code.Tag.Code.argsV_, infoSrc.names[0], a);
+                                                ? string.Format(Tag.Code.argsN, data.classDefaultType, a)
+                                                : string.Format(Tag.Code.argsV_, infoSrc.names[0], a);
                             }
                         }
 
@@ -199,8 +199,8 @@ namespace Prateek.CodeGeneration
                                 for (int a = 0; a < argCount; a++)
                                 {
                                     varsA = (p == 1 && a != 0)
-                                             ? (this[a] + string.Format(Code.Tag.Code.varsN, a)).Apply(varsA)
-                                             : (this[a] + string.Format(Code.Tag.Code.varsV_, a, infoSrc.variables[v])).Apply(varsA);
+                                             ? (this[a] + string.Format(Tag.Code.varsN, a)).Apply(varsA)
+                                             : (this[a] + string.Format(Tag.Code.varsV_, a, infoSrc.variables[v])).Apply(varsA);
                                 }
                                 variant.Vars = varsA;
                             }
@@ -208,7 +208,7 @@ namespace Prateek.CodeGeneration
                             variant = new Variant(variant.Call)
                             {
                                 Args = variant.Args,
-                                Vars = Code.Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.ParenthesisOpen.C() + variant.Vars + Strings.Separator.ParenthesisClose.C()
+                                Vars = Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.ParenthesisOpen.C() + variant.Vars + Strings.Separator.ParenthesisClose.C()
                             };
                         }
 

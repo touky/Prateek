@@ -84,20 +84,30 @@ using System.Text.RegularExpressions;
 namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public class PrateekScriptBuilder : CodeBuilder
+    public partial class PrateekScriptBuilder : CodeBuilder
     {
         //---------------------------------------------------------------------
-        protected override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Code.Tag.importExtension); } }
+        public class Database : ScriptTemplate
+        {
+            #region Code rules
+            private static List<CodeRule> rules = new List<PrateekScriptBuilder.CodeRule>();
+            public static Group<CodeRule> CodeRules { get { return new Group<PrateekScriptBuilder.CodeRule>(rules); } }
+            public static void Add(CodeRule data) { rules.Add(data); }
+            #endregion Code rules
+        }
+
+        //---------------------------------------------------------------------
+        protected override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Tag.importExtension); } }
 
         //---------------------------------------------------------------------
         protected override bool DoApplyValidTemplate(ref FileData fileData)
         {
-            if (fileData.source.extension != Code.Tag.importExtension)
+            if (fileData.source.extension != Tag.importExtension)
                 return true;
 
             base.DoApplyValidTemplate(ref fileData);
 
-            var genStart = Code.Tag.Macro.codeGenStart.Keyword();
+            var genStart = Tag.Macro.codeGenStart.Keyword();
             var startIndex = fileData.destination.content.IndexOf(genStart);
             if (startIndex < 0)
                 return false;
@@ -127,7 +137,7 @@ namespace Prateek.CodeGeneration
                     else
                     {
                         var foundMatch = false;
-                        var rules = ScriptTemplate.CodeRules;
+                        var rules = Database.CodeRules;
                         for (int s = 0; s < rules.Count; s++)
                         {
                             var rule = rules[s];
@@ -135,7 +145,7 @@ namespace Prateek.CodeGeneration
                                 continue;
 
                             var setup = rule.GetKeyRule(keyword, codeDepth);
-                            if (setup.usage != Code.Tag.KeyRule.Usage.Match)
+                            if (setup.usage != Utils.KeyRule.Usage.Match)
                                 continue;
 
                             if (!analyzer.FindArgs(args, setup))
@@ -172,7 +182,7 @@ namespace Prateek.CodeGeneration
                                 if (activeCodeFile.ActiveData.activeRule.CloseScope(activeCodeFile, scopeName))
                                     codeDepth--;
                             }
-                            else if (codeDepth == 1 && scopeName == Code.Tag.Macro.FileInfo)
+                            else if (codeDepth == 1 && scopeName == Tag.Macro.FileInfo)
                             {
                                 activeCodeFile = null;
                                 codeDepth--;
@@ -214,7 +224,7 @@ namespace Prateek.CodeGeneration
                 codeFile.Generate(genHeader, genCode);
 
                 var newData = fileData;
-                var swap = new Code.Tag.SwapInfo(newData.destination.name.Extension(newData.destination.extension)) + codeFile.fileName.Extension(codeFile.fileExtension);
+                var swap = new Utils.SwapInfo(newData.destination.name.Extension(newData.destination.extension)) + codeFile.fileName.Extension(codeFile.fileExtension);
                 newData.destination.name = codeFile.fileName;
                 newData.destination.extension = codeFile.fileExtension;
                 newData.destination.absPath = swap.Apply(newData.destination.absPath);
@@ -240,12 +250,12 @@ namespace Prateek.CodeGeneration
         //---------------------------------------------------------------------
         private int CheckGenericData(ref int codeDepth, string keyword, Analyzer analyzer, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
         {
-            if (keyword == Code.Tag.Macro.FileInfo)
+            if (keyword == Tag.Macro.FileInfo)
             {
                 if (codeDepth != 0)
                     return -1;
 
-                var keyRule = new Code.Tag.KeyRule(keyword, true) { args = 2, needOpenScope = true };
+                var keyRule = new Utils.KeyRule(keyword, true) { args = 2, needOpenScope = true };
                 if (!analyzer.FindArgs(args, keyRule))
                     return -1;
 

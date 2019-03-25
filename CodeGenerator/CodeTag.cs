@@ -84,7 +84,7 @@ using System.Text.RegularExpressions;
 namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public static partial class Code
+    public partial class CodeBuilder
     {
         //---------------------------------------------------------------------
         public static class Tag
@@ -92,115 +92,6 @@ namespace Prateek.CodeGeneration
             //Default datas ---------------------------------------------------
             public const string importExtension = "prtk";
             public const string exportExtension = "cs";
-
-            //-----------------------------------------------------------------
-            public struct SwapInfo
-            {
-                //-------------------------------------------------------------
-                private string original;
-                private string replacement;
-
-                //-------------------------------------------------------------
-                public string Original { get { return original; } }
-                public string Replacement { get { return replacement; } }
-
-                //-------------------------------------------------------------
-                public SwapInfo(string original)
-                {
-                    this.original = original;
-                    this.replacement = string.Empty;
-                }
-
-                //-------------------------------------------------------------
-                public static implicit operator SwapInfo(string original)
-                {
-                    return new SwapInfo(original);
-                }
-
-                //-------------------------------------------------------------
-                public static SwapInfo operator +(SwapInfo info, string other)
-                {
-                    return new SwapInfo() { original = info.original, replacement = other };
-                }
-
-                //-------------------------------------------------------------
-                public string Apply(string text)
-                {
-                    if (original == null)
-                        return text;
-                    return text.Replace(original, replacement);
-                }
-            }
-
-            //-----------------------------------------------------------------
-            public struct KeyRule
-            {
-                //-------------------------------------------------------------
-                public enum Usage
-                {
-                    Match,
-                    Forbidden,
-                    Ignore,
-
-                    MAX
-                }
-
-                //-------------------------------------------------------------
-                public struct ArgRange
-                {
-                    //---------------------------------------------------------
-                    private int min;
-                    private int max;
-
-                    //---------------------------------------------------------
-                    public bool NoneNeeded { get { return min <= 0 && max <= 0; } }
-
-                    //---------------------------------------------------------
-                    public static implicit operator ArgRange(int value)
-                    {
-                        return new ArgRange(value);
-                    }
-
-                    //---------------------------------------------------------
-                    public ArgRange(int min) : this(min, min) { }
-                    public ArgRange(int min, int max)
-                    {
-                        this.min = min;
-                        this.max = max;
-                    }
-
-                    //---------------------------------------------------------
-                    public bool Check(int count)
-                    {
-                        if (min < 0)
-                            return true;
-
-                        if (count < min)
-                            return false;
-
-                        if (max >= 0)
-                            return count <= max;
-                        return true;
-                    }
-                }
-
-                //-------------------------------------------------------------
-                public string key;
-                public Usage usage;
-                public ArgRange args;
-                public bool needOpenScope;
-                public bool needScopeData;
-
-                //-------------------------------------------------------------
-                public KeyRule(string key, bool doesMatch)
-                {
-                    this.key = key;
-                    usage = doesMatch ? Usage.Match : Usage.Forbidden;
-                    args = new ArgRange(0);
-                    needOpenScope = false;
-                    needScopeData = false;
-                }
-            }
 
             //-----------------------------------------------------------------
             public static class Macro
