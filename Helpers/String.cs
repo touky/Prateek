@@ -225,7 +225,7 @@ namespace Prateek.Helpers
 
                     if ((value & mask) != 0)
                     {
-                        chars.AddRange(Get(value));
+                        chars.AddRange(GetRaw(value));
                     }
                 }
                 dictionnary[mask] = chars.ToArray();
@@ -272,7 +272,7 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static string ApplyCRLF(this string left)
         {
-            return left.Replace(Separator.LineFeed.C().ToString(), string.Empty + Separator.CarrRet.C() + Separator.LineFeed.Get());
+            return left.Replace(Separator.LineFeed.C().ToString(), string.Empty + Separator.CarrRet.C() + Separator.LineFeed.C());
         }
 
         //---------------------------------------------------------------------

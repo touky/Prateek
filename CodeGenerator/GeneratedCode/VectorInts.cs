@@ -221,6 +221,7 @@ namespace Prateek.ShaderTo
         #region Mixed Ctor Vector2Int
         public static Vector2Int vec2i(int n_0, int n_1) { return new Vector2Int(n_0, n_1); }
         public static Vector2Int vec2i(Vector2Int v_0) { return new Vector2Int(v_0.x, v_0.y); }
+        public static Vector2Int vec2i(int n_0) { return new Vector2Int(n_0, n_0); }
         #endregion Mixed Ctor Vector2Int
         
         //---------------------------------------------------------------------
@@ -229,6 +230,7 @@ namespace Prateek.ShaderTo
         public static Vector3Int vec3i(int n_0, Vector2Int v_0) { return new Vector3Int(n_0, v_0.x, v_0.y); }
         public static Vector3Int vec3i(Vector2Int v_0, int n_0) { return new Vector3Int(v_0.x, v_0.y, n_0); }
         public static Vector3Int vec3i(Vector3Int v_0) { return new Vector3Int(v_0.x, v_0.y, v_0.z); }
+        public static Vector3Int vec3i(int n_0) { return new Vector3Int(n_0, n_0, n_0); }
         #endregion Mixed Ctor Vector3Int
         
         

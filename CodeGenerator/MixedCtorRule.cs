@@ -158,6 +158,15 @@ namespace Prateek.ScriptTemplating
 
                 variants.Clear();
                 GatherVariants(0, slots, slots.Length, variants, data, infoSrc);
+
+                //Add Default vec(f)
+                var variant = new Variant(infoSrc.names[1]);
+                variant.Args = string.Format(Code.Tag.Code.argsN, data.classDefaultType, 0);
+                for (int v = 0; v < infoSrc.variables.Count; v++)
+                {
+                    variant.Vars = string.Format(Code.Tag.Code.varsN, 0);
+                }
+                variants.Add(variant);
             }
 
             //-----------------------------------------------------------------

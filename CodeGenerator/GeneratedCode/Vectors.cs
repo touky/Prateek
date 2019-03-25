@@ -1348,6 +1348,7 @@ namespace Prateek.ShaderTo
         #region Mixed Ctor Vector2
         public static Vector2 vec2(float n_0, float n_1) { return new Vector2(n_0, n_1); }
         public static Vector2 vec2(Vector2 v_0) { return new Vector2(v_0.x, v_0.y); }
+        public static Vector2 vec2(float n_0) { return new Vector2(n_0, n_0); }
         #endregion Mixed Ctor Vector2
         
         //---------------------------------------------------------------------
@@ -1356,6 +1357,7 @@ namespace Prateek.ShaderTo
         public static Vector3 vec3(float n_0, Vector2 v_0) { return new Vector3(n_0, v_0.x, v_0.y); }
         public static Vector3 vec3(Vector2 v_0, float n_0) { return new Vector3(v_0.x, v_0.y, n_0); }
         public static Vector3 vec3(Vector3 v_0) { return new Vector3(v_0.x, v_0.y, v_0.z); }
+        public static Vector3 vec3(float n_0) { return new Vector3(n_0, n_0, n_0); }
         #endregion Mixed Ctor Vector3
         
         //---------------------------------------------------------------------
@@ -1368,6 +1370,7 @@ namespace Prateek.ShaderTo
         public static Vector4 vec4(Vector2 v_0, Vector2 v_1) { return new Vector4(v_0.x, v_0.y, v_1.x, v_1.y); }
         public static Vector4 vec4(Vector3 v_0, float n_0) { return new Vector4(v_0.x, v_0.y, v_0.z, n_0); }
         public static Vector4 vec4(Vector4 v_0) { return new Vector4(v_0.x, v_0.y, v_0.z, v_0.w); }
+        public static Vector4 vec4(float n_0) { return new Vector4(n_0, n_0, n_0, n_0); }
         #endregion Mixed Ctor Vector4
         
         
