@@ -78,6 +78,18 @@ using Prateek.Debug;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
+namespace Prateek.ShaderTo
+{
+    //-------------------------------------------------------------------------
+    public static partial class CSharp
+    {
+        public static Vector2 normalize(Vector2 v) { return v.normalized; }
+        public static Vector3 normalize(Vector3 v) { return v.normalized; }
+        public static Vector4 normalize(Vector4 v) { return v.normalized; }
+    }
+}
+
+//-----------------------------------------------------------------------------
 namespace Prateek.Helpers
 {
     //-------------------------------------------------------------------------
