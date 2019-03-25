@@ -123,7 +123,7 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public void Add(File file)
         {
-            var fileSplit = file.FullName.Split(Strings.Separator.Directory.C(), StringSplitOptions.RemoveEmptyEntries);
+            var fileSplit = file.FullName.Split(Strings.Separator.Directory.Get(), StringSplitOptions.RemoveEmptyEntries);
             var currentDirectory = Root;
             for (int s = 0; s < fileSplit.Length; s++)
             {
@@ -279,8 +279,8 @@ namespace Prateek.Helpers
             //-----------------------------------------------------------------
             public File(string fullName)
             {
-                var fileSplit = fullName.Split(Strings.Separator.Directory.C(), StringSplitOptions.RemoveEmptyEntries);
-                var ExtSplit = fileSplit[fileSplit.Length - 1].Split(Strings.Separator.FileExtension.C(), StringSplitOptions.RemoveEmptyEntries);
+                var fileSplit = fullName.Split(Strings.Separator.Directory.Get(), StringSplitOptions.RemoveEmptyEntries);
+                var ExtSplit = fileSplit[fileSplit.Length - 1].Split(Strings.Separator.FileExtension.Get(), StringSplitOptions.RemoveEmptyEntries);
 
                 this.fullName = fullName;
 

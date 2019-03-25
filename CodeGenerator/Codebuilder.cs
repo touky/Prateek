@@ -119,8 +119,8 @@ namespace Prateek.ScriptTemplating
                     return;
                 }
 
-                var iExt = file.LastIndexOf(Strings.Separator.FileExtension.C()[0]);
-                var iName = Mathf.Max(file.LastIndexOf(Strings.Separator.Directory.C()[0]), file.LastIndexOf(Strings.Separator.Directory.C()[1]));
+                var iExt = file.LastIndexOf(Strings.Separator.FileExtension.C());
+                var iName = Mathf.Max(file.LastIndexOf(Strings.Separator.DirSlash.C()), file.LastIndexOf(Strings.Separator.DirBackslash.C()));
 
                 source.absPath = file;
                 source.relPath = sourceDir == string.Empty ? file : file.Replace(sourceDir, string.Empty);
@@ -442,7 +442,7 @@ namespace Prateek.ScriptTemplating
         //---------------------------------------------------------------------
         protected virtual bool DoApplyFixUps(ref FileData fileData)
         {
-            var comment = "//--";
+            var comment = Strings.Comment;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
             var stack = new TemplateReplacement.KeywordStack(TemplateReplacement.KeywordMode.ZoneDelimiter, fileData.destination.content);
 
@@ -456,8 +456,8 @@ namespace Prateek.ScriptTemplating
                     continue;
                 }
 
-                var start = fileData.destination.content.LastIndexOf(Strings.Separator.NewLine.C()[0], position);
-                var end = fileData.destination.content.IndexOf(Strings.Separator.NewLine.C()[0], position);
+                var start = fileData.destination.content.LastIndexOf(Strings.Separator.LineFeed.C(), position);
+                var end = fileData.destination.content.IndexOf(Strings.Separator.LineFeed.C(), position);
 
                 if (start < 0 || end < 0)
                 {
@@ -471,14 +471,14 @@ namespace Prateek.ScriptTemplating
                 {
                     while (line.Length > 79)
                     {
-                        if (line[line.Length - 1] != '-')
+                        if (line[line.Length - 1] != Strings.Separator.OpMinus.C())
                             break;
                         line = line.Remove(line.Length - 1);
                     }
 
                     while (line.Length < 79)
                     {
-                        line += '-';
+                        line += Strings.Separator.OpMinus.C();
                     }
 
                     stack.Add(line, start, end);

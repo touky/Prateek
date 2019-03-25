@@ -91,7 +91,7 @@ namespace Prateek.ScriptTemplating
         public static void OnWillCreateAsset(string path)
         {
             path = path.Replace(".meta", string.Empty);
-            int index = path.LastIndexOf(Strings.Separator.FileExtension.C()[0]);
+            int index = path.LastIndexOf(Strings.Separator.FileExtension.C());
             if (index < 0)
                 return;
 

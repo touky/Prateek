@@ -162,7 +162,7 @@ namespace Prateek.IO
             if (!appPath.EndsWith(".exe"))
                 return string.Empty;
 
-            var last = appPath.LastIndexOf(Strings.Separator.Directory.C()[0]);
+            var last = appPath.LastIndexOf(Strings.Separator.DirSlash.C());
             if (last < 0)
                 return string.Empty;
 

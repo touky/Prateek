@@ -208,7 +208,7 @@ namespace Prateek.ScriptTemplating
                             variant = new Variant(variant.Call)
                             {
                                 Args = variant.Args,
-                                Vars = Code.Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.Parenthesis.C()[0] + variant.Vars + Strings.Separator.Parenthesis.C()[1]
+                                Vars = Code.Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.ParenthesisOpen.C() + variant.Vars + Strings.Separator.ParenthesisClose.C()
                             };
                         }
 

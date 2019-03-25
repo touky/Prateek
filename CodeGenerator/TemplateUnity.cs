@@ -129,15 +129,15 @@ namespace Prateek.ScriptTemplating
                 if (!File.Exists(path))
                     return this;
 
-                var index = path.LastIndexOf(Strings.Separator.Directory.C()[0]);
+                var index = path.LastIndexOf(Strings.Separator.DirSlash.C());
                 if (index < 0)
                     return this;
 
-                var i0 = path.LastIndexOf(Strings.Separator.FileExtension.C()[0]);
+                var i0 = path.LastIndexOf(Strings.Separator.FileExtension.C());
                 if (i0 < 0)
                     return this;
 
-                var i1 = path.LastIndexOf(Strings.Separator.FileExtension.C()[0], i0 - 1);
+                var i1 = path.LastIndexOf(Strings.Separator.FileExtension.C(), i0 - 1);
                 if (i1 < 0)
                     return this;
 

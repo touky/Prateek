@@ -181,7 +181,7 @@ namespace Prateek.ScriptTemplating
                 if (i < 0)
                     return false;
 
-                var r = genCode.LastIndexOf(Strings.Separator.NewLine.C()[0], i);
+                var r = genCode.LastIndexOf(Strings.Separator.LineFeed.C(), i);
                 if (r >= 0)
                     genTabs = genTabs + genCode.Substring(r + 1, i - (r + 1));
 
