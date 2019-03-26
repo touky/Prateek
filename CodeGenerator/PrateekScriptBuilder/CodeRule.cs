@@ -115,13 +115,13 @@ namespace Prateek.CodeGeneration
                 {
                     get
                     {
-                        if (i < 0 || i > results.Count)
+                        if (i < 0 || i >= results.Count)
                             return string.Empty;
                         return results[i];
                     }
                     set
                     {
-                        if (i < 0 || i > results.Count)
+                        if (i < 0 || i >= results.Count)
                             return;
                         var result = results[i];
                         Set(ref result, value);
@@ -168,7 +168,7 @@ namespace Prateek.CodeGeneration
                 {
                     get
                     {
-                        if (i < 0 || i > datas.Count)
+                        if (i < 0 || i >= datas.Count)
                             return string.Empty;
                         return datas[i];
                     }
@@ -214,12 +214,9 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public Utils.SwapInfo ClassDst { get { return Tag.Macro.dstClass; } }
             public Utils.SwapInfo ClassSrc { get { return Tag.Macro.srcClass; } }
-            //public Utils.SwapInfo CodeCall { get { return DataCall; } }
-            //public Utils.SwapInfo CodeArgs { get { return DataArgs; } }
-            //public Utils.SwapInfo CodeVars { get { return DataVars; } }
             public NumberedVars Names { get { return names; } }
-            public NumberedVars Vars { get { return vars; } }
             public NumberedVars Funcs { get { return funcs; } }
+            public NumberedVars Vars { get { return vars; } }
 
             //-----------------------------------------------------------------
             protected CodeRule(string extension) : base(extension)
@@ -237,9 +234,6 @@ namespace Prateek.CodeGeneration
             private void Init()
             {
                 data.Add(string.Format("{0}_{1}_{2}", Tag.Macro.prefix, Tag.Macro.To(Tag.Macro.FuncName.BLOCK), ScopeTag));
-                //data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.VarName.CALL)));
-                //data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.VarName.ARGS)));
-                //data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.VarName.VARS)));
 
                 names = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.NAMES));
                 vars = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.VARS));
@@ -279,38 +273,59 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region CodeRule overridable
-            public void Generate(CodeFile.ContentInfos data)
+            public BuildResult Generate(CodeFile.ContentInfos data)
             {
                 var variants = new List<FuncVariant>();
+                //If needed, Add the default value as a possible class
                 var maxSrc = data.classInfos.Count + (GenerateDefault ? 1 : 0);
+                //Only loop through the dst classes if required
                 var maxDst = GenMode == GenerationMode.ForeachSrcXDest ? data.classInfos.Count : 1;
                 var infoSrc = new CodeFile.ClassInfos();
                 var infoDst = new CodeFile.ClassInfos();
                 var infoDef = new CodeFile.ClassInfos();
                 if (GenerateDefault)
                 {
-                    infoDef.names = new List<string>();
-                    infoDef.names.Add(data.classDefaultType);
+                    infoDef.name = data.classDefaultType;
                 }
 
+                //Find the amount of FUNC_RESULT & NAMES that are requested by the main code
+                var funcCount = 0;
+                var nameCount = 0;
+                for (int i = 0; i < Funcs.Count; i++)
+                {
+                    funcCount += data.codeMain.Contains(Funcs[i].Original) ? 1 : 0;
+                    nameCount += data.codeMain.Contains(Names[i].Original) ? 1 : 0;
+                }
+
+                //Loop throught the source classes
                 for (int iSrc = 0; iSrc < maxSrc; iSrc++)
                 {
+                    //Add the default value as a possible class
                     infoSrc = (GenerateDefault && iSrc == 0)
                         ? infoDef
                         : data.classInfos[iSrc + (GenerateDefault ? -1 : 0)];
 
+                    //Error out if the requested Names are not available
+                    if (nameCount > infoSrc.SynCount)
+                    {
+                        return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.name;
+                    }
+
+                    //one pass or as many as the dst classes
                     for (int iSDst = 0; iSDst < maxDst; iSDst++)
                     {
                         if (GenMode == GenerationMode.ForeachSrcXDest)
                             infoDst = data.classInfos[iSDst];
 
+                        //Gather code variants
                         GatherVariants(variants, data, infoSrc, infoDst);
 
-                        var swapSrc = ClassSrc + infoSrc.names[0];
+                        var swapSrc = ClassSrc + infoSrc.name;
                         var swapDst = ClassDst;
+                        //Add the prefix from the code file
                         if (GenMode == GenerationMode.ForeachSrcXDest)
                         {
-                            swapDst = swapDst + infoDst.names[0];
+                            swapDst = swapDst + infoDst.name;
                             AddCode(data.codePrefix, data, swapSrc, swapDst);
                         }
                         else
@@ -318,13 +333,28 @@ namespace Prateek.CodeGeneration
                             AddCode(data.codePrefix, data, swapSrc);
                         }
 
+                        //Go through all variants and apply them to the code
                         for (int v = 0; v < variants.Count; v++)
                         {
                             var variant = variants[v];
                             var code = data.codeMain;
+
+                            //Error out if the requested funcs result are not available
+                            if (funcCount > variant.Count)
+                            {
+                                return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.name;
+                            }
+
+                            //Apply variants
                             for (int r = 0; r < variant.Count; r++)
                             {
                                 code = (Funcs[r] + variant[r]).Apply(code);
+                            }
+
+                            //Apply names
+                            for (int r = 0; r < min(nameCount, infoSrc.SynCount); r++)
+                            {
+                                code = (Names[r] + infoSrc.synonyms[r]).Apply(code);
                             }
 
                             if (GenMode == GenerationMode.ForeachSrcXDest)
@@ -337,6 +367,7 @@ namespace Prateek.CodeGeneration
                             }
                         }
 
+                        //Add the Postfix from the code file
                         if (GenMode == GenerationMode.ForeachSrcXDest)
                         {
                             AddCode(data.codePostfix, data, swapSrc, swapDst);
@@ -349,6 +380,8 @@ namespace Prateek.CodeGeneration
                 }
 
                 data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Tag.Macro.codeGenTabs.Keyword());
+
+                return BuildResult.ValueType.Success;
             }
 
             //-----------------------------------------------------------------
@@ -386,7 +419,7 @@ namespace Prateek.CodeGeneration
                 {
                     activeData.classInfos.Add(new CodeFile.ClassInfos()
                     {
-                        names = args.GetRange(0, 1),
+                        name = args[0],
                         variables = args.GetRange(1, args.Count - 1)
                     });
                 }

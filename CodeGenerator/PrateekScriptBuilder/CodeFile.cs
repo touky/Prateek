@@ -92,8 +92,13 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public struct ClassInfos
             {
-                public List<string> names;
+                //-----------------------------------------------------------------
+                public string name;
+                public List<string> synonyms;
                 public List<string> variables;
+
+                //-----------------------------------------------------------------
+                public int SynCount { get { return synonyms == null ? 0 : synonyms.Count; } }
             }
 
             //-----------------------------------------------------------------
@@ -171,7 +176,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public bool Generate(string genHeader, string genCode)
+            public BuildResult Generate(string genHeader, string genCode)
             {
                 var genNSpc = (Utils.SwapInfo)Tag.Macro.codeGenNSpc.Keyword();
                 var genExtn = (Utils.SwapInfo)Tag.Macro.codeGenExtn.Keyword();
@@ -180,7 +185,7 @@ namespace Prateek.CodeGeneration
 
                 var i = genCode.IndexOf(genData.Original);
                 if (i < 0)
-                    return false;
+                    return BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;
 
                 var r = genCode.LastIndexOf(Strings.Separator.LineFeed.C(), i);
                 if (r >= 0)
@@ -191,7 +196,11 @@ namespace Prateek.CodeGeneration
                 {
                     var data = datas[d];
 
-                    data.activeRule.Generate(data);
+                    var result = data.activeRule.Generate(data);
+                    if (!result)
+                    {
+                        return result;
+                    }
 
                     var code = genTabs.Apply(data.codeGenerated);
                     genNSpc += data.blockNamespace;
@@ -200,7 +209,7 @@ namespace Prateek.CodeGeneration
                     codeGenerated += genExtn.Apply(genData.Apply(genNSpc.Apply(genCode)));
                 }
 
-                return true;
+                return BuildResult.ValueType.Success;
             }
         }
     }

@@ -183,7 +183,7 @@ namespace Prateek.CodeGeneration
                             {
                                 variant[1] = (p == 1 && a != 0)
                                                 ? string.Format(Tag.Code.argsN, data.classDefaultType, a)
-                                                : string.Format(Tag.Code.argsV_, infoSrc.names[0], a);
+                                                : string.Format(Tag.Code.argsV_, infoSrc.name, a);
                             }
                         }
 
@@ -207,7 +207,7 @@ namespace Prateek.CodeGeneration
 
                             var v2 = new FuncVariant(variant.Call, 2);
                             v2[1] = variant[1];
-                            v2[2] = Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.ParenthesisOpen.C() + variant[2] + Strings.Separator.ParenthesisClose.C();
+                            v2[2] = Tag.Code.varNew + infoSrc.name + Strings.Separator.ParenthesisOpen.C() + variant[2] + Strings.Separator.ParenthesisClose.C();
                             variant = v2;
                         }
 

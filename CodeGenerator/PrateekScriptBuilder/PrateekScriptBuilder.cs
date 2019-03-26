@@ -100,17 +100,17 @@ namespace Prateek.CodeGeneration
         protected override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Tag.importExtension); } }
 
         //---------------------------------------------------------------------
-        protected override bool DoApplyValidTemplate(ref FileData fileData)
+        protected override BuildResult DoApplyValidTemplate(ref FileData fileData)
         {
             if (fileData.source.extension != Tag.importExtension)
-                return true;
+                return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
 
             base.DoApplyValidTemplate(ref fileData);
 
             var genStart = Tag.Macro.codeGenStart.Keyword();
             var startIndex = fileData.destination.content.IndexOf(genStart);
             if (startIndex < 0)
-                return false;
+                return BuildResult.ValueType.PrateekScriptSourceStartTagInvalid;
             var genHeader = fileData.destination.content.Substring(0, startIndex);
             var genCode = fileData.destination.content.Substring(startIndex + genStart.Length);
 
@@ -149,13 +149,13 @@ namespace Prateek.CodeGeneration
                                 continue;
 
                             if (!analyzer.FindArgs(args, setup))
-                                return false;
+                                return (BuildResult)BuildResult.ValueType.PrateekScriptArgNotFound + keyword;
 
                             if (!analyzer.FindData(ref data, setup))
-                                return false;
+                                return (BuildResult)BuildResult.ValueType.PrateekScriptDataNotFound + keyword;
 
                             if (!rule.TreatData(activeCodeFile, setup, args, data))
-                                return false;
+                                return (BuildResult)BuildResult.ValueType.PrateekScriptDataNotTreated + keyword;
 
                             foundMatch = true;
                             if (setup.needOpenScope)
@@ -164,7 +164,7 @@ namespace Prateek.CodeGeneration
                         }
 
                         if (!foundMatch)
-                            return false;
+                            return (BuildResult)BuildResult.ValueType.PrateekScriptInvalidKeyword + keyword;
                     }
                 }
                 else
@@ -221,7 +221,11 @@ namespace Prateek.CodeGeneration
                 //}
 
                 // Build the actual code
-                codeFile.Generate(genHeader, genCode);
+                var result = codeFile.Generate(genHeader, genCode);
+                if (!result)
+                {
+                    return result;
+                }
 
                 var newData = fileData;
                 var swap = new Utils.SwapInfo(newData.destination.name.Extension(newData.destination.extension)) + codeFile.fileName.Extension(codeFile.fileExtension);
@@ -244,7 +248,7 @@ namespace Prateek.CodeGeneration
                 //}
             }
 
-            return false;
+            return BuildResult.ValueType.Ignored;
         }
 
         //---------------------------------------------------------------------

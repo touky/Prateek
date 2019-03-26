@@ -87,6 +87,82 @@ namespace Prateek.CodeGeneration
     {
         //---------------------------------------------------------------------
         #region Declarations
+        public struct BuildResult
+        {
+            //---------------------------------------------------------------------
+            [Flags]
+            public enum ValueType
+            {
+                Success = 1 << 0,
+                Ignored = 1 << 1,
+
+                LoadingFailed = 1 << 2,
+                NoMatchingTemplate = 1 << 3,
+                WritingFailedDirDoesntExist = 1 << 4,
+                PrateekScriptSourceStartTagInvalid = 1 << 5,
+                PrateekScriptArgNotFound = 1 << 6,
+                PrateekScriptDataNotFound = 1 << 7,
+                PrateekScriptDataNotTreated = 1 << 8,
+                PrateekScriptInvalidKeyword = 1 << 9,
+                PrateekScriptInsufficientNames = 1 << 10,
+                PrateekScriptSourceDataTagInvalid = 1 << 11,
+                PrateekScriptInsufficientFuncResults = 1 << 12,
+
+
+                MAX = 32
+            }
+
+            //---------------------------------------------------------------------
+            private ValueType value;
+            private string text;
+
+            //---------------------------------------------------------------------
+            public ValueType Value { get { return value; } }
+            public static implicit operator bool(BuildResult result)
+            {
+                return (result.value & ValueType.Success) != 0;
+            }
+
+            //---------------------------------------------------------------------
+            public static implicit operator BuildResult(ValueType value)
+            {
+                return new BuildResult() { value = value, text = string.Empty };
+            }
+
+            //---------------------------------------------------------------------
+            public static BuildResult operator +(BuildResult other, string text)
+            {
+                return new BuildResult() { value = other.value, text = other.text + (other.text != string.Empty ? ", " : "") + text };
+            }
+
+            //---------------------------------------------------------------------
+            public static BuildResult operator +(BuildResult one, BuildResult other)
+            {
+                return new BuildResult() { value = one.value | other.value, text = one.text + (one.text != string.Empty ? ", " : "") + other.text };
+            }
+
+            //---------------------------------------------------------------------
+            public bool Is(ValueType value)
+            {
+                return (this.value & value) != 0;
+            }
+
+            //---------------------------------------------------------------------
+            public void Log()
+            {
+                var log = string.Format("Error with: {0}\n", text);
+                for (int i = 0; i < (int)ValueType.MAX; i++)
+                {
+                    var testValue = (ValueType)(1 << i);
+                    if (!Is(testValue))
+                        continue;
+                    log += string.Format(" - {0}\n", testValue);
+                }
+                UnityEngine.Debug.LogError(log);
+            }
+        }
+
+        //---------------------------------------------------------------------
         public struct FileData
         {
             //-----------------------------------------------------------------
@@ -301,92 +377,115 @@ namespace Prateek.CodeGeneration
         }
 
         //---------------------------------------------------------------------
-        public void StartWork()
+        public BuildResult StartWork()
         {
             for (int f = 0; f < workFiles.Count; f++)
             {
                 var file = workFiles[f];
+                var result = (BuildResult)BuildResult.ValueType.Success;
 
-                if (LoadData(ref file))
+                result = LoadData(ref file);
+                if (result)
                 {
-                    if (!ApplyValidTemplate(ref file))
-                        continue;
+                    bool nextFile = false;
+                    for (int p = 0; p >= 0; p++)
+                    {
+                        switch (p)
+                        {
+                            case 0: { result = ApplyValidTemplate(ref file); break; }
+                            case 1: { result = ApplyZonedScript(ref file); break; }
+                            case 2: { result = ApplyKeyword(ref file); break; }
+                            case 3: { result = ApplyFixups(ref file); break; }
+                            case 4: { result = WriteData(ref file); break; }
+                            default: { p = -100; result = BuildResult.ValueType.Success; break; }
+                        }
 
-                    if (!ApplyZonedScript(ref file))
-                        continue;
+                        if (!result)
+                        {
+                            if (!result.Is(BuildResult.ValueType.Ignored))
+                            {
+                                result.Log();
+                            }
+                            nextFile = true;
+                            break;
+                        }
+                    }
 
-                    if (!ApplyKeyword(ref file))
+                    if (nextFile)
                         continue;
-
-                    if (!ApplyFixups(ref file))
-                        continue;
-
-                    WriteData(ref file);
+                }
+                else if (!result.Is(BuildResult.ValueType.Ignored))
+                {
+                    result.Log();
                 }
             }
 
             AssetDatabase.Refresh();
+
+            return BuildResult.ValueType.Success;
         }
 
         //---------------------------------------------------------------------
         #region Local calls
-        private bool LoadData(ref FileData fileData)
+        private BuildResult LoadData(ref FileData fileData)
         {
             if ((operations & OperationApplied.LoadData) == 0)
-                return true;
+                return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             return DoLoadData(ref fileData);
         }
 
         //---------------------------------------------------------------------
-        private bool ApplyValidTemplate(ref FileData fileData)
+        private BuildResult ApplyValidTemplate(ref FileData fileData)
         {
             if ((operations & OperationApplied.ApplyScriptTemplate) == 0)
-                return true;
+                return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             return DoApplyValidTemplate(ref fileData);
         }
 
         //---------------------------------------------------------------------
-        private bool ApplyZonedScript(ref FileData fileData)
+        private BuildResult ApplyZonedScript(ref FileData fileData)
         {
             if ((operations & OperationApplied.ApplyZonedScript) == 0)
-                return true;
+                return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             return DoApplyZonedScript(ref fileData);
         }
 
         //---------------------------------------------------------------------
-        private bool ApplyKeyword(ref FileData fileData)
+        private BuildResult ApplyKeyword(ref FileData fileData)
         {
             if ((operations & OperationApplied.ApplyKeyword) == 0)
-                return true;
+                return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             return DoApplyKeyword(ref fileData);
         }
 
         //---------------------------------------------------------------------
-        private bool ApplyFixups(ref FileData fileData)
+        private BuildResult ApplyFixups(ref FileData fileData)
         {
             if ((operations & OperationApplied.ApplyFixUp) == 0)
-                return true;
+                return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             return DoApplyFixUps(ref fileData);
         }
 
         //---------------------------------------------------------------------
-        private bool WriteData(ref FileData fileData)
+        private BuildResult WriteData(ref FileData fileData)
         {
             if ((operations & OperationApplied.WriteData) == 0)
-                return true;
+                return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             return DoWriteData(ref fileData);
         }
 
         //---------------------------------------------------------------------
-        protected virtual bool DoLoadData(ref FileData fileData)
+        protected virtual BuildResult DoLoadData(ref FileData fileData)
         {
-            return fileData.Load();
+            if (fileData.Load())
+                return BuildResult.ValueType.Success;
+            return BuildResult.ValueType.LoadingFailed;
         }
         #endregion Local calls
 
         //---------------------------------------------------------------------
         #region Inheritable calls
-        protected virtual bool DoApplyValidTemplate(ref FileData fileData)
+        protected virtual BuildResult DoApplyValidTemplate(ref FileData fileData)
         {
             var content = string.Empty;
             var extension = string.Empty;
@@ -408,7 +507,7 @@ namespace Prateek.CodeGeneration
             }
 
             if (content == string.Empty)
-                return false;
+                return BuildResult.ValueType.Success | BuildResult.ValueType.NoMatchingTemplate;
 
             content = content.Replace("#SCRIPTNAME#", fileData.source.name);
 
@@ -422,11 +521,11 @@ namespace Prateek.CodeGeneration
 
             fileData.destination.content = content;
 
-            return true;
+            return BuildResult.ValueType.Success;
         }
 
         //---------------------------------------------------------------------
-        protected virtual bool DoApplyZonedScript(ref FileData fileData)
+        protected virtual BuildResult DoApplyZonedScript(ref FileData fileData)
         {
             var keywords = ScriptTemplate.Keywords;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
@@ -469,19 +568,19 @@ namespace Prateek.CodeGeneration
                 fileData.destination.content = stack.Apply();
             }
 
-            return true;
+            return BuildResult.ValueType.Success;
         }
 
         //---------------------------------------------------------------------
-        protected virtual bool DoApplyKeyword(ref FileData fileData)
+        protected virtual BuildResult DoApplyKeyword(ref FileData fileData)
         {
             TemplateHelpers.ApplyKeywords(ref fileData.destination.content, fileData.destination.extension);
 
-            return true;
+            return BuildResult.ValueType.Success;
         }
 
         //---------------------------------------------------------------------
-        protected virtual bool DoApplyFixUps(ref FileData fileData)
+        protected virtual BuildResult DoApplyFixUps(ref FileData fileData)
         {
             var comment = Strings.Comment;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
@@ -533,23 +632,23 @@ namespace Prateek.CodeGeneration
                 fileData.destination.content = stack.Apply();
             }
 
-            return true;
+            return BuildResult.ValueType.Success;
         }
 
         //---------------------------------------------------------------------
-        protected virtual bool DoWriteData(ref FileData fileData)
+        protected virtual BuildResult DoWriteData(ref FileData fileData)
         {
             var dst = fileData.destination;
             var path = destinationDirectory + dst.relPath;
             var dir = path.Replace(dst.name.Extension(dst.extension), string.Empty);
             dir = FileHelpers.GetValidDirectory(dir);
             if (dir == string.Empty)
-                return false;
+                return BuildResult.ValueType.WritingFailedDirDoesntExist;
 
             path = dir + dst.name.Extension(dst.extension);
             File.WriteAllText(path + (runInTestMode ? ".txt" : String.Empty), dst.content.ApplyCRLF());
 
-            return true;
+            return BuildResult.ValueType.Success;
         }
         #endregion Inheritable calls
         #endregion Behaviour

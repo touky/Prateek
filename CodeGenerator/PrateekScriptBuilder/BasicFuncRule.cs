@@ -137,7 +137,7 @@ namespace Prateek.CodeGeneration
             {
                 if (keyRule.key == Tag.Macro.OperationClass)
                 {
-                    activeData.classInfos.Add(new CodeFile.ClassInfos() { names = new List<string>(args) });
+                    activeData.classInfos.Add(new CodeFile.ClassInfos() { name = args[0], synonyms = args.GetRange(1, args.Count - 1) });
                 }
                 else if (keyRule.key == Tag.Macro.Func)
                 {
@@ -161,9 +161,9 @@ namespace Prateek.CodeGeneration
                 {
                     var funcInfo = data.funcInfos[d];
                     var content = funcInfo.data;
-                    for (int n = 0; n < infoSrc.names.Count; n++)
+                    for (int n = 0; n < infoSrc.SynCount + 1; n++)
                     {
-                        var vars = (Vars[n] + infoSrc.names[n]);
+                        var vars = (Vars[n] + (n == 0 ? infoSrc.name : infoSrc.synonyms[n - 1]));
                         content = vars.Apply(content);
                     }
 

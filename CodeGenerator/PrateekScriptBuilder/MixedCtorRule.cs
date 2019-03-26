@@ -134,7 +134,8 @@ namespace Prateek.CodeGeneration
                 {
                     activeData.classInfos.Add(new CodeFile.ClassInfos()
                     {
-                        names = args.GetRange(0, 2),
+                        name = args[0],
+                        synonyms = args.GetRange(1, 1),
                         variables = args.GetRange(2, args.Count - 2)
                     });
                 }
@@ -160,7 +161,7 @@ namespace Prateek.CodeGeneration
                 GatherVariants(0, slots, slots.Length, variants, data, infoSrc);
 
                 //Add Default vec(f)
-                var variant = new FuncVariant(infoSrc.names[1]);
+                var variant = new FuncVariant(infoSrc.synonyms[0], 2);
                 variant[1] = string.Format(Tag.Code.argsN, data.classDefaultType, 0);
                 for (int v = 0; v < infoSrc.variables.Count; v++)
                 {
@@ -185,7 +186,7 @@ namespace Prateek.CodeGeneration
                     {
                         var sn = 0;
                         var sv = 0;
-                        var variant = new FuncVariant(infoSrc.names[1], 2);
+                        var variant = new FuncVariant(infoSrc.synonyms[0], 2);
                         for (int v = 0; v < slots.Length && v < s + 1; v++)
                         {
                             var sl = slots[v];
@@ -199,7 +200,7 @@ namespace Prateek.CodeGeneration
                             {
                                 sl -= 1;
                                 var info = data.classInfos[sl];
-                                variant[1] = string.Format(Tag.Code.argsV_, info.names[0], sv);
+                                variant[1] = string.Format(Tag.Code.argsV_, info.name, sv);
                                 for (int vr = 0; vr < info.variables.Count; vr++)
                                 {
                                     variant[2] = string.Format(Tag.Code.varsV_, sv, info.variables[vr]);
