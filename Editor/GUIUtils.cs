@@ -111,19 +111,19 @@ namespace Prateek.Editors
         {
             var foldoutActive = Prateek.Editors.Prefs.Get(key, false);
             EditorGUI.BeginChangeCheck();
-            var tempActive = foldoutActive.data;
+            var tempActive = foldoutActive.Value;
             if (!isLayout)
             {
-                tempActive = EditorGUI.Foldout(rect, foldoutActive.data, content, toggleOnLabelClick);
+                tempActive = EditorGUI.Foldout(rect, foldoutActive.Value, content, toggleOnLabelClick);
             }
             else
             {
-                tempActive = EditorGUILayout.Foldout(foldoutActive.data, content, toggleOnLabelClick);
+                tempActive = EditorGUILayout.Foldout(foldoutActive.Value, content, toggleOnLabelClick);
             }
 
             if (EditorGUI.EndChangeCheck())
             {
-                foldoutActive.data = tempActive;
+                foldoutActive.Value = tempActive;
             }
 
             return tempActive;

@@ -1,0 +1,116 @@
+PRATEEK_CODEGEN_FILE_INFO(EditorPrefs, cs)
+{
+    PRATEEK_CODEGEN_BLOCK_BASIC_FUNC(Prateek.Editors, Prefs)
+    {
+        PRATEEK_CODEGEN_CLASS(bool, Bools, GetBool, SetBool)
+        PRATEEK_CODEGEN_CLASS(int, Ints, GetInt, SetInt)
+        PRATEEK_CODEGEN_CLASS(float, Floats, GetFloat, SetFloat)
+        PRATEEK_CODEGEN_CLASS(string, Strings, GetString, SetString)
+
+        PRATEEK_CODEGEN_FUNC
+        {
+        @//---------------------------------------------------------------------
+        @#region VARS_0
+        @public static VARS_1 Get(string name, VARS_0 defaultValue)
+        @{
+        @    return new VARS_1(name, defaultValue);
+        @}
+        @
+        @//---------------------------------------------------------------------
+        @public class VARS_1 : ValueStorage
+        @{
+        @    #region Fields
+        @    protected VARS_0 value;
+        @    protected VARS_0 defaultValue;
+        @    #endregion Fields
+        @
+        @    public VARS_0 Value
+        @    {
+        @        get
+        @        {
+        @            TryGetting();
+        @            return value;
+        @        }
+        @        set
+        @        {
+        @            var doUpdate = this.value != value;
+        @            this.value = value;
+        @            TrySetting(doUpdate);
+        @        }
+        @    }
+        @
+        @    public VARS_1(string name, VARS_0 defaultValue) : base(name)
+        @    {
+        @        value = defaultValue;
+        @        this.defaultValue = defaultValue;
+        @        TryGetting();
+        @    }
+        @
+        @    //-----------------------------------------------------------------
+        @    #if UNITY_EDITOR
+        @    protected override void GetFromPrefs()
+        @    {
+        @        value = UnityEditor.EditorPrefs.VARS_2(name, defaultValue);
+        @    }
+        @
+        @    //-----------------------------------------------------------------
+        @    protected override void SetToPrefs()
+        @    {
+        @        UnityEditor.EditorPrefs.VARS_3(name, value);
+        @    }
+        @    #endif //UNITY_EDITOR
+        @}
+        @#endregion VARS_0
+        }
+
+        PRATEEK_CODEGEN_CODE_MAIN
+        {
+        @BASIC_FUNC_CALL
+        }
+    }
+}
+
+//PRATEEK_CODEGEN_CLASS(string, Strings, GetString, SetString)
+//PRATEEK_CODEGEN_CLASS(Vector4, Vector4s, Floats
+//
+//#region Vector4
+//public static Vector4s Get(string name, Vector4 default_value)
+//{
+//	return new Vector4s(name, default_value);
+//}
+//
+////---------------------------------------------------------------------
+//public class Vector4s : ValueStorage
+//{
+//	#region Fields
+//	protected Floats m_x;
+//	protected Floats m_y;
+//	protected Floats m_z;
+//	protected Floats m_w;
+//	#endregion Fields
+//
+//	public Vector4 Value
+//	{
+//		get
+//		{
+//			return new Vector4(m_x.Value, m_y.Value, m_z.Value, m_w.Value);
+//		}
+//		set
+//		{
+//			m_x.Value = value.x;
+//			m_y.Value = value.y;
+//			m_z.Value = value.z;
+//			m_w.Value = value.w;
+//		}
+//	}
+//
+//	public Vector4s(string name, Vector4 default_value)
+//		: base(name)
+//	{
+//		m_x = new Floats(name + ".x", default_value.x);
+//		m_y = new Floats(name + ".y", default_value.y);
+//		m_z = new Floats(name + ".z", default_value.z);
+//		m_w = new Floats(name + ".w", default_value.w);
+//	}
+//}
+//#endregion Vector4

@@ -90,21 +90,9 @@ namespace Prateek.CodeGeneration
         static PrateekScriptLoader()
         {
             NewScript(CodeBuilder.Tag.importExtension, CodeBuilder.Tag.exportExtension)
-                .SetTemplateFile(String.Empty)
-                .SetContent(@"#PRATEEK_COPYRIGHT#
-
-#PRATEEK_CSHARP_NAMESPACE#
-#PRATEEK_SCRIPT_STARTS_HERE#
-//-----------------------------------------------------------------------------
-namespace #PRATEEK_EXTENSION_NAMESPACE#
-{
-    //-------------------------------------------------------------------------
-    public static partial class #PRATEEK_EXTENSION_STATIC_CLASS#
-    {
-        #PRATEEK_CODEGEN_DATA#
-    }
-}
-").Commit();
+            .SetTemplateFile(String.Empty)
+            .SetFileContent("InternalContent_Prateek_script.txt")
+            .Commit();
         }
     }
 
@@ -330,24 +318,6 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
             }
 
             //-----------------------------------------------------------------
-            public virtual bool CloseScope(CodeFile codeFile, string scope)
-            {
-                if (scope == CodeBlock)
-                {
-                    codeFile.Submit();
-                    return true;
-                }
-                else if (scope == Tag.Macro.Func
-                     || scope == Tag.Macro.CodePartMain
-                     || scope == Tag.Macro.CodePartPrefix
-                     || scope == Tag.Macro.CodePartSuffix)
-                {
-                    return true;
-                }
-                return false;
-            }
-
-            //-----------------------------------------------------------------
             protected virtual bool DoTreatData(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
             {
                 if (keyRule.key == CodeBlock)
@@ -381,6 +351,24 @@ namespace #PRATEEK_EXTENSION_NAMESPACE#
                     activeData.codePostfix = data;
                 }
                 return true;
+            }
+
+            //-----------------------------------------------------------------
+            public virtual bool CloseScope(CodeFile codeFile, string scope)
+            {
+                if (scope == CodeBlock)
+                {
+                    codeFile.Submit();
+                    return true;
+                }
+                else if (scope == Tag.Macro.Func
+                     || scope == Tag.Macro.CodePartMain
+                     || scope == Tag.Macro.CodePartPrefix
+                     || scope == Tag.Macro.CodePartSuffix)
+                {
+                    return true;
+                }
+                return false;
             }
             #endregion CodeRule override
 

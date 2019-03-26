@@ -81,29 +81,30 @@ using Prateek.Debug;
 namespace Prateek.Editors
 {
     //-------------------------------------------------------------------------
-    public static class Prefs
+    public static partial class Prefs
     {
+        //---------------------------------------------------------------------
         public const float UPDATE_TIME = 5f;
 
         //---------------------------------------------------------------------
         public abstract class ValueStorage
         {
             #region Fields
-            protected float m_last_update = 0;
-            protected string m_name = string.Empty;
+            protected float lastUpdate = 0;
+            protected string name = string.Empty;
             #endregion Fields
 
             //-----------------------------------------------------------------
             #region Properties
-            public string name { get { return m_name; } }
-            protected bool should_update
+            public string Name { get { return name; } }
+            protected bool ShouldUpdate
             {
                 get
                 {
 #if UNITY_EDITOR
-                    if (m_last_update < Time.realtimeSinceStartup)
+                    if (lastUpdate < Time.realtimeSinceStartup)
                     {
-                        m_last_update = Time.realtimeSinceStartup + UPDATE_TIME;
+                        lastUpdate = Time.realtimeSinceStartup + UPDATE_TIME;
                         return true;
                     }
 #endif //UNITY_EDITOR
@@ -116,14 +117,14 @@ namespace Prateek.Editors
             #region Properties
             protected ValueStorage(string name)
             {
-                m_name = name;
+                this.name = name;
             }
 
             //-----------------------------------------------------------------
             protected void TryGetting()
             {
 #if UNITY_EDITOR
-                if (should_update)
+                if (ShouldUpdate)
                 {
                     GetFromPrefs();
                 }
@@ -131,10 +132,10 @@ namespace Prateek.Editors
             }
 
             //-----------------------------------------------------------------
-            protected void TrySetting(bool should_update)
+            protected void TrySetting(bool shouldUpdate)
             {
 #if UNITY_EDITOR
-                if (should_update)
+                if (shouldUpdate)
                 {
                     SetToPrefs();
                 }
@@ -149,255 +150,6 @@ namespace Prateek.Editors
 #endif //UNITY_EDITOR
             #endregion ctor
         }
-
-        //---------------------------------------------------------------------
-        #region Bool
-        public static Bools Get(string name, bool default_value)
-        {
-            return new Bools(name, default_value);
-        }
-
-        //---------------------------------------------------------------------
-        public class Bools : ValueStorage
-        {
-            #region Fields
-            protected bool m_value;
-            protected bool m_default_value;
-            #endregion Fields
-
-            public bool data
-            {
-                get
-                {
-                    TryGetting();
-                    return m_value;
-                }
-                set
-                {
-                    var do_update = m_value != value;
-                    m_value = value;
-                    TrySetting(do_update);
-                }
-            }
-
-            public Bools(string name, bool default_value)
-                : base(name)
-            {
-                m_value = default_value;
-                m_default_value = default_value;
-            }
-
-            //-----------------------------------------------------------------
-#if UNITY_EDITOR
-            protected override void GetFromPrefs()
-            {
-                m_value = UnityEditor.EditorPrefs.GetBool(m_name, m_default_value);
-            }
-
-            //-----------------------------------------------------------------
-            protected override void SetToPrefs()
-            {
-                UnityEditor.EditorPrefs.SetBool(m_name, m_value);
-            }
-#endif //UNITY_EDITOR
-        }
-        #endregion Bool
-
-        //---------------------------------------------------------------------
-        #region Int
-        public static Ints Get(string name, int default_value)
-        {
-            return new Ints(name, default_value);
-        }
-
-        //---------------------------------------------------------------------
-        public class Ints : ValueStorage
-        {
-            #region Fields
-            protected int m_value;
-            protected int m_default_value;
-            #endregion Fields
-
-            public int data
-            {
-                get
-                {
-                    TryGetting();
-                    return m_value;
-                }
-                set
-                {
-                    var do_update = m_value != value;
-                    m_value = value;
-                    TrySetting(do_update);
-                }
-            }
-
-            public Ints(string name, int default_value)
-                : base(name)
-            {
-                m_value = default_value;
-                m_default_value = default_value;
-            }
-
-            //-----------------------------------------------------------------
-#if UNITY_EDITOR
-            protected override void GetFromPrefs()
-            {
-                m_value = UnityEditor.EditorPrefs.GetInt(m_name, m_default_value);
-            }
-
-            //-----------------------------------------------------------------
-            protected override void SetToPrefs()
-            {
-                UnityEditor.EditorPrefs.SetInt(m_name, m_value);
-            }
-#endif //UNITY_EDITOR
-        }
-        #endregion Int
-
-        //---------------------------------------------------------------------
-        #region ULong
-        public static ULongs Get(string name, ulong default_value)
-        {
-            return new ULongs(name, default_value);
-        }
-
-        //---------------------------------------------------------------------
-        public class ULongs : ValueStorage
-        {
-            #region Fields
-            protected Ints m_0f;
-            protected Ints m_f0;
-            #endregion Fields
-
-            public ulong data
-            {
-                get
-                {
-                    return ((ulong)m_f0.data << 32) | (uint)m_0f.data;
-                }
-                set
-                {
-                    m_0f.data = (int)((value << 32) >> 32);
-                    m_f0.data = (int)(value >> 32);
-                }
-            }
-
-            public ULongs(string name, ulong default_value)
-                : base(name)
-            {
-                m_0f = new Ints(name + ".0f", (int)((default_value << 32) >> 32));
-                m_f0 = new Ints(name + ".f0", (int)(default_value >> 32));
-            }
-        }
-        #endregion ULong
-
-        //---------------------------------------------------------------------
-        #region Float
-        public static Floats Get(string name, float default_value)
-        {
-            return new Floats(name, default_value);
-        }
-
-        //---------------------------------------------------------------------
-        public class Floats : ValueStorage
-        {
-            #region Fields
-            protected float m_value;
-            protected float m_default_value;
-            #endregion Fields
-
-            public float data
-            {
-                get
-                {
-                    TryGetting();
-                    return m_value;
-                }
-                set
-                {
-                    var do_update = m_value != value;
-                    m_value = value;
-                    TrySetting(do_update);
-                }
-            }
-
-            public Floats(string name, float default_value)
-                : base(name)
-            {
-                m_value = default_value;
-                m_default_value = default_value;
-            }
-
-            //-----------------------------------------------------------------
-#if UNITY_EDITOR
-            protected override void GetFromPrefs()
-            {
-                m_value = UnityEditor.EditorPrefs.GetFloat(m_name, m_default_value);
-            }
-
-            //-----------------------------------------------------------------
-            protected override void SetToPrefs()
-            {
-                UnityEditor.EditorPrefs.SetFloat(m_name, m_value);
-            }
-#endif //UNITY_EDITOR
-        }
-        #endregion Float
-
-        //---------------------------------------------------------------------
-        #region String
-        public static Strings Get(string name, string default_value)
-        {
-            return new Strings(name, default_value);
-        }
-
-        //---------------------------------------------------------------------
-        public class Strings : ValueStorage
-        {
-            #region Fields
-            protected string m_value;
-            protected string m_default_value;
-            #endregion Fields
-
-            public string Value
-            {
-                get
-                {
-                    TryGetting();
-                    return m_value;
-                }
-                set
-                {
-                    var do_update = m_value != value;
-                    m_value = value;
-                    TrySetting(do_update);
-                }
-            }
-
-            public Strings(string name, string default_value)
-                : base(name)
-            {
-                m_value = default_value;
-                m_default_value = default_value;
-            }
-
-            //-----------------------------------------------------------------
-#if UNITY_EDITOR
-            protected override void GetFromPrefs()
-            {
-                m_value = UnityEditor.EditorPrefs.GetString(m_name, m_default_value);
-            }
-
-            //-----------------------------------------------------------------
-            protected override void SetToPrefs()
-            {
-                UnityEditor.EditorPrefs.SetString(m_name, m_value);
-            }
-#endif //UNITY_EDITOR
-        }
-        #endregion String
 
         //---------------------------------------------------------------------
         #region List<string>
@@ -435,7 +187,7 @@ namespace Prateek.Editors
 
                         while (strings.Count < valueCount)
                         {
-                            strings.Add(new Strings(m_name + "[" + strings.Count + "]", value[strings.Count]));
+                            strings.Add(new Strings(name + "[" + strings.Count + "]", value[strings.Count]));
                         }
                     }
 
@@ -457,8 +209,8 @@ namespace Prateek.Editors
             public ListStrings(string name, List<string> default_value)
                 : base(name)
             {
-                this.m_name = name;
-                count = new Ints(m_name + ".Count", default_value == null ? 0 : default_value.Count);
+                this.name = name;
+                count = new Ints(base.name + ".Count", default_value == null ? 0 : default_value.Count);
                 data = default_value;
             }
         }
@@ -483,12 +235,12 @@ namespace Prateek.Editors
             {
                 get
                 {
-                    return new Vector2(m_x.data, m_y.data);
+                    return new Vector2(m_x.Value, m_y.Value);
                 }
                 set
                 {
-                    m_x.data = value.x;
-                    m_y.data = value.y;
+                    m_x.Value = value.x;
+                    m_y.Value = value.y;
                 }
             }
 
@@ -521,13 +273,13 @@ namespace Prateek.Editors
             {
                 get
                 {
-                    return new Vector3(m_x.data, m_y.data, m_z.data);
+                    return new Vector3(m_x.Value, m_y.Value, m_z.Value);
                 }
                 set
                 {
-                    m_x.data = value.x;
-                    m_y.data = value.y;
-                    m_z.data = value.z;
+                    m_x.Value = value.x;
+                    m_y.Value = value.y;
+                    m_z.Value = value.z;
                 }
             }
 
@@ -562,14 +314,14 @@ namespace Prateek.Editors
             {
                 get
                 {
-                    return new Vector4(m_x.data, m_y.data, m_z.data, m_w.data);
+                    return new Vector4(m_x.Value, m_y.Value, m_z.Value, m_w.Value);
                 }
                 set
                 {
-                    m_x.data = value.x;
-                    m_y.data = value.y;
-                    m_z.data = value.z;
-                    m_w.data = value.w;
+                    m_x.Value = value.x;
+                    m_y.Value = value.y;
+                    m_z.Value = value.z;
+                    m_w.Value = value.w;
                 }
             }
 
@@ -605,14 +357,14 @@ namespace Prateek.Editors
             {
                 get
                 {
-                    return new Rect(m_x.data, m_y.data, m_width.data, m_height.data);
+                    return new Rect(m_x.Value, m_y.Value, m_width.Value, m_height.Value);
                 }
                 set
                 {
-                    m_x.data = value.x;
-                    m_y.data = value.y;
-                    m_width.data = value.width;
-                    m_height.data = value.height;
+                    m_x.Value = value.x;
+                    m_y.Value = value.y;
+                    m_width.Value = value.width;
+                    m_height.Value = value.height;
                 }
             }
 
@@ -626,6 +378,43 @@ namespace Prateek.Editors
             }
         }
         #endregion Rect
+
+        //---------------------------------------------------------------------
+        #region ULong
+        public static ULongs Get(string name, ulong default_value)
+        {
+            return new ULongs(name, default_value);
+        }
+
+        //---------------------------------------------------------------------
+        public class ULongs : ValueStorage
+        {
+            #region Fields
+            protected Ints m_0f;
+            protected Ints m_f0;
+            #endregion Fields
+
+            public ulong Value
+            {
+                get
+                {
+                    return ((ulong)m_f0.Value << 32) | (uint)m_0f.Value;
+                }
+                set
+                {
+                    m_0f.Value = (int)((value << 32) >> 32);
+                    m_f0.Value = (int)(value >> 32);
+                }
+            }
+
+            public ULongs(string name, ulong default_value)
+                : base(name)
+            {
+                m_0f = new Ints(name + ".0f", (int)((default_value << 32) >> 32));
+                m_f0 = new Ints(name + ".f0", (int)(default_value >> 32));
+            }
+        }
+        #endregion ULong
 
         //---------------------------------------------------------------------
         #region Mask
@@ -684,7 +473,7 @@ namespace Prateek.Editors
 
                     for (int i = old_values.Length; i < m_values.Length; i++)
                     {
-                        m_values[i] = new ULongs(String.Format("{0}.{1}", name, GetPostfix(i)), 0);
+                        m_values[i] = new ULongs(String.Format("{0}.{1}", Name, GetPostfix(i)), 0);
                     }
                 }
             }
@@ -706,7 +495,7 @@ namespace Prateek.Editors
                     var mask = new Helpers.Mask128();
                     for (int i = 0; i < m_values.Length; i++)
                     {
-                        mask.Set(i, m_values[i].data);
+                        mask.Set(i, m_values[i].Value);
                     }
                     return mask;
                 }
@@ -715,7 +504,7 @@ namespace Prateek.Editors
                     Resize(Helpers.Mask128.MAX_SIZE);
                     for (int i = 0; i < Helpers.Mask128.MAX_SIZE; i++)
                     {
-                        m_values[i].data = value.Get(i);
+                        m_values[i].Value = value.Get(i);
                     }
                 }
             }
@@ -739,7 +528,7 @@ namespace Prateek.Editors
                     var mask = new Helpers.Mask256();
                     for (int i = 0; i < m_values.Length; i++)
                     {
-                        mask.Set(i, m_values[i].data);
+                        mask.Set(i, m_values[i].Value);
                     }
                     return mask;
                 }
@@ -748,7 +537,7 @@ namespace Prateek.Editors
                     Resize(Helpers.Mask256.MAX_SIZE);
                     for (int i = 0; i < Helpers.Mask256.MAX_SIZE; i++)
                     {
-                        m_values[i].data = value.Get(i);
+                        m_values[i].Value = value.Get(i);
                     }
                 }
             }
@@ -772,7 +561,7 @@ namespace Prateek.Editors
                     var mask = new Helpers.Mask512();
                     for (int i = 0; i < m_values.Length; i++)
                     {
-                        mask.Set(i, m_values[i].data);
+                        mask.Set(i, m_values[i].Value);
                     }
                     return mask;
                 }
@@ -781,7 +570,7 @@ namespace Prateek.Editors
                     Resize(Helpers.Mask512.MAX_SIZE);
                     for (int i = 0; i < Helpers.Mask512.MAX_SIZE; i++)
                     {
-                        m_values[i].data = value.Get(i);
+                        m_values[i].Value = value.Get(i);
                     }
                 }
             }

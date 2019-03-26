@@ -231,7 +231,7 @@ namespace Prateek.CodeGeneration
                 newData.destination.relPath = swap.Apply(newData.destination.relPath);
                 newData.destination.content = codeFile.CodeGenerated;
                 newData.source = newData.destination;
-                AddFile(newData);
+                AddWorkFile(newData);
 
                 //{ // Log shit
                 //    for (int i = 0; i < codeFile.DataCount; i++)

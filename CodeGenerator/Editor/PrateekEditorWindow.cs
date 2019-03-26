@@ -172,6 +172,10 @@ namespace Prateek.CodeGeneration.Editor
                 prateekScriptGenerator = null;
                 InitDatas();
             }
+            if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute"))
+            {
+                prateekScriptGenerator.StartWork();
+            }
             prateekExportDir.Value = EditorGUILayout.TextField("Export dir", prateekExportDir.Value);
             {
                 var values = prateekSourceDir.data;

@@ -122,7 +122,7 @@ namespace Prateek.CodeGeneration
                 //-------------------------------------------------------------
                 public string Apply(string text)
                 {
-                    if (original == null)
+                    if (text == null || original == null || replacement == null)
                         return text;
                     return text.Replace(original, replacement);
                 }

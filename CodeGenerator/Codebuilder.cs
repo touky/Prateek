@@ -243,7 +243,13 @@ namespace Prateek.CodeGeneration
         public void AddFile(FileData fileData) { dataFiles.Add(new FileSources() { data = fileData }); }
 
         //---------------------------------------------------------------------
-        private void AddWorkFiles(FileSources source)
+        protected void AddWorkFile(FileData fileData)
+        {
+            workFiles.Add(fileData);
+        }
+
+        //---------------------------------------------------------------------
+        protected void AddWorkFiles(FileSources source)
         {
             if (source.files == null)
             {
@@ -258,7 +264,7 @@ namespace Prateek.CodeGeneration
                     continue;
 
                 string rootPath = ((operations & OperationApplied.RelativeDestination) != 0) ? source.sourceDir : string.Empty;
-                workFiles.Add(new FileData(file, rootPath));
+                AddWorkFile(new FileData(file, rootPath));
             }
         }
 
