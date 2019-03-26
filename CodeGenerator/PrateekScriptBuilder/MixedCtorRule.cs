@@ -148,7 +148,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region Rule internal
-            protected override void GatherVariants(List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
+            protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 var slots = new int[infoSrc.variables.Count];
                 for (int s = 0; s < slots.Length; s++)
@@ -160,17 +160,17 @@ namespace Prateek.CodeGeneration
                 GatherVariants(0, slots, slots.Length, variants, data, infoSrc);
 
                 //Add Default vec(f)
-                var variant = new Variant(infoSrc.names[1]);
-                variant.Args = string.Format(Tag.Code.argsN, data.classDefaultType, 0);
+                var variant = new FuncVariant(infoSrc.names[1]);
+                variant[1] = string.Format(Tag.Code.argsN, data.classDefaultType, 0);
                 for (int v = 0; v < infoSrc.variables.Count; v++)
                 {
-                    variant.Vars = string.Format(Tag.Code.varsN, 0);
+                    variant[2] = string.Format(Tag.Code.varsN, 0);
                 }
                 variants.Add(variant);
             }
 
             //-----------------------------------------------------------------
-            private void GatherVariants(int s, int[] slots, int count, List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc)
+            private void GatherVariants(int s, int[] slots, int count, List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc)
             {
                 var classCount = data.classInfos.Count + 1;
                 for (int c = 0; c < classCount; c++)
@@ -185,24 +185,24 @@ namespace Prateek.CodeGeneration
                     {
                         var sn = 0;
                         var sv = 0;
-                        var variant = new Variant(infoSrc.names[1]);
+                        var variant = new FuncVariant(infoSrc.names[1], 2);
                         for (int v = 0; v < slots.Length && v < s + 1; v++)
                         {
                             var sl = slots[v];
                             if (sl == 0)
                             {
-                                variant.Args = string.Format(Tag.Code.argsN, data.classDefaultType, sn);
-                                variant.Vars = string.Format(Tag.Code.varsN, sn);
+                                variant[1] = string.Format(Tag.Code.argsN, data.classDefaultType, sn);
+                                variant[2] = string.Format(Tag.Code.varsN, sn);
                                 sn++;
                             }
                             else
                             {
                                 sl -= 1;
                                 var info = data.classInfos[sl];
-                                variant.Args = string.Format(Tag.Code.argsV_, info.names[0], sv);
+                                variant[1] = string.Format(Tag.Code.argsV_, info.names[0], sv);
                                 for (int vr = 0; vr < info.variables.Count; vr++)
                                 {
-                                    variant.Vars = string.Format(Tag.Code.varsV_, sv, info.variables[vr]);
+                                    variant[2] = string.Format(Tag.Code.varsV_, sv, info.variables[vr]);
                                 }
                                 sv++;
                             }

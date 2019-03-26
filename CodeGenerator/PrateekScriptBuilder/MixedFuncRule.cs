@@ -149,7 +149,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region Rule internal
-            protected override void GatherVariants(List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
+            protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 variants.Clear();
 
@@ -159,12 +159,12 @@ namespace Prateek.CodeGeneration
                     for (int p = 0; p < (isDefault ? 1 : 2); p++)
                     {
                         var funcInfo = data.funcInfos[d];
-                        var variant = new Variant(funcInfo.name);
+                        var variant = new FuncVariant(funcInfo.name, 2);
                         var argCount = 0;
 
-                        for (int v = 0; v < VarCount; v++)
+                        for (int v = 0; v < Vars.Count; v++)
                         {
-                            if (funcInfo.data.Contains(this[v].Original))
+                            if (funcInfo.data.Contains(Vars[v].Original))
                                 argCount++;
                         }
 
@@ -176,12 +176,12 @@ namespace Prateek.CodeGeneration
                         {
                             if (isDefault)
                             {
-                                variant.Args = string.Format(Tag.Code.argsN, data.classDefaultType, a);
-                                vars = (this[a] + string.Format(Tag.Code.varsN, a)).Apply(vars);
+                                variant[1] = string.Format(Tag.Code.argsN, data.classDefaultType, a);
+                                vars = (Vars[a] + string.Format(Tag.Code.varsN, a)).Apply(vars);
                             }
                             else
                             {
-                                variant.Args = (p == 1 && a != 0)
+                                variant[1] = (p == 1 && a != 0)
                                                 ? string.Format(Tag.Code.argsN, data.classDefaultType, a)
                                                 : string.Format(Tag.Code.argsV_, infoSrc.names[0], a);
                             }
@@ -189,7 +189,7 @@ namespace Prateek.CodeGeneration
 
                         if (isDefault)
                         {
-                            variant.Vars = vars;
+                            variant[2] = vars;
                         }
                         else
                         {
@@ -199,17 +199,16 @@ namespace Prateek.CodeGeneration
                                 for (int a = 0; a < argCount; a++)
                                 {
                                     varsA = (p == 1 && a != 0)
-                                             ? (this[a] + string.Format(Tag.Code.varsN, a)).Apply(varsA)
-                                             : (this[a] + string.Format(Tag.Code.varsV_, a, infoSrc.variables[v])).Apply(varsA);
+                                             ? (Vars[a] + string.Format(Tag.Code.varsN, a)).Apply(varsA)
+                                             : (Vars[a] + string.Format(Tag.Code.varsV_, a, infoSrc.variables[v])).Apply(varsA);
                                 }
-                                variant.Vars = varsA;
+                                variant[2] = varsA;
                             }
 
-                            variant = new Variant(variant.Call)
-                            {
-                                Args = variant.Args,
-                                Vars = Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.ParenthesisOpen.C() + variant.Vars + Strings.Separator.ParenthesisClose.C()
-                            };
+                            var v2 = new FuncVariant(variant.Call, 2);
+                            v2[1] = variant[1];
+                            v2[2] = Tag.Code.varNew + infoSrc.names[0] + Strings.Separator.ParenthesisOpen.C() + variant[2] + Strings.Separator.ParenthesisClose.C();
+                            variant = v2;
                         }
 
                         variants.Add(variant);

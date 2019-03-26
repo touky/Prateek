@@ -18,7 +18,7 @@ PRATEEK_CODEGEN_FILE_INFO(Colors, cs)
         
         PRATEEK_CODEGEN_CODE_MAIN
         {
-		@public static DST_CLASS SWIZZLE_CALL(this SRC_CLASS SWIZZLE_ARGS) { return new DST_CLASS(SWIZZLE_VARS); }
+		@public static DST_CLASS FUNC_RESULT_0(this SRC_CLASS FUNC_RESULT_1) { return new DST_CLASS(FUNC_RESULT_2); }
         }
 
         PRATEEK_CODEGEN_CODE_SUFFIX

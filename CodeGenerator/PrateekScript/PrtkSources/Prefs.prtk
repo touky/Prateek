@@ -17,35 +17,17 @@ PRATEEK_CODEGEN_FILE_INFO(EditorPrefs, cs)
         @}
         @
         @//---------------------------------------------------------------------
-        @public class VARS_1 : ValueStorage
+        @public class VARS_1 : TypedStorage<VARS_0>
         @{
-        @    #region Fields
-        @    protected VARS_0 value;
-        @    protected VARS_0 defaultValue;
-        @    #endregion Fields
+        @    //-----------------------------------------------------------------
+        @    public VARS_1(string name, VARS_0 defaultValue) : base(name, defaultValue) { }
         @
-        @    public VARS_0 Value
+        @    //-----------------------------------------------------------------
+        @    public override bool ShouldSetNewValue(VARS_0 newValue)
         @    {
-        @        get
-        @        {
-        @            TryGetting();
-        @            return value;
-        @        }
-        @        set
-        @        {
-        @            var doUpdate = this.value != value;
-        @            this.value = value;
-        @            TrySetting(doUpdate);
-        @        }
+        @        return this.value != newValue;
         @    }
-        @
-        @    public VARS_1(string name, VARS_0 defaultValue) : base(name)
-        @    {
-        @        value = defaultValue;
-        @        this.defaultValue = defaultValue;
-        @        TryGetting();
-        @    }
-        @
+		@	 
         @    //-----------------------------------------------------------------
         @    #if UNITY_EDITOR
         @    protected override void GetFromPrefs()
@@ -65,52 +47,64 @@ PRATEEK_CODEGEN_FILE_INFO(EditorPrefs, cs)
 
         PRATEEK_CODEGEN_CODE_MAIN
         {
-        @BASIC_FUNC_CALL
+        @FUNC_RESULT_0
         }
     }
 }
 
-//PRATEEK_CODEGEN_CLASS(string, Strings, GetString, SetString)
-//PRATEEK_CODEGEN_CLASS(Vector4, Vector4s, Floats
-//
-//#region Vector4
-//public static Vector4s Get(string name, Vector4 default_value)
-//{
-//	return new Vector4s(name, default_value);
-//}
-//
-////---------------------------------------------------------------------
-//public class Vector4s : ValueStorage
-//{
-//	#region Fields
-//	protected Floats m_x;
-//	protected Floats m_y;
-//	protected Floats m_z;
-//	protected Floats m_w;
-//	#endregion Fields
-//
-//	public Vector4 Value
-//	{
-//		get
-//		{
-//			return new Vector4(m_x.Value, m_y.Value, m_z.Value, m_w.Value);
-//		}
-//		set
-//		{
-//			m_x.Value = value.x;
-//			m_y.Value = value.y;
-//			m_z.Value = value.z;
-//			m_w.Value = value.w;
-//		}
-//	}
-//
-//	public Vector4s(string name, Vector4 default_value)
-//		: base(name)
-//	{
-//		m_x = new Floats(name + ".x", default_value.x);
-//		m_y = new Floats(name + ".y", default_value.y);
-//		m_z = new Floats(name + ".z", default_value.z);
-//		m_w = new Floats(name + ".w", default_value.w);
-//	}
-//}
-//#endregion Vector4
+/*
+PRATEEK_CODEGEN_CLASS(Vector4, x, y, z, w)
+PRATEEK_CODEGEN_CLASS(Vector4, Vector4s, Floats)
+
+PRATEEK_CODEGEN_VARS(4) { @protected VARS_2 VARS_3;$ }
+PRATEEK_CODEGEN_VARS(5) { @VARS_3.Value$ }
+
+PRATEEK_CODEGEN_FUNC
+{
+//---------------------------------------------------------------------
+#region VARS_0
+public static VARS_1 Get(string name, VARS_0 defaultValue)
+{
+	return new VARS_1(name, defaultValue);
+}
+
+//---------------------------------------------------------------------
+public class VARS_1 : ValueStorage
+{
+	//-----------------------------------------------------------------
+	#region Fields
+	VARS_4
+	#endregion Fields
+
+	//-----------------------------------------------------------------
+	#region Properties
+	public VARS_0 data
+	{
+		get
+		{
+			return new VARS_0(VARS_5);
+		}
+		set
+		{
+			VARS_3.Value = value.VARS_3;
+			...
+		}
+	}
+	#endregion Properties
+
+	//-----------------------------------------------------------------
+	#region Behaviour
+	public VARS_1(string name, VARS_0 defaultValue) : base(name)
+	{
+		VARS_3 = new VARS_2(name + ".VARS_3", defaultValue.VARS_3);
+		...
+	}
+
+	//-----------------------------------------------------------------
+	protected override void GetFromPrefs() { }
+	protected override void SetToPrefs() { }
+	#endregion Behaviour
+}
+#endregion VARS_0
+}
+*/

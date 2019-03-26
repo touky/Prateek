@@ -87,34 +87,17 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Bools : ValueStorage
+        public class Bools : TypedStorage<bool>
         {
-            #region Fields
-            protected bool value;
-            protected bool defaultValue;
-            #endregion Fields
+            //-----------------------------------------------------------------
+            public Bools(string name, bool defaultValue) : base(name, defaultValue) { }
         
-            public bool Value
+            //-----------------------------------------------------------------
+            public override bool ShouldSetNewValue(bool newValue)
             {
-                get
-                {
-                    TryGetting();
-                    return value;
-                }
-                set
-                {
-                    var doUpdate = this.value != value;
-                    this.value = value;
-                    TrySetting(doUpdate);
-                }
+                return this.value != newValue;
             }
-
-            public Bools(string name, bool defaultValue) : base(name)
-            {
-                value = defaultValue;
-                this.defaultValue = defaultValue;
-            }
-        
+             
             //-----------------------------------------------------------------
             #if UNITY_EDITOR
             protected override void GetFromPrefs()
@@ -139,36 +122,19 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Ints : ValueStorage
+        public class Ints : TypedStorage<int>
         {
-            #region Fields
-            protected int value;
-            protected int defaultValue;
-            #endregion Fields
-        
-            public int Value
-            {
-                get
-                {
-                    TryGetting();
-                    return value;
-                }
-                set
-                {
-                    var doUpdate = this.value != value;
-                    this.value = value;
-                    TrySetting(doUpdate);
-                }
-            }
-        
-            public Ints(string name, int defaultValue) : base(name)
-            {
-                value = defaultValue;
-                this.defaultValue = defaultValue;
-            }
+            //-----------------------------------------------------------------
+            public Ints(string name, int defaultValue) : base(name, defaultValue) { }
         
             //-----------------------------------------------------------------
-        #if UNITY_EDITOR
+            public override bool ShouldSetNewValue(int newValue)
+            {
+                return this.value != newValue;
+            }
+             
+            //-----------------------------------------------------------------
+            #if UNITY_EDITOR
             protected override void GetFromPrefs()
             {
                 value = UnityEditor.EditorPrefs.GetInt(name, defaultValue);
@@ -179,7 +145,7 @@ namespace Prateek.Editors
             {
                 UnityEditor.EditorPrefs.SetInt(name, value);
             }
-        #endif //UNITY_EDITOR
+            #endif //UNITY_EDITOR
         }
         #endregion int
         
@@ -191,36 +157,19 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Floats : ValueStorage
+        public class Floats : TypedStorage<float>
         {
-            #region Fields
-            protected float value;
-            protected float defaultValue;
-            #endregion Fields
-        
-            public float Value
-            {
-                get
-                {
-                    TryGetting();
-                    return value;
-                }
-                set
-                {
-                    var doUpdate = this.value != value;
-                    this.value = value;
-                    TrySetting(doUpdate);
-                }
-            }
-        
-            public Floats(string name, float defaultValue) : base(name)
-            {
-                value = defaultValue;
-                this.defaultValue = defaultValue;
-            }
+            //-----------------------------------------------------------------
+            public Floats(string name, float defaultValue) : base(name, defaultValue) { }
         
             //-----------------------------------------------------------------
-        #if UNITY_EDITOR
+            public override bool ShouldSetNewValue(float newValue)
+            {
+                return this.value != newValue;
+            }
+             
+            //-----------------------------------------------------------------
+            #if UNITY_EDITOR
             protected override void GetFromPrefs()
             {
                 value = UnityEditor.EditorPrefs.GetFloat(name, defaultValue);
@@ -231,7 +180,7 @@ namespace Prateek.Editors
             {
                 UnityEditor.EditorPrefs.SetFloat(name, value);
             }
-        #endif //UNITY_EDITOR
+            #endif //UNITY_EDITOR
         }
         #endregion float
         
@@ -243,36 +192,19 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Strings : ValueStorage
+        public class Strings : TypedStorage<string>
         {
-            #region Fields
-            protected string value;
-            protected string defaultValue;
-            #endregion Fields
-        
-            public string Value
-            {
-                get
-                {
-                    TryGetting();
-                    return value;
-                }
-                set
-                {
-                    var doUpdate = this.value != value;
-                    this.value = value;
-                    TrySetting(doUpdate);
-                }
-            }
-        
-            public Strings(string name, string defaultValue) : base(name)
-            {
-                value = defaultValue;
-                this.defaultValue = defaultValue;
-            }
+            //-----------------------------------------------------------------
+            public Strings(string name, string defaultValue) : base(name, defaultValue) { }
         
             //-----------------------------------------------------------------
-        #if UNITY_EDITOR
+            public override bool ShouldSetNewValue(string newValue)
+            {
+                return this.value != newValue;
+            }
+             
+            //-----------------------------------------------------------------
+            #if UNITY_EDITOR
             protected override void GetFromPrefs()
             {
                 value = UnityEditor.EditorPrefs.GetString(name, defaultValue);
@@ -283,7 +215,7 @@ namespace Prateek.Editors
             {
                 UnityEditor.EditorPrefs.SetString(name, value);
             }
-        #endif //UNITY_EDITOR
+            #endif //UNITY_EDITOR
         }
         #endregion string
         

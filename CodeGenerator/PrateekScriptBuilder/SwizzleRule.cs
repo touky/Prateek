@@ -115,7 +115,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region Rule internal
-            protected override void GatherVariants(List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
+            protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 var slots = new int[infoDst.variables.Count];
                 for (int s = 0; s < slots.Length; s++)
@@ -128,7 +128,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            private void GatherVariantsSlots(int s, int[] slots, List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
+            private void GatherVariantsSlots(int s, int[] slots, List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 var varCount = infoSrc.variables.Count + 1;
                 for (int c = 0; c < varCount; c++)
@@ -141,8 +141,8 @@ namespace Prateek.CodeGeneration
                     else
                     {
                         var sn = 0;
-                        var variant = new Variant(string.Empty);
-                        variant.Args += Tag.Code.argsV;
+                        var variant = new FuncVariant(string.Empty, 2);
+                        variant[1] += Tag.Code.argsV;
                         for (int v = 0; v < slots.Length; v++)
                         {
                             var sv = slots[v];
@@ -150,13 +150,13 @@ namespace Prateek.CodeGeneration
                             {
                                 var variable = infoSrc.variables[sv];
                                 variant.Call = variable;
-                                variant.Vars = string.Format(Tag.Code.varsV, variable);
+                                variant[2] = string.Format(Tag.Code.varsV, variable);
                             }
                             else
                             {
                                 variant.Call = Tag.Code.callN;
-                                variant.Args = string.Format(Tag.Code.argsNOpt, data.classDefaultType, sn, data.classDefaultValue);
-                                variant.Vars = string.Format(Tag.Code.varsN, sn);
+                                variant[1] = string.Format(Tag.Code.argsNOpt, data.classDefaultType, sn, data.classDefaultValue);
+                                variant[2] = string.Format(Tag.Code.varsN, sn);
                                 sn++;
                             }
                         }

@@ -153,7 +153,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region Rule internal
-            protected override void GatherVariants(List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
+            protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 variants.Clear();
 
@@ -163,11 +163,11 @@ namespace Prateek.CodeGeneration
                     var content = funcInfo.data;
                     for (int n = 0; n < infoSrc.names.Count; n++)
                     {
-                        var vars = (this[n] + infoSrc.names[n]);
+                        var vars = (Vars[n] + infoSrc.names[n]);
                         content = vars.Apply(content);
                     }
 
-                    var variant = new Variant(content);
+                    var variant = new FuncVariant(content);
                     variants.Add(variant);
                 }
             }

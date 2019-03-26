@@ -117,7 +117,7 @@ namespace Prateek.CodeGeneration
                 public static string codeData = "CODE";
 
                 //-------------------------------------------------------------
-                public enum Content
+                public enum FuncName
                 {
                     FILE_INFO,  //PRATEEK_CODEGEN_FILE_INFO(MyFile, Extension)
                     BLOCK,      //PRATEEK_CODEGEN_BLOCK_[OPERATION](StaticClass)
@@ -136,11 +136,11 @@ namespace Prateek.CodeGeneration
                 public static string dstClass = "DST_CLASS";
 
                 //-------------------------------------------------------------
-                public enum Code
+                public enum VarName
                 {
-                    CALL,    //[OPERATION]_CALL
-                    ARGS,    //[OPERATION]_ARGS
-                    VARS,    //[OPERATION]_VARS
+                    NAMES,      //NAMES_[n]
+                    VARS,       //VARS_[n]
+                    FUNC_RESULT,//FUNC_RESULT_[n]
 
                     MAX
                 }
@@ -158,19 +158,19 @@ namespace Prateek.CodeGeneration
                 public static string Func           { get { return data[6]; } }
 
                 //-------------------------------------------------------------
-                public static string To(Content value) { return Enum.GetNames(typeof(Content))[(int)value]; }
-                public static string To(Code value) { return Enum.GetNames(typeof(Code))[(int)value]; }
+                public static string To(FuncName value) { return Enum.GetNames(typeof(FuncName))[(int)value]; }
+                public static string To(VarName value) { return Enum.GetNames(typeof(VarName))[(int)value]; }
 
                 //-------------------------------------------------------------
                 public static void Init()
                 {
-                    data.Add(string.Format("{0}_{1}", prefix, To(Content.FILE_INFO)));
-                    data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.PREFIX)));
-                    data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.MAIN)));
-                    data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(Content.SUFFIX)));
-                    data.Add(string.Format("{0}_{1}", prefix, To(Content.CLASS)));
-                    data.Add(string.Format("{0}_{1}", prefix, To(Content.DEFAULT)));
-                    data.Add(string.Format("{0}_{1}", prefix, To(Content.FUNC)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(FuncName.FILE_INFO)));
+                    data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.PREFIX)));
+                    data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.MAIN)));
+                    data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.SUFFIX)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(FuncName.CLASS)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(FuncName.DEFAULT)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(FuncName.FUNC)));
                 }
             }
 

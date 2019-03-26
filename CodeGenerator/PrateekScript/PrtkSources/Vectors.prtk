@@ -16,7 +16,7 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
 
         PRATEEK_CODEGEN_CODE_MAIN
         {
-        @public static DST_CLASS SWIZZLE_CALL(this SRC_CLASS SWIZZLE_ARGS) { return new DST_CLASS(SWIZZLE_VARS); }
+        @public static DST_CLASS FUNC_RESULT_0(this SRC_CLASS FUNC_RESULT_1) { return new DST_CLASS(FUNC_RESULT_2); }
         }
         
         PRATEEK_CODEGEN_CODE_SUFFIX
@@ -42,7 +42,7 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
 
         PRATEEK_CODEGEN_CODE_MAIN
         {
-        @public static SRC_CLASS MIXED_CTOR_CALL(MIXED_CTOR_ARGS) { return new SRC_CLASS(MIXED_CTOR_VARS); }
+        @public static SRC_CLASS FUNC_RESULT_0(FUNC_RESULT_1) { return new SRC_CLASS(FUNC_RESULT_2); }
         }
         
         PRATEEK_CODEGEN_CODE_SUFFIX
@@ -85,7 +85,7 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
 
         PRATEEK_CODEGEN_CODE_MAIN
         {
-        @public static SRC_CLASS MIXED_FUNC_CALL(MIXED_FUNC_ARGS) { return MIXED_FUNC_VARS; }
+        @public static SRC_CLASS FUNC_RESULT_0(FUNC_RESULT_1) { return FUNC_RESULT_2; }
         }
         
         PRATEEK_CODEGEN_CODE_SUFFIX
@@ -113,7 +113,7 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
 
         PRATEEK_CODEGEN_CODE_MAIN
         {
-        @public static DST_CLASS SWIZZLE_CALL(this SRC_CLASS SWIZZLE_ARGS) { return new DST_CLASS(SWIZZLE_VARS); }
+        @public static DST_CLASS FUNC_RESULT_0(this SRC_CLASS FUNC_RESULT_1) { return new DST_CLASS(FUNC_RESULT_2); }
         }
         
         PRATEEK_CODEGEN_CODE_SUFFIX
@@ -138,7 +138,7 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
 
         PRATEEK_CODEGEN_CODE_MAIN
         {
-        @public static SRC_CLASS MIXED_CTOR_CALL(MIXED_CTOR_ARGS) { return new SRC_CLASS(MIXED_CTOR_VARS); }
+        @public static SRC_CLASS FUNC_RESULT_0(FUNC_RESULT_1) { return new SRC_CLASS(FUNC_RESULT_2); }
         }
         
         PRATEEK_CODEGEN_CODE_SUFFIX
@@ -173,7 +173,7 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
 
         PRATEEK_CODEGEN_CODE_MAIN
         {
-        @public static SRC_CLASS MIXED_FUNC_CALL(MIXED_FUNC_ARGS) { return MIXED_FUNC_VARS; }
+        @public static SRC_CLASS FUNC_RESULT_0(FUNC_RESULT_1) { return FUNC_RESULT_2; }
         }
         
         PRATEEK_CODEGEN_CODE_SUFFIX

@@ -98,7 +98,8 @@ namespace Prateek.CodeGeneration.Editor
         private CodeBuilder scriptTemplateUpdater = null;
         private CodeBuilder prateekScriptGenerator = null;
         private Prefs.Strings prateekExportDir;
-        private Prefs.ListStrings prateekSourceDir;
+        private Prefs.Strings prateekSourceDir;
+        private Prefs.ListStrings prateekSourceDir0;
         #endregion Fields
 
         //---------------------------------------------------------------------
@@ -174,11 +175,13 @@ namespace Prateek.CodeGeneration.Editor
             }
             if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute"))
             {
+                prateekScriptGenerator.RunInTestMode = true;
                 prateekScriptGenerator.StartWork();
             }
             prateekExportDir.Value = EditorGUILayout.TextField("Export dir", prateekExportDir.Value);
+            prateekSourceDir.Value = EditorGUILayout.TextField("Source dir", prateekSourceDir.Value);
             {
-                var values = prateekSourceDir.data;
+                var values = prateekSourceDir0.data;
                 if (GUI.Button(EditorGUILayout.GetControlRect(), "Add folder"))
                 {
                     values.Add(string.Empty);
@@ -188,7 +191,7 @@ namespace Prateek.CodeGeneration.Editor
                 {
                     values[v] = EditorGUILayout.TextField(values[v]);
                 }
-                prateekSourceDir.data = values;
+                prateekSourceDir0.data = values;
             }
             EditorGUILayout.LabelField("File count: " + prateekScriptGenerator.WorkFileCount);
             using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.MaxHeight(350)))
@@ -216,11 +219,14 @@ namespace Prateek.CodeGeneration.Editor
                 prateekExportDir = Prefs.Get(GetType().Name + ".prateekExportDir", string.Empty);
 
             if (prateekSourceDir == null)
-                prateekSourceDir = Prefs.Get(GetType().Name + ".prateekSourceDir", (List<string>)null);
+                prateekSourceDir = Prefs.Get(GetType().Name + ".prateekSourceDir", string.Empty);
+
+            if (prateekSourceDir0 == null)
+                prateekSourceDir0 = Prefs.Get(GetType().Name + ".prateekSourceDir0", (List<string>)null);
 
             if (prateekScriptGenerator == null)
             {
-                prateekScriptGenerator = Tools.GetPrateekScriptGenerator(prateekExportDir.Value, prateekSourceDir.data);
+                prateekScriptGenerator = Tools.GetPrateekScriptGenerator(prateekExportDir.Value, new List<string>(new string[] { prateekSourceDir.Value }));
                 prateekScriptGenerator.Init();
             }
         }

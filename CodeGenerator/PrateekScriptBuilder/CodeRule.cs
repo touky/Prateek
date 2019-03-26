@@ -103,24 +103,48 @@ namespace Prateek.CodeGeneration
         public abstract class CodeRule : ScriptTemplate.BaseTemplate
     {
             //-----------------------------------------------------------------
-            public struct Variant
+            public struct FuncVariant
             {
                 //-------------------------------------------------------------
-                private string call;
-                private string args;
-                private string vars;
+                private List<string> results;
 
                 //-------------------------------------------------------------
-                public string Call { get { return call; } set { call += value; } }
-                public string Args { get { return args; } set { Set(ref args, value); } }
-                public string Vars { get { return vars; } set { Set(ref vars, value); } }
-
-                //-------------------------------------------------------------
-                public Variant(string value)
+                public string Call { get { return results[0]; } set { results[0] += value; } }
+                public int Count { get { return results.Count; } }
+                public string this[int i]
                 {
-                    call = value;
-                    args = string.Empty;
-                    vars = string.Empty;
+                    get
+                    {
+                        if (i < 0 || i > results.Count)
+                            return string.Empty;
+                        return results[i];
+                    }
+                    set
+                    {
+                        if (i < 0 || i > results.Count)
+                            return;
+                        var result = results[i];
+                        Set(ref result, value);
+                        results[i] = result;
+                    }
+                }
+
+                //-------------------------------------------------------------
+                public FuncVariant(string value) : this(value, 0) { }
+                public FuncVariant(string value, int emptySlot)
+                {
+                    results = new List<string>();
+                    results.Add(value);
+                    while (emptySlot-- > 0)
+                    {
+                        results.Add(string.Empty);
+                    }
+                }
+
+                //-------------------------------------------------------------
+                public void Add(string value)
+                {
+                    results.Add(value);
                 }
 
                 //-------------------------------------------------------------
@@ -129,6 +153,35 @@ namespace Prateek.CodeGeneration
                     if (dst != null && dst.Length > 0)
                         dst += Tag.Code.argVarSeparator;
                     dst += value;
+                }
+            }
+
+            //-----------------------------------------------------------------
+            public struct NumberedVars
+            {
+                //-----------------------------------------------------------------
+                private List<string> datas;
+
+                //-----------------------------------------------------------------
+                public int Count { get { return datas.Count; } }
+                public Utils.SwapInfo this[int i]
+                {
+                    get
+                    {
+                        if (i < 0 || i > datas.Count)
+                            return string.Empty;
+                        return datas[i];
+                    }
+                }
+
+                //-----------------------------------------------------------------
+                public NumberedVars(string root)
+                {
+                    datas = new List<string>();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        datas.Add(root + i);
+                    }
                 }
             }
 
@@ -148,7 +201,9 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             private List<string> data = new List<string>();
-            private List<string> vars = new List<string>();
+            private NumberedVars names;
+            private NumberedVars vars;
+            private NumberedVars funcs;
 
             //-----------------------------------------------------------------
             public string CodeBlock { get { return data[0]; } }
@@ -159,11 +214,12 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public Utils.SwapInfo ClassDst { get { return Tag.Macro.dstClass; } }
             public Utils.SwapInfo ClassSrc { get { return Tag.Macro.srcClass; } }
-            public Utils.SwapInfo CodeCall { get { return DataCall; } }
-            public Utils.SwapInfo CodeArgs { get { return DataArgs; } }
-            public Utils.SwapInfo CodeVars { get { return DataVars; } }
-            public Utils.SwapInfo this[int i] { get { if (i < 0 || i > 9) return string.Empty; return vars[i]; } }
-            public int VarCount { get { return vars.Count; } }
+            //public Utils.SwapInfo CodeCall { get { return DataCall; } }
+            //public Utils.SwapInfo CodeArgs { get { return DataArgs; } }
+            //public Utils.SwapInfo CodeVars { get { return DataVars; } }
+            public NumberedVars Names { get { return names; } }
+            public NumberedVars Vars { get { return vars; } }
+            public NumberedVars Funcs { get { return funcs; } }
 
             //-----------------------------------------------------------------
             protected CodeRule(string extension) : base(extension)
@@ -180,15 +236,14 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             private void Init()
             {
-                data.Add(string.Format("{0}_{1}_{2}", Tag.Macro.prefix, Tag.Macro.To(Tag.Macro.Content.BLOCK), ScopeTag));
-                data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.Code.CALL)));
-                data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.Code.ARGS)));
-                data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.Code.VARS)));
+                data.Add(string.Format("{0}_{1}_{2}", Tag.Macro.prefix, Tag.Macro.To(Tag.Macro.FuncName.BLOCK), ScopeTag));
+                //data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.VarName.CALL)));
+                //data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.VarName.ARGS)));
+                //data.Add(string.Format("{0}_{1}", ScopeTag, Tag.Macro.To(Tag.Macro.VarName.VARS)));
 
-                for (int v = 0; v < 10; v++)
-                {
-                    vars.Add(string.Format("{0}_{1}", Tag.Macro.Code.VARS, v));
-                }
+                names = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.NAMES));
+                vars = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.VARS));
+                funcs = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.FUNC_RESULT));
             }
 
             //-----------------------------------------------------------------
@@ -226,7 +281,7 @@ namespace Prateek.CodeGeneration
             #region CodeRule overridable
             public void Generate(CodeFile.ContentInfos data)
             {
-                var variants = new List<Variant>();
+                var variants = new List<FuncVariant>();
                 var maxSrc = data.classInfos.Count + (GenerateDefault ? 1 : 0);
                 var maxDst = GenMode == GenerationMode.ForeachSrcXDest ? data.classInfos.Count : 1;
                 var infoSrc = new CodeFile.ClassInfos();
@@ -267,9 +322,11 @@ namespace Prateek.CodeGeneration
                         {
                             var variant = variants[v];
                             var code = data.codeMain;
-                            code = (CodeCall + variant.Call).Apply(code);
-                            code = (CodeArgs + variant.Args).Apply(code);
-                            code = (CodeVars + variant.Vars).Apply(code);
+                            for (int r = 0; r < variant.Count; r++)
+                            {
+                                code = (Funcs[r] + variant[r]).Apply(code);
+                            }
+
                             if (GenMode == GenerationMode.ForeachSrcXDest)
                             {
                                 AddCode(code, data, swapSrc, swapDst);
@@ -374,7 +431,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region CodeRule abstract
-            protected abstract void GatherVariants(List<Variant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst);
+            protected abstract void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst);
             #endregion CodeRule abstract
         }
     }

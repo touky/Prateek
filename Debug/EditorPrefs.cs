@@ -114,13 +114,15 @@ namespace Prateek.Editors
             #endregion Properties
 
             //-----------------------------------------------------------------
-            #region Properties
+            #region CTor
             protected ValueStorage(string name)
             {
                 this.name = name;
             }
+            #endregion CTor
 
             //-----------------------------------------------------------------
+            #region Get/Set
             protected void TryGetting()
             {
 #if UNITY_EDITOR
@@ -141,14 +143,63 @@ namespace Prateek.Editors
                 }
 #endif //UNITY_EDITOR
             }
+            #endregion Get/Set
 
             //-----------------------------------------------------------------
+            #region Prefs
 #if UNITY_EDITOR
-            public virtual void ClearFromPrefs() { }
-            protected virtual void GetFromPrefs() { }
-            protected virtual void SetToPrefs() { }
+            public void ClearFromPrefs()
+            {
+                UnityEditor.EditorPrefs.DeleteKey(name);
+            }
+
+            //-----------------------------------------------------------------
+            protected abstract void GetFromPrefs();
+            protected abstract void SetToPrefs();
 #endif //UNITY_EDITOR
-            #endregion ctor
+            #endregion Prefs
+        }
+
+        //---------------------------------------------------------------------
+        public abstract class TypedStorage<T> : ValueStorage
+        {
+            //-----------------------------------------------------------------
+            #region Fields
+            protected T value;
+            protected T defaultValue;
+            #endregion Fields
+
+            //-----------------------------------------------------------------
+            #region Properties
+            public T Value
+            {
+                get
+                {
+                    TryGetting();
+                    return value;
+                }
+                set
+                {
+                    var doUpdate = ShouldSetNewValue(value);
+                    this.value = value;
+                    TrySetting(doUpdate);
+                }
+            }
+            #endregion Properties
+
+            //-----------------------------------------------------------------
+            #region Behaviour
+            public TypedStorage(string name, T defaultValue) : base(name)
+            {
+                value = defaultValue;
+                this.defaultValue = defaultValue;
+
+                TryGetting();
+            }
+
+            //-----------------------------------------------------------------
+            public abstract bool ShouldSetNewValue(T newValue);
+            #endregion Behaviour
         }
 
         //---------------------------------------------------------------------
@@ -213,6 +264,10 @@ namespace Prateek.Editors
                 count = new Ints(base.name + ".Count", default_value == null ? 0 : default_value.Count);
                 data = default_value;
             }
+
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
         }
         #endregion List<string>
 
@@ -250,6 +305,10 @@ namespace Prateek.Editors
                 m_x = new Floats(name + ".x", default_value.x);
                 m_y = new Floats(name + ".y", default_value.y);
             }
+
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
         }
         #endregion Vector2
 
@@ -290,6 +349,10 @@ namespace Prateek.Editors
                 m_y = new Floats(name + ".y", default_value.y);
                 m_z = new Floats(name + ".z", default_value.z);
             }
+
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
         }
         #endregion Vector3
 
@@ -333,6 +396,10 @@ namespace Prateek.Editors
                 m_z = new Floats(name + ".z", default_value.z);
                 m_w = new Floats(name + ".w", default_value.w);
             }
+
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
         }
         #endregion Vector4
 
@@ -376,6 +443,10 @@ namespace Prateek.Editors
                 m_width = new Floats(name + ".width", default_value.width);
                 m_height = new Floats(name + ".heigth", default_value.height);
             }
+
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
         }
         #endregion Rect
 
@@ -413,6 +484,10 @@ namespace Prateek.Editors
                 m_0f = new Ints(name + ".0f", (int)((default_value << 32) >> 32));
                 m_f0 = new Ints(name + ".f0", (int)(default_value >> 32));
             }
+
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
         }
         #endregion ULong
 
@@ -515,6 +590,10 @@ namespace Prateek.Editors
             {
                 Resize(Helpers.Mask128.MAX_SIZE);
             }
+
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
         }
 
         //---------------------------------------------------------------------
@@ -548,6 +627,10 @@ namespace Prateek.Editors
             {
                 Resize(Helpers.Mask256.MAX_SIZE);
             }
+
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
         }
 
         //---------------------------------------------------------------------
@@ -581,6 +664,10 @@ namespace Prateek.Editors
             {
                 Resize(Helpers.Mask512.MAX_SIZE);
             }
+
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
         }
         #endregion Mask
     }
