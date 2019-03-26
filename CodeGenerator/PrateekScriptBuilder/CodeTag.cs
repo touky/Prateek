@@ -86,6 +86,16 @@ namespace Prateek.CodeGeneration
     //-------------------------------------------------------------------------
     public partial class CodeBuilder
     {
+        //-------------------------------------------------------------------------
+        [InitializeOnLoad]
+        class TagLoader
+        {
+            static TagLoader()
+            {
+                CodeBuilder.Tag.Macro.Init();
+            }
+        }
+
         //---------------------------------------------------------------------
         public static class Tag
         {

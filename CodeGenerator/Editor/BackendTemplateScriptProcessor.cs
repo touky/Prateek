@@ -84,23 +84,5 @@ using Prateek.CodeGeneration;
 
 namespace Prateek.CodeGeneration
 {
-    //-------------------------------------------------------------------------
-    internal sealed class ScriptKeywordProcessor : UnityEditor.AssetModificationProcessor
-    {
-        //---------------------------------------------------------------------
-        public static void OnWillCreateAsset(string path)
-        {
-            path = path.Replace(".meta", string.Empty);
-            int index = path.LastIndexOf(Strings.Separator.FileExtension.C());
-            if (index < 0)
-                return;
 
-            var builder = new CodeBuilder();
-
-            builder.AddFile(new CodeBuilder.FileData(path, string.Empty));
-
-            builder.Init();
-            builder.StartWork();
-        }
-    }
 }

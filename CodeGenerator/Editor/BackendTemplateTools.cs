@@ -82,27 +82,57 @@ using Prateek.IO;
 using Prateek.CodeGeneration;
 #endregion File namespaces
 
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGeneration.Editor
 {
     //-------------------------------------------------------------------------
-    public static partial class TemplateTools
+    public static class Tools
     {
         //---------------------------------------------------------------------
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
-        [MenuItem("Prateek/Internal/Update prateek templates")]
-        private static void UpdateTemplate()
+        internal sealed class ScriptKeywordProcessor : UnityEditor.AssetModificationProcessor
+        {
+            //---------------------------------------------------------------------
+            public static void OnWillCreateAsset(string path)
+            {
+                path = path.Replace(".meta", string.Empty);
+                int index = path.LastIndexOf(Strings.Separator.FileExtension.C());
+                if (index < 0)
+                    return;
+
+                var builder = new CodeBuilder();
+
+                builder.AddFile(new CodeBuilder.FileData(path, string.Empty));
+
+                builder.Init();
+                builder.StartWork();
+            }
+        }
+
+        //-------------------------------------------------------------------------
+        public static CodeBuilder GetScriptTemplateUpdater()
         {
             var path = Application.dataPath + "/Scripts";
             if (!Directory.Exists(path))
-                return;
+                return null;
 
             var builder = new CodeBuilder();
 
             builder.AddDirectory(path);
 
             builder.Operations = CodeBuilder.OperationApplied.ALL & ~CodeBuilder.OperationApplied.ApplyScriptTemplate;
-            builder.Init();
-            builder.StartWork();
+
+            return builder;
+        }
+
+        //---------------------------------------------------------------------
+        public static CodeBuilder GetPrateekScriptGenerator(string destinationDirectory, List<string> sourceDirectories)
+        {
+            var builder = new PrateekScriptBuilder();
+
+            builder.AddDirectories(sourceDirectories);
+            builder.DestinationDirectory = destinationDirectory;
+
+            return builder;
         }
 #endif //PRATEEK_ALLOW_INTERNAL_TOOLS
     }

@@ -133,10 +133,10 @@ namespace Prateek.CodeGeneration
             for (int t = 0; t < templates.Count; t++)
             {
                 var template = templates[t];
-                if (template.Path != filePath)
+                if (template.FullName != filePath)
                     continue;
 
-                return template.Match(extension, content);
+                return template.Match(template.FileName, extension, content);
             }
             return false;
         }

@@ -109,10 +109,18 @@ namespace Prateek.IO
         }
 
         //---------------------------------------------------------------------
-        public static bool GatherFilesAt(string path, List<string> files, string matchPattern, bool recursive = false)
+        public static bool GatherFilesAt(string path, List<string> files, string matchPattern)
+        { return GatherFilesAt(path, files, matchPattern, false, string.Empty); }
+        public static bool GatherFilesAt(string path, List<string> files, string matchPattern, bool recursive)
+        { return GatherFilesAt(path, files, matchPattern, recursive, string.Empty); }
+        public static bool GatherFilesAt(string path, List<string> files, string matchPattern, bool recursive, string ignorePattern)
         {
             if (!Directory.Exists(path))
                 return false;
+
+            var ignoreMatch = "(.git)";
+            if (ignorePattern != string.Empty)
+                ignoreMatch = String.Format("(({0})|({1}))", ignoreMatch, ignorePattern);
 
             var directories = new List<string>();
             directories.Add(path);
@@ -122,16 +130,26 @@ namespace Prateek.IO
                 {
                     if (recursive)
                     {
-                        directories.AddRange(Directory.GetDirectories(directory));
+                        var dirs = Directory.GetDirectories(directory);
+                        for (int d = 0; d < dirs.Length; d++)
+                        {
+                            if (Regex.Match(dirs[d], ignoreMatch).Success)
+                                continue;
+
+                            directories.Add(dirs[d]);
+                        }
                     }
 
                     var foundFiles = Directory.GetFiles(directory);
                     for (int f = 0; f < foundFiles.Length; f++)
                     {
-                        if (Regex.Match(foundFiles[f], matchPattern).Success)
-                        {
-                            files.Add(foundFiles[f]);
-                        }
+                        if (Regex.Match(foundFiles[f], ignoreMatch).Success)
+                            continue;
+
+                        if (!Regex.Match(foundFiles[f], matchPattern).Success)
+                            continue;
+
+                        files.Add(foundFiles[f]);
                     }
                 }
                 directories.RemoveAt(0);

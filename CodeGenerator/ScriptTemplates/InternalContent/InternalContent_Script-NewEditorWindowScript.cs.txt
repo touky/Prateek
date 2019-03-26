@@ -1,0 +1,80 @@
+#PRATEEK_COPYRIGHT#
+
+#PRATEEK_CSHARP_NAMESPACE#
+
+//-----------------------------------------------------------------------------
+#region File namespaces
+#endregion File namespaces
+
+//-----------------------------------------------------------------------------
+namespace Editor
+{
+    //-------------------------------------------------------------------------
+    public partial class #SCRIPTNAME# : EditorWindow
+    {
+        //---------------------------------------------------------------------
+        #region Declarations
+        #endregion Declarations
+
+        //---------------------------------------------------------------------
+        #region Settings
+        #endregion Settings
+
+        //---------------------------------------------------------------------
+        #region Fields
+        #endregion Fields
+
+        //---------------------------------------------------------------------
+        #region Properties
+        #endregion Properties
+
+        //---------------------------------------------------------------------
+        #region Unity Defaults
+        [MenuItem("Window/#SCRIPTNAME#")]
+        static void CreateWindow()
+        {
+            var window = (#SCRIPTNAME#)EditorWindow.GetWindow(typeof(#SCRIPTNAME#));
+            window.Show();
+        }
+
+        //---------------------------------------------------------------------
+        private void Awake() { }
+
+        //---------------------------------------------------------------------
+        private void OnDestroy() { }
+
+        //---------------------------------------------------------------------
+        //-- Keyboard focus --
+        private void OnFocus() { }
+
+        //---------------------------------------------------------------------
+        private void OnLostFocus() { }
+
+        //---------------------------------------------------------------------
+        //-- Sent when an object or group of objects in the hierarchy changes -
+        private void OnHierarchyChange() { }
+
+        //---------------------------------------------------------------------
+        //-- Sent whenever the state of the project changes -
+        private void OnProjectChange() { }
+
+        //---------------------------------------------------------------------
+        //-- Called whenever the selection has changed -
+        private void OnSelectionChange() { }
+
+        //---------------------------------------------------------------------
+        // Called at 10 frames per second
+        private void OnInspectorUpdate() { }
+
+        //---------------------------------------------------------------------
+        private void Update() { }
+
+        //---------------------------------------------------------------------
+        private void OnGUI() { }
+        #endregion Unity Defaults
+
+        //---------------------------------------------------------------------
+        #region Behaviour
+        #endregion Behaviour
+    }
+}

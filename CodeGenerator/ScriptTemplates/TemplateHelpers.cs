@@ -88,13 +88,16 @@ namespace Prateek.CodeGeneration
     {
         //---------------------------------------------------------------------
         public static ScriptTemplate.Ignorable.BuildResult GatherValidIgnorables(string fileContent, string fileExtension)
+        { return GatherValidIgnorables(String.Empty, fileContent, fileExtension); }
+        //---------------------------------------------------------------------
+        public static ScriptTemplate.Ignorable.BuildResult GatherValidIgnorables(string fileName, string fileContent, string fileExtension)
         {
             var results = default(ScriptTemplate.Ignorable.BuildResult);
             var ignorables = ScriptTemplate.Ignorables;
             for (int i = 0; i < ignorables.Count; i++)
             {
                 var ignorable = ignorables[i];
-                if (!ignorable.Match(fileExtension, fileContent))
+                if (!ignorable.Match(fileExtension, fileExtension, fileContent))
                     continue;
 
                 var result = ignorable.Build(fileContent);
@@ -110,6 +113,9 @@ namespace Prateek.CodeGeneration
 
         //---------------------------------------------------------------------
         public static void ApplyKeywords(ref string fileContent, string fileExtension)
+        { ApplyKeywords(ref fileContent, string.Empty, fileExtension); }
+        //---------------------------------------------------------------------
+        public static void ApplyKeywords(ref string fileContent, string fileName, string fileExtension)
         {
             var keywords = ScriptTemplate.Keywords;
             var doAnotherPass = true;
@@ -122,7 +128,7 @@ namespace Prateek.CodeGeneration
                 {
                     var keyword = keywords[r];
                     var tag = keyword.Tag;
-                    if (!keyword.Match(fileExtension, fileContent))
+                    if (!keyword.Match(fileName, fileExtension, fileContent))
                         continue;
 
                     var start = 0;

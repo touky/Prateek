@@ -1,19 +1,4 @@
-// -BEGIN_PRATEEK_COPYRIGHT-
-//
-//  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
-//
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
-//
-//  Prateek is free software. It comes without any warranty, to
-//  the extent permitted by applicable law. You can redistribute it
-//  and/or modify it under the terms of the Do What the Fuck You Want
-//  to Public License, Version 2, as published by the WTFPL Task Force.
-//  See http://www.wtfpl.net/ for more details.
-//
-// -END_PRATEEK_COPYRIGHT-
 
-// -BEGIN_PRATEEK_CSHARP_NAMESPACE-
 //
 #region C# Prateek Namespaces
 #if UNITY_EDITOR && !PRATEEK_DEBUG
@@ -71,16 +56,3 @@ using Prateek.Debug;
 
 #endregion C# Prateek Namespaces
 //
-// -END_PRATEEK_CSHARP_NAMESPACE-
-
-//-----------------------------------------------------------------------------
-#region File namespaces
-using System.IO;
-using Prateek.IO;
-using System.Text.RegularExpressions;
-#endregion File namespaces
-
-//-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
-{
-}

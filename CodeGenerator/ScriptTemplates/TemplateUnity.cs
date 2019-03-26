@@ -116,11 +116,13 @@ namespace Prateek.CodeGeneration
         {
             //-----------------------------------------------------------------
             protected static string[] tags = new string[2] { "#SCRIPTNAME#", "#NOTRIM#" };
-            protected string path;
+            protected string fullName;
+            protected string fileName;
             protected List<string> parts;
 
             //-----------------------------------------------------------------
-            public string Path { get { return path; } }
+            public string FullName { get { return fullName; } }
+            public string FileName { get { return fileName; } }
 
             //-----------------------------------------------------------------
             public UnityFile(string extension) : base(extension) { }
@@ -132,9 +134,9 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public override bool Match(string extension, string content)
+            public override bool Match(string fileName, string extension, string content)
             {
-                if (!base.Match(extension, content))
+                if (!base.Match(fileName, extension, content))
                     return false;
 
                 var start = 0;
@@ -156,20 +158,21 @@ namespace Prateek.CodeGeneration
                 if (!File.Exists(path))
                     return this;
 
-                var index = path.LastIndexOf(Strings.Separator.DirSlash.C());
-                if (index < 0)
+                var lastSlash = path.LastIndexOf(Strings.Separator.DirSlash.C());
+                if (lastSlash < 0)
                     return this;
 
-                var i0 = path.LastIndexOf(Strings.Separator.FileExtension.C());
-                if (i0 < 0)
+                var ext0 = path.LastIndexOf(Strings.Separator.FileExtension.C());
+                if (ext0 < 0)
                     return this;
 
-                var i1 = path.LastIndexOf(Strings.Separator.FileExtension.C(), i0 - 1);
-                if (i1 < 0)
+                var ext1 = path.LastIndexOf(Strings.Separator.FileExtension.C(), ext0 - 1);
+                if (ext1 < 0)
                     return this;
 
-                this.path = path.Substring(index + 1, path.Length - (index + 1));
-                this.extension = path.Substring(i1 + 1, (i0 - i1) - 1);
+                this.fullName = path.Substring(lastSlash + 1, path.Length - (lastSlash + 1));
+                this.fileName = path.Substring(0, ext1);
+                this.extension = path.Substring(ext1 + 1, (ext0 - ext1) - 1);
 
                 SetContent(FileHelpers.ReadAllTextCleaned(path));
                 parts = new List<string>(content.Split(tags, StringSplitOptions.RemoveEmptyEntries));

@@ -153,6 +153,14 @@ namespace Prateek.CodeGeneration
         }
 
         //---------------------------------------------------------------------
+        public struct FileSources
+        {
+            public string sourceDir;
+            public List<string> files;
+            public FileData data;
+        }
+
+        //---------------------------------------------------------------------
         [Flags]
         public enum OperationApplied
         {
@@ -192,6 +200,9 @@ namespace Prateek.CodeGeneration
         //---------------------------------------------------------------------
         #region Fields
         private OperationApplied operations = OperationApplied.ALL;
+        private List<string> dataDirectories = new List<string>();
+        private List<FileSources> dataFiles = new List<FileSources>();
+
         private List<string> workDirectories = new List<string>();
         private List<FileData> workFiles = new List<FileData>();
         #endregion Fields
@@ -202,6 +213,17 @@ namespace Prateek.CodeGeneration
         public OperationApplied Operations { get { return operations; } set { operations = value; } }
         protected virtual string SearchPattern { get { return FileHelpers.BuildExtensionMatch(ScriptTemplate.Keywords.List); } private set { } }
         public bool RunInTestMode { get { return runInTestMode; } set { runInTestMode = value; } }
+
+        public int WorkFileCount { get { return workFiles.Count; } }
+        public FileData this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= WorkFileCount)
+                    return new FileData();
+                return workFiles[index];
+            }
+        }
         #endregion Properties
 
         //---------------------------------------------------------------------
@@ -210,35 +232,43 @@ namespace Prateek.CodeGeneration
         {
             if (destinationDirectory == string.Empty)
                 destinationDirectory = path;
-            workDirectories.Add(path);
+            dataDirectories.Add(path);
         }
-        public void AddDirectories(params string[] paths) { workDirectories.AddRange(paths); }
-        public void AddDirectories(List<string> paths) { workDirectories.AddRange(paths); }
+        public void AddDirectories(params string[] paths) { dataDirectories.AddRange(paths); }
+        public void AddDirectories(List<string> paths) { dataDirectories.AddRange(paths); }
 
         //---------------------------------------------------------------------
         public void AddFiles(string sourceDir, params string[] files) { AddFiles(sourceDir, new List<string>(files)); }
-        public void AddFiles(string sourceDir, List<string> files)
+        public void AddFiles(string sourceDir, List<string> files) { dataFiles.Add(new FileSources() { sourceDir = sourceDir, files = files }); }
+        public void AddFile(FileData fileData) { dataFiles.Add(new FileSources() { data = fileData }); }
+
+        //---------------------------------------------------------------------
+        private void AddWorkFiles(FileSources source)
         {
-            for (int f = 0; f < files.Count; f++)
+            if (source.files == null)
             {
-                var file = files[f];
+                workFiles.Add(source.data);
+                return;
+            }
+
+            for (int f = 0; f < source.files.Count; f++)
+            {
+                var file = source.files[f];
                 if (workFiles.FindIndex((x) => { return x.source.absPath == file; }) != -1)
                     continue;
 
-                string rootPath = ((operations & OperationApplied.RelativeDestination) != 0) ? sourceDir : string.Empty;
-                AddFile(new FileData(file, rootPath));
+                string rootPath = ((operations & OperationApplied.RelativeDestination) != 0) ? source.sourceDir : string.Empty;
+                workFiles.Add(new FileData(file, rootPath));
             }
-        }
-
-        //---------------------------------------------------------------------
-        public void AddFile(FileData fileData)
-        {
-            workFiles.Add(fileData);
         }
 
         //---------------------------------------------------------------------
         public void Init()
         {
+            workDirectories.Clear();
+            workFiles.Clear();
+
+            workDirectories.AddRange(dataDirectories);
             workDirectories.AddRange(sourceDirectories);
 
             var files = new List<string>();
@@ -248,15 +278,20 @@ namespace Prateek.CodeGeneration
                 if (dir == string.Empty)
                     continue;
 
-                if (!FileHelpers.GatherFilesAt(dir, files, SearchPattern, true))
+                if (!FileHelpers.GatherFilesAt(dir, files, SearchPattern, true, "(External)|((InternalContent_).*(cs)$)"))
                     continue;
 
-                AddFiles(dir, files);
+                AddWorkFiles(new FileSources() { sourceDir = dir, files = files });
 
                 files.Clear();
             }
 
-            AddFiles(string.Empty, sourceFiles);
+            for (int d = 0; d < dataFiles.Count; d++)
+            {
+                AddWorkFiles(dataFiles[d]);
+            }
+
+            AddWorkFiles(new FileSources() { sourceDir = string.Empty, files = sourceFiles });
         }
 
         //---------------------------------------------------------------------
@@ -355,7 +390,7 @@ namespace Prateek.CodeGeneration
             for (int r = 0; r < scripts.Count; r++)
             {
                 var script = scripts[r];
-                if (script.Match(fileData.source.extension, fileData.source.content))
+                if (script.Match(fileData.source.name, fileData.source.extension, fileData.source.content))
                 {
                     content = script.Content.CleanText();
                     extension = script.ExportExtension;
@@ -394,7 +429,7 @@ namespace Prateek.CodeGeneration
             for (int r = 0; r < keywords.Count; r++)
             {
                 var keyword = keywords[r];
-                if (!keyword.Match(fileData.destination.extension, fileData.destination.content))
+                if (!keyword.Match(fileData.destination.name, fileData.destination.extension, fileData.destination.content))
                     continue;
 
                 if (keyword.Mode == ScriptTemplate.KeywordMode.KeywordOnly)

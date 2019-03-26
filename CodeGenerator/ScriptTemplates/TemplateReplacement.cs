@@ -111,7 +111,16 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public virtual bool Match(string extension, string content)
+            public virtual BaseTemplate SetFileContent(string filePath)
+            {
+                var files = new List<string>();
+                if (!FileHelpers.GatherFilesAt(Application.dataPath, files, "(" + filePath + ")$", true))
+                    return this;
+                return SetContent(FileHelpers.ReadAllTextCleaned(files[0]));
+            }
+
+            //-----------------------------------------------------------------
+            public virtual bool Match(string fileName, string extension, string content)
             {
                 if (this.extension == string.Empty || this.extension == extension)
                     return true;

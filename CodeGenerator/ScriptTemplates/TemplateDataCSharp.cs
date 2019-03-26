@@ -90,126 +90,20 @@ namespace Prateek.CodeGeneration
         static CSharpScriptLoader()
         {
             NewScript("cs")
+            .SetEndsWith("EditorWindow")
             .SetTemplateFile("81-C# Script-NewBehaviourScript.cs.txt")
-            .SetContent(
-@"#PRATEEK_COPYRIGHT#
+            .SetFileContent("InternalContent_Script-NewEditorWindowScript.cs.txt")
+            .Commit();
 
-#PRATEEK_CSHARP_NAMESPACE#
-
-//-----------------------------------------------------------------------------
-#region File namespaces
-#endregion File namespaces
-
-//-----------------------------------------------------------------------------
-namespace Gameplay
-{
-    //-------------------------------------------------------------------------
-    public partial class #SCRIPTNAME# : BaseBehaviour
-    {
-        //---------------------------------------------------------------------
-        #region Declarations
-        #endregion Declarations
-
-        //---------------------------------------------------------------------
-        #region Settings
-        #endregion Settings
-
-        //---------------------------------------------------------------------
-        #region Fields
-        #endregion Fields
-
-        //---------------------------------------------------------------------
-        #region Properties
-        #endregion Properties
-
-        //---------------------------------------------------------------------
-        #region Unity Defaults
-        private void Awake() { }
-
-        //---------------------------------------------------------------------
-        private void OnDestroy() { }
-
-        //---------------------------------------------------------------------
-        private void OnEnable() { }
-
-        //---------------------------------------------------------------------
-        private void OnDisable() { }
-
-        //---------------------------------------------------------------------
-        private void Start() { }
-
-        //---------------------------------------------------------------------
-        private void Update() { }
-        #endregion Unity Defaults
-
-        //---------------------------------------------------------------------
-        #region Behaviour
-        #endregion Behaviour
-    }
-}
-").Commit();
+            NewScript("cs")
+            .SetTemplateFile("81-C# Script-NewBehaviourScript.cs.txt")
+            .SetFileContent("InternalContent_Script-NewBehaviourScript.cs.txt")
+            .Commit();
 
             NewKeyword("cs")
-                .SetTag("PRATEEK_CSHARP_NAMESPACE", KeywordMode.ZoneDelimiter)
-                .SetContent(@"
-//
-#region C# Prateek Namespaces
-#if UNITY_EDITOR && !PRATEEK_DEBUG
-#define PRATEEK_DEBUG
-#endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
-#region System
-using System;
-using System.Collections;
-using System.Collections.Generic;
-#endregion System
-
-#region Unity
-using Unity.Jobs;
-using Unity.Collections;
-
-#region Engine
-using UnityEngine;
-using UnityEngine.Jobs;
-using UnityEngine.Serialization;
-
-#if UNITY_PROFILING
-using UnityEngine.Profiling;
-#endif //UNITY_PROFILING
-#endregion Engine
-
-#region Editor
-#if UNITY_EDITOR
-using UnityEditor;
-#endif //UNITY_EDITOR
-#endregion Editor
-#endregion Unity
-
-#region Prateek
-using Prateek;
-using Prateek.Base;
-using Prateek.Extensions;
-using Prateek.Helpers;
-using Prateek.Attributes;
-
-#region Using static
-using static Prateek.ShaderTo.CSharp;
-#endregion Using static
-
-#region Editor
-#if UNITY_EDITOR
-using Prateek.CodeGeneration;
-#endif //UNITY_EDITOR
-#endregion Editor
-
-#if PRATEEK_DEBUGS
-using Prateek.Debug;
-#endif //PRATEEK_DEBUG
-#endregion Prateek
-
-#endregion C# Prateek Namespaces
-//
-").Commit();
+            .SetTag("PRATEEK_CSHARP_NAMESPACE", KeywordMode.ZoneDelimiter)
+            .SetFileContent("InternalContent_PRATEEK_CSHARP_NAMESPACE.cs")
+            .Commit();
         }
     }
 }

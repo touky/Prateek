@@ -143,6 +143,7 @@ namespace Prateek.Editors
 
             //-----------------------------------------------------------------
 #if UNITY_EDITOR
+            public virtual void ClearFromPrefs() { }
             protected virtual void GetFromPrefs() { }
             protected virtual void SetToPrefs() { }
 #endif //UNITY_EDITOR
@@ -397,6 +398,71 @@ namespace Prateek.Editors
 #endif //UNITY_EDITOR
         }
         #endregion String
+
+        //---------------------------------------------------------------------
+        #region List<string>
+        public static ListStrings Get(string name, List<string> default_value)
+        {
+            return new ListStrings(name, default_value);
+        }
+
+        //---------------------------------------------------------------------
+        public class ListStrings : ValueStorage
+        {
+            #region Fields
+            protected Ints count;
+            protected List<Strings> strings = new List<Strings>();
+            protected List<string> values = new List<string>();
+            #endregion Fields
+
+            public List<string> data
+            {
+                get
+                {
+                    return values;
+                }
+                set
+                {
+                    var valueCount = value == null ? 0 : value.Count;
+                    if (valueCount != strings.Count)
+                    {
+                        while (strings.Count > valueCount)
+                        {
+                            var last = strings.Last() as ValueStorage;
+                            last.ClearFromPrefs();
+                            strings.RemoveLast();
+                        }
+
+                        while (strings.Count < valueCount)
+                        {
+                            strings.Add(new Strings(m_name + "[" + strings.Count + "]", value[strings.Count]));
+                        }
+                    }
+
+                    if (value != null)
+                    {
+                        for (int v = 0; v < value.Count; v++)
+                        {
+                            strings[v].Value = value[v];
+                        }
+                        values = value;
+                    }
+                    else
+                    {
+                        values.Clear();
+                    }
+                }
+            }
+
+            public ListStrings(string name, List<string> default_value)
+                : base(name)
+            {
+                this.m_name = name;
+                count = new Ints(m_name + ".Count", default_value == null ? 0 : default_value.Count);
+                data = default_value;
+            }
+        }
+        #endregion List<string>
 
         //---------------------------------------------------------------------
         #region Vector2

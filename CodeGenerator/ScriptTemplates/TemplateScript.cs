@@ -97,6 +97,7 @@ namespace Prateek.CodeGeneration
         public class ScriptFile : BaseTemplate
         {
             //-----------------------------------------------------------------
+            private string nameEndsWith = string.Empty;
             private string exportExtension = string.Empty;
             private string templateFile = string.Empty;
 
@@ -107,6 +108,13 @@ namespace Prateek.CodeGeneration
             public ScriptFile(string extension, string exportExtension) : base(extension)
             {
                 this.exportExtension = exportExtension;
+            }
+
+            //-----------------------------------------------------------------
+            public ScriptFile SetEndsWith(string endsWith)
+            {
+                this.nameEndsWith = endsWith;
+                return this;
             }
 
             //-----------------------------------------------------------------
@@ -123,12 +131,15 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public override bool Match(string extension, string content)
+            public override bool Match(string fileName, string extension, string content)
             {
-                if (!base.Match(extension, content))
+                if (!base.Match(fileName, extension, content))
                     return false;
 
 #if UNITY_EDITOR
+                if (nameEndsWith != string.Empty && !fileName.EndsWith(nameEndsWith))
+                    return false;
+
                 if (templateFile != string.Empty)
                     return MatchTemplate(templateFile, extension, content);
                 return true;
