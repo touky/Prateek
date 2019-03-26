@@ -116,6 +116,7 @@ namespace Prateek.CodeGeneration
 
             var analyzer = new Analyzer();
             var activeCodeFile = (CodeFile)null;
+            var activeScope = string.Empty;
             var codeFiles = new List<CodeFile>();
             var codeDepth = 0;
 
@@ -126,9 +127,10 @@ namespace Prateek.CodeGeneration
             var data = String.Empty;
             while (analyzer.ShouldContinue)
             {
+                activeScope = analyzer.Scope;
                 if (analyzer.FindKeyword(ref keyword))
                 {
-                    var result = CheckGenericData(ref codeDepth, keyword, analyzer, ref activeCodeFile, codeFiles, args);
+                    var result = CheckGenericData(activeScope, keyword, analyzer, ref activeCodeFile, codeFiles, args);
                     if (result < 1)
                     {
                         if (result < 0)
@@ -144,22 +146,20 @@ namespace Prateek.CodeGeneration
                             if (!activeCodeFile.AllowRule(rule))
                                 continue;
 
-                            var setup = rule.GetKeyRule(keyword, codeDepth);
-                            if (setup.usage != Utils.KeyRule.Usage.Match)
+                            var keyRule = rule.GetKeyRule(keyword, activeScope);
+                            if (keyRule.usage != Utils.KeyRule.Usage.Match)
                                 continue;
 
-                            if (!analyzer.FindArgs(args, setup))
+                            if (!analyzer.FindArgs(args, keyRule))
                                 return (BuildResult)BuildResult.ValueType.PrateekScriptArgNotFound + keyword;
 
-                            if (!analyzer.FindData(ref data, setup))
+                            if (!analyzer.FindData(ref data, keyRule))
                                 return (BuildResult)BuildResult.ValueType.PrateekScriptDataNotFound + keyword;
 
-                            if (!rule.TreatData(activeCodeFile, setup, args, data))
+                            if (!rule.RetrieveRuleContent(activeCodeFile, keyRule, args, data))
                                 return (BuildResult)BuildResult.ValueType.PrateekScriptDataNotTreated + keyword;
 
                             foundMatch = true;
-                            if (setup.needOpenScope)
-                                codeDepth++;
                             break;
                         }
 
@@ -252,11 +252,11 @@ namespace Prateek.CodeGeneration
         }
 
         //---------------------------------------------------------------------
-        private int CheckGenericData(ref int codeDepth, string keyword, Analyzer analyzer, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
+        private int CheckGenericData(string scope, string keyword, Analyzer analyzer, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
         {
             if (keyword == Tag.Macro.FileInfo)
             {
-                if (codeDepth != 0)
+                if (scope != string.Empty)
                     return -1;
 
                 var keyRule = new Utils.KeyRule(keyword, true) { args = 2, needOpenScope = true };
@@ -269,9 +269,6 @@ namespace Prateek.CodeGeneration
                     activeCodeFile = new CodeFile() { fileName = args[0], fileExtension = args[1] };
                     codeFiles.Add(activeCodeFile);
                 }
-
-                codeDepth++;
-
                 return 0;
             }
 

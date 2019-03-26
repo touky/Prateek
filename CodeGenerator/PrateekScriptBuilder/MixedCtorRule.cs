@@ -114,44 +114,10 @@ namespace Prateek.CodeGeneration
             public MixedCTorCodeRule(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
-            #region CodeRule override
-            public override Utils.KeyRule GetKeyRule(string keyword, int codeDepth)
-            {
-                if (keyword == Tag.Macro.OperationClass)
-                {
-                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = new Utils.KeyRule.ArgRange(2, -1) };
-                }
-                else
-                {
-                    return base.GetKeyRule(keyword, codeDepth);
-                }
-            }
-
-            //-----------------------------------------------------------------
-            protected override bool DoTreatData(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
-            {
-                if (keyRule.key == Tag.Macro.OperationClass)
-                {
-                    activeData.classInfos.Add(new CodeFile.ClassInfos()
-                    {
-                        name = args[0],
-                        synonyms = args.GetRange(1, 1),
-                        variables = args.GetRange(2, args.Count - 2)
-                    });
-                }
-                else
-                {
-                    return base.DoTreatData(activeData, keyRule, args, data);
-                }
-                return true;
-            }
-            #endregion CodeRule override
-
-            //-----------------------------------------------------------------
             #region Rule internal
             protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
-                var slots = new int[infoSrc.variables.Count];
+                var slots = new int[infoSrc.VarCount];
                 for (int s = 0; s < slots.Length; s++)
                 {
                     slots[s] = 0;
@@ -161,9 +127,9 @@ namespace Prateek.CodeGeneration
                 GatherVariants(0, slots, slots.Length, variants, data, infoSrc);
 
                 //Add Default vec(f)
-                var variant = new FuncVariant(infoSrc.synonyms[0], 2);
+                var variant = new FuncVariant(infoSrc.names[0], 2);
                 variant[1] = string.Format(Tag.Code.argsN, data.classDefaultType, 0);
-                for (int v = 0; v < infoSrc.variables.Count; v++)
+                for (int v = 0; v < infoSrc.VarCount; v++)
                 {
                     variant[2] = string.Format(Tag.Code.varsN, 0);
                 }
@@ -176,7 +142,7 @@ namespace Prateek.CodeGeneration
                 var classCount = data.classInfos.Count + 1;
                 for (int c = 0; c < classCount; c++)
                 {
-                    var varCount = c == 0 ? 1 : data.classInfos[c - 1].variables.Count;
+                    var varCount = c == 0 ? 1 : data.classInfos[c - 1].VarCount;
                     slots[s] = c;
                     if (count - varCount > 0)
                     {
@@ -186,7 +152,7 @@ namespace Prateek.CodeGeneration
                     {
                         var sn = 0;
                         var sv = 0;
-                        var variant = new FuncVariant(infoSrc.synonyms[0], 2);
+                        var variant = new FuncVariant(infoSrc.names[0], 2);
                         for (int v = 0; v < slots.Length && v < s + 1; v++)
                         {
                             var sl = slots[v];
@@ -200,8 +166,8 @@ namespace Prateek.CodeGeneration
                             {
                                 sl -= 1;
                                 var info = data.classInfos[sl];
-                                variant[1] = string.Format(Tag.Code.argsV_, info.name, sv);
-                                for (int vr = 0; vr < info.variables.Count; vr++)
+                                variant[1] = string.Format(Tag.Code.argsV_, info.className, sv);
+                                for (int vr = 0; vr < info.VarCount; vr++)
                                 {
                                     variant[2] = string.Format(Tag.Code.varsV_, sv, info.variables[vr]);
                                 }

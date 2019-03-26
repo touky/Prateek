@@ -6,7 +6,7 @@ PRATEEK_CODEGEN_FILE_INFO(Colors, cs)
     // Color swizzle
     PRATEEK_CODEGEN_BLOCK_SWIZZLE(Prateek.Extensions, ColorExt)
     {
-        PRATEEK_CODEGEN_CLASS(Color, r, g, b, a)
+        PRATEEK_CODEGEN_CLASS(Color) { PRATEEK_CODEGEN_VARS(r, g, b, a) }
 
         PRATEEK_CODEGEN_DEFAULT(float, 0)
 

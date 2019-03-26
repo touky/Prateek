@@ -93,12 +93,13 @@ namespace Prateek.CodeGeneration
             public struct ClassInfos
             {
                 //-----------------------------------------------------------------
-                public string name;
-                public List<string> synonyms;
+                public string className;
+                public List<string> names;
                 public List<string> variables;
 
                 //-----------------------------------------------------------------
-                public int SynCount { get { return synonyms == null ? 0 : synonyms.Count; } }
+                public int NameCount { get { return names == null ? 0 : names.Count; } }
+                public int VarCount { get { return variables == null ? 0 : variables.Count; } }
             }
 
             //-----------------------------------------------------------------
@@ -165,7 +166,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public bool Submit()
+            public bool Commit()
             {
                 var hasSubmitted = activeData != null;
                 if (activeData != null)

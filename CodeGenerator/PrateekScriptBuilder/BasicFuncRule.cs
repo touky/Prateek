@@ -116,36 +116,28 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region CodeRule override
-            public override Utils.KeyRule GetKeyRule(string keyword, int codeDepth)
+            public override Utils.KeyRule GetKeyRule(string keyword, string activeScope)
             {
-                if (keyword == Tag.Macro.OperationClass)
+                if (keyword == Tag.Macro.Func)
                 {
-                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = new Utils.KeyRule.ArgRange(4) };
-                }
-                else if (keyword == Tag.Macro.Func)
-                {
-                    return new Utils.KeyRule(keyword, codeDepth == 2) { needOpenScope = true, needScopeData = true };
+                    return new Utils.KeyRule(keyword, activeScope == CodeBlock) { needOpenScope = true, needScopeData = true };
                 }
                 else
                 {
-                    return base.GetKeyRule(keyword, codeDepth);
+                    return base.GetKeyRule(keyword, activeScope);
                 }
             }
 
             //-----------------------------------------------------------------
-            protected override bool DoTreatData(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
+            protected override bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
             {
-                if (keyRule.key == Tag.Macro.OperationClass)
-                {
-                    activeData.classInfos.Add(new CodeFile.ClassInfos() { name = args[0], synonyms = args.GetRange(1, args.Count - 1) });
-                }
-                else if (keyRule.key == Tag.Macro.Func)
+                if (keyRule.key == Tag.Macro.Func)
                 {
                     activeData.funcInfos.Add(new CodeFile.FuncInfos() { data = data });
                 }
                 else
                 {
-                    return base.DoTreatData(activeData, keyRule, args, data);
+                    return base.DoRetrieveRuleContent(activeData, keyRule, args, data);
                 }
                 return true;
             }
@@ -161,9 +153,9 @@ namespace Prateek.CodeGeneration
                 {
                     var funcInfo = data.funcInfos[d];
                     var content = funcInfo.data;
-                    for (int n = 0; n < infoSrc.SynCount + 1; n++)
+                    for (int n = 0; n < infoSrc.NameCount + 1; n++)
                     {
-                        var vars = (Vars[n] + (n == 0 ? infoSrc.name : infoSrc.synonyms[n - 1]));
+                        var vars = (Vars[n] + (n == 0 ? infoSrc.className : infoSrc.names[n - 1]));
                         content = vars.Apply(content);
                     }
 

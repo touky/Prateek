@@ -116,20 +116,20 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region CodeRule override
-            public override Utils.KeyRule GetKeyRule(string keyword, int codeDepth)
+            public override Utils.KeyRule GetKeyRule(string keyword, string activeScope)
             {
                 if (keyword == Tag.Macro.Func)
                 {
-                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = 1, needOpenScope = true, needScopeData = true };
+                    return new Utils.KeyRule(keyword, activeScope == CodeBlock) { args = 1, needOpenScope = true, needScopeData = true };
                 }
                 else
                 {
-                    return base.GetKeyRule(keyword, codeDepth);
+                    return base.GetKeyRule(keyword, activeScope);
                 }
             }
 
             //-----------------------------------------------------------------
-            protected override bool DoTreatData(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
+            protected override bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
             {
                 if (keyRule.key == Tag.Macro.Func)
                 {
@@ -141,7 +141,7 @@ namespace Prateek.CodeGeneration
                 }
                 else
                 {
-                    return base.DoTreatData(activeData, keyRule, args, data);
+                    return base.DoRetrieveRuleContent(activeData, keyRule, args, data);
                 }
                 return true;
             }
@@ -153,7 +153,7 @@ namespace Prateek.CodeGeneration
             {
                 variants.Clear();
 
-                var isDefault = infoSrc.variables == null || infoSrc.variables.Count == 0;
+                var isDefault = infoSrc.VarCount == 0;
                 for (int d = 0; d < data.funcInfos.Count; d++)
                 {
                     for (int p = 0; p < (isDefault ? 1 : 2); p++)
@@ -183,7 +183,7 @@ namespace Prateek.CodeGeneration
                             {
                                 variant[1] = (p == 1 && a != 0)
                                                 ? string.Format(Tag.Code.argsN, data.classDefaultType, a)
-                                                : string.Format(Tag.Code.argsV_, infoSrc.name, a);
+                                                : string.Format(Tag.Code.argsV_, infoSrc.className, a);
                             }
                         }
 
@@ -193,7 +193,7 @@ namespace Prateek.CodeGeneration
                         }
                         else
                         {
-                            for (int v = 0; v < infoSrc.variables.Count; v++)
+                            for (int v = 0; v < infoSrc.VarCount; v++)
                             {
                                 var varsA = vars;
                                 for (int a = 0; a < argCount; a++)
@@ -207,7 +207,7 @@ namespace Prateek.CodeGeneration
 
                             var v2 = new FuncVariant(variant.Call, 2);
                             v2[1] = variant[1];
-                            v2[2] = Tag.Code.varNew + infoSrc.name + Strings.Separator.ParenthesisOpen.C() + variant[2] + Strings.Separator.ParenthesisClose.C();
+                            v2[2] = Tag.Code.varNew + infoSrc.className + Strings.Separator.ParenthesisOpen.C() + variant[2] + Strings.Separator.ParenthesisClose.C();
                             variant = v2;
                         }
 

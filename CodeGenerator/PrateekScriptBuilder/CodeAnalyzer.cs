@@ -128,6 +128,21 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             public bool ShouldContinue { get { return position < content.Length; } }
+            public string Scope
+            {
+                get
+                {
+                    if (scopes.Count == 0)
+                        return string.Empty;
+
+                    int i = scopes.Count - 1;
+                    while (i >= 0 && scopes[i] == string.Empty)
+                    {
+                        i++;
+                    }
+                    return i < 0 ? string.Empty : scopes[i];
+                }
+            }
 
             //-----------------------------------------------------------------
             public void Init(string content)
@@ -269,7 +284,7 @@ namespace Prateek.CodeGeneration
                             if (!keyRule.needOpenScope)
                                 break;
 
-                            if (argSplit == SymbolType.ArgSplit)
+                            if (argScope != SymbolType.CallEnd && argSplit == SymbolType.ArgSplit)
                                 return false;
 
                             if (argScope != SymbolType.CallEnd && argScope != SymbolType.MAX)

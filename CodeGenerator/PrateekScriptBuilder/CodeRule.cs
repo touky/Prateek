@@ -101,7 +101,7 @@ namespace Prateek.CodeGeneration
     {
         //---------------------------------------------------------------------
         public abstract class CodeRule : ScriptTemplate.BaseTemplate
-    {
+        {
             //-----------------------------------------------------------------
             public struct FuncVariant
             {
@@ -200,16 +200,13 @@ namespace Prateek.CodeGeneration
             public virtual bool GenerateDefault { get { return false; } }
 
             //-----------------------------------------------------------------
-            private List<string> data = new List<string>();
+            private string codeBlock = string.Empty;
             private NumberedVars names;
             private NumberedVars vars;
             private NumberedVars funcs;
 
             //-----------------------------------------------------------------
-            public string CodeBlock { get { return data[0]; } }
-            private string DataCall { get { return data[1]; } }
-            private string DataArgs { get { return data[2]; } }
-            private string DataVars { get { return data[3]; } }
+            public string CodeBlock { get { return codeBlock; } }
 
             //-----------------------------------------------------------------
             public Utils.SwapInfo ClassDst { get { return Tag.Macro.dstClass; } }
@@ -233,7 +230,7 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             private void Init()
             {
-                data.Add(string.Format("{0}_{1}_{2}", Tag.Macro.prefix, Tag.Macro.To(Tag.Macro.FuncName.BLOCK), ScopeTag));
+                codeBlock = string.Format("{0}_{1}_{2}", Tag.Macro.prefix, Tag.Macro.To(Tag.Macro.FuncName.BLOCK), ScopeTag);
 
                 names = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.NAMES));
                 vars = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.VARS));
@@ -241,7 +238,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public bool TreatData(CodeFile codeFile, Utils.KeyRule keyRule, List<string> args, string data)
+            public bool RetrieveRuleContent(CodeFile codeFile, Utils.KeyRule keyRule, List<string> args, string data)
             {
                 var activeData = codeFile.ActiveData;
                 if (activeData == null)
@@ -252,7 +249,7 @@ namespace Prateek.CodeGeneration
                 if (activeData.activeRule == null || activeData.activeRule != this)
                     return false;
 
-                return DoTreatData(activeData, keyRule, args, data);
+                return DoRetrieveRuleContent(activeData, keyRule, args, data);
             }
 
             //-----------------------------------------------------------------
@@ -285,7 +282,7 @@ namespace Prateek.CodeGeneration
                 var infoDef = new CodeFile.ClassInfos();
                 if (GenerateDefault)
                 {
-                    infoDef.name = data.classDefaultType;
+                    infoDef.className = data.classDefaultType;
                 }
 
                 //Find the amount of FUNC_RESULT & NAMES that are requested by the main code
@@ -306,9 +303,9 @@ namespace Prateek.CodeGeneration
                         : data.classInfos[iSrc + (GenerateDefault ? -1 : 0)];
 
                     //Error out if the requested Names are not available
-                    if (nameCount > infoSrc.SynCount)
+                    if (nameCount > infoSrc.NameCount)
                     {
-                        return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.name;
+                        return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
                     }
 
                     //one pass or as many as the dst classes
@@ -320,12 +317,12 @@ namespace Prateek.CodeGeneration
                         //Gather code variants
                         GatherVariants(variants, data, infoSrc, infoDst);
 
-                        var swapSrc = ClassSrc + infoSrc.name;
+                        var swapSrc = ClassSrc + infoSrc.className;
                         var swapDst = ClassDst;
                         //Add the prefix from the code file
                         if (GenMode == GenerationMode.ForeachSrcXDest)
                         {
-                            swapDst = swapDst + infoDst.name;
+                            swapDst = swapDst + infoDst.className;
                             AddCode(data.codePrefix, data, swapSrc, swapDst);
                         }
                         else
@@ -342,7 +339,7 @@ namespace Prateek.CodeGeneration
                             //Error out if the requested funcs result are not available
                             if (funcCount > variant.Count)
                             {
-                                return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.name;
+                                return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.className;
                             }
 
                             //Apply variants
@@ -352,9 +349,9 @@ namespace Prateek.CodeGeneration
                             }
 
                             //Apply names
-                            for (int r = 0; r < min(nameCount, infoSrc.SynCount); r++)
+                            for (int r = 0; r < min(nameCount, infoSrc.NameCount); r++)
                             {
-                                code = (Names[r] + infoSrc.synonyms[r]).Apply(code);
+                                code = (Names[r] + infoSrc.names[r]).Apply(code);
                             }
 
                             if (GenMode == GenerationMode.ForeachSrcXDest)
@@ -385,43 +382,67 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public virtual Utils.KeyRule GetKeyRule(string keyword, int codeDepth)
+            public virtual Utils.KeyRule GetKeyRule(string keyword, string activeScope)
             {
                 if (keyword == CodeBlock)
                 {
-                    return new Utils.KeyRule(keyword, codeDepth == 1) { args = 2, needOpenScope = true };
+                    return new Utils.KeyRule(keyword, activeScope == Tag.Macro.FileInfo) { args = 2, needOpenScope = true };
                 }
-                else if (keyword == Tag.Macro.OperationClass)
+                else if (keyword == Tag.Macro.ClassInfo)
                 {
-                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = new Utils.KeyRule.ArgRange(1, -1) };
+                    return new Utils.KeyRule(keyword, activeScope == codeBlock) { args = 1, needOpenScope = true };
+                }
+                else if (keyword == Tag.Macro.ClassNames)
+                {
+                    return new Utils.KeyRule(keyword, activeScope == Tag.Macro.ClassInfo) { args = new Utils.KeyRule.ArgRange(1, -1) };
+                }
+                else if (keyword == Tag.Macro.ClassVars)
+                {
+                    return new Utils.KeyRule(keyword, activeScope == Tag.Macro.ClassInfo) { args = new Utils.KeyRule.ArgRange(1, -1) };
                 }
                 else if (keyword == Tag.Macro.DefaultInfo)
                 {
-                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = 2 };
+                    return new Utils.KeyRule(keyword, activeScope == codeBlock) { args = 2 };
                 }
                 else if (keyword == Tag.Macro.CodePartPrefix || keyword == Tag.Macro.CodePartMain || keyword == Tag.Macro.CodePartSuffix)
                 {
-                    return new Utils.KeyRule(keyword, codeDepth == 2) { args = 0, needOpenScope = true, needScopeData = true };
+                    return new Utils.KeyRule(keyword, activeScope == codeBlock) { args = 0, needOpenScope = true, needScopeData = true };
                 }
 
                 return new Utils.KeyRule() { usage = Utils.KeyRule.Usage.Ignore };
             }
 
             //-----------------------------------------------------------------
-            protected virtual bool DoTreatData(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
+            protected virtual bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
             {
                 if (keyRule.key == CodeBlock)
                 {
                     activeData.blockNamespace = args[0];
                     activeData.blockClassName = args[1];
                 }
-                else if (keyRule.key == Tag.Macro.OperationClass)
+                else if (keyRule.key == Tag.Macro.ClassInfo)
                 {
-                    activeData.classInfos.Add(new CodeFile.ClassInfos()
-                    {
-                        name = args[0],
-                        variables = args.GetRange(1, args.Count - 1)
-                    });
+                    activeData.classInfos.Add(new CodeFile.ClassInfos() { className = args[0] });
+                }
+                else if (keyRule.key == Tag.Macro.ClassNames)
+                {
+                    if (activeData.classInfos.Count == 0)
+                        return false;
+                    var infos = activeData.classInfos.Last();
+                    if (infos.names == null)
+                        infos.names = new List<string>();
+                    infos.names.AddRange(args);
+                    activeData.classInfos[activeData.classInfos.Count - 1] = infos;
+                }
+                else if (keyRule.key == Tag.Macro.ClassVars)
+                {
+                    if (activeData.classInfos.Count == 0)
+                        return false;
+                    var infos = activeData.classInfos.Last();
+                    if (infos.variables == null)
+                        infos.variables = new List<string>();
+                    infos.variables.AddRange(args);
+                    activeData.classInfos[activeData.classInfos.Count - 1] = infos;
                 }
                 else if (keyRule.key == Tag.Macro.DefaultInfo)
                 {
@@ -448,7 +469,7 @@ namespace Prateek.CodeGeneration
             {
                 if (scope == CodeBlock)
                 {
-                    codeFile.Submit();
+                    codeFile.Commit();
                     return true;
                 }
                 else if (scope == Tag.Macro.Func

@@ -2,10 +2,10 @@ PRATEEK_CODEGEN_FILE_INFO(EditorPrefs, cs)
 {
     PRATEEK_CODEGEN_BLOCK_BASIC_FUNC(Prateek.Editors, Prefs)
     {
-        PRATEEK_CODEGEN_CLASS(bool, Bools, GetBool, SetBool)
-        PRATEEK_CODEGEN_CLASS(int, Ints, GetInt, SetInt)
-        PRATEEK_CODEGEN_CLASS(float, Floats, GetFloat, SetFloat)
-        PRATEEK_CODEGEN_CLASS(string, Strings, GetString, SetString)
+		PRATEEK_CODEGEN_CLASS(bool)  { PRATEEK_CODEGEN_NAMES(Bools, GetBool, SetBool) }
+		PRATEEK_CODEGEN_CLASS(int)   { PRATEEK_CODEGEN_NAMES(Ints, GetInt, SetInt) }
+		PRATEEK_CODEGEN_CLASS(float) { PRATEEK_CODEGEN_NAMES(Floats, GetFloat, SetFloat) }
+		PRATEEK_CODEGEN_CLASS(string){ PRATEEK_CODEGEN_NAMES(Strings, GetString, SetString) }
 
         PRATEEK_CODEGEN_FUNC
         {

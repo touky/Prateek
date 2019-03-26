@@ -117,7 +117,7 @@ namespace Prateek.CodeGeneration
             #region Rule internal
             protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
-                var slots = new int[infoDst.variables.Count];
+                var slots = new int[infoDst.VarCount];
                 for (int s = 0; s < slots.Length; s++)
                 {
                     slots[s] = 0;
@@ -130,7 +130,7 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             private void GatherVariantsSlots(int s, int[] slots, List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
-                var varCount = infoSrc.variables.Count + 1;
+                var varCount = infoSrc.VarCount + 1;
                 for (int c = 0; c < varCount; c++)
                 {
                     slots[s] = c;
@@ -146,7 +146,7 @@ namespace Prateek.CodeGeneration
                         for (int v = 0; v < slots.Length; v++)
                         {
                             var sv = slots[v];
-                            if (sv < infoSrc.variables.Count)
+                            if (sv < infoSrc.VarCount)
                             {
                                 var variable = infoSrc.variables[sv];
                                 variant.Call = variable;

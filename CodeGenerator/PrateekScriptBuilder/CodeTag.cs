@@ -153,9 +153,11 @@ namespace Prateek.CodeGeneration
                 public static string CodePartPrefix { get { return data[1]; } }
                 public static string CodePartMain   { get { return data[2]; } }
                 public static string CodePartSuffix { get { return data[3]; } }
-                public static string OperationClass { get { return data[4]; } }
+                public static string ClassInfo      { get { return data[4]; } }
                 public static string DefaultInfo    { get { return data[5]; } }
                 public static string Func           { get { return data[6]; } }
+                public static string ClassNames     { get { return data[7]; } }
+                public static string ClassVars      { get { return data[8]; } }
 
                 //-------------------------------------------------------------
                 public static string To(FuncName value) { return Enum.GetNames(typeof(FuncName))[(int)value]; }
@@ -171,6 +173,8 @@ namespace Prateek.CodeGeneration
                     data.Add(string.Format("{0}_{1}", prefix, To(FuncName.CLASS)));
                     data.Add(string.Format("{0}_{1}", prefix, To(FuncName.DEFAULT)));
                     data.Add(string.Format("{0}_{1}", prefix, To(FuncName.FUNC)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(VarName.NAMES)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(VarName.VARS)));
                 }
             }
 
