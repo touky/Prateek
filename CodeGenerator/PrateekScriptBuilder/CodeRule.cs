@@ -110,7 +110,7 @@ namespace Prateek.CodeGeneration
 
                 //-------------------------------------------------------------
                 public string Call { get { return results[0]; } set { results[0] += value; } }
-                public int Count { get { return results.Count; } }
+                public int Count { get { return results == null ? 0 : results.Count; } }
                 public string this[int i]
                 {
                     get
@@ -175,12 +175,12 @@ namespace Prateek.CodeGeneration
                 }
 
                 //-----------------------------------------------------------------
-                public NumberedVars(string root)
+                public NumberedVars(Tag.Macro.VarName root)
                 {
                     datas = new List<string>();
                     for (int i = 0; i < 10; i++)
                     {
-                        datas.Add(root + i);
+                        datas.Add(string.Format("{0}_{1}", root, i));
                     }
                 }
             }
@@ -232,9 +232,9 @@ namespace Prateek.CodeGeneration
             {
                 codeBlock = string.Format("{0}_{1}_{2}", Tag.Macro.prefix, Tag.Macro.To(Tag.Macro.FuncName.BLOCK), ScopeTag);
 
-                names = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.NAMES));
-                vars = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.VARS));
-                funcs = new NumberedVars(string.Format("{0}_", Tag.Macro.VarName.FUNC_RESULT));
+                names = new NumberedVars(Tag.Macro.VarName.NAMES);
+                vars = new NumberedVars(Tag.Macro.VarName.VARS);
+                funcs = new NumberedVars(Tag.Macro.VarName.FUNC_RESULT);
             }
 
             //-----------------------------------------------------------------

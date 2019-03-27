@@ -7,23 +7,24 @@ PRATEEK_CODEGEN_FILE_INFO(EditorPrefs, cs)
 		PRATEEK_CODEGEN_CLASS(float) { PRATEEK_CODEGEN_NAMES(Floats, GetFloat, SetFloat) }
 		PRATEEK_CODEGEN_CLASS(string){ PRATEEK_CODEGEN_NAMES(Strings, GetString, SetString) }
 
-        PRATEEK_CODEGEN_FUNC
+        PRATEEK_CODEGEN_CODE_MAIN
         {
+		@
         @//---------------------------------------------------------------------
-        @#region VARS_0
-        @public static VARS_1 Get(string name, VARS_0 defaultValue)
+        @#region SRC_CLASS
+        @public static NAMES_0 Get(string name, SRC_CLASS defaultValue)
         @{
-        @    return new VARS_1(name, defaultValue);
+        @    return new NAMES_0(name, defaultValue);
         @}
         @
         @//---------------------------------------------------------------------
-        @public class VARS_1 : TypedStorage<VARS_0>
+        @public class NAMES_0 : TypedStorage<SRC_CLASS>
         @{
         @    //-----------------------------------------------------------------
-        @    public VARS_1(string name, VARS_0 defaultValue) : base(name, defaultValue) { }
+        @    public NAMES_0(string name, SRC_CLASS defaultValue) : base(name, defaultValue) { }
         @
         @    //-----------------------------------------------------------------
-        @    public override bool ShouldSetNewValue(VARS_0 newValue)
+        @    public override bool ShouldSetNewValue(SRC_CLASS newValue)
         @    {
         @        return this.value != newValue;
         @    }
@@ -32,22 +33,17 @@ PRATEEK_CODEGEN_FILE_INFO(EditorPrefs, cs)
         @    #if UNITY_EDITOR
         @    protected override void GetFromPrefs()
         @    {
-        @        value = UnityEditor.EditorPrefs.VARS_2(name, defaultValue);
+        @        value = UnityEditor.EditorPrefs.NAMES_1(name, defaultValue);
         @    }
         @
         @    //-----------------------------------------------------------------
         @    protected override void SetToPrefs()
         @    {
-        @        UnityEditor.EditorPrefs.VARS_3(name, value);
+        @        UnityEditor.EditorPrefs.NAMES_2(name, value);
         @    }
         @    #endif //UNITY_EDITOR
         @}
-        @#endregion VARS_0
-        }
-
-        PRATEEK_CODEGEN_CODE_MAIN
-        {
-        @FUNC_RESULT_0
+        @#endregion SRC_CLASS
         }
     }
 }

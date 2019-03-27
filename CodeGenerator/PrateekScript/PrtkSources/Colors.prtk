@@ -12,6 +12,7 @@ PRATEEK_CODEGEN_FILE_INFO(Colors, cs)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
+		@
         @//---------------------------------------------------------------------
 		@#region Swizzle SRC_CLASS
         }
@@ -24,7 +25,6 @@ PRATEEK_CODEGEN_FILE_INFO(Colors, cs)
         PRATEEK_CODEGEN_CODE_SUFFIX
         {
     	@#endregion Swizzle PRTK_SRC_CLASS
-		@
         }
     }
 }

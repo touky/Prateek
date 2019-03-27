@@ -10,6 +10,7 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
+		@
         @//---------------------------------------------------------------------
         @#region Swizzle SRC_CLASS to DST_CLASS
         }
@@ -22,7 +23,6 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
         PRATEEK_CODEGEN_CODE_SUFFIX
         {
         @#endregion Swizzle SRC_CLASS to DST_CLASS
-		@
         }
     }
 
@@ -36,6 +36,7 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
+		@
         @//---------------------------------------------------------------------
         @#region Mixed Ctor SRC_CLASS
         }
@@ -48,7 +49,6 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
         PRATEEK_CODEGEN_CODE_SUFFIX
         {
         @#endregion Mixed Ctor SRC_CLASS
-		@
         }
     }
 
@@ -79,6 +79,7 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
+		@
         @//---------------------------------------------------------------------
         @#region Mixed Func SRC_CLASS
         }
@@ -91,7 +92,6 @@ PRATEEK_CODEGEN_FILE_INFO(Vectors, cs)
         PRATEEK_CODEGEN_CODE_SUFFIX
         {
         @#endregion Mixed Func SRC_CLASS
-		@
         }
     }
 }
@@ -107,6 +107,7 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
+		@
         @//---------------------------------------------------------------------
         @#region Swizzle SRC_CLASS to DST_CLASS
         }
@@ -119,7 +120,6 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
         PRATEEK_CODEGEN_CODE_SUFFIX
         {
         @#endregion Swizzle SRC_CLASS to DST_CLASS
-		@
         }
     }
 
@@ -132,6 +132,7 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
+		@
         @//---------------------------------------------------------------------
         @#region Mixed Ctor SRC_CLASS
         }
@@ -144,7 +145,6 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
         PRATEEK_CODEGEN_CODE_SUFFIX
         {
         @#endregion Mixed Ctor SRC_CLASS
-		@
         }
     }
 
@@ -167,6 +167,7 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
 
         PRATEEK_CODEGEN_CODE_PREFIX
         {
+		@
         @//---------------------------------------------------------------------
         @#region Mixed Func SRC_CLASS
         }
@@ -179,7 +180,6 @@ PRATEEK_CODEGEN_FILE_INFO(VectorInts, cs)
         PRATEEK_CODEGEN_CODE_SUFFIX
         {
         @#endregion Mixed Func SRC_CLASS
-		@
         }
     }
 }

@@ -148,6 +148,7 @@ namespace Prateek.CodeGeneration
             protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 variants.Clear();
+                variants.Add(new FuncVariant());
 
                 for (int d = 0; d < data.funcInfos.Count; d++)
                 {
