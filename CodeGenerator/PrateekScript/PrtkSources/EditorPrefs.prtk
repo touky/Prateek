@@ -49,10 +49,25 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 
 	PRATEEK_BLOCK_BASIC_FUNC(Prateek.Editors, Prefs)
 	{
+		PRATEEK_CLASS_INFO(Vector2)
+		{
+			PRATEEK_NAMES(Vector2s, Floats)
+			PRATEEK_VARS(x, y)
+		}
+		PRATEEK_CLASS_INFO(Vector3)
+		{
+			PRATEEK_NAMES(Vector3s, Floats)
+			PRATEEK_VARS(x, y, z)
+		}
 		PRATEEK_CLASS_INFO(Vector4)
 		{
 			PRATEEK_NAMES(Vector4s, Floats)
 			PRATEEK_VARS(x, y, z, w)
+		}
+		PRATEEK_CLASS_INFO(Rect)
+		{
+			PRATEEK_NAMES(Rects, Floats)
+			PRATEEK_VARS(x, y, width, height)
 		}
 
 		PRATEEK_FUNC

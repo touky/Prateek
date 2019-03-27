@@ -222,3 +222,228 @@ namespace Prateek.Editors
         
     }
 }
+
+//-----------------------------------------------------------------------------
+namespace Prateek.Editors
+{
+    //-------------------------------------------------------------------------
+    public static partial class Prefs
+    {
+        
+        //---------------------------------------------------------------------
+        #region Vector2
+        public static Vector2s Get(string name, Vector2 defaultValue)
+        {
+            return new Vector2s(name, defaultValue);
+        }
+        
+        //---------------------------------------------------------------------
+        public class Vector2s : ValueStorage
+        {
+            //-----------------------------------------------------------------
+            #region Fields
+            protected Floats x;
+            protected Floats y;
+        
+            #endregion Fields
+        
+            //-----------------------------------------------------------------
+            #region Properties
+            public Vector2 data
+            {
+                get
+                {
+                    return new Vector2(x.Value, y.Value);
+                }
+                set
+                {
+                    x.Value = value.x;
+                    y.Value = value.y;
+        
+                }
+            }
+            #endregion Properties
+        
+            //-----------------------------------------------------------------
+            #region Behaviour
+            public Vector2s(string name, Vector2 defaultValue) : base(name)
+            {
+                x = new Floats(name + ".x", defaultValue.x);
+                y = new Floats(name + ".y", defaultValue.y);
+        
+            }
+        
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
+            #endregion Behaviour
+        }
+        #endregion Vector2
+        
+        //---------------------------------------------------------------------
+        #region Vector3
+        public static Vector3s Get(string name, Vector3 defaultValue)
+        {
+            return new Vector3s(name, defaultValue);
+        }
+        
+        //---------------------------------------------------------------------
+        public class Vector3s : ValueStorage
+        {
+            //-----------------------------------------------------------------
+            #region Fields
+            protected Floats x;
+            protected Floats y;
+            protected Floats z;
+        
+            #endregion Fields
+        
+            //-----------------------------------------------------------------
+            #region Properties
+            public Vector3 data
+            {
+                get
+                {
+                    return new Vector3(x.Value, y.Value, z.Value);
+                }
+                set
+                {
+                    x.Value = value.x;
+                    y.Value = value.y;
+                    z.Value = value.z;
+        
+                }
+            }
+            #endregion Properties
+        
+            //-----------------------------------------------------------------
+            #region Behaviour
+            public Vector3s(string name, Vector3 defaultValue) : base(name)
+            {
+                x = new Floats(name + ".x", defaultValue.x);
+                y = new Floats(name + ".y", defaultValue.y);
+                z = new Floats(name + ".z", defaultValue.z);
+        
+            }
+        
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
+            #endregion Behaviour
+        }
+        #endregion Vector3
+        
+        //---------------------------------------------------------------------
+        #region Vector4
+        public static Vector4s Get(string name, Vector4 defaultValue)
+        {
+            return new Vector4s(name, defaultValue);
+        }
+        
+        //---------------------------------------------------------------------
+        public class Vector4s : ValueStorage
+        {
+            //-----------------------------------------------------------------
+            #region Fields
+            protected Floats x;
+            protected Floats y;
+            protected Floats z;
+            protected Floats w;
+        
+            #endregion Fields
+        
+            //-----------------------------------------------------------------
+            #region Properties
+            public Vector4 data
+            {
+                get
+                {
+                    return new Vector4(x.Value, y.Value, z.Value, w.Value);
+                }
+                set
+                {
+                    x.Value = value.x;
+                    y.Value = value.y;
+                    z.Value = value.z;
+                    w.Value = value.w;
+        
+                }
+            }
+            #endregion Properties
+        
+            //-----------------------------------------------------------------
+            #region Behaviour
+            public Vector4s(string name, Vector4 defaultValue) : base(name)
+            {
+                x = new Floats(name + ".x", defaultValue.x);
+                y = new Floats(name + ".y", defaultValue.y);
+                z = new Floats(name + ".z", defaultValue.z);
+                w = new Floats(name + ".w", defaultValue.w);
+        
+            }
+        
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
+            #endregion Behaviour
+        }
+        #endregion Vector4
+        
+        //---------------------------------------------------------------------
+        #region Rect
+        public static Rects Get(string name, Rect defaultValue)
+        {
+            return new Rects(name, defaultValue);
+        }
+        
+        //---------------------------------------------------------------------
+        public class Rects : ValueStorage
+        {
+            //-----------------------------------------------------------------
+            #region Fields
+            protected Floats x;
+            protected Floats y;
+            protected Floats width;
+            protected Floats height;
+        
+            #endregion Fields
+        
+            //-----------------------------------------------------------------
+            #region Properties
+            public Rect data
+            {
+                get
+                {
+                    return new Rect(x.Value, y.Value, width.Value, height.Value);
+                }
+                set
+                {
+                    x.Value = value.x;
+                    y.Value = value.y;
+                    width.Value = value.width;
+                    height.Value = value.height;
+        
+                }
+            }
+            #endregion Properties
+        
+            //-----------------------------------------------------------------
+            #region Behaviour
+            public Rects(string name, Rect defaultValue) : base(name)
+            {
+                x = new Floats(name + ".x", defaultValue.x);
+                y = new Floats(name + ".y", defaultValue.y);
+                width = new Floats(name + ".width", defaultValue.width);
+                height = new Floats(name + ".height", defaultValue.height);
+        
+            }
+        
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
+            #endregion Behaviour
+        }
+        #endregion Rect
+        
+    }
+}
