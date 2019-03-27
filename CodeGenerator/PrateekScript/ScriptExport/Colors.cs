@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 26/03/2019
+//  Header last update date: 27/03/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -79,6 +79,7 @@ namespace Prateek.Extensions
     //-------------------------------------------------------------------------
     public static partial class ColorExt
     {
+        
         //---------------------------------------------------------------------
         #region Swizzle Color
         public static Color rrrr(this Color v) { return new Color(v.r, v.r, v.r, v.r); }
@@ -706,7 +707,6 @@ namespace Prateek.Extensions
         public static Color nnnb(this Color v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Color(n_0, n_1, n_2, v.b); }
         public static Color nnna(this Color v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Color(n_0, n_1, n_2, v.a); }
         #endregion Swizzle PRTK_Color
-        
         
     }
 }

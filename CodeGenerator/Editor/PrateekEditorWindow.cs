@@ -99,6 +99,7 @@ namespace Prateek.CodeGeneration.Editor
         private CodeBuilder prateekScriptGenerator = null;
         private Prefs.Strings prateekExportDir;
         private Prefs.Strings prateekSourceDir;
+        private Prefs.Bools prateekRunInTestMode;
         private Prefs.ListStrings prateekSourceDir0;
         #endregion Fields
 
@@ -173,9 +174,11 @@ namespace Prateek.CodeGeneration.Editor
                 prateekScriptGenerator = null;
                 InitDatas();
             }
+            prateekRunInTestMode.Value = EditorGUILayout.ToggleLeft("Run in test mode", prateekRunInTestMode.Value);
+
             if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute"))
             {
-                prateekScriptGenerator.RunInTestMode = true;
+                prateekScriptGenerator.RunInTestMode = prateekRunInTestMode.Value;
                 prateekScriptGenerator.StartWork();
             }
             prateekExportDir.Value = EditorGUILayout.TextField("Export dir", prateekExportDir.Value);
@@ -220,6 +223,9 @@ namespace Prateek.CodeGeneration.Editor
 
             if (prateekSourceDir == null)
                 prateekSourceDir = Prefs.Get(GetType().Name + ".prateekSourceDir", string.Empty);
+
+            if (prateekRunInTestMode == null)
+                prateekRunInTestMode = Prefs.Get(GetType().Name + ".prateekRunInTestMode", false);
 
             if (prateekSourceDir0 == null)
                 prateekSourceDir0 = Prefs.Get(GetType().Name + ".prateekSourceDir0", (List<string>)null);

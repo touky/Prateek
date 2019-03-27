@@ -183,6 +183,17 @@ namespace Prateek.CodeGeneration
                         datas.Add(string.Format("{0}_{1}", root, i));
                     }
                 }
+
+                //-----------------------------------------------------------------
+                public int GetCount(string content)
+                {
+                    var count = 0;
+                    for (int c = 0; c < Count; c++)
+                    {
+                        count += content.Contains(datas[c]) ? 1 : 0;
+                    }
+                    return count;
+                }
             }
 
             //-----------------------------------------------------------------
@@ -286,13 +297,7 @@ namespace Prateek.CodeGeneration
                 }
 
                 //Find the amount of FUNC_RESULT & NAMES that are requested by the main code
-                var funcCount = 0;
-                var nameCount = 0;
-                for (int i = 0; i < Funcs.Count; i++)
-                {
-                    funcCount += data.codeMain.Contains(Funcs[i].Original) ? 1 : 0;
-                    nameCount += data.codeMain.Contains(Names[i].Original) ? 1 : 0;
-                }
+                var funcCount = Funcs.GetCount(data.codeMain);
 
                 //Loop throught the source classes
                 for (int iSrc = 0; iSrc < maxSrc; iSrc++)
@@ -301,12 +306,6 @@ namespace Prateek.CodeGeneration
                     infoSrc = (GenerateDefault && iSrc == 0)
                         ? infoDef
                         : data.classInfos[iSrc + (GenerateDefault ? -1 : 0)];
-
-                    //Error out if the requested Names are not available
-                    if (nameCount > infoSrc.NameCount)
-                    {
-                        return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
-                    }
 
                     //one pass or as many as the dst classes
                     for (int iSDst = 0; iSDst < maxDst; iSDst++)
@@ -346,6 +345,13 @@ namespace Prateek.CodeGeneration
                             for (int r = 0; r < variant.Count; r++)
                             {
                                 code = (Funcs[r] + variant[r]).Apply(code);
+                            }
+
+                            //Error out if the requested Names are not available
+                            var nameCount = Names.GetCount(code);
+                            if (nameCount > infoSrc.NameCount)
+                            {
+                                return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
                             }
 
                             //Apply names

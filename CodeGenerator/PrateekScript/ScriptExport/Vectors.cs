@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 26/03/2019
+//  Header last update date: 27/03/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -79,6 +79,7 @@ namespace Prateek.Extensions
     //-------------------------------------------------------------------------
     public static partial class VectorExt
     {
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector2 to Vector2
         public static Vector2 xx(this Vector2 v) { return new Vector2(v.x, v.x); }
@@ -1334,7 +1335,6 @@ namespace Prateek.Extensions
         public static Vector4 nnnw(this Vector4 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.w); }
         #endregion Swizzle Vector4 to Vector4
         
-        
     }
 }
 
@@ -1344,6 +1344,7 @@ namespace Prateek.ShaderTo
     //-------------------------------------------------------------------------
     public static partial class CSharp
     {
+        
         //---------------------------------------------------------------------
         #region Mixed Ctor Vector2
         public static Vector2 vec2(float n_0, float n_1) { return new Vector2(n_0, n_1); }
@@ -1373,7 +1374,6 @@ namespace Prateek.ShaderTo
         public static Vector4 vec4(float n_0) { return new Vector4(n_0, n_0, n_0, n_0); }
         #endregion Mixed Ctor Vector4
         
-        
     }
 }
 
@@ -1383,6 +1383,7 @@ namespace Prateek.ShaderTo
     //-------------------------------------------------------------------------
     public static partial class CSharp
     {
+        
         //---------------------------------------------------------------------
         #region Mixed Func float
         public static float random(float n_0, float n_1) { return UnityEngine.Random.Range(n_0, n_1); }
@@ -1476,7 +1477,6 @@ namespace Prateek.ShaderTo
         public static Vector4 floor(Vector4 v_0) { return new Vector4(Mathf.Floor(v_0.x), Mathf.Floor(v_0.y), Mathf.Floor(v_0.z), Mathf.Floor(v_0.w)); }
         public static Vector4 sqrt(Vector4 v_0) { return new Vector4(Mathf.Sqrt(v_0.x), Mathf.Sqrt(v_0.y), Mathf.Sqrt(v_0.z), Mathf.Sqrt(v_0.w)); }
         #endregion Mixed Func Vector4
-        
         
     }
 }

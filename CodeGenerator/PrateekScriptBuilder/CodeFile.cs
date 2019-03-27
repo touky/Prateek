@@ -184,6 +184,7 @@ namespace Prateek.CodeGeneration
                 var genData = (Utils.SwapInfo)Tag.Macro.codeGenData.Keyword();
                 var genTabs = (Utils.SwapInfo)Tag.Macro.codeGenTabs.Keyword();
 
+
                 var i = genCode.IndexOf(genData.Original);
                 if (i < 0)
                     return BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;

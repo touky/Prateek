@@ -1,28 +1,28 @@
 /*
     Color swizzle
 */
-PRATEEK_CODEGEN_FILE_INFO(Colors, cs)
+PRATEEK_FILE_INFO(Colors, cs)
 {
     // Color swizzle
-    PRATEEK_CODEGEN_BLOCK_SWIZZLE(Prateek.Extensions, ColorExt)
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, ColorExt)
     {
-        PRATEEK_CODEGEN_CLASS(Color) { PRATEEK_CODEGEN_VARS(r, g, b, a) }
+        PRATEEK_CLASS_INFO(Color) { PRATEEK_VARS(r, g, b, a) }
 
-        PRATEEK_CODEGEN_DEFAULT(float, 0)
+        PRATEEK_DEFAULT(float, 0)
 
-        PRATEEK_CODEGEN_CODE_PREFIX
+        PRATEEK_CODE_PREFIX
         {
 		@
         @//---------------------------------------------------------------------
 		@#region Swizzle SRC_CLASS
         }
         
-        PRATEEK_CODEGEN_CODE_MAIN
+        PRATEEK_CODE_MAIN
         {
 		@public static DST_CLASS FUNC_RESULT_0(this SRC_CLASS FUNC_RESULT_1) { return new DST_CLASS(FUNC_RESULT_2); }
         }
 
-        PRATEEK_CODEGEN_CODE_SUFFIX
+        PRATEEK_CODE_SUFFIX
         {
     	@#endregion Swizzle PRTK_SRC_CLASS
         }

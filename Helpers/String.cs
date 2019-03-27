@@ -148,6 +148,12 @@ namespace Prateek.Helpers
         private static Dictionary<Separator, char[]> dictionnary = new Dictionary<Separator, char[]>();
 
         //---------------------------------------------------------------------
+        public static string S(this Separator mask)
+        {
+            return C(mask).ToString();
+        }
+
+        //---------------------------------------------------------------------
         public static char C(this Separator mask)
         {
             switch (mask)

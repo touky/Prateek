@@ -148,19 +148,34 @@ namespace Prateek.CodeGeneration
             protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 variants.Clear();
-                variants.Add(new FuncVariant());
-
-                for (int d = 0; d < data.funcInfos.Count; d++)
+                if (data.funcInfos.Count == 0)
                 {
-                    var funcInfo = data.funcInfos[d];
-                    var content = funcInfo.data;
-                    for (int n = 0; n < infoSrc.NameCount + 1; n++)
+                    variants.Add(new FuncVariant());
+                }
+                else
+                {
+                    var variant = new FuncVariant(string.Empty, data.funcInfos.Count - 1);
+                    for (int d = 0; d < data.funcInfos.Count; d++)
                     {
-                        var vars = (Vars[n] + (n == 0 ? infoSrc.className : infoSrc.names[n - 1]));
-                        content = vars.Apply(content);
-                    }
+                        var funcInfo = data.funcInfos[d];
+                        var varsCount = Vars.GetCount(funcInfo.data);
+                        var content = string.Empty;
+                        for (int v = 0; v < infoSrc.variables.Count; v++)
+                        {
+                            var funcData = funcInfo.data;
+                            for (int n = 0; n < min(varsCount, Vars.Count); n++)
+                            {
+                                var vars = (Vars[n] + infoSrc.variables[v]);
+                                funcData = vars.Apply(funcData);
+                            }
 
-                    var variant = new FuncVariant(content);
+                            if (content != string.Empty && !funcData.EndsWith(Strings.Separator.LineFeed.S()))
+                                content += Tag.Code.argVarSeparator;
+                            content += funcData;
+                        }
+
+                        variant[d] = content;
+                    }
                     variants.Add(variant);
                 }
             }

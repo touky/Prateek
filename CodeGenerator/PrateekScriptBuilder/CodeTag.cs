@@ -113,7 +113,7 @@ namespace Prateek.CodeGeneration
                 public static string codeGenData = "PRATEEK_CODEGEN_DATA";
                 public static string codeGenTabs = "PRATEEK_CODEGEN_TABS";
 
-                public static string prefix = "PRATEEK_CODEGEN";
+                public static string prefix = "PRATEEK";
                 public static string codeData = "CODE";
 
                 //-------------------------------------------------------------
@@ -124,7 +124,7 @@ namespace Prateek.CodeGeneration
                     PREFIX,     //PRATEEK_CODEGEN_CODE_PREFIX
                     MAIN,       //PRATEEK_CODEGEN_CODE_MAIN
                     SUFFIX,     //PRATEEK_CODEGEN_CODE_SUFFIX
-                    CLASS,      //PRATEEK_CODEGEN_CLASS(*****)
+                    CLASS_INFO, //PRATEEK_CODEGEN_CLASS_INFO(*****)
                     DEFAULT,    //PRATEEK_CODEGEN_DEFAULT(*****)
                     FUNC,       //PRATEEK_CODEGEN_FUNC(*****) { }
 
@@ -170,7 +170,7 @@ namespace Prateek.CodeGeneration
                     data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.PREFIX)));
                     data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.MAIN)));
                     data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.SUFFIX)));
-                    data.Add(string.Format("{0}_{1}", prefix, To(FuncName.CLASS)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(FuncName.CLASS_INFO)));
                     data.Add(string.Format("{0}_{1}", prefix, To(FuncName.DEFAULT)));
                     data.Add(string.Format("{0}_{1}", prefix, To(FuncName.FUNC)));
                     data.Add(string.Format("{0}_{1}", prefix, To(VarName.NAMES)));

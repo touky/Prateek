@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 26/03/2019
+//  Header last update date: 27/03/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -79,6 +79,7 @@ namespace Prateek.Extensions
     //-------------------------------------------------------------------------
     public static partial class VectorExt
     {
+        
         //---------------------------------------------------------------------
         #region Swizzle Vector2Int to Vector2Int
         public static Vector2Int xx(this Vector2Int v) { return new Vector2Int(v.x, v.x); }
@@ -207,6 +208,31 @@ namespace Prateek.Extensions
         public static Vector3Int nnz(this Vector3Int v, int n_0 = 0, int n_1 = 0) { return new Vector3Int(n_0, n_1, v.z); }
         #endregion Swizzle Vector3Int to Vector3Int
         
+    }
+}
+
+//-----------------------------------------------------------------------------
+namespace Prateek.ShaderTo
+{
+    //-------------------------------------------------------------------------
+    public static partial class CSharp
+    {
+        
+        //---------------------------------------------------------------------
+        #region Mixed Ctor Vector2
+        public static Vector2 vec2i(int n_0, int n_1) { return new Vector2(n_0, n_1); }
+        public static Vector2 vec2i(Vector2 v_0) { return new Vector2(v_0.x, v_0.y); }
+        public static Vector2 vec2i(int n_0) { return new Vector2(n_0, n_0); }
+        #endregion Mixed Ctor Vector2
+        
+        //---------------------------------------------------------------------
+        #region Mixed Ctor Vector3
+        public static Vector3 vec3i(int n_0, int n_1, int n_2) { return new Vector3(n_0, n_1, n_2); }
+        public static Vector3 vec3i(int n_0, Vector2 v_0) { return new Vector3(n_0, v_0.x, v_0.y); }
+        public static Vector3 vec3i(Vector2 v_0, int n_0) { return new Vector3(v_0.x, v_0.y, n_0); }
+        public static Vector3 vec3i(Vector3 v_0) { return new Vector3(v_0.x, v_0.y, v_0.z); }
+        public static Vector3 vec3i(int n_0) { return new Vector3(n_0, n_0, n_0); }
+        #endregion Mixed Ctor Vector3
         
     }
 }
@@ -217,32 +243,7 @@ namespace Prateek.ShaderTo
     //-------------------------------------------------------------------------
     public static partial class CSharp
     {
-        //---------------------------------------------------------------------
-        #region Mixed Ctor Vector2Int
-        public static Vector2Int vec2i(int n_0, int n_1) { return new Vector2Int(n_0, n_1); }
-        public static Vector2Int vec2i(Vector2Int v_0) { return new Vector2Int(v_0.x, v_0.y); }
-        public static Vector2Int vec2i(int n_0) { return new Vector2Int(n_0, n_0); }
-        #endregion Mixed Ctor Vector2Int
         
-        //---------------------------------------------------------------------
-        #region Mixed Ctor Vector3Int
-        public static Vector3Int vec3i(int n_0, int n_1, int n_2) { return new Vector3Int(n_0, n_1, n_2); }
-        public static Vector3Int vec3i(int n_0, Vector2Int v_0) { return new Vector3Int(n_0, v_0.x, v_0.y); }
-        public static Vector3Int vec3i(Vector2Int v_0, int n_0) { return new Vector3Int(v_0.x, v_0.y, n_0); }
-        public static Vector3Int vec3i(Vector3Int v_0) { return new Vector3Int(v_0.x, v_0.y, v_0.z); }
-        public static Vector3Int vec3i(int n_0) { return new Vector3Int(n_0, n_0, n_0); }
-        #endregion Mixed Ctor Vector3Int
-        
-        
-    }
-}
-
-//-----------------------------------------------------------------------------
-namespace Prateek.ShaderTo
-{
-    //-------------------------------------------------------------------------
-    public static partial class CSharp
-    {
         //---------------------------------------------------------------------
         #region Mixed Func int
         public static int random(int n_0, int n_1) { return UnityEngine.Random.Range(n_0, n_1); }
@@ -293,7 +294,6 @@ namespace Prateek.ShaderTo
         public static Vector3Int sign(Vector3Int v_0) { return new Vector3Int(System.Math.Sign(v_0.x), System.Math.Sign(v_0.y), System.Math.Sign(v_0.z)); }
         public static Vector3Int exp(Vector3Int v_0) { return new Vector3Int((int)Mathf.Exp(v_0.x), (int)Mathf.Exp(v_0.y), (int)Mathf.Exp(v_0.z)); }
         #endregion Mixed Func Vector3Int
-        
         
     }
 }

@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 26/03/2019
+//  Header last update date: 27/03/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -79,6 +79,7 @@ namespace Prateek.Editors
     //-------------------------------------------------------------------------
     public static partial class Prefs
     {
+        
         //---------------------------------------------------------------------
         #region bool
         public static Bools Get(string name, bool defaultValue)
@@ -218,7 +219,6 @@ namespace Prateek.Editors
             #endif //UNITY_EDITOR
         }
         #endregion string
-        
         
     }
 }
