@@ -123,10 +123,10 @@ namespace Prateek.Editors
 
             //-----------------------------------------------------------------
             #region Get/Set
-            protected void TryGetting()
+            protected void TryGetting(bool forceUpdate)
             {
 #if UNITY_EDITOR
-                if (ShouldUpdate)
+                if (ShouldUpdate || forceUpdate)
                 {
                     GetFromPrefs();
                 }
@@ -134,10 +134,10 @@ namespace Prateek.Editors
             }
 
             //-----------------------------------------------------------------
-            protected void TrySetting(bool shouldUpdate)
+            protected void TrySetting(bool forceUpdate)
             {
 #if UNITY_EDITOR
-                if (shouldUpdate)
+                if (ShouldUpdate || forceUpdate)
                 {
                     SetToPrefs();
                 }
@@ -175,7 +175,7 @@ namespace Prateek.Editors
             {
                 get
                 {
-                    TryGetting();
+                    TryGetting(false);
                     return value;
                 }
                 set
@@ -194,7 +194,7 @@ namespace Prateek.Editors
                 value = defaultValue;
                 this.defaultValue = defaultValue;
 
-                TryGetting();
+                TryGetting(true);
             }
 
             //-----------------------------------------------------------------
@@ -212,57 +212,123 @@ namespace Prateek.Editors
         //---------------------------------------------------------------------
         public class ListStrings : ValueStorage
         {
+            //-----------------------------------------------------------------
             #region Fields
             protected Ints count;
             protected List<Strings> strings = new List<Strings>();
             protected List<string> values = new List<string>();
             #endregion Fields
 
-            public List<string> data
+            //-----------------------------------------------------------------
+            public int Count { get { return count.Value; } }
+
+            //-----------------------------------------------------------------
+            public string this[int index]
             {
-                get
-                {
-                    return values;
-                }
+                get { return strings[index].Value; }
                 set
                 {
-                    var valueCount = value == null ? 0 : value.Count;
-                    if (valueCount != strings.Count)
-                    {
-                        while (strings.Count > valueCount)
-                        {
-                            var last = strings.Last() as ValueStorage;
-                            last.ClearFromPrefs();
-                            strings.RemoveLast();
-                        }
-
-                        while (strings.Count < valueCount)
-                        {
-                            strings.Add(new Strings(name + "[" + strings.Count + "]", value[strings.Count]));
-                        }
-                    }
-
-                    if (value != null)
-                    {
-                        for (int v = 0; v < value.Count; v++)
-                        {
-                            strings[v].Value = value[v];
-                        }
-                        values = value;
-                    }
-                    else
-                    {
-                        values.Clear();
-                    }
+                    strings[index].Value = values[index];
+                    values[index] = strings[index].Value;
                 }
             }
 
-            public ListStrings(string name, List<string> default_value)
-                : base(name)
+            //-----------------------------------------------------------------
+            public List<string> Values
             {
+                get { return new List<string>(values); }
+                set
+                {
+                    var valueCount = value == null ? 0 : value.Count;
+                    var length = min(Count, valueCount);
+                    for (int l = 0; l < length; l++)
+                    {
+                        strings[l].Value = value[l];
+                        values[l] = strings[l].Value;
+                    }
+
+                    if (Count > valueCount)
+                        RemoveRange(valueCount, Count - valueCount);
+
+                    if (Count < valueCount)
+                        AddRange(value.GetRange(Count, valueCount - Count));
+                }
+            }
+
+            //-----------------------------------------------------------------
+            public ListStrings(string name, List<string> defaultValue) : base(name)
+            {
+                var valueCount = defaultValue == null ? 0 : defaultValue.Count;
                 this.name = name;
-                count = new Ints(base.name + ".Count", default_value == null ? 0 : default_value.Count);
-                data = default_value;
+                count = new Ints(base.name + ".Count", valueCount);
+                var length = count.Value;
+                for (int i = 0; i < length; i++)
+                {
+                    Add(i < valueCount ? defaultValue[i] : string.Empty);
+                }
+            }
+
+            //-----------------------------------------------------------------
+            private string GetName(int index)
+            {
+                return string.Format("{0}[{1}]", name, index);
+            }
+
+            //-----------------------------------------------------------------
+            public void Add(string value)
+            {
+                strings.Add(new Strings(GetName(strings.Count), value));
+                values.Add(strings.Last().Value);
+                count.Value = values.Count;
+            }
+
+            //-----------------------------------------------------------------
+            public void AddRange(List<string> value)
+            {
+                for (int i = 0; i < value.Count; i++)
+                {
+                    Add(value[i]);
+                }
+            }
+
+            //-----------------------------------------------------------------
+            public void RemoveAt(int index)
+            {
+                values.RemoveAt(index);
+                count.Value = values.Count;
+                for (int i = index; i + 1 < strings.Count; i++)
+                {
+                    strings[i].Value = strings[i + 1].Value;
+                }
+                strings.Last().ClearFromPrefs();
+                strings.RemoveLast();
+            }
+
+            //-----------------------------------------------------------------
+            public void RemoveLast()
+            {
+                RemoveAt(count.Value - 1);
+            }
+
+            //-----------------------------------------------------------------
+            public void RemoveRange(int index, int length = 1)
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    RemoveAt(index);
+                }
+            }
+
+            //-----------------------------------------------------------------
+            public void Clear()
+            {
+                values.Clear();
+                count.Value = 0;
+                for (int i = 0; i < strings.Count; i++)
+                {
+                    strings[i].ClearFromPrefs();
+                }
+                strings.Clear();
             }
 
             //-----------------------------------------------------------------

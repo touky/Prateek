@@ -184,17 +184,20 @@ namespace Prateek.CodeGeneration.Editor
             prateekExportDir.Value = EditorGUILayout.TextField("Export dir", prateekExportDir.Value);
             prateekSourceDir.Value = EditorGUILayout.TextField("Source dir", prateekSourceDir.Value);
             {
-                var values = prateekSourceDir0.data;
                 if (GUI.Button(EditorGUILayout.GetControlRect(), "Add folder"))
                 {
-                    values.Add(string.Empty);
+                    prateekSourceDir0.Add(string.Empty);
                 }
 
-                for (int v = 0; v < values.Count; v++)
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Remove Folder"))
                 {
-                    values[v] = EditorGUILayout.TextField(values[v]);
+                    prateekSourceDir0.RemoveLast();
                 }
-                prateekSourceDir0.data = values;
+
+                for (int v = 0; v < prateekSourceDir0.Count; v++)
+                {
+                    prateekSourceDir0[v] = EditorGUILayout.TextField(prateekSourceDir0[v]);
+                }
             }
             EditorGUILayout.LabelField("File count: " + prateekScriptGenerator.WorkFileCount);
             using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.MaxHeight(350)))

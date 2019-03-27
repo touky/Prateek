@@ -281,6 +281,8 @@ namespace Prateek.CodeGeneration
 
         private List<string> workDirectories = new List<string>();
         private List<FileData> workFiles = new List<FileData>();
+
+        private bool isAutorun = false;
         #endregion Fields
 
         //---------------------------------------------------------------------
@@ -377,8 +379,10 @@ namespace Prateek.CodeGeneration
         }
 
         //---------------------------------------------------------------------
-        public BuildResult StartWork()
+        public BuildResult StartWork(bool isAutorun = false)
         {
+            this.isAutorun = isAutorun;
+
             for (int f = 0; f < workFiles.Count; f++)
             {
                 var file = workFiles[f];
@@ -495,6 +499,9 @@ namespace Prateek.CodeGeneration
             for (int r = 0; r < scripts.Count; r++)
             {
                 var script = scripts[r];
+                if (isAutorun && !script.AllowAutorun)
+                    continue;
+
                 if (script.Match(fileData.source.name, fileData.source.extension, fileData.source.content))
                 {
                     content = script.Content.CleanText();

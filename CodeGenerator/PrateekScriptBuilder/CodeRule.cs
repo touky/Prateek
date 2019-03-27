@@ -90,6 +90,7 @@ namespace Prateek.CodeGeneration
         static PrateekScriptLoader()
         {
             NewScript(CodeBuilder.Tag.importExtension, CodeBuilder.Tag.exportExtension)
+            .SetAutorun(false)
             .SetTemplateFile(String.Empty)
             .SetFileContent("InternalContent_Prateek_script.txt")
             .Commit();

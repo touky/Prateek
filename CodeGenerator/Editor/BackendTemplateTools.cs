@@ -104,7 +104,7 @@ namespace Prateek.CodeGeneration.Editor
                 builder.AddFile(new CodeBuilder.FileData(path, string.Empty));
 
                 builder.Init();
-                builder.StartWork();
+                builder.StartWork(true);
             }
         }
 

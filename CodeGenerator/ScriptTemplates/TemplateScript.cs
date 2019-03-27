@@ -97,17 +97,26 @@ namespace Prateek.CodeGeneration
         public class ScriptFile : BaseTemplate
         {
             //-----------------------------------------------------------------
+            private bool allowAutorun = true;
             private string nameEndsWith = string.Empty;
             private string exportExtension = string.Empty;
             private string templateFile = string.Empty;
 
             //-----------------------------------------------------------------
             public string ExportExtension { get { return exportExtension; } }
+            public bool AllowAutorun { get { return allowAutorun; } }
 
             //-----------------------------------------------------------------
             public ScriptFile(string extension, string exportExtension) : base(extension)
             {
                 this.exportExtension = exportExtension;
+            }
+
+            //-----------------------------------------------------------------
+            public ScriptFile SetAutorun(bool enable)
+            {
+                allowAutorun = enable;
+                return this;
             }
 
             //-----------------------------------------------------------------
