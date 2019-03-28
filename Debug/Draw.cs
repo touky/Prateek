@@ -157,14 +157,6 @@ namespace Prateek.Debug
                     }
                 }
             }
-
-            //---------------------------------------------------------------------
-            public Setup(Matrix4x4 matrix, SpaceType space, Color color, float duration, bool depthTest)
-                : this(InitMode.Reset)
-            {
-                this.matrix = matrix;
-            }
-            //public RenderSetup(RenderSetup other) : this(other.space, other.color, other.duration, other.depthTest, other.matrix) { }
         }
 
         //-----------------------------------------------------------------------------

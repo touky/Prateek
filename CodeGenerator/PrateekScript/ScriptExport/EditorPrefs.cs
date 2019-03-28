@@ -244,7 +244,6 @@ namespace Prateek.Editors
             #region Fields
             protected Ints x;
             protected Ints y;
-        
             #endregion Fields
         
             //-----------------------------------------------------------------
@@ -259,7 +258,6 @@ namespace Prateek.Editors
                 {
                     x.Value = value.x;
                     y.Value = value.y;
-        
                 }
             }
             #endregion Properties
@@ -270,7 +268,6 @@ namespace Prateek.Editors
             {
                 x = new Ints(name + ".x", defaultValue.x);
                 y = new Ints(name + ".y", defaultValue.y);
-        
             }
         
             //-----------------------------------------------------------------
@@ -295,7 +292,6 @@ namespace Prateek.Editors
             protected Ints x;
             protected Ints y;
             protected Ints z;
-        
             #endregion Fields
         
             //-----------------------------------------------------------------
@@ -311,7 +307,6 @@ namespace Prateek.Editors
                     x.Value = value.x;
                     y.Value = value.y;
                     z.Value = value.z;
-        
                 }
             }
             #endregion Properties
@@ -323,7 +318,6 @@ namespace Prateek.Editors
                 x = new Ints(name + ".x", defaultValue.x);
                 y = new Ints(name + ".y", defaultValue.y);
                 z = new Ints(name + ".z", defaultValue.z);
-        
             }
         
             //-----------------------------------------------------------------
@@ -347,7 +341,6 @@ namespace Prateek.Editors
             #region Fields
             protected Floats x;
             protected Floats y;
-        
             #endregion Fields
         
             //-----------------------------------------------------------------
@@ -362,7 +355,6 @@ namespace Prateek.Editors
                 {
                     x.Value = value.x;
                     y.Value = value.y;
-        
                 }
             }
             #endregion Properties
@@ -373,7 +365,6 @@ namespace Prateek.Editors
             {
                 x = new Floats(name + ".x", defaultValue.x);
                 y = new Floats(name + ".y", defaultValue.y);
-        
             }
         
             //-----------------------------------------------------------------
@@ -398,7 +389,6 @@ namespace Prateek.Editors
             protected Floats x;
             protected Floats y;
             protected Floats z;
-        
             #endregion Fields
         
             //-----------------------------------------------------------------
@@ -414,7 +404,6 @@ namespace Prateek.Editors
                     x.Value = value.x;
                     y.Value = value.y;
                     z.Value = value.z;
-        
                 }
             }
             #endregion Properties
@@ -426,7 +415,6 @@ namespace Prateek.Editors
                 x = new Floats(name + ".x", defaultValue.x);
                 y = new Floats(name + ".y", defaultValue.y);
                 z = new Floats(name + ".z", defaultValue.z);
-        
             }
         
             //-----------------------------------------------------------------
@@ -452,7 +440,6 @@ namespace Prateek.Editors
             protected Floats y;
             protected Floats z;
             protected Floats w;
-        
             #endregion Fields
         
             //-----------------------------------------------------------------
@@ -469,7 +456,6 @@ namespace Prateek.Editors
                     y.Value = value.y;
                     z.Value = value.z;
                     w.Value = value.w;
-        
                 }
             }
             #endregion Properties
@@ -482,7 +468,6 @@ namespace Prateek.Editors
                 y = new Floats(name + ".y", defaultValue.y);
                 z = new Floats(name + ".z", defaultValue.z);
                 w = new Floats(name + ".w", defaultValue.w);
-        
             }
         
             //-----------------------------------------------------------------
@@ -508,7 +493,6 @@ namespace Prateek.Editors
             protected Floats y;
             protected Floats width;
             protected Floats height;
-        
             #endregion Fields
         
             //-----------------------------------------------------------------
@@ -525,7 +509,6 @@ namespace Prateek.Editors
                     y.Value = value.y;
                     width.Value = value.width;
                     height.Value = value.height;
-        
                 }
             }
             #endregion Properties
@@ -538,7 +521,6 @@ namespace Prateek.Editors
                 y = new Floats(name + ".y", defaultValue.y);
                 width = new Floats(name + ".width", defaultValue.width);
                 height = new Floats(name + ".height", defaultValue.height);
-        
             }
         
             //-----------------------------------------------------------------
@@ -564,7 +546,6 @@ namespace Prateek.Editors
             protected Ints y;
             protected Ints width;
             protected Ints height;
-        
             #endregion Fields
         
             //-----------------------------------------------------------------
@@ -581,7 +562,6 @@ namespace Prateek.Editors
                     y.Value = value.y;
                     width.Value = value.width;
                     height.Value = value.height;
-        
                 }
             }
             #endregion Properties
@@ -594,7 +574,6 @@ namespace Prateek.Editors
                 y = new Ints(name + ".y", defaultValue.y);
                 width = new Ints(name + ".width", defaultValue.width);
                 height = new Ints(name + ".height", defaultValue.height);
-        
             }
         
             //-----------------------------------------------------------------

@@ -5,7 +5,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         PRATEEK_CLASS_INFO(Setup)
 		{
 			PRATEEK_NAMES(Matrix4x4, matrix)
-			PRATEEK_NAMES(SpaceType, space)
+			PRATEEK_NAMES(Space, space)
 			PRATEEK_NAMES(Color, color)
 			PRATEEK_NAMES(float, duration)
 			PRATEEK_NAMES(bool, depthTest)

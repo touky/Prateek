@@ -15,12 +15,13 @@
         <KeyWord name="PRATEEK_VARS" />
         <KeyWord name="SRC_CLASS" />
         <KeyWord name="DST_CLASS" />
-        <KeyWord name="PRATEEK_BLOCK_FUNC_BASIC" />
         <KeyWord name="PRATEEK_BLOCK_CTOR_MIXED" />
         <KeyWord name="PRATEEK_BLOCK_FUNC_MIXED" />
+        <KeyWord name="PRATEEK_BLOCK_FUNC_OVERLOAD" />
         <KeyWord name="PRATEEK_BLOCK_SYNTAX_NPP_COLOR" />
         <KeyWord name="PRATEEK_BLOCK_SYNTAX_NPP_AUTO_COMPLETE" />
         <KeyWord name="PRATEEK_BLOCK_SWIZZLE" />
+        <KeyWord name="PRATEEK_BLOCK_FUNC_BASIC" />
         <KeyWord name="NAMES_0" />
         <KeyWord name="NAMES_1" />
         <KeyWord name="NAMES_2" />
@@ -51,7 +52,6 @@
         <KeyWord name="FUNC_RESULT_7" />
         <KeyWord name="FUNC_RESULT_8" />
         <KeyWord name="FUNC_RESULT_9" />
-        
         
 
         <!-- C# -->

@@ -650,9 +650,10 @@ namespace Prateek.CodeGeneration
             var dst = fileData.destination;
             var path = destinationDirectory + dst.relPath;
             var dir = path.Replace(dst.name.Extension(dst.extension), string.Empty);
-            dir = FileHelpers.GetValidDirectory(dir);
-            if (dir == string.Empty)
-                return BuildResult.ValueType.WritingFailedDirDoesntExist;
+            var newDir = FileHelpers.GetValidDirectory(dir);
+            if (newDir == string.Empty)
+                return (BuildResult)BuildResult.ValueType.WritingFailedDirDoesntExist + dir;
+            dir = newDir;
 
             path = dir;
             if (runInTestMode)

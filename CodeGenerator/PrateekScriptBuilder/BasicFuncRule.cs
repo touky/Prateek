@@ -139,7 +139,7 @@ namespace Prateek.CodeGeneration
                                 funcData = vars.Apply(funcData);
                             }
 
-                            variant[d] += funcData;
+                            variant[d] = funcData;
                         }
                     }
                     variants.Add(variant);
