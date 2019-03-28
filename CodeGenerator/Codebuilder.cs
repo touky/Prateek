@@ -107,6 +107,8 @@ namespace Prateek.CodeGeneration
                 PrateekScriptInsufficientNames = 1 << 10,
                 PrateekScriptSourceDataTagInvalid = 1 << 11,
                 PrateekScriptInsufficientFuncResults = 1 << 12,
+                PrateekScriptKeywordCannotStartWithNumeric = 1 << 13,
+                PrateekScriptWrongKeywordChar = 1 << 14,
 
 
                 MAX = 32
@@ -156,7 +158,7 @@ namespace Prateek.CodeGeneration
                     var testValue = (ValueType)(1 << i);
                     if (!Is(testValue))
                         continue;
-                    log += string.Format(" - {0}\n", testValue);
+                    log += string.Format(" - {0}\n", testValue.ToString());
                 }
                 UnityEngine.Debug.LogError(log);
             }
@@ -652,8 +654,18 @@ namespace Prateek.CodeGeneration
             if (dir == string.Empty)
                 return BuildResult.ValueType.WritingFailedDirDoesntExist;
 
-            path = dir + dst.name.Extension(dst.extension);
-            File.WriteAllText(path + (runInTestMode ? ".txt" : String.Empty), dst.content.ApplyCRLF());
+            path = dir;
+            if (runInTestMode)
+            {
+                path += "TEST_";
+            }
+            path += dst.name.Extension(dst.extension);
+            if (runInTestMode)
+            {
+                path = path.Extension("txt");
+            }
+
+            File.WriteAllText(path, dst.content.ApplyCRLF());
 
             return BuildResult.ValueType.Success;
         }

@@ -97,22 +97,28 @@ namespace Prateek.CodeGeneration
         }
 
         //---------------------------------------------------------------------
+        public abstract class SyntaxCodeRule : CodeRule
+        {
+            public SyntaxCodeRule(string extension) : base(extension) { }
+
+            public abstract void AddKeyword(string content);
+            public abstract void AddIdentifier(string content);
+        }
+
+        //---------------------------------------------------------------------
         protected override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Tag.importExtension); } }
+
+        //---------------------------------------------------------------------
+        protected BuildResult Error(BuildResult result, ref FileData fileData)
+        {
+            return result + "in File: " + fileData.source.name.Extension(fileData.source.extension);
+        }
 
         //---------------------------------------------------------------------
         protected override BuildResult DoApplyValidTemplate(ref FileData fileData)
         {
             if (fileData.source.extension != Tag.importExtension)
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
-
-            base.DoApplyValidTemplate(ref fileData);
-
-            var genStart = Tag.Macro.codeGenStart.Keyword();
-            var startIndex = fileData.destination.content.IndexOf(genStart);
-            if (startIndex < 0)
-                return BuildResult.ValueType.PrateekScriptSourceStartTagInvalid;
-            var genHeader = fileData.destination.content.Substring(0, startIndex);
-            var genCode = fileData.destination.content.Substring(startIndex + genStart.Length);
 
             var analyzer = new Analyzer();
             var activeCodeFile = (CodeFile)null;
@@ -128,12 +134,18 @@ namespace Prateek.CodeGeneration
             while (analyzer.ShouldContinue)
             {
                 activeScope = analyzer.Scope;
-                if (analyzer.FindKeyword(ref keyword))
+                var keywordResult = analyzer.FindKeyword(ref keyword);
+                if (!keywordResult && !keywordResult.Is(BuildResult.ValueType.Ignored))
                 {
-                    var result = CheckGenericData(activeScope, keyword, analyzer, ref activeCodeFile, codeFiles, args);
-                    if (result < 1)
+                    return Error(keywordResult, ref fileData);
+                }
+
+                if (keywordResult)
+                {
+                    var dataResult = CheckGenericData(activeScope, keyword, analyzer, ref activeCodeFile, codeFiles, args);
+                    if (dataResult < 1)
                     {
-                        if (result < 0)
+                        if (dataResult < 0)
                             break;
                     }
                     else
@@ -151,20 +163,20 @@ namespace Prateek.CodeGeneration
                                 continue;
 
                             if (!analyzer.FindArgs(args, keyRule))
-                                return (BuildResult)BuildResult.ValueType.PrateekScriptArgNotFound + keyword;
+                                return Error((BuildResult)BuildResult.ValueType.PrateekScriptArgNotFound + keyword, ref fileData);
 
                             if (!analyzer.FindData(ref data, keyRule))
-                                return (BuildResult)BuildResult.ValueType.PrateekScriptDataNotFound + keyword;
+                                return Error((BuildResult)BuildResult.ValueType.PrateekScriptDataNotFound + keyword, ref fileData);
 
                             if (!rule.RetrieveRuleContent(activeCodeFile, keyRule, args, data))
-                                return (BuildResult)BuildResult.ValueType.PrateekScriptDataNotTreated + keyword;
+                                return Error((BuildResult)BuildResult.ValueType.PrateekScriptDataNotTreated + keyword, ref fileData);
 
                             foundMatch = true;
                             break;
                         }
 
                         if (!foundMatch)
-                            return (BuildResult)BuildResult.ValueType.PrateekScriptInvalidKeyword + keyword;
+                            return Error((BuildResult)BuildResult.ValueType.PrateekScriptInvalidKeyword + keyword, ref fileData);
                     }
                 }
                 else
@@ -220,21 +232,39 @@ namespace Prateek.CodeGeneration
                 //    UnityEngine.Debug.Log(log);
                 //}
 
-                // Build the actual code
-                var result = codeFile.Generate(genHeader, genCode);
-                if (!result)
-                {
-                    return result;
-                }
-
                 var newData = fileData;
-                var swap = new Utils.SwapInfo(newData.destination.name.Extension(newData.destination.extension)) + codeFile.fileName.Extension(codeFile.fileExtension);
+                var ext = newData.source.extension.Extension(codeFile.fileExtension);
+                var swap = new Utils.SwapInfo(newData.source.name.Extension(newData.source.extension))
+                                            + codeFile.fileName.Extension(ext);
+                newData.source.name = codeFile.fileName;
+                newData.source.extension = ext;
+                newData.source.absPath = swap.Apply(newData.source.absPath);
+                newData.source.relPath = swap.Apply(newData.source.relPath);
+                swap = new Utils.SwapInfo(newData.destination.name.Extension(newData.destination.extension)) + codeFile.fileName.Extension(codeFile.fileExtension);
                 newData.destination.name = codeFile.fileName;
                 newData.destination.extension = codeFile.fileExtension;
                 newData.destination.absPath = swap.Apply(newData.destination.absPath);
                 newData.destination.relPath = swap.Apply(newData.destination.relPath);
+
+                var applyResult = base.DoApplyValidTemplate(ref newData);
+                if (applyResult.Is(BuildResult.ValueType.NoMatchingTemplate))
+                    return Error(applyResult, ref newData);
+
+                var genStart = Tag.Macro.codeGenStart.Keyword();
+                var startIndex = newData.destination.content.IndexOf(genStart);
+                if (startIndex < 0)
+                    return Error(BuildResult.ValueType.PrateekScriptSourceStartTagInvalid, ref newData);
+                var genHeader = newData.destination.content.Substring(0, startIndex);
+                var genCode = newData.destination.content.Substring(startIndex + genStart.Length);
+
+                // Build the actual code
+                var result = codeFile.Generate(genHeader, genCode);
+                if (!result)
+                {
+                    return Error(result, ref newData);
+                }
+
                 newData.destination.content = codeFile.CodeGenerated;
-                newData.source = newData.destination;
                 AddWorkFile(newData);
 
                 //{ // Log shit

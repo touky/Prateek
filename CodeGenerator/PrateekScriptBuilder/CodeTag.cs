@@ -84,7 +84,7 @@ using System.Text.RegularExpressions;
 namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
-    public partial class CodeBuilder
+    public partial class PrateekScriptBuilder
     {
         //-------------------------------------------------------------------------
         [InitializeOnLoad]
@@ -92,7 +92,7 @@ namespace Prateek.CodeGeneration
         {
             static TagLoader()
             {
-                CodeBuilder.Tag.Macro.Init();
+                Tag.Macro.Init();
             }
         }
 
@@ -102,6 +102,46 @@ namespace Prateek.CodeGeneration
             //Default datas ---------------------------------------------------
             public const string importExtension = "prtk";
             public const string exportExtension = "cs";
+
+            //-----------------------------------------------------------------
+            public struct NumberedVars
+            {
+                //-----------------------------------------------------------------
+                private List<string> datas;
+
+                //-----------------------------------------------------------------
+                public int Count { get { return datas.Count; } }
+                public Utils.SwapInfo this[int i]
+                {
+                    get
+                    {
+                        if (i < 0 || i >= datas.Count)
+                            return string.Empty;
+                        return datas[i];
+                    }
+                }
+
+                //-----------------------------------------------------------------
+                public NumberedVars(Tag.Macro.VarName root)
+                {
+                    datas = new List<string>();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        datas.Add(string.Format("{0}_{1}", root, i).Keyword());
+                    }
+                }
+
+                //-----------------------------------------------------------------
+                public int GetCount(string content)
+                {
+                    var count = 0;
+                    for (int c = 0; c < Count; c++)
+                    {
+                        count += content.Contains(datas[c]) ? 1 : 0;
+                    }
+                    return count;
+                }
+            }
 
             //-----------------------------------------------------------------
             public static class Macro
@@ -132,8 +172,13 @@ namespace Prateek.CodeGeneration
                 }
 
                 //-------------------------------------------------------------
-                public static string srcClass = "SRC_CLASS";
-                public static string dstClass = "DST_CLASS";
+                public enum ClassName
+                {
+                    SRC_CLASS,
+                    DST_CLASS,
+
+                    MAX
+                }
 
                 //-------------------------------------------------------------
                 public enum VarName
@@ -144,6 +189,15 @@ namespace Prateek.CodeGeneration
 
                     MAX
                 }
+
+                //-------------------------------------------------------------
+                private static NumberedVars names;
+                private static NumberedVars vars;
+                private static NumberedVars funcs;
+
+                //-------------------------------------------------------------
+                public static string srcClass = "#SRC_CLASS#";
+                public static string dstClass = "#DST_CLASS#";
 
                 //-------------------------------------------------------------
                 private static List<string> data = new List<string>();
@@ -158,6 +212,11 @@ namespace Prateek.CodeGeneration
                 public static string Func           { get { return data[6]; } }
                 public static string ClassNames     { get { return data[7]; } }
                 public static string ClassVars      { get { return data[8]; } }
+
+                //-------------------------------------------------------------
+                public static NumberedVars Names { get { return names; } }
+                public static NumberedVars Funcs { get { return funcs; } }
+                public static NumberedVars Vars { get { return vars; } }
 
                 //-------------------------------------------------------------
                 public static string To(FuncName value) { return Enum.GetNames(typeof(FuncName))[(int)value]; }
@@ -175,6 +234,49 @@ namespace Prateek.CodeGeneration
                     data.Add(string.Format("{0}_{1}", prefix, To(FuncName.FUNC)));
                     data.Add(string.Format("{0}_{1}", prefix, To(VarName.NAMES)));
                     data.Add(string.Format("{0}_{1}", prefix, To(VarName.VARS)));
+
+                    srcClass = ClassName.SRC_CLASS.ToString().Keyword();
+                    dstClass = ClassName.DST_CLASS.ToString().Keyword();
+
+                    names = new NumberedVars(VarName.NAMES);
+                    vars = new NumberedVars(VarName.VARS);
+                    funcs = new NumberedVars(VarName.FUNC_RESULT);
+                }
+
+                //-------------------------------------------------------------
+                public static void GetTags(SyntaxCodeRule syntaxer)
+                {
+                    syntaxer.AddKeyword(FileInfo);
+                    for (int d = 1; d < data.Count; d++)
+                    {
+                        syntaxer.AddIdentifier(data[d]);
+                    }
+
+                    syntaxer.AddIdentifier(srcClass.Keyword(false));
+                    syntaxer.AddIdentifier(dstClass.Keyword(false));
+
+                    var rules = PrateekScriptBuilder.Database.CodeRules;
+                    for (int r = 0; r < rules.Count; r++)
+                    {
+                        var rule = rules[r];
+                        syntaxer.AddKeyword(rule.CodeBlock);
+                    }
+
+                    for (int p = 0; p < 3; p++)
+                    {
+                        var list = default(NumberedVars);
+                        switch (p)
+                        {
+                            case 0: { list = names; break; }
+                            case 1: { list = vars; break; }
+                            case 2: { list = funcs; break; }
+                        }
+
+                        for (int l = 0; l < list.Count; l++)
+                        {
+                            syntaxer.AddIdentifier(list[l].Original.Keyword(false));
+                        }
+                    }
                 }
             }
 

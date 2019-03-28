@@ -12,17 +12,17 @@ PRATEEK_FILE_INFO(Vectors, cs)
         {
 		@
         @//---------------------------------------------------------------------
-        @#region Swizzle SRC_CLASS to DST_CLASS
+        @#region Swizzle #SRC_CLASS# to #DST_CLASS#
         }
 
         PRATEEK_CODE_MAIN
         {
-        @public static DST_CLASS FUNC_RESULT_0(this SRC_CLASS FUNC_RESULT_1) { return new DST_CLASS(FUNC_RESULT_2); }
+        @public static #DST_CLASS# #FUNC_RESULT_0#(this #SRC_CLASS# #FUNC_RESULT_1#) { return new #DST_CLASS#(#FUNC_RESULT_2#); }
         }
         
         PRATEEK_CODE_SUFFIX
         {
-        @#endregion Swizzle SRC_CLASS to DST_CLASS
+        @#endregion Swizzle #SRC_CLASS# to #DST_CLASS#
         }
     }
 
@@ -38,17 +38,17 @@ PRATEEK_FILE_INFO(Vectors, cs)
         {
 		@
         @//---------------------------------------------------------------------
-        @#region Mixed Ctor SRC_CLASS
+        @#region Mixed Ctor #SRC_CLASS#
         }
 
         PRATEEK_CODE_MAIN
         {
-        @public static SRC_CLASS FUNC_RESULT_0(FUNC_RESULT_1) { return new SRC_CLASS(FUNC_RESULT_2); }
+        @public static #SRC_CLASS# #FUNC_RESULT_0#(#FUNC_RESULT_1#) { return new #SRC_CLASS#(#FUNC_RESULT_2#); }
         }
         
         PRATEEK_CODE_SUFFIX
         {
-        @#endregion Mixed Ctor SRC_CLASS
+        @#endregion Mixed Ctor #SRC_CLASS#
         }
     }
 
@@ -61,37 +61,37 @@ PRATEEK_FILE_INFO(Vectors, cs)
         PRATEEK_DEFAULT(float, 0)
 
 		
-		PRATEEK_FUNC(random) { @UnityEngine.Random.Range(VARS_0, VARS_1)$ }
-        PRATEEK_FUNC(max)    { @Mathf.Max(VARS_0, VARS_1)$ }
-        PRATEEK_FUNC(min)    { @Mathf.Min(VARS_0, VARS_1)$ }
-        PRATEEK_FUNC(mul)    { @VARS_0 * VARS_1$ }
-        PRATEEK_FUNC(div)    { @VARS_0 / VARS_1$ }
-        PRATEEK_FUNC(mod)    { @(VARS_0 + VARS_1) % VARS_1$ }
-        PRATEEK_FUNC(fract)  { @VARS_0 - floor(VARS_0)$ }
-        PRATEEK_FUNC(abs)    { @Mathf.Abs(VARS_0)$ }
-        PRATEEK_FUNC(sign)   { @Mathf.Sign(VARS_0)$ }
-        PRATEEK_FUNC(exp)    { @Mathf.Exp(VARS_0)$ }
-        PRATEEK_FUNC(cos)    { @Mathf.Cos(VARS_0)$ }
-        PRATEEK_FUNC(sin)    { @Mathf.Sin(VARS_0)$ }
-        PRATEEK_FUNC(ceil)   { @Mathf.Ceil(VARS_0)$ }
-        PRATEEK_FUNC(floor)  { @Mathf.Floor(VARS_0)$ }
-        PRATEEK_FUNC(sqrt)   { @Mathf.Sqrt(VARS_0)$ }
+		PRATEEK_FUNC(random) { @UnityEngine.Random.Range(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(max)    { @Mathf.Max(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(min)    { @Mathf.Min(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(mul)    { @#VARS_0# * #VARS_1#$ }
+        PRATEEK_FUNC(div)    { @#VARS_0# / #VARS_1#$ }
+        PRATEEK_FUNC(mod)    { @(#VARS_0# + #VARS_1#) % #VARS_1#$ }
+        PRATEEK_FUNC(fract)  { @#VARS_0# - floor(#VARS_0#)$ }
+        PRATEEK_FUNC(abs)    { @Mathf.Abs(#VARS_0#)$ }
+        PRATEEK_FUNC(sign)   { @Mathf.Sign(#VARS_0#)$ }
+        PRATEEK_FUNC(exp)    { @Mathf.Exp(#VARS_0#)$ }
+        PRATEEK_FUNC(cos)    { @Mathf.Cos(#VARS_0#)$ }
+        PRATEEK_FUNC(sin)    { @Mathf.Sin(#VARS_0#)$ }
+        PRATEEK_FUNC(ceil)   { @Mathf.Ceil(#VARS_0#)$ }
+        PRATEEK_FUNC(floor)  { @Mathf.Floor(#VARS_0#)$ }
+        PRATEEK_FUNC(sqrt)   { @Mathf.Sqrt(#VARS_0#)$ }
 
         PRATEEK_CODE_PREFIX
         {
 		@
         @//---------------------------------------------------------------------
-        @#region Mixed Func SRC_CLASS
+        @#region Mixed Func #SRC_CLASS#
         }
 
         PRATEEK_CODE_MAIN
         {
-        @public static SRC_CLASS FUNC_RESULT_0(FUNC_RESULT_1) { return FUNC_RESULT_2; }
+        @public static #SRC_CLASS# #FUNC_RESULT_0#(#FUNC_RESULT_1#) { return #FUNC_RESULT_2#; }
         }
         
         PRATEEK_CODE_SUFFIX
         {
-        @#endregion Mixed Func SRC_CLASS
+        @#endregion Mixed Func #SRC_CLASS#
         }
     }
 }
@@ -109,17 +109,17 @@ PRATEEK_FILE_INFO(VectorInts, cs)
         {
 		@
         @//---------------------------------------------------------------------
-        @#region Swizzle SRC_CLASS to DST_CLASS
+        @#region Swizzle #SRC_CLASS# to #DST_CLASS#
         }
 
         PRATEEK_CODE_MAIN
         {
-        @public static DST_CLASS FUNC_RESULT_0(this SRC_CLASS FUNC_RESULT_1) { return new DST_CLASS(FUNC_RESULT_2); }
+        @public static #DST_CLASS# #FUNC_RESULT_0#(this #SRC_CLASS# #FUNC_RESULT_1#) { return new #DST_CLASS#(#FUNC_RESULT_2#); }
         }
         
         PRATEEK_CODE_SUFFIX
         {
-        @#endregion Swizzle SRC_CLASS to DST_CLASS
+        @#endregion Swizzle #SRC_CLASS# to #DST_CLASS#
         }
     }
 
@@ -134,17 +134,17 @@ PRATEEK_FILE_INFO(VectorInts, cs)
         {
 		@
         @//---------------------------------------------------------------------
-        @#region Mixed Ctor SRC_CLASS
+        @#region Mixed Ctor #SRC_CLASS#
         }
 
         PRATEEK_CODE_MAIN
         {
-        @public static SRC_CLASS FUNC_RESULT_0(FUNC_RESULT_1) { return new SRC_CLASS(FUNC_RESULT_2); }
+        @public static #SRC_CLASS# #FUNC_RESULT_0#(#FUNC_RESULT_1#) { return new #SRC_CLASS#(#FUNC_RESULT_2#); }
         }
         
         PRATEEK_CODE_SUFFIX
         {
-        @#endregion Mixed Ctor SRC_CLASS
+        @#endregion Mixed Ctor #SRC_CLASS#
         }
     }
 
@@ -155,31 +155,31 @@ PRATEEK_FILE_INFO(VectorInts, cs)
 
         PRATEEK_DEFAULT(int, 0)
 
-		PRATEEK_FUNC(random) { @UnityEngine.Random.Range(VARS_0, VARS_1)$ }
-        PRATEEK_FUNC(max)    { @Mathf.Max(VARS_0, VARS_1)$ }
-        PRATEEK_FUNC(min)    { @Mathf.Min(VARS_0, VARS_1)$ }
-        PRATEEK_FUNC(mul)    { @VARS_0 * VARS_1$ }
-        PRATEEK_FUNC(div)    { @VARS_0 / VARS_1$ }
-        PRATEEK_FUNC(mod)    { @(VARS_0 + VARS_1) % VARS_1$ }
-        PRATEEK_FUNC(abs)    { @Mathf.Abs(VARS_0)$ }
-        PRATEEK_FUNC(sign)   { @System.Math.Sign(VARS_0)$ }
-        PRATEEK_FUNC(exp)    { @(int)Mathf.Exp(VARS_0)$ }
+		PRATEEK_FUNC(random) { @UnityEngine.Random.Range(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(max)    { @Mathf.Max(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(min)    { @Mathf.Min(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(mul)    { @#VARS_0# * #VARS_1#$ }
+        PRATEEK_FUNC(div)    { @#VARS_0# / #VARS_1#$ }
+        PRATEEK_FUNC(mod)    { @(#VARS_0# + #VARS_1#) % #VARS_1#$ }
+        PRATEEK_FUNC(abs)    { @Mathf.Abs(#VARS_0#)$ }
+        PRATEEK_FUNC(sign)   { @System.Math.Sign(#VARS_0#)$ }
+        PRATEEK_FUNC(exp)    { @(int)Mathf.Exp(#VARS_0#)$ }
 
         PRATEEK_CODE_PREFIX
         {
 		@
         @//---------------------------------------------------------------------
-        @#region Mixed Func SRC_CLASS
+        @#region Mixed Func #SRC_CLASS#
         }
 
         PRATEEK_CODE_MAIN
         {
-        @public static SRC_CLASS FUNC_RESULT_0(FUNC_RESULT_1) { return FUNC_RESULT_2; }
+        @public static #SRC_CLASS# #FUNC_RESULT_0#(#FUNC_RESULT_1#) { return #FUNC_RESULT_2#; }
         }
         
         PRATEEK_CODE_SUFFIX
         {
-        @#endregion Mixed Func SRC_CLASS
+        @#endregion Mixed Func #SRC_CLASS#
         }
     }
 }

@@ -14,17 +14,17 @@ PRATEEK_FILE_INFO(Colors, cs)
         {
 		@
         @//---------------------------------------------------------------------
-		@#region Swizzle SRC_CLASS
+		@#region Swizzle #SRC_CLASS#
         }
         
         PRATEEK_CODE_MAIN
         {
-		@public static DST_CLASS FUNC_RESULT_0(this SRC_CLASS FUNC_RESULT_1) { return new DST_CLASS(FUNC_RESULT_2); }
+		@public static #DST_CLASS# #FUNC_RESULT_0#(this #SRC_CLASS# #FUNC_RESULT_1#) { return new #DST_CLASS#(#FUNC_RESULT_2#); }
         }
 
         PRATEEK_CODE_SUFFIX
         {
-    	@#endregion Swizzle PRTK_SRC_CLASS
+    	@#endregion Swizzle #SRC_CLASS#
         }
     }
 }

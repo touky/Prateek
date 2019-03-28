@@ -89,7 +89,7 @@ namespace Prateek.CodeGeneration
     {
         static PrateekScriptLoader()
         {
-            NewScript(CodeBuilder.Tag.importExtension, CodeBuilder.Tag.exportExtension)
+            NewScript(PrateekScriptBuilder.Tag.importExtension.Extension(PrateekScriptBuilder.Tag.exportExtension), PrateekScriptBuilder.Tag.exportExtension)
             .SetAutorun(false)
             .SetTemplateFile(String.Empty)
             .SetFileContent("InternalContent_Prateek_script.txt")
@@ -158,46 +158,6 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public struct NumberedVars
-            {
-                //-----------------------------------------------------------------
-                private List<string> datas;
-
-                //-----------------------------------------------------------------
-                public int Count { get { return datas.Count; } }
-                public Utils.SwapInfo this[int i]
-                {
-                    get
-                    {
-                        if (i < 0 || i >= datas.Count)
-                            return string.Empty;
-                        return datas[i];
-                    }
-                }
-
-                //-----------------------------------------------------------------
-                public NumberedVars(Tag.Macro.VarName root)
-                {
-                    datas = new List<string>();
-                    for (int i = 0; i < 10; i++)
-                    {
-                        datas.Add(string.Format("{0}_{1}", root, i));
-                    }
-                }
-
-                //-----------------------------------------------------------------
-                public int GetCount(string content)
-                {
-                    var count = 0;
-                    for (int c = 0; c < Count; c++)
-                    {
-                        count += content.Contains(datas[c]) ? 1 : 0;
-                    }
-                    return count;
-                }
-            }
-
-            //-----------------------------------------------------------------
             public enum GenerationMode
             {
                 ForeachSrc,
@@ -213,9 +173,6 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             private string codeBlock = string.Empty;
-            private NumberedVars names;
-            private NumberedVars vars;
-            private NumberedVars funcs;
 
             //-----------------------------------------------------------------
             public string CodeBlock { get { return codeBlock; } }
@@ -223,9 +180,9 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public Utils.SwapInfo ClassDst { get { return Tag.Macro.dstClass; } }
             public Utils.SwapInfo ClassSrc { get { return Tag.Macro.srcClass; } }
-            public NumberedVars Names { get { return names; } }
-            public NumberedVars Funcs { get { return funcs; } }
-            public NumberedVars Vars { get { return vars; } }
+            public Tag.NumberedVars Names { get { return Tag.Macro.Names; } }
+            public Tag.NumberedVars Funcs { get { return Tag.Macro.Funcs; } }
+            public Tag.NumberedVars Vars { get { return Tag.Macro.Vars; } }
 
             //-----------------------------------------------------------------
             protected CodeRule(string extension) : base(extension)
@@ -243,10 +200,6 @@ namespace Prateek.CodeGeneration
             private void Init()
             {
                 codeBlock = string.Format("{0}_{1}_{2}", Tag.Macro.prefix, Tag.Macro.To(Tag.Macro.FuncName.BLOCK), ScopeTag);
-
-                names = new NumberedVars(Tag.Macro.VarName.NAMES);
-                vars = new NumberedVars(Tag.Macro.VarName.VARS);
-                funcs = new NumberedVars(Tag.Macro.VarName.FUNC_RESULT);
             }
 
             //-----------------------------------------------------------------

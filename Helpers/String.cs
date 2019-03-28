@@ -383,9 +383,21 @@ namespace Prateek.Helpers
         }
 
         //---------------------------------------------------------------------
-        public static string Keyword(this string left)
+        public static string Keyword(this string left, bool enable = true)
         {
-            return string.Format("{0}{1}{2}", keyword[0], left, keyword[0]);
+            if (enable)
+            {
+                return string.Format("{0}{1}{2}", keyword[0], left, keyword[0]);
+            }
+            else
+            {
+                var result = left;
+                if (result.StartsWith(Separator.Keyword.S()))
+                    result = result.Remove(0, 1);
+                if (result.EndsWith(Separator.Keyword.S()))
+                    result = result.Remove(result.Length - 1);
+                return result;
+            }
         }
 
         //---------------------------------------------------------------------

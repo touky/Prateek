@@ -114,6 +114,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             private int position = 0;
+            private int lineCount = 0;
             private int trailingWhiteSpaces = 0;
             private List<string> scopes = new List<string>();
 
@@ -148,6 +149,7 @@ namespace Prateek.CodeGeneration
             public void Init(string content)
             {
                 position = 0;
+                lineCount = 0;
                 trailingWhiteSpaces = 0;
                 scopes.Clear();
 
@@ -157,7 +159,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public bool FindKeyword(ref string keyword)
+            public BuildResult FindKeyword(ref string keyword)
             {
                 keyword = String.Empty;
                 while (position < content.Length)
@@ -169,7 +171,7 @@ namespace Prateek.CodeGeneration
                         case SymbolType.Letter:
                         {
                             if (type == SymbolType.Numeric && keyword.Length == 0)
-                                return false;
+                                return (BuildResult)BuildResult.ValueType.PrateekScriptKeywordCannotStartWithNumeric + string.Format("at line: {0}", lineCount);
                             keyword += content[position];
                             break;
                         }
@@ -178,24 +180,31 @@ namespace Prateek.CodeGeneration
                         case SymbolType.WhiteSpace:
                         case SymbolType.LineFeed:
                         {
+                            if (type == SymbolType.LineFeed)
+                                lineCount++;
+
                             if (keyword.Length > 0)
-                                return true;
+                                return BuildResult.ValueType.Success;
 
                             if (type == SymbolType.ScopeStart)
                                 scopes.Add(string.Empty);
                             break;
                         }
+                        case SymbolType.ScopeEnd:
+                        {
+                            return BuildResult.ValueType.Ignored;
+                        }
                         default:
                         {
                             if (keyword.Length > 0)
-                                return true;
-                            return false;
+                                return BuildResult.ValueType.Success;
+                            return (BuildResult)BuildResult.ValueType.PrateekScriptWrongKeywordChar + content[position].ToString() + string.Format("at line: {0}", lineCount);
                         }
                     }
 
                     position++;
                 }
-                return keyword.Length > 0;
+                return keyword.Length > 0 ? BuildResult.ValueType.Success : BuildResult.ValueType.Ignored;
             }
 
             //-----------------------------------------------------------------
@@ -258,6 +267,9 @@ namespace Prateek.CodeGeneration
                         case SymbolType.LineFeed:
                         case SymbolType.ArgSplit:
                         {
+                            if (type == SymbolType.LineFeed)
+                                lineCount++;
+
                             if (type == SymbolType.ArgSplit)
                             {
                                 if (keyRule.args.NoneNeeded)
@@ -353,6 +365,9 @@ namespace Prateek.CodeGeneration
                         case SymbolType.LiteralEnd:
                         case SymbolType.LineFeed:
                         {
+                            if (type == SymbolType.LineFeed)
+                                lineCount++;
+
                             if (storeData)
                             {
                                 if (type != SymbolType.LiteralEnd)
@@ -401,6 +416,9 @@ namespace Prateek.CodeGeneration
                         }
                         case SymbolType.LineFeed:
                         {
+                            if (type == SymbolType.LineFeed)
+                                lineCount++;
+
                             trailingWhiteSpaces = 0;
                             break;
                         }
@@ -420,18 +438,18 @@ namespace Prateek.CodeGeneration
             {
                 int commentStart = -1;
                 int commentEnd = -1;
-                bool ignoreAllToLineEnd = false;
+                bool ignoreAllToLiteralEnd = false;
                 bool lookForLineEnd = false;
                 bool lookForContEnd = false;
-                for (int i = 0; i < content.Length - 1; i++)
+                for (int i = 0; i < content.Length; i++)
                 {
                     var value0 = content[i];
-                    var value1 = content[i + 1];
-                    if (ignoreAllToLineEnd)
+                    var value1 = content[min(i + 1, content.Length - 1)];
+                    if (ignoreAllToLiteralEnd)
                     {
-                        if (value0 == charIgnore[1])
+                        if (value0 == charIgnore[1] || value0 == charLiteral[1])
                         {
-                            ignoreAllToLineEnd = false;
+                            ignoreAllToLiteralEnd = false;
                         }
                         continue;
                     }
@@ -442,12 +460,14 @@ namespace Prateek.CodeGeneration
                             commentEnd = i;
                         if (lookForContEnd && value0 == charComment[1] && value1 == charComment[0])
                             commentEnd = ++i;
+                        if (i + 1 >= content.Length - 1)
+                            commentEnd = i;
 
                         if (commentEnd >= 0)
                         {
                             content = content.Remove(commentStart, (commentEnd + 1) - commentStart);
                             i = commentStart - 1;
-                            lookForLineEnd = false;
+                             lookForLineEnd = false;
                             lookForContEnd = false;
                             commentStart = -1;
                             commentEnd = -1;
@@ -466,7 +486,7 @@ namespace Prateek.CodeGeneration
                     }
                     else if (value0 == charLiteral[0])
                     {
-                        ignoreAllToLineEnd = true;
+                        ignoreAllToLiteralEnd = true;
                     }
                 }
             }

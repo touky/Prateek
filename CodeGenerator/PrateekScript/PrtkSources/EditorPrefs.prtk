@@ -11,20 +11,20 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
         {
 		@
         @//---------------------------------------------------------------------
-        @#region SRC_CLASS
-        @public static NAMES_0 Get(string name, SRC_CLASS defaultValue)
+        @#region #SRC_CLASS#
+        @public static #NAMES_0# Get(string name, #SRC_CLASS# defaultValue)
         @{
-        @    return new NAMES_0(name, defaultValue);
+        @    return new #NAMES_0#(name, defaultValue);
         @}
         @
         @//---------------------------------------------------------------------
-        @public class NAMES_0 : TypedStorage<SRC_CLASS>
+        @public class #NAMES_0# : TypedStorage<#SRC_CLASS#>
         @{
         @    //-----------------------------------------------------------------
-        @    public NAMES_0(string name, SRC_CLASS defaultValue) : base(name, defaultValue) { }
+        @    public #NAMES_0#(string name, #SRC_CLASS# defaultValue) : base(name, defaultValue) { }
         @
         @    //-----------------------------------------------------------------
-        @    public override bool ShouldSetNewValue(SRC_CLASS newValue)
+        @    public override bool ShouldSetNewValue(#SRC_CLASS# newValue)
         @    {
         @        return this.value != newValue;
         @    }
@@ -33,22 +33,32 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
         @    #if UNITY_EDITOR
         @    protected override void GetFromPrefs()
         @    {
-        @        value = UnityEditor.EditorPrefs.NAMES_1(name, defaultValue);
+        @        value = UnityEditor.EditorPrefs.#NAMES_1#(name, defaultValue);
         @    }
         @
         @    //-----------------------------------------------------------------
         @    protected override void SetToPrefs()
         @    {
-        @        UnityEditor.EditorPrefs.NAMES_2(name, value);
+        @        UnityEditor.EditorPrefs.#NAMES_2#(name, value);
         @    }
         @    #endif //UNITY_EDITOR
         @}
-        @#endregion SRC_CLASS
+        @#endregion #SRC_CLASS#
         }
     }
 
 	PRATEEK_BLOCK_BASIC_FUNC(Prateek.Editors, Prefs)
 	{
+		PRATEEK_CLASS_INFO(Vector2Int)
+		{
+			PRATEEK_NAMES(Vector2Ints, Ints)
+			PRATEEK_VARS(x, y)
+		}
+		PRATEEK_CLASS_INFO(Vector3Int)
+		{
+			PRATEEK_NAMES(Vector3Ints, Ints)
+			PRATEEK_VARS(x, y, z)
+		}
 		PRATEEK_CLASS_INFO(Vector2)
 		{
 			PRATEEK_NAMES(Vector2s, Floats)
@@ -69,59 +79,64 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 			PRATEEK_NAMES(Rects, Floats)
 			PRATEEK_VARS(x, y, width, height)
 		}
+		PRATEEK_CLASS_INFO(RectInt)
+		{
+			PRATEEK_NAMES(RectInts, Ints)
+			PRATEEK_VARS(x, y, width, height)
+		}
 
 		PRATEEK_FUNC
 		{
-		@	protected NAMES_1 VARS_0;
+		@	protected #NAMES_1# #VARS_0#;
 		}
-		PRATEEK_FUNC { @VARS_0.Value$ }
+		PRATEEK_FUNC { @#VARS_0#.Value$ }
 		PRATEEK_FUNC
 		{
-		@			VARS_0.Value = value.VARS_0;
+		@			#VARS_0#.Value = value.#VARS_0#;
 		}
 		PRATEEK_FUNC
 		{
-		@		VARS_0 = new NAMES_1(name + ".VARS_0", defaultValue.VARS_0);
+		@		#VARS_0# = new #NAMES_1#(name + ".#VARS_0#", defaultValue.#VARS_0#);
 		}
 
 		PRATEEK_CODE_MAIN
 		{
 		@
 		@//---------------------------------------------------------------------
-		@#region SRC_CLASS
-		@public static NAMES_0 Get(string name, SRC_CLASS defaultValue)
+		@#region #SRC_CLASS#
+		@public static #NAMES_0# Get(string name, #SRC_CLASS# defaultValue)
 		@{
-		@	return new NAMES_0(name, defaultValue);
+		@	return new #NAMES_0#(name, defaultValue);
 		@}
 		@
 		@//---------------------------------------------------------------------
-		@public class NAMES_0 : ValueStorage
+		@public class #NAMES_0# : ValueStorage
 		@{
 		@	//-----------------------------------------------------------------
 		@	#region Fields
-		@FUNC_RESULT_0
+		@#FUNC_RESULT_0#
 		@	#endregion Fields
 		@
 		@	//-----------------------------------------------------------------
 		@	#region Properties
-		@	public SRC_CLASS data
+		@	public #SRC_CLASS# Value
 		@	{
 		@		get
 		@		{
-		@			return new SRC_CLASS(FUNC_RESULT_1);
+		@			return new #SRC_CLASS#(#FUNC_RESULT_1#);
 		@		}
 		@		set
 		@		{
-		@FUNC_RESULT_2
+		@#FUNC_RESULT_2#
 		@		}
 		@	}
 		@	#endregion Properties
 		@
 		@	//-----------------------------------------------------------------
 		@	#region Behaviour
-		@	public NAMES_0(string name, SRC_CLASS defaultValue) : base(name)
+		@	public #NAMES_0#(string name, #SRC_CLASS# defaultValue) : base(name)
 		@	{
-		@FUNC_RESULT_3
+		@#FUNC_RESULT_3#
 		@	}
 		@
 		@	//-----------------------------------------------------------------
@@ -129,7 +144,161 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@	protected override void SetToPrefs() { }
 		@	#endregion Behaviour
 		@}
-		@#endregion SRC_CLASS
+		@#endregion #SRC_CLASS#
+		}
+	}
+
+	PRATEEK_BLOCK_BASIC_FUNC(Prateek.Editors, Prefs)
+	{
+		PRATEEK_CLASS_INFO(string) 	  { PRATEEK_NAMES(Strings) }
+		PRATEEK_CLASS_INFO(bool)   	  { PRATEEK_NAMES(Bools) }
+		PRATEEK_CLASS_INFO(int)    	  { PRATEEK_NAMES(Ints) }
+		PRATEEK_CLASS_INFO(float)  	  { PRATEEK_NAMES(Floats) }
+		PRATEEK_CLASS_INFO(Vector2Int){ PRATEEK_NAMES(Vector2Ints) }
+		PRATEEK_CLASS_INFO(Vector3Int){ PRATEEK_NAMES(Vector3Ints) }
+		PRATEEK_CLASS_INFO(Vector2)   { PRATEEK_NAMES(Vector2s) }
+		PRATEEK_CLASS_INFO(Vector3)   { PRATEEK_NAMES(Vector3s) }
+		PRATEEK_CLASS_INFO(Vector4)   { PRATEEK_NAMES(Vector4s) }
+		PRATEEK_CLASS_INFO(Rect)      { PRATEEK_NAMES(Rects) }
+		PRATEEK_CLASS_INFO(RectInt)   { PRATEEK_NAMES(RectInts) }
+		
+		PRATEEK_CODE_MAIN
+		{
+		@
+		@//---------------------------------------------------------------------
+		@#region List<#SRC_CLASS#>
+		@public static List#NAMES_0# Get(string name, List<#SRC_CLASS#> default_value)
+		@{
+		@    return new List#NAMES_0#(name, default_value);
+		@}
+		@
+		@//---------------------------------------------------------------------
+		@public class List#NAMES_0# : ValueStorage
+		@{
+		@    //-----------------------------------------------------------------
+		@    #region Fields
+		@    protected Ints count;
+		@    protected List<#NAMES_0#> prefValues = new List<#NAMES_0#>();
+		@    protected List<#SRC_CLASS#> realValues = new List<#SRC_CLASS#>();
+		@    #endregion Fields
+		@
+		@    //-----------------------------------------------------------------
+		@    public int Count { get { return count.Value; } }
+		@
+		@    //-----------------------------------------------------------------
+		@    public #SRC_CLASS# this[int index]
+		@    {
+		@        get { return prefValues[index].Value; }
+		@        set
+		@        {
+		@            prefValues[index].Value = realValues[index];
+		@            realValues[index] = prefValues[index].Value;
+		@        }
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    public List<#SRC_CLASS#> Values
+		@    {
+		@        get { return new List<#SRC_CLASS#>(realValues); }
+		@        set
+		@        {
+		@            var valueCount = value == null ? 0 : value.Count;
+		@            var length = min(Count, valueCount);
+		@            for (int l = 0; l < length; l++)
+		@            {
+		@                prefValues[l].Value = value[l];
+		@                realValues[l] = prefValues[l].Value;
+		@            }
+		@
+		@            if (Count > valueCount)
+		@                RemoveRange(valueCount, Count - valueCount);
+		@
+		@            if (Count < valueCount)
+		@                AddRange(value.GetRange(Count, valueCount - Count));
+		@        }
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    public List#NAMES_0#(string name, List<#SRC_CLASS#> defaultValue) : base(name)
+		@    {
+		@        var valueCount = defaultValue == null ? 0 : defaultValue.Count;
+		@        this.name = name;
+		@        count = new Ints(base.name + ".Count", valueCount);
+		@        var length = count.Value;
+		@        for (int i = 0; i < length; i++)
+		@        {
+		@            Add(i < valueCount ? defaultValue[i] : default(#SRC_CLASS#));
+		@        }
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    private string GetName(int index)
+		@    {
+		@        return string.Format("{0}[{1}]", name, index);
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    public void Add(#SRC_CLASS# value)
+		@    {
+		@        prefValues.Add(new #NAMES_0#(GetName(prefValues.Count), value));
+		@        realValues.Add(prefValues.Last().Value);
+		@        count.Value = realValues.Count;
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    public void AddRange(List<#SRC_CLASS#> value)
+		@    {
+		@        for (int i = 0; i < value.Count; i++)
+		@        {
+		@            Add(value[i]);
+		@        }
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    public void RemoveAt(int index)
+		@    {
+		@        realValues.RemoveAt(index);
+		@        count.Value = realValues.Count;
+		@        for (int i = index; i + 1 < prefValues.Count; i++)
+		@        {
+		@            prefValues[i].Value = prefValues[i + 1].Value;
+		@        }
+		@        prefValues.Last().ClearFromPrefs();
+		@        prefValues.RemoveLast();
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    public void RemoveLast()
+		@    {
+		@        RemoveAt(count.Value - 1);
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    public void RemoveRange(int index, int length = 1)
+		@    {
+		@        for (int i = 0; i < length; i++)
+		@        {
+		@            RemoveAt(index);
+		@        }
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    public void Clear()
+		@    {
+		@        realValues.Clear();
+		@        count.Value = 0;
+		@        for (int i = 0; i < prefValues.Count; i++)
+		@        {
+		@            prefValues[i].ClearFromPrefs();
+		@        }
+		@        prefValues.Clear();
+		@    }
+		@
+		@    //-----------------------------------------------------------------
+		@    protected override void GetFromPrefs() { }
+		@    protected override void SetToPrefs() { }
+		@}
+		@#endregion List<#SRC_CLASS#>
 		}
 	}
 }
