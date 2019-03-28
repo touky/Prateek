@@ -95,13 +95,13 @@ namespace Prateek.Debug
         {
             base.OnRegister();
 
-            Registry.instance.Register(typeof(DebugDisplayBase), this);
+            Registry.Instance.Register(typeof(DebugDisplayBase), this);
         }
 
         //---------------------------------------------------------------------
         public override void OnUnregister()
         {
-            Registry.instance.Unregister(typeof(DebugDisplayBase));
+            Registry.Instance.Unregister(typeof(DebugDisplayBase));
 
             base.OnUnregister();
         }
@@ -114,8 +114,8 @@ namespace Prateek.Debug
         public override void OnCreate() { }
 
         //---------------------------------------------------------------------
-        public override void OnRegister() { Registry.instance.Register(typeof(DebugDisplayBase), this); }
-        public override void OnUnregister() { Registry.instance.Unregister(typeof(DebugDisplayBase)); }
+        public override void OnRegister() { Registry.Instance.Register(typeof(DebugDisplayBase), this); }
+        public override void OnUnregister() { Registry.Instance.Unregister(typeof(DebugDisplayBase)); }
 
         // Object Lifetime Messages
         public override void OnInitialize() { }

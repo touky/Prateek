@@ -86,20 +86,20 @@ namespace Prateek.Drawers
     {
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent content)
         {
-            var math = attribute as MathAttribute;
+            var att = attribute as MathAttribute;
             switch (property.propertyType)
             {
                 case SerializedPropertyType.Integer:
                 {
-                    property.intValue = Math.Max((int)(math.value_type == MathAttribute.ValueType.Int ? math.min_int : math.min_float),
-                                        Math.Min((int)(math.value_type == MathAttribute.ValueType.Int ? math.max_int : math.max_float),
+                    property.intValue = Math.Max((int)(att.Type == MathAttribute.ValueType.Int ? att.iMin : att.fMin),
+                                        Math.Min((int)(att.Type == MathAttribute.ValueType.Int ? att.iMax : att.fMax),
                                                  property.intValue));
                     break;
                 }
                 case SerializedPropertyType.Float:
                 {
-                    property.floatValue = Math.Max((float)(math.value_type == MathAttribute.ValueType.Int ? math.min_int : math.min_float),
-                                          Math.Min((float)(math.value_type == MathAttribute.ValueType.Int ? math.max_int : math.max_float),
+                    property.floatValue = Math.Max((float)(att.Type == MathAttribute.ValueType.Int ? att.iMin : att.fMin),
+                                          Math.Min((float)(att.Type == MathAttribute.ValueType.Int ? att.iMax : att.fMax),
                                                    property.floatValue));
                     break;
                 }

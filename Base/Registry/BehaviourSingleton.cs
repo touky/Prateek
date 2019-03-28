@@ -88,40 +88,40 @@ namespace Prateek.Base
     public abstract class BehaviourSingleton<T> : NamedBehaviour, ISingleton where T : BehaviourSingleton<T>
     {
         //---------------------------------------------------------------------
-        private static T m_instance;
-        public static T instance
+        private static T instance;
+        public static T Instance
         {
             get
             {
-                if (m_instance == null)
+                if (instance == null)
                 {
-                    if ((m_instance = FindObjectOfType<T>()) == null)
+                    if ((instance = FindObjectOfType<T>()) == null)
                     {
-                        GameObject game_object = new GameObject(typeof(T).Name);
-                        m_instance = game_object.AddComponent<T>();
+                        var gameObject = new GameObject(typeof(T).Name);
+                        instance = gameObject.AddComponent<T>();
                     }
 
                     if (Application.isPlaying)
                     {
-                        DontDestroyOnLoad(m_instance.gameObject);
+                        DontDestroyOnLoad(instance.gameObject);
                     }
                 }
-                return m_instance;
+                return instance;
             }
         }
 
         //---------------------------------------------------------------------
         protected virtual void Awake()
         {
-            if (m_instance == null)
+            if (instance == null)
             {
-                m_instance = this as T;
+                instance = this as T;
                 if (transform.parent == null && Application.isPlaying)
                 {
-                    DontDestroyOnLoad(m_instance.gameObject);
+                    DontDestroyOnLoad(instance.gameObject);
                 }
             }
-            else if (this != m_instance)
+            else if (this != instance)
             {
                 UnityEngine.Debug.LogError(String.Format("Singleton for {0} already exists. Destroying {1}.", typeof(T).ToString(), name));
                 Destroy(gameObject);
@@ -137,9 +137,9 @@ namespace Prateek.Base
         //---------------------------------------------------------------------
         protected virtual void OnDestroy()
         {
-            if (m_instance == this)
+            if (instance == this)
             {
-                m_instance = null;
+                instance = null;
             }
         }
     }

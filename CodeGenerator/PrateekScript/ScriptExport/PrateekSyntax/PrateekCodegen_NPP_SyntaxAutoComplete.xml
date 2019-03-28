@@ -15,9 +15,9 @@
         <KeyWord name="PRATEEK_VARS" />
         <KeyWord name="SRC_CLASS" />
         <KeyWord name="DST_CLASS" />
-        <KeyWord name="PRATEEK_BLOCK_BASIC_FUNC" />
-        <KeyWord name="PRATEEK_BLOCK_MIXED_CTOR" />
-        <KeyWord name="PRATEEK_BLOCK_MIXED_FUNC" />
+        <KeyWord name="PRATEEK_BLOCK_FUNC_BASIC" />
+        <KeyWord name="PRATEEK_BLOCK_CTOR_MIXED" />
+        <KeyWord name="PRATEEK_BLOCK_FUNC_MIXED" />
         <KeyWord name="PRATEEK_BLOCK_SYNTAX_NPP_COLOR" />
         <KeyWord name="PRATEEK_BLOCK_SYNTAX_NPP_AUTO_COMPLETE" />
         <KeyWord name="PRATEEK_BLOCK_SWIZZLE" />

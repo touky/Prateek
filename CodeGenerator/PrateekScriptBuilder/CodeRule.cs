@@ -151,7 +151,7 @@ namespace Prateek.CodeGeneration
                 //-------------------------------------------------------------
                 private void Set(ref string dst, string value)
                 {
-                    if (dst != null && dst.Length > 0)
+                    if (dst != null && dst.Length > 0 && !dst.EndsWith(Strings.Separator.LineFeed.S()))
                         dst += Tag.Code.argVarSeparator;
                     dst += value;
                 }
@@ -364,6 +364,10 @@ namespace Prateek.CodeGeneration
                 {
                     return new Utils.KeyRule(keyword, activeScope == codeBlock) { args = 2 };
                 }
+                else if (keyword == Tag.Macro.Func)
+                {
+                    return new Utils.KeyRule(keyword, activeScope == CodeBlock) { needOpenScope = true, needScopeData = true };
+                }
                 else if (keyword == Tag.Macro.CodePartPrefix || keyword == Tag.Macro.CodePartMain || keyword == Tag.Macro.CodePartSuffix)
                 {
                     return new Utils.KeyRule(keyword, activeScope == codeBlock) { args = 0, needOpenScope = true, needScopeData = true };
@@ -409,7 +413,11 @@ namespace Prateek.CodeGeneration
                     activeData.classDefaultType = args[0];
                     activeData.classDefaultValue = args[1];
                 }
-                else if (keyRule.key == Tag.Macro.CodePartPrefix)
+                else if (keyRule.key == Tag.Macro.Func)
+                {
+                    activeData.funcInfos.Add(new CodeFile.FuncInfos() { data = data });
+                }
+                else if(keyRule.key == Tag.Macro.CodePartPrefix)
                 {
                     activeData.codePrefix = data;
                 }

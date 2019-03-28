@@ -89,7 +89,7 @@ namespace Prateek.Base
         {
             if (Application.isPlaying)
             {
-                Registry.instance.Register(this);
+                Registry.Instance.Register(this);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Prateek.Base
         {
             if (Application.isPlaying)
             {
-                Registry.instance.Unregister(this);
+                Registry.Instance.Unregister(this);
             }
         }
     }

@@ -86,7 +86,7 @@ namespace Prateek.Debug
     public class Flag
     {
         //---------------------------------------------------------------------
-        public enum OverrideType
+        public enum OverrideMode
         {
             None,
             On,
@@ -98,17 +98,17 @@ namespace Prateek.Debug
         public struct Overridable
         {
             [SerializeField]
-            private bool m_value;
-            private OverrideType m_override;
+            private bool value;
+            private OverrideMode mode;
 
-            public bool CanUse { get { return m_override == OverrideType.None ? m_value : m_override == OverrideType.On; } }
-            public OverrideType Override { get { return m_override; } set { m_override = value; } }
+            public bool CanUse { get { return mode == OverrideMode.None ? value : mode == OverrideMode.On; } }
+            public OverrideMode Override { get { return mode; } set { mode = value; } }
 
-            public Overridable(bool flag) : this (flag, OverrideType.None) { }
-            public Overridable(bool flag, OverrideType @override)
+            public Overridable(bool flag) : this (flag, OverrideMode.None) { }
+            public Overridable(bool value, OverrideMode mode)
             {
-                m_value = flag;
-                m_override = @override;
+                this.value = value;
+                this.mode = mode;
             }
 
             public static implicit operator Overridable(bool flagValue)
@@ -117,7 +117,8 @@ namespace Prateek.Debug
             }
         }
 
-        protected bool CanUse(bool flagValue, OverrideType overrideValue)
+        //---------------------------------------------------------------------
+        protected bool CanUse(bool flagValue, OverrideMode overrideValue)
         {
             return (new Overridable(flagValue, overrideValue)).CanUse;
         }

@@ -1,0 +1,51 @@
+PRATEEK_FILE_INFO(DebugDraw, cs)
+{
+    PRATEEK_BLOCK_FUNC_OVERLOAD(Prateek.Debug, Draw)
+    {
+        PRATEEK_CLASS_INFO(Setup)
+		{
+			PRATEEK_NAMES(Matrix4x4, matrix)
+			PRATEEK_NAMES(SpaceType, space)
+			PRATEEK_NAMES(Color, color)
+			PRATEEK_NAMES(float, duration)
+			PRATEEK_NAMES(bool, depthTest)
+		}
+
+		PRATEEK_FUNC { @#NAMES_0# #NAMES_1#$ }
+		PRATEEK_FUNC
+		{
+		@this.#NAMES_1# = #NAMES_1#;
+		}
+
+        PRATEEK_CODE_PREFIX
+        {
+        @
+        @//--------------------------------------------------------------------
+        @#region DrawSetup overload
+        @public partial struct Setup
+        @{
+        }
+        
+        PRATEEK_CODE_MAIN
+        {
+        @
+        @//--------------------------------------------------------------------
+        @public #SRC_CLASS#(#FUNC_RESULT_0#) : this(InitMode.Reset)
+        @{
+        @#FUNC_RESULT_1#
+        @}
+        @
+        @//--------------------------------------------------------------------
+        @public #SRC_CLASS#(InitMode mode, #FUNC_RESULT_0#) : this(mode)
+        @{
+        @#FUNC_RESULT_1#
+        @}
+        }
+
+        PRATEEK_CODE_SUFFIX
+        {
+        @}
+        @#endregion DrawSetup overload
+        }
+    }
+}

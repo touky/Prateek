@@ -86,15 +86,15 @@ namespace Prateek.Drawers
     {
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent content)
         {
-            var enum_allow = attribute as EnumAllowCategoriesAttribute;
-            var enum_mask = attribute as EnumMaskAttribute;
+            var enumAllow = attribute as EnumAllowCategoriesAttribute;
+            var enumMask = attribute as EnumMaskAttribute;
 
-            var type = (enum_mask == null || enum_mask.value == null) ? fieldInfo.FieldType : enum_mask.value;
+            var type = (enumMask == null || enumMask.Value == null) ? fieldInfo.FieldType : enumMask.Value;
 
             string[] names = Helpers.Editors.GetEnumNames(type, property);
             if (names != null)
             {
-                if (enum_allow != null)
+                if (enumAllow != null)
                 {
                     var contents = new GUIContent[names.Length];
                     for (int i = 0; i < names.Length; i++)
@@ -103,7 +103,7 @@ namespace Prateek.Drawers
                     }
                     property.enumValueIndex = EditorGUI.Popup(rect, content, property.enumValueIndex, contents, EditorStyles.popup);
                 }
-                else if (enum_mask != null)
+                else if (enumMask != null)
                 {
                     property.intValue = EditorGUI.MaskField(rect, content, property.intValue, names);
                 }

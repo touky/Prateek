@@ -86,15 +86,15 @@ namespace Prateek.Base
     {
         #region Settings
         [SerializeField]
-        private string m_behavior_name;
+        private string behaviourName;
 
         [SerializeField]
-        private Color m_behavior_color = Color.white;
+        private Color behaviourColor = Color.white;
         #endregion Settings
 
         #region Properties
-        public string behavior_name { get { return m_behavior_name; } set { m_behavior_name = value; } }
-        public Color behavior_color { get { return m_behavior_color; }  set { m_behavior_color = value; } }
+        public string BehaviourName { get { return behaviourName; } set { behaviourName = value; } }
+        public Color BehaviourColor { get { return behaviourColor; }  set { behaviourColor = value; } }
         #endregion Properties
     }
 }

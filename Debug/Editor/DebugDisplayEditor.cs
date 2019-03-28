@@ -84,13 +84,15 @@ namespace Prateek.Editors
 #if PRATEEK_DEBUGS
     public class DrawEditorBase : EditorWindow
     {
-        private struct enumData
+        //---------------------------------------------------------------------
+        private struct EnumData
         {
             public int value;
             public string name;
         }
 
-        private List<enumData> m_enum_data = new List<enumData>();
+        //---------------------------------------------------------------------
+        private List<EnumData> enumdatas = new List<EnumData>();
         private Vector2 m_scrollPosition;
 
         //---------------------------------------------------------------------
@@ -167,17 +169,17 @@ namespace Prateek.Editors
             if (enum_type == null)
                 return;
 
-            var manager = Base.Registry.instance.GetManager<DebugDisplayBase>();
+            var manager = Base.Registry.Instance.GetManager<DebugDisplayBase>();
 
             var enum_values = Enum.GetValues(enum_type);
-            if (m_enum_data.Count != enum_values.Length)
+            if (enumdatas.Count != enum_values.Length)
             {
-                m_enum_data.Clear();
+                enumdatas.Clear();
 
                 var enum_names = Enum.GetNames(enum_type);
                 for (int i = 0; i < enum_values.Length; ++i)
                 {
-                    m_enum_data.Add(new enumData() { value = (int)enum_values.GetValue(i), name = enum_names[i] });
+                    enumdatas.Add(new EnumData() { value = (int)enum_values.GetValue(i), name = enum_names[i] });
                 }
             }
 
@@ -192,7 +194,7 @@ namespace Prateek.Editors
 #region Draw setup
                 var margin2 = Vector2.one * 2;
                 var margin4 = Vector2.one * 4;
-                var window_rect = EditorGUILayout.GetControlRect(GUILayout.MinHeight(EditorGUIUtility.singleLineHeight * m_enum_data.Count + margin4.y * 2));
+                var window_rect = EditorGUILayout.GetControlRect(GUILayout.MinHeight(EditorGUIUtility.singleLineHeight * enumdatas.Count + margin4.y * 2));
                 var line_rect = window_rect;
                 {
                     line_rect.x += margin4.x;
@@ -221,7 +223,7 @@ namespace Prateek.Editors
 
 #region Draw lines
 
-                for (int i = m_enum_data.Count - 1; i >= 0; i--)
+                for (int i = enumdatas.Count - 1; i >= 0; i--)
                 {
                     var indent = manager != null ? manager.CountParents(i) : 0;
                     var old_x = line_rect.x;
@@ -234,7 +236,7 @@ namespace Prateek.Editors
 
                         GUI.Box(line_rect, GUIContent.none, m_style.m_item_background[Mathf.Min(indent, m_style.m_item_background.Count)]);
                         GUI.Box(box_rect, GUIContent.none, m_style.m_active[i % 2]);
-                        GUI.Label(text_rect, m_enum_data[i].name, m_style.m_item_text);
+                        GUI.Label(text_rect, enumdatas[i].name, m_style.m_item_text);
                     }
                     line_rect.x = old_x;
                     line_rect.width = old_width;

@@ -142,33 +142,6 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region CodeRule override
-            public override Utils.KeyRule GetKeyRule(string keyword, string activeScope)
-            {
-                if (keyword == Tag.Macro.Func)
-                {
-                    return new Utils.KeyRule(keyword, activeScope == CodeBlock) { needOpenScope = true, needScopeData = true };
-                }
-                else
-                {
-                    return base.GetKeyRule(keyword, activeScope);
-                }
-            }
-
-            //-----------------------------------------------------------------
-            protected override bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
-            {
-                if (keyRule.key == Tag.Macro.Func)
-                {
-                    activeData.funcInfos.Add(new CodeFile.FuncInfos() { data = data });
-                }
-                else
-                {
-                    return base.DoRetrieveRuleContent(activeData, keyRule, args, data);
-                }
-                return true;
-            }
-
-            //-----------------------------------------------------------------
             public override void AddKeyword(string content)
             {
                 keywords.Add(content);
@@ -241,33 +214,6 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region CodeRule override
-            public override Utils.KeyRule GetKeyRule(string keyword, string activeScope)
-            {
-                if (keyword == Tag.Macro.Func)
-                {
-                    return new Utils.KeyRule(keyword, activeScope == CodeBlock) { needOpenScope = true, needScopeData = true };
-                }
-                else
-                {
-                    return base.GetKeyRule(keyword, activeScope);
-                }
-            }
-
-            //-----------------------------------------------------------------
-            protected override bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
-            {
-                if (keyRule.key == Tag.Macro.Func)
-                {
-                    activeData.funcInfos.Add(new CodeFile.FuncInfos() { data = data });
-                }
-                else
-                {
-                    return base.DoRetrieveRuleContent(activeData, keyRule, args, data);
-                }
-                return true;
-            }
-
-            //-----------------------------------------------------------------
             public override void AddKeyword(string content)
             {
                 infos.Add(new KeywordInfo() { name = content });

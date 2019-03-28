@@ -83,16 +83,16 @@ namespace Prateek.Base
     //-------------------------------------------------------------------------
     public abstract class Singleton<T> : System.Object, ISingleton where T : Singleton<T>, new()
     {
-        private static T m_instance = null;
-        public static T instance
+        private static T instance = null;
+        public static T Instance
         {
             get
             {
-                if (m_instance == null)
+                if (instance == null)
                 {
-                    m_instance = new T();
+                    instance = new T();
                 }
-                return m_instance;
+                return instance;
             }
         }
     }

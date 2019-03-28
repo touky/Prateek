@@ -87,13 +87,16 @@ namespace Prateek.Attributes
     [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
     public class TypeRefAttribute : PropertyAttribute
     {
-        private Type m_value = null;
+        //-------------------------------------------------------------------------
+        private Type value = null;
 
-        public Type value { get { return m_value; } }
+        //-------------------------------------------------------------------------
+        public Type Value { get { return value; } }
 
-        public TypeRefAttribute(Type type)
+        //-------------------------------------------------------------------------
+        public TypeRefAttribute(Type value)
         {
-            m_value = type;
+            this.value = value;
         }
     }
 }

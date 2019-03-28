@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
+//  Header last update date: 28/03/2019
 //
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -85,11 +85,11 @@ namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
     [InitializeOnLoad]
-    class BasicFuncRuleLoader : PrateekScriptBuilder
+    class OverloadFuncRuleLoader : PrateekScriptBuilder
     {
-        static BasicFuncRuleLoader()
+        static OverloadFuncRuleLoader()
         {
-            NewBasicFunc(Tag.importExtension).Commit();
+            NewOverloadFunc(Tag.importExtension).Commit();
         }
     }
 
@@ -97,51 +97,54 @@ namespace Prateek.CodeGeneration
     public partial class PrateekScriptBuilder
     {
         //---------------------------------------------------------------------
-        protected static BasicFuncCodeRule NewBasicFunc(string extension)
+        protected static OverloadFuncCodeRule NewOverloadFunc(string extension)
         {
-            return new BasicFuncCodeRule(extension);
+            return new OverloadFuncCodeRule(extension);
         }
 
         //---------------------------------------------------------------------
         [InitializeOnLoad]
-        public partial class BasicFuncCodeRule : CodeRule
+        public partial class OverloadFuncCodeRule : CodeRule
         {
             //-----------------------------------------------------------------
-            public override string ScopeTag { get { return "FUNC_BASIC"; } }
+            public override string ScopeTag { get { return "FUNC_OVERLOAD"; } }
             public override GenerationMode GenMode { get { return GenerationMode.ForeachSrc; } }
             public override bool GenerateDefault { get { return false; } }
 
             //-----------------------------------------------------------------
-            public BasicFuncCodeRule(string extension) : base(extension) { }
+            public OverloadFuncCodeRule(string extension) : base(extension) { }
 
             //-----------------------------------------------------------------
             #region Rule internal
             protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 variants.Clear();
-                if (data.funcInfos.Count == 0)
-                {
-                    variants.Add(new FuncVariant());
-                }
-                else
-                {
-                    var variant = new FuncVariant(string.Empty, data.funcInfos.Count - 1);
-                    for (int d = 0; d < data.funcInfos.Count; d++)
-                    {
-                        var funcInfo = data.funcInfos[d];
-                        var varsCount = Vars.GetCount(funcInfo.data);
-                        for (int v = 0; v < infoSrc.variables.Count; v++)
-                        {
-                            var funcData = funcInfo.data;
-                            for (int n = 0; n < min(varsCount, Vars.Count); n++)
-                            {
-                                var vars = (Vars[n] + infoSrc.variables[v]);
-                                funcData = vars.Apply(funcData);
-                            }
 
-                            variant[d] += funcData;
+                GatherVariants(0, new FuncVariant(string.Empty, 1), variants, data, infoSrc, infoDst);
+            }
+            //-----------------------------------------------------------------
+            private void GatherVariants(int n, FuncVariant variant, List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
+            {
+                if (n < infoSrc.NameCount)
+                {
+                    for (int p = 0; p < 2; p++)
+                    {
+                        if (p == 1)
+                        {
+                            for (int i = 0; i < data.funcInfos.Count; i++)
+                            {
+                                var info = data.funcInfos[i].data;
+                                info = (Names[0] + infoSrc.names[n + 0]).Apply(info);
+                                info = (Names[1] + infoSrc.names[n + 1]).Apply(info);
+                                variant[i] = info;
+                            }
                         }
+
+                        GatherVariants(n + 2, variant, variants, data, infoSrc, infoDst);
                     }
+                }
+                else if (variant.Call != string.Empty)
+                {
                     variants.Add(variant);
                 }
             }

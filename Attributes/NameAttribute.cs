@@ -83,13 +83,16 @@ namespace Prateek.Attributes
     //-------------------------------------------------------------------------
     public abstract class BaseNameAttribute : Attribute
     {
-        protected string m_value;
+        //-------------------------------------------------------------------------
+        protected string value;
 
-        public string value { get { return m_value; } }
+        //-------------------------------------------------------------------------
+        public string Value { get { return value; } }
 
+        //-------------------------------------------------------------------------
         protected BaseNameAttribute(string new_value)
         {
-            m_value = new_value;
+            value = new_value;
         }
     }
 

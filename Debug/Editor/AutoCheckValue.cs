@@ -90,18 +90,18 @@ namespace Prateek.Helpers
         {
             //-----------------------------------------------------------------
             #region Fields
-            protected bool m_has_changed = false;
-            protected bool m_is_checking = false;
+            protected bool hasChanged = false;
+            protected bool isChecking = false;
             #endregion Fields
 
             //-----------------------------------------------------------------
             #region Properties
-            public bool has_changed
+            public bool HasChanged
             {
                 get
                 {
-                    var result = m_has_changed;
-                    m_has_changed = false;
+                    var result = hasChanged;
+                    hasChanged = false;
                     return result;
                 }
             }
@@ -116,16 +116,16 @@ namespace Prateek.Helpers
             //-----------------------------------------------------------------
             protected void Begin()
             {
-                m_has_changed = false;
-                m_is_checking = true;
+                hasChanged = false;
+                isChecking = true;
                 EditorGUI.BeginChangeCheck();
             }
 
             //-----------------------------------------------------------------
             protected void End()
             {
-                m_has_changed = m_is_checking ? EditorGUI.EndChangeCheck() : m_has_changed;
-                m_is_checking = false;
+                hasChanged = isChecking ? EditorGUI.EndChangeCheck() : hasChanged;
+                isChecking = false;
             }
             #endregion ctor
         }
@@ -321,7 +321,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_x.data = value;
-                    m_has_changed = m_x.has_changed;
+                    hasChanged = m_x.HasChanged;
                 }
             }
 
@@ -335,7 +335,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_y.data = value;
-                    m_has_changed = m_y.has_changed;
+                    hasChanged = m_y.HasChanged;
                 }
             }
             #endregion Properties
@@ -370,7 +370,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_x.data = value;
-                    m_has_changed = m_x.has_changed;
+                    hasChanged = m_x.HasChanged;
                 }
             }
 
@@ -384,7 +384,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_y.data = value;
-                    m_has_changed = m_y.has_changed;
+                    hasChanged = m_y.HasChanged;
                 }
             }
 
@@ -398,7 +398,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_z.data = value;
-                    m_has_changed = m_z.has_changed;
+                    hasChanged = m_z.HasChanged;
                 }
             }
             #endregion Properties
@@ -434,7 +434,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_x.data = value;
-                    m_has_changed = m_x.has_changed;
+                    hasChanged = m_x.HasChanged;
                 }
             }
 
@@ -448,7 +448,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_y.data = value;
-                    m_has_changed = m_y.has_changed;
+                    hasChanged = m_y.HasChanged;
                 }
             }
 
@@ -462,7 +462,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_z.data = value;
-                    m_has_changed = m_z.has_changed;
+                    hasChanged = m_z.HasChanged;
                 }
             }
 
@@ -476,7 +476,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_w.data = value;
-                    m_has_changed = m_w.has_changed;
+                    hasChanged = m_w.HasChanged;
                 }
             }
             #endregion Properties
@@ -512,7 +512,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_x.data = value;
-                    m_has_changed = m_x.has_changed;
+                    hasChanged = m_x.HasChanged;
                 }
             }
 
@@ -526,7 +526,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_y.data = value;
-                    m_has_changed = m_y.has_changed;
+                    hasChanged = m_y.HasChanged;
                 }
             }
 
@@ -540,7 +540,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_width.data = value;
-                    m_has_changed = m_width.has_changed;
+                    hasChanged = m_width.HasChanged;
                 }
             }
 
@@ -554,7 +554,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_height.data = value;
-                    m_has_changed = m_height.has_changed;
+                    hasChanged = m_height.HasChanged;
                 }
             }
             #endregion Properties
@@ -586,7 +586,7 @@ namespace Prateek.Helpers
                 set
                 {
                     m_values[index].data = value;
-                    m_has_changed = m_values[index].has_changed;
+                    hasChanged = m_values[index].HasChanged;
                 }
             }
             #endregion Properties
@@ -602,7 +602,7 @@ namespace Prateek.Helpers
                     this[i] = values[i];
                 }
             }
-            
+
             //-----------------------------------------------------------------
             private void Resize(int size)
             {
@@ -712,9 +712,10 @@ namespace Prateek.Helpers
             #region ctor
             public static implicit operator Mask512s(Helpers.Mask512 value) { return new Mask512s(value); }
             public Mask512s(Helpers.Mask512 value) : base(value.Get(0), value.Get(1), value.Get(2), value.Get(3),
-                                                          value.Get(4), value.Get(5), value.Get(6), value.Get(7)) { }
+                                                          value.Get(4), value.Get(5), value.Get(6), value.Get(7))
+            { }
             #endregion ctor
         }
         #endregion Mask
     }
-    }
+}

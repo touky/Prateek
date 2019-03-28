@@ -86,41 +86,43 @@ namespace Prateek.Base
     //-------------------------------------------------------------------------
     public class Registry : BehaviourSingleton<Registry>
     {
+        //-------------------------------------------------------------------------
         #region Settings
         [SerializeField]
-        private List<string> m_load_on_awake = new List<string>();
+        private List<string> loadOnAwake = new List<string>();
 
         [SerializeField, TypeRef(typeof(GlobalManager))]
-        private List<string> m_create_on_awake = new List<string>();
+        private List<string> createOnAwake = new List<string>();
         #endregion Settings
 
+        //-------------------------------------------------------------------------
         #region Fields
-        private bool m_sort_managers = false;
-        private Dictionary<Type, List<RegistrableBehaviour>> m_registered_behaviours = new Dictionary<Type, List<RegistrableBehaviour>>();
-        private List<RegistrableBehaviour> m_empty_behaviours = new List<RegistrableBehaviour>();
+        private bool sortManagers = false;
+        private Dictionary<Type, List<RegistrableBehaviour>> registeredBehaviours = new Dictionary<Type, List<RegistrableBehaviour>>();
+        private List<RegistrableBehaviour> emptyBehaviours = new List<RegistrableBehaviour>();
 
-        private List<GlobalManager> m_registered_managers = new List<GlobalManager>();
-        private List<GlobalManager> m_start_managers = new List<GlobalManager>();
-        private Dictionary<Type, GlobalManager> m_stored_managers = new Dictionary<Type, GlobalManager>();
-        private Dictionary<Type, GlobalManager.BuilderBase> m_stored_builder = new Dictionary<Type, GlobalManager.BuilderBase>();
+        private List<GlobalManager> registeredManagers = new List<GlobalManager>();
+        private List<GlobalManager> startManagers = new List<GlobalManager>();
+        private Dictionary<Type, GlobalManager> storedManagers = new Dictionary<Type, GlobalManager>();
+        private Dictionary<Type, GlobalManager.BuilderBase> storedBuilder = new Dictionary<Type, GlobalManager.BuilderBase>();
         #endregion Fields
 
         //---------------------------------------------------------------------
         protected override void Awake()
         {
-            m_sort_managers = true;
+            sortManagers = true;
 
             //Load stored resources
-            for (int i = 0; i < m_load_on_awake.Count; i++)
+            for (int i = 0; i < loadOnAwake.Count; i++)
             {
-                var instance = GameObject.Instantiate(Resources.Load(m_load_on_awake[i])) as GlobalManager;
-                Registry.instance.Register(instance.GetType(), instance);
+                var instance = GameObject.Instantiate(Resources.Load(loadOnAwake[i])) as GlobalManager;
+                Registry.Instance.Register(instance.GetType(), instance);
             }
 
             //Create listed classes
-            for (int i = 0; i < m_create_on_awake.Count; i++)
+            for (int i = 0; i < createOnAwake.Count; i++)
             {
-                TryCreating(Helpers.Types.GetType(m_create_on_awake[i]));
+                TryCreating(Helpers.Types.GetType(createOnAwake[i]));
             }
 
             base.Awake();
@@ -130,7 +132,7 @@ namespace Prateek.Base
         protected void TryCreating(Type type, bool force_null = false)
         {
             GlobalManager.BuilderBase builder = null;
-            if (!m_stored_builder.ContainsKey(type))
+            if (!storedBuilder.ContainsKey(type))
             {
                 var method_info = type.GetMethod(GlobalManager.CREATE_METHOD, BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
                 if (method_info != null)
@@ -140,25 +142,25 @@ namespace Prateek.Base
             }
             else
             {
-                builder = m_stored_builder[type];
+                builder = storedBuilder[type];
             }
 
             if (builder != null)
             {
-                m_stored_builder[type] = builder;
+                storedBuilder[type] = builder;
 
                 if (!force_null
-                &&  builder.m_real_type != null
-                && !builder.m_real_type.IsAbstract
-                && !builder.m_real_type.IsInterface)
+                &&  builder.realType != null
+                && !builder.realType.IsAbstract
+                && !builder.realType.IsInterface)
                 {
-                    DoCreate(builder.m_real_type);
+                    DoCreate(builder.realType);
                 }
-                else if (builder.m_empty_type != null
-                     && !builder.m_empty_type.IsAbstract
-                     && !builder.m_empty_type.IsInterface)
+                else if (builder.emptyType != null
+                     && !builder.emptyType.IsAbstract
+                     && !builder.emptyType.IsInterface)
                 {
-                    DoCreate(builder.m_empty_type);
+                    DoCreate(builder.emptyType);
                 }
                 else
                 {
@@ -172,7 +174,7 @@ namespace Prateek.Base
         {
             var instance = ScriptableObject.CreateInstance(type) as GlobalManager;
             instance.name = type.Name + "(Instance)";
-            Registry.instance.Register(type, instance);
+            Registry.Instance.Register(type, instance);
         }
 
         //---------------------------------------------------------------------
@@ -181,23 +183,23 @@ namespace Prateek.Base
         {
             var type = typeof(T);
 
-            if (m_stored_managers.ContainsKey(type))
-                return m_stored_managers[type] as T;
+            if (storedManagers.ContainsKey(type))
+                return storedManagers[type] as T;
 
 #if UNITY_EDITOR
-            for (int i = 0; i < m_create_on_awake.Count; i++)
+            for (int i = 0; i < createOnAwake.Count; i++)
             {
-                var test_type = Helpers.Types.GetType(m_create_on_awake[i]);
-                if (test_type.IsSubclassOf(type))
+                var testType = Helpers.Types.GetType(createOnAwake[i]);
+                if (testType.IsSubclassOf(type))
                 {
-                    type = test_type;
+                    type = testType;
                 }
             }
 #endif // UNITY_EDITOR
 
             TryCreating(type);
 
-            return m_stored_managers[type] as T;
+            return storedManagers[type] as T;
         }
 
         //---------------------------------------------------------------------
@@ -206,39 +208,39 @@ namespace Prateek.Base
             if (type == null || manager == null)
                 return;
 
-            if (m_stored_managers.ContainsKey(type))
+            if (storedManagers.ContainsKey(type))
             {
                 if (manager != null)
                 {
                     Unregister(type);
-                    m_stored_managers[type] = manager;
+                    storedManagers[type] = manager;
                 }
             }
             else if (manager != null)
             {
-                m_stored_managers.Add(type, manager);
+                storedManagers.Add(type, manager);
             }
 
-            m_sort_managers = true;
+            sortManagers = true;
 
-            if (!m_registered_managers.Contains(manager))
+            if (!registeredManagers.Contains(manager))
             {
-                m_registered_managers.Add(manager);
+                registeredManagers.Add(manager);
 
                 manager.OnInitialize();
                 manager.OnRegister();
 
-                m_start_managers.Add(manager);
+                startManagers.Add(manager);
             }
         }
 
         //---------------------------------------------------------------------
         public void Unregister(Type manager_type)
         {
-            var manager = m_stored_managers[manager_type];
-            if (m_registered_managers.Contains(manager))
+            var manager = storedManagers[manager_type];
+            if (registeredManagers.Contains(manager))
             {
-                m_registered_managers.Remove(manager);
+                registeredManagers.Remove(manager);
 
                 manager.OnUnregister();
                 manager.OnDispose();
@@ -258,9 +260,9 @@ namespace Prateek.Base
             List<RegistrableBehaviour> behaviours = null;
             while (type != null && type != typeof(RegistrableBehaviour))
             {
-                if (m_registered_behaviours.TryGetValue(type, out behaviours) == false)
+                if (registeredBehaviours.TryGetValue(type, out behaviours) == false)
                 {
-                    m_registered_behaviours[type] = (behaviours = new List<RegistrableBehaviour>());
+                    registeredBehaviours[type] = (behaviours = new List<RegistrableBehaviour>());
                 }
 
                 behaviours.AddUnique(behaviour);
@@ -277,7 +279,7 @@ namespace Prateek.Base
             List<RegistrableBehaviour> behaviours = null;
             while (type != null && type != typeof(RegistrableBehaviour))
             {
-                if (m_registered_behaviours.TryGetValue(type, out behaviours))
+                if (registeredBehaviours.TryGetValue(type, out behaviours))
                 {
                     behaviours.Remove(behaviour);
                 }
@@ -312,7 +314,7 @@ namespace Prateek.Base
         public bool GetRegistrable<T>(ref List<T> behaviours) where T : RegistrableBehaviour
         {
             List<RegistrableBehaviour> temp = null; behaviours = null;
-            if (m_registered_behaviours.TryGetValue(typeof(T), out temp))
+            if (registeredBehaviours.TryGetValue(typeof(T), out temp))
             {
                 if (behaviours.Count > 0)
                 {
@@ -332,20 +334,20 @@ namespace Prateek.Base
         #region Unity events
         private void Update()
         {
-            if (m_start_managers.Count > 0)
+            if (startManagers.Count > 0)
             {
-                m_start_managers.Sort((a, b) => a.priority - b.priority);
-                for (int i = 0; i < m_start_managers.Count; i++)
+                startManagers.Sort((a, b) => a.Priority - b.Priority);
+                for (int i = 0; i < startManagers.Count; i++)
                 {
-                    m_start_managers[i].OnStart();
+                    startManagers[i].OnStart();
                 }
-                m_start_managers.Clear();
+                startManagers.Clear();
             }
 
-            if (m_sort_managers)
+            if (sortManagers)
             {
-                m_sort_managers = false;
-                m_registered_managers.Sort((a, b) => a.priority - b.priority);
+                sortManagers = false;
+                registeredManagers.Sort((a, b) => a.Priority - b.Priority);
             }
 
             UpdateManagers();
@@ -373,64 +375,64 @@ namespace Prateek.Base
         #region Manager Events
         private void UpdateManagers()
         {
-            for (int i = 0; i < m_registered_managers.Count; ++i)
+            for (int i = 0; i < registeredManagers.Count; ++i)
             {
-                m_registered_managers[i].OnUpdate(Time.deltaTime);
-                m_registered_managers[i].OnTimescaleIndependantUpdate(Time.unscaledDeltaTime);
+                registeredManagers[i].OnUpdate(Time.deltaTime);
+                registeredManagers[i].OnTimescaleIndependantUpdate(Time.unscaledDeltaTime);
             }
         }
 
         //---------------------------------------------------------------------
         private void LateUpdateManagers()
         {
-            for (int i = 0; i < m_registered_managers.Count; ++i)
+            for (int i = 0; i < registeredManagers.Count; ++i)
             {
-                m_registered_managers[i].OnLateUpdate(Time.deltaTime);
+                registeredManagers[i].OnLateUpdate(Time.deltaTime);
             }
         }
 
         //---------------------------------------------------------------------
         private void FixedUpdateManagers()
         {
-            for (int i = 0; i < m_registered_managers.Count; ++i)
+            for (int i = 0; i < registeredManagers.Count; ++i)
             {
-                m_registered_managers[i].OnFixedUpdate(Time.fixedDeltaTime);
+                registeredManagers[i].OnFixedUpdate(Time.fixedDeltaTime);
             }
         }
 
         //---------------------------------------------------------------------
         private void OnApplicationFocusManagers(bool focusStatus)
         {
-            for (int i = 0; i < m_registered_managers.Count; ++i)
+            for (int i = 0; i < registeredManagers.Count; ++i)
             {
-                m_registered_managers[i].OnApplicationFocus(focusStatus);
+                registeredManagers[i].OnApplicationFocus(focusStatus);
             }
         }
 
         //---------------------------------------------------------------------
         private void OnApplicationPauseManagers(bool pauseStatus)
         {
-            for (int i = 0; i < m_registered_managers.Count; ++i)
+            for (int i = 0; i < registeredManagers.Count; ++i)
             {
-                m_registered_managers[i].OnApplicationPause(pauseStatus);
+                registeredManagers[i].OnApplicationPause(pauseStatus);
             }
         }
 
         //---------------------------------------------------------------------
         private void OnApplicationQuitManagers()
         {
-            for (int i = 0; i < m_registered_managers.Count; ++i)
+            for (int i = 0; i < registeredManagers.Count; ++i)
             {
-                m_registered_managers[i].OnApplicationQuit();
+                registeredManagers[i].OnApplicationQuit();
             }
         }
 
         //---------------------------------------------------------------------
         private void OnGUIManagers()
         {
-            for (int i = 0; i < m_registered_managers.Count; ++i)
+            for (int i = 0; i < registeredManagers.Count; ++i)
             {
-                m_registered_managers[i].OnGUI();
+                registeredManagers[i].OnGUI();
             }
         }
         #endregion Manager Events

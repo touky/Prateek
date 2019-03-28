@@ -88,13 +88,13 @@ namespace Prateek.Base
         //---------------------------------------------------------------------
         public abstract class BuilderBase
         {
-            public Type m_real_type = null;
-            public Type m_empty_type = null;
+            public Type realType = null;
+            public Type emptyType = null;
 
-            public BuilderBase(Type real_type, Type empty_type)
+            public BuilderBase(Type realType, Type emptyType)
             {
-                m_real_type = real_type;
-                m_empty_type = empty_type;
+                this.realType = realType;
+                this.emptyType = emptyType;
             }
         }
 
@@ -104,8 +104,8 @@ namespace Prateek.Base
         }
 
         [SerializeField]
-        private int m_priority;
-        public int priority { get { return m_priority; } }
+        private int priority;
+        public int Priority { get { return priority; } }
 
         //---------------------------------------------------------------------
         public virtual void OnCreate() { }

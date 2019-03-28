@@ -87,14 +87,14 @@ namespace Prateek.Drawers
     {
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent content)
         {
-            var popup_shown = false;
-            var type_ref = attribute as TypeRefAttribute;
-            if (type_ref.value != null && property.propertyType == SerializedPropertyType.String)
+            var popupShown = false;
+            var typeRef = attribute as TypeRefAttribute;
+            if (typeRef.Value != null && property.propertyType == SerializedPropertyType.String)
             {
-                var types = new List<Type>(Assembly.GetAssembly(type_ref.value).GetTypes());
+                var types = new List<Type>(Assembly.GetAssembly(typeRef.Value).GetTypes());
                 for (int i = 0; i < types.Count; i++)
                 {
-                    if (!types[i].IsSubclassOf(type_ref.value)
+                    if (!types[i].IsSubclassOf(typeRef.Value)
                       || types[i].FullName.IndexOf('`') != -1
                       || types[i].IsAbstract)
                     {
@@ -116,13 +116,13 @@ namespace Prateek.Drawers
 
                         names[i + 1] = new GUIContent(types[i].FullName.Replace('.', '/'));
                     }
-                    popup_shown = true;
+                    popupShown = true;
                     index = EditorGUI.Popup(rect, content, index, names, EditorStyles.popup);
                     property.stringValue = index > 0 ? types[index - 1].FullName : string.Empty;
                 }
             }
 
-            if (!popup_shown)
+            if (!popupShown)
             {
                 EditorGUI.PropertyField(rect, property, content, true);
             }

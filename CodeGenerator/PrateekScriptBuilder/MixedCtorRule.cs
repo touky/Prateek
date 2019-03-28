@@ -107,7 +107,7 @@ namespace Prateek.CodeGeneration
         public partial class MixedCTorCodeRule : CodeRule
         {
             //-----------------------------------------------------------------
-            public override string ScopeTag { get { return "MIXED_CTOR"; } }
+            public override string ScopeTag { get { return "CTOR_MIXED"; } }
             public override GenerationMode GenMode { get { return GenerationMode.ForeachSrc; } }
 
             //-----------------------------------------------------------------

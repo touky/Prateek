@@ -107,7 +107,7 @@ namespace Prateek.CodeGeneration
         public partial class MixedFuncCodeRule : CodeRule
         {
             //-----------------------------------------------------------------
-            public override string ScopeTag { get { return "MIXED_FUNC"; } }
+            public override string ScopeTag { get { return "FUNC_MIXED"; } }
             public override GenerationMode GenMode { get { return GenerationMode.ForeachSrc; } }
             public override bool GenerateDefault { get { return true; } }
 

@@ -96,7 +96,7 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         //Box: A box, several flavors available
-#region Box
+        #region Box
         public static void Box(Bounds bounds, RenderSetup? custom_setup = null)
         {
             Box(bounds.center, bounds.extents, custom_setup);
@@ -160,10 +160,10 @@ namespace Prateek.Debug
             Line(points[2], points[5], custom_setup);
             Line(points[3], points[4], custom_setup);
         }
-#endregion //Box
+        #endregion //Box
 
         //---------------------------------------------------------------------
-#region Cone
+        #region Cone
         public static void Cone(Vector3 position, Quaternion rotation, float length, Vector2 radius, int sideLine = 8, int segments = 8, RenderSetup? custom_setup = null)
         {
             Vector3 fw = Vector3.forward * length;
@@ -180,12 +180,12 @@ namespace Prateek.Debug
             }
             Ellipse(position + rotation * fw, rotation, radius, segments, custom_setup);
         }
-#endregion Cone
+        #endregion Cone
 
         //---------------------------------------------------------------------
         //Circle/Ellipse: Vertically aligned if drawn in world, aligned on z-axis if other
-#region Circle/Ellipse/Sphere/Ellipsoid
-#region Circle
+        #region Circle/Ellipse/Sphere/Ellipsoid
+        #region Circle
         public static void Circle(Vector3 position, float radius, int segments = 8, RenderSetup? custom_setup = null)
         {
             Arc(position, Quaternion.identity, radius, 0, 360, segments, custom_setup);
@@ -194,14 +194,14 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         public static void Circle(Vector3 position, Quaternion rotation, float radius, int segments = 8, RenderSetup? custom_setup = null)
         {
-            var space = custom_setup != null ? custom_setup.Value.space : m_current_setup.space;
+            var space = custom_setup != null ? custom_setup.Value.Space : m_current_setup.Space;
             var spaceRotation = space != SpaceType.World ? Quaternion.identity : Quaternion.FromToRotation(Vector3.forward, Vector3.up);
             Arc(position, spaceRotation * rotation, radius, 0, 360, segments, custom_setup);
         }
-#endregion //Circle
+        #endregion //Circle
 
         //---------------------------------------------------------------------
-#region Ellipse
+        #region Ellipse
         public static void Ellipse(Vector3 position, Vector2 radius, int segments = 8, RenderSetup? custom_setup = null)
         {
             Arc(position, Quaternion.identity, radius, 0, 360, segments, custom_setup);
@@ -210,14 +210,14 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         public static void Ellipse(Vector3 position, Quaternion rotation, Vector2 radius, int segments = 8, RenderSetup? custom_setup = null)
         {
-            var space = custom_setup != null ? custom_setup.Value.space : m_current_setup.space;
+            var space = custom_setup != null ? custom_setup.Value.Space : m_current_setup.Space;
             var spaceRotation = space != SpaceType.World ? Quaternion.identity : Quaternion.FromToRotation(Vector3.forward, Vector3.up);
             Arc(position, spaceRotation * rotation, radius, 0, 360, segments, custom_setup);
         }
-#endregion //Ellipse
+        #endregion //Ellipse
 
         //---------------------------------------------------------------------
-#region Sphere
+        #region Sphere
         public static void Sphere(Vector3 position, float radius, int segments = 8, RenderSetup? custom_setup = null)
         {
             Sphere(position, Quaternion.identity, radius, segments, custom_setup);
@@ -228,10 +228,10 @@ namespace Prateek.Debug
         {
             Ellipsoid(position, rotation, Vector3.one * radius, segments, custom_setup);
         }
-#endregion //Sphere
+        #endregion //Sphere
 
         //---------------------------------------------------------------------
-#region Ellipsoid
+        #region Ellipsoid
         public static void Ellipsoid(Vector3 position, Vector3 radius, int segments = 8, RenderSetup? custom_setup = null)
         {
             Ellipsoid(position, Quaternion.identity, radius, segments, custom_setup);
@@ -244,7 +244,7 @@ namespace Prateek.Debug
             Arc(position, rotation * Quaternion.Euler(90, 0, 0), radius.xz(), 0, 360, segments, custom_setup);
             Arc(position, rotation * Quaternion.Euler(0, 90, 0), radius.zy(), 0, 360, segments, custom_setup);
         }
-#endregion //Ellipsoid
+        #endregion //Ellipsoid
 
         //---------------------------------------------------------------------
         public static void SphereCast(Ray position, float radius, float length, int segments = 8, RenderSetup? custom_setup = null)
@@ -260,11 +260,11 @@ namespace Prateek.Debug
             Line(position.origin + Vector3.down * radius, position.origin + Vector3.down * radius + position.direction * length, custom_setup);
         }
 
-#endregion //Circle/Ellipse/Sphere/Ellipsoid
+        #endregion //Circle/Ellipse/Sphere/Ellipsoid
 
         //---------------------------------------------------------------------
         //Arc: Vertically aligned if drawn in world, aligned on z-axis if other
-#region Arc
+        #region Arc
         public static void Arc(Vector3 position, Quaternion rotation, float radius, float start, float end, int segments = 8, RenderSetup? custom_setup = null)
         {
             Arc(position, rotation, Vector2.one * radius, start, end, segments, custom_setup);
@@ -287,7 +287,7 @@ namespace Prateek.Debug
                 Line(position + rotation * p0, position + rotation * p1, custom_setup);
             }
         }
-#endregion //Arc
+        #endregion //Arc
 
 
         //---------------------------------------------------------------------

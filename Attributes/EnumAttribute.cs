@@ -97,14 +97,14 @@ namespace Prateek.Attributes
     //-------------------------------------------------------------------------
     public class EnumMaskAttribute : EnumBaseAttribute
     {
-        protected Type m_value = null;
+        protected Type value = null;
 
-        public Type value { get { return m_value; } }
+        public Type Value { get { return value; } }
 
         public EnumMaskAttribute() { }
-        public EnumMaskAttribute(Type enum_type)
+        public EnumMaskAttribute(Type enumType)
         {
-            m_value = enum_type;
+            value = enumType;
         }
     }
 

@@ -101,7 +101,7 @@ namespace Prateek.Helpers
                 var attribute = type.GetFirstAttribute<EnumMaskMethodAttribute>();
                 if (attribute != null)
                 {
-                    var method = type.GetMethod(attribute.value);
+                    var method = type.GetMethod(attribute.Value);
                     if (method != null)
                     {
                         names = method.Invoke(null, null) as string[];
@@ -127,18 +127,18 @@ namespace Prateek.Helpers
                         var name = GetEnumAttributeOfType<NameAttribute>((Enum)values.GetValue(i));
                         if (name != null)
                         {
-                            names[i] = name.value;
+                            names[i] = name.Value;
                         }
 
                         //Get correct custom categories
                         var category = GetEnumAttributeOfType<CategoryAttribute>((Enum)values.GetValue(i));
                         if (category != null)
                         {
-                            if (!category.value.EndsWith("/"))
+                            if (!category.Value.EndsWith("/"))
                             {
                                 names[i] = "/" + names[i];
                             }
-                            names[i] = category.value + names[i];
+                            names[i] = category.Value + names[i];
                         }
                     }
                 }

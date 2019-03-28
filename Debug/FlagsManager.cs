@@ -136,7 +136,7 @@ namespace Prateek.Debug
             var type = GetFlagType();
             if (type == null ||!type.IsEnum)
             {
-                Registry.instance.Unregister(GetType());
+                Registry.Instance.Unregister(GetType());
                 return;
             }
 
@@ -144,7 +144,7 @@ namespace Prateek.Debug
             var default_mask = new Helpers.Mask256();
             if (values.Length < Helpers.Mask256.MAX_SIZE)
             {
-                Registry.instance.Unregister(GetType());
+                Registry.Instance.Unregister(GetType());
                 return;
             }
 

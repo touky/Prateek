@@ -26,7 +26,7 @@ PRATEEK_FILE_INFO(Vectors, cs)
         }
     }
 
-    PRATEEK_BLOCK_MIXED_CTOR(Prateek.ShaderTo, CSharp)
+    PRATEEK_BLOCK_CTOR_MIXED(Prateek.ShaderTo, CSharp)
     {
         PRATEEK_CLASS_INFO(Vector2) { PRATEEK_NAMES(vec2) PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3) { PRATEEK_NAMES(vec3) PRATEEK_VARS(x, y, z) }
@@ -52,7 +52,7 @@ PRATEEK_FILE_INFO(Vectors, cs)
         }
     }
 
-    PRATEEK_BLOCK_MIXED_FUNC(Prateek.ShaderTo, CSharp)
+    PRATEEK_BLOCK_FUNC_MIXED(Prateek.ShaderTo, CSharp)
     {
         PRATEEK_CLASS_INFO(Vector2) { PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3) { PRATEEK_VARS(x, y, z) }
@@ -123,7 +123,7 @@ PRATEEK_FILE_INFO(VectorInts, cs)
         }
     }
 
-    PRATEEK_BLOCK_MIXED_CTOR(Prateek.ShaderTo, CSharp)
+    PRATEEK_BLOCK_CTOR_MIXED(Prateek.ShaderTo, CSharp)
     {
         PRATEEK_CLASS_INFO(Vector2) { PRATEEK_NAMES(vec2i) PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3) { PRATEEK_NAMES(vec3i) PRATEEK_VARS(x, y, z) }
@@ -148,7 +148,7 @@ PRATEEK_FILE_INFO(VectorInts, cs)
         }
     }
 
-    PRATEEK_BLOCK_MIXED_FUNC(Prateek.ShaderTo, CSharp)
+    PRATEEK_BLOCK_FUNC_MIXED(Prateek.ShaderTo, CSharp)
     {
         PRATEEK_CLASS_INFO(Vector2Int) { PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3Int) { PRATEEK_VARS(x, y, z) }

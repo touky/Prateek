@@ -86,43 +86,45 @@ namespace Prateek.Attributes
         public enum ValueType
         {
             Int,
-            Float
+            Float,
+
+            MAX
         }
 
         #region Fields
-        protected ValueType m_value_type = ValueType.Int;
+        protected ValueType valueType = ValueType.Int;
 
-        protected int m_min_int;
-        protected int m_max_int;
+        protected int iMinValue;
+        protected int iMaxValue;
 
-        protected float m_min_float;
-        protected float m_max_float;
+        protected float fMinValue;
+        protected float fMaxValue;
         #endregion Fields
 
         #region Fields
-        public ValueType value_type { get { return m_value_type; } }
+        public ValueType Type { get { return valueType; } }
 
-        public int min_int { get { return m_min_int; } }
-        public int max_int { get { return m_max_int; } }
+        public int iMin { get { return iMinValue; } }
+        public int iMax { get { return iMaxValue; } }
 
-        public float min_float { get { return m_min_float; } }
-        public float max_float { get { return m_max_float; } }
+        public float fMin { get { return fMinValue; } }
+        public float fMax { get { return fMaxValue; } }
         #endregion Fields
 
         //---------------------------------------------------------------------
-        protected MathAttribute(int min_value, int max_value)
+        protected MathAttribute(int minValue, int maxValue)
         {
-            m_value_type = ValueType.Int;
-            m_min_int = min_value;
-            m_max_int = max_value;
+            valueType = ValueType.Int;
+            iMinValue = minValue;
+            iMaxValue = maxValue;
         }
 
         //---------------------------------------------------------------------
-        protected MathAttribute(float min_float, float max_float)
+        protected MathAttribute(float minValue, float maxValue)
         {
-            m_value_type = ValueType.Float;
-            m_min_float = min_float;
-            m_max_float = max_float;
+            valueType = ValueType.Float;
+            fMinValue = minValue;
+            fMaxValue = maxValue;
         }
     }
 

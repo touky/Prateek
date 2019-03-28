@@ -87,34 +87,34 @@ namespace Prateek.Debug
         #region Declarations
         public struct LineData
         {
-            public GameObject Root;
-            public LineRenderer Line;
+            public GameObject root;
+            public LineRenderer line;
         }
         #endregion //Declarations
 
         //---------------------------------------------------------------------
         #region Fields
-        private PersonalLoggerManager m_logger_manager = new PersonalLoggerManager();
+        private PersonalLoggerManager loggerManager = new PersonalLoggerManager();
 
-        private Stack<LineData> m_line_pool = new Stack<LineData>();
-        private Stack<LineData> m_lines = new Stack<LineData>();
-        private Shader m_line_shader = null;
-        private int m_get_line_count = 0;
-        private int m_new_line_count = 0;
+        private Stack<LineData> linePool = new Stack<LineData>();
+        private Stack<LineData> lineActive = new Stack<LineData>();
+        private Shader lineShader = null;
+        private int getCallCount = 0;
+        private int newCallCount = 0;
 
-        private List<Helpers.StringBlurp> m_blurps = new List<Helpers.StringBlurp>();
+        private List<Helpers.StringBlurp> blurps = new List<Helpers.StringBlurp>();
 
         #endregion //Fields
 
         //---------------------------------------------------------------------
         #region Settings
         [SerializeField]
-        private float m_debug_line_renderer_width = 0.0025f;
+        private float lineRendererWidth = 0.0025f;
         #endregion //Settings
 
         //---------------------------------------------------------------------
         #region Properties
-        public float DebugLineRendererWidth { get { return m_debug_line_renderer_width; } }
+        public float LineRendererWidth { get { return lineRendererWidth; } }
         #endregion //Properties
 
 
@@ -124,18 +124,18 @@ namespace Prateek.Debug
         {
             Draw.EndFrame();
 
-            if (m_lines.Count > 0)
+            if (lineActive.Count > 0)
             {
                 StartCoroutine(RefreshPool());
             }
 
-            m_logger_manager.DisplayDebug();
+            loggerManager.DisplayDebug();
         }
 
         //---------------------------------------------------------------------
         void OnGUI()
         {
-            m_logger_manager.DisplayGUI();
+            loggerManager.DisplayGUI();
         }
         #endregion //Unity Defaults
 
@@ -143,15 +143,15 @@ namespace Prateek.Debug
         #region OCP Black Box
         public void Register(Helpers.PersonalLogger logger)
         {
-            if (m_logger_manager == null)
-                m_logger_manager = new PersonalLoggerManager();
-            m_logger_manager.Register(logger);
+            if (loggerManager == null)
+                loggerManager = new PersonalLoggerManager();
+            loggerManager.Register(logger);
         }
 
         //---------------------------------------------------------------------
         public void Unregister(Helpers.PersonalLogger logger)
         {
-            m_logger_manager.Unregister(logger);
+            loggerManager.Unregister(logger);
         }
         #endregion //OCP Black Box
 
@@ -161,46 +161,46 @@ namespace Prateek.Debug
         {
             yield return new WaitForEndOfFrame();
 
-            while (m_lines.Count > 0)
+            while (lineActive.Count > 0)
             {
-                var data = m_lines.Pop();
-                data.Root.SetActive(false);
-                m_line_pool.Push(data);
-                m_get_line_count--;
+                var data = lineActive.Pop();
+                data.root.SetActive(false);
+                linePool.Push(data);
+                getCallCount--;
             }
         }
 
         //---------------------------------------------------------------------
         public LineRenderer GetLine()
         {
-            if (m_line_shader == null)
+            if (lineShader == null)
             {
-                m_line_shader = Shader.Find("Particles/Alpha Blended Premultiply");
+                lineShader = Shader.Find("Particles/Alpha Blended Premultiply");
             }
 
             LineData data = new LineData();
-            if (m_line_pool.Count > 0)
+            if (linePool.Count > 0)
             {
-                m_get_line_count++;
-                data = m_line_pool.Pop();
+                getCallCount++;
+                data = linePool.Pop();
             }
             else
             {
-                m_new_line_count++;
-                m_get_line_count++;
-                data.Root = new GameObject();
-                data.Root.transform.SetParent(gameObject.transform);
-                data.Line = data.Root.AddComponent<LineRenderer>();
-                data.Line.material = new Material(m_line_shader);
-                data.Line.startWidth = 0.01f;
-                data.Line.endWidth = 0.01f;
+                newCallCount++;
+                getCallCount++;
+                data.root = new GameObject();
+                data.root.transform.SetParent(gameObject.transform);
+                data.line = data.root.AddComponent<LineRenderer>();
+                data.line.material = new Material(lineShader);
+                data.line.startWidth = 0.01f;
+                data.line.endWidth = 0.01f;
             }
 
-            data.Root.SetActive(true);
+            data.root.SetActive(true);
 
-            m_lines.Push(data);
+            lineActive.Push(data);
 
-            return data.Line;
+            return data.line;
         }
         #endregion //Lines Pool
     }
