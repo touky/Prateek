@@ -1,0 +1,66 @@
+
+<NotepadPlus>
+    <UserLang name="PrateekCodegen" ext="prtk" udlVersion="2.1">
+        <Settings>
+            <Global caseIgnored="no" allowFoldOfComments="no" foldCompact="no" forcePureLC="0" decimalSeparator="0" />
+            <Prefix Keywords1="no" Keywords2="no" Keywords3="no" Keywords4="no" Keywords5="no" Keywords6="no" Keywords7="no" Keywords8="no" />
+        </Settings>
+        <KeywordLists>
+            <Keywords name="Comments">00// 01 02 03/* 04*/</Keywords>
+            <Keywords name="Numbers, prefix1"></Keywords>
+            <Keywords name="Numbers, prefix2"></Keywords>
+            <Keywords name="Numbers, extras1"></Keywords>
+            <Keywords name="Numbers, extras2"></Keywords>
+            <Keywords name="Numbers, suffix1"></Keywords>
+            <Keywords name="Numbers, suffix2"></Keywords>
+            <Keywords name="Numbers, range"></Keywords>
+            <Keywords name="Operators1"></Keywords>
+            <Keywords name="Operators2"></Keywords>
+            <Keywords name="Folders in code1, open">{</Keywords>
+            <Keywords name="Folders in code1, middle"></Keywords>
+            <Keywords name="Folders in code1, close">}</Keywords>
+            <Keywords name="Folders in code2, open"></Keywords>
+            <Keywords name="Folders in code2, middle"></Keywords>
+            <Keywords name="Folders in code2, close"></Keywords>
+            <Keywords name="Folders in comment, open"></Keywords>
+            <Keywords name="Folders in comment, middle"></Keywords>
+            <Keywords name="Folders in comment, close"></Keywords>
+            <Keywords name="Keywords1">PRATEEK_FILE_INFO&#x000D;&#x000A;PRATEEK_BLOCK_BASIC_FUNC&#x000D;&#x000A;PRATEEK_BLOCK_MIXED_CTOR&#x000D;&#x000A;PRATEEK_BLOCK_MIXED_FUNC&#x000D;&#x000A;PRATEEK_BLOCK_SYNTAX_NPP_COLOR&#x000D;&#x000A;PRATEEK_BLOCK_SYNTAX_NPP_AUTO_COMPLETE&#x000D;&#x000A;PRATEEK_BLOCK_SWIZZLE&#x000D;&#x000A;</Keywords>
+            <Keywords name="Keywords2">PRATEEK_CODE_PREFIX&#x000D;&#x000A;PRATEEK_CODE_MAIN&#x000D;&#x000A;PRATEEK_CODE_SUFFIX&#x000D;&#x000A;PRATEEK_CLASS_INFO&#x000D;&#x000A;PRATEEK_DEFAULT&#x000D;&#x000A;PRATEEK_FUNC&#x000D;&#x000A;PRATEEK_NAMES&#x000D;&#x000A;PRATEEK_VARS&#x000D;&#x000A;SRC_CLASS&#x000D;&#x000A;DST_CLASS&#x000D;&#x000A;NAMES_0&#x000D;&#x000A;NAMES_1&#x000D;&#x000A;NAMES_2&#x000D;&#x000A;NAMES_3&#x000D;&#x000A;NAMES_4&#x000D;&#x000A;NAMES_5&#x000D;&#x000A;NAMES_6&#x000D;&#x000A;NAMES_7&#x000D;&#x000A;NAMES_8&#x000D;&#x000A;NAMES_9&#x000D;&#x000A;VARS_0&#x000D;&#x000A;VARS_1&#x000D;&#x000A;VARS_2&#x000D;&#x000A;VARS_3&#x000D;&#x000A;VARS_4&#x000D;&#x000A;VARS_5&#x000D;&#x000A;VARS_6&#x000D;&#x000A;VARS_7&#x000D;&#x000A;VARS_8&#x000D;&#x000A;VARS_9&#x000D;&#x000A;FUNC_RESULT_0&#x000D;&#x000A;FUNC_RESULT_1&#x000D;&#x000A;FUNC_RESULT_2&#x000D;&#x000A;FUNC_RESULT_3&#x000D;&#x000A;FUNC_RESULT_4&#x000D;&#x000A;FUNC_RESULT_5&#x000D;&#x000A;FUNC_RESULT_6&#x000D;&#x000A;FUNC_RESULT_7&#x000D;&#x000A;FUNC_RESULT_8&#x000D;&#x000A;FUNC_RESULT_9&#x000D;&#x000A;</Keywords>
+            
+            <Keywords name="Keywords3"></Keywords>
+            <Keywords name="Keywords4"></Keywords>
+            <Keywords name="Keywords5"></Keywords>
+            <Keywords name="Keywords6"></Keywords>
+            <Keywords name="Keywords7"></Keywords>
+            <Keywords name="Keywords8"></Keywords>
+            <Keywords name="Delimiters">00@ 01 02(($ EOL)) 03( 04 05) 06#reg 07 08ion 09#endreg 10 11ion 12#i 13 14f 15#el 16 17se 18#endi 19 20f 21# 22 23#</Keywords>
+        </KeywordLists>
+        <Styles>
+            <WordsStyle name="DEFAULT" fgColor="FFFFFF" bgColor="000000" fontName="Consolas" fontStyle="0" nesting="0" />
+            <WordsStyle name="COMMENTS" fgColor="0BBB32" bgColor="000000" fontName="" fontStyle="0" nesting="3" />
+            <WordsStyle name="LINE COMMENTS" fgColor="0BBB32" bgColor="000000" fontName="" fontStyle="0" nesting="3" />
+            <WordsStyle name="NUMBERS" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS1" fgColor="569CD6" bgColor="000000" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS2" fgColor="4EC9B0" bgColor="000000" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS3" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS4" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS5" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS6" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS7" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS8" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="OPERATORS" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="FOLDER IN CODE1" fgColor="CFCFFF" bgColor="000000" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="FOLDER IN CODE2" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="FOLDER IN COMMENT" fgColor="008040" bgColor="000000" fontName="Consolas" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS1" fgColor="D69D85" bgColor="000000" fontName="" fontStyle="0" nesting="253" />
+            <WordsStyle name="DELIMITERS2" fgColor="FFFFFF" bgColor="000000" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS3" fgColor="D69D85" bgColor="000000" fontName="" fontStyle="0" nesting="5" />
+            <WordsStyle name="DELIMITERS4" fgColor="D69D85" bgColor="000000" fontName="" fontStyle="0" nesting="13" />
+            <WordsStyle name="DELIMITERS5" fgColor="D69D85" bgColor="000000" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS6" fgColor="D69D85" bgColor="000000" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS7" fgColor="D69D85" bgColor="000000" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS8" fgColor="8DD3BE" bgColor="000000" fontName="" fontStyle="0" nesting="0" />
+        </Styles>
+    </UserLang>
+</NotepadPlus>

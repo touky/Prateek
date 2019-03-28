@@ -706,7 +706,7 @@ namespace Prateek.Extensions
         public static Color nnng(this Color v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Color(n_0, n_1, n_2, v.g); }
         public static Color nnnb(this Color v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Color(n_0, n_1, n_2, v.b); }
         public static Color nnna(this Color v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Color(n_0, n_1, n_2, v.a); }
-        #endregion Swizzle PRTK_Color
+        #endregion Swizzle Color
         
     }
 }
