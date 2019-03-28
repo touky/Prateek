@@ -14,7 +14,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
 		PRATEEK_FUNC { @#NAMES_0# #NAMES_1#$ }
 		PRATEEK_FUNC
 		{
-		@this.#NAMES_1# = #NAMES_1#;
+		@    this.#NAMES_1# = #NAMES_1#;
 		}
 
         PRATEEK_CODE_PREFIX

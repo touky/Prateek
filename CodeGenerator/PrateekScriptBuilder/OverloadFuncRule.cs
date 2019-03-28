@@ -119,33 +119,39 @@ namespace Prateek.CodeGeneration
             protected override void GatherVariants(List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
                 variants.Clear();
-
-                GatherVariants(0, new FuncVariant(string.Empty, 1), variants, data, infoSrc, infoDst);
+                var slots = new int[infoSrc.NameCount / 2];
+                GatherVariants(0, slots, variants, data, infoSrc, infoDst);
             }
             //-----------------------------------------------------------------
-            private void GatherVariants(int n, FuncVariant variant, List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
+            private void GatherVariants(int s, int[] slots, List<FuncVariant> variants, CodeFile.ContentInfos data, CodeFile.ClassInfos infoSrc, CodeFile.ClassInfos infoDst)
             {
-                if (n < infoSrc.NameCount)
+                if (s < slots.Length)
                 {
                     for (int p = 0; p < 2; p++)
                     {
-                        if (p == 1)
+                        slots[s] = p;
+                        GatherVariants(s + 1, slots, variants, data, infoSrc, infoDst);
+                    }
+                }
+                else
+                {
+                    var variant = new FuncVariant(string.Empty, 1);
+                    for (int sv = 0; sv < slots.Length; sv++)
+                    {
+                        if (slots[sv] == 1)
                         {
                             for (int i = 0; i < data.funcInfos.Count; i++)
                             {
                                 var info = data.funcInfos[i].data;
-                                info = (Names[0] + infoSrc.names[n + 0]).Apply(info);
-                                info = (Names[1] + infoSrc.names[n + 1]).Apply(info);
+                                info = (Names[0] + infoSrc.names[sv * 2 + 0]).Apply(info);
+                                info = (Names[1] + infoSrc.names[sv * 2 + 1]).Apply(info);
                                 variant[i] = info;
                             }
                         }
-
-                        GatherVariants(n + 2, variant, variants, data, infoSrc, infoDst);
                     }
-                }
-                else if (variant.Call != string.Empty)
-                {
-                    variants.Add(variant);
+
+                    if (variant.Call != string.Empty)
+                        variants.Add(variant);
                 }
             }
             #endregion Rule internal

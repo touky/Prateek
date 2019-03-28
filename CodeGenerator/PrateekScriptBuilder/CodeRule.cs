@@ -143,6 +143,12 @@ namespace Prateek.CodeGeneration
                 }
 
                 //-------------------------------------------------------------
+                public FuncVariant(FuncVariant other)
+                {
+                    results = new List<string>(other.results);
+                }
+
+                //-------------------------------------------------------------
                 public void Add(string value)
                 {
                     results.Add(value);
