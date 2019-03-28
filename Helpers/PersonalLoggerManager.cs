@@ -304,7 +304,7 @@ namespace Prateek.Debug
                                                      Mathf.Clamp(robotPos.y, style.WindowRect.y, style.WindowRect.y + style.WindowRect.height));
                             guiPos.y = Screen.height - guiPos.y;
                             var worldGuiPos = camera.ScreenToWorldPoint(guiPos.xyn(1f));
-                            Draw.Line(worldGuiPos, box.logger.transform.position, new Draw.RenderSetup(Draw.SpaceType.World, Color.white));
+                            Draw.Line(worldGuiPos, box.logger.transform.position, new Draw.Setup(Draw.Space.World, Color.white));
                         }
                         break;
                     }

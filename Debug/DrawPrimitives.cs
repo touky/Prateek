@@ -86,7 +86,7 @@ namespace Prateek.Debug
     {
         //---------------------------------------------------------------------
         //Point: Three line to mark each axis
-        public static void Point(Vector3 position, float size, RenderSetup? custom_setup = null)
+        public static void Point(Vector3 position, float size, Setup? custom_setup = null)
         {
             size *= 0.5f;
             Line(position - Vector3.up * size, position + Vector3.up * size, custom_setup);
@@ -97,25 +97,25 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         //Box: A box, several flavors available
         #region Box
-        public static void Box(Bounds bounds, RenderSetup? custom_setup = null)
+        public static void Box(Bounds bounds, Setup? custom_setup = null)
         {
             Box(bounds.center, bounds.extents, custom_setup);
         }
 
         //---------------------------------------------------------------------
-        public static void Box(Vector3 position, float extends, RenderSetup? custom_setup = null)
+        public static void Box(Vector3 position, float extends, Setup? custom_setup = null)
         {
             Box(position, Vector3.one * extends, custom_setup);
         }
 
         //---------------------------------------------------------------------
-        public static void Box(Vector3 position, Vector3 extends, RenderSetup? custom_setup = null)
+        public static void Box(Vector3 position, Vector3 extends, Setup? custom_setup = null)
         {
             Box(position, Quaternion.identity, extends, custom_setup);
         }
 
         //---------------------------------------------------------------------
-        public static void Box(Vector3 position, Quaternion rotation, Vector3 extends, RenderSetup? custom_setup = null)
+        public static void Box(Vector3 position, Quaternion rotation, Vector3 extends, Setup? custom_setup = null)
         {
             Vector3 x = rotation * Vector3.right * extends.x;
             Vector3 y = rotation * Vector3.up * extends.y;
@@ -140,7 +140,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public static void Box(Vector3[] points, RenderSetup? custom_setup = null)
+        public static void Box(Vector3[] points, Setup? custom_setup = null)
         {
             if (points.Length != 8)
                 return;
@@ -164,7 +164,7 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Cone
-        public static void Cone(Vector3 position, Quaternion rotation, float length, Vector2 radius, int sideLine = 8, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Cone(Vector3 position, Quaternion rotation, float length, Vector2 radius, int sideLine = 8, int segments = 8, Setup? custom_setup = null)
         {
             Vector3 fw = Vector3.forward * length;
             Vector3 rt = Vector3.right * radius.x;
@@ -186,45 +186,45 @@ namespace Prateek.Debug
         //Circle/Ellipse: Vertically aligned if drawn in world, aligned on z-axis if other
         #region Circle/Ellipse/Sphere/Ellipsoid
         #region Circle
-        public static void Circle(Vector3 position, float radius, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Circle(Vector3 position, float radius, int segments = 8, Setup? custom_setup = null)
         {
             Arc(position, Quaternion.identity, radius, 0, 360, segments, custom_setup);
         }
 
         //---------------------------------------------------------------------
-        public static void Circle(Vector3 position, Quaternion rotation, float radius, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Circle(Vector3 position, Quaternion rotation, float radius, int segments = 8, Setup? custom_setup = null)
         {
-            var space = custom_setup != null ? custom_setup.Value.Space : m_current_setup.Space;
-            var spaceRotation = space != SpaceType.World ? Quaternion.identity : Quaternion.FromToRotation(Vector3.forward, Vector3.up);
+            var space = custom_setup != null ? custom_setup.Value.Space : currentSetup.Space;
+            var spaceRotation = space != Space.World ? Quaternion.identity : Quaternion.FromToRotation(Vector3.forward, Vector3.up);
             Arc(position, spaceRotation * rotation, radius, 0, 360, segments, custom_setup);
         }
         #endregion //Circle
 
         //---------------------------------------------------------------------
         #region Ellipse
-        public static void Ellipse(Vector3 position, Vector2 radius, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Ellipse(Vector3 position, Vector2 radius, int segments = 8, Setup? custom_setup = null)
         {
             Arc(position, Quaternion.identity, radius, 0, 360, segments, custom_setup);
         }
 
         //---------------------------------------------------------------------
-        public static void Ellipse(Vector3 position, Quaternion rotation, Vector2 radius, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Ellipse(Vector3 position, Quaternion rotation, Vector2 radius, int segments = 8, Setup? custom_setup = null)
         {
-            var space = custom_setup != null ? custom_setup.Value.Space : m_current_setup.Space;
-            var spaceRotation = space != SpaceType.World ? Quaternion.identity : Quaternion.FromToRotation(Vector3.forward, Vector3.up);
+            var space = custom_setup != null ? custom_setup.Value.Space : currentSetup.Space;
+            var spaceRotation = space != Space.World ? Quaternion.identity : Quaternion.FromToRotation(Vector3.forward, Vector3.up);
             Arc(position, spaceRotation * rotation, radius, 0, 360, segments, custom_setup);
         }
         #endregion //Ellipse
 
         //---------------------------------------------------------------------
         #region Sphere
-        public static void Sphere(Vector3 position, float radius, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Sphere(Vector3 position, float radius, int segments = 8, Setup? custom_setup = null)
         {
             Sphere(position, Quaternion.identity, radius, segments, custom_setup);
         }
 
         //---------------------------------------------------------------------
-        public static void Sphere(Vector3 position, Quaternion rotation, float radius, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Sphere(Vector3 position, Quaternion rotation, float radius, int segments = 8, Setup? custom_setup = null)
         {
             Ellipsoid(position, rotation, Vector3.one * radius, segments, custom_setup);
         }
@@ -232,13 +232,13 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Ellipsoid
-        public static void Ellipsoid(Vector3 position, Vector3 radius, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Ellipsoid(Vector3 position, Vector3 radius, int segments = 8, Setup? custom_setup = null)
         {
             Ellipsoid(position, Quaternion.identity, radius, segments, custom_setup);
         }
 
         //---------------------------------------------------------------------
-        public static void Ellipsoid(Vector3 position, Quaternion rotation, Vector3 radius, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Ellipsoid(Vector3 position, Quaternion rotation, Vector3 radius, int segments = 8, Setup? custom_setup = null)
         {
             Arc(position, rotation, radius.xy(), 0, 360, segments, custom_setup);
             Arc(position, rotation * Quaternion.Euler(90, 0, 0), radius.xz(), 0, 360, segments, custom_setup);
@@ -247,7 +247,7 @@ namespace Prateek.Debug
         #endregion //Ellipsoid
 
         //---------------------------------------------------------------------
-        public static void SphereCast(Ray position, float radius, float length, int segments = 8, RenderSetup? custom_setup = null)
+        public static void SphereCast(Ray position, float radius, float length, int segments = 8, Setup? custom_setup = null)
         {
             Sphere(position.origin, Quaternion.identity, radius, segments, custom_setup);
             Sphere(position.origin + position.direction * length, Quaternion.identity, radius, segments, custom_setup);
@@ -265,13 +265,13 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         //Arc: Vertically aligned if drawn in world, aligned on z-axis if other
         #region Arc
-        public static void Arc(Vector3 position, Quaternion rotation, float radius, float start, float end, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Arc(Vector3 position, Quaternion rotation, float radius, float start, float end, int segments = 8, Setup? custom_setup = null)
         {
             Arc(position, rotation, Vector2.one * radius, start, end, segments, custom_setup);
         }
 
         //---------------------------------------------------------------------
-        public static void Arc(Vector3 position, Quaternion rotation, Vector2 radius, float start, float end, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Arc(Vector3 position, Quaternion rotation, Vector2 radius, float start, float end, int segments = 8, Setup? custom_setup = null)
         {
             if (segments < 1)
                 return;
@@ -291,7 +291,7 @@ namespace Prateek.Debug
 
 
         //---------------------------------------------------------------------
-        public static void Arrow(Vector3 p0, Vector3 p1, Vector3 up, float width, float length, RenderSetup? custom_setup = null)
+        public static void Arrow(Vector3 p0, Vector3 p1, Vector3 up, float width, float length, Setup? custom_setup = null)
         {
             var forward = (p1 - p0).normalized;
             Vector3 right;
@@ -305,7 +305,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public static void Pie(Vector3 position, Quaternion rotation, float radius, float degreeStart, float degreeEnd, int segments = 8, RenderSetup? custom_setup = null)
+        public static void Pie(Vector3 position, Quaternion rotation, float radius, float degreeStart, float degreeEnd, int segments = 8, Setup? custom_setup = null)
         {
             if (segments < 1)
                 return;
@@ -339,7 +339,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public static void Plane(Plane plane, Vector2 offset, float size, Vector3 up, RenderSetup? custom_setup = null)
+        public static void Plane(Plane plane, Vector2 offset, float size, Vector3 up, Setup? custom_setup = null)
         {
             var q = Quaternion.LookRotation(plane.normal, up);
             var x = q * Vector3.right;
