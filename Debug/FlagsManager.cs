@@ -84,12 +84,12 @@ namespace Prateek.Debug
     //-------------------------------------------------------------------------
     public abstract class FlagManager : GlobalManager
     {
-        private Type m_enum = null;
-        private Editors.Prefs.Mask256s m_mask;
-        private bool m_deactivate_all = false;
-        private int[] m_values = null;
-        private string[] m_names = null;
-        private int[] m_parents = null;
+        private Type enumType = null;
+        private Editors.Prefs.Mask256s mask;
+        private bool deactivateAll = false;
+        private int[] values = null;
+        private string[] names = null;
+        private int[] parents = null;
 
         //---------------------------------------------------------------------
         protected virtual Type GetFlagType()
@@ -100,10 +100,10 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         protected bool IsWrongType<T>() where T : struct, IConvertible
         {
-            if (m_enum == null)
+            if (enumType == null)
                 return true;
 
-            if (typeof(T) != m_enum && typeof(T) != typeof(int))
+            if (typeof(T) != enumType && typeof(T) != typeof(int))
                 return true;
 
             return false;
@@ -112,12 +112,12 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         protected bool IsActive(MaskFlag mask)
         {
-            var parent = m_parents[mask.flag];
+            var parent = parents[mask.flag];
             if (parent >= 0 && !IsActive(parent))
             {
                 return false;
             }
-            return (m_mask.data & mask) != 0;
+            return (this.mask.data & mask) != 0;
         }
 
         //---------------------------------------------------------------------
@@ -148,14 +148,14 @@ namespace Prateek.Debug
                 return;
             }
 
-            m_enum = type;
-            m_values = values;
-            m_names = Enum.GetNames(type);
-            m_mask = Editors.Prefs.Get(String.Format("{0}_{1}", GetType().Name, type.Name), default_mask);
-            m_parents = new int[values.Length];
-            for (int i = 0; i < m_parents.Length; i++)
+            enumType = type;
+            this.values = values;
+            names = Enum.GetNames(type);
+            mask = Editors.Prefs.Get(String.Format("{0}_{1}", GetType().Name, type.Name), default_mask);
+            parents = new int[values.Length];
+            for (int i = 0; i < parents.Length; i++)
             {
-                m_parents[i] = -1;
+                parents[i] = -1;
             }
         }
 
@@ -166,10 +166,10 @@ namespace Prateek.Debug
                 return false;
 
             var mask = ToMask(child);
-            if (m_parents == null || mask.flag >= m_parents.Length)
+            if (parents == null || mask.flag >= parents.Length)
                 return false;
 
-            return m_parents[mask.flag] >= 0;
+            return parents[mask.flag] >= 0;
         }
 
         //---------------------------------------------------------------------
@@ -183,11 +183,11 @@ namespace Prateek.Debug
 
             var mask = ToMask(child);
             var count = 1;
-            var parent = m_parents[mask.flag];
-            while (parent != 0 && m_parents[parent] >= 0)
+            var parent = parents[mask.flag];
+            while (parent != 0 && parents[parent] >= 0)
             {
                 count++;
-                parent = m_parents[parent];
+                parent = parents[parent];
             }
             return count;
         }
@@ -199,10 +199,10 @@ namespace Prateek.Debug
                 return;
 
             var mask = ToMask(child);
-            if (m_parents == null || mask.flag >= m_parents.Length)
+            if (parents == null || mask.flag >= parents.Length)
                 return;
 
-            m_parents[mask.flag] = -1;
+            parents[mask.flag] = -1;
         }
 
         //---------------------------------------------------------------------
@@ -213,12 +213,12 @@ namespace Prateek.Debug
 
             var mask0 = ToMask(child);
             var mask1 = ToMask(parent);
-            if (m_values == null
-                || mask0.flag >= m_values.Length
-                || mask1.flag >= m_values.Length)
+            if (values == null
+                || mask0.flag >= values.Length
+                || mask1.flag >= values.Length)
                 return;
 
-            m_parents[mask0.flag] = mask1.flag;
+            parents[mask0.flag] = mask1.flag;
         }
 
         //---------------------------------------------------------------------
@@ -227,7 +227,7 @@ namespace Prateek.Debug
             if (IsWrongType<T>())
                 return false;
 
-            if (m_deactivate_all)
+            if (deactivateAll)
                 return false;
 
             return IsActive(ToMask(value));
@@ -262,18 +262,18 @@ namespace Prateek.Debug
             var mask = ToMask(value);
             if (active)
             {
-                m_mask.data |= mask;
+                this.mask.data |= mask;
             }
             else
             {
-                m_mask.data &= ~(new Helpers.Mask256(mask));
+                this.mask.data &= ~(new Helpers.Mask256(mask));
             }
         }
 
         //---------------------------------------------------------------------
         public virtual void SetActive(bool active)
         {
-            m_deactivate_all = !active;
+            deactivateAll = !active;
         }
     }
 }

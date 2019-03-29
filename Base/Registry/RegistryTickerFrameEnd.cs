@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
+//  Header last update date: 28/03/2019
 //
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -66,6 +66,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
+using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -75,63 +76,40 @@ using Prateek.Debug;
 
 //-----------------------------------------------------------------------------
 #region File namespaces
+using System.Reflection;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
 namespace Prateek.Base
 {
     //-------------------------------------------------------------------------
-    public abstract class GlobalManager : ScriptableObject, IGlobalManager, IUpdatable
+    public sealed class RegistryTickerFrameEnd : RegistryTicker
     {
-        public const string CREATE_METHOD = "GetBuilder";
+        //---------------------------------------------------------------------
+        public delegate void TickableEvent(Registry.TickEvent tickEvent, float seconds);
 
         //---------------------------------------------------------------------
-        public abstract class BuilderBase
-        {
-            public Type realType = null;
-            public Type emptyType = null;
+        private TickableEvent onUpdate;
+        private TickableEvent onUpdateUnscaled;
+        private TickableEvent onLateUpdate;
+        private TickableEvent onFixedUpdate;
 
-            public BuilderBase(Type realType, Type emptyType)
-            {
-                this.realType = realType;
-                this.emptyType = emptyType;
-            }
+        //---------------------------------------------------------------------
+        public void Register(TickableEvent onUpdate, TickableEvent onUpdateUnscaled, TickableEvent onLateUpdate, TickableEvent onFixedUpdate)
+        {
+            this.onUpdate = onUpdate;
+            this.onUpdateUnscaled = onUpdateUnscaled;
+            this.onLateUpdate = onLateUpdate;
+            this.onFixedUpdate = onFixedUpdate;
         }
 
-        //--
-        public class Builder<REAL, FAKE> : BuilderBase where REAL : class where FAKE : class
+        //---------------------------------------------------------------------
+        private void Update()
         {
-            public Builder() : base(typeof(REAL), typeof(FAKE)) { }
+            onUpdate(Registry.TickEvent.FrameEnding, Time.deltaTime);
+            onUpdateUnscaled(Registry.TickEvent.FrameEnding, Time.unscaledDeltaTime);
         }
-
-        //--
-        [SerializeField]
-        protected int priority;
-
-        //---------------------------------------------------------------------
-        public int Priority { get { return priority; } }
-        public virtual Registry.TickEvent TickEvent { get { return Registry.TickEvent.FrameBeginning; } }
-
-        //---------------------------------------------------------------------
-        public virtual void OnCreate() { }
-
-        //-- Object Lifetime Messages
-        public virtual void OnInitialize() { }
-        public virtual void OnStart() { }
-        public virtual void OnUpdate(Registry.TickEvent tickEvent, float seconds) { }
-        public virtual void OnUpdateUnscaled(Registry.TickEvent tickEvent, float seconds) { }
-        public virtual void OnLateUpdate(Registry.TickEvent tickEvent, float seconds) { }
-        public virtual void OnFixedUpdate(Registry.TickEvent tickEvent, float seconds) { }
-        public virtual void OnDispose() { }
-        public virtual void OnRegister() { }
-        public virtual void OnUnregister() { }
-
-        //-- Application Messages
-        public virtual void OnApplicationFocus(bool focusStatus) { }
-        public virtual void OnApplicationPause(bool pauseStatus) { }
-        public virtual void OnApplicationQuit() { }
-
-        //-- Ui Messages
-        public virtual void OnGUI() { }
+        private void LateUpdate() { onLateUpdate(Registry.TickEvent.FrameEnding, Time.deltaTime); }
+        private void FixedUpdate() { onFixedUpdate(Registry.TickEvent.FrameEnding, Time.fixedDeltaTime); }
     }
 }

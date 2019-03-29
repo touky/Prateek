@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
+//  Header last update date: 28/03/2019
 //
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -66,6 +66,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
+using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -75,88 +76,63 @@ using Prateek.Debug;
 
 //-----------------------------------------------------------------------------
 #region File namespaces
+using System.Reflection;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Helpers
+namespace Prateek.Base
 {
     //-------------------------------------------------------------------------
-    public sealed class StaticManager
+    public class RegistryTicker : NamedBehaviour { }
+
+    //-------------------------------------------------------------------------
+    public sealed class RegistryTickerFrameBegin : RegistryTicker
     {
-        private static StaticManager m_manager = null;
-        private Dictionary<Type, object> m_instances = null;
+        //---------------------------------------------------------------------
+        public delegate void TickableEvent(Registry.TickEvent tickEvent, float seconds);
+        public delegate void ApplicationEvent(bool status);
 
         //---------------------------------------------------------------------
-        private static StaticManager manager
+        private TickableEvent onUpdate;
+        private TickableEvent onUpdateUnscaled;
+        private TickableEvent onLateUpdate;
+        private TickableEvent onFixedUpdate;
+        private ApplicationEvent onFocus;
+        private ApplicationEvent onPause;
+        private ApplicationEvent onQuit;
+        private ApplicationEvent onGUI;
+
+        //---------------------------------------------------------------------
+        public void Register(TickableEvent onUpdate, TickableEvent onUpdateUnscaled, TickableEvent onLateUpdate, TickableEvent onFixedUpdate,
+                             ApplicationEvent onFocus, ApplicationEvent onPause, ApplicationEvent onQuit,
+                             ApplicationEvent onGUI)
         {
-            get
-            {
-                if (m_manager == null)
-                {
-                    m_manager = new StaticManager();
-                }
-                return m_manager;
-            }
+            this.onUpdate = onUpdate;
+            this.onUpdateUnscaled = onUpdateUnscaled;
+            this.onLateUpdate = onLateUpdate;
+            this.onFixedUpdate = onFixedUpdate;
+            this.onFocus = onFocus;
+            this.onPause = onPause;
+            this.onQuit = onQuit;
+            this.onGUI = onGUI;
         }
 
         //---------------------------------------------------------------------
-        private StaticManager()
+        private void Update()
         {
-            m_instances = new Dictionary<Type, object>();
+            onUpdate.Invoke(Registry.TickEvent.FrameBeginning, Time.deltaTime);
+            onUpdateUnscaled(Registry.TickEvent.FrameBeginning, Time.unscaledDeltaTime);
         }
+        private void LateUpdate() { onLateUpdate(Registry.TickEvent.FrameBeginning, Time.deltaTime); }
+        private void FixedUpdate() { onFixedUpdate(Registry.TickEvent.FrameBeginning, Time.fixedDeltaTime); }
 
         //---------------------------------------------------------------------
-        public static T Get<T>()
-        {
-            object instance = Get(typeof(T));
-            if (instance != null)
-                return (T)instance;
-            return default(T);
-        }
+        private void OnApplicationFocus(bool focusStatus) { onFocus(focusStatus); }
+        private void OnApplicationPause(bool pauseStatus) { onPause(pauseStatus); }
+        private void OnApplicationQuit() { onQuit(true); }
 
         //---------------------------------------------------------------------
-        public static object Get(Type key)
-        {
-            object instance = null;
-            if (manager.m_instances.TryGetValue(key, out instance))
-            {
-                return instance;
-            }
-            return null;
-        }
-
-        //---------------------------------------------------------------------
-        public static void Set<T>(T value)
-        {
-            Set(typeof(T), value);
-        }
-
-        //---------------------------------------------------------------------
-        public static void Set(Type key, object value)
-        {
-            if (manager.m_instances.ContainsKey(key))
-            {
-                manager.m_instances[key] = value;
-            }
-            else
-            {
-                manager.m_instances.Add(key, value);
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public static void Remove<T>()
-        {
-            Remove(typeof(T));
-        }
-
-        //---------------------------------------------------------------------
-        public static void Remove(Type key)
-        {
-            if (manager.m_instances.ContainsKey(key))
-            {
-                manager.m_instances.Remove(key);
-            }
-        }
+        private void OnGUI() { onGUI(true); }
     }
 }
+

@@ -100,6 +100,8 @@ namespace Prateek.CodeGeneration.Editor
                     return;
 
                 var builder = new CodeBuilder();
+                if (!Regex.Match(path, builder.SearchPattern).Success)
+                    return;
 
                 builder.AddFile(new CodeBuilder.FileData(path, string.Empty));
 

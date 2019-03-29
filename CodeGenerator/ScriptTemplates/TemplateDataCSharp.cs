@@ -90,6 +90,12 @@ namespace Prateek.CodeGeneration
         static CSharpScriptLoader()
         {
             NewScript("cs")
+            .SetEndsWith("Manager")
+            .SetTemplateFile("81-C# Script-NewBehaviourScript.cs.txt")
+            .SetFileContent("InternalContent_Script-NewGlobalManager.cs.txt")
+            .Commit();
+
+            NewScript("cs")
             .SetEndsWith("EditorWindow")
             .SetTemplateFile("81-C# Script-NewBehaviourScript.cs.txt")
             .SetFileContent("InternalContent_Script-NewEditorWindowScript.cs.txt")

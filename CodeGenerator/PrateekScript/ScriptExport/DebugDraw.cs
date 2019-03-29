@@ -78,7 +78,7 @@ using static Prateek.Debug.Draw.Setup.QuickCTor;
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public static partial class Draw
+    public partial class Draw
     {
         
         //---------------------------------------------------------------------
@@ -565,7 +565,7 @@ namespace Prateek.Debug
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public static partial class Draw
+    public partial class Draw
     {
         
         //---------------------------------------------------------------------

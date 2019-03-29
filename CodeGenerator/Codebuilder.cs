@@ -291,7 +291,7 @@ namespace Prateek.CodeGeneration
         #region Properties
         public string DestinationDirectory { get { return destinationDirectory; } set { destinationDirectory = value; } }
         public OperationApplied Operations { get { return operations; } set { operations = value; } }
-        protected virtual string SearchPattern { get { return FileHelpers.BuildExtensionMatch(ScriptTemplate.Keywords.List); } private set { } }
+        public virtual string SearchPattern { get { return FileHelpers.BuildExtensionMatch(ScriptTemplate.Keywords.List); } private set { } }
         public bool RunInTestMode { get { return runInTestMode; } set { runInTestMode = value; } }
 
         public int WorkFileCount { get { return workFiles.Count; } }

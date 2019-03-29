@@ -53,6 +53,7 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+using Prateek.Manager;
 
 #region Using static
 using static Prateek.ShaderTo.CSharp;
@@ -82,57 +83,34 @@ using Prateek.Debug;
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public abstract class DebugDisplayBase : FlagManager
-    {
-        //---------------------------------------------------------------------
-        public static BuilderBase GetBuilder()
-        {
-            return new Builder<DebugDisplayBase, NullDebugDisplay>();
-        }
-
-        //---------------------------------------------------------------------
-        public override void OnRegister()
-        {
-            base.OnRegister();
-
-            Registry.Instance.Register(typeof(DebugDisplayBase), this);
-        }
-
-        //---------------------------------------------------------------------
-        public override void OnUnregister()
-        {
-            Registry.Instance.Unregister(typeof(DebugDisplayBase));
-
-            base.OnUnregister();
-        }
-    }
-    
-    //-------------------------------------------------------------------------
-    public sealed class NullDebugDisplay : DebugDisplayBase
+    #region NullDebugDisplay
+    public sealed class NullDebugDisplay : DebugDisplayManager
     {
         //---------------------------------------------------------------------
         public override void OnCreate() { }
 
         //---------------------------------------------------------------------
-        public override void OnRegister() { Registry.Instance.Register(typeof(DebugDisplayBase), this); }
-        public override void OnUnregister() { Registry.Instance.Unregister(typeof(DebugDisplayBase)); }
+        public override void OnRegister() { Registry.Instance.Register(typeof(DebugDisplayManager), this); }
+        public override void OnUnregister() { Registry.Instance.Unregister(typeof(DebugDisplayManager)); }
 
-        // Object Lifetime Messages
+        //-- Object Lifetime Messages
         public override void OnInitialize() { }
         public override void OnStart() { }
-        public override void OnUpdate(float deltaTime) { }
-        public override void OnLateUpdate(float deltaTime) { }
-        public override void OnFixedUpdate(float deltaTime) { }
-        public override void OnTimescaleIndependantUpdate(float deltaTime) { }
+        public override void OnUpdate(Registry.TickEvent tickEvent, float seconds) { }
+        public override void OnUpdateUnscaled(Registry.TickEvent tickEvent, float seconds) { }
+        public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds) { }
+        public override void OnFixedUpdate(Registry.TickEvent tickEvent, float seconds) { }
         public override void OnDispose() { }
 
-        // Application Messages
+        //-- Application Messages
         public override void OnApplicationFocus(bool focusStatus) { }
         public override void OnApplicationPause(bool pauseStatus) { }
         public override void OnApplicationQuit() { }
 
-        // Ui Messages
+#if UNITY_EDITOR
+        //-- Ui Messages
         public override void OnGUI() { }
+#endif //UNITY_EDITOR
 
         //---------------------------------------------------------------------
         public override bool HasParent<T>(T child) { return false; }
@@ -143,6 +121,112 @@ namespace Prateek.Debug
         public override bool IsActiveAndSelected<T>(T value, MonoBehaviour behaviour) { return false; }
         public override void SetActive<T>(T value, bool active) { }
         public override void SetActive(bool active) { }
+    }
+    #endregion NullDebugDisplay
+
+    //-------------------------------------------------------------------------
+    public abstract class DebugDisplayManager : FlagManager, FrameRecorderManager.IRecorderBase
+    {
+        //-------------------------------------------------------------------------
+        #region Declarations
+        public struct DebugRecording : FrameRecorderManager.Frame.IData
+        {
+            //-------------------------------------------------------------------------
+            private DebugDisplayManager owner;
+            private List<Draw.PrimitiveSetup> primitives;
+
+            //-------------------------------------------------------------------------
+            public FrameRecorderManager.IRecorderBase Owner { get { return owner; } }
+            public List<Draw.PrimitiveSetup> Primitives
+            {
+                get
+                {
+                    if (primitives == null)
+                        primitives = new List<Draw.PrimitiveSetup>();
+                    return primitives;
+                }
+            }
+
+            //-------------------------------------------------------------------------
+            public DebugRecording(DebugDisplayManager owner)
+            {
+                this.owner = owner;
+                primitives = new List<Draw.PrimitiveSetup>();
+            }
+        }
+        #endregion Declarations
+
+        //-------------------------------------------------------------------------
+        #region Fields
+        private DebugRecording recordings;
+        private DebugLineDisplayer lineDisplay;
+        #endregion Fields
+
+        //---------------------------------------------------------------------
+        public static BuilderBase GetBuilder()
+        {
+            return new Builder<DebugDisplayManager, NullDebugDisplay>();
+        }
+
+        //---------------------------------------------------------------------
+        public override void OnRegister()
+        {
+            base.OnRegister();
+
+            var go = new GameObject("DebugDisplayLine");
+            go.transform.SetParent(Registry.Instance.TickerObject.transform);
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
+            lineDisplay = go.AddComponent<DebugLineDisplayer>();
+
+            Registry.Instance.Register(typeof(DebugDisplayManager), this);
+            FrameRecorder.Register(this);
+        }
+
+        //---------------------------------------------------------------------
+        public override void OnUnregister()
+        {
+            Destroy(lineDisplay.gameObject);
+
+            FrameRecorder.Unregister(this);
+            Registry.Instance.Unregister(typeof(DebugDisplayManager));
+
+            base.OnUnregister();
+        }
+
+        //-------------------------------------------------------------------------
+        #region FrameRecorder.IRecorderBase
+        public FrameRecorderManager.Frame.IData EndFrame()
+        {
+            var old = recordings;
+            recordings = new DebugRecording(this);
+            return old;
+        }
+
+        //-------------------------------------------------------------------------
+        public void SetRecordingStatus(bool enable) { }
+        public void PlayFrames(List<FrameRecorderManager.Frame.IData> datas) { }
+        public void PlayFrame(FrameRecorderManager.Frame.IData data)
+        {
+            var recordings = (DebugRecording)data;
+            for (int r = 0; r < recordings.Primitives.Count; r++)
+            {
+                Draw.Render(lineDisplay, recordings.Primitives[r]);
+            }
+        }
+        #endregion FrameRecorder.IRecorderBase
+
+        //-------------------------------------------------------------------------
+        #region Recording datas
+        public static void Add(Draw.PrimitiveSetup primitive)
+        {
+            var instance = Registry.GetManager<DebugDisplayManager>();
+            if (instance == null)
+                return;
+
+            instance.recordings.Primitives.Add(primitive);
+        }
+        #endregion Recording datas
     }
 }
 #endif //PRATEEK_DEBUG

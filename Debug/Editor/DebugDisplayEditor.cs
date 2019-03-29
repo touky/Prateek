@@ -169,7 +169,7 @@ namespace Prateek.Editors
             if (enum_type == null)
                 return;
 
-            var manager = Base.Registry.Instance.GetManager<DebugDisplayBase>();
+            var manager = Registry.GetManager<DebugDisplayManager>();
 
             var enum_values = Enum.GetValues(enum_type);
             if (enumdatas.Count != enum_values.Length)

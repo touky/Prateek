@@ -97,7 +97,7 @@ namespace Prateek.Base
                 {
                     if ((instance = FindObjectOfType<T>()) == null)
                     {
-                        var gameObject = new GameObject(typeof(T).Name);
+                        var gameObject = new GameObject(typeof(T).Name + " Instance");
                         instance = gameObject.AddComponent<T>();
                     }
 

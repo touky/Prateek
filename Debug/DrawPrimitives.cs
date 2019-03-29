@@ -82,280 +82,213 @@ using Prateek.Debug;
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public static partial class Draw
+    public partial class Draw
     {
         //---------------------------------------------------------------------
         //Point: Three line to mark each axis
-        public static void Point(Vector3 position, float size, Setup? custom_setup = null)
+        ////public static void Line(Vector3 start, Vector3 dir, float distance) { Line(start, dir, distance, ActiveSetup); }
+        ////public static void Line(Vector3 start, Vector3 dir, float distance, Setup setup) { Line(start, start + dir * distance, setup); }
+        ////public static void Line(Vector3 start, Vector3 end) { Line(start, end, ActiveSetup); }
+        public static void Line(Vector3 start, Vector3 end, Setup setup)
         {
-            size *= 0.5f;
-            Line(position - Vector3.up * size, position + Vector3.up * size, custom_setup);
-            Line(position - Vector3.forward * size, position + Vector3.forward * size, custom_setup);
-            Line(position - Vector3.left * size, position + Vector3.left * size, custom_setup);
+            var dir = end - start;
+            var prim = new PrimitiveSetup(PrimitiveType.Line, setup);
+            prim.pos = start;
+            prim.rot = Quaternion.LookRotation(dir.normalized);
+            prim.size = vec3(0, 0, dir.magnitude);
+            Add(prim);
+        }
+
+        //---------------------------------------------------------------------
+        //Point: Three line to mark each axis
+        public static void Point(Vector3 position, float size, Setup setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.Point, setup);
+            prim.pos = position;
+            prim.rot = Quaternion.identity;
+            prim.size = vec3(size * 0.5f);
+            Add(prim);
         }
 
         //---------------------------------------------------------------------
         //Box: A box, several flavors available
         #region Box
-        public static void Box(Bounds bounds, Setup? custom_setup = null)
+        ////public static void Box(Bounds bounds, Setup setup)
+        ////{
+        ////    Box(bounds.center, bounds.extents, setup);
+        ////}
+
+        //////---------------------------------------------------------------------
+        ////public static void Box(Vector3 position, float extends, Setup setup)
+        ////{
+        ////    Box(position, Vector3.one * extends, setup);
+        ////}
+
+        //////---------------------------------------------------------------------
+        ////public static void Box(Vector3 position, Vector3 extends, Setup setup)
+        ////{
+        ////    Box(position, Quaternion.identity, extends, setup);
+        ////}
+
+        //---------------------------------------------------------------------
+        public static void Box(Vector3 position, Quaternion rotation, Vector3 size, Setup setup)
         {
-            Box(bounds.center, bounds.extents, custom_setup);
+            var prim = new PrimitiveSetup(PrimitiveType.Box, setup);
+            prim.pos = position;
+            prim.rot = rotation;
+            prim.size = size * 0.5f;
+            Add(prim);
         }
 
         //---------------------------------------------------------------------
-        public static void Box(Vector3 position, float extends, Setup? custom_setup = null)
-        {
-            Box(position, Vector3.one * extends, custom_setup);
-        }
-
-        //---------------------------------------------------------------------
-        public static void Box(Vector3 position, Vector3 extends, Setup? custom_setup = null)
-        {
-            Box(position, Quaternion.identity, extends, custom_setup);
-        }
-
-        //---------------------------------------------------------------------
-        public static void Box(Vector3 position, Quaternion rotation, Vector3 extends, Setup? custom_setup = null)
-        {
-            Vector3 x = rotation * Vector3.right * extends.x;
-            Vector3 y = rotation * Vector3.up * extends.y;
-            Vector3 z = rotation * Vector3.forward * extends.z;
-
-            var posUp = position + y;
-            Line(posUp - x + z, posUp + x + z, custom_setup);
-            Line(posUp - x - z, posUp + x - z, custom_setup);
-            Line(posUp - x - z, posUp - x + z, custom_setup);
-            Line(posUp + x - z, posUp + x + z, custom_setup);
-
-            var posDn = position - y;
-            Line(posDn - x + z, posDn + x + z, custom_setup);
-            Line(posDn - x - z, posDn + x - z, custom_setup);
-            Line(posDn - x - z, posDn - x + z, custom_setup);
-            Line(posDn + x - z, posDn + x + z, custom_setup);
-
-            Line(posUp + x + z, posDn + x + z, custom_setup);
-            Line(posUp - x - z, posDn - x - z, custom_setup);
-            Line(posUp - x + z, posDn - x + z, custom_setup);
-            Line(posUp + x - z, posDn + x - z, custom_setup);
-        }
-
-        //---------------------------------------------------------------------
-        public static void Box(Vector3[] points, Setup? custom_setup = null)
+        public static void Box(Vector3[] points, Setup setup)
         {
             if (points.Length != 8)
                 return;
 
-            Line(points[0], points[1], custom_setup);
-            Line(points[1], points[2], custom_setup);
-            Line(points[2], points[3], custom_setup);
-            Line(points[3], points[0], custom_setup);
+            Line(points[0], points[1], setup);
+            Line(points[1], points[2], setup);
+            Line(points[2], points[3], setup);
+            Line(points[3], points[0], setup);
 
-            Line(points[4], points[5], custom_setup);
-            Line(points[5], points[6], custom_setup);
-            Line(points[6], points[7], custom_setup);
-            Line(points[7], points[4], custom_setup);
+            Line(points[4], points[5], setup);
+            Line(points[5], points[6], setup);
+            Line(points[6], points[7], setup);
+            Line(points[7], points[4], setup);
 
-            Line(points[0], points[7], custom_setup);
-            Line(points[1], points[6], custom_setup);
-            Line(points[2], points[5], custom_setup);
-            Line(points[3], points[4], custom_setup);
+            Line(points[0], points[7], setup);
+            Line(points[1], points[6], setup);
+            Line(points[2], points[5], setup);
+            Line(points[3], points[4], setup);
         }
         #endregion //Box
 
         //---------------------------------------------------------------------
-        #region Cone
-        public static void Cone(Vector3 position, Quaternion rotation, float length, Vector2 radius, int sideLine = 8, int segments = 8, Setup? custom_setup = null)
+        #region Arrow
+        public static void Arrow(Vector3 start, Vector3 end, Vector3 up, float width, float length, Setup setup)
         {
-            Vector3 fw = Vector3.forward * length;
-            Vector3 rt = Vector3.right * radius.x;
-            Vector3 up = Vector3.up * radius.y;
-
-            for (int i = 0; i < sideLine; ++i)
-            {
-                var a = (((float)i) / (float)sideLine) * Mathf.PI * 2.0f;
-                var x = Mathf.Sin(a) * rt;
-                var y = Mathf.Cos(a) * up;
-
-                Line(position, position + rotation * (fw + x + y), custom_setup);
-            }
-            Ellipse(position + rotation * fw, rotation, radius, segments, custom_setup);
+            var dir = end - start;
+            var prim = new PrimitiveSetup(PrimitiveType.Arrow, setup);
+            prim.pos = start;
+            prim.rot = Quaternion.LookRotation(dir, up);
+            prim.size = vec3(width, length, dir.magnitude);
+            Add(prim);
         }
-        #endregion Cone
+        #endregion Arrow
+
+        //---------------------------------------------------------------------
+        #region Plane
+        public static void Plane(Plane plane, Vector2 offset, float size, Vector3 up, Setup setup)
+        {
+            var q = Quaternion.LookRotation(plane.normal, up);
+            var x = q * Vector3.right;
+            var y = q * Vector3.up;
+            var p = (plane.normal * -plane.distance) + (x * offset.x) + (y * offset.y);
+
+            var prim = new PrimitiveSetup(PrimitiveType.Plane, setup);
+            prim.pos = p;
+            prim.rot = q;
+            prim.size = vec3(size);
+            Add(prim);
+
+            Arrow(p, p + plane.normal * size * 0.2f, up, size * 0.02f, size * 0.02f, setup);
+        }
+        #endregion Plane
+
+        //---------------------------------------------------------------------
+        //Arc: Vertically aligned if drawn in world, aligned on z-axis if other
+        #region Arc
+        ////public static void Arc(Vector3 position, Quaternion rotation, float radius, float start, float end, int segments = 8, Setup setup)
+        ////{
+        ////    Arc(position, rotation, Vector2.one * radius, start, end, segments, setup);
+        ////}
+
+        //---------------------------------------------------------------------
+        public static void Arc(Vector3 position, Quaternion rotation, Vector2 radius, Vector2 degrees, Setup setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.Arc, setup);
+            prim.pos = position;
+            prim.rot = rotation;
+            prim.size = radius.xny();
+            prim.range = degrees;
+            Add(prim);
+        }
+        #endregion //Arc
 
         //---------------------------------------------------------------------
         //Circle/Ellipse: Vertically aligned if drawn in world, aligned on z-axis if other
         #region Circle/Ellipse/Sphere/Ellipsoid
         #region Circle
-        public static void Circle(Vector3 position, float radius, int segments = 8, Setup? custom_setup = null)
-        {
-            Arc(position, Quaternion.identity, radius, 0, 360, segments, custom_setup);
-        }
+        ////public static void Circle(Vector3 position, float radius, int segments = 8, Setup setup)
+        ////{
+        ////    Arc(position, Quaternion.identity, radius, 0, 360, segments, setup);
+        ////}
 
         //---------------------------------------------------------------------
-        public static void Circle(Vector3 position, Quaternion rotation, float radius, int segments = 8, Setup? custom_setup = null)
+        public static void Circle(Vector3 position, Quaternion rotation, float radius, Setup setup)
         {
-            var space = custom_setup != null ? custom_setup.Value.Space : currentSetup.Space;
-            var spaceRotation = space != Space.World ? Quaternion.identity : Quaternion.FromToRotation(Vector3.forward, Vector3.up);
-            Arc(position, spaceRotation * rotation, radius, 0, 360, segments, custom_setup);
+            var prim = new PrimitiveSetup(PrimitiveType.Circle, setup);
+            prim.pos = position;
+            prim.rot = rotation;
+            prim.size = vec3(radius);
+            Add(prim);
         }
         #endregion //Circle
 
         //---------------------------------------------------------------------
-        #region Ellipse
-        public static void Ellipse(Vector3 position, Vector2 radius, int segments = 8, Setup? custom_setup = null)
-        {
-            Arc(position, Quaternion.identity, radius, 0, 360, segments, custom_setup);
-        }
-
-        //---------------------------------------------------------------------
-        public static void Ellipse(Vector3 position, Quaternion rotation, Vector2 radius, int segments = 8, Setup? custom_setup = null)
-        {
-            var space = custom_setup != null ? custom_setup.Value.Space : currentSetup.Space;
-            var spaceRotation = space != Space.World ? Quaternion.identity : Quaternion.FromToRotation(Vector3.forward, Vector3.up);
-            Arc(position, spaceRotation * rotation, radius, 0, 360, segments, custom_setup);
-        }
-        #endregion //Ellipse
-
-        //---------------------------------------------------------------------
         #region Sphere
-        public static void Sphere(Vector3 position, float radius, int segments = 8, Setup? custom_setup = null)
-        {
-            Sphere(position, Quaternion.identity, radius, segments, custom_setup);
-        }
+        ////public static void Sphere(Vector3 position, float radius, int segments = 8, Setup setup)
+        ////{
+        ////    Sphere(position, Quaternion.identity, radius, segments, setup);
+        ////}
 
         //---------------------------------------------------------------------
-        public static void Sphere(Vector3 position, Quaternion rotation, float radius, int segments = 8, Setup? custom_setup = null)
+        public static void Sphere(Vector3 position, Quaternion rotation, float radius, Setup setup)
         {
-            Ellipsoid(position, rotation, Vector3.one * radius, segments, custom_setup);
+            var prim = new PrimitiveSetup(PrimitiveType.Sphere, setup);
+            prim.pos = position;
+            prim.rot = rotation;
+            prim.size = vec3(radius);
+            Add(prim);
         }
         #endregion //Sphere
 
         //---------------------------------------------------------------------
-        #region Ellipsoid
-        public static void Ellipsoid(Vector3 position, Vector3 radius, int segments = 8, Setup? custom_setup = null)
+        public static void SphereCast(Ray ray, float radius, float distance, Setup setup)
         {
-            Ellipsoid(position, Quaternion.identity, radius, segments, custom_setup);
-        }
-
-        //---------------------------------------------------------------------
-        public static void Ellipsoid(Vector3 position, Quaternion rotation, Vector3 radius, int segments = 8, Setup? custom_setup = null)
-        {
-            Arc(position, rotation, radius.xy(), 0, 360, segments, custom_setup);
-            Arc(position, rotation * Quaternion.Euler(90, 0, 0), radius.xz(), 0, 360, segments, custom_setup);
-            Arc(position, rotation * Quaternion.Euler(0, 90, 0), radius.zy(), 0, 360, segments, custom_setup);
-        }
-        #endregion //Ellipsoid
-
-        //---------------------------------------------------------------------
-        public static void SphereCast(Ray position, float radius, float length, int segments = 8, Setup? custom_setup = null)
-        {
-            Sphere(position.origin, Quaternion.identity, radius, segments, custom_setup);
-            Sphere(position.origin + position.direction * length, Quaternion.identity, radius, segments, custom_setup);
-
-            Line(position.origin + Vector3.left * radius, position.origin + Vector3.left * radius + position.direction * length, custom_setup);
-            Line(position.origin + Vector3.forward * radius, position.origin + Vector3.forward * radius + position.direction * length, custom_setup);
-            Line(position.origin + Vector3.right * radius, position.origin + Vector3.right * radius + position.direction * length, custom_setup);
-            Line(position.origin + Vector3.back * radius, position.origin + Vector3.back * radius + position.direction * length, custom_setup);
-            Line(position.origin + Vector3.up * radius, position.origin + Vector3.up * radius + position.direction * length, custom_setup);
-            Line(position.origin + Vector3.down * radius, position.origin + Vector3.down * radius + position.direction * length, custom_setup);
+            var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
+            prim.pos = ray.origin;
+            prim.rot = Quaternion.LookRotation(ray.direction);
+            prim.size = vec3(radius, radius, distance);
+            Add(prim);
         }
 
         #endregion //Circle/Ellipse/Sphere/Ellipsoid
 
         //---------------------------------------------------------------------
-        //Arc: Vertically aligned if drawn in world, aligned on z-axis if other
-        #region Arc
-        public static void Arc(Vector3 position, Quaternion rotation, float radius, float start, float end, int segments = 8, Setup? custom_setup = null)
+        #region Cone
+        public static void Cone(Vector3 position, Quaternion rotation, float length, Vector2 radius, Setup setup)
         {
-            Arc(position, rotation, Vector2.one * radius, start, end, segments, custom_setup);
+            var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
+            prim.pos = position;
+            prim.rot = rotation;
+            prim.size = vec3(radius, length);
+            Add(prim);
         }
+        #endregion Cone
 
         //---------------------------------------------------------------------
-        public static void Arc(Vector3 position, Quaternion rotation, Vector2 radius, float start, float end, int segments = 8, Setup? custom_setup = null)
+        #region Pie
+        public static void Pie(Vector3 position, Quaternion rotation, float radius, float thickness, Vector2 degrees, Setup setup)
         {
-            if (segments < 1)
-                return;
-
-            float step = (end - start) / segments;
-            for (uint i = 0; i < segments; i++)
-            {
-                uint j = i + 1;
-                float angle0 = start + i * step;
-                float angle1 = start + j * step;
-                Vector4 p0 = new Vector3(radius.x * Mathf.Cos(angle0 * Mathf.Deg2Rad), radius.y * Mathf.Sin(angle0 * Mathf.Deg2Rad), 0.0f);
-                Vector4 p1 = new Vector3(radius.x * Mathf.Cos(angle1 * Mathf.Deg2Rad), radius.y * Mathf.Sin(angle1 * Mathf.Deg2Rad), 0.0f);
-                Line(position + rotation * p0, position + rotation * p1, custom_setup);
-            }
+            var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
+            prim.pos = position;
+            prim.rot = rotation;
+            prim.size = vec3(radius, thickness, radius);
+            prim.range = degrees;
+            Add(prim);
         }
-        #endregion //Arc
-
-
-        //---------------------------------------------------------------------
-        public static void Arrow(Vector3 p0, Vector3 p1, Vector3 up, float width, float length, Setup? custom_setup = null)
-        {
-            var forward = (p1 - p0).normalized;
-            Vector3 right;
-            Helpers.Geometry.CreateBasis(forward, up, out right, out up);
-
-            Line(p0, p1, custom_setup);
-            Line(p1, p1 - forward * length - right * width, custom_setup);
-            Line(p1, p1 - forward * length + right * width, custom_setup);
-            Line(p1, p1 - forward * length - up * width, custom_setup);
-            Line(p1, p1 - forward * length + up * width, custom_setup);
-        }
-
-        //---------------------------------------------------------------------
-        public static void Pie(Vector3 position, Quaternion rotation, float radius, float degreeStart, float degreeEnd, int segments = 8, Setup? custom_setup = null)
-        {
-            if (segments < 1)
-                return;
-
-            if ((degreeEnd - degreeStart) >= 360)
-            {
-                Circle(position, rotation, radius, segments, custom_setup);
-                return;
-            }
-
-            float step = (degreeEnd - degreeStart) / segments;
-            for (uint i = 0; i < segments; i++)
-            {
-                uint j = i + 1;
-                float angle0 = degreeStart + (i * step);
-                float angle1 = degreeStart + (j * step);
-                Vector3 p0 = new Vector3(radius * Mathf.Sin(angle0 * Mathf.Deg2Rad), 0.0f, radius * Mathf.Cos(angle0 * Mathf.Deg2Rad));
-                Vector3 p1 = new Vector3(radius * Mathf.Sin(angle1 * Mathf.Deg2Rad), 0.0f, radius * Mathf.Cos(angle1 * Mathf.Deg2Rad));
-                Line(position + rotation * p0, position + rotation * p1, custom_setup);
-
-                if (i == 0)
-                {
-                    Line(position, position + rotation * p0, custom_setup);
-                }
-
-                if (i == segments - 1)
-                {
-                    Line(position, position + rotation * p1, custom_setup);
-                }
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public static void Plane(Plane plane, Vector2 offset, float size, Vector3 up, Setup? custom_setup = null)
-        {
-            var q = Quaternion.LookRotation(plane.normal, up);
-            var x = q * Vector3.right;
-            var y = q * Vector3.up;
-
-            var p = (plane.normal * -plane.distance) + (x * offset.x) + (y * offset.y);
-            var sx = x * size;
-            var sy = y * size;
-
-            Line(p - sx - sy, p + sx - sy, custom_setup);
-            Line(p - sx + sy, p + sx + sy, custom_setup);
-            Line(p - sx - sy, p - sx + sy, custom_setup);
-            Line(p + sx - sy, p + sx + sy, custom_setup);
-            Arrow(p, p + plane.normal * size * 0.2f, up, size * 0.02f, size * 0.02f, custom_setup);
-
-        }
+        #endregion Pie
     }
 }
 #endif //PRATEEK_DEBUG

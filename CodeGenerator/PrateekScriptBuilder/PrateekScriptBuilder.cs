@@ -106,7 +106,7 @@ namespace Prateek.CodeGeneration
         }
 
         //---------------------------------------------------------------------
-        protected override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Tag.importExtension); } }
+        public override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Tag.importExtension); } }
 
         //---------------------------------------------------------------------
         protected BuildResult Error(BuildResult result, ref FileData fileData)
