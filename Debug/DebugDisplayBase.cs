@@ -196,6 +196,9 @@ namespace Prateek.Debug
 
         //-------------------------------------------------------------------------
         #region FrameRecorder.IRecorderBase
+        public void BeginFrame() { }
+
+        //-------------------------------------------------------------------------
         public FrameRecorderManager.Frame.IData EndFrame()
         {
             var old = recordings;

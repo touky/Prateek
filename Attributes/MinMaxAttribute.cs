@@ -130,15 +130,6 @@ namespace Prateek.Attributes
 
     //-------------------------------------------------------------------------
     [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
-    public class MinAttribute : MathAttribute
-    {
-        public MinAttribute(float value) : base(value, float.MaxValue) { }
-        public MinAttribute(double value) : base((float)value, float.MaxValue) { }
-        public MinAttribute(int value) : base(value, int.MaxValue) { }
-    }
-
-    //-------------------------------------------------------------------------
-    [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
     public class MaxAttribute : MathAttribute
     {
         public MaxAttribute(float value) : base(float.MinValue, value) { }

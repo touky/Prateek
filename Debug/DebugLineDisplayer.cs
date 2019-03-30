@@ -89,89 +89,393 @@ namespace Prateek.Debug
         #region Declarations
         public struct LineData
         {
-            public GameObject root;
-            public LineRenderer line;
+            //---------------------------------------------------------------------
+            private const int offset = 20;
+            private const string lineKeyword = "LINE_USE_BORDER";
+
+            //---------------------------------------------------------------------
+            public struct MeshContainer
+            {
+                //---------------------------------------------------------------------
+                public class Bound { public Bounds b; }
+                private Bound bounds;
+                private MeshRenderer renderer;
+                private MeshFilter filter;
+                private Mesh mesh;
+
+                private int borderThickness;
+                private int[] triangles;
+                private Vector3[] vertices;
+
+                //---------------------------------------------------------------------
+                public Bound Bounds { get { return bounds; } }
+
+                //---------------------------------------------------------------------
+                public MeshContainer(int capacity, MeshRenderer renderer, int borderThickness)
+                {
+                    this.bounds = new Bound() { b = new Bounds() };
+                    this.renderer = renderer;
+                    this.filter = renderer.GetComponent<MeshFilter>();
+                    this.mesh = new Mesh();
+                    this.mesh.name = "DebugLineMesh";
+                    this.filter.sharedMesh = this.mesh;
+                    this.borderThickness = borderThickness + 1;
+
+                    vertices = null;
+                    triangles = null;
+                    RefreshMesh(capacity, borderThickness);
+                }
+
+                //---------------------------------------------------------------------
+                public void Destroy()
+                {
+                    if (renderer == null)
+                        return;
+
+                    filter.sharedMesh = null;
+
+                    renderer = null;
+                    filter = null;
+                    GameObject.Destroy(mesh);
+                    mesh = null;
+                    vertices = null;
+                }
+
+                //---------------------------------------------------------------------
+                public void RefreshMesh(int size, int borderThickness)
+                {
+                    //borderThickness = 0;
+                    if (this.borderThickness != borderThickness)
+                    {
+                        vertices = null;
+                        triangles = null;
+                        this.borderThickness = borderThickness;
+                    }
+
+                    var vtxCount = borderThickness == 0 ? 2 : 6;
+                    var triCount = borderThickness == 0 ? 3 : 9;
+
+                    if (vertices == null || size > vertices.Length)
+                    {
+                        var oldVert = vertices;
+                        vertices = new Vector3[(size + offset) * vtxCount];
+                        if (oldVert != null)
+                        {
+                            oldVert.CopyTo(vertices, 0);
+                        }
+
+                        for (int v = (oldVert == null ? 0 : oldVert.Length); v < vertices.Length; v += vtxCount * 2)
+                        {
+                            vertices[v + 0] = vec3((v / vtxCount) + 0, -1, (v / vtxCount) + 1);
+                            vertices[v + 1] = vec3((v / vtxCount) + 0, +1, (v / vtxCount) + 1);
+                            vertices[v + 2] = vec3((v / vtxCount) + 1, +1, (v / vtxCount) + 0);
+                            vertices[v + 3] = vec3((v / vtxCount) + 1, -1, (v / vtxCount) + 0);
+                            if (borderThickness > 0)
+                            {
+                                vertices[v + 0 + 4] = vec3((v / vtxCount) + 0, -4, (v / vtxCount) + 1);
+                                vertices[v + 1 + 4] = vec3((v / vtxCount) + 0, -3, (v / vtxCount) + 1);
+                                vertices[v + 2 + 4] = vec3((v / vtxCount) + 1, +4, (v / vtxCount) + 0);
+                                vertices[v + 3 + 4] = vec3((v / vtxCount) + 1, +3, (v / vtxCount) + 0);
+
+                                vertices[v + 0 + 8] = vec3((v / vtxCount) + 0, +3, (v / vtxCount) + 1);
+                                vertices[v + 1 + 8] = vec3((v / vtxCount) + 0, +4, (v / vtxCount) + 1);
+                                vertices[v + 2 + 8] = vec3((v / vtxCount) + 1, -3, (v / vtxCount) + 0);
+                                vertices[v + 3 + 8] = vec3((v / vtxCount) + 1, -4, (v / vtxCount) + 0);
+                            }
+                        }
+
+                        var oldTris = triangles;
+                        triangles = new int[(size + offset) * triCount];
+                        if (oldTris != null)
+                        {
+                            oldTris.CopyTo(triangles, 0);
+                        }
+
+                        for (int t = (oldTris == null ? 0 : oldTris.Length); t < triangles.Length; t += triCount * 2)
+                        {
+                            triangles[t + 0] = (t / triCount) * vtxCount + 0;
+                            triangles[t + 1] = (t / triCount) * vtxCount + 1;
+                            triangles[t + 2] = (t / triCount) * vtxCount + 2;
+                            triangles[t + 3] = (t / triCount) * vtxCount + 1;
+                            triangles[t + 4] = (t / triCount) * vtxCount + 3;
+                            triangles[t + 5] = (t / triCount) * vtxCount + 2;
+                            if (borderThickness > 0)
+                            {
+                                triangles[t + 0 + 6] = (t / triCount) * vtxCount + 0 + 4;
+                                triangles[t + 1 + 6] = (t / triCount) * vtxCount + 1 + 4;
+                                triangles[t + 2 + 6] = (t / triCount) * vtxCount + 2 + 4;
+                                triangles[t + 3 + 6] = (t / triCount) * vtxCount + 1 + 4;
+                                triangles[t + 4 + 6] = (t / triCount) * vtxCount + 3 + 4;
+                                triangles[t + 5 + 6] = (t / triCount) * vtxCount + 2 + 4;
+
+                                triangles[t + 0 + 12] = (t / triCount) * vtxCount + 0 + 8;
+                                triangles[t + 1 + 12] = (t / triCount) * vtxCount + 1 + 8;
+                                triangles[t + 2 + 12] = (t / triCount) * vtxCount + 2 + 8;
+                                triangles[t + 3 + 12] = (t / triCount) * vtxCount + 1 + 8;
+                                triangles[t + 4 + 12] = (t / triCount) * vtxCount + 3 + 8;
+                                triangles[t + 5 + 12] = (t / triCount) * vtxCount + 2 + 8;
+                            }
+                        }
+
+                        mesh.Clear();
+                        mesh.vertices = vertices;
+                        mesh.triangles = triangles;
+                    }
+
+                    mesh.bounds = bounds.b;
+                }
+            }
+
+            //---------------------------------------------------------------------
+            public struct BufferContainer
+            {
+                //---------------------------------------------------------------------
+                private ComputeBuffer buffer;
+                private List<Vector4> list;
+                private Vector4[] array;
+
+                //---------------------------------------------------------------------
+                public ComputeBuffer Buffer { get { return buffer; } }
+                public int Count { get { return list.Count; } }
+                public Vector4 this[int index] { set { list[index] = value; } }
+
+                //---------------------------------------------------------------------
+                public BufferContainer(int capacity)
+                {
+                    buffer = new ComputeBuffer(capacity, 16);
+                    list = new List<Vector4>(capacity);
+                    array = new Vector4[capacity];
+                }
+
+                //---------------------------------------------------------------------
+                public void Destroy()
+                {
+                    if (list == null)
+                        return;
+
+                    buffer.Release();
+                    list = null;
+                    array = null;
+                }
+
+                //---------------------------------------------------------------------
+                public void Increment(int index)
+                {
+                    if (index * 2 < list.Count)
+                        return;
+
+                    list.Add(Vector4.zero);
+                    list.Add(Vector4.zero);
+                }
+
+                //---------------------------------------------------------------------
+                public void Clear()
+                {
+                    list.Clear();
+                }
+
+                //---------------------------------------------------------------------
+                public void RefreshBuffers()
+                {
+                    if (list.Count > array.Length)
+                    {
+                        array = new Vector4[list.Count + offset];
+                        if (buffer != null)
+                            buffer.Release();
+                        buffer = new ComputeBuffer(array.Length + offset, 16);
+                    }
+
+                    list.CopyTo(array);
+                    buffer.SetData(array);
+                }
+            }
+
+            //---------------------------------------------------------------------
+            private int index;
+            private MeshContainer mesh;
+            private BufferContainer positions;
+            private BufferContainer colors;
+
+            //---------------------------------------------------------------------
+            public LineData(int capacity, MeshRenderer renderer, int borderThickness)
+            {
+                index = 0;
+                mesh = new MeshContainer(capacity, renderer, borderThickness);
+                positions = new BufferContainer(capacity);
+                colors = new BufferContainer(capacity);
+            }
+
+            //---------------------------------------------------------------------
+            public void Destroy()
+            {
+                positions.Destroy();
+                colors.Destroy();
+            }
+
+            //---------------------------------------------------------------------
+            public LineSetup GetPoint()
+            {
+                Increment(index + 1);
+
+                return new LineSetup(mesh.Bounds, index++, positions, colors);
+            }
+
+            //---------------------------------------------------------------------
+            private void Increment(int index)
+            {
+                positions.Increment(index);
+                colors.Increment(index);
+            }
+
+            //---------------------------------------------------------------------
+            public void RefreshBuffers(Material material, int lineThickness, int borderThickness)
+            {
+                positions.RefreshBuffers();
+                colors.RefreshBuffers();
+
+                mesh.RefreshMesh(positions.Count, borderThickness);
+
+                material.SetBuffer("positionBuffer", positions.Buffer);
+                material.SetBuffer("colorBuffer", colors.Buffer);
+                material.SetInt("maxVertexShown", positions.Count);
+                material.SetFloat("lineThickness", lineThickness);
+                material.SetFloat("borderThickness", borderThickness);
+
+                if (borderThickness == 0)
+                    material.DisableKeyword(lineKeyword);
+                else
+                    material.EnableKeyword(lineKeyword);
+            }
+
+            //---------------------------------------------------------------------
+            public void Clear()
+            {
+                index = 0;
+                positions.Clear();
+                colors.Clear();
+            }
+
+            //---------------------------------------------------------------------
+            public struct LineSetup
+            {
+                //---------------------------------------------------------------------
+                private MeshContainer.Bound bounds;
+                private int index;
+                private BufferContainer positions;
+                private BufferContainer colors;
+
+                //---------------------------------------------------------------------
+                public LineSetup(MeshContainer.Bound bounds, int index, BufferContainer positions, BufferContainer colors)
+                {
+                    this.bounds = bounds;
+                    this.index = index;
+                    this.positions = positions;
+                    this.colors = colors;
+                }
+
+                //---------------------------------------------------------------------
+                public void SetLine(Vector3 start, Vector3 end)
+                {
+                    if (index == 0)
+                    {
+                        bounds.b = new Bounds(start, Vector3.zero);
+                    }
+
+                    bounds.b.Encapsulate(start);
+                    bounds.b.Encapsulate(end);
+
+                    positions[index * 2] = start;
+                    positions[index * 2 + 1] = end;
+                }
+
+                //---------------------------------------------------------------------
+                public void SetColor(Color front, Color back)
+                {
+                    colors[index * 2] = front;
+                    colors[index * 2 + 1] = back;
+                }
+            }
         }
         #endregion //Declarations
 
         //---------------------------------------------------------------------
         #region Fields
-        private Stack<LineData> linePool = new Stack<LineData>();
-        private Stack<LineData> lineActive = new Stack<LineData>();
+        private GameObject lineRenderer;
+        private LineData lineData;
         private Shader lineShader = null;
-        private int getCallCount = 0;
-        private int newCallCount = 0;
+        private Material lineMaterial = null;
+        private int instanceCount = 50;
         #endregion //Fields
 
         //---------------------------------------------------------------------
         #region Settings
-        [SerializeField]
-        private float lineRendererWidth = 0.0025f;
+        [SerializeField, Min(1)]
+        private int lineThickness = 1;
+        [SerializeField, Min(0)]
+        private int borderThickness = 1;
         #endregion //Settings
 
         //---------------------------------------------------------------------
         #region Properties
-        public float LineRendererWidth { get { return lineRendererWidth; } }
+        public float LineRendererWidth { get { return lineThickness; } }
         #endregion //Properties
 
+        //---------------------------------------------------------------------
+        #region Unity Default
+        private void OnEnable()
+        {
+            EnableRendering();
+        }
 
         //---------------------------------------------------------------------
-        #region Unity Defaults
         private void LateUpdate()
         {
-            if (lineActive.Count > 0)
-            {
-                StartCoroutine(RefreshPool());
-            }
+            UpdateRendering();
         }
-        #endregion //Unity Defaults
+
+        //---------------------------------------------------------------------
+        private void OnDisable()
+        {
+            DisableRendering();
+        }
+        #endregion //Unity Default
 
         //---------------------------------------------------------------------
         #region Lines Pool
-        public IEnumerator RefreshPool()
+        private void EnableRendering()
         {
-            yield return new WaitForEndOfFrame();
+            lineShader = Shader.Find("Prateek/DebugLineShader");
+            lineMaterial = new Material(lineShader);
 
-            while (lineActive.Count > 0)
-            {
-                var data = lineActive.Pop();
-                data.root.SetActive(false);
-                linePool.Push(data);
-                getCallCount--;
-            }
+            lineRenderer = new GameObject("DebugLineRenderer", typeof(MeshFilter), typeof(MeshRenderer));
+            lineRenderer.transform.SetParent(transform);
+            lineRenderer.transform.localPosition = Vector3.zero;
+            lineRenderer.transform.localRotation = Quaternion.identity;
+
+            var renderer = lineRenderer.GetComponent<MeshRenderer>();
+            renderer.material = lineMaterial;
+            lineMaterial = renderer.material;
+
+            lineData = new LineData(instanceCount, renderer, borderThickness);
         }
 
         //---------------------------------------------------------------------
-        public LineRenderer GetLine()
+        private void UpdateRendering()
         {
-            if (lineShader == null)
-            {
-                lineShader = Shader.Find("Unlit/Color");
-            }
+            lineData.RefreshBuffers(lineMaterial, lineThickness, borderThickness);
+            lineData.Clear();
+        }
 
-            LineData data = new LineData();
-            if (linePool.Count > 0)
-            {
-                getCallCount++;
-                data = linePool.Pop();
-            }
-            else
-            {
-                newCallCount++;
-                getCallCount++;
-                data.root = new GameObject();
-                data.root.transform.SetParent(gameObject.transform);
-                data.line = data.root.AddComponent<LineRenderer>();
-                data.line.material = new Material(lineShader);
-                data.line.startWidth = 0.01f;
-                data.line.endWidth = 0.01f;
-            }
+        //---------------------------------------------------------------------
+        private void DisableRendering()
+        {
+            lineData.Destroy();
+        }
 
-            data.root.SetActive(true);
-
-            lineActive.Push(data);
-
-            return data.line;
+        //---------------------------------------------------------------------
+        public LineData.LineSetup GetLine()
+        {
+            return lineData.GetPoint();
         }
         #endregion //Lines Pool
 
@@ -179,33 +483,8 @@ namespace Prateek.Debug
         public void RenderLine(Draw.Setup setup, Vector3 start, Vector3 end)
         {
             var line = GetLine();
-            line.SetColor(setup.Color);
-            line.SetDebugLine(start, end);
-        }
-    }
-
-    //-------------------------------------------------------------------------
-    public static class LineRendererUtils
-    {
-        //---------------------------------------------------------------------
-        public static void SetColor(this LineRenderer line, Color color)
-        {
-            line.startColor = color;
-            line.endColor = color;
-        }
-
-        //---------------------------------------------------------------------
-        public static void SetDebugLine(this LineRenderer line, Vector3 start, Vector3 end)
-        {
-            line.SetPosition(0, start);
-            line.SetPosition(1, end);
-
-            var camera = UnityEngine.Camera.main;
-            var screenStart = camera.WorldToScreenPoint(start);
-            var screenEnd = camera.WorldToScreenPoint(end);
-            //TODO BHU
-            line.startWidth = Mathf.Max(0, 5f /*MainManager.Instance.DebugDisplayManager.DebugLineRendererWidth*/ * screenStart.z);
-            line.endWidth = Mathf.Max(0, 5f /*MainManager.Instance.DebugDisplayManager.DebugLineRendererWidth*/ * screenEnd.z);
+            line.SetLine(start, end);
+            line.SetColor(setup.Color, setup.Color);
         }
     }
 }

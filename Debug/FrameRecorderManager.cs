@@ -129,7 +129,11 @@ namespace Prateek.Manager
         //---------------------------------------------------------------------
         public interface IRecorderBase
         {
+            //-----------------------------------------------------------------
+            void BeginFrame();
             Frame.IData EndFrame();
+
+            //-----------------------------------------------------------------
             void SetRecordingStatus(bool enable);
             void PlayFrames(List<Frame.IData> datas);
             void PlayFrame(Frame.IData data);
@@ -165,7 +169,7 @@ namespace Prateek.Manager
 
         //---------------------------------------------------------------------
         #region Properties
-        public override Registry.TickEvent TickEvent { get { return Registry.TickEvent.FrameEnding; } }
+        public override Registry.TickEvent TickEvent { get { return Registry.TickEvent.FrameBeginning | Registry.TickEvent.FrameEnding; } }
         public StateType State { get { return state; } set { state = value; } }
         public bool PlaybackActive { get { return state >= StateType.Playback; } }
         public int FrameCount { get { return history.Count; } }
@@ -234,8 +238,20 @@ namespace Prateek.Manager
         }
 
         //---------------------------------------------------------------------
+        public override void OnUpdate(Registry.TickEvent tickEvent, float seconds)
+        {
+            if (tickEvent != Registry.TickEvent.FrameBeginning)
+                return;
+
+            BeginFrame();
+        }
+
+        //---------------------------------------------------------------------
         public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds)
         {
+            if (tickEvent != Registry.TickEvent.FrameEnding)
+                return;
+
             EndFrame();
 
             PlayCurrentFrame();
@@ -272,6 +288,22 @@ namespace Prateek.Manager
         {
             history.Clear();
             frameIndex = 0;
+        }
+
+        //---------------------------------------------------------------------
+        private void BeginFrame()
+        {
+            for (int r = 0; r < recorders.Count; r++)
+            {
+                var recorder = recorders[r];
+                if (recorder == null)
+                {
+                    recorders.RemoveAt(r--);
+                    continue;
+                }
+
+                recorder.BeginFrame();
+            }
         }
 
         //---------------------------------------------------------------------
