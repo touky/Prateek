@@ -90,12 +90,13 @@ namespace Prateek.CodeGeneration
         public abstract class Ignorable : BaseTemplate
         {
             //-----------------------------------------------------------------
+            [Flags]
             public enum Style
             {
-                Comment,
-                Text,
+                Comment = 1,
+                Text = 2,
 
-                MAX
+                MAX = ~0
             }
 
             //-----------------------------------------------------------------
@@ -151,7 +152,7 @@ namespace Prateek.CodeGeneration
                 }
 
                 //-------------------------------------------------------------
-                public int AdvanceToSafety(int index, Style style = Style.MAX)
+                public int AdvanceToSafety(int index, Style typeToAvoid = Style.MAX)
                 {
                     if (extends == null)
                         return index;
@@ -159,7 +160,7 @@ namespace Prateek.CodeGeneration
                     for (int e = 0; e < extends.Count; e++)
                     {
                         var extent = extends[e];
-                        if (extent.Style == style && extent.Contains(index))
+                        if ((extent.Style & typeToAvoid) != 0 && extent.Contains(index))
                         {
                             return extent.OverEnd;
                         }

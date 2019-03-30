@@ -598,7 +598,7 @@ namespace Prateek.CodeGeneration
             var position = 0;
             while ((position = fileData.destination.content.IndexOf(comment, position)) >= 0)
             {
-                var safety = ignorers.AdvanceToSafety(position, ScriptTemplate.Ignorable.Style.Text);
+                var safety = ignorers.AdvanceToSafety(position, ScriptTemplate.Ignorable.Style.Comment);
                 if (safety != position)
                 {
                     position = safety;
