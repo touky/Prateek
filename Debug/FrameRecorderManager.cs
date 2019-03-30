@@ -124,7 +124,6 @@ namespace Prateek.Manager
             Inactive,
             Recording,
             Playback,
-            PlaybackPaused,
         }
 
         //---------------------------------------------------------------------
@@ -133,10 +132,6 @@ namespace Prateek.Manager
             //-----------------------------------------------------------------
             void BeginFrame();
             Frame.IData EndFrame();
-
-            //-----------------------------------------------------------------
-            void SetRecordingStatus(bool enable);
-            void PlayFrames(List<Frame.IData> datas);
             void PlayFrame(Frame.IData data);
         }
 
@@ -162,8 +157,9 @@ namespace Prateek.Manager
         #region Fields
         private StateType state = StateType.Inactive;
         private int frameCapacity = 50;
-        private int frameIndex = 0;
+        private Vector2Int frameRange = Vector2Int.zero;
         private Frame activeFrame = null;
+        private List<Frame> playback = new List<Frame>();
         private List<Frame> history = new List<Frame>();
         private List<IRecorderBase> recorders = new List<IRecorderBase>();
         #endregion Fields
@@ -172,17 +168,8 @@ namespace Prateek.Manager
         #region Properties
         public override Registry.TickEvent TickEvent { get { return Registry.TickEvent.FrameBeginning | Registry.TickEvent.FrameEnding; } }
         public StateType State { get { return state; } set { state = value; } }
-        public bool PlaybackActive { get { return state >= StateType.Playback; } }
+        public bool PlaybackActive { get { return state == StateType.Playback; } }
         public int FrameCount { get { return history.Count; } }
-        public Frame CurrentFrame
-        {
-            get
-            {
-                if (frameIndex == 0)
-                    return activeFrame;
-                return history.Count == 0 ? activeFrame : history[Mathf.Min(frameIndex, history.Count - 1)];
-            }
-        }
 
         //---------------------------------------------------------------------
         public int MaxFrameRecorded
@@ -201,14 +188,10 @@ namespace Prateek.Manager
         }
 
         //---------------------------------------------------------------------
-        public int CurrentFrameIndex
+        public Vector2Int CurrentFrameRange
         {
-            get { return frameIndex; }
-            set
-            {
-                var max = Mathf.Max(1, Mathf.Min(history.Count, frameCapacity));
-                frameIndex = (value + max) % max;
-            }
+            get { return frameRange; }
+            set { frameRange = clamp(value, 0, frameCapacity - 1); }
         }
         #endregion Properties
 
@@ -254,8 +237,26 @@ namespace Prateek.Manager
                 return;
 
             EndFrame();
+            {
+                if (state == StateType.Recording)
+                {
+                    if (history.Count == frameCapacity)
+                    {
+                        history.RemoveAt(0);
+                    }
 
-            PlayCurrentFrame();
+                    history.Add(activeFrame);
+                }
+            }
+
+            if (state != StateType.Playback)
+            {
+                PlayFrame(activeFrame);
+            }
+            else
+            {
+                DoPlayback();
+            }
         }
         #endregion GlobalManager integration
 
@@ -288,7 +289,7 @@ namespace Prateek.Manager
         private void InternalClearHistory()
         {
             history.Clear();
-            frameIndex = 0;
+            frameRange = Vector2Int.zero;
         }
 
         //---------------------------------------------------------------------
@@ -326,23 +327,11 @@ namespace Prateek.Manager
 
                 activeFrame.datas.Add(data);
             }
-
-            if (state != StateType.Recording)
-                return;
-
-            if (history.Count == frameCapacity)
-            {
-                history.RemoveAt(0);
-            }
-
-            history.Add(activeFrame);
-            frameIndex = history.Count - 1;
         }
 
         //---------------------------------------------------------------------
-        private void PlayCurrentFrame()
+        private void PlayFrame(Frame frame)
         {
-            var frame = CurrentFrame;
             if (frame == null)
                 return;
 
@@ -353,6 +342,22 @@ namespace Prateek.Manager
                     continue;
 
                 data.Owner.PlayFrame(data);
+            }
+        }
+
+        //---------------------------------------------------------------------
+        private void DoPlayback()
+        {
+            playback.Clear();
+
+            frameRange = clamp(frameRange, 0, frameCapacity - 1);
+            for (int h = frameRange.x; h < min(frameRange.y + 1, history.Count); h++)
+            {
+                var frame = history[history.Count - (1 + h)];
+                if (frame == null)
+                    continue;
+
+                PlayFrame(frame);
             }
         }
         #endregion Instance Methods
@@ -425,33 +430,21 @@ namespace Prateek.Manager
         }
 
         //---------------------------------------------------------------------
-        public static int CurrentFrameIndex
+        public static Vector2Int CurrentFrameRange
         {
             get
             {
                 var instance = Registry.GetManager<FrameRecorderManager>();
                 if (instance == null)
-                    return 0;
-                return instance.CurrentFrameIndex;
+                    return Vector2Int.zero;
+                return instance.CurrentFrameRange;
             }
             set
             {
                 var instance = Registry.GetManager<FrameRecorderManager>();
                 if (instance == null)
                     return;
-                instance.CurrentFrameIndex = value;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public static FrameRecorderManager.Frame CurrentFrame
-        {
-            get
-            {
-                var instance = Registry.GetManager<FrameRecorderManager>();
-                if (instance == null)
-                    return new FrameRecorderManager.Frame();
-                return instance.CurrentFrame;
+                instance.CurrentFrameRange = value;
             }
         }
         #endregion Properties

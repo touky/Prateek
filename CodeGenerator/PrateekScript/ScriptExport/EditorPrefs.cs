@@ -79,7 +79,7 @@ using static Prateek.Debug.Draw.Setup.QuickCTor;
 namespace Prateek.Editors
 {
     //-------------------------------------------------------------------------
-    public static partial class Prefs
+    public static  partial class Prefs
     {
         
         //---------------------------------------------------------------------
@@ -229,7 +229,7 @@ namespace Prateek.Editors
 namespace Prateek.Editors
 {
     //-------------------------------------------------------------------------
-    public static partial class Prefs
+    public static  partial class Prefs
     {
         
         //---------------------------------------------------------------------
@@ -592,7 +592,7 @@ namespace Prateek.Editors
 namespace Prateek.Editors
 {
     //-------------------------------------------------------------------------
-    public static partial class Prefs
+    public static  partial class Prefs
     {
         
         //---------------------------------------------------------------------

@@ -79,7 +79,7 @@ using static Prateek.Debug.Draw.Setup.QuickCTor;
 namespace Prateek.Extensions
 {
     //-------------------------------------------------------------------------
-    public static partial class VectorExt
+    public static  partial class VectorExt
     {
         
         //---------------------------------------------------------------------
@@ -1344,7 +1344,7 @@ namespace Prateek.Extensions
 namespace Prateek.ShaderTo
 {
     //-------------------------------------------------------------------------
-    public static partial class CSharp
+    public static  partial class CSharp
     {
         
         //---------------------------------------------------------------------
@@ -1383,11 +1383,13 @@ namespace Prateek.ShaderTo
 namespace Prateek.ShaderTo
 {
     //-------------------------------------------------------------------------
-    public static partial class CSharp
+    public static  partial class CSharp
     {
         
         //---------------------------------------------------------------------
         #region Mixed Func float
+        public static float clamp(float n_0, float n_1, float n_2) { return Mathf.Clamp(n_0, n_1, n_2); }
+        public static float saturate(float n_0) { return Mathf.Clamp01(n_0); }
         public static float random(float n_0, float n_1) { return UnityEngine.Random.Range(n_0, n_1); }
         public static float max(float n_0, float n_1) { return Mathf.Max(n_0, n_1); }
         public static float min(float n_0, float n_1) { return Mathf.Min(n_0, n_1); }
@@ -1407,6 +1409,9 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector2
+        public static Vector2 clamp(Vector2 v_0, Vector2 v_1, Vector2 v_2) { return new Vector2(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y)); }
+        public static Vector2 clamp(Vector2 v_0, float n_1, float n_2) { return new Vector2(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2)); }
+        public static Vector2 saturate(Vector2 v_0) { return new Vector2(Mathf.Clamp01(v_0.x), Mathf.Clamp01(v_0.y)); }
         public static Vector2 random(Vector2 v_0, Vector2 v_1) { return new Vector2(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y)); }
         public static Vector2 random(Vector2 v_0, float n_1) { return new Vector2(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1)); }
         public static Vector2 max(Vector2 v_0, Vector2 v_1) { return new Vector2(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y)); }
@@ -1432,6 +1437,9 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector3
+        public static Vector3 clamp(Vector3 v_0, Vector3 v_1, Vector3 v_2) { return new Vector3(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y), Mathf.Clamp(v_0.z, v_1.z, v_2.z)); }
+        public static Vector3 clamp(Vector3 v_0, float n_1, float n_2) { return new Vector3(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2), Mathf.Clamp(v_0.z, n_1, n_2)); }
+        public static Vector3 saturate(Vector3 v_0) { return new Vector3(Mathf.Clamp01(v_0.x), Mathf.Clamp01(v_0.y), Mathf.Clamp01(v_0.z)); }
         public static Vector3 random(Vector3 v_0, Vector3 v_1) { return new Vector3(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y), UnityEngine.Random.Range(v_0.z, v_1.z)); }
         public static Vector3 random(Vector3 v_0, float n_1) { return new Vector3(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1), UnityEngine.Random.Range(v_0.z, n_1)); }
         public static Vector3 max(Vector3 v_0, Vector3 v_1) { return new Vector3(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y), Mathf.Max(v_0.z, v_1.z)); }
@@ -1457,6 +1465,9 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector4
+        public static Vector4 clamp(Vector4 v_0, Vector4 v_1, Vector4 v_2) { return new Vector4(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y), Mathf.Clamp(v_0.z, v_1.z, v_2.z), Mathf.Clamp(v_0.w, v_1.w, v_2.w)); }
+        public static Vector4 clamp(Vector4 v_0, float n_1, float n_2) { return new Vector4(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2), Mathf.Clamp(v_0.z, n_1, n_2), Mathf.Clamp(v_0.w, n_1, n_2)); }
+        public static Vector4 saturate(Vector4 v_0) { return new Vector4(Mathf.Clamp01(v_0.x), Mathf.Clamp01(v_0.y), Mathf.Clamp01(v_0.z), Mathf.Clamp01(v_0.w)); }
         public static Vector4 random(Vector4 v_0, Vector4 v_1) { return new Vector4(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y), UnityEngine.Random.Range(v_0.z, v_1.z), UnityEngine.Random.Range(v_0.w, v_1.w)); }
         public static Vector4 random(Vector4 v_0, float n_1) { return new Vector4(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1), UnityEngine.Random.Range(v_0.z, n_1), UnityEngine.Random.Range(v_0.w, n_1)); }
         public static Vector4 max(Vector4 v_0, Vector4 v_1) { return new Vector4(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y), Mathf.Max(v_0.z, v_1.z), Mathf.Max(v_0.w, v_1.w)); }

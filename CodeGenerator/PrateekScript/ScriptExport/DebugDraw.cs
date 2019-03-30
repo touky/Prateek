@@ -79,7 +79,7 @@ using static Prateek.Debug.Draw.Setup.QuickCTor;
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public partial class Draw
+    public  partial class Draw
     {
         
         //---------------------------------------------------------------------
@@ -88,204 +88,9 @@ namespace Prateek.Debug
         {
         
         //---------------------------------------------------------------------
-        public Setup(bool depthTest) : this(InitMode.Reset)
+        public Setup(Matrix4x4 matrix, Space space, Color color, float duration, bool depthTest) : this(InitMode.Reset)
         {
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, bool depthTest) : this(mode)
-        {
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(float duration) : this(InitMode.Reset)
-        {
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, float duration) : this(mode)
-        {
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(float duration, bool depthTest) : this(InitMode.Reset)
-        {
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, float duration, bool depthTest) : this(mode)
-        {
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Color color) : this(InitMode.Reset)
-        {
-            this.color = color;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Color color) : this(mode)
-        {
-            this.color = color;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Color color, bool depthTest) : this(InitMode.Reset)
-        {
-            this.color = color;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Color color, bool depthTest) : this(mode)
-        {
-            this.color = color;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Color color, float duration) : this(InitMode.Reset)
-        {
-            this.color = color;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Color color, float duration) : this(mode)
-        {
-            this.color = color;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Color color, float duration, bool depthTest) : this(InitMode.Reset)
-        {
-            this.color = color;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Color color, float duration, bool depthTest) : this(mode)
-        {
-            this.color = color;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Space space) : this(InitMode.Reset)
-        {
-            this.space = space;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Space space) : this(mode)
-        {
-            this.space = space;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Space space, bool depthTest) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Space space, bool depthTest) : this(mode)
-        {
-            this.space = space;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Space space, float duration) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Space space, float duration) : this(mode)
-        {
-            this.space = space;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Space space, float duration, bool depthTest) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Space space, float duration, bool depthTest) : this(mode)
-        {
-            this.space = space;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Space space, Color color) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.color = color;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Space space, Color color) : this(mode)
-        {
-            this.space = space;
-            this.color = color;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Space space, Color color, bool depthTest) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.color = color;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Space space, Color color, bool depthTest) : this(mode)
-        {
-            this.space = space;
-            this.color = color;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Space space, Color color, float duration) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.color = color;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Space space, Color color, float duration) : this(mode)
-        {
-            this.space = space;
-            this.color = color;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Space space, Color color, float duration, bool depthTest) : this(InitMode.Reset)
-        {
+            this.matrix = matrix;
             this.space = space;
             this.color = color;
             this.duration = duration;
@@ -293,229 +98,12 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Setup(InitMode mode, Space space, Color color, float duration, bool depthTest) : this(mode)
-        {
-            this.space = space;
-            this.color = color;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix) : this(mode)
-        {
-            this.matrix = matrix;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, bool depthTest) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, bool depthTest) : this(mode)
-        {
-            this.matrix = matrix;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, float duration) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, float duration) : this(mode)
-        {
-            this.matrix = matrix;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, float duration, bool depthTest) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest) : this(mode)
-        {
-            this.matrix = matrix;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Color color) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.color = color;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Color color) : this(mode)
-        {
-            this.matrix = matrix;
-            this.color = color;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Color color, bool depthTest) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.color = color;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest) : this(mode)
-        {
-            this.matrix = matrix;
-            this.color = color;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Color color, float duration) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.color = color;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Color color, float duration) : this(mode)
-        {
-            this.matrix = matrix;
-            this.color = color;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.color = color;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(mode)
-        {
-            this.matrix = matrix;
-            this.color = color;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Space space) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.space = space;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Space space) : this(mode)
-        {
-            this.matrix = matrix;
-            this.space = space;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Space space, bool depthTest) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.space = space;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Space space, bool depthTest) : this(mode)
-        {
-            this.matrix = matrix;
-            this.space = space;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Space space, float duration) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.space = space;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Space space, float duration) : this(mode)
-        {
-            this.matrix = matrix;
-            this.space = space;
-            this.duration = duration;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Space space, float duration, bool depthTest) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.space = space;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Space space, float duration, bool depthTest) : this(mode)
-        {
-            this.matrix = matrix;
-            this.space = space;
-            this.duration = duration;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Space space, Color color) : this(InitMode.Reset)
+        public Setup(InitMode mode, Matrix4x4 matrix, Space space, Color color, float duration, bool depthTest) : this(mode)
         {
             this.matrix = matrix;
             this.space = space;
             this.color = color;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Space space, Color color) : this(mode)
-        {
-            this.matrix = matrix;
-            this.space = space;
-            this.color = color;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Space space, Color color, bool depthTest) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.space = space;
-            this.color = color;
-            this.depthTest = depthTest;
-        }
-        
-        //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Space space, Color color, bool depthTest) : this(mode)
-        {
-            this.matrix = matrix;
-            this.space = space;
-            this.color = color;
+            this.duration = duration;
             this.depthTest = depthTest;
         }
         
@@ -538,9 +126,226 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Setup(Matrix4x4 matrix, Space space, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        public Setup(Matrix4x4 matrix, Space space, Color color, bool depthTest) : this(InitMode.Reset)
         {
             this.matrix = matrix;
+            this.space = space;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Space space, Color color, bool depthTest) : this(mode)
+        {
+            this.matrix = matrix;
+            this.space = space;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, Space space, Color color) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.space = space;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Space space, Color color) : this(mode)
+        {
+            this.matrix = matrix;
+            this.space = space;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, Space space, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.space = space;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Space space, float duration, bool depthTest) : this(mode)
+        {
+            this.matrix = matrix;
+            this.space = space;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, Space space, float duration) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.space = space;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Space space, float duration) : this(mode)
+        {
+            this.matrix = matrix;
+            this.space = space;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, Space space, bool depthTest) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.space = space;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Space space, bool depthTest) : this(mode)
+        {
+            this.matrix = matrix;
+            this.space = space;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, Space space) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.space = space;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Space space) : this(mode)
+        {
+            this.matrix = matrix;
+            this.space = space;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(mode)
+        {
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, Color color, float duration) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Color color, float duration) : this(mode)
+        {
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, Color color, bool depthTest) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest) : this(mode)
+        {
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, Color color) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, Color color) : this(mode)
+        {
+            this.matrix = matrix;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest) : this(mode)
+        {
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, float duration) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, float duration) : this(mode)
+        {
+            this.matrix = matrix;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix, bool depthTest) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix, bool depthTest) : this(mode)
+        {
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Matrix4x4 matrix) : this(InitMode.Reset)
+        {
+            this.matrix = matrix;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Matrix4x4 matrix) : this(mode)
+        {
+            this.matrix = matrix;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Space space, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        {
             this.space = space;
             this.color = color;
             this.duration = duration;
@@ -548,12 +353,207 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Setup(InitMode mode, Matrix4x4 matrix, Space space, Color color, float duration, bool depthTest) : this(mode)
+        public Setup(InitMode mode, Space space, Color color, float duration, bool depthTest) : this(mode)
         {
-            this.matrix = matrix;
             this.space = space;
             this.color = color;
             this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Space space, Color color, float duration) : this(InitMode.Reset)
+        {
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Space space, Color color, float duration) : this(mode)
+        {
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Space space, Color color, bool depthTest) : this(InitMode.Reset)
+        {
+            this.space = space;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Space space, Color color, bool depthTest) : this(mode)
+        {
+            this.space = space;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Space space, Color color) : this(InitMode.Reset)
+        {
+            this.space = space;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Space space, Color color) : this(mode)
+        {
+            this.space = space;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Space space, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.space = space;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Space space, float duration, bool depthTest) : this(mode)
+        {
+            this.space = space;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Space space, float duration) : this(InitMode.Reset)
+        {
+            this.space = space;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Space space, float duration) : this(mode)
+        {
+            this.space = space;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Space space, bool depthTest) : this(InitMode.Reset)
+        {
+            this.space = space;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Space space, bool depthTest) : this(mode)
+        {
+            this.space = space;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Space space) : this(InitMode.Reset)
+        {
+            this.space = space;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Space space) : this(mode)
+        {
+            this.space = space;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Color color, float duration, bool depthTest) : this(mode)
+        {
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Color color, float duration) : this(InitMode.Reset)
+        {
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Color color, float duration) : this(mode)
+        {
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Color color, bool depthTest) : this(InitMode.Reset)
+        {
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Color color, bool depthTest) : this(mode)
+        {
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(Color color) : this(InitMode.Reset)
+        {
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, Color color) : this(mode)
+        {
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, float duration, bool depthTest) : this(mode)
+        {
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(float duration) : this(InitMode.Reset)
+        {
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, float duration) : this(mode)
+        {
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(bool depthTest) : this(InitMode.Reset)
+        {
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public Setup(InitMode mode, bool depthTest) : this(mode)
+        {
             this.depthTest = depthTest;
         }
         }
@@ -566,7 +566,7 @@ namespace Prateek.Debug
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public partial class Draw
+    public  partial class Draw
     {
         
         //---------------------------------------------------------------------
@@ -574,256 +574,256 @@ namespace Prateek.Debug
         public partial struct Setup
         {
             //-----------------------------------------------------------------
-            public partial struct QuickCTor
+            public static class QuickCTor
             {
         
                 //-------------------------------------------------------------
-                public Setup DebugSetup(bool depthTest) 
-                { return new Setup(InitMode.Reset, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, bool depthTest)
-                { return new Setup(mode, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(float duration) 
-                { return new Setup(InitMode.Reset, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, float duration)
-                { return new Setup(mode, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(float duration, bool depthTest) 
-                { return new Setup(InitMode.Reset, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, float duration, bool depthTest)
-                { return new Setup(mode, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Color color) 
-                { return new Setup(InitMode.Reset, color); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Color color)
-                { return new Setup(mode, color); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Color color, bool depthTest) 
-                { return new Setup(InitMode.Reset, color, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Color color, bool depthTest)
-                { return new Setup(mode, color, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Color color, float duration) 
-                { return new Setup(InitMode.Reset, color, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Color color, float duration)
-                { return new Setup(mode, color, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Color color, float duration, bool depthTest) 
-                { return new Setup(InitMode.Reset, color, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Color color, float duration, bool depthTest)
-                { return new Setup(mode, color, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Space space) 
-                { return new Setup(InitMode.Reset, space); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Space space)
-                { return new Setup(mode, space); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Space space, bool depthTest) 
-                { return new Setup(InitMode.Reset, space, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Space space, bool depthTest)
-                { return new Setup(mode, space, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Space space, float duration) 
-                { return new Setup(InitMode.Reset, space, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Space space, float duration)
-                { return new Setup(mode, space, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Space space, float duration, bool depthTest) 
-                { return new Setup(InitMode.Reset, space, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Space space, float duration, bool depthTest)
-                { return new Setup(mode, space, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Space space, Color color) 
-                { return new Setup(InitMode.Reset, space, color); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Space space, Color color)
-                { return new Setup(mode, space, color); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Space space, Color color, bool depthTest) 
-                { return new Setup(InitMode.Reset, space, color, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Space space, Color color, bool depthTest)
-                { return new Setup(mode, space, color, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Space space, Color color, float duration) 
-                { return new Setup(InitMode.Reset, space, color, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Space space, Color color, float duration)
-                { return new Setup(mode, space, color, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Space space, Color color, float duration, bool depthTest) 
-                { return new Setup(InitMode.Reset, space, color, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Space space, Color color, float duration, bool depthTest)
-                { return new Setup(mode, space, color, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix) 
-                { return new Setup(InitMode.Reset, matrix); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix)
-                { return new Setup(mode, matrix); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, bool depthTest) 
-                { return new Setup(InitMode.Reset, matrix, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, bool depthTest)
-                { return new Setup(mode, matrix, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, float duration) 
-                { return new Setup(InitMode.Reset, matrix, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, float duration)
-                { return new Setup(mode, matrix, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, float duration, bool depthTest) 
-                { return new Setup(InitMode.Reset, matrix, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest)
-                { return new Setup(mode, matrix, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Color color) 
-                { return new Setup(InitMode.Reset, matrix, color); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Color color)
-                { return new Setup(mode, matrix, color); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Color color, bool depthTest) 
-                { return new Setup(InitMode.Reset, matrix, color, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest)
-                { return new Setup(mode, matrix, color, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Color color, float duration) 
-                { return new Setup(InitMode.Reset, matrix, color, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Color color, float duration)
-                { return new Setup(mode, matrix, color, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Color color, float duration, bool depthTest) 
-                { return new Setup(InitMode.Reset, matrix, color, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest)
-                { return new Setup(mode, matrix, color, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Space space) 
-                { return new Setup(InitMode.Reset, matrix, space); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space)
-                { return new Setup(mode, matrix, space); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Space space, bool depthTest) 
-                { return new Setup(InitMode.Reset, matrix, space, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, bool depthTest)
-                { return new Setup(mode, matrix, space, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Space space, float duration) 
-                { return new Setup(InitMode.Reset, matrix, space, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, float duration)
-                { return new Setup(mode, matrix, space, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Space space, float duration, bool depthTest) 
-                { return new Setup(InitMode.Reset, matrix, space, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, float duration, bool depthTest)
-                { return new Setup(mode, matrix, space, duration, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Space space, Color color) 
-                { return new Setup(InitMode.Reset, matrix, space, color); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, Color color)
-                { return new Setup(mode, matrix, space, color); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Space space, Color color, bool depthTest) 
-                { return new Setup(InitMode.Reset, matrix, space, color, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, Color color, bool depthTest)
-                { return new Setup(mode, matrix, space, color, depthTest); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Space space, Color color, float duration) 
-                { return new Setup(InitMode.Reset, matrix, space, color, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, Color color, float duration)
-                { return new Setup(mode, matrix, space, color, duration); }
-        
-                //-------------------------------------------------------------
-                public Setup DebugSetup(Matrix4x4 matrix, Space space, Color color, float duration, bool depthTest) 
+                public static Setup DebugSetup(Matrix4x4 matrix, Space space, Color color, float duration, bool depthTest) 
                 { return new Setup(InitMode.Reset, matrix, space, color, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, Color color, float duration, bool depthTest)
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, Color color, float duration, bool depthTest)
                 { return new Setup(mode, matrix, space, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Space space, Color color, float duration) 
+                { return new Setup(InitMode.Reset, matrix, space, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, Color color, float duration)
+                { return new Setup(mode, matrix, space, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Space space, Color color, bool depthTest) 
+                { return new Setup(InitMode.Reset, matrix, space, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, Color color, bool depthTest)
+                { return new Setup(mode, matrix, space, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Space space, Color color) 
+                { return new Setup(InitMode.Reset, matrix, space, color); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, Color color)
+                { return new Setup(mode, matrix, space, color); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Space space, float duration, bool depthTest) 
+                { return new Setup(InitMode.Reset, matrix, space, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, float duration, bool depthTest)
+                { return new Setup(mode, matrix, space, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Space space, float duration) 
+                { return new Setup(InitMode.Reset, matrix, space, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, float duration)
+                { return new Setup(mode, matrix, space, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Space space, bool depthTest) 
+                { return new Setup(InitMode.Reset, matrix, space, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space, bool depthTest)
+                { return new Setup(mode, matrix, space, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Space space) 
+                { return new Setup(InitMode.Reset, matrix, space); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Space space)
+                { return new Setup(mode, matrix, space); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Color color, float duration, bool depthTest) 
+                { return new Setup(InitMode.Reset, matrix, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest)
+                { return new Setup(mode, matrix, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Color color, float duration) 
+                { return new Setup(InitMode.Reset, matrix, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Color color, float duration)
+                { return new Setup(mode, matrix, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Color color, bool depthTest) 
+                { return new Setup(InitMode.Reset, matrix, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest)
+                { return new Setup(mode, matrix, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, Color color) 
+                { return new Setup(InitMode.Reset, matrix, color); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, Color color)
+                { return new Setup(mode, matrix, color); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, float duration, bool depthTest) 
+                { return new Setup(InitMode.Reset, matrix, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest)
+                { return new Setup(mode, matrix, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, float duration) 
+                { return new Setup(InitMode.Reset, matrix, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, float duration)
+                { return new Setup(mode, matrix, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix, bool depthTest) 
+                { return new Setup(InitMode.Reset, matrix, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix, bool depthTest)
+                { return new Setup(mode, matrix, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Matrix4x4 matrix) 
+                { return new Setup(InitMode.Reset, matrix); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Matrix4x4 matrix)
+                { return new Setup(mode, matrix); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Space space, Color color, float duration, bool depthTest) 
+                { return new Setup(InitMode.Reset, space, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Space space, Color color, float duration, bool depthTest)
+                { return new Setup(mode, space, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Space space, Color color, float duration) 
+                { return new Setup(InitMode.Reset, space, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Space space, Color color, float duration)
+                { return new Setup(mode, space, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Space space, Color color, bool depthTest) 
+                { return new Setup(InitMode.Reset, space, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Space space, Color color, bool depthTest)
+                { return new Setup(mode, space, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Space space, Color color) 
+                { return new Setup(InitMode.Reset, space, color); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Space space, Color color)
+                { return new Setup(mode, space, color); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Space space, float duration, bool depthTest) 
+                { return new Setup(InitMode.Reset, space, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Space space, float duration, bool depthTest)
+                { return new Setup(mode, space, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Space space, float duration) 
+                { return new Setup(InitMode.Reset, space, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Space space, float duration)
+                { return new Setup(mode, space, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Space space, bool depthTest) 
+                { return new Setup(InitMode.Reset, space, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Space space, bool depthTest)
+                { return new Setup(mode, space, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Space space) 
+                { return new Setup(InitMode.Reset, space); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Space space)
+                { return new Setup(mode, space); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Color color, float duration, bool depthTest) 
+                { return new Setup(InitMode.Reset, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Color color, float duration, bool depthTest)
+                { return new Setup(mode, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Color color, float duration) 
+                { return new Setup(InitMode.Reset, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Color color, float duration)
+                { return new Setup(mode, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Color color, bool depthTest) 
+                { return new Setup(InitMode.Reset, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Color color, bool depthTest)
+                { return new Setup(mode, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(Color color) 
+                { return new Setup(InitMode.Reset, color); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, Color color)
+                { return new Setup(mode, color); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(float duration, bool depthTest) 
+                { return new Setup(InitMode.Reset, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, float duration, bool depthTest)
+                { return new Setup(mode, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(float duration) 
+                { return new Setup(InitMode.Reset, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, float duration)
+                { return new Setup(mode, duration); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(bool depthTest) 
+                { return new Setup(InitMode.Reset, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static Setup DebugSetup(InitMode mode, bool depthTest)
+                { return new Setup(mode, depthTest); }
             }
         }
         #endregion DrawSetup overload

@@ -79,7 +79,7 @@ using static Prateek.Debug.Draw.Setup.QuickCTor;
 namespace Prateek.Extensions
 {
     //-------------------------------------------------------------------------
-    public static partial class ColorExt
+    public static  partial class ColorExt
     {
         
         //---------------------------------------------------------------------

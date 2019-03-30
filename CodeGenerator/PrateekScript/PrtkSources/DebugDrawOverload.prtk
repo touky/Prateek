@@ -71,7 +71,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         @public partial struct Setup
         @{
         @    //----------------------------------------------------------------
-        @    public partial struct QuickCTor
+        @    public static class QuickCTor
         @    {
         }
         
@@ -79,11 +79,11 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         {
         @
         @        //--------------------------------------------------------------------
-        @        public #SRC_CLASS# DebugSetup(#FUNC_RESULT_0#) 
+        @        public static #SRC_CLASS# DebugSetup(#FUNC_RESULT_0#) 
 		@        { return new Setup(InitMode.Reset, #FUNC_RESULT_1#); }
         @
         @        //--------------------------------------------------------------------
-        @        public #SRC_CLASS# DebugSetup(InitMode mode, #FUNC_RESULT_0#)
+        @        public static #SRC_CLASS# DebugSetup(InitMode mode, #FUNC_RESULT_0#)
         @        { return new Setup(mode, #FUNC_RESULT_1#); }
         }
 

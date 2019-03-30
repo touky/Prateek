@@ -208,8 +208,6 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public void SetRecordingStatus(bool enable) { }
-        public void PlayFrames(List<FrameRecorderManager.Frame.IData> datas) { }
         public void PlayFrame(FrameRecorderManager.Frame.IData data)
         {
             var recordings = (DebugRecording)data;

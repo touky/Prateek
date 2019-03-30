@@ -79,7 +79,7 @@ using static Prateek.Debug.Draw.Setup.QuickCTor;
 namespace Prateek.Extensions
 {
     //-------------------------------------------------------------------------
-    public static partial class VectorExt
+    public static  partial class VectorExt
     {
         
         //---------------------------------------------------------------------
@@ -217,7 +217,7 @@ namespace Prateek.Extensions
 namespace Prateek.ShaderTo
 {
     //-------------------------------------------------------------------------
-    public static partial class CSharp
+    public static  partial class CSharp
     {
         
         //---------------------------------------------------------------------
@@ -243,11 +243,12 @@ namespace Prateek.ShaderTo
 namespace Prateek.ShaderTo
 {
     //-------------------------------------------------------------------------
-    public static partial class CSharp
+    public static  partial class CSharp
     {
         
         //---------------------------------------------------------------------
         #region Mixed Func int
+        public static int clamp(int n_0, int n_1, int n_2) { return Mathf.Clamp(n_0, n_1, n_2); }
         public static int random(int n_0, int n_1) { return UnityEngine.Random.Range(n_0, n_1); }
         public static int max(int n_0, int n_1) { return Mathf.Max(n_0, n_1); }
         public static int min(int n_0, int n_1) { return Mathf.Min(n_0, n_1); }
@@ -261,6 +262,8 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector2Int
+        public static Vector2Int clamp(Vector2Int v_0, Vector2Int v_1, Vector2Int v_2) { return new Vector2Int(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y)); }
+        public static Vector2Int clamp(Vector2Int v_0, int n_1, int n_2) { return new Vector2Int(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2)); }
         public static Vector2Int random(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y)); }
         public static Vector2Int random(Vector2Int v_0, int n_1) { return new Vector2Int(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1)); }
         public static Vector2Int max(Vector2Int v_0, Vector2Int v_1) { return new Vector2Int(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y)); }
@@ -280,6 +283,8 @@ namespace Prateek.ShaderTo
         
         //---------------------------------------------------------------------
         #region Mixed Func Vector3Int
+        public static Vector3Int clamp(Vector3Int v_0, Vector3Int v_1, Vector3Int v_2) { return new Vector3Int(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y), Mathf.Clamp(v_0.z, v_1.z, v_2.z)); }
+        public static Vector3Int clamp(Vector3Int v_0, int n_1, int n_2) { return new Vector3Int(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2), Mathf.Clamp(v_0.z, n_1, n_2)); }
         public static Vector3Int random(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int(UnityEngine.Random.Range(v_0.x, v_1.x), UnityEngine.Random.Range(v_0.y, v_1.y), UnityEngine.Random.Range(v_0.z, v_1.z)); }
         public static Vector3Int random(Vector3Int v_0, int n_1) { return new Vector3Int(UnityEngine.Random.Range(v_0.x, n_1), UnityEngine.Random.Range(v_0.y, n_1), UnityEngine.Random.Range(v_0.z, n_1)); }
         public static Vector3Int max(Vector3Int v_0, Vector3Int v_1) { return new Vector3Int(Mathf.Max(v_0.x, v_1.x), Mathf.Max(v_0.y, v_1.y), Mathf.Max(v_0.z, v_1.z)); }

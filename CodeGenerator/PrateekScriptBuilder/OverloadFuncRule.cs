@@ -140,7 +140,7 @@ namespace Prateek.CodeGeneration
                     var variant = new FuncVariant(string.Empty, 1);
                     for (int sv = 0; sv < slots.Length; sv++)
                     {
-                        if (slots[sv] == 1)
+                        if (slots[sv] == 0)
                         {
                             for (int i = 0; i < data.funcInfos.Count; i++)
                             {
