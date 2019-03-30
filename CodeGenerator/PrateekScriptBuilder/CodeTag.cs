@@ -149,7 +149,8 @@ namespace Prateek.CodeGeneration
                 //-------------------------------------------------------------
                 public static string codeGenStart = "PRATEEK_SCRIPT_STARTS_HERE";
                 public static string codeGenNSpc = "PRATEEK_EXTENSION_NAMESPACE";
-                public static string codeGenExtn = "PRATEEK_EXTENSION_STATIC_CLASS";
+                public static string codeGenExtn = "PRATEEK_EXTENSION_CLASS";
+                public static string codeGenPrfx = "PRATEEK_EXTENSION_PREFIX";
                 public static string codeGenData = "PRATEEK_CODEGEN_DATA";
                 public static string codeGenTabs = "PRATEEK_CODEGEN_TABS";
 

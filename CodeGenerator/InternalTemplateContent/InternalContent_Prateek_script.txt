@@ -6,7 +6,7 @@
 namespace #PRATEEK_EXTENSION_NAMESPACE#
 {
     //-------------------------------------------------------------------------
-    public static partial class #PRATEEK_EXTENSION_STATIC_CLASS#
+    public #PRATEEK_EXTENSION_PREFIX# partial class #PRATEEK_EXTENSION_CLASS#
     {
         #PRATEEK_CODEGEN_DATA#
     }

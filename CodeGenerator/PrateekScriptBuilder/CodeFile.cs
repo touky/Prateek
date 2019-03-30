@@ -115,6 +115,7 @@ namespace Prateek.CodeGeneration
                 public CodeRule activeRule;
                 public string blockNamespace;
                 public string blockClassName;
+                public List<string> blockClassPrefix = new List<string>();
 
                 public List<ClassInfos> classInfos = new List<ClassInfos>();
                 public List<FuncInfos> funcInfos = new List<FuncInfos>();
@@ -181,6 +182,7 @@ namespace Prateek.CodeGeneration
             {
                 var genNSpc = (Utils.SwapInfo)Tag.Macro.codeGenNSpc.Keyword();
                 var genExtn = (Utils.SwapInfo)Tag.Macro.codeGenExtn.Keyword();
+                var genPrfx = (Utils.SwapInfo)Tag.Macro.codeGenPrfx.Keyword();
                 var genData = (Utils.SwapInfo)Tag.Macro.codeGenData.Keyword();
                 var genTabs = (Utils.SwapInfo)Tag.Macro.codeGenTabs.Keyword();
 
@@ -207,8 +209,13 @@ namespace Prateek.CodeGeneration
                     var code = genTabs.Apply(data.codeGenerated);
                     genNSpc += data.blockNamespace;
                     genExtn += data.blockClassName;
+                    var prefix = string.Empty;
+                    for (int p = 0; p < data.blockClassPrefix.Count; p++)
+                    {
+                        genPrfx += data.blockClassPrefix[p] + Strings.Separator.Space.S();
+                    }
                     genData += code;
-                    codeGenerated += genExtn.Apply(genData.Apply(genNSpc.Apply(genCode)));
+                    codeGenerated += genPrfx.Apply(genExtn.Apply(genData.Apply(genNSpc.Apply(genCode))));
                 }
 
                 return BuildResult.ValueType.Success;

@@ -352,7 +352,7 @@ namespace Prateek.CodeGeneration
             {
                 if (keyword == CodeBlock)
                 {
-                    return new Utils.KeyRule(keyword, activeScope == Tag.Macro.FileInfo) { args = 2, needOpenScope = true };
+                    return new Utils.KeyRule(keyword, activeScope == Tag.Macro.FileInfo) { args = new Utils.KeyRule.ArgRange(2, -1), needOpenScope = true };
                 }
                 else if (keyword == Tag.Macro.ClassInfo)
                 {
@@ -389,6 +389,10 @@ namespace Prateek.CodeGeneration
                 {
                     activeData.blockNamespace = args[0];
                     activeData.blockClassName = args[1];
+                    if (args.Count > 2)
+                    {
+                        activeData.blockClassPrefix.AddRange(args.GetRange(2, args.Count - 2));
+                    }
                 }
                 else if (keyRule.key == Tag.Macro.ClassInfo)
                 {

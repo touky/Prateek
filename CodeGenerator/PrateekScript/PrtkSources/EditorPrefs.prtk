@@ -1,6 +1,6 @@
 PRATEEK_FILE_INFO(EditorPrefs, cs)
 {
-    PRATEEK_BLOCK_FUNC_BASIC(Prateek.Editors, Prefs)
+    PRATEEK_BLOCK_FUNC_BASIC(Prateek.Editors, Prefs, static)
     {
 		PRATEEK_CLASS_INFO(bool)  { PRATEEK_NAMES(Bools, GetBool, SetBool) }
 		PRATEEK_CLASS_INFO(int)   { PRATEEK_NAMES(Ints, GetInt, SetInt) }
@@ -47,7 +47,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
         }
     }
 
-	PRATEEK_BLOCK_FUNC_BASIC(Prateek.Editors, Prefs)
+	PRATEEK_BLOCK_FUNC_BASIC(Prateek.Editors, Prefs, static)
 	{
 		PRATEEK_CLASS_INFO(Vector2Int)
 		{
@@ -148,7 +148,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		}
 	}
 
-	PRATEEK_BLOCK_FUNC_BASIC(Prateek.Editors, Prefs)
+	PRATEEK_BLOCK_FUNC_BASIC(Prateek.Editors, Prefs, static)
 	{
 		PRATEEK_CLASS_INFO(string) 	  { PRATEEK_NAMES(Strings) }
 		PRATEEK_CLASS_INFO(bool)   	  { PRATEEK_NAMES(Bools) }
