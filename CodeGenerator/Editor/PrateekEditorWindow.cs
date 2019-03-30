@@ -95,6 +95,7 @@ namespace Prateek.CodeGeneration.Editor
         //---------------------------------------------------------------------
         #region Fields
         private Vector2 scrollPosition = Vector2.zero;
+        private Vector2 scrollPosition2 = Vector2.zero;
         private CodeBuilder scriptTemplateUpdater = null;
         private CodeBuilder prateekScriptGenerator = null;
         private Prefs.Strings prateekExportDir;
@@ -158,6 +159,12 @@ namespace Prateek.CodeGeneration.Editor
         {
             InitDatas();
 
+            if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute updater"))
+            {
+                scriptTemplateUpdater.RunInTestMode = prateekRunInTestMode.Value;
+                scriptTemplateUpdater.StartWork();
+            }
+
             EditorGUILayout.LabelField("File count: " + scriptTemplateUpdater.WorkFileCount);
             using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.MaxHeight(350)))
             {
@@ -176,7 +183,7 @@ namespace Prateek.CodeGeneration.Editor
             }
             prateekRunInTestMode.Value = EditorGUILayout.ToggleLeft("Run in test mode", prateekRunInTestMode.Value);
 
-            if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute"))
+            if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute generator"))
             {
                 prateekScriptGenerator.RunInTestMode = prateekRunInTestMode.Value;
                 prateekScriptGenerator.StartWork();
@@ -200,13 +207,13 @@ namespace Prateek.CodeGeneration.Editor
                 }
             }
             EditorGUILayout.LabelField("File count: " + prateekScriptGenerator.WorkFileCount);
-            using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.MaxHeight(350)))
+            using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition2, GUILayout.MaxHeight(350)))
             {
                 for (int w = 0; w < prateekScriptGenerator.WorkFileCount; w++)
                 {
                     EditorGUILayout.LabelField(" - " + prateekScriptGenerator[w].source.name.Extension(prateekScriptGenerator[w].source.extension));
                 }
-                scrollPosition = scrollScope.scrollPosition;
+                scrollPosition2 = scrollScope.scrollPosition;
             }
         }
         #endregion Unity Defaults
