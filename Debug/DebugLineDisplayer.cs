@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 29/03/2019
+//  Header last update date: 30/03/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -89,14 +89,14 @@ namespace Prateek.Debug
         #region Declarations
         public struct LineData
         {
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             private const int offset = 20;
             private const string lineKeyword = "LINE_USE_BORDER";
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public struct MeshContainer
             {
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public class Bound { public Bounds b; }
                 private Bound bounds;
                 private MeshRenderer renderer;
@@ -107,10 +107,10 @@ namespace Prateek.Debug
                 private int[] triangles;
                 private Vector3[] vertices;
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public Bound Bounds { get { return bounds; } }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public MeshContainer(int capacity, MeshRenderer renderer, int borderThickness)
                 {
                     this.bounds = new Bound() { b = new Bounds() };
@@ -126,7 +126,7 @@ namespace Prateek.Debug
                     RefreshMesh(capacity, borderThickness);
                 }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public void Destroy()
                 {
                     if (renderer == null)
@@ -141,7 +141,7 @@ namespace Prateek.Debug
                     vertices = null;
                 }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public void RefreshMesh(int size, int borderThickness)
                 {
                     //borderThickness = 0;
@@ -226,20 +226,20 @@ namespace Prateek.Debug
                 }
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public struct BufferContainer
             {
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 private ComputeBuffer buffer;
                 private List<Vector4> list;
                 private Vector4[] array;
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public ComputeBuffer Buffer { get { return buffer; } }
                 public int Count { get { return list.Count; } }
                 public Vector4 this[int index] { set { list[index] = value; } }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public BufferContainer(int capacity)
                 {
                     buffer = new ComputeBuffer(capacity, 16);
@@ -247,7 +247,7 @@ namespace Prateek.Debug
                     array = new Vector4[capacity];
                 }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public void Destroy()
                 {
                     if (list == null)
@@ -258,7 +258,7 @@ namespace Prateek.Debug
                     array = null;
                 }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public void Increment(int index)
                 {
                     if (index * 2 < list.Count)
@@ -268,13 +268,13 @@ namespace Prateek.Debug
                     list.Add(Vector4.zero);
                 }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public void Clear()
                 {
                     list.Clear();
                 }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public void RefreshBuffers()
                 {
                     if (list.Count > array.Length)
@@ -290,13 +290,13 @@ namespace Prateek.Debug
                 }
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             private int index;
             private MeshContainer mesh;
             private BufferContainer positions;
             private BufferContainer colors;
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public LineData(int capacity, MeshRenderer renderer, int borderThickness)
             {
                 index = 0;
@@ -305,14 +305,14 @@ namespace Prateek.Debug
                 colors = new BufferContainer(capacity);
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public void Destroy()
             {
                 positions.Destroy();
                 colors.Destroy();
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public LineSetup GetPoint()
             {
                 Increment(index + 1);
@@ -320,14 +320,14 @@ namespace Prateek.Debug
                 return new LineSetup(mesh.Bounds, index++, positions, colors);
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             private void Increment(int index)
             {
                 positions.Increment(index);
                 colors.Increment(index);
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public void RefreshBuffers(Material material, int lineThickness, int borderThickness)
             {
                 positions.RefreshBuffers();
@@ -347,7 +347,7 @@ namespace Prateek.Debug
                     material.EnableKeyword(lineKeyword);
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public void Clear()
             {
                 index = 0;
@@ -355,16 +355,16 @@ namespace Prateek.Debug
                 colors.Clear();
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public struct LineSetup
             {
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 private MeshContainer.Bound bounds;
                 private int index;
                 private BufferContainer positions;
                 private BufferContainer colors;
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public LineSetup(MeshContainer.Bound bounds, int index, BufferContainer positions, BufferContainer colors)
                 {
                     this.bounds = bounds;
@@ -373,7 +373,7 @@ namespace Prateek.Debug
                     this.colors = colors;
                 }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public void SetLine(Vector3 start, Vector3 end)
                 {
                     if (index == 0)
@@ -388,7 +388,7 @@ namespace Prateek.Debug
                     positions[index * 2 + 1] = end;
                 }
 
-                //---------------------------------------------------------------------
+                //-------------------------------------------------------------
                 public void SetColor(Color front, Color back)
                 {
                     colors[index * 2] = front;

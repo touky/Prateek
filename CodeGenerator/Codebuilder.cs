@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
+//  Header last update date: 30/03/2019
 //
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -53,6 +53,7 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+using Prateek.Manager;
 
 #region Using static
 using static Prateek.ShaderTo.CSharp;
@@ -66,6 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
+using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -89,7 +91,7 @@ namespace Prateek.CodeGeneration
         #region Declarations
         public struct BuildResult
         {
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             [Flags]
             public enum ValueType
             {
@@ -114,42 +116,42 @@ namespace Prateek.CodeGeneration
                 MAX = 32
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             private ValueType value;
             private string text;
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public ValueType Value { get { return value; } }
             public static implicit operator bool(BuildResult result)
             {
                 return (result.value & ValueType.Success) != 0;
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public static implicit operator BuildResult(ValueType value)
             {
                 return new BuildResult() { value = value, text = string.Empty };
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public static BuildResult operator +(BuildResult other, string text)
             {
                 return new BuildResult() { value = other.value, text = other.text + (other.text != string.Empty ? ", " : "") + text };
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public static BuildResult operator +(BuildResult one, BuildResult other)
             {
                 return new BuildResult() { value = one.value | other.value, text = one.text + (one.text != string.Empty ? ", " : "") + other.text };
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public bool Is(ValueType value)
             {
                 return (this.value & value) != 0;
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public void Log()
             {
                 var log = string.Format("Error with: {0}\n", text);
@@ -598,7 +600,7 @@ namespace Prateek.CodeGeneration
             var position = 0;
             while ((position = fileData.destination.content.IndexOf(comment, position)) >= 0)
             {
-                var safety = ignorers.AdvanceToSafety(position, ScriptTemplate.Ignorable.Style.Comment);
+                var safety = ignorers.AdvanceToSafety(position, ScriptTemplate.Ignorable.Style.Text);
                 if (safety != position)
                 {
                     position = safety;

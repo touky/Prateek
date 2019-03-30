@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 28/03/2019
+//  Header last update date: 30/03/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -53,6 +53,7 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+using Prateek.Manager;
 
 #region Using static
 using static Prateek.ShaderTo.CSharp;
@@ -86,7 +87,7 @@ namespace Prateek.Base
     [CreateAssetMenu(fileName = "RegistrySetup", menuName = "Prateek/Create registry setup")]
     public sealed class RegistrySetup : ScriptableObject
     {
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Settings
         [SerializeField]
         private List<string> loadOnInit = new List<string>();
@@ -95,7 +96,7 @@ namespace Prateek.Base
         private List<string> createOnInit = new List<string>();
         #endregion Settings
 
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public void Initialize()
         {
             //Load stored resources

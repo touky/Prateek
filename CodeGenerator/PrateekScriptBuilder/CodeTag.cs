@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
+//  Header last update date: 30/03/2019
 //
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -53,6 +53,7 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+using Prateek.Manager;
 
 #region Using static
 using static Prateek.ShaderTo.CSharp;
@@ -66,6 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
+using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -86,7 +88,7 @@ namespace Prateek.CodeGeneration
     //-------------------------------------------------------------------------
     public partial class PrateekScriptBuilder
     {
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         [InitializeOnLoad]
         class TagLoader
         {
@@ -106,10 +108,10 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public struct NumberedVars
             {
-                //-----------------------------------------------------------------
+                //-------------------------------------------------------------
                 private List<string> datas;
 
-                //-----------------------------------------------------------------
+                //-------------------------------------------------------------
                 public int Count { get { return datas.Count; } }
                 public Utils.SwapInfo this[int i]
                 {
@@ -121,7 +123,7 @@ namespace Prateek.CodeGeneration
                     }
                 }
 
-                //-----------------------------------------------------------------
+                //-------------------------------------------------------------
                 public NumberedVars(Tag.Macro.VarName root)
                 {
                     datas = new List<string>();
@@ -131,7 +133,7 @@ namespace Prateek.CodeGeneration
                     }
                 }
 
-                //-----------------------------------------------------------------
+                //-------------------------------------------------------------
                 public int GetCount(string content)
                 {
                     var count = 0;

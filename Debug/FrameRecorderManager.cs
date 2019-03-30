@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 29/03/2019
+//  Header last update date: 30/03/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -53,6 +53,7 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+using Prateek.Manager;
 
 #region Using static
 using static Prateek.ShaderTo.CSharp;
@@ -142,13 +143,13 @@ namespace Prateek.Manager
         //---------------------------------------------------------------------
         public class Frame
         {
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public interface IData
             {
                 IRecorderBase Owner { get; }
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public List<IData> datas = new List<IData>();
         }
         #endregion Declarations
@@ -357,7 +358,7 @@ namespace Prateek.Manager
         #endregion Instance Methods
     }
 
-    //---------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     public static class FrameRecorder
     {
         //---------------------------------------------------------------------

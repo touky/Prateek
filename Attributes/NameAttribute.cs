@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
+//  Header last update date: 30/03/2019
 //
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -53,6 +53,7 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+using Prateek.Manager;
 
 #region Using static
 using static Prateek.ShaderTo.CSharp;
@@ -66,6 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
+using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -83,13 +85,13 @@ namespace Prateek.Attributes
     //-------------------------------------------------------------------------
     public abstract class BaseNameAttribute : Attribute
     {
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         protected string value;
 
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public string Value { get { return value; } }
 
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         protected BaseNameAttribute(string new_value)
         {
             value = new_value;

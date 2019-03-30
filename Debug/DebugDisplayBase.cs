@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
+//  Header last update date: 30/03/2019
 //
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -67,6 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
+using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -93,7 +94,7 @@ namespace Prateek.Debug
         public override void OnRegister() { Registry.Instance.Register(typeof(DebugDisplayManager), this); }
         public override void OnUnregister() { Registry.Instance.Unregister(typeof(DebugDisplayManager)); }
 
-        //-- Object Lifetime Messages
+        //-- Object Lifetime Messages------------------------------------------
         public override void OnInitialize() { }
         public override void OnStart() { }
         public override void OnUpdate(Registry.TickEvent tickEvent, float seconds) { }
@@ -102,13 +103,13 @@ namespace Prateek.Debug
         public override void OnFixedUpdate(Registry.TickEvent tickEvent, float seconds) { }
         public override void OnDispose() { }
 
-        //-- Application Messages
+        //-- Application Messages----------------------------------------------
         public override void OnApplicationFocus(bool focusStatus) { }
         public override void OnApplicationPause(bool pauseStatus) { }
         public override void OnApplicationQuit() { }
 
 #if UNITY_EDITOR
-        //-- Ui Messages
+        //-- Ui Messages-------------------------------------------------------
         public override void OnGUI() { }
 #endif //UNITY_EDITOR
 
@@ -127,15 +128,15 @@ namespace Prateek.Debug
     //-------------------------------------------------------------------------
     public abstract class DebugDisplayManager : FlagManager, FrameRecorderManager.IRecorderBase
     {
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Declarations
         public struct DebugRecording : FrameRecorderManager.Frame.IData
         {
-            //-------------------------------------------------------------------------
+            //-----------------------------------------------------------------
             private DebugDisplayManager owner;
             private List<Draw.PrimitiveSetup> primitives;
 
-            //-------------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public FrameRecorderManager.IRecorderBase Owner { get { return owner; } }
             public List<Draw.PrimitiveSetup> Primitives
             {
@@ -147,7 +148,7 @@ namespace Prateek.Debug
                 }
             }
 
-            //-------------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public DebugRecording(DebugDisplayManager owner)
             {
                 this.owner = owner;
@@ -156,7 +157,7 @@ namespace Prateek.Debug
         }
         #endregion Declarations
 
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Fields
         private DebugRecording recordings;
         private DebugLineDisplayer lineDisplay;
@@ -194,11 +195,11 @@ namespace Prateek.Debug
             base.OnUnregister();
         }
 
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region FrameRecorder.IRecorderBase
         public void BeginFrame() { }
 
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public FrameRecorderManager.Frame.IData EndFrame()
         {
             var old = recordings;
@@ -206,7 +207,7 @@ namespace Prateek.Debug
             return old;
         }
 
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         public void SetRecordingStatus(bool enable) { }
         public void PlayFrames(List<FrameRecorderManager.Frame.IData> datas) { }
         public void PlayFrame(FrameRecorderManager.Frame.IData data)
@@ -219,7 +220,7 @@ namespace Prateek.Debug
         }
         #endregion FrameRecorder.IRecorderBase
 
-        //-------------------------------------------------------------------------
+        //---------------------------------------------------------------------
         #region Recording datas
         public static void Add(Draw.PrimitiveSetup primitive)
         {

@@ -86,8 +86,8 @@ namespace Prateek.Helpers
     public static class TextMessage
     {
         //---------------------------------------------------------------------
-        public static string INVALID_FORMAT = "/!\\ INVALID FORMAT /!\\";
-        public static string GENERIC_LOAD_ERROR = "/!\\ GENERIC LOAD ERROR /!\\";
+        public static string INVALID_FORMAT = @"/!\ INVALID FORMAT /!\";
+        public static string GENERIC_LOAD_ERROR = @"/!\ GENERIC LOAD ERROR /!\";
     }
 
     //-------------------------------------------------------------------------

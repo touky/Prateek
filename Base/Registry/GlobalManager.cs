@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
+//  Header last update date: 30/03/2019
 //
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -53,6 +53,7 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+using Prateek.Manager;
 
 #region Using static
 using static Prateek.ShaderTo.CSharp;
@@ -66,6 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
+using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -98,13 +100,13 @@ namespace Prateek.Base
             }
         }
 
-        //--
+        //---------------------------------------------------------------------
         public class Builder<REAL, FAKE> : BuilderBase where REAL : class where FAKE : class
         {
             public Builder() : base(typeof(REAL), typeof(FAKE)) { }
         }
 
-        //--
+        //---------------------------------------------------------------------
         [SerializeField]
         protected int priority;
 
@@ -115,7 +117,7 @@ namespace Prateek.Base
         //---------------------------------------------------------------------
         public virtual void OnCreate() { }
 
-        //-- Object Lifetime Messages
+        //-- Object Lifetime Messages------------------------------------------
         public virtual void OnInitialize() { }
         public virtual void OnStart() { }
         public virtual void OnUpdate(Registry.TickEvent tickEvent, float seconds) { }
@@ -126,12 +128,12 @@ namespace Prateek.Base
         public virtual void OnRegister() { }
         public virtual void OnUnregister() { }
 
-        //-- Application Messages
+        //-- Application Messages----------------------------------------------
         public virtual void OnApplicationFocus(bool focusStatus) { }
         public virtual void OnApplicationPause(bool pauseStatus) { }
         public virtual void OnApplicationQuit() { }
 
-        //-- Ui Messages
+        //-- Ui Messages-------------------------------------------------------
         public virtual void OnGUI() { }
     }
 }

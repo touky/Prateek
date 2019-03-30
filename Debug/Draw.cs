@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 24/03/2019
+//  Header last update date: 30/03/2019
 //
-//  Copyright © 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -53,6 +53,7 @@ using Prateek.Base;
 using Prateek.Extensions;
 using Prateek.Helpers;
 using Prateek.Attributes;
+using Prateek.Manager;
 
 #region Using static
 using static Prateek.ShaderTo.CSharp;
@@ -66,6 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUGS
 using Prateek.Debug;
+using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -98,17 +100,17 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         public class Scope : GUI.Scope
         {
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             #region Fields
             private Setup setup;
             #endregion Fields
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             #region Properties
             public Setup Setup { get { return setup; } }
             #endregion Properties
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             #region Scope
             protected Scope(Setup setup) : base()
             {
@@ -116,7 +118,7 @@ namespace Prateek.Debug
                 Add(this);
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             protected override void CloseScope()
             {
                 Remove(this);
@@ -127,14 +129,14 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         public partial struct Setup
         {
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public enum InitMode
             {
                 Reset,
                 UseLast,
             }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             private Space space;
             private Matrix4x4 matrix;
             private Color color;
@@ -142,7 +144,7 @@ namespace Prateek.Debug
             private bool depthTest;
             private int precision;
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public Space Space { get { return space; } set { space = value; } }
             public Matrix4x4 Matrix { get { return matrix; } set { matrix = value; } }
             public Color Color { get { return color; } set { color = value; } }
@@ -150,7 +152,7 @@ namespace Prateek.Debug
             public bool DepthTest { get { return depthTest; } set { depthTest = value; } }
             public int Precision { get { return precision; } set { precision = value; } }
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public Setup(InitMode initMode)
             {
                 switch(initMode)
@@ -195,7 +197,7 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         public struct PrimitiveSetup
         {
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public PrimitiveType type;
             public Setup setup;
             public Space endSpace;
@@ -204,7 +206,7 @@ namespace Prateek.Debug
             public Vector4 size;
             public Vector2 range;
 
-            //---------------------------------------------------------------------
+            //-----------------------------------------------------------------
             public PrimitiveSetup(PrimitiveType type, Setup setup)
             {
                 this.type = type;
@@ -541,7 +543,7 @@ namespace Prateek.Debug
 
         //        }
 
-        //        //---------------------------------------------------------------------
+        //        //-----------------------------------------------------------
         //#if UNITY_EDITOR
         //        private static void ImmediateLine(ref LineSetup data)
         //        {
