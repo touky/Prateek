@@ -50,7 +50,7 @@ using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
-#if PRATEEK_DEBUGS
+#if PRATEEK_DEBUG
 using Prateek.Debug;
 using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG

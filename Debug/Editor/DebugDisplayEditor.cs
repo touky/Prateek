@@ -65,7 +65,7 @@ using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
-#if PRATEEK_DEBUGS
+#if PRATEEK_DEBUG
 using Prateek.Debug;
 using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
@@ -83,7 +83,7 @@ using static Prateek.Debug.Draw.Setup.QuickCTor;
 namespace Prateek.Editors
 {
     //-------------------------------------------------------------------------
-#if PRATEEK_DEBUGS
+#if PRATEEK_DEBUG
     public class DrawEditorBase : EditorWindow
     {
         //---------------------------------------------------------------------
@@ -424,5 +424,5 @@ namespace Prateek.Editors
             */
         }
     }
-#endif //PRATEEK_DEBUGS
+#endif //PRATEEK_DEBUG
 }

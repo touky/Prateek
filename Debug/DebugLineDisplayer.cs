@@ -65,7 +65,7 @@ using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
 #endregion Editor
 
-#if PRATEEK_DEBUGS
+#if PRATEEK_DEBUG
 using Prateek.Debug;
 using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
@@ -120,7 +120,7 @@ namespace Prateek.Debug
                     this.mesh.name = "DebugLineMesh";
                     this.filter.sharedMesh = this.mesh;
                     this.borderThickness = borderThickness + 1;
-
+                    
                     vertices = null;
                     triangles = null;
                     RefreshMesh(capacity, borderThickness);
