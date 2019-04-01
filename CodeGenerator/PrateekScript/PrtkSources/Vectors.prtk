@@ -60,7 +60,6 @@ PRATEEK_FILE_INFO(Vectors, cs)
 
         PRATEEK_DEFAULT(float, 0)
 
-		//PRATEEK_FUNC(lerp)    { PRATEEK_DATA { @Mathf.Lerp(#VARS_0#, #VARS_1#, alpha)$ } }
 		PRATEEK_FUNC(clamp)    { @Mathf.Clamp(#VARS_0#, #VARS_1#, #VARS_2#)$ }
 		PRATEEK_FUNC(saturate) { @Mathf.Clamp01(#VARS_0#)$ }
 		PRATEEK_FUNC(random)   { @UnityEngine.Random.Range(#VARS_0#, #VARS_1#)$ }

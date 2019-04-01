@@ -123,7 +123,7 @@ namespace Prateek.CodeGeneration
                 var keyRule = new Utils.KeyRule(keyword, activeScope);
                 if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
-                    { keyRule.args = new Utils.KeyRule.ArgRange(1, 2); keyRule.needOpenScope = true; keyRule.needScopeData = true; }
+                    { keyRule.args = 1; keyRule.needOpenScope = true; keyRule.needScopeData = true; }
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace Prateek.CodeGeneration
             {
                 if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
-                    activeData.funcInfos.Add(new CodeFile.FuncInfos() { funcName = args[0] });
+                    activeData.funcInfos.Add(new CodeFile.FuncInfos() { funcName = args[0], data = data });
                 }
                 else
                 {

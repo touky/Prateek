@@ -369,13 +369,14 @@ namespace Prateek.CodeGeneration
                 {
                     { keyRule.args = new Utils.KeyRule.ArgRange(1, -1); }
                 }
+
                 else if (keyRule.Match(Tag.Macro.DefaultInfo, codeBlock))
                 {
                     { keyRule.args = 2; }
                 }
                 else if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
-                    { keyRule.needOpenScope = true; }
+                    { keyRule.needOpenScope = true; keyRule.needScopeData = true; }
                 }
                 else if (keyRule.Match(Tag.Macro.CodePartPrefix, codeBlock)
                       || keyRule.Match(Tag.Macro.CodePartMain, codeBlock)

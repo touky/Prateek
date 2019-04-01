@@ -96,6 +96,16 @@ namespace Prateek.ShaderTo
         public static float dot(Vector2 v0, Vector2 v1) { return Vector2.Dot(v0, v1); }
         public static float dot(Vector3 v0, Vector3 v1) { return Vector3.Dot(v0, v1); }
         public static float dot(Vector4 v0, Vector4 v1) { return Vector4.Dot(v0, v1); }
+        public static float lerp(float v0, float v1, float alpha) { return Mathf.Lerp(v0, v1, alpha); }
+        public static Vector2 lerp(Vector2 v0, Vector2 v1, float alpha) { return Vector2.Lerp(v0, v1, alpha); }
+        public static Vector3 lerp(Vector3 v0, Vector3 v1, float alpha) { return Vector3.Lerp(v0, v1, alpha); }
+        public static Vector4 lerp(Vector4 v0, Vector4 v1, float alpha) { return Vector4.Lerp(v0, v1, alpha); }
+        public static Color lerp(Color v0, Color v1, float alpha) { return Color.Lerp(v0, v1, alpha); }
+        public static float mix(float v0, float v1, float alpha) { return Mathf.Lerp(v0, v1, alpha); }
+        public static Vector2 mix(Vector2 v0, Vector2 v1, float alpha) { return Vector2.Lerp(v0, v1, alpha); }
+        public static Vector3 mix(Vector3 v0, Vector3 v1, float alpha) { return Vector3.Lerp(v0, v1, alpha); }
+        public static Vector4 mix(Vector4 v0, Vector4 v1, float alpha) { return Vector4.Lerp(v0, v1, alpha); }
+        public static Color mix(Color v0, Color v1, float alpha) { return Color.Lerp(v0, v1, alpha); }
         public static Vector3 cross(Vector3 v0, Vector3 v1) { return Vector3.Cross(v0, v1); }
         public static Vector2Int Int(this Vector2 v) { return vec2i((int)v.x, (int)v.y); }
         public static Vector3Int Int(this Vector3 v) { return vec3i((int)v.x, (int)v.y, (int)v.z); }
