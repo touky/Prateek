@@ -107,7 +107,7 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public struct FuncInfos
             {
-                public string name;
+                public string funcName;
                 public string data;
             }
 
@@ -129,6 +129,43 @@ namespace Prateek.CodeGeneration
                 public string codePostfix;
 
                 public string codeGenerated;
+
+                //-----------------------------------------------------------------
+                public bool SetClassNames(List<string> args)
+                {
+                    if (classInfos.Count == 0)
+                        return false;
+                    var infos = classInfos.Last();
+                    if (infos.names == null)
+                        infos.names = new List<string>();
+                    infos.names.AddRange(args);
+                    classInfos[classInfos.Count - 1] = infos;
+                    return true;
+                }
+
+                //-----------------------------------------------------------------
+                public bool SetClassVars(List<string> args)
+                {
+                    if (classInfos.Count == 0)
+                        return false;
+                    var infos = classInfos.Last();
+                    if (infos.variables == null)
+                        infos.variables = new List<string>();
+                    infos.variables.AddRange(args);
+                    classInfos[classInfos.Count - 1] = infos;
+                    return true;
+                }
+
+                //-----------------------------------------------------------------
+                public bool SetFuncData(string data)
+                {
+                    if (funcInfos.Count == 0)
+                        return false;
+                    var infos = funcInfos.Last();
+                    infos.data = data;
+                    funcInfos[funcInfos.Count - 1] = infos;
+                    return true;
+                }
             }
 
             //-----------------------------------------------------------------
@@ -187,7 +224,6 @@ namespace Prateek.CodeGeneration
                 var genPrfx = (Utils.SwapInfo)Tag.Macro.codeGenPrfx.Keyword();
                 var genData = (Utils.SwapInfo)Tag.Macro.codeGenData.Keyword();
                 var genTabs = (Utils.SwapInfo)Tag.Macro.codeGenTabs.Keyword();
-
 
                 var i = genCode.IndexOf(genData.Original);
                 if (i < 0)

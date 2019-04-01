@@ -7,7 +7,7 @@
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Editor
+namespace Prateek.Editors
 {
     //-------------------------------------------------------------------------
     public partial class #SCRIPTNAME# : EditorWindow
@@ -30,15 +30,12 @@ namespace Editor
 
         //---------------------------------------------------------------------
         #region Unity Defaults
-        [MenuItem("Window/#SCRIPTNAME#")]
+        [MenuItem("Prateek/Window/#SCRIPTNAME#")]
         static void CreateWindow()
         {
             var window = (#SCRIPTNAME#)EditorWindow.GetWindow(typeof(#SCRIPTNAME#));
             window.Show();
         }
-
-        //---------------------------------------------------------------------
-        private void Awake() { }
 
         //---------------------------------------------------------------------
         private void OnDestroy() { }
@@ -67,10 +64,23 @@ namespace Editor
         private void OnInspectorUpdate() { }
 
         //---------------------------------------------------------------------
-        private void Update() { }
+        private void TryInit()
+        {
+            //Consider that your fields can de-init themselves on script rebuild or random reload
+			// So this method helps fixing that
+        }
 
         //---------------------------------------------------------------------
-        private void OnGUI() { }
+        private void Update()
+		{
+		    TryInit();
+		}
+
+        //---------------------------------------------------------------------
+        private void OnGUI()
+		{
+		    TryInit();
+		}
         #endregion Unity Defaults
 
         //---------------------------------------------------------------------

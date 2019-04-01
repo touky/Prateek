@@ -84,7 +84,7 @@ using Prateek.IO;
 using Prateek.CodeGeneration;
 #endregion File namespaces
 
-namespace Prateek.CodeGeneration.Editor
+namespace Prateek.CodeGeneration.Editors
 {
     //-------------------------------------------------------------------------
     public static class Tools

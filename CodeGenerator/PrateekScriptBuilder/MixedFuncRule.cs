@@ -120,26 +120,24 @@ namespace Prateek.CodeGeneration
             #region CodeRule override
             public override Utils.KeyRule GetKeyRule(string keyword, string activeScope)
             {
-                if (keyword == Tag.Macro.Func)
+                var keyRule = new Utils.KeyRule(keyword, activeScope);
+                if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
-                    return new Utils.KeyRule(keyword, activeScope == CodeBlock) { args = 1, needOpenScope = true, needScopeData = true };
+                    { keyRule.args = new Utils.KeyRule.ArgRange(1, 2); keyRule.needOpenScope = true; keyRule.needScopeData = true; }
                 }
                 else
                 {
                     return base.GetKeyRule(keyword, activeScope);
                 }
+                return keyRule;
             }
 
             //-----------------------------------------------------------------
             protected override bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
             {
-                if (keyRule.key == Tag.Macro.Func)
+                if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
-                    activeData.funcInfos.Add(new CodeFile.FuncInfos()
-                    {
-                        name = args[0],
-                        data = data
-                    });
+                    activeData.funcInfos.Add(new CodeFile.FuncInfos() { funcName = args[0] });
                 }
                 else
                 {
@@ -161,20 +159,14 @@ namespace Prateek.CodeGeneration
                     for (int p = 0; p < (isDefault ? 1 : 2); p++)
                     {
                         var funcInfo = data.funcInfos[d];
-                        var variant = new FuncVariant(funcInfo.name, 2);
-                        var argCount = 0;
+                        var variant = new FuncVariant(funcInfo.funcName, 2);
 
-                        for (int v = 0; v < Vars.Count; v++)
-                        {
-                            if (funcInfo.data.Contains(Vars[v].Original))
-                                argCount++;
-                        }
-
-                        if (p == 1 && argCount == 1)
+                        var varsCount = Vars.GetCount(funcInfo.data);
+                        if (p == 1 && varsCount == 1)
                             continue;
 
                         var vars = funcInfo.data;
-                        for (int a = 0; a < argCount; a++)
+                        for (int a = 0; a < varsCount; a++)
                         {
                             if (isDefault)
                             {
@@ -198,7 +190,7 @@ namespace Prateek.CodeGeneration
                             for (int v = 0; v < infoSrc.VarCount; v++)
                             {
                                 var varsA = vars;
-                                for (int a = 0; a < argCount; a++)
+                                for (int a = 0; a < varsCount; a++)
                                 {
                                     varsA = (p == 1 && a != 0)
                                              ? (Vars[a] + string.Format(Tag.Code.varsN, a)).Apply(varsA)

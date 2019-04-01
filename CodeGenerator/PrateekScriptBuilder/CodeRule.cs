@@ -352,42 +352,48 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public virtual Utils.KeyRule GetKeyRule(string keyword, string activeScope)
             {
-                if (keyword == CodeBlock)
+                var keyRule = new Utils.KeyRule(keyword, activeScope);
+                if (keyRule.Match(CodeBlock, Tag.Macro.FileInfo))
                 {
-                    return new Utils.KeyRule(keyword, activeScope == Tag.Macro.FileInfo) { args = new Utils.KeyRule.ArgRange(2, -1), needOpenScope = true };
+                    { keyRule.args = new Utils.KeyRule.ArgRange(2, -1); keyRule.needOpenScope = true; }
                 }
-                else if (keyword == Tag.Macro.ClassInfo)
+                else if (keyRule.Match(Tag.Macro.ClassInfo, codeBlock))
                 {
-                    return new Utils.KeyRule(keyword, activeScope == codeBlock) { args = 1, needOpenScope = true };
+                    { keyRule.args = 1; keyRule.needOpenScope = true; }
                 }
-                else if (keyword == Tag.Macro.ClassNames)
+                else if (keyRule.Match(Tag.Macro.ClassNames, Tag.Macro.ClassInfo))
                 {
-                    return new Utils.KeyRule(keyword, activeScope == Tag.Macro.ClassInfo) { args = new Utils.KeyRule.ArgRange(1, -1) };
+                    { keyRule.args = new Utils.KeyRule.ArgRange(1, -1); }
                 }
-                else if (keyword == Tag.Macro.ClassVars)
+                else if (keyRule.Match(Tag.Macro.ClassVars, Tag.Macro.ClassInfo))
                 {
-                    return new Utils.KeyRule(keyword, activeScope == Tag.Macro.ClassInfo) { args = new Utils.KeyRule.ArgRange(1, -1) };
+                    { keyRule.args = new Utils.KeyRule.ArgRange(1, -1); }
                 }
-                else if (keyword == Tag.Macro.DefaultInfo)
+                else if (keyRule.Match(Tag.Macro.DefaultInfo, codeBlock))
                 {
-                    return new Utils.KeyRule(keyword, activeScope == codeBlock) { args = 2 };
+                    { keyRule.args = 2; }
                 }
-                else if (keyword == Tag.Macro.Func)
+                else if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
-                    return new Utils.KeyRule(keyword, activeScope == CodeBlock) { needOpenScope = true, needScopeData = true };
+                    { keyRule.needOpenScope = true; }
                 }
-                else if (keyword == Tag.Macro.CodePartPrefix || keyword == Tag.Macro.CodePartMain || keyword == Tag.Macro.CodePartSuffix)
+                else if (keyRule.Match(Tag.Macro.CodePartPrefix, codeBlock)
+                      || keyRule.Match(Tag.Macro.CodePartMain, codeBlock)
+                      || keyRule.Match(Tag.Macro.CodePartSuffix, codeBlock))
                 {
-                    return new Utils.KeyRule(keyword, activeScope == codeBlock) { args = 0, needOpenScope = true, needScopeData = true };
+                    { keyRule.args = 0; keyRule.needOpenScope = true; keyRule.needScopeData = true; }
                 }
-
-                return new Utils.KeyRule() { usage = Utils.KeyRule.Usage.Ignore };
+                else
+                {
+                    return new Utils.KeyRule() { usage = Utils.KeyRule.Usage.Ignore };
+                }
+                return keyRule;
             }
 
             //-----------------------------------------------------------------
             protected virtual bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
             {
-                if (keyRule.key == CodeBlock)
+                if (keyRule.Match(CodeBlock, Tag.Macro.FileInfo))
                 {
                     activeData.blockNamespace = args[0];
                     activeData.blockClassName = args[1];
@@ -396,48 +402,39 @@ namespace Prateek.CodeGeneration
                         activeData.blockClassPrefix.AddRange(args.GetRange(2, args.Count - 2));
                     }
                 }
-                else if (keyRule.key == Tag.Macro.ClassInfo)
+                else if (keyRule.Match(Tag.Macro.ClassInfo, codeBlock))
                 {
                     activeData.classInfos.Add(new CodeFile.ClassInfos() { className = args[0] });
                 }
-                else if (keyRule.key == Tag.Macro.ClassNames)
+                else if (keyRule.Match(Tag.Macro.ClassNames, Tag.Macro.ClassInfo))
                 {
-                    if (activeData.classInfos.Count == 0)
+                    if (!activeData.SetClassNames(args))
                         return false;
-                    var infos = activeData.classInfos.Last();
-                    if (infos.names == null)
-                        infos.names = new List<string>();
-                    infos.names.AddRange(args);
-                    activeData.classInfos[activeData.classInfos.Count - 1] = infos;
                 }
-                else if (keyRule.key == Tag.Macro.ClassVars)
+                else if (keyRule.Match(Tag.Macro.ClassVars, Tag.Macro.ClassInfo))
                 {
-                    if (activeData.classInfos.Count == 0)
+                    if (!activeData.SetClassVars(args))
                         return false;
-                    var infos = activeData.classInfos.Last();
-                    if (infos.variables == null)
-                        infos.variables = new List<string>();
-                    infos.variables.AddRange(args);
-                    activeData.classInfos[activeData.classInfos.Count - 1] = infos;
                 }
-                else if (keyRule.key == Tag.Macro.DefaultInfo)
+                else if (keyRule.Match(Tag.Macro.DefaultInfo, codeBlock))
                 {
                     activeData.classDefaultType = args[0];
                     activeData.classDefaultValue = args[1];
                 }
-                else if (keyRule.key == Tag.Macro.Func)
+                else if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
-                    activeData.funcInfos.Add(new CodeFile.FuncInfos() { data = data });
+                    activeData.funcInfos.Add(new CodeFile.FuncInfos());
+                    activeData.SetFuncData(data);
                 }
-                else if(keyRule.key == Tag.Macro.CodePartPrefix)
+                else if (keyRule.Match(Tag.Macro.CodePartPrefix, codeBlock))
                 {
                     activeData.codePrefix = data;
                 }
-                else if (keyRule.key == Tag.Macro.CodePartMain)
+                else if (keyRule.Match(Tag.Macro.CodePartMain, codeBlock))
                 {
                     activeData.codeMain = data;
                 }
-                else if (keyRule.key == Tag.Macro.CodePartSuffix)
+                else if (keyRule.Match(Tag.Macro.CodePartSuffix, codeBlock))
                 {
                     activeData.codePostfix = data;
                 }

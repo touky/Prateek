@@ -297,6 +297,9 @@ namespace Prateek.Debug
             private BufferContainer colors;
 
             //-----------------------------------------------------------------
+            public bool IsDirty { get { return index > 0; } }
+
+            //-----------------------------------------------------------------
             public LineData(int capacity, MeshRenderer renderer, int borderThickness)
             {
                 index = 0;
@@ -434,6 +437,15 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
+#if UNITY_EDITOR
+        private void OnRenderObject()
+        {
+            if (EditorApplication.isPaused)
+                UpdateRendering();
+        }
+#endif //UNITY_EDITOR
+
+        //---------------------------------------------------------------------
         private void OnDisable()
         {
             DisableRendering();
@@ -462,6 +474,9 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         private void UpdateRendering()
         {
+            if (!lineData.IsDirty)
+                return;
+
             lineData.RefreshBuffers(lineMaterial, lineThickness, borderThickness);
             lineData.Clear();
         }

@@ -291,7 +291,7 @@ namespace Prateek.CodeGeneration
                 if (scope != string.Empty)
                     return -1;
 
-                var keyRule = new Utils.KeyRule(keyword, true) { args = 2, needOpenScope = true };
+                var keyRule = new Utils.KeyRule(keyword, scope) { args = 2, needOpenScope = true };
                 if (!analyzer.FindArgs(args, keyRule))
                     return -1;
 

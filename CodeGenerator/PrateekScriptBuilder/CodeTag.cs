@@ -170,6 +170,7 @@ namespace Prateek.CodeGeneration
                     CLASS_INFO, //PRATEEK_CODEGEN_CLASS_INFO(*****)
                     DEFAULT,    //PRATEEK_CODEGEN_DEFAULT(*****)
                     FUNC,       //PRATEEK_CODEGEN_FUNC(*****) { }
+                    DATA,       //PRATEEK_CODEGEN_DATA { }
 
                     MAX
                 }
@@ -215,6 +216,7 @@ namespace Prateek.CodeGeneration
                 public static string Func           { get { return data[6]; } }
                 public static string ClassNames     { get { return data[7]; } }
                 public static string ClassVars      { get { return data[8]; } }
+                public static string Data           { get { return data[9]; } }
 
                 //-------------------------------------------------------------
                 public static NumberedVars Names { get { return names; } }
@@ -237,6 +239,7 @@ namespace Prateek.CodeGeneration
                     data.Add(string.Format("{0}_{1}", prefix, To(FuncName.FUNC)));
                     data.Add(string.Format("{0}_{1}", prefix, To(VarName.NAMES)));
                     data.Add(string.Format("{0}_{1}", prefix, To(VarName.VARS)));
+                    data.Add(string.Format("{0}_{1}", prefix, To(FuncName.DATA)));
 
                     srcClass = ClassName.SRC_CLASS.ToString().Keyword();
                     dstClass = ClassName.DST_CLASS.ToString().Keyword();

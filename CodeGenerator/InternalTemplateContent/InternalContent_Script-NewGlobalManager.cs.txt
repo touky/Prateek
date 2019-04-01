@@ -61,7 +61,7 @@ namespace Prateek.Manager
         #endregion Properties
 
         //---------------------------------------------------------------------
-        #region GlobalManager integration
+        #region IGlobalManager integration
         public static BuilderBase GetBuilder()
         {
             return new Builder<#SCRIPTNAME#, Null#SCRIPTNAME#>();
@@ -82,6 +82,6 @@ namespace Prateek.Manager
 
             base.OnUnregister();
         }
-        #endregion GlobalManager integration
+        #endregion IGlobalManager integration
     }
 }

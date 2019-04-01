@@ -184,19 +184,27 @@ namespace Prateek.CodeGeneration
 
                 //-------------------------------------------------------------
                 public string key;
+                public string scope;
                 public Usage usage;
                 public ArgRange args;
                 public bool needOpenScope;
                 public bool needScopeData;
 
                 //-------------------------------------------------------------
-                public KeyRule(string key, bool doesMatch)
+                public KeyRule(string key, string scope)
                 {
                     this.key = key;
-                    usage = doesMatch ? Usage.Match : Usage.Forbidden;
+                    this.scope = scope;
+                    usage = Usage.Match;
                     args = new ArgRange(0);
                     needOpenScope = false;
                     needScopeData = false;
+                }
+
+                //-------------------------------------------------------------
+                public bool Match(string key, string scope)
+                {
+                    return key == this.key && scope == this.scope;
                 }
             }
         }

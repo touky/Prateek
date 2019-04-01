@@ -95,8 +95,44 @@ namespace Prateek.Extensions
         //---------------------------------------------------------------------
         public static Rect Inflate(this Rect rect, Vector2 value)
         {
-            rect.position += value;
-            rect.size -= value;
+            rect.position -= value * sign(rect.size);
+            rect.size += value * sign(rect.size) * 2;
+            return rect;
+        }
+
+        //---------------------------------------------------------------------
+        public static Rect TruncateX(this Rect rect, float size)
+        {
+            if (size > 0)
+            {
+                rect.x += size;
+            }
+            rect.width -= abs(size);
+            return rect;
+        }
+
+        //---------------------------------------------------------------------
+        public static Rect TruncateY(this Rect rect, float size)
+        {
+            if (size > 0)
+            {
+                rect.y += size;
+            }
+            rect.height -= abs(size);
+            return rect;
+        }
+
+        //---------------------------------------------------------------------
+        public static Rect NextLine(this Rect rect)
+        {
+            rect.y += rect.height;
+            return rect;
+        }
+
+        //---------------------------------------------------------------------
+        public static Rect NextColumn(this Rect rect)
+        {
+            rect.x += rect.width;
             return rect;
         }
         #endregion Declarations

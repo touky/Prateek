@@ -112,16 +112,6 @@ namespace Prateek.Debug
         //-- Ui Messages-------------------------------------------------------
         public override void OnGUI() { }
 #endif //UNITY_EDITOR
-
-        //---------------------------------------------------------------------
-        public override bool HasParent<T>(T child) { return false; }
-        public override int CountParents<T>(T child) { return 0; }
-        public override void SetParent<T>(T child) { }
-        public override void SetParent<T>(T child, T parent) { }
-        public override bool IsActive<T>(T value) { return false; }
-        public override bool IsActiveAndSelected<T>(T value, MonoBehaviour behaviour) { return false; }
-        public override void SetActive<T>(T value, bool active) { }
-        public override void SetActive(bool active) { }
     }
     #endregion NullDebugDisplay
 
@@ -164,6 +154,7 @@ namespace Prateek.Debug
         #endregion Fields
 
         //---------------------------------------------------------------------
+        #region IGlobalManager integration
         public static BuilderBase GetBuilder()
         {
             return new Builder<DebugDisplayManager, NullDebugDisplay>();
@@ -194,6 +185,7 @@ namespace Prateek.Debug
 
             base.OnUnregister();
         }
+        #endregion IGlobalManager integration
 
         //---------------------------------------------------------------------
         #region FrameRecorder.IRecorderBase

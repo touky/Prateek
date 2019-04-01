@@ -83,26 +83,56 @@ using static Prateek.Debug.Draw.Setup.QuickCTor;
 namespace Prateek.Helpers
 {
     //-------------------------------------------------------------------------
-    public abstract class SharedStorage
+    public abstract class SharedStorage : ISerializationCallbackReceiver
     {
-        private Dictionary<string, object> m_storage = new Dictionary<string, object>();
+        [SerializeField]
+        public List<string> _keys = new List<string>();
+        [SerializeField]
+        public List<object> _values = new List<object>();
+
+        private Dictionary<string, object> storage = new Dictionary<string, object>();
 
         //---------------------------------------------------------------------
         protected object GetInstance(string key)
         {
             object instance = null;
-            if (!m_storage.TryGetValue(key, out instance))
+            if (storage.TryGetValue(key, out instance))
             {
-                if ((instance = CreateInstance(key)) != null)
-                {
-                    m_storage.Add(key, instance);
-                }
+                if (instance != null)
+                    return instance;
+            }
+
+            if ((instance = CreateInstance(key)) != null)
+            {
+                storage.Add(key, instance);
             }
             return instance;
         }
 
         //---------------------------------------------------------------------
         protected abstract object CreateInstance(string key);
+
+        //---------------------------------------------------------------------
+        public void OnBeforeSerialize()
+        {
+            _keys.Clear();
+            _values.Clear();
+
+            foreach (var kvp in storage)
+            {
+                _keys.Add(kvp.Key);
+                _values.Add(kvp.Value);
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public void OnAfterDeserialize()
+        {
+            storage = new Dictionary<string, object>();
+
+            for (int i = 0; i != Math.Min(_keys.Count, _values.Count); i++)
+                storage.Add(_keys[i], _values[i]);
+        }
     }
 }
 

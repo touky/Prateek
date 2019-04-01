@@ -86,26 +86,150 @@ namespace Prateek.Debug
     //-------------------------------------------------------------------------
     public abstract class FlagManager : GlobalManager
     {
-        private Type enumType = null;
+        //---------------------------------------------------------------------
+        #region Declarations
+        public struct FlagData
+        {
+            //-----------------------------------------------------------------
+            public struct HierarchyInfos
+            {
+                public ulong parent;
+                public List<ulong> children;
+            }
+
+            //-----------------------------------------------------------------
+            public Type maskType;
+            public List<HierarchyInfos> hierarchy;
+
+            //-----------------------------------------------------------------
+            public void Add(ulong parent, params ulong[] children)
+            {
+                if (hierarchy == null)
+                    hierarchy = new List<HierarchyInfos>();
+
+                int i = -1;
+                for (int h = 0; h < hierarchy.Count; h++)
+                {
+                    if (hierarchy[h].parent == parent)
+                    {
+                        i = h;
+                        break;
+                    }
+                }
+
+                if (i < 0)
+                {
+                    i = hierarchy.Count;
+                    hierarchy.Add(new HierarchyInfos() { parent = parent, children = new List<ulong>() } );
+                }
+
+                if (children == null)
+                    return;
+
+                var info = hierarchy[i];
+                {
+                    info.children.AddRange(children);
+                }
+                hierarchy[i] = info;
+
+                for (int c = 0; c < children.Length; c++)
+                {
+                    Add(children[c], null);
+                }
+            }
+
+            //-----------------------------------------------------------------
+            public bool GetParent(ulong value, ref ulong parent)
+            {
+                for (int h = 0; h < hierarchy.Count; h++)
+                {
+                    for (int c = 0; c < hierarchy[h].children.Count; c++)
+                    {
+                        if (hierarchy[h].children[c] == value)
+                        {
+                            parent = hierarchy[h].parent;
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            //-----------------------------------------------------------------
+            public int CountParent(ulong value)
+            {
+                var i = -1;
+                for (int h = 0; h < hierarchy.Count; h++)
+                {
+                    for (int c = 0; c < hierarchy[h].children.Count; c++)
+                    {
+                        if (hierarchy[h].children[c] == value)
+                        {
+                            return CountParent(hierarchy[h].parent) + 1;
+                        }
+                    }
+                }
+                return 0;
+            }
+        }
+        #endregion Declarations
+
+        //---------------------------------------------------------------------
+        #region Fields
+        protected static FlagData flagDatas;
+
         private Editors.Prefs.Mask256s mask;
         private bool deactivateAll = false;
-        private int[] values = null;
+        private ulong[] values = null;
         private string[] names = null;
         private int[] parents = null;
+        #endregion Fields
 
         //---------------------------------------------------------------------
-        protected virtual Type GetFlagType()
+        #region Properties
+        public static FlagData FlagDatas { get { return flagDatas; } }
+        #endregion Properties
+
+        //---------------------------------------------------------------------
+        #region FrameRecorder.IRecorderBase
+        public override void OnInitialize()
         {
-            return null;
+            base.OnInitialize();
+
+            var type = flagDatas.maskType;
+            if (type == null || !type.IsEnum)
+            {
+                Registry.Instance.Unregister(GetType());
+                return;
+            }
+
+            var values = (ulong[])Enum.GetValues(type);
+            var default_mask = new Helpers.Mask256();
+            if (values.Length < Helpers.Mask256.MAX_SIZE)
+            {
+                Registry.Instance.Unregister(GetType());
+                return;
+            }
+
+            this.values = values;
+            names = Enum.GetNames(type);
+            mask = Editors.Prefs.Get(String.Format("{0}_{1}", GetType().Name, type.Name), default_mask);
+            parents = new int[values.Length];
+            for (int i = 0; i < parents.Length; i++)
+            {
+                parents[i] = -1;
+            }
         }
+        #endregion FrameRecorder.IRecorderBase
 
         //---------------------------------------------------------------------
+        #region Flag manageement
         protected bool IsWrongType<T>() where T : struct, IConvertible
         {
-            if (enumType == null)
+            if (flagDatas.maskType == null)
                 return true;
 
-            if (typeof(T) != enumType && typeof(T) != typeof(int))
+            if (typeof(T) != flagDatas.maskType && typeof(T) != typeof(int))
                 return true;
 
             return false;
@@ -131,38 +255,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public override void OnInitialize()
-        {
-            base.OnInitialize();
-
-            var type = GetFlagType();
-            if (type == null ||!type.IsEnum)
-            {
-                Registry.Instance.Unregister(GetType());
-                return;
-            }
-
-            var values = (int[])Enum.GetValues(type);
-            var default_mask = new Helpers.Mask256();
-            if (values.Length < Helpers.Mask256.MAX_SIZE)
-            {
-                Registry.Instance.Unregister(GetType());
-                return;
-            }
-
-            enumType = type;
-            this.values = values;
-            names = Enum.GetNames(type);
-            mask = Editors.Prefs.Get(String.Format("{0}_{1}", GetType().Name, type.Name), default_mask);
-            parents = new int[values.Length];
-            for (int i = 0; i < parents.Length; i++)
-            {
-                parents[i] = -1;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public virtual bool HasParent<T>(T child) where T : struct, IConvertible
+        public bool HasParent<T>(T child) where T : struct, IConvertible
         {
             if (IsWrongType<T>())
                 return false;
@@ -175,7 +268,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public virtual int CountParents<T>(T child) where T : struct, IConvertible
+        public int CountParents<T>(T child) where T : struct, IConvertible
         {
             if (IsWrongType<T>())
                 return 0;
@@ -195,7 +288,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public virtual void SetParent<T>(T child) where T : struct, IConvertible
+        public void SetParent<T>(T child) where T : struct, IConvertible
         {
             if (IsWrongType<T>())
                 return;
@@ -208,7 +301,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public virtual void SetParent<T>(T child, T parent) where T : struct, IConvertible
+        public void SetParent<T>(T child, T parent) where T : struct, IConvertible
         {
             if (IsWrongType<T>())
                 return;
@@ -224,7 +317,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public virtual bool IsActive<T>(T value) where T : struct, IConvertible
+        public bool IsActive<T>(T value) where T : struct, IConvertible
         {
             if (IsWrongType<T>())
                 return false;
@@ -236,7 +329,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public virtual bool IsActiveAndSelected<T>(T value, MonoBehaviour behaviour) where T : struct, IConvertible
+        public bool IsActiveAndSelected<T>(T value, MonoBehaviour behaviour) where T : struct, IConvertible
         {
             if (IsWrongType<T>())
                 return false;
@@ -256,7 +349,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public virtual void SetActive<T>(T value, bool active) where T : struct, IConvertible
+        public void SetActive<T>(T value, bool active) where T : struct, IConvertible
         {
             if (IsWrongType<T>())
                 return;
@@ -273,10 +366,11 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public virtual void SetActive(bool active)
+        public void SetActive(bool active)
         {
             deactivateAll = !active;
         }
+        #endregion Flag manageement
     }
 }
 #endif //PRATEEK_DEBUG

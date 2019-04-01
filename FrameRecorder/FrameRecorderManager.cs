@@ -158,8 +158,7 @@ namespace Prateek.Manager
         private StateType state = StateType.Inactive;
         private int frameCapacity = 50;
         private Vector2Int frameRange = Vector2Int.zero;
-        private Frame activeFrame = null;
-        private List<Frame> playback = new List<Frame>();
+        private Frame lastActiveFrame = null;
         private List<Frame> history = new List<Frame>();
         private List<IRecorderBase> recorders = new List<IRecorderBase>();
         #endregion Fields
@@ -196,7 +195,7 @@ namespace Prateek.Manager
         #endregion Properties
 
         //---------------------------------------------------------------------
-        #region GlobalManager integration
+        #region IGlobalManager integration
         public static BuilderBase GetBuilder()
         {
             return new Builder<FrameRecorderManager, NullFrameRecorderManager>();
@@ -218,7 +217,7 @@ namespace Prateek.Manager
         public override void OnInitialize()
         {
             priority = int.MaxValue;
-            activeFrame = new Frame();
+            lastActiveFrame = new Frame();
         }
 
         //---------------------------------------------------------------------
@@ -231,34 +230,45 @@ namespace Prateek.Manager
         }
 
         //---------------------------------------------------------------------
+#if UNITY_EDITOR
+        public void OnFakeUpdate()
+        {
+            OnUpdate(Registry.TickEvent.FrameBeginning, 0);
+            OnLateUpdate(Registry.TickEvent.FrameEnding, 0);
+        }
+#endif //UNITY_EDITOR
+
+        //---------------------------------------------------------------------
         public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds)
         {
             if (tickEvent != Registry.TickEvent.FrameEnding)
                 return;
 
-            EndFrame();
+            var lastFrame = EndFrame();
             {
-                if (state == StateType.Recording)
+                if (!IsAppPaused && state == StateType.Recording)
                 {
                     if (history.Count == frameCapacity)
                     {
                         history.RemoveAt(0);
                     }
 
-                    history.Add(activeFrame);
+                    history.Add(lastFrame);
                 }
             }
 
             if (state != StateType.Playback)
             {
-                PlayFrame(activeFrame);
+                if (!IsAppPaused)
+                    lastActiveFrame = lastFrame;
+                PlayFrame(lastFrame);
             }
             else
             {
                 DoPlayback();
             }
         }
-        #endregion GlobalManager integration
+        #endregion IGlobalManager integration
 
         //---------------------------------------------------------------------
         #region External Access
@@ -272,21 +282,11 @@ namespace Prateek.Manager
         {
             recorders.Remove(recorder);
         }
-
-        //---------------------------------------------------------------------
-        public static void ClearHistory()
-        {
-            var instance = Registry.GetManager<FrameRecorderManager>();
-            if (instance == null)
-                return;
-
-            instance.InternalClearHistory();
-        }
         #endregion External Access
 
         //---------------------------------------------------------------------
         #region Instance Methods
-        private void InternalClearHistory()
+        public void InternalClearHistory()
         {
             history.Clear();
             frameRange = Vector2Int.zero;
@@ -309,9 +309,9 @@ namespace Prateek.Manager
         }
 
         //---------------------------------------------------------------------
-        private void EndFrame()
+        private Frame EndFrame()
         {
-            activeFrame = new Frame();
+            var lastFrame = new Frame();
             for (int r = 0; r < recorders.Count; r++)
             {
                 var recorder = recorders[r];
@@ -325,8 +325,9 @@ namespace Prateek.Manager
                 if (data == null)
                     continue;
 
-                activeFrame.datas.Add(data);
+                lastFrame.datas.Add(data);
             }
+            return lastFrame;
         }
 
         //---------------------------------------------------------------------
@@ -348,8 +349,6 @@ namespace Prateek.Manager
         //---------------------------------------------------------------------
         private void DoPlayback()
         {
-            playback.Clear();
-
             frameRange = clamp(frameRange, 0, frameCapacity - 1);
             for (int h = frameRange.x; h < min(frameRange.y + 1, history.Count); h++)
             {
@@ -470,5 +469,15 @@ namespace Prateek.Manager
             instance.Unregister(recorder);
         }
         #endregion External Access
+
+        //---------------------------------------------------------------------
+        public static void ClearHistory()
+        {
+            var instance = Registry.GetManager<FrameRecorderManager>();
+            if (instance == null)
+                return;
+
+            instance.InternalClearHistory();
+        }
     }
 }

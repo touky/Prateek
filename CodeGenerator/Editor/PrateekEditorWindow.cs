@@ -81,7 +81,7 @@ using Prateek.Editors;
 #endregion File namespaces
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration.Editor
+namespace Prateek.CodeGeneration.Editors
 {
     //-------------------------------------------------------------------------
     public partial class PrateekEditorWindow : EditorWindow
@@ -112,7 +112,7 @@ namespace Prateek.CodeGeneration.Editor
 
         //---------------------------------------------------------------------
         #region Unity Defaults
-        [MenuItem("Prateek/Prateek Tools Window")]
+        [MenuItem("Prateek/Window/Prateek Tools Window")]
         static void CreateWindow()
         {
             var window = (PrateekEditorWindow)EditorWindow.GetWindow(typeof(PrateekEditorWindow));

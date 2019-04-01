@@ -183,7 +183,16 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@    #endregion Fields
 		@
 		@    //-----------------------------------------------------------------
-		@    public int Count { get { return count.Value; } }
+        @    public int Count
+        @    {
+        @        get { return count.Value; }
+        @        set
+        @        {
+        @            if (count.Value == value)
+        @                return;
+        @            Values = new List<#SRC_CLASS#>(new #SRC_CLASS#[value]);
+        @        }
+        @    }
 		@
 		@    //-----------------------------------------------------------------
 		@    public #SRC_CLASS# this[int index]
@@ -191,6 +200,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@        get { return prefValues[index].Value; }
 		@        set
 		@        {
+		@            realValues[index] = value;
 		@            prefValues[index].Value = realValues[index];
 		@            realValues[index] = prefValues[index].Value;
 		@        }

@@ -85,9 +85,11 @@ namespace Prateek.Base
     //-------------------------------------------------------------------------
     public abstract class GlobalManager : ScriptableObject, IGlobalManager, IUpdatable
     {
+        //---------------------------------------------------------------------
         public const string CREATE_METHOD = "GetBuilder";
 
         //---------------------------------------------------------------------
+        #region Declarations
         public abstract class BuilderBase
         {
             public Type realType = null;
@@ -105,19 +107,33 @@ namespace Prateek.Base
         {
             public Builder() : base(typeof(REAL), typeof(FAKE)) { }
         }
+        #endregion Declarations
 
         //---------------------------------------------------------------------
+        #region Settings
         [SerializeField]
         protected int priority;
+        #endregion Settings
 
         //---------------------------------------------------------------------
+        #region Fields
+        private bool isAppFocused = false;
+        private bool isAppPaused = false;
+        #endregion Fields
+
+        //---------------------------------------------------------------------
+        #region Properties
         public int Priority { get { return priority; } }
+        protected bool IsAppFocused { get { return isAppFocused; } }
+        protected bool IsAppPaused { get { return isAppPaused; } }
         public virtual Registry.TickEvent TickEvent { get { return Registry.TickEvent.FrameBeginning; } }
+        #endregion Properties
 
         //---------------------------------------------------------------------
+        #region IGlobalManager integration
         public virtual void OnCreate() { }
 
-        //-- Object Lifetime Messages------------------------------------------
+        //-- Object Lifetime Messages -----------------------------------------
         public virtual void OnInitialize() { }
         public virtual void OnStart() { }
         public virtual void OnUpdate(Registry.TickEvent tickEvent, float seconds) { }
@@ -128,12 +144,13 @@ namespace Prateek.Base
         public virtual void OnRegister() { }
         public virtual void OnUnregister() { }
 
-        //-- Application Messages----------------------------------------------
-        public virtual void OnApplicationFocus(bool focusStatus) { }
-        public virtual void OnApplicationPause(bool pauseStatus) { }
+        //-- Application Messages ---------------------------------------------
+        public virtual void OnApplicationFocus(bool focusStatus) { isAppFocused = focusStatus; }
+        public virtual void OnApplicationPause(bool pauseStatus) { isAppPaused = pauseStatus; }
         public virtual void OnApplicationQuit() { }
 
-        //-- Ui Messages-------------------------------------------------------
+        //-- Ui Messages ------------------------------------------------------
         public virtual void OnGUI() { }
+        #endregion IGlobalManager integration
     }
 }

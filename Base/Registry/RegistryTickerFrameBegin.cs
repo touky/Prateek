@@ -116,7 +116,26 @@ namespace Prateek.Base
             this.onPause = onPause;
             this.onQuit = onQuit;
             this.onGUI = onGUI;
+#if UNITY_EDITOR
+            EditorApplication.pauseStateChanged += PauseStateChanged;
+#endif //UNITY_EDITOR
         }
+
+        //---------------------------------------------------------------------
+        #region Editor behaviour
+#if UNITY_EDITOR
+        private void PauseStateChanged(PauseState state)
+        {
+            OnApplicationPause(state == PauseState.Paused);
+        }
+
+        //---------------------------------------------------------------------
+        private void OnDestroy()
+        {
+            EditorApplication.pauseStateChanged -= PauseStateChanged;
+        }
+#endif //UNITY_EDITOR
+        #endregion Editor behaviour
 
         //---------------------------------------------------------------------
         private void Update()

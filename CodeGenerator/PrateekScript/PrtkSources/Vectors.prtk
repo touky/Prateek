@@ -60,7 +60,7 @@ PRATEEK_FILE_INFO(Vectors, cs)
 
         PRATEEK_DEFAULT(float, 0)
 
-		
+		//PRATEEK_FUNC(lerp)    { PRATEEK_DATA { @Mathf.Lerp(#VARS_0#, #VARS_1#, alpha)$ } }
 		PRATEEK_FUNC(clamp)    { @Mathf.Clamp(#VARS_0#, #VARS_1#, #VARS_2#)$ }
 		PRATEEK_FUNC(saturate) { @Mathf.Clamp01(#VARS_0#)$ }
 		PRATEEK_FUNC(random)   { @UnityEngine.Random.Range(#VARS_0#, #VARS_1#)$ }
@@ -127,8 +127,8 @@ PRATEEK_FILE_INFO(VectorInts, cs)
 
     PRATEEK_BLOCK_CTOR_MIXED(Prateek.ShaderTo, CSharp, static)
     {
-        PRATEEK_CLASS_INFO(Vector2) { PRATEEK_NAMES(vec2i) PRATEEK_VARS(x, y) }
-        PRATEEK_CLASS_INFO(Vector3) { PRATEEK_NAMES(vec3i) PRATEEK_VARS(x, y, z) }
+        PRATEEK_CLASS_INFO(Vector2Int) { PRATEEK_NAMES(vec2i) PRATEEK_VARS(x, y) }
+        PRATEEK_CLASS_INFO(Vector3Int) { PRATEEK_NAMES(vec3i) PRATEEK_VARS(x, y, z) }
 
         PRATEEK_DEFAULT(int, 0)
 

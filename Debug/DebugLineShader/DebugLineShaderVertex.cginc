@@ -68,9 +68,9 @@ Pixel vert(Vertex v)
     //----------
 
     o.vertex = p0;
-    o.color = half4(lerp(colorBuffer[(int)v.vertex.x],
-                         half3(0, 0, 0),
-                         saturate(abs(v.vertex.y) - 2)) * DIMMER, 1);
+    o.color = half4(lerp(colorBuffer[(int)v.vertex.x] * DIMMER,
+                         BORDER,
+                         saturate(abs(v.vertex.y) - 2)), 1);
 
     return o;
 }

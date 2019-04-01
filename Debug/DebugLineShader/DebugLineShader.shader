@@ -21,10 +21,12 @@
             #pragma fragment frag
             #pragma vertex vert
 
-            #define DIMMER half4(0.4,0.4,0.4,0.4)
+            #define DIMMER half3(0.6,0.6,0.6)
+            #define BORDER half3(0.5,0.5,0.5)
             #include "DebugLineShaderPixel.cginc"
             #include "DebugLineShaderVertex.cginc"
             #undef DIMMER
+            #undef BORDER
             ENDCG
         }
 
@@ -44,10 +46,12 @@
             #pragma fragment frag
             #pragma vertex vert
 
-            #define DIMMER half4(1,1,1,1)
+            #define DIMMER half3(1,1,1)
+            #define BORDER half3(0,0,0)
             #include "DebugLineShaderPixel.cginc"
             #include "DebugLineShaderVertex.cginc"
             #undef DIMMER
+            #undef BORDER
             ENDCG
         }
     }

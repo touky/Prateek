@@ -131,5 +131,49 @@ namespace Prateek.Editors
             return tempActive;
         }
         #endregion Foldout
+
+        //---------------------------------------------------------------------
+        public class StatusScope : GUI.Scope
+        {
+            //-----------------------------------------------------------------
+            #region Fields
+            private bool enable;
+            private Color color;
+            #endregion Fields
+
+            //-----------------------------------------------------------------
+            #region Properties
+            public bool Enable { set { GUI.enabled = value; } }
+            public Color Color { set { GUI.color = value; } }
+            #endregion Properties
+
+            //-----------------------------------------------------------------
+            #region Scope
+            public StatusScope(bool enable) : this(enable, GUI.color) { }
+            public StatusScope(Color color) : this(true, color) { }
+            public StatusScope(bool enable, Color color) : base()
+            {
+                this.enable = GUI.enabled;
+                this.color = GUI.color;
+
+                GUI.enabled = GUI.enabled && enable;
+                GUI.color = color;
+            }
+
+            //-----------------------------------------------------------------
+            public void Reset()
+            {
+                GUI.enabled = enable;
+                GUI.color = color;
+            }
+
+            //-----------------------------------------------------------------
+            protected override void CloseScope()
+            {
+                Reset();
+            }
+            #endregion Scope
+        }
+
     }
 }

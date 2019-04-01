@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 30/03/2019
+//  Header last update date: 31/03/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -15,38 +15,51 @@
 
 // -BEGIN_PRATEEK_CSHARP_NAMESPACE-
 //
+//-----------------------------------------------------------------------------
 #region C# Prateek Namespaces
-#if UNITY_EDITOR && !PRATEEK_DEBUG
+
+//Auto activate some of the prateek defines
+#if UNITY_EDITOR
+
+#if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
+#endif //!PRATEEK_DEBUG
+
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
+//-----------------------------------------------------------------------------
 #region System
 using System;
 using System.Collections;
 using System.Collections.Generic;
 #endregion System
 
+//-----------------------------------------------------------------------------
 #region Unity
 using Unity.Jobs;
 using Unity.Collections;
 
+//-----------------------------------------------------------------------------
 #region Engine
 using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.Serialization;
 
+//-----------------------------------------------------------------------------
 #if UNITY_PROFILING
 using UnityEngine.Profiling;
 #endif //UNITY_PROFILING
+
 #endregion Engine
 
-#region Editor
+//-----------------------------------------------------------------------------
 #if UNITY_EDITOR
 using UnityEditor;
 #endif //UNITY_EDITOR
-#endregion Editor
+
 #endregion Unity
 
+//-----------------------------------------------------------------------------
 #region Prateek
 using Prateek;
 using Prateek.Base;
@@ -55,20 +68,22 @@ using Prateek.Helpers;
 using Prateek.Attributes;
 using Prateek.Manager;
 
+//-----------------------------------------------------------------------------
 #region Using static
 using static Prateek.ShaderTo.CSharp;
 #endregion Using static
 
-#region Editor
+//-----------------------------------------------------------------------------
 #if UNITY_EDITOR
 using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
-#endregion Editor
 
+//-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
 using Prateek.Debug;
 using static Prateek.Debug.Draw.Setup.QuickCTor;
 #endif //PRATEEK_DEBUG
+
 #endregion Prateek
 
 #endregion C# Prateek Namespaces
@@ -613,7 +628,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<string>(new string[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public string this[int index]
@@ -621,6 +645,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -748,7 +773,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<bool>(new bool[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public bool this[int index]
@@ -756,6 +790,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -883,7 +918,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<int>(new int[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public int this[int index]
@@ -891,6 +935,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -1018,7 +1063,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<float>(new float[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public float this[int index]
@@ -1026,6 +1080,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -1153,7 +1208,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<Vector2Int>(new Vector2Int[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public Vector2Int this[int index]
@@ -1161,6 +1225,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -1288,7 +1353,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<Vector3Int>(new Vector3Int[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public Vector3Int this[int index]
@@ -1296,6 +1370,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -1423,7 +1498,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<Vector2>(new Vector2[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public Vector2 this[int index]
@@ -1431,6 +1515,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -1558,7 +1643,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<Vector3>(new Vector3[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public Vector3 this[int index]
@@ -1566,6 +1660,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -1693,7 +1788,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<Vector4>(new Vector4[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public Vector4 this[int index]
@@ -1701,6 +1805,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -1828,7 +1933,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<Rect>(new Rect[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public Rect this[int index]
@@ -1836,6 +1950,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
@@ -1963,7 +2078,16 @@ namespace Prateek.Editors
             #endregion Fields
         
             //-----------------------------------------------------------------
-            public int Count { get { return count.Value; } }
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<RectInt>(new RectInt[value]);
+                }
+            }
         
             //-----------------------------------------------------------------
             public RectInt this[int index]
@@ -1971,6 +2095,7 @@ namespace Prateek.Editors
                 get { return prefValues[index].Value; }
                 set
                 {
+                    realValues[index] = value;
                     prefValues[index].Value = realValues[index];
                     realValues[index] = prefValues[index].Value;
                 }
