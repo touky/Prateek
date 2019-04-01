@@ -318,10 +318,7 @@ namespace Prateek.Editors
         }
 
         //---------------------------------------------------------------------
-        private void Update()
-        {
-            Repaint();
-        }
+        private void Update() { }
 
         //---------------------------------------------------------------------
         private bool IsExpanded(ulong value, ref DebugDisplayManager.FlagData flagDatas)
@@ -349,8 +346,9 @@ namespace Prateek.Editors
             ////d.Add(new Textures.Drawer.Sphere(5) { color = Color.red, elongate = vec3(2, 0, 2) });
             ////d.Add(new Textures.Drawer.Sphere(5) { color = Color.black, fallout = 2.5f, skin = 0.1f, elongate = vec3(2, 0, 2) });
             //d.Add(new Textures.Drawer.Box(vec3(6, 2, 2)) { color = Color.red });
-            //d.Add(new Textures.Drawer.Substraction(new Textures.Drawer.Box(vec3(6, 2, 2)),
-            //                                       new Textures.Drawer.Box(vec3(2, 4, 6)))
+            //d.Add(new Textures.Drawer.SmoothSubstraction(new Textures.Drawer.Box(vec3(6, 2, 2)),
+            //                                             new Textures.Drawer.Box(vec3(2, 4, 6)),
+            //                                             1)
             //{ color = Color.cyan });
             ////d.Add(new Textures.Drawer.Torus(vec2(8, 1)) { color = Color.green, fallout = 1 });
             ////d.Add(new Textures.Drawer.Hexagon(vec2(3, 1)) { color = Color.magenta, fallout = 1 });
@@ -400,17 +398,20 @@ namespace Prateek.Editors
             {
                 var value = enumInfos[e].value;
                 var parentCount = flagDatas.CountParent(value);
+                var hasChildren = flagDatas.HasChildren(value);
                 if (IsExpanded(value, ref flagDatas))
                 {
                     var line = lineRect;
-                    var activeRect = GUIDraw.Square(GUIDraw.Square(ref line, 2), 0, styleSetup.actives[activeFlags[e] ? 1 : 0]);
 
+                    //On-Off square
+                    var activeRect = GUIDraw.Square(GUIDraw.Square(ref line, 2), 0, styleSetup.actives[activeFlags[e] ? 1 : 0]);
                     if (Event.current.type == EventType.MouseUp && activeRect.Contains(Event.current.mousePosition))
                     {
                         activeFlags[e] = !activeFlags[e];
                         Repaint();
                     }
 
+                    //Parent offsets
                     line = line.TruncateX(line.height * parentCount);
 
                     line = GUIDraw.Background(line, 2, styleSetup.itemBG[0]);
@@ -421,7 +422,8 @@ namespace Prateek.Editors
                         Repaint();
                     }
 
-                    GUIDraw.Square(ref line, 0, styleSetup.actives[0]);
+                    //Does this option has children 
+                    GUIDraw.Square(ref line, 0, hasChildren ? styleSetup.actives[0] : null);
 
                     line = line.TruncateX(line.height / 2);
                     GUI.Label(line, enumInfos[e].name, styleSetup.itemText);

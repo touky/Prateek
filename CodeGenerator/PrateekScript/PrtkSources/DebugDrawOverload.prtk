@@ -53,11 +53,12 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
     {
         PRATEEK_CLASS_INFO(Setup)
 		{
-			PRATEEK_NAMES(Matrix4x4, matrix)
 			PRATEEK_NAMES(Space, space)
+			PRATEEK_NAMES(Matrix4x4, matrix)
 			PRATEEK_NAMES(Color, color)
 			PRATEEK_NAMES(float, duration)
 			PRATEEK_NAMES(bool, depthTest)
+			PRATEEK_NAMES(int, precision)
 		}
 
 		PRATEEK_FUNC { @#NAMES_0# #NAMES_1#$ }
@@ -80,7 +81,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         @
         @        //--------------------------------------------------------------------
         @        public static #SRC_CLASS# DebugSetup(#FUNC_RESULT_0#) 
-		@        { return new Setup(InitMode.Reset, #FUNC_RESULT_1#); }
+		@        { return new Setup(InitMode.UseLast, #FUNC_RESULT_1#); }
         @
         @        //--------------------------------------------------------------------
         @        public static #SRC_CLASS# DebugSetup(InitMode mode, #FUNC_RESULT_0#)

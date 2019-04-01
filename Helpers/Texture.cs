@@ -425,9 +425,8 @@ namespace Prateek.Helpers
                 public SmoothUnion(Base a, Base b, float smooth) : base(a, b) { this.smooth = smooth; }
                 protected override float Apply(float d1, float d2)
                 {
-                    //float h = clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);
-                    //return mix(d2, d1, h) - k * h * (1.0 - h);
-                    return float.MaxValue;
+                    float h = clamp(0.5f + 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
+                    return mix(d2, d1, h) - smooth * h * (1.0f - h);
                 }
             }
 
@@ -435,39 +434,37 @@ namespace Prateek.Helpers
             public class SmoothSubstraction : DualBase
             {
                 private float smooth;
-                public SmoothSubstraction(Base a, Base b) : base(a, b) { this.smooth = smooth; }
-                protected override float Apply(float d1, float d2) { return max(d1, -d2); }
+                public SmoothSubstraction(Base a, Base b, float smooth) : base(a, b) { this.smooth = smooth; }
+                protected override float Apply(float d1, float d2)
+                {
+                    float h = clamp(0.5f - 0.5f * (d2 + d1) / smooth, 0.0f, 1.0f);
+                    return mix(d2, -d1, h) + smooth * h * (1.0f - h);
+                }
             }
 
             //---------------------------------------------------------------------
             public class SmoothIntersection : DualBase
             {
                 private float smooth;
-                public SmoothIntersection(Base a, Base b) : base(a, b) { this.smooth = smooth; }
-                protected override float Apply(float d1, float d2) { return max(d1, d2); }
+                public SmoothIntersection(Base a, Base b, float smooth) : base(a, b) { this.smooth = smooth; }
+                protected override float Apply(float d1, float d2)
+                {
+                    float h = clamp(0.5f - 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
+                    return mix(d2, d1, h) + smooth * h * (1.0f - h);
+                }
             }
 
             //---------------------------------------------------------------------
             private Rect rect;
+            private Color background;
             private List<Base> operations = new List<Base>();
             private Color[] colors;
             public Texture2D texture;
 
             //---------------------------------------------------------------------
-            public void Clear()
+            public void Init(Color background, int width, int height, Rect rect, string name)
             {
-                operations.Clear();
-            }
-
-            //---------------------------------------------------------------------
-            public void Add(Base operation)
-            {
-                operations.Add(operation);
-            }
-
-            //---------------------------------------------------------------------
-            public void Init(int width, int height, Rect rect, string name)
-            {
+                this.background = background;
                 this.rect = rect;
 
                 if (texture != null)
@@ -482,6 +479,18 @@ namespace Prateek.Helpers
                 texture.name = name;
                 texture.filterMode = FilterMode.Point;
                 texture.Apply();
+            }
+
+            //---------------------------------------------------------------------
+            public void Clear()
+            {
+                operations.Clear();
+            }
+
+            //---------------------------------------------------------------------
+            public void Add(Base operation)
+            {
+                operations.Add(operation);
             }
 
             //---------------------------------------------------------------------

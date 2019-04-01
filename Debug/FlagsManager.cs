@@ -171,6 +171,20 @@ namespace Prateek.Debug
                 }
                 return 0;
             }
+
+            //-----------------------------------------------------------------
+            public bool HasChildren(ulong value)
+            {
+                var i = -1;
+                for (int h = 0; h < hierarchy.Count; h++)
+                {
+                    if (hierarchy[h].parent == value)
+                    {
+                        return hierarchy[h].children.Count > 0;
+                    }
+                }
+                return false;
+            }
         }
         #endregion Declarations
 
