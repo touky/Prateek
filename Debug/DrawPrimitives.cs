@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Setup.QuickCTor;
+using static Prateek.Debug.Draw.Style.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -91,7 +91,7 @@ namespace Prateek.Debug
         ////public static void Line(Vector3 start, Vector3 dir, float distance) { Line(start, dir, distance, ActiveSetup); }
         ////public static void Line(Vector3 start, Vector3 dir, float distance, Setup setup) { Line(start, start + dir * distance, setup); }
         ////public static void Line(Vector3 start, Vector3 end) { Line(start, end, ActiveSetup); }
-        public static void Line(Vector3 start, Vector3 end, Setup setup)
+        public static void Line(Vector3 start, Vector3 end, Style setup)
         {
             var dir = end - start;
             var prim = new PrimitiveSetup(PrimitiveType.Line, setup);
@@ -103,7 +103,7 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         //Point: Three line to mark each axis
-        public static void Point(Vector3 position, float size, Setup setup)
+        public static void Point(Vector3 position, float size, Style setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.Point, setup);
             prim.pos = position;
@@ -133,7 +133,7 @@ namespace Prateek.Debug
         ////}
 
         //---------------------------------------------------------------------
-        public static void Box(Vector3 position, Quaternion rotation, Vector3 size, Setup setup)
+        public static void Box(Vector3 position, Quaternion rotation, Vector3 size, Style setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.Box, setup);
             prim.pos = position;
@@ -143,7 +143,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public static void Box(Vector3[] points, Setup setup)
+        public static void Box(Vector3[] points, Style setup)
         {
             if (points.Length != 8)
                 return;
@@ -167,7 +167,7 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Arrow
-        public static void Arrow(Vector3 start, Vector3 end, Vector3 up, float width, float length, Setup setup)
+        public static void Arrow(Vector3 start, Vector3 end, Vector3 up, float width, float length, Style setup)
         {
             var dir = end - start;
             var prim = new PrimitiveSetup(PrimitiveType.Arrow, setup);
@@ -180,7 +180,7 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Plane
-        public static void Plane(Plane plane, Vector2 offset, float size, Vector3 up, Setup setup)
+        public static void Plane(Plane plane, Vector2 offset, float size, Vector3 up, Style setup)
         {
             var q = Quaternion.LookRotation(plane.normal, up);
             var x = q * Vector3.right;
@@ -206,7 +206,7 @@ namespace Prateek.Debug
         ////}
 
         //---------------------------------------------------------------------
-        public static void Arc(Vector3 position, Quaternion rotation, Vector2 radius, Vector2 degrees, Setup setup)
+        public static void Arc(Vector3 position, Quaternion rotation, Vector2 radius, Vector2 degrees, Style setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.Arc, setup);
             prim.pos = position;
@@ -227,7 +227,7 @@ namespace Prateek.Debug
         ////}
 
         //---------------------------------------------------------------------
-        public static void Circle(Vector3 position, Quaternion rotation, float radius, Setup setup)
+        public static void Circle(Vector3 position, Quaternion rotation, float radius, Style setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.Circle, setup);
             prim.pos = position;
@@ -245,7 +245,7 @@ namespace Prateek.Debug
         ////}
 
         //---------------------------------------------------------------------
-        public static void Sphere(Vector3 position, Quaternion rotation, float radius, Setup setup)
+        public static void Sphere(Vector3 position, Quaternion rotation, float radius, Style setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.Sphere, setup);
             prim.pos = position;
@@ -256,7 +256,7 @@ namespace Prateek.Debug
         #endregion //Sphere
 
         //---------------------------------------------------------------------
-        public static void SphereCast(Ray ray, float radius, float distance, Setup setup)
+        public static void SphereCast(Ray ray, float radius, float distance, Style setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
             prim.pos = ray.origin;
@@ -269,7 +269,7 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Cone
-        public static void Cone(Vector3 position, Quaternion rotation, float length, Vector2 radius, Setup setup)
+        public static void Cone(Vector3 position, Quaternion rotation, float length, Vector2 radius, Style setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
             prim.pos = position;
@@ -281,7 +281,7 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Pie
-        public static void Pie(Vector3 position, Quaternion rotation, float radius, float thickness, Vector2 degrees, Setup setup)
+        public static void Pie(Vector3 position, Quaternion rotation, float radius, float thickness, Vector2 degrees, Style setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
             prim.pos = position;

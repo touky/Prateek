@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Setup.QuickCTor;
+using static Prateek.Debug.Draw.Style.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -150,8 +150,9 @@ namespace Prateek.CodeGeneration
                             var sv = slots[v];
                             if (sv < infoSrc.VarCount)
                             {
+                                var name = sv < infoSrc.NameCount ? infoSrc.names[sv] : infoSrc.variables[sv];
+                                variant.Call = name;
                                 var variable = infoSrc.variables[sv];
-                                variant.Call = variable;
                                 variant[2] = string.Format(Tag.Code.varsV, variable);
                             }
                             else

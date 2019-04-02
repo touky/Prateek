@@ -2,13 +2,14 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
 {
     PRATEEK_BLOCK_FUNC_OVERLOAD(Prateek.Debug, Draw)
     {
-        PRATEEK_CLASS_INFO(Setup)
+        PRATEEK_CLASS_INFO(Style)
 		{
-			PRATEEK_NAMES(Matrix4x4, matrix)
 			PRATEEK_NAMES(Space, space)
+			PRATEEK_NAMES(Matrix4x4, matrix)
 			PRATEEK_NAMES(Color, color)
 			PRATEEK_NAMES(float, duration)
 			PRATEEK_NAMES(bool, depthTest)
+			PRATEEK_NAMES(int, precision)
 		}
 
 		PRATEEK_FUNC { @#NAMES_0# #NAMES_1#$ }
@@ -51,7 +52,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
 	
     PRATEEK_BLOCK_FUNC_OVERLOAD(Prateek.Debug, Draw)
     {
-        PRATEEK_CLASS_INFO(Setup)
+        PRATEEK_CLASS_INFO(Style)
 		{
 			PRATEEK_NAMES(Space, space)
 			PRATEEK_NAMES(Matrix4x4, matrix)
@@ -80,12 +81,12 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         {
         @
         @        //--------------------------------------------------------------------
-        @        public static #SRC_CLASS# DebugSetup(#FUNC_RESULT_0#) 
-		@        { return new Setup(InitMode.UseLast, #FUNC_RESULT_1#); }
+        @        public static #SRC_CLASS# DebugStyle(#FUNC_RESULT_0#) 
+		@        { return new Style(InitMode.UseLast, #FUNC_RESULT_1#); }
         @
         @        //--------------------------------------------------------------------
-        @        public static #SRC_CLASS# DebugSetup(InitMode mode, #FUNC_RESULT_0#)
-        @        { return new Setup(mode, #FUNC_RESULT_1#); }
+        @        public static #SRC_CLASS# DebugStyle(InitMode mode, #FUNC_RESULT_0#)
+        @        { return new Style(mode, #FUNC_RESULT_1#); }
         }
 
         PRATEEK_CODE_SUFFIX

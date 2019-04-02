@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Setup.QuickCTor;
+using static Prateek.Debug.Draw.Style.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -83,7 +83,7 @@ using static Prateek.Debug.Draw.Setup.QuickCTor;
 namespace Prateek.Extensions
 {
     //-------------------------------------------------------------------------
-    public static class RectExt
+    public static partial class RectExt
     {
         //---------------------------------------------------------------------
         #region Declarations

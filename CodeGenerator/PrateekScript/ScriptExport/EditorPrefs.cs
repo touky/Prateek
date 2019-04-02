@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 31/03/2019
+//  Header last update date: 01/04/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -81,7 +81,7 @@ using Prateek.CodeGeneration;
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Setup.QuickCTor;
+using static Prateek.Debug.Draw.Style.QuickCTor;
 #endif //PRATEEK_DEBUG
 
 #endregion Prateek
@@ -1189,6 +1189,151 @@ namespace Prateek.Editors
             protected override void SetToPrefs() { }
         }
         #endregion List<float>
+        
+        //---------------------------------------------------------------------
+        #region List<ulong>
+        public static ListULongs Get(string name, List<ulong> default_value)
+        {
+            return new ListULongs(name, default_value);
+        }
+        
+        //---------------------------------------------------------------------
+        public class ListULongs : ValueStorage
+        {
+            //-----------------------------------------------------------------
+            #region Fields
+            protected Ints count;
+            protected List<ULongs> prefValues = new List<ULongs>();
+            protected List<ulong> realValues = new List<ulong>();
+            #endregion Fields
+        
+            //-----------------------------------------------------------------
+            public int Count
+            {
+                get { return count.Value; }
+                set
+                {
+                    if (count.Value == value)
+                        return;
+                    Values = new List<ulong>(new ulong[value]);
+                }
+            }
+        
+            //-----------------------------------------------------------------
+            public ulong this[int index]
+            {
+                get { return prefValues[index].Value; }
+                set
+                {
+                    realValues[index] = value;
+                    prefValues[index].Value = realValues[index];
+                    realValues[index] = prefValues[index].Value;
+                }
+            }
+        
+            //-----------------------------------------------------------------
+            public List<ulong> Values
+            {
+                get { return new List<ulong>(realValues); }
+                set
+                {
+                    var valueCount = value == null ? 0 : value.Count;
+                    var length = min(Count, valueCount);
+                    for (int l = 0; l < length; l++)
+                    {
+                        prefValues[l].Value = value[l];
+                        realValues[l] = prefValues[l].Value;
+                    }
+        
+                    if (Count > valueCount)
+                        RemoveRange(valueCount, Count - valueCount);
+        
+                    if (Count < valueCount)
+                        AddRange(value.GetRange(Count, valueCount - Count));
+                }
+            }
+        
+            //-----------------------------------------------------------------
+            public ListULongs(string name, List<ulong> defaultValue) : base(name)
+            {
+                var valueCount = defaultValue == null ? 0 : defaultValue.Count;
+                this.name = name;
+                count = new Ints(base.name + ".Count", valueCount);
+                var length = count.Value;
+                for (int i = 0; i < length; i++)
+                {
+                    Add(i < valueCount ? defaultValue[i] : default(ulong));
+                }
+            }
+        
+            //-----------------------------------------------------------------
+            private string GetName(int index)
+            {
+                return string.Format("{0}[{1}]", name, index);
+            }
+        
+            //-----------------------------------------------------------------
+            public void Add(ulong value)
+            {
+                prefValues.Add(new ULongs(GetName(prefValues.Count), value));
+                realValues.Add(prefValues.Last().Value);
+                count.Value = realValues.Count;
+            }
+        
+            //-----------------------------------------------------------------
+            public void AddRange(List<ulong> value)
+            {
+                for (int i = 0; i < value.Count; i++)
+                {
+                    Add(value[i]);
+                }
+            }
+        
+            //-----------------------------------------------------------------
+            public void RemoveAt(int index)
+            {
+                realValues.RemoveAt(index);
+                count.Value = realValues.Count;
+                for (int i = index; i + 1 < prefValues.Count; i++)
+                {
+                    prefValues[i].Value = prefValues[i + 1].Value;
+                }
+                prefValues.Last().ClearFromPrefs();
+                prefValues.RemoveLast();
+            }
+        
+            //-----------------------------------------------------------------
+            public void RemoveLast()
+            {
+                RemoveAt(count.Value - 1);
+            }
+        
+            //-----------------------------------------------------------------
+            public void RemoveRange(int index, int length = 1)
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    RemoveAt(index);
+                }
+            }
+        
+            //-----------------------------------------------------------------
+            public void Clear()
+            {
+                realValues.Clear();
+                count.Value = 0;
+                for (int i = 0; i < prefValues.Count; i++)
+                {
+                    prefValues[i].ClearFromPrefs();
+                }
+                prefValues.Clear();
+            }
+        
+            //-----------------------------------------------------------------
+            protected override void GetFromPrefs() { }
+            protected override void SetToPrefs() { }
+        }
+        #endregion List<ulong>
         
         //---------------------------------------------------------------------
         #region List<Vector2Int>

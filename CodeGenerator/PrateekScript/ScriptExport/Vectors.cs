@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 31/03/2019
+//  Header last update date: 01/04/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -81,7 +81,7 @@ using Prateek.CodeGeneration;
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Setup.QuickCTor;
+using static Prateek.Debug.Draw.Style.QuickCTor;
 #endif //PRATEEK_DEBUG
 
 #endregion Prateek

@@ -81,7 +81,7 @@ using Prateek.CodeGeneration;
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Setup.QuickCTor;
+using static Prateek.Debug.Draw.Style.QuickCTor;
 #endif //PRATEEK_DEBUG
 
 #endregion Prateek
@@ -203,6 +203,7 @@ namespace Prateek.Editors
             public Font font;
             public GUIStyle background = null;
             public List<GUIStyle> itemBG = null;
+            public GUIStyle titleText = null;
             public GUIStyle itemText = null;
             public GUIStyle[] actives = null;
 
@@ -211,15 +212,15 @@ namespace Prateek.Editors
                 GUIStyle style = null;
                 var border1 = new RectOffset(1, 1, 1, 1);
                 var border2 = new RectOffset(2, 2, 2, 2);
-                var tex_size1 = new Rect(1, 1, 1, 1);
-                var tex_size2 = new Rect(2, 2, 1, 1);
+                var texSize1 = new Rect(1, 1, 1, 1);
+                var texSize2 = new Rect(2, 2, 1, 1);
 
                 font = font != null ? font : Helpers.Fonts.Get("Consolas", GUI.skin.font.fontSize);
 
                 if (background == null)
                 {
                     background = Helpers.GUIStyles.Get(GUI.skin.box, Vector2.zero, border2, 8, new Color(1f, 1f, 1f));
-                    background.normal.background = Helpers.Textures.Make(tex_size2, new Color(0.3f, 0.3f, 0.3f), Color.black);
+                    background.normal.background = Helpers.Textures.Make(texSize2, new Color(0.3f, 0.3f, 0.3f), Color.black);
                 }
 
                 if (itemBG == null)
@@ -230,10 +231,18 @@ namespace Prateek.Editors
                     for (int i = 0; i < 5; i++)
                     {
                         style = Helpers.GUIStyles.Get(String.Format("item_{0}_", i), GUI.skin.box, Vector2.zero, border1, 8, new Color(1f, 1f, 1f));
-                        style.normal.background = Helpers.Textures.Make(tex_size1, new Color(color, color, color), Color.black);
+                        style.normal.background = Helpers.Textures.Make(texSize1, new Color(color, color, color), Color.black);
                         itemBG.Add(style);
                         color -= 0.05f;
                     }
+                }
+
+                if (titleText == null)
+                {
+                    titleText = Helpers.GUIStyles.Get("text", GUI.skin.label, Vector2.zero, border1, 18, Color.black);
+                    titleText.fontStyle = FontStyle.Bold;
+                    titleText.alignment = TextAnchor.MiddleCenter;
+                    titleText.padding = new RectOffset();
                 }
 
                 if (itemText == null)
@@ -248,11 +257,29 @@ namespace Prateek.Editors
                     actives = new GUIStyle[2];
 
                     actives[0] = Helpers.GUIStyles.Get("active_off_", GUI.skin.box, Vector2.zero, border1, 8, new Color(1f, 1f, 1f));
-                    actives[0].normal.background = Helpers.Textures.Make(tex_size1, new Color(0.1f, 0.3f, 0.1f), Color.grey);
+                    actives[0].normal.background = Helpers.Textures.Make(texSize1, new Color(0.1f, 0.3f, 0.1f), Color.grey);
 
                     actives[1] = Helpers.GUIStyles.Get("active_on__", GUI.skin.box, Vector2.zero, border1, 8, new Color(1f, 1f, 1f));
-                    actives[1].normal.background = Helpers.Textures.Make(tex_size1, new Color(0.1f, 1.0f, 0.1f), Color.black);
+                    actives[1].normal.background = Helpers.Textures.Make(texSize1, new Color(0.1f, 1.0f, 0.1f), Color.black);
                 }
+
+                //d.Init(new Color(194f / 255f, 0, 0).rrrn(1), 512, 512, new Rect(vec2(-10), vec2(20)), "test");
+                //d.Clear();
+                ////d.Add(new Textures.Drawer.Sphere(5) { color = Color.red, elongate = vec3(2, 0, 2) });
+                ////d.Add(new Textures.Drawer.Sphere(5) { color = Color.black, fallout = 2.5f, skin = 0.1f, elongate = vec3(2, 0, 2) });
+                //d.Add(new Textures.Drawer.Box(vec3(6, 2, 2)) { color = Color.red });
+                //d.Add(new Textures.Drawer.SmoothSubstraction(new Textures.Drawer.Box(vec3(6, 2, 2)),
+                //                                             new Textures.Drawer.Box(vec3(2, 4, 6)),
+                //                                             1)
+                //{ color = Color.cyan });
+                ////d.Add(new Textures.Drawer.Torus(vec2(8, 1)) { color = Color.green, fallout = 1 });
+                ////d.Add(new Textures.Drawer.Hexagon(vec2(3, 1)) { color = Color.magenta, fallout = 1 });
+                ////d.Add(new Textures.Drawer.Triangle(vec3(0), vec3(2, 0, 0), vec3(1, 0, 2)) { color = Color.cyan, fallout = 1, rounding = 1 });
+                //d.Make();
+
+                //var txt = EditorGUILayout.GetControlRect(GUILayout.Width(d.texture.width), GUILayout.Height(d.texture.height));
+                //GUI.Box(txt, d.texture);
+
             }
         }
         #endregion Declarations
@@ -341,23 +368,6 @@ namespace Prateek.Editors
         public Textures.Drawer d = new Textures.Drawer();
         private void OnGUI()
         {
-            //d.Init(512, 512, new Rect(vec2(-10), vec2(20)), "test");
-            //d.Clear();
-            ////d.Add(new Textures.Drawer.Sphere(5) { color = Color.red, elongate = vec3(2, 0, 2) });
-            ////d.Add(new Textures.Drawer.Sphere(5) { color = Color.black, fallout = 2.5f, skin = 0.1f, elongate = vec3(2, 0, 2) });
-            //d.Add(new Textures.Drawer.Box(vec3(6, 2, 2)) { color = Color.red });
-            //d.Add(new Textures.Drawer.SmoothSubstraction(new Textures.Drawer.Box(vec3(6, 2, 2)),
-            //                                             new Textures.Drawer.Box(vec3(2, 4, 6)),
-            //                                             1)
-            //{ color = Color.cyan });
-            ////d.Add(new Textures.Drawer.Torus(vec2(8, 1)) { color = Color.green, fallout = 1 });
-            ////d.Add(new Textures.Drawer.Hexagon(vec2(3, 1)) { color = Color.magenta, fallout = 1 });
-            ////d.Add(new Textures.Drawer.Triangle(vec3(0), vec3(2, 0, 0), vec3(1, 0, 2)) { color = Color.cyan, fallout = 1, rounding = 1 });
-            //d.Make();
-
-            //var txt = EditorGUILayout.GetControlRect(GUILayout.Width(d.texture.width), GUILayout.Height(d.texture.height));
-            //GUI.Box(txt, d.texture);
-
             TryInit();
 
             #region Main setup
@@ -391,44 +401,64 @@ namespace Prateek.Editors
                     itemCount += 1;
             }
 
-            var winRect = GUIDraw.BackgroundAuto(itemCount, lineMargin, bgMargin, styleSetup.background);
-            var lineRect = winRect;
-            lineRect.height /= itemCount;
-            for (int e = 0; e < enumInfos.Count; e++)
+            var titleRect = GUIDraw.BackgroundAuto(2, lineMargin, bgMargin, styleSetup.background);
             {
-                var value = enumInfos[e].value;
-                var parentCount = flagDatas.CountParent(value);
-                var hasChildren = flagDatas.HasChildren(value);
-                if (IsExpanded(value, ref flagDatas))
+                titleRect = titleRect.TruncateX(titleRect.height)
+                                     .TruncateX(-titleRect.height)
+                                     .Inflate(-titleRect.height / 8);
+                GUIDraw.Background(titleRect, 2, styleSetup.itemBG[0]);
+                titleRect = titleRect.TruncateX(titleRect.height / 2);
+                GUI.Label(titleRect, enumInfos.Type.Name, styleSetup.titleText);
+            }
+
+            var winRect = GUIDraw.BackgroundAuto(itemCount, lineMargin, bgMargin, styleSetup.background);
+            {
+                var lineRect = winRect;
+                lineRect.height /= itemCount;
+                for (int e = 0; e < enumInfos.Count; e++)
                 {
-                    var line = lineRect;
-
-                    //On-Off square
-                    var activeRect = GUIDraw.Square(GUIDraw.Square(ref line, 2), 0, styleSetup.actives[activeFlags[e] ? 1 : 0]);
-                    if (Event.current.type == EventType.MouseUp && activeRect.Contains(Event.current.mousePosition))
+                    var value = enumInfos[e].value;
+                    var parentCount = flagDatas.CountParent(value);
+                    var hasChildren = flagDatas.HasChildren(value);
+                    if (IsExpanded(value, ref flagDatas))
                     {
-                        activeFlags[e] = !activeFlags[e];
-                        Repaint();
+                        var line = lineRect;
+                        var lockSize = 0.8f;
+
+                        {
+                            var lockRect = line.nh(line.height * (1.0f + lockSize));
+                            GUIDraw.Background(lockRect, 0, styleSetup.itemBG[0]);
+                            lockRect = lockRect.TruncateX(lockRect.height);
+                            GUIDraw.Background(lockRect.Inflate(-2), 0, styleSetup.actives[0]);
+                        }
+
+                        //On-Off square
+                        var activeRect = GUIDraw.Square(GUIDraw.Square(ref line, 2), 0, styleSetup.actives[activeFlags[e] ? 1 : 0]);
+                        if (Event.current.type == EventType.MouseUp && activeRect.Contains(Event.current.mousePosition))
+                        {
+                            activeFlags[e] = !activeFlags[e];
+                            Repaint();
+                        }
+
+                        //Parent offsets
+                        line = line.TruncateX(line.height * ((float)parentCount + lockSize));
+
+                        line = GUIDraw.Background(line, 2, styleSetup.itemBG[0]);
+
+                        if (Event.current.type == EventType.MouseUp && line.Contains(Event.current.mousePosition))
+                        {
+                            expandedFlags[e] = !expandedFlags[e];
+                            Repaint();
+                        }
+
+                        //Does this option has children 
+                        GUIDraw.Square(ref line, 0, hasChildren ? styleSetup.actives[0] : null);
+
+                        line = line.TruncateX(line.height / 2);
+                        GUI.Label(line, enumInfos[e].name, styleSetup.itemText);
+
+                        lineRect = lineRect.NextLine();
                     }
-
-                    //Parent offsets
-                    line = line.TruncateX(line.height * parentCount);
-
-                    line = GUIDraw.Background(line, 2, styleSetup.itemBG[0]);
-
-                    if (Event.current.type == EventType.MouseUp && line.Contains(Event.current.mousePosition))
-                    {
-                        expandedFlags[e] = !expandedFlags[e];
-                        Repaint();
-                    }
-
-                    //Does this option has children 
-                    GUIDraw.Square(ref line, 0, hasChildren ? styleSetup.actives[0] : null);
-
-                    line = line.TruncateX(line.height / 2);
-                    GUI.Label(line, enumInfos[e].name, styleSetup.itemText);
-
-                    lineRect = lineRect.NextLine();
                 }
             }
             return;

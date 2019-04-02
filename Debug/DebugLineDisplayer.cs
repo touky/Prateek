@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Setup.QuickCTor;
+using static Prateek.Debug.Draw.Style.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -495,7 +495,7 @@ namespace Prateek.Debug
         #endregion //Lines Pool
 
         //---------------------------------------------------------------------
-        public void RenderLine(Draw.Setup setup, Vector3 start, Vector3 end)
+        public void RenderLine(Draw.Style setup, Vector3 start, Vector3 end)
         {
             var line = GetLine();
             line.SetLine(start, end);

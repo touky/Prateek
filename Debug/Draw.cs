@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Setup.QuickCTor;
+using static Prateek.Debug.Draw.Style.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -102,17 +102,17 @@ namespace Prateek.Debug
         {
             //-----------------------------------------------------------------
             #region Fields
-            private Setup setup;
+            private Style setup;
             #endregion Fields
 
             //-----------------------------------------------------------------
             #region Properties
-            public Setup Setup { get { return setup; } }
+            public Style Setup { get { return setup; } }
             #endregion Properties
 
             //-----------------------------------------------------------------
             #region Scope
-            protected Scope(Setup setup) : base()
+            protected Scope(Style setup) : base()
             {
                 this.setup = setup;
                 Add(this);
@@ -127,7 +127,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public partial struct Setup
+        public partial struct Style
         {
             //-----------------------------------------------------------------
             public enum InitMode
@@ -153,9 +153,9 @@ namespace Prateek.Debug
             public int Precision { get { return precision; } set { precision = value; } }
 
             //-----------------------------------------------------------------
-            public Setup(InitMode initMode)
+            public Style(InitMode initMode)
             {
-                switch(initMode)
+                switch (initMode)
                 {
                     case InitMode.UseLast:
                     {
@@ -199,7 +199,7 @@ namespace Prateek.Debug
         {
             //-----------------------------------------------------------------
             public PrimitiveType type;
-            public Setup setup;
+            public Style setup;
             public Space endSpace;
             public Vector3 pos;
             public Quaternion rot;
@@ -207,7 +207,7 @@ namespace Prateek.Debug
             public Vector2 range;
 
             //-----------------------------------------------------------------
-            public PrimitiveSetup(PrimitiveType type, Setup setup)
+            public PrimitiveSetup(PrimitiveType type, Style setup)
             {
                 this.type = type;
                 this.setup = setup;
@@ -224,7 +224,7 @@ namespace Prateek.Debug
         {
             public Vector3 start;
             public Vector3 end;
-            public Setup setup;
+            public Style setup;
         }
         #endregion Declarations
 
@@ -235,12 +235,12 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Scopes
-        public static Setup ActiveSetup
+        public static Style ActiveSetup
         {
             get
             {
                 if (scopes.Count == 0)
-                    return new Setup(Setup.InitMode.Reset);
+                    return new Style(Style.InitMode.Reset);
                 return scopes.Last().Setup;
             }
         }

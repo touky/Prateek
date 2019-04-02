@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Setup.QuickCTor;
+using static Prateek.Debug.Draw.Style.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -500,7 +500,7 @@ namespace Prateek.Helpers
                 for (int c = 0; c < colors.Length; c++)
                 {
                     var point = rect.position + mul(rect.size, div(vec2i(c % texture.width, c / texture.height).Float(), vec2(texture.width, texture.height)));
-                    var result = new Color(194f / 255f, 0, 0).rrrn(1);
+                    var result = background;
                     for (int o = 0; o < operations.Count; o++)
                     {
                         var operation = operations[o];
