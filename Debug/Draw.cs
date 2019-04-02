@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Style.QuickCTor;
+using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -84,7 +84,7 @@ using static Prateek.Debug.Draw.Style.QuickCTor;
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public partial class Draw
+    public partial class DebugDraw
     {
         //---------------------------------------------------------------------
         #region Declarations
@@ -98,21 +98,21 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public class Scope : GUI.Scope
+        public class DebugScope : GUI.Scope
         {
             //-----------------------------------------------------------------
             #region Fields
-            private Style setup;
+            private DebugStyle setup;
             #endregion Fields
 
             //-----------------------------------------------------------------
             #region Properties
-            public Style Setup { get { return setup; } }
+            public DebugStyle Setup { get { return setup; } }
             #endregion Properties
 
             //-----------------------------------------------------------------
             #region Scope
-            protected Scope(Style setup) : base()
+            public DebugScope(DebugStyle setup) : base()
             {
                 this.setup = setup;
                 Add(this);
@@ -127,7 +127,7 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public partial struct Style
+        public partial struct DebugStyle
         {
             //-----------------------------------------------------------------
             public enum InitMode
@@ -153,7 +153,7 @@ namespace Prateek.Debug
             public int Precision { get { return precision; } set { precision = value; } }
 
             //-----------------------------------------------------------------
-            public Style(InitMode initMode)
+            public DebugStyle(InitMode initMode)
             {
                 switch (initMode)
                 {
@@ -173,6 +173,138 @@ namespace Prateek.Debug
                         break;
                     }
                 }
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public partial struct DebugPlace
+        {
+            //-----------------------------------------------------------------
+            public enum Pivot
+            {
+                Center,
+                Bottom,
+            }
+
+            //-----------------------------------------------------------------
+            private Vector3 position;
+            private Quaternion rotation;
+            private Vector3 extents;
+
+            //-----------------------------------------------------------------
+            public Vector3 Start { get { return position - rotation * extents.nnz(); } }
+            public Vector3 End { get { return position + rotation * extents.nnz(); } }
+            public Vector3 Position { get { return position; } }
+            public Quaternion Rotation { get { return rotation; } }
+            public Vector3 Forward { get { return rotation * Vector3.forward; } }
+            public Vector3 Up { get { return rotation * Vector3.up; } }
+            public Vector3 Right { get { return rotation * Vector3.right; } }
+            public Vector3 Extents { get { return extents; } }
+            public Vector3 Size { get { return extents * 2; } }
+
+            //-----------------------------------------------------------------
+            public DebugPlace(bool none)
+            {
+                this.position = Vector3.zero;
+                this.rotation = Quaternion.identity;
+                this.extents = Vector3.one;
+            }
+
+            //-----------------------------------------------------------------
+            public static DebugPlace AToB(Vector3 a, Vector3 b) { return AToB(Pivot.Center, a, b, vec3(0), Vector3.up); }
+            public static DebugPlace AToB(Vector3 a, Vector3 b, Vector3 up) { return AToB(Pivot.Center, a, b, vec3(0), Vector3.up); }
+            public static DebugPlace AToB(Vector3 a, Vector3 b, float size) { return AToB(Pivot.Center, a, b, vec3(size), Vector3.up); }
+            public static DebugPlace AToB(Vector3 a, Vector3 b, float size, Vector3 up) { return AToB(Pivot.Center, a, b, vec3(size), up); }
+            public static DebugPlace AToB(Vector3 a, Vector3 b, Vector2 size, Vector3 up) { return AToB(Pivot.Center, a, b, size.yyx() , up); }
+            public static DebugPlace AToB(Vector3 a, Vector3 b, Vector3 size, Vector3 up) { return AToB(Pivot.Center, a, b, size, up); }
+
+            //-----------------------------------------------------------------
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b) { return AToB(pivot, a, b, vec3(0), Vector3.up); }
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector3 up) { return AToB(pivot, a, b, vec3(0), Vector3.up); }
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, float size) { return AToB(pivot, a, b, vec3(size), Vector3.up); }
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, float size, Vector3 up) { return AToB(pivot, a, b, vec3(size), up); }
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector2 size, Vector3 up) { return AToB(pivot, a, b, size.yyx(), up); }
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector3 size, Vector3 up)
+            {
+                var offset = pivot == Pivot.Center ? Vector3.zero : up * size.y * 0.5f;
+                var dir = b - a;
+                return new DebugPlace(true)
+                {
+                    position = a + dir * 0.5f + offset,
+                    rotation = Quaternion.LookRotation(normalize(dir), up),
+                    extents = vec3(0, 0, length(dir) * 0.5f) + size * 0.5f
+                };
+            }
+
+            //-----------------------------------------------------------------
+            public static DebugPlace Ray(Vector3 position, float distance) { return Ray(Pivot.Center, position, Vector3.forward, vec3(distance), Vector3.up); }
+            public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance) { return Ray(Pivot.Center, position, dir, vec3(distance), Vector3.up); }
+            public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(Pivot.Center, position, dir, vec3(distance), up); }
+            public static DebugPlace Ray(Vector3 position, Vector3 dir, Vector2 size, Vector3 up) { return Ray(Pivot.Center, position, dir, size.yyx(), up); }
+            public static DebugPlace Ray(Vector3 position, Vector3 dir, Vector3 size, Vector3 up) { return Ray(Pivot.Center, position, dir, size, up); }
+
+            //-----------------------------------------------------------------
+            public static DebugPlace Ray(Pivot pivot, Vector3 position, float distance) { return Ray(pivot, position, Vector3.forward, vec3(distance), Vector3.up); }
+            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance) { return Ray(pivot, position, dir, vec3(distance), Vector3.up); }
+            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(pivot, position, dir, vec3(distance), up); }
+            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, Vector2 size, Vector3 up) { return Ray(pivot, position, dir, size.yyx(), up); }
+            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, Vector3 size, Vector3 up)
+            {
+                var offset = pivot == Pivot.Center ? Vector3.zero : up * size.y * 0.5f;
+                return new DebugPlace(true)
+                {
+                    position = position + dir * size.z * 0.5f + offset,
+                    rotation = Quaternion.LookRotation(dir, up),
+                    extents = size * 0.5f
+                };
+            }
+
+            //-----------------------------------------------------------------
+            public static DebugPlace At(float size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, vec3(size)); }
+            public static DebugPlace At(Vector2 size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, size.yyx()); }
+            public static DebugPlace At(Vector3 size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, size); }
+            public static DebugPlace At(Vector3 position, float size) { return At(Pivot.Center, position, Quaternion.identity, vec3(size)); }
+            public static DebugPlace At(Vector3 position, Vector2 size) { return At(Pivot.Center, position, Quaternion.identity, size.yyx()); }
+            public static DebugPlace At(Vector3 position, Vector3 size) { return At(Pivot.Center, position, Quaternion.identity, size); }
+            public static DebugPlace At(Vector3 position, Quaternion rotation, float size) { return At(Pivot.Center, position, rotation, vec3(size)); }
+            public static DebugPlace At(Vector3 position, Quaternion rotation, Vector2 size) { return At(Pivot.Center, position, rotation, size.yyx()); }
+            public static DebugPlace At(Vector3 position, Quaternion rotation, Vector3 size) { return At(Pivot.Center, position, rotation, size); }
+
+            //-----------------------------------------------------------------
+            public static DebugPlace At(Pivot pivot, float size) { return At(pivot, Vector3.zero, Quaternion.identity, vec3(size)); }
+            public static DebugPlace At(Pivot pivot, Vector2 size) { return At(pivot, Vector3.zero, Quaternion.identity, size.yyx()); }
+            public static DebugPlace At(Pivot pivot, Vector3 size) { return At(pivot, Vector3.zero, Quaternion.identity, size); }
+            public static DebugPlace At(Pivot pivot, Vector3 position, float size) { return At(pivot, position, Quaternion.identity, vec3(size)); }
+            public static DebugPlace At(Pivot pivot, Vector3 position, Vector2 size) { return At(Pivot.Center, position, Quaternion.identity, size.yyx()); }
+            public static DebugPlace At(Pivot pivot, Vector3 position, Vector3 size) { return At(pivot, position, Quaternion.identity, size); }
+            public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, float size) { return At(pivot, position, rotation, vec3(size)); }
+            public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, Vector2 size) { return At(pivot, position, rotation, size.yyx()); }
+            public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, Vector3 size)
+            {
+                var offset = pivot == Pivot.Center ? Vector3.zero : rotation * Vector3.up * size.y * 0.5f;
+                return new DebugPlace(true)
+                {
+                    position = position + offset,
+                    rotation = rotation,
+                    extents = size * 0.5f
+                };
+            }
+
+            //-----------------------------------------------------------------
+            public static DebugPlace Bounds(Bounds bounds) { return Bounds(Pivot.Center, bounds, Quaternion.identity); }
+            public static DebugPlace Bounds(Bounds bounds, Quaternion rotation) { return Bounds(Pivot.Center, bounds, rotation); }
+
+            //-----------------------------------------------------------------
+            public static DebugPlace Bounds(Pivot pivot, Bounds bounds) { return Bounds(pivot, bounds, Quaternion.identity); }
+            public static DebugPlace Bounds(Pivot pivot, Bounds bounds, Quaternion rotation)
+            {
+                var offset = pivot == Pivot.Center ? Vector3.zero : rotation * Vector3.up * bounds.size.y * 0.5f;
+                return new DebugPlace(true)
+                {
+                    position = bounds.center + offset,
+                    rotation = rotation,
+                    extents = bounds.extents
+                };
             }
         }
 
@@ -199,22 +331,22 @@ namespace Prateek.Debug
         {
             //-----------------------------------------------------------------
             public PrimitiveType type;
-            public Style setup;
+            public DebugStyle setup;
             public Space endSpace;
             public Vector3 pos;
             public Quaternion rot;
-            public Vector4 size;
+            public Vector4 extents;
             public Vector2 range;
 
             //-----------------------------------------------------------------
-            public PrimitiveSetup(PrimitiveType type, Style setup)
+            public PrimitiveSetup(PrimitiveType type, DebugStyle setup)
             {
                 this.type = type;
                 this.setup = setup;
                 endSpace = Space.World;
                 pos = Vector3.zero;
                 rot = Quaternion.identity;
-                size = Vector3.one;
+                extents = Vector3.one;
                 range = vec2(0, 1);
             }
     }
@@ -224,35 +356,35 @@ namespace Prateek.Debug
         {
             public Vector3 start;
             public Vector3 end;
-            public Style setup;
+            public DebugStyle setup;
         }
         #endregion Declarations
 
         //---------------------------------------------------------------------
         #region Fields
-        private static List<Scope> scopes = new List<Scope>();
+        private static List<DebugScope> scopes = new List<DebugScope>();
         #endregion Fields
 
         //---------------------------------------------------------------------
         #region Scopes
-        public static Style ActiveSetup
+        public static DebugStyle ActiveSetup
         {
             get
             {
                 if (scopes.Count == 0)
-                    return new Style(Style.InitMode.Reset);
+                    return new DebugStyle(DebugStyle.InitMode.Reset);
                 return scopes.Last().Setup;
             }
         }
 
         //---------------------------------------------------------------------
-        public static void Add(Scope scope)
+        public static void Add(DebugScope scope)
         {
             scopes.Add(scope);
         }
 
         //---------------------------------------------------------------------
-        public static void Remove(Scope scope)
+        public static void Remove(DebugScope scope)
         {
             scopes.Remove(scope);
         }
@@ -281,9 +413,9 @@ namespace Prateek.Debug
                 case PrimitiveType.Arc:
                 case PrimitiveType.Cone:
                 {
-                    wRt *= prim.size.x;
-                    wUp *= prim.size.y;
-                    wFw *= prim.size.z;
+                    wRt *= prim.extents.x;
+                    wUp *= prim.extents.y;
+                    wFw *= prim.extents.z;
                     break;
                 }
             }
@@ -293,7 +425,7 @@ namespace Prateek.Debug
             {
                 case PrimitiveType.Line:
                 {
-                    d.RenderLine(prim.setup, prim.pos, prim.pos + prim.rot * prim.size);
+                    d.RenderLine(prim.setup, prim.pos, prim.pos + prim.rot * prim.extents);
                     break;
                 }
                 case PrimitiveType.Point:
@@ -326,18 +458,18 @@ namespace Prateek.Debug
                 }
                 case PrimitiveType.Arrow:
                 {
-                    var end = prim.pos + wFw * prim.size.z;
+                    var end = prim.pos + wFw * prim.extents.z;
                     d.RenderLine(prim.setup, end, prim.pos);
-                    d.RenderLine(prim.setup, end, end - wFw * prim.size.y - wRt * prim.size.x);
-                    d.RenderLine(prim.setup, end, end - wFw * prim.size.y + wRt * prim.size.x);
-                    d.RenderLine(prim.setup, end, end - wFw * prim.size.y - wUp * prim.size.x);
-                    d.RenderLine(prim.setup, end, end - wFw * prim.size.y + wUp * prim.size.x);
+                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y - wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y + wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y - wUp * prim.extents.x);
+                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y + wUp * prim.extents.x);
 
-                    var end0 = end - wFw * prim.size.y * 0.25f;
-                    d.RenderLine(prim.setup, end0, end - wFw * prim.size.y - wRt * prim.size.x);
-                    d.RenderLine(prim.setup, end0, end - wFw * prim.size.y + wRt * prim.size.x);
-                    d.RenderLine(prim.setup, end0, end - wFw * prim.size.y - wUp * prim.size.x);
-                    d.RenderLine(prim.setup, end0, end - wFw * prim.size.y + wUp * prim.size.x);
+                    var end0 = end - wFw * prim.extents.y * 0.25f;
+                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y - wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y + wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y - wUp * prim.extents.x);
+                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y + wUp * prim.extents.x);
                     break;
                 }
                 case PrimitiveType.Plane:
@@ -357,8 +489,8 @@ namespace Prateek.Debug
                         var j = i + 1;
                         var angle0 = prim.range.x + i * step;
                         var angle1 = prim.range.x + j * step;
-                        var p0 = wRt * Mathf.Cos(angle0 * Mathf.Deg2Rad) + wFw * Mathf.Sin(angle0 * Mathf.Deg2Rad);
-                        var p1 = wRt * Mathf.Cos(angle1 * Mathf.Deg2Rad) + wFw * Mathf.Sin(angle1 * Mathf.Deg2Rad);
+                        var p0 = wRt * Mathf.Cos(angle0 * Mathf.Deg2Rad) + wUp * Mathf.Sin(angle0 * Mathf.Deg2Rad);
+                        var p1 = wRt * Mathf.Cos(angle1 * Mathf.Deg2Rad) + wUp * Mathf.Sin(angle1 * Mathf.Deg2Rad);
                         d.RenderLine(prim.setup, prim.pos + p0, prim.pos + p1);
                     }
                     break;
@@ -378,10 +510,10 @@ namespace Prateek.Debug
                     other.range = vec2(0, 360);
                     Render(d, other);
                     other.rot = Quaternion.LookRotation(wUp, wFw);
-                    other.size = prim.size.xzy();
+                    other.extents = prim.extents.xzy();
                     Render(d, other);
-                    other.rot = Quaternion.LookRotation(wUp, wRt);
-                    other.size = prim.size.zxy();
+                    other.rot = Quaternion.LookRotation(wRt, wFw);
+                    other.extents = prim.extents.zxy() * 0.8f;
                     Render(d, other);
                     break;
                 }
@@ -389,17 +521,17 @@ namespace Prateek.Debug
                 {
                     var other = prim;
                     other.type = PrimitiveType.Sphere;
-                    other.size = vec3(prim.size.x);
+                    other.extents = vec3(prim.extents.x);
                     Render(d, other);
-                    other.pos = prim.pos + wFw * prim.size.z;
+                    other.pos = prim.pos + wFw * prim.extents.z;
                     Render(d, other);
 
-                    d.RenderLine(prim.setup, prim.pos - wRt * prim.size.x, prim.pos - wRt * prim.size.x + wFw * prim.size.z);
-                    d.RenderLine(prim.setup, prim.pos + wRt * prim.size.x, prim.pos + wRt * prim.size.x + wFw * prim.size.z);
-                    d.RenderLine(prim.setup, prim.pos + wUp * prim.size.y, prim.pos + wUp * prim.size.y + wFw * prim.size.z);
-                    d.RenderLine(prim.setup, prim.pos - wUp * prim.size.y, prim.pos - wUp * prim.size.y + wFw * prim.size.z);
+                    d.RenderLine(prim.setup, prim.pos - wRt * prim.extents.x, prim.pos - wRt * prim.extents.x + wFw * prim.extents.z);
+                    d.RenderLine(prim.setup, prim.pos + wRt * prim.extents.x, prim.pos + wRt * prim.extents.x + wFw * prim.extents.z);
+                    d.RenderLine(prim.setup, prim.pos + wUp * prim.extents.y, prim.pos + wUp * prim.extents.y + wFw * prim.extents.z);
+                    d.RenderLine(prim.setup, prim.pos - wUp * prim.extents.y, prim.pos - wUp * prim.extents.y + wFw * prim.extents.z);
 
-                    d.RenderLine(prim.setup, prim.pos + wFw * prim.size.x, prim.pos + wFw * (prim.size.z - prim.size.x));
+                    d.RenderLine(prim.setup, prim.pos + wFw * prim.extents.x, prim.pos + wFw * (prim.extents.z - prim.extents.x));
                     break;
                 }
                 case PrimitiveType.Cone:
@@ -424,7 +556,7 @@ namespace Prateek.Debug
                 case PrimitiveType.Pie:
                 {
                     var pieDiff = abs(prim.range.y - prim.range.x);
-                    if (pieDiff >= 360 && prim.size.y == 0)
+                    if (pieDiff >= 360 && prim.extents.z == 0)
                     {
                         var other = prim;
                         other.type = PrimitiveType.Arc;
@@ -437,15 +569,14 @@ namespace Prateek.Debug
                     {
                         var other = prim;
                         other.type = PrimitiveType.Arc;
-                        other.pos -= wUp * prim.size.y;
+                        other.pos -= wFw * prim.extents.z;
                         Render(d, other);
-                        other.pos += wUp * prim.size.y * 2f;
+                        other.pos += wFw * prim.extents.z * 2f;
                         Render(d, other);
                     }
 
                     //Center line
-                    d.RenderLine(prim.setup, prim.pos - wUp * prim.size.y, prim.pos + wUp * prim.size.y);
-
+                    d.RenderLine(prim.setup, prim.pos - wFw * prim.extents.z, prim.pos + wFw * prim.extents.z);
 
                     //Draw sides and inner lines
                     var segments = prim.setup.Precision;
@@ -455,12 +586,12 @@ namespace Prateek.Debug
                         var j = i + 1;
                         var angle = prim.range.x + i * step;
                         var p = wRt * Mathf.Cos(angle * Mathf.Deg2Rad) + wFw * Mathf.Sin(angle * Mathf.Deg2Rad);
-                        d.RenderLine(prim.setup, prim.pos + p - wUp * prim.size.y, prim.pos + p + wUp * prim.size.y);
+                        d.RenderLine(prim.setup, prim.pos + p - wFw * prim.extents.z, prim.pos + p + wFw * prim.extents.z);
 
                         if (i == 0 || i == segments - 1)
                         {
-                            d.RenderLine(prim.setup, prim.pos - wUp * prim.size.y, prim.pos + p - wUp * prim.size.y);
-                            d.RenderLine(prim.setup, prim.pos + wUp * prim.size.y, prim.pos + p + wUp * prim.size.y);
+                            d.RenderLine(prim.setup, prim.pos - wFw * prim.extents.z, prim.pos + p - wFw * prim.extents.z);
+                            d.RenderLine(prim.setup, prim.pos + wFw * prim.extents.z, prim.pos + p + wFw * prim.extents.z);
                         }
                     }
                     break;

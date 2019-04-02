@@ -81,7 +81,8 @@ using Prateek.CodeGeneration;
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Style.QuickCTor;
+using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
+using DebugDraw = Prateek.Debug.DebugDraw;
 #endif //PRATEEK_DEBUG
 
 #endregion Prateek

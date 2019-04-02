@@ -1,8 +1,8 @@
 PRATEEK_FILE_INFO(DebugDraw, cs)
 {
-    PRATEEK_BLOCK_FUNC_OVERLOAD(Prateek.Debug, Draw)
+    PRATEEK_BLOCK_FUNC_OVERLOAD(Prateek.Debug, DebugDraw)
     {
-        PRATEEK_CLASS_INFO(Style)
+        PRATEEK_CLASS_INFO(DebugStyle)
 		{
 			PRATEEK_NAMES(Space, space)
 			PRATEEK_NAMES(Matrix4x4, matrix)
@@ -23,7 +23,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         @
         @//--------------------------------------------------------------------
         @#region DrawSetup overload
-        @public partial struct Setup
+        @public partial struct #SRC_CLASS#
         @{
         }
         
@@ -50,9 +50,9 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         }
     }
 	
-    PRATEEK_BLOCK_FUNC_OVERLOAD(Prateek.Debug, Draw)
+    PRATEEK_BLOCK_FUNC_OVERLOAD(Prateek.Debug, DebugDraw)
     {
-        PRATEEK_CLASS_INFO(Style)
+        PRATEEK_CLASS_INFO(DebugStyle)
 		{
 			PRATEEK_NAMES(Space, space)
 			PRATEEK_NAMES(Matrix4x4, matrix)
@@ -70,7 +70,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         @
         @//--------------------------------------------------------------------
         @#region DrawSetup overload
-        @public partial struct Setup
+        @public partial struct #SRC_CLASS#
         @{
         @    //----------------------------------------------------------------
         @    public static class QuickCTor
@@ -81,12 +81,12 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         {
         @
         @        //--------------------------------------------------------------------
-        @        public static #SRC_CLASS# DebugStyle(#FUNC_RESULT_0#) 
-		@        { return new Style(InitMode.UseLast, #FUNC_RESULT_1#); }
+        @        public static #SRC_CLASS# #SRC_CLASS#(#FUNC_RESULT_0#) 
+		@        { return new #SRC_CLASS#(InitMode.UseLast, #FUNC_RESULT_1#); }
         @
         @        //--------------------------------------------------------------------
-        @        public static #SRC_CLASS# DebugStyle(InitMode mode, #FUNC_RESULT_0#)
-        @        { return new Style(mode, #FUNC_RESULT_1#); }
+        @        public static #SRC_CLASS# #SRC_CLASS#(InitMode mode, #FUNC_RESULT_0#)
+        @        { return new #SRC_CLASS#(mode, #FUNC_RESULT_1#); }
         }
 
         PRATEEK_CODE_SUFFIX

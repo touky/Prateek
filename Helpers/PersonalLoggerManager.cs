@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Style.QuickCTor;
+using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -306,7 +306,7 @@ namespace Prateek.Debug
                                                      Mathf.Clamp(robotPos.y, style.WindowRect.y, style.WindowRect.y + style.WindowRect.height));
                             guiPos.y = Screen.height - guiPos.y;
                             var worldGuiPos = camera.ScreenToWorldPoint(guiPos.xyn(1f));
-                            Draw.Line(worldGuiPos, box.logger.transform.position, new Draw.Style(Draw.Space.World, Color.white));
+                            DebugDraw.Line(DebugDraw.DebugPlace.AToB(worldGuiPos, box.logger.transform.position), new DebugDraw.DebugStyle(DebugDraw.Space.World, Color.white));
                         }
                         break;
                     }

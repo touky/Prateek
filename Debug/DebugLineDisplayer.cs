@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Style.QuickCTor;
+using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -152,13 +152,16 @@ namespace Prateek.Debug
                         this.borderThickness = borderThickness;
                     }
 
+                    size = min(size, (1 << 16) / (borderThickness == 0 ? 4 : 12));
+
                     var vtxCount = borderThickness == 0 ? 2 : 6;
                     var triCount = borderThickness == 0 ? 3 : 9;
+                    var newSize = size * vtxCount * 2;
 
-                    if (vertices == null || size > vertices.Length)
+                    if (vertices == null || newSize > vertices.Length)
                     {
                         var oldVert = vertices;
-                        vertices = new Vector3[(size + offset) * vtxCount];
+                        vertices = new Vector3[(size + offset) * vtxCount * 2];
                         if (oldVert != null)
                         {
                             oldVert.CopyTo(vertices, 0);
@@ -495,7 +498,7 @@ namespace Prateek.Debug
         #endregion //Lines Pool
 
         //---------------------------------------------------------------------
-        public void RenderLine(Draw.Style setup, Vector3 start, Vector3 end)
+        public void RenderLine(DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
         {
             var line = GetLine();
             line.SetLine(start, end);

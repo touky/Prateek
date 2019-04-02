@@ -81,7 +81,8 @@ using Prateek.CodeGeneration;
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Style.QuickCTor;
+using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
+using DebugDraw = Prateek.Debug.DebugDraw;
 #endif //PRATEEK_DEBUG
 
 #endregion Prateek
@@ -94,27 +95,16 @@ using static Prateek.Debug.Draw.Style.QuickCTor;
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public  partial class Draw
+    public  partial class DebugDraw
     {
         
         //---------------------------------------------------------------------
         #region DrawSetup overload
-        public partial struct Style
+        public partial struct DebugStyle
         {
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.matrix = matrix;
-            this.color = color;
-            this.duration = duration;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -125,7 +115,18 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -135,7 +136,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -145,7 +146,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, Color color, float duration, int precision) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -155,7 +156,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, int precision) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -165,7 +166,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, Color color, float duration) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -174,7 +175,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -183,17 +184,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.matrix = matrix;
-            this.color = color;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -203,7 +194,17 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, Color color, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(mode)
+        {
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Space space, Matrix4x4 matrix, Color color, bool depthTest) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -212,7 +213,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, Color color, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, bool depthTest) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -221,7 +222,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, Color color, int precision) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix, Color color, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -230,7 +231,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, Color color, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, int precision) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -239,7 +240,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, Color color) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix, Color color) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -247,7 +248,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, Color color) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -255,17 +256,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.matrix = matrix;
-            this.duration = duration;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -275,7 +266,17 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, float duration, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.space = space;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Space space, Matrix4x4 matrix, float duration, bool depthTest) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -284,7 +285,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, float duration, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration, bool depthTest) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -293,7 +294,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, float duration, int precision) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix, float duration, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -302,7 +303,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, float duration, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration, int precision) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -311,7 +312,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, float duration) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix, float duration) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -319,7 +320,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, float duration) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -327,7 +328,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, bool depthTest, int precision) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -336,7 +337,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, bool depthTest, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, bool depthTest, int precision) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -345,7 +346,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix, bool depthTest) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -353,7 +354,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, bool depthTest) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -361,7 +362,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix, int precision) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
@@ -369,7 +370,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, int precision) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
@@ -377,31 +378,21 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Matrix4x4 matrix) : this(InitMode.Reset)
+        public DebugStyle(Space space, Matrix4x4 matrix) : this(InitMode.Reset)
         {
             this.space = space;
             this.matrix = matrix;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Matrix4x4 matrix) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Matrix4x4 matrix) : this(mode)
         {
             this.space = space;
             this.matrix = matrix;
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.color = color;
-            this.duration = duration;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Color color, float duration, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Space space, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.color = color;
@@ -411,7 +402,17 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Space space, Color color, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Space space, Color color, float duration, bool depthTest) : this(InitMode.Reset)
         {
             this.space = space;
             this.color = color;
@@ -420,7 +421,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Color color, float duration, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Color color, float duration, bool depthTest) : this(mode)
         {
             this.space = space;
             this.color = color;
@@ -429,7 +430,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Color color, float duration, int precision) : this(InitMode.Reset)
+        public DebugStyle(Space space, Color color, float duration, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.color = color;
@@ -438,7 +439,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Color color, float duration, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Color color, float duration, int precision) : this(mode)
         {
             this.space = space;
             this.color = color;
@@ -447,7 +448,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Color color, float duration) : this(InitMode.Reset)
+        public DebugStyle(Space space, Color color, float duration) : this(InitMode.Reset)
         {
             this.space = space;
             this.color = color;
@@ -455,7 +456,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Color color, float duration) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Color color, float duration) : this(mode)
         {
             this.space = space;
             this.color = color;
@@ -463,16 +464,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Color color, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.color = color;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Color color, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Space space, Color color, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.color = color;
@@ -481,7 +473,16 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Color color, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Space space, Color color, bool depthTest, int precision) : this(mode)
+        {
+            this.space = space;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Space space, Color color, bool depthTest) : this(InitMode.Reset)
         {
             this.space = space;
             this.color = color;
@@ -489,7 +490,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Color color, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Color color, bool depthTest) : this(mode)
         {
             this.space = space;
             this.color = color;
@@ -497,7 +498,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Color color, int precision) : this(InitMode.Reset)
+        public DebugStyle(Space space, Color color, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.color = color;
@@ -505,7 +506,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Color color, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Color color, int precision) : this(mode)
         {
             this.space = space;
             this.color = color;
@@ -513,30 +514,21 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, Color color) : this(InitMode.Reset)
+        public DebugStyle(Space space, Color color) : this(InitMode.Reset)
         {
             this.space = space;
             this.color = color;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, Color color) : this(mode)
+        public DebugStyle(InitMode mode, Space space, Color color) : this(mode)
         {
             this.space = space;
             this.color = color;
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, float duration, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.duration = duration;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, float duration, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Space space, float duration, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.duration = duration;
@@ -545,7 +537,16 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, float duration, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Space space, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.space = space;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Space space, float duration, bool depthTest) : this(InitMode.Reset)
         {
             this.space = space;
             this.duration = duration;
@@ -553,7 +554,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, float duration, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Space space, float duration, bool depthTest) : this(mode)
         {
             this.space = space;
             this.duration = duration;
@@ -561,7 +562,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, float duration, int precision) : this(InitMode.Reset)
+        public DebugStyle(Space space, float duration, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.duration = duration;
@@ -569,7 +570,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, float duration, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Space space, float duration, int precision) : this(mode)
         {
             this.space = space;
             this.duration = duration;
@@ -577,29 +578,21 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, float duration) : this(InitMode.Reset)
+        public DebugStyle(Space space, float duration) : this(InitMode.Reset)
         {
             this.space = space;
             this.duration = duration;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, float duration) : this(mode)
+        public DebugStyle(InitMode mode, Space space, float duration) : this(mode)
         {
             this.space = space;
             this.duration = duration;
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.space = space;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Space space, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.depthTest = depthTest;
@@ -607,47 +600,55 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Space space, bool depthTest, int precision) : this(mode)
+        {
+            this.space = space;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Space space, bool depthTest) : this(InitMode.Reset)
         {
             this.space = space;
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Space space, bool depthTest) : this(mode)
         {
             this.space = space;
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space, int precision) : this(InitMode.Reset)
+        public DebugStyle(Space space, int precision) : this(InitMode.Reset)
         {
             this.space = space;
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Space space, int precision) : this(mode)
         {
             this.space = space;
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(Space space) : this(InitMode.Reset)
+        public DebugStyle(Space space) : this(InitMode.Reset)
         {
             this.space = space;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Space space) : this(mode)
+        public DebugStyle(InitMode mode, Space space) : this(mode)
         {
             this.space = space;
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        public DebugStyle(Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.color = color;
@@ -657,7 +658,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(mode)
         {
             this.matrix = matrix;
             this.color = color;
@@ -667,7 +668,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.color = color;
@@ -676,7 +677,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(mode)
         {
             this.matrix = matrix;
             this.color = color;
@@ -685,16 +686,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, Color color, float duration, int precision) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.color = color;
-            this.duration = duration;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, Color color, float duration, int precision) : this(mode)
+        public DebugStyle(Matrix4x4 matrix, Color color, float duration, int precision) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.color = color;
@@ -703,7 +695,16 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, Color color, float duration) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration, int precision) : this(mode)
+        {
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Matrix4x4 matrix, Color color, float duration) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.color = color;
@@ -711,7 +712,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, Color color, float duration) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration) : this(mode)
         {
             this.matrix = matrix;
             this.color = color;
@@ -719,16 +720,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.color = color;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.color = color;
@@ -737,7 +729,16 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, Color color, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(mode)
+        {
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Matrix4x4 matrix, Color color, bool depthTest) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.color = color;
@@ -745,7 +746,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest) : this(mode)
         {
             this.matrix = matrix;
             this.color = color;
@@ -753,7 +754,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, Color color, int precision) : this(InitMode.Reset)
+        public DebugStyle(Matrix4x4 matrix, Color color, int precision) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.color = color;
@@ -761,7 +762,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, Color color, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, int precision) : this(mode)
         {
             this.matrix = matrix;
             this.color = color;
@@ -769,30 +770,21 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, Color color) : this(InitMode.Reset)
+        public DebugStyle(Matrix4x4 matrix, Color color) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.color = color;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, Color color) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, Color color) : this(mode)
         {
             this.matrix = matrix;
             this.color = color;
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.duration = duration;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.duration = duration;
@@ -801,7 +793,16 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, float duration, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Matrix4x4 matrix, float duration, bool depthTest) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.duration = duration;
@@ -809,7 +810,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest) : this(mode)
         {
             this.matrix = matrix;
             this.duration = duration;
@@ -817,7 +818,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, float duration, int precision) : this(InitMode.Reset)
+        public DebugStyle(Matrix4x4 matrix, float duration, int precision) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.duration = duration;
@@ -825,7 +826,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, float duration, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, float duration, int precision) : this(mode)
         {
             this.matrix = matrix;
             this.duration = duration;
@@ -833,29 +834,21 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, float duration) : this(InitMode.Reset)
+        public DebugStyle(Matrix4x4 matrix, float duration) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.duration = duration;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, float duration) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, float duration) : this(mode)
         {
             this.matrix = matrix;
             this.duration = duration;
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.matrix = matrix;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Matrix4x4 matrix, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.depthTest = depthTest;
@@ -863,47 +856,55 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, bool depthTest, int precision) : this(mode)
+        {
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Matrix4x4 matrix, bool depthTest) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, bool depthTest) : this(mode)
         {
             this.matrix = matrix;
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix, int precision) : this(InitMode.Reset)
+        public DebugStyle(Matrix4x4 matrix, int precision) : this(InitMode.Reset)
         {
             this.matrix = matrix;
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix, int precision) : this(mode)
         {
             this.matrix = matrix;
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(Matrix4x4 matrix) : this(InitMode.Reset)
+        public DebugStyle(Matrix4x4 matrix) : this(InitMode.Reset)
         {
             this.matrix = matrix;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Matrix4x4 matrix) : this(mode)
+        public DebugStyle(InitMode mode, Matrix4x4 matrix) : this(mode)
         {
             this.matrix = matrix;
         }
         
         //---------------------------------------------------------------------
-        public Style(Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        public DebugStyle(Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.color = color;
             this.duration = duration;
@@ -912,7 +913,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Color color, float duration, bool depthTest, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Color color, float duration, bool depthTest, int precision) : this(mode)
         {
             this.color = color;
             this.duration = duration;
@@ -921,7 +922,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(Color color, float duration, bool depthTest) : this(InitMode.Reset)
         {
             this.color = color;
             this.duration = duration;
@@ -929,7 +930,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Color color, float duration, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Color color, float duration, bool depthTest) : this(mode)
         {
             this.color = color;
             this.duration = duration;
@@ -937,15 +938,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Color color, float duration, int precision) : this(InitMode.Reset)
-        {
-            this.color = color;
-            this.duration = duration;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Color color, float duration, int precision) : this(mode)
+        public DebugStyle(Color color, float duration, int precision) : this(InitMode.Reset)
         {
             this.color = color;
             this.duration = duration;
@@ -953,29 +946,29 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Color color, float duration) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Color color, float duration, int precision) : this(mode)
+        {
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Color color, float duration) : this(InitMode.Reset)
         {
             this.color = color;
             this.duration = duration;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Color color, float duration) : this(mode)
+        public DebugStyle(InitMode mode, Color color, float duration) : this(mode)
         {
             this.color = color;
             this.duration = duration;
         }
         
         //---------------------------------------------------------------------
-        public Style(Color color, bool depthTest, int precision) : this(InitMode.Reset)
-        {
-            this.color = color;
-            this.depthTest = depthTest;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, Color color, bool depthTest, int precision) : this(mode)
+        public DebugStyle(Color color, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.color = color;
             this.depthTest = depthTest;
@@ -983,47 +976,55 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(Color color, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, Color color, bool depthTest, int precision) : this(mode)
+        {
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(Color color, bool depthTest) : this(InitMode.Reset)
         {
             this.color = color;
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Color color, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, Color color, bool depthTest) : this(mode)
         {
             this.color = color;
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(Color color, int precision) : this(InitMode.Reset)
+        public DebugStyle(Color color, int precision) : this(InitMode.Reset)
         {
             this.color = color;
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Color color, int precision) : this(mode)
+        public DebugStyle(InitMode mode, Color color, int precision) : this(mode)
         {
             this.color = color;
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(Color color) : this(InitMode.Reset)
+        public DebugStyle(Color color) : this(InitMode.Reset)
         {
             this.color = color;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, Color color) : this(mode)
+        public DebugStyle(InitMode mode, Color color) : this(mode)
         {
             this.color = color;
         }
         
         //---------------------------------------------------------------------
-        public Style(float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        public DebugStyle(float duration, bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.duration = duration;
             this.depthTest = depthTest;
@@ -1031,7 +1032,7 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, float duration, bool depthTest, int precision) : this(mode)
+        public DebugStyle(InitMode mode, float duration, bool depthTest, int precision) : this(mode)
         {
             this.duration = duration;
             this.depthTest = depthTest;
@@ -1039,79 +1040,79 @@ namespace Prateek.Debug
         }
         
         //---------------------------------------------------------------------
-        public Style(float duration, bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(float duration, bool depthTest) : this(InitMode.Reset)
         {
             this.duration = duration;
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, float duration, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, float duration, bool depthTest) : this(mode)
         {
             this.duration = duration;
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(float duration, int precision) : this(InitMode.Reset)
-        {
-            this.duration = duration;
-            this.precision = precision;
-        }
-        
-        //---------------------------------------------------------------------
-        public Style(InitMode mode, float duration, int precision) : this(mode)
+        public DebugStyle(float duration, int precision) : this(InitMode.Reset)
         {
             this.duration = duration;
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(float duration) : this(InitMode.Reset)
+        public DebugStyle(InitMode mode, float duration, int precision) : this(mode)
+        {
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(float duration) : this(InitMode.Reset)
         {
             this.duration = duration;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, float duration) : this(mode)
+        public DebugStyle(InitMode mode, float duration) : this(mode)
         {
             this.duration = duration;
         }
         
         //---------------------------------------------------------------------
-        public Style(bool depthTest, int precision) : this(InitMode.Reset)
+        public DebugStyle(bool depthTest, int precision) : this(InitMode.Reset)
         {
             this.depthTest = depthTest;
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, bool depthTest, int precision) : this(mode)
+        public DebugStyle(InitMode mode, bool depthTest, int precision) : this(mode)
         {
             this.depthTest = depthTest;
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(bool depthTest) : this(InitMode.Reset)
+        public DebugStyle(bool depthTest) : this(InitMode.Reset)
         {
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, bool depthTest) : this(mode)
+        public DebugStyle(InitMode mode, bool depthTest) : this(mode)
         {
             this.depthTest = depthTest;
         }
         
         //---------------------------------------------------------------------
-        public Style(int precision) : this(InitMode.Reset)
+        public DebugStyle(int precision) : this(InitMode.Reset)
         {
             this.precision = precision;
         }
         
         //---------------------------------------------------------------------
-        public Style(InitMode mode, int precision) : this(mode)
+        public DebugStyle(InitMode mode, int precision) : this(mode)
         {
             this.precision = precision;
         }
@@ -1125,520 +1126,520 @@ namespace Prateek.Debug
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public  partial class Draw
+    public  partial class DebugDraw
     {
         
         //---------------------------------------------------------------------
         #region DrawSetup overload
-        public partial struct Style
+        public partial struct DebugStyle
         {
             //-----------------------------------------------------------------
             public static class QuickCTor
             {
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, space, matrix, color, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, color, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision)
-                { return new Style(mode, space, matrix, color, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, space, matrix, color, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest) 
-                { return new Style(InitMode.UseLast, space, matrix, color, duration, depthTest); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, color, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest)
-                { return new Style(mode, space, matrix, color, duration, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest)
+                { return new DebugStyle(mode, space, matrix, color, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, int precision) 
-                { return new Style(InitMode.UseLast, space, matrix, color, duration, precision); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, color, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, int precision)
-                { return new Style(mode, space, matrix, color, duration, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration, int precision)
+                { return new DebugStyle(mode, space, matrix, color, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration) 
-                { return new Style(InitMode.UseLast, space, matrix, color, duration); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, color, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration)
-                { return new Style(mode, space, matrix, color, duration); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, float duration)
+                { return new DebugStyle(mode, space, matrix, color, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, space, matrix, color, depthTest, precision); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, color, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision)
-                { return new Style(mode, space, matrix, color, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision)
+                { return new DebugStyle(mode, space, matrix, color, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, Color color, bool depthTest) 
-                { return new Style(InitMode.UseLast, space, matrix, color, depthTest); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, Color color, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, color, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, bool depthTest)
-                { return new Style(mode, space, matrix, color, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, bool depthTest)
+                { return new DebugStyle(mode, space, matrix, color, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, Color color, int precision) 
-                { return new Style(InitMode.UseLast, space, matrix, color, precision); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, Color color, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, color, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, int precision)
-                { return new Style(mode, space, matrix, color, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color, int precision)
+                { return new DebugStyle(mode, space, matrix, color, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, Color color) 
-                { return new Style(InitMode.UseLast, space, matrix, color); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, Color color) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, color); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color)
-                { return new Style(mode, space, matrix, color); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, Color color)
+                { return new DebugStyle(mode, space, matrix, color); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, space, matrix, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision)
-                { return new Style(mode, space, matrix, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, space, matrix, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, float duration, bool depthTest) 
-                { return new Style(InitMode.UseLast, space, matrix, duration, depthTest); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration, bool depthTest)
-                { return new Style(mode, space, matrix, duration, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration, bool depthTest)
+                { return new DebugStyle(mode, space, matrix, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, float duration, int precision) 
-                { return new Style(InitMode.UseLast, space, matrix, duration, precision); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration, int precision)
-                { return new Style(mode, space, matrix, duration, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration, int precision)
+                { return new DebugStyle(mode, space, matrix, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, float duration) 
-                { return new Style(InitMode.UseLast, space, matrix, duration); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, float duration) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration)
-                { return new Style(mode, space, matrix, duration); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, float duration)
+                { return new DebugStyle(mode, space, matrix, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, space, matrix, depthTest, precision); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, bool depthTest, int precision)
-                { return new Style(mode, space, matrix, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, bool depthTest, int precision)
+                { return new DebugStyle(mode, space, matrix, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, bool depthTest) 
-                { return new Style(InitMode.UseLast, space, matrix, depthTest); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, bool depthTest)
-                { return new Style(mode, space, matrix, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, bool depthTest)
+                { return new DebugStyle(mode, space, matrix, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix, int precision) 
-                { return new Style(InitMode.UseLast, space, matrix, precision); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, int precision)
-                { return new Style(mode, space, matrix, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix, int precision)
+                { return new DebugStyle(mode, space, matrix, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Matrix4x4 matrix) 
-                { return new Style(InitMode.UseLast, space, matrix); }
+                public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix) 
+                { return new DebugStyle(InitMode.UseLast, space, matrix); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Matrix4x4 matrix)
-                { return new Style(mode, space, matrix); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Matrix4x4 matrix)
+                { return new DebugStyle(mode, space, matrix); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Color color, float duration, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, space, color, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(Space space, Color color, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, color, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Color color, float duration, bool depthTest, int precision)
-                { return new Style(mode, space, color, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Color color, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, space, color, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Color color, float duration, bool depthTest) 
-                { return new Style(InitMode.UseLast, space, color, duration, depthTest); }
+                public static DebugStyle DebugStyle(Space space, Color color, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, space, color, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Color color, float duration, bool depthTest)
-                { return new Style(mode, space, color, duration, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Color color, float duration, bool depthTest)
+                { return new DebugStyle(mode, space, color, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Color color, float duration, int precision) 
-                { return new Style(InitMode.UseLast, space, color, duration, precision); }
+                public static DebugStyle DebugStyle(Space space, Color color, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, color, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Color color, float duration, int precision)
-                { return new Style(mode, space, color, duration, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Color color, float duration, int precision)
+                { return new DebugStyle(mode, space, color, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Color color, float duration) 
-                { return new Style(InitMode.UseLast, space, color, duration); }
+                public static DebugStyle DebugStyle(Space space, Color color, float duration) 
+                { return new DebugStyle(InitMode.UseLast, space, color, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Color color, float duration)
-                { return new Style(mode, space, color, duration); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Color color, float duration)
+                { return new DebugStyle(mode, space, color, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Color color, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, space, color, depthTest, precision); }
+                public static DebugStyle DebugStyle(Space space, Color color, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, color, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Color color, bool depthTest, int precision)
-                { return new Style(mode, space, color, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Color color, bool depthTest, int precision)
+                { return new DebugStyle(mode, space, color, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Color color, bool depthTest) 
-                { return new Style(InitMode.UseLast, space, color, depthTest); }
+                public static DebugStyle DebugStyle(Space space, Color color, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, space, color, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Color color, bool depthTest)
-                { return new Style(mode, space, color, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Color color, bool depthTest)
+                { return new DebugStyle(mode, space, color, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Color color, int precision) 
-                { return new Style(InitMode.UseLast, space, color, precision); }
+                public static DebugStyle DebugStyle(Space space, Color color, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, color, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Color color, int precision)
-                { return new Style(mode, space, color, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Color color, int precision)
+                { return new DebugStyle(mode, space, color, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, Color color) 
-                { return new Style(InitMode.UseLast, space, color); }
+                public static DebugStyle DebugStyle(Space space, Color color) 
+                { return new DebugStyle(InitMode.UseLast, space, color); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, Color color)
-                { return new Style(mode, space, color); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, Color color)
+                { return new DebugStyle(mode, space, color); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, float duration, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, space, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(Space space, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, float duration, bool depthTest, int precision)
-                { return new Style(mode, space, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, space, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, float duration, bool depthTest) 
-                { return new Style(InitMode.UseLast, space, duration, depthTest); }
+                public static DebugStyle DebugStyle(Space space, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, space, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, float duration, bool depthTest)
-                { return new Style(mode, space, duration, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, float duration, bool depthTest)
+                { return new DebugStyle(mode, space, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, float duration, int precision) 
-                { return new Style(InitMode.UseLast, space, duration, precision); }
+                public static DebugStyle DebugStyle(Space space, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, float duration, int precision)
-                { return new Style(mode, space, duration, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, float duration, int precision)
+                { return new DebugStyle(mode, space, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, float duration) 
-                { return new Style(InitMode.UseLast, space, duration); }
+                public static DebugStyle DebugStyle(Space space, float duration) 
+                { return new DebugStyle(InitMode.UseLast, space, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, float duration)
-                { return new Style(mode, space, duration); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, float duration)
+                { return new DebugStyle(mode, space, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, space, depthTest, precision); }
+                public static DebugStyle DebugStyle(Space space, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, bool depthTest, int precision)
-                { return new Style(mode, space, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, bool depthTest, int precision)
+                { return new DebugStyle(mode, space, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, bool depthTest) 
-                { return new Style(InitMode.UseLast, space, depthTest); }
+                public static DebugStyle DebugStyle(Space space, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, space, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, bool depthTest)
-                { return new Style(mode, space, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, bool depthTest)
+                { return new DebugStyle(mode, space, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space, int precision) 
-                { return new Style(InitMode.UseLast, space, precision); }
+                public static DebugStyle DebugStyle(Space space, int precision) 
+                { return new DebugStyle(InitMode.UseLast, space, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space, int precision)
-                { return new Style(mode, space, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space, int precision)
+                { return new DebugStyle(mode, space, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Space space) 
-                { return new Style(InitMode.UseLast, space); }
+                public static DebugStyle DebugStyle(Space space) 
+                { return new DebugStyle(InitMode.UseLast, space); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Space space)
-                { return new Style(mode, space); }
+                public static DebugStyle DebugStyle(InitMode mode, Space space)
+                { return new DebugStyle(mode, space); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, matrix, color, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, matrix, color, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision)
-                { return new Style(mode, matrix, color, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, matrix, color, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, Color color, float duration, bool depthTest) 
-                { return new Style(InitMode.UseLast, matrix, color, duration, depthTest); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, Color color, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, matrix, color, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest)
-                { return new Style(mode, matrix, color, duration, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration, bool depthTest)
+                { return new DebugStyle(mode, matrix, color, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, Color color, float duration, int precision) 
-                { return new Style(InitMode.UseLast, matrix, color, duration, precision); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, Color color, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, matrix, color, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration, int precision)
-                { return new Style(mode, matrix, color, duration, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration, int precision)
+                { return new DebugStyle(mode, matrix, color, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, Color color, float duration) 
-                { return new Style(InitMode.UseLast, matrix, color, duration); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, Color color, float duration) 
+                { return new DebugStyle(InitMode.UseLast, matrix, color, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration)
-                { return new Style(mode, matrix, color, duration); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, float duration)
+                { return new DebugStyle(mode, matrix, color, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, Color color, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, matrix, color, depthTest, precision); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, Color color, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, matrix, color, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest, int precision)
-                { return new Style(mode, matrix, color, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest, int precision)
+                { return new DebugStyle(mode, matrix, color, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, Color color, bool depthTest) 
-                { return new Style(InitMode.UseLast, matrix, color, depthTest); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, Color color, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, matrix, color, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest)
-                { return new Style(mode, matrix, color, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, bool depthTest)
+                { return new DebugStyle(mode, matrix, color, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, Color color, int precision) 
-                { return new Style(InitMode.UseLast, matrix, color, precision); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, Color color, int precision) 
+                { return new DebugStyle(InitMode.UseLast, matrix, color, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, int precision)
-                { return new Style(mode, matrix, color, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, Color color, int precision)
+                { return new DebugStyle(mode, matrix, color, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, Color color) 
-                { return new Style(InitMode.UseLast, matrix, color); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, Color color) 
+                { return new DebugStyle(InitMode.UseLast, matrix, color); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, Color color)
-                { return new Style(mode, matrix, color); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, Color color)
+                { return new DebugStyle(mode, matrix, color); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, float duration, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, matrix, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, matrix, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest, int precision)
-                { return new Style(mode, matrix, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, matrix, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, float duration, bool depthTest) 
-                { return new Style(InitMode.UseLast, matrix, duration, depthTest); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, matrix, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest)
-                { return new Style(mode, matrix, duration, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, float duration, bool depthTest)
+                { return new DebugStyle(mode, matrix, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, float duration, int precision) 
-                { return new Style(InitMode.UseLast, matrix, duration, precision); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, matrix, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, float duration, int precision)
-                { return new Style(mode, matrix, duration, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, float duration, int precision)
+                { return new DebugStyle(mode, matrix, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, float duration) 
-                { return new Style(InitMode.UseLast, matrix, duration); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, float duration) 
+                { return new DebugStyle(InitMode.UseLast, matrix, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, float duration)
-                { return new Style(mode, matrix, duration); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, float duration)
+                { return new DebugStyle(mode, matrix, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, matrix, depthTest, precision); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, matrix, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, bool depthTest, int precision)
-                { return new Style(mode, matrix, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, bool depthTest, int precision)
+                { return new DebugStyle(mode, matrix, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, bool depthTest) 
-                { return new Style(InitMode.UseLast, matrix, depthTest); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, matrix, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, bool depthTest)
-                { return new Style(mode, matrix, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, bool depthTest)
+                { return new DebugStyle(mode, matrix, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix, int precision) 
-                { return new Style(InitMode.UseLast, matrix, precision); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix, int precision) 
+                { return new DebugStyle(InitMode.UseLast, matrix, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix, int precision)
-                { return new Style(mode, matrix, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix, int precision)
+                { return new DebugStyle(mode, matrix, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Matrix4x4 matrix) 
-                { return new Style(InitMode.UseLast, matrix); }
+                public static DebugStyle DebugStyle(Matrix4x4 matrix) 
+                { return new DebugStyle(InitMode.UseLast, matrix); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Matrix4x4 matrix)
-                { return new Style(mode, matrix); }
+                public static DebugStyle DebugStyle(InitMode mode, Matrix4x4 matrix)
+                { return new DebugStyle(mode, matrix); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Color color, float duration, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, color, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(Color color, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, color, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Color color, float duration, bool depthTest, int precision)
-                { return new Style(mode, color, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Color color, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, color, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Color color, float duration, bool depthTest) 
-                { return new Style(InitMode.UseLast, color, duration, depthTest); }
+                public static DebugStyle DebugStyle(Color color, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, color, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Color color, float duration, bool depthTest)
-                { return new Style(mode, color, duration, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Color color, float duration, bool depthTest)
+                { return new DebugStyle(mode, color, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Color color, float duration, int precision) 
-                { return new Style(InitMode.UseLast, color, duration, precision); }
+                public static DebugStyle DebugStyle(Color color, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, color, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Color color, float duration, int precision)
-                { return new Style(mode, color, duration, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Color color, float duration, int precision)
+                { return new DebugStyle(mode, color, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Color color, float duration) 
-                { return new Style(InitMode.UseLast, color, duration); }
+                public static DebugStyle DebugStyle(Color color, float duration) 
+                { return new DebugStyle(InitMode.UseLast, color, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Color color, float duration)
-                { return new Style(mode, color, duration); }
+                public static DebugStyle DebugStyle(InitMode mode, Color color, float duration)
+                { return new DebugStyle(mode, color, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Color color, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, color, depthTest, precision); }
+                public static DebugStyle DebugStyle(Color color, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, color, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Color color, bool depthTest, int precision)
-                { return new Style(mode, color, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Color color, bool depthTest, int precision)
+                { return new DebugStyle(mode, color, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Color color, bool depthTest) 
-                { return new Style(InitMode.UseLast, color, depthTest); }
+                public static DebugStyle DebugStyle(Color color, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, color, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Color color, bool depthTest)
-                { return new Style(mode, color, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, Color color, bool depthTest)
+                { return new DebugStyle(mode, color, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Color color, int precision) 
-                { return new Style(InitMode.UseLast, color, precision); }
+                public static DebugStyle DebugStyle(Color color, int precision) 
+                { return new DebugStyle(InitMode.UseLast, color, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Color color, int precision)
-                { return new Style(mode, color, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, Color color, int precision)
+                { return new DebugStyle(mode, color, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(Color color) 
-                { return new Style(InitMode.UseLast, color); }
+                public static DebugStyle DebugStyle(Color color) 
+                { return new DebugStyle(InitMode.UseLast, color); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, Color color)
-                { return new Style(mode, color); }
+                public static DebugStyle DebugStyle(InitMode mode, Color color)
+                { return new DebugStyle(mode, color); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(float duration, bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, float duration, bool depthTest, int precision)
-                { return new Style(mode, duration, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, duration, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(float duration, bool depthTest) 
-                { return new Style(InitMode.UseLast, duration, depthTest); }
+                public static DebugStyle DebugStyle(float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, float duration, bool depthTest)
-                { return new Style(mode, duration, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, float duration, bool depthTest)
+                { return new DebugStyle(mode, duration, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(float duration, int precision) 
-                { return new Style(InitMode.UseLast, duration, precision); }
+                public static DebugStyle DebugStyle(float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, float duration, int precision)
-                { return new Style(mode, duration, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, float duration, int precision)
+                { return new DebugStyle(mode, duration, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(float duration) 
-                { return new Style(InitMode.UseLast, duration); }
+                public static DebugStyle DebugStyle(float duration) 
+                { return new DebugStyle(InitMode.UseLast, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, float duration)
-                { return new Style(mode, duration); }
+                public static DebugStyle DebugStyle(InitMode mode, float duration)
+                { return new DebugStyle(mode, duration); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(bool depthTest, int precision) 
-                { return new Style(InitMode.UseLast, depthTest, precision); }
+                public static DebugStyle DebugStyle(bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, bool depthTest, int precision)
-                { return new Style(mode, depthTest, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, bool depthTest, int precision)
+                { return new DebugStyle(mode, depthTest, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(bool depthTest) 
-                { return new Style(InitMode.UseLast, depthTest); }
+                public static DebugStyle DebugStyle(bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, bool depthTest)
-                { return new Style(mode, depthTest); }
+                public static DebugStyle DebugStyle(InitMode mode, bool depthTest)
+                { return new DebugStyle(mode, depthTest); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(int precision) 
-                { return new Style(InitMode.UseLast, precision); }
+                public static DebugStyle DebugStyle(int precision) 
+                { return new DebugStyle(InitMode.UseLast, precision); }
         
                 //-------------------------------------------------------------
-                public static Style DebugStyle(InitMode mode, int precision)
-                { return new Style(mode, precision); }
+                public static DebugStyle DebugStyle(InitMode mode, int precision)
+                { return new DebugStyle(mode, precision); }
             }
         }
         #endregion DrawSetup overload

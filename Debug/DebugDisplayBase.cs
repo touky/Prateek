@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Style.QuickCTor;
+using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -124,16 +124,16 @@ namespace Prateek.Debug
         {
             //-----------------------------------------------------------------
             private DebugDisplayManager owner;
-            private List<Draw.PrimitiveSetup> primitives;
+            private List<DebugDraw.PrimitiveSetup> primitives;
 
             //-----------------------------------------------------------------
             public FrameRecorderManager.IRecorderBase Owner { get { return owner; } }
-            public List<Draw.PrimitiveSetup> Primitives
+            public List<DebugDraw.PrimitiveSetup> Primitives
             {
                 get
                 {
                     if (primitives == null)
-                        primitives = new List<Draw.PrimitiveSetup>();
+                        primitives = new List<DebugDraw.PrimitiveSetup>();
                     return primitives;
                 }
             }
@@ -142,7 +142,7 @@ namespace Prateek.Debug
             public DebugRecording(DebugDisplayManager owner)
             {
                 this.owner = owner;
-                primitives = new List<Draw.PrimitiveSetup>();
+                primitives = new List<DebugDraw.PrimitiveSetup>();
             }
         }
         #endregion Declarations
@@ -205,14 +205,14 @@ namespace Prateek.Debug
             var recordings = (DebugRecording)data;
             for (int r = 0; r < recordings.Primitives.Count; r++)
             {
-                Draw.Render(lineDisplay, recordings.Primitives[r]);
+                DebugDraw.Render(lineDisplay, recordings.Primitives[r]);
             }
         }
         #endregion FrameRecorder.IRecorderBase
 
         //---------------------------------------------------------------------
         #region Recording datas
-        public static void Add(Draw.PrimitiveSetup primitive)
+        public static void Add(DebugDraw.PrimitiveSetup primitive)
         {
             var instance = Registry.GetManager<DebugDisplayManager>();
             if (instance == null)

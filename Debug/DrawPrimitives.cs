@@ -67,7 +67,7 @@ using Prateek.CodeGeneration;
 
 #if PRATEEK_DEBUG
 using Prateek.Debug;
-using static Prateek.Debug.Draw.Style.QuickCTor;
+using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
 #endif //PRATEEK_DEBUG
 #endregion Prateek
 
@@ -84,66 +84,134 @@ using static Prateek.Debug.Draw.Style.QuickCTor;
 namespace Prateek.Debug
 {
     //-------------------------------------------------------------------------
-    public partial class Draw
+    public partial class DebugDraw
     {
         //---------------------------------------------------------------------
         //Point: Three line to mark each axis
-        ////public static void Line(Vector3 start, Vector3 dir, float distance) { Line(start, dir, distance, ActiveSetup); }
-        ////public static void Line(Vector3 start, Vector3 dir, float distance, Setup setup) { Line(start, start + dir * distance, setup); }
-        ////public static void Line(Vector3 start, Vector3 end) { Line(start, end, ActiveSetup); }
-        public static void Line(Vector3 start, Vector3 end, Style setup)
+        private static void Line(Vector3 start, Vector3 end, DebugStyle setup)
         {
             var dir = end - start;
             var prim = new PrimitiveSetup(PrimitiveType.Line, setup);
             prim.pos = start;
             prim.rot = Quaternion.LookRotation(dir.normalized);
-            prim.size = vec3(0, 0, dir.magnitude);
+            prim.extents = vec3(0, 0, dir.magnitude);
+            Add(prim);
+        }
+
+        //---------------------------------------------------------------------
+        #region Standard Primitives
+        //Point: Three line to mark each axis
+        public static void Line(DebugPlace place) { Line(place, ActiveSetup); }
+        public static void Line(DebugPlace place, DebugStyle setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.Line, setup);
+            prim.pos = place.Start;
+            prim.rot = place.Rotation;
+            prim.extents = place.Size;
             Add(prim);
         }
 
         //---------------------------------------------------------------------
         //Point: Three line to mark each axis
-        public static void Point(Vector3 position, float size, Style setup)
+        public static void Point(DebugPlace place) { Point(place, ActiveSetup); }
+        public static void Point(DebugPlace place, DebugStyle setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.Point, setup);
-            prim.pos = position;
+            prim.pos = place.Position;
             prim.rot = Quaternion.identity;
-            prim.size = vec3(size * 0.5f);
+            prim.extents = place.Extents;
             Add(prim);
         }
 
         //---------------------------------------------------------------------
         //Box: A box, several flavors available
-        #region Box
-        ////public static void Box(Bounds bounds, Setup setup)
-        ////{
-        ////    Box(bounds.center, bounds.extents, setup);
-        ////}
-
-        //////-----------------------------------------------------------------
-        ////public static void Box(Vector3 position, float extends, Setup setup)
-        ////{
-        ////    Box(position, Vector3.one * extends, setup);
-        ////}
-
-        //////-----------------------------------------------------------------
-        ////public static void Box(Vector3 position, Vector3 extends, Setup setup)
-        ////{
-        ////    Box(position, Quaternion.identity, extends, setup);
-        ////}
-
-        //---------------------------------------------------------------------
-        public static void Box(Vector3 position, Quaternion rotation, Vector3 size, Style setup)
+        public static void Box(DebugPlace place) { Box(place, ActiveSetup); }
+        public static void Box(DebugPlace place, DebugStyle setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.Box, setup);
-            prim.pos = position;
-            prim.rot = rotation;
-            prim.size = size * 0.5f;
+            prim.pos = place.Position;
+            prim.rot = place.Rotation;
+            prim.extents = place.Extents;
             Add(prim);
         }
 
         //---------------------------------------------------------------------
-        public static void Box(Vector3[] points, Style setup)
+        //Arc: Vertically aligned if drawn in world, aligned on z-axis if other
+        public static void Arc(DebugPlace place, Vector2 degrees) { Arc(place, degrees, ActiveSetup); }
+        public static void Arc(DebugPlace place, Vector2 degrees, DebugStyle setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.Arc, setup);
+            prim.pos = place.Position;
+            prim.rot = place.Rotation;
+            prim.extents = place.Extents;
+            prim.range = degrees;
+            Add(prim);
+        }
+
+        //---------------------------------------------------------------------
+        //Circle/Ellipse: Vertically aligned if drawn in world, aligned on z-axis if other
+        public static void Circle(DebugPlace place) { Circle(place, ActiveSetup); }
+        public static void Circle(DebugPlace place, DebugStyle setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.Circle, setup);
+            prim.pos = place.Position;
+            prim.rot = place.Rotation;
+            prim.extents = place.Extents;
+            Add(prim);
+        }
+
+        //---------------------------------------------------------------------
+        public static void Sphere(DebugPlace place) { Sphere(place, ActiveSetup); }
+        public static void Sphere(DebugPlace place, DebugStyle setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.Sphere, setup);
+            prim.pos = place.Position;
+            prim.rot = place.Rotation;
+            prim.extents = place.Extents;
+            Add(prim);
+        }
+        #endregion Standard Primitives
+
+        //---------------------------------------------------------------------
+        #region Complex Primitives
+        public static void Cone(DebugPlace place) { Cone(place, ActiveSetup); }
+        public static void Cone(DebugPlace place, DebugStyle setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
+            prim.pos = place.Position;
+            prim.rot = place.Rotation;
+            prim.extents = place.Extents;
+            Add(prim);
+        }
+
+        //---------------------------------------------------------------------
+        public static void Pie(DebugPlace place, Vector2 degrees) { Pie(place, degrees, ActiveSetup); }
+        public static void Pie(DebugPlace place, Vector2 degrees, DebugStyle setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
+            prim.pos = place.Position;
+            prim.rot = place.Rotation;
+            prim.extents = place.Extents;
+            prim.range = degrees;
+            Add(prim);
+        }
+
+        //---------------------------------------------------------------------
+        public static void Arrow(DebugPlace place) { Arrow(place, ActiveSetup); }
+        public static void Arrow(DebugPlace place, DebugStyle setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.Arrow, setup);
+            prim.pos = place.Start;
+            prim.rot = place.Rotation;
+            prim.extents = vec3(place.Extents.x, place.Extents.y, place.Size.z);
+            Add(prim);
+        }
+        #endregion Complex Primitives
+
+        //---------------------------------------------------------------------
+        #region Custom Primitives
+        public static void Box(Vector3[] points) { Box(points, ActiveSetup); }
+        public static void Box(Vector3[] points, DebugStyle setup)
         {
             if (points.Length != 8)
                 return;
@@ -163,134 +231,36 @@ namespace Prateek.Debug
             Line(points[2], points[5], setup);
             Line(points[3], points[4], setup);
         }
-        #endregion //Box
 
         //---------------------------------------------------------------------
-        #region Arrow
-        public static void Arrow(Vector3 start, Vector3 end, Vector3 up, float width, float length, Style setup)
+        public static void Plane(Plane plane, DebugPlace place) { Plane(plane, place, ActiveSetup); }
+        public static void Plane(Plane plane, DebugPlace place, DebugStyle setup)
         {
-            var dir = end - start;
-            var prim = new PrimitiveSetup(PrimitiveType.Arrow, setup);
-            prim.pos = start;
-            prim.rot = Quaternion.LookRotation(dir, up);
-            prim.size = vec3(width, length, dir.magnitude);
-            Add(prim);
-        }
-        #endregion Arrow
-
-        //---------------------------------------------------------------------
-        #region Plane
-        public static void Plane(Plane plane, Vector2 offset, float size, Vector3 up, Style setup)
-        {
-            var q = Quaternion.LookRotation(plane.normal, up);
-            var x = q * Vector3.right;
-            var y = q * Vector3.up;
-            var p = (plane.normal * -plane.distance) + (x * offset.x) + (y * offset.y);
+            var q = place.Rotation;
+            var x = place.Right;
+            var y = place.Up;
+            var p = (plane.normal * -plane.distance) + (x * place.Position.x) + (y * place.Position.y);
 
             var prim = new PrimitiveSetup(PrimitiveType.Plane, setup);
             prim.pos = p;
             prim.rot = q;
-            prim.size = vec3(size);
+            prim.extents = place.Size;
             Add(prim);
 
-            Arrow(p, p + plane.normal * size * 0.2f, up, size * 0.02f, size * 0.02f, setup);
+            Arrow(place, setup);
         }
-        #endregion Plane
 
         //---------------------------------------------------------------------
-        //Arc: Vertically aligned if drawn in world, aligned on z-axis if other
-        #region Arc
-        ////public static void Arc(Vector3 position, Quaternion rotation, float radius, float start, float end, int segments = 8, Setup setup)
-        ////{
-        ////    Arc(position, rotation, Vector2.one * radius, start, end, segments, setup);
-        ////}
-
-        //---------------------------------------------------------------------
-        public static void Arc(Vector3 position, Quaternion rotation, Vector2 radius, Vector2 degrees, Style setup)
-        {
-            var prim = new PrimitiveSetup(PrimitiveType.Arc, setup);
-            prim.pos = position;
-            prim.rot = rotation;
-            prim.size = radius.xny();
-            prim.range = degrees;
-            Add(prim);
-        }
-        #endregion //Arc
-
-        //---------------------------------------------------------------------
-        //Circle/Ellipse: Vertically aligned if drawn in world, aligned on z-axis if other
-        #region Circle/Ellipse/Sphere/Ellipsoid
-        #region Circle
-        ////public static void Circle(Vector3 position, float radius, int segments = 8, Setup setup)
-        ////{
-        ////    Arc(position, Quaternion.identity, radius, 0, 360, segments, setup);
-        ////}
-
-        //---------------------------------------------------------------------
-        public static void Circle(Vector3 position, Quaternion rotation, float radius, Style setup)
-        {
-            var prim = new PrimitiveSetup(PrimitiveType.Circle, setup);
-            prim.pos = position;
-            prim.rot = rotation;
-            prim.size = vec3(radius);
-            Add(prim);
-        }
-        #endregion //Circle
-
-        //---------------------------------------------------------------------
-        #region Sphere
-        ////public static void Sphere(Vector3 position, float radius, int segments = 8, Setup setup)
-        ////{
-        ////    Sphere(position, Quaternion.identity, radius, segments, setup);
-        ////}
-
-        //---------------------------------------------------------------------
-        public static void Sphere(Vector3 position, Quaternion rotation, float radius, Style setup)
-        {
-            var prim = new PrimitiveSetup(PrimitiveType.Sphere, setup);
-            prim.pos = position;
-            prim.rot = rotation;
-            prim.size = vec3(radius);
-            Add(prim);
-        }
-        #endregion //Sphere
-
-        //---------------------------------------------------------------------
-        public static void SphereCast(Ray ray, float radius, float distance, Style setup)
+        public static void SphereCast(Ray ray, float radius, float distance) { SphereCast(ray, radius, distance, ActiveSetup); }
+        public static void SphereCast(Ray ray, float radius, float distance, DebugStyle setup)
         {
             var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
             prim.pos = ray.origin;
             prim.rot = Quaternion.LookRotation(ray.direction);
-            prim.size = vec3(radius, radius, distance);
+            prim.extents = vec3(radius, radius, distance);
             Add(prim);
         }
-
-        #endregion //Circle/Ellipse/Sphere/Ellipsoid
-
-        //---------------------------------------------------------------------
-        #region Cone
-        public static void Cone(Vector3 position, Quaternion rotation, float length, Vector2 radius, Style setup)
-        {
-            var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
-            prim.pos = position;
-            prim.rot = rotation;
-            prim.size = vec3(radius, length);
-            Add(prim);
-        }
-        #endregion Cone
-
-        //---------------------------------------------------------------------
-        #region Pie
-        public static void Pie(Vector3 position, Quaternion rotation, float radius, float thickness, Vector2 degrees, Style setup)
-        {
-            var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
-            prim.pos = position;
-            prim.rot = rotation;
-            prim.size = vec3(radius, thickness, radius);
-            prim.range = degrees;
-            Add(prim);
-        }
-        #endregion Pie
+        #endregion Custom Primitives
     }
 }
 #endif //PRATEEK_DEBUG
