@@ -513,7 +513,7 @@ namespace Prateek.Debug
                     other.extents = prim.extents.xzy();
                     Render(d, other);
                     other.rot = Quaternion.LookRotation(wRt, wFw);
-                    other.extents = prim.extents.zxy() * 0.8f;
+                    other.extents = prim.extents.zxy();
                     Render(d, other);
                     break;
                 }
