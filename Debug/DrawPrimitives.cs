@@ -170,6 +170,17 @@ namespace Prateek.Debug
             prim.extents = place.Extents;
             Add(prim);
         }
+
+        //---------------------------------------------------------------------
+        public static void Capsule(DebugPlace place) { Capsule(place, ActiveSetup); }
+        public static void Capsule(DebugPlace place, DebugStyle setup)
+        {
+            var prim = new PrimitiveSetup(PrimitiveType.Capsule, setup);
+            prim.pos = place.Position;
+            prim.rot = place.Rotation;
+            prim.extents = place.Extents;
+            Add(prim);
+        }
         #endregion Standard Primitives
 
         //---------------------------------------------------------------------
@@ -177,7 +188,7 @@ namespace Prateek.Debug
         public static void Cone(DebugPlace place) { Cone(place, ActiveSetup); }
         public static void Cone(DebugPlace place, DebugStyle setup)
         {
-            var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
+            var prim = new PrimitiveSetup(PrimitiveType.Cone, setup);
             prim.pos = place.Position;
             prim.rot = place.Rotation;
             prim.extents = place.Extents;
@@ -188,7 +199,7 @@ namespace Prateek.Debug
         public static void Pie(DebugPlace place, Vector2 degrees) { Pie(place, degrees, ActiveSetup); }
         public static void Pie(DebugPlace place, Vector2 degrees, DebugStyle setup)
         {
-            var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
+            var prim = new PrimitiveSetup(PrimitiveType.Pie, setup);
             prim.pos = place.Position;
             prim.rot = place.Rotation;
             prim.extents = place.Extents;
@@ -251,14 +262,91 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
+        public static void LineCast(Ray ray, float radius, float distance) { SphereCast(ray, radius, distance, ActiveSetup); }
+        public static void LineCast(Ray ray, float radius, float distance, DebugStyle setup)
+        {
+            var place = DebugPlace.AToB(ray.origin, ray.origin + ray.direction * distance);
+            var prim = new PrimitiveSetup(PrimitiveType.LineCast, setup);
+            prim.pos = place.Position;
+            prim.rot = place.Rotation;
+            prim.extents = vec3(radius, radius, place.Extents.z);
+            Add(prim);
+        }
+
+        //---------------------------------------------------------------------
+        public static void LineCast(RaycastHit hit, Ray ray, float radius, float distance) { SphereCast(hit, ray, radius, distance, ActiveSetup); }
+        public static void LineCast(RaycastHit hit, Ray ray, float radius, float distance, DebugStyle setup)
+        {
+            {
+                var prim = new PrimitiveSetup(PrimitiveType.Point, setup);
+                prim.pos = hit.point;
+                prim.rot = Quaternion.LookRotation(hit.normal);
+                prim.extents = vec3(radius * 2);
+                Add(prim);
+            }
+
+            var place0 = DebugPlace.AToB(ray.origin, ray.origin + ray.direction * hit.distance);
+            {
+                var prim = new PrimitiveSetup(PrimitiveType.LineCast, setup);
+                prim.pos = place0.Position;
+                prim.rot = place0.Rotation;
+                prim.extents = vec3(radius, radius, place0.Extents.z);
+                Add(prim);
+            }
+
+            var place1 = DebugPlace.AToB(place0.End, ray.origin + ray.direction * distance);
+            {
+                setup.Color = Color.grey;
+                var prim = new PrimitiveSetup(PrimitiveType.LineCast, setup);
+                prim.pos = place1.Position;
+                prim.rot = place1.Rotation;
+                prim.extents = vec3(radius * 0.9f, radius * 0.9f, place1.Extents.z);
+                Add(prim);
+            }
+        }
+
+        //---------------------------------------------------------------------
         public static void SphereCast(Ray ray, float radius, float distance) { SphereCast(ray, radius, distance, ActiveSetup); }
         public static void SphereCast(Ray ray, float radius, float distance, DebugStyle setup)
         {
+            var place = DebugPlace.AToB(ray.origin, ray.origin + ray.direction * distance);
             var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
-            prim.pos = ray.origin;
-            prim.rot = Quaternion.LookRotation(ray.direction);
-            prim.extents = vec3(radius, radius, distance);
+            prim.pos = place.Position;
+            prim.rot = place.Rotation;
+            prim.extents = vec3(radius, radius, place.Extents.z);
             Add(prim);
+        }
+
+        //---------------------------------------------------------------------
+        public static void SphereCast(RaycastHit hit, Ray ray, float radius, float distance) { SphereCast(hit, ray, radius, distance, ActiveSetup); }
+        public static void SphereCast(RaycastHit hit, Ray ray, float radius, float distance, DebugStyle setup)
+        {
+            {
+                var prim = new PrimitiveSetup(PrimitiveType.Point, setup);
+                prim.pos = hit.point;
+                prim.rot = Quaternion.LookRotation(hit.normal);
+                prim.extents = vec3(radius * 0.4f);
+                Add(prim);
+            }
+
+            var place0 = DebugPlace.AToB(ray.origin, ray.origin + ray.direction * (hit.distance + radius));
+            {
+                var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
+                prim.pos = place0.Position;
+                prim.rot = place0.Rotation;
+                prim.extents = vec3(radius, radius, place0.Extents.z);
+                Add(prim);
+            }
+
+            var place1 = DebugPlace.AToB(place0.End - ray.direction * radius * 1.9f, ray.origin + ray.direction * distance);
+            {
+                setup.Color = Color.grey;
+                var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
+                prim.pos = place1.Position;
+                prim.rot = place1.Rotation;
+                prim.extents = vec3(radius * 0.9f, radius * 0.9f, place1.Extents.z);
+                Add(prim);
+            }
         }
         #endregion Custom Primitives
     }

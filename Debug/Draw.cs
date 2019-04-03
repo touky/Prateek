@@ -314,14 +314,18 @@ namespace Prateek.Debug
             Line,
             Point,
             Box,
-            Arrow,
-            Plane,
             Arc,
             Circle,
             Sphere,
-            SphereCast,
+            Capsule,
+
             Cone,
             Pie,
+            Arrow,
+
+            Plane,
+            LineCast,
+            SphereCast,
 
             MAX
         }
@@ -430,9 +434,27 @@ namespace Prateek.Debug
                 }
                 case PrimitiveType.Point:
                 {
-                    d.RenderLine(prim.setup, prim.pos - wRt, prim.pos + wRt);
-                    d.RenderLine(prim.setup, prim.pos - wUp, prim.pos + wUp);
                     d.RenderLine(prim.setup, prim.pos - wFw, prim.pos + wFw);
+                    d.RenderLine(prim.setup, prim.pos - wUp, prim.pos + wUp);
+                    d.RenderLine(prim.setup, prim.pos - wRt, prim.pos + wRt);
+
+                    prim.setup.Color = Color.red;
+                    d.RenderLine(prim.setup, prim.pos + wRt, prim.pos + wRt * 0.75f + wUp * 0.25f);
+                    d.RenderLine(prim.setup, prim.pos + wRt * 0.9f, prim.pos + wRt * 0.75f + wUp * 0.25f);
+                    d.RenderLine(prim.setup, prim.pos + wRt, prim.pos + wRt * 0.75f + wFw * 0.25f);
+                    d.RenderLine(prim.setup, prim.pos + wRt * 0.9f, prim.pos + wRt * 0.75f + wFw * 0.25f);
+
+                    prim.setup.Color = Color.green;
+                    d.RenderLine(prim.setup, prim.pos + wUp, prim.pos + wUp * 0.75f + wFw * 0.25f);
+                    d.RenderLine(prim.setup, prim.pos + wUp * 0.9f, prim.pos + wUp * 0.75f + wFw * 0.25f);
+                    d.RenderLine(prim.setup, prim.pos + wUp, prim.pos + wUp * 0.75f + wRt * 0.25f);
+                    d.RenderLine(prim.setup, prim.pos + wUp * 0.9f, prim.pos + wUp * 0.75f + wRt * 0.25f);
+
+                    prim.setup.Color = Color.blue;
+                    d.RenderLine(prim.setup, prim.pos + wFw, prim.pos + wFw * 0.75f + wUp * 0.25f);
+                    d.RenderLine(prim.setup, prim.pos + wFw * 0.9f, prim.pos + wFw * 0.75f + wUp * 0.25f);
+                    d.RenderLine(prim.setup, prim.pos + wFw, prim.pos + wFw * 0.75f + wRt * 0.25f);
+                    d.RenderLine(prim.setup, prim.pos + wFw * 0.9f, prim.pos + wFw * 0.75f + wRt * 0.25f);
                     break;
                 }
                 case PrimitiveType.Box:
@@ -454,30 +476,6 @@ namespace Prateek.Debug
                     d.RenderLine(prim.setup, posUp - wRt - wFw, posDn - wRt - wFw);
                     d.RenderLine(prim.setup, posUp - wRt + wFw, posDn - wRt + wFw);
                     d.RenderLine(prim.setup, posUp + wRt - wFw, posDn + wRt - wFw);
-                    break;
-                }
-                case PrimitiveType.Arrow:
-                {
-                    var end = prim.pos + wFw * prim.extents.z;
-                    d.RenderLine(prim.setup, end, prim.pos);
-                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y - wRt * prim.extents.x);
-                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y + wRt * prim.extents.x);
-                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y - wUp * prim.extents.x);
-                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y + wUp * prim.extents.x);
-
-                    var end0 = end - wFw * prim.extents.y * 0.25f;
-                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y - wRt * prim.extents.x);
-                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y + wRt * prim.extents.x);
-                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y - wUp * prim.extents.x);
-                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y + wUp * prim.extents.x);
-                    break;
-                }
-                case PrimitiveType.Plane:
-                {
-                    d.RenderLine(prim.setup, prim.pos - wRt - wUp, prim.pos + wRt - wUp);
-                    d.RenderLine(prim.setup, prim.pos - wRt + wUp, prim.pos + wRt + wUp);
-                    d.RenderLine(prim.setup, prim.pos - wRt - wUp, prim.pos - wRt + wUp);
-                    d.RenderLine(prim.setup, prim.pos + wRt - wUp, prim.pos + wRt + wUp);
                     break;
                 }
                 case PrimitiveType.Arc:
@@ -517,39 +515,59 @@ namespace Prateek.Debug
                     Render(d, other);
                     break;
                 }
-                case PrimitiveType.SphereCast:
+                case PrimitiveType.Capsule:
                 {
-                    var other = prim;
-                    other.type = PrimitiveType.Sphere;
-                    other.extents = vec3(prim.extents.x);
-                    Render(d, other);
-                    other.pos = prim.pos + wFw * prim.extents.z;
-                    Render(d, other);
+                    var z = min(min(prim.extents.x, prim.extents.y), abs(prim.extents.z));
+                    var h = max(0, prim.extents.z - z);
 
-                    d.RenderLine(prim.setup, prim.pos - wRt * prim.extents.x, prim.pos - wRt * prim.extents.x + wFw * prim.extents.z);
-                    d.RenderLine(prim.setup, prim.pos + wRt * prim.extents.x, prim.pos + wRt * prim.extents.x + wFw * prim.extents.z);
-                    d.RenderLine(prim.setup, prim.pos + wUp * prim.extents.y, prim.pos + wUp * prim.extents.y + wFw * prim.extents.z);
-                    d.RenderLine(prim.setup, prim.pos - wUp * prim.extents.y, prim.pos - wUp * prim.extents.y + wFw * prim.extents.z);
+                    var other0 = prim;
+                    other0.type = PrimitiveType.Arc;
+                    other0.range = vec2(0, 360);
+                    var other1 = other0;
+                    other0.pos -= other0.rot * vec3(0, 0, h);
+                    Render(d, other0);
+                    other0.rot = Quaternion.LookRotation(wUp, wFw);
+                    other0.extents = prim.extents.xny(z);
+                    other0.range = vec2(180, 360);
+                    Render(d, other0);
+                    other0.rot = Quaternion.LookRotation(wRt, wFw);
+                    Render(d, other0);
 
-                    d.RenderLine(prim.setup, prim.pos + wFw * prim.extents.x, prim.pos + wFw * (prim.extents.z - prim.extents.x));
+                    other1.pos += other1.rot * vec3(0, 0, h);
+                    Render(d, other1);
+                    other1.rot = Quaternion.LookRotation(wUp, wFw);
+                    other1.extents = prim.extents.xny(z);
+                    other1.range = vec2(0, 180);
+                    Render(d, other1);
+                    other1.rot = Quaternion.LookRotation(wRt, wFw);
+                    Render(d, other1);
+
+                    wUp = wUp * prim.extents.y;
+                    wRt = wRt * prim.extents.x;
+                    d.RenderLine(prim.setup, other0.pos + wUp, other1.pos + wUp);
+                    d.RenderLine(prim.setup, other0.pos - wUp, other1.pos - wUp);
+                    d.RenderLine(prim.setup, other0.pos + wRt, other1.pos + wRt);
+                    d.RenderLine(prim.setup, other0.pos - wRt, other1.pos - wRt);
+
                     break;
                 }
+
                 case PrimitiveType.Cone:
                 {
+                    var start = prim.pos - wFw;
                     for (int i = 0; i < prim.setup.Precision; ++i)
                     {
                         var a = ((float)i / (float)prim.setup.Precision) * Mathf.PI * 2.0f;
                         var x = Mathf.Sin(a) * wRt;
                         var y = Mathf.Cos(a) * wUp;
 
-                        d.RenderLine(prim.setup, prim.pos, prim.pos + wFw + x + y); 
+                        d.RenderLine(prim.setup, start, prim.pos + wFw + x + y);
                     }
 
                     var other = prim;
                     other.type = PrimitiveType.Arc;
                     other.range = vec2(0, 360);
                     other.pos = prim.pos + wFw;
-                    other.rot = Quaternion.LookRotation(wUp, wFw);
                     Render(d, other);
                     break;
                 }
@@ -581,19 +599,80 @@ namespace Prateek.Debug
                     //Draw sides and inner lines
                     var segments = prim.setup.Precision;
                     var step = (prim.range.y - prim.range.x) / segments;
-                    for (var i = 0; i < segments; i++)
+                    for (var i = 0; i <= segments; i++)
                     {
                         var j = i + 1;
                         var angle = prim.range.x + i * step;
-                        var p = wRt * Mathf.Cos(angle * Mathf.Deg2Rad) + wFw * Mathf.Sin(angle * Mathf.Deg2Rad);
+                        var p = wRt * prim.extents.x * Mathf.Cos(angle * Mathf.Deg2Rad) + wUp * prim.extents.y * Mathf.Sin(angle * Mathf.Deg2Rad);
                         d.RenderLine(prim.setup, prim.pos + p - wFw * prim.extents.z, prim.pos + p + wFw * prim.extents.z);
 
-                        if (i == 0 || i == segments - 1)
+                        if (i == 0 || i == segments)
                         {
                             d.RenderLine(prim.setup, prim.pos - wFw * prim.extents.z, prim.pos + p - wFw * prim.extents.z);
                             d.RenderLine(prim.setup, prim.pos + wFw * prim.extents.z, prim.pos + p + wFw * prim.extents.z);
                         }
                     }
+                    break;
+                }
+                case PrimitiveType.Arrow:
+                {
+                    var end = prim.pos + wFw * prim.extents.z;
+                    d.RenderLine(prim.setup, end, prim.pos);
+                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y - wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y + wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y - wUp * prim.extents.x);
+                    d.RenderLine(prim.setup, end, end - wFw * prim.extents.y + wUp * prim.extents.x);
+
+                    var end0 = end - wFw * prim.extents.y * 0.25f;
+                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y - wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y + wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y - wUp * prim.extents.x);
+                    d.RenderLine(prim.setup, end0, end - wFw * prim.extents.y + wUp * prim.extents.x);
+                    break;
+                }
+
+                case PrimitiveType.Plane:
+                {
+                    d.RenderLine(prim.setup, prim.pos - wRt - wUp, prim.pos + wRt - wUp);
+                    d.RenderLine(prim.setup, prim.pos - wRt + wUp, prim.pos + wRt + wUp);
+                    d.RenderLine(prim.setup, prim.pos - wRt - wUp, prim.pos - wRt + wUp);
+                    d.RenderLine(prim.setup, prim.pos + wRt - wUp, prim.pos + wRt + wUp);
+                    break;
+                }
+                case PrimitiveType.LineCast:
+                {
+                    var a = prim.pos - wFw * prim.extents.z;
+                    var b = prim.pos + wFw * prim.extents.z;
+                    d.RenderLine(prim.setup, a, b);
+
+                    var other = prim;
+                    other.type = PrimitiveType.Sphere;
+                    other.extents = vec3(prim.extents.x);
+                    other.pos = a;
+                    Render(d, other);
+                    other.pos = b;
+                    Render(d, other);
+                    break;
+                }
+                case PrimitiveType.SphereCast:
+                {
+                    var pos = prim.pos;
+                    var pos0 = pos - wFw * (prim.extents.z - prim.extents.x);
+                    var pos1 = pos + wFw * (prim.extents.z - prim.extents.x);
+                    var other = prim;
+                    other.type = PrimitiveType.Sphere;
+                    other.extents = vec3(prim.extents.x);
+                    other.pos = pos0;
+                    Render(d, other);
+                    other.pos = pos1;
+                    Render(d, other);
+
+                    d.RenderLine(prim.setup, pos0 - wRt * prim.extents.x, pos1 - wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, pos0 + wRt * prim.extents.x, pos1 + wRt * prim.extents.x);
+                    d.RenderLine(prim.setup, pos0 + wUp * prim.extents.y, pos1 + wUp * prim.extents.y);
+                    d.RenderLine(prim.setup, pos0 - wUp * prim.extents.y, pos1 - wUp * prim.extents.y);
+
+                    d.RenderLine(prim.setup, pos0 + wFw * prim.extents.x, pos1 - wFw * prim.extents.x);
                     break;
                 }
             }

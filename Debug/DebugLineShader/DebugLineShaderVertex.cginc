@@ -33,8 +33,8 @@ float borderThickness;
 Pixel vert(Vertex v)
 {
     Pixel o = (Pixel)0;
-    //if (maxVertexShown - v.vertex.x <= 0)
-    //    return o;
+    if (maxVertexShown - v.vertex.x <= 0)
+        return o;
 #if false
     o.vertex = UnityObjectToClipPos(v.vertex);
     o.color = half4(1, 1, 1, 1);
