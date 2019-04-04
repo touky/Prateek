@@ -244,6 +244,22 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
+        public static void Light(Light light) { var setup = ActiveSetup; setup.Color = light.color; Light(light, setup); }
+        public static void Light(Light light, DebugStyle setup)
+        {
+            var tr = light.transform;
+            if (light.type == LightType.Point)
+            {
+                Sphere(DebugPlace.At(tr.position, tr.rotation, light.range), setup);
+            }
+            else if (light.type == LightType.Spot)
+            {
+                var t = Mathf.Tan(light.spotAngle) * light.range;
+                Cone(DebugPlace.AToB(tr.position, tr.rotation * vec3(0, 0, light.range), vec3(t, t, 0), tr.rotation * Vector3.up), setup);
+            }
+        }
+
+        //---------------------------------------------------------------------
         public static void Plane(Plane plane, DebugPlace place) { Plane(plane, place, ActiveSetup); }
         public static void Plane(Plane plane, DebugPlace place, DebugStyle setup)
         {
@@ -274,9 +290,73 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        public static void LineCast(RaycastHit hit, Ray ray, float radius, float distance) { SphereCast(hit, ray, radius, distance, ActiveSetup); }
+        public static void LineCastList(RaycastHit[] hits, Ray[] ray, float radius, float distance, bool doLoop = false) { LineCastList(hits, ray, radius, distance, ActiveSetup, doLoop); }
+        public static void LineCastList(RaycastHit[] hits, Ray[] rays, float radius, float distance, DebugStyle setup, bool doLoop = false)
+        {
+            bool hasHit = false;
+            for (int h = 0; h < hits.Length; h++)
+            {
+                if (hits[h].transform != null)
+                {
+                    hasHit = true;
+                    break;
+                }
+            }
+
+            if (!hasHit)
+            {
+                LineCastList(rays, radius, distance, setup, doLoop);
+                return;
+            }
+
+            var greySetup = setup;
+            greySetup.Color = Color.grey;
+            for (int h = 0; h < hits.Length; h++)
+            {
+                LineCast(hits[h], rays[h], radius, distance, setup);
+
+                if (doLoop || h < hits.Length - 1)
+                {
+                    var h1 = (h + 1) % hits.Length;
+
+                    var d0 = hits[h].transform != null ? hits[h].distance : distance;
+                    var d1 = hits[h1].transform != null ? hits[h1].distance : distance;
+                    Line(DebugPlace.AToB(rays[h].origin + rays[h].direction * d0, rays[h1].origin + rays[h1].direction * d1), setup);
+
+                    if (hits[h].transform != null || hits[h1].transform != null)
+                    {
+                        Line(DebugPlace.AToB(rays[h].origin + rays[h].direction * distance, rays[h1].origin + rays[h1].direction * distance), greySetup);
+                    }
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public static void LineCastList(Ray[] ray, float radius, float distance, bool doLoop = false) { LineCastList(ray, radius, distance, ActiveSetup, doLoop); }
+        public static void LineCastList(Ray[] rays, float radius, float distance, DebugStyle setup, bool doLoop = false)
+        {
+            for (int h = 0; h < rays.Length; h++)
+            {
+                LineCast(rays[h], radius, distance, setup);
+
+                if (doLoop || h < rays.Length - 1)
+                {
+                    var h1 = (h + 1) % rays.Length;
+                    Line(DebugPlace.AToB(rays[h].origin + rays[h].direction * distance, rays[h1].origin + rays[h1].direction * distance), setup);
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public static void LineCast(RaycastHit hit, Ray ray, float radius, float distance) { LineCast(hit, ray, radius, distance, ActiveSetup); }
         public static void LineCast(RaycastHit hit, Ray ray, float radius, float distance, DebugStyle setup)
         {
+            if (hit.transform == null)
+            {
+                LineCast(ray, radius, distance, setup);
+                return;
+            }
+
             {
                 var prim = new PrimitiveSetup(PrimitiveType.Point, setup);
                 prim.pos = hit.point;

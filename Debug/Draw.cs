@@ -404,9 +404,16 @@ namespace Prateek.Debug
         #region Primitives render
         public static void Render(DebugLineDisplayer d, PrimitiveSetup prim)
         {
+            var pos = prim.pos;
             var wRt = prim.rot * Vector3.right;
             var wUp = prim.rot * Vector3.up;
             var wFw = prim.rot * Vector3.forward;
+
+            pos = prim.setup.Matrix.MultiplyPoint(pos);
+            wFw = prim.setup.Matrix.MultiplyPoint(prim.pos + wFw) - pos;
+            wRt = prim.setup.Matrix.MultiplyPoint(prim.pos + wRt) - pos;
+            wUp = prim.setup.Matrix.MultiplyPoint(prim.pos + wUp) - pos;
+            prim.setup.Matrix = Matrix4x4.identity;
 
             //Adjust axis size if required
             switch (prim.type)
@@ -429,38 +436,38 @@ namespace Prateek.Debug
             {
                 case PrimitiveType.Line:
                 {
-                    d.RenderLine(prim.setup, prim.pos, prim.pos + prim.rot * prim.extents);
+                    d.RenderLine(prim.setup, pos, pos + wFw * prim.extents.z);
                     break;
                 }
                 case PrimitiveType.Point:
                 {
-                    d.RenderLine(prim.setup, prim.pos - wFw, prim.pos + wFw);
-                    d.RenderLine(prim.setup, prim.pos - wUp, prim.pos + wUp);
-                    d.RenderLine(prim.setup, prim.pos - wRt, prim.pos + wRt);
+                    d.RenderLine(prim.setup, pos - wFw, pos + wFw);
+                    d.RenderLine(prim.setup, pos - wUp, pos + wUp);
+                    d.RenderLine(prim.setup, pos - wRt, pos + wRt);
 
                     prim.setup.Color = Color.red;
-                    d.RenderLine(prim.setup, prim.pos + wRt, prim.pos + wRt * 0.75f + wUp * 0.25f);
-                    d.RenderLine(prim.setup, prim.pos + wRt * 0.9f, prim.pos + wRt * 0.75f + wUp * 0.25f);
-                    d.RenderLine(prim.setup, prim.pos + wRt, prim.pos + wRt * 0.75f + wFw * 0.25f);
-                    d.RenderLine(prim.setup, prim.pos + wRt * 0.9f, prim.pos + wRt * 0.75f + wFw * 0.25f);
+                    d.RenderLine(prim.setup, pos + wRt, pos + wRt * 0.75f + wUp * 0.25f);
+                    d.RenderLine(prim.setup, pos + wRt * 0.9f, pos + wRt * 0.75f + wUp * 0.25f);
+                    d.RenderLine(prim.setup, pos + wRt, pos + wRt * 0.75f + wFw * 0.25f);
+                    d.RenderLine(prim.setup, pos + wRt * 0.9f, pos + wRt * 0.75f + wFw * 0.25f);
 
                     prim.setup.Color = Color.green;
-                    d.RenderLine(prim.setup, prim.pos + wUp, prim.pos + wUp * 0.75f + wFw * 0.25f);
-                    d.RenderLine(prim.setup, prim.pos + wUp * 0.9f, prim.pos + wUp * 0.75f + wFw * 0.25f);
-                    d.RenderLine(prim.setup, prim.pos + wUp, prim.pos + wUp * 0.75f + wRt * 0.25f);
-                    d.RenderLine(prim.setup, prim.pos + wUp * 0.9f, prim.pos + wUp * 0.75f + wRt * 0.25f);
+                    d.RenderLine(prim.setup, pos + wUp, pos + wUp * 0.75f + wFw * 0.25f);
+                    d.RenderLine(prim.setup, pos + wUp * 0.9f, pos + wUp * 0.75f + wFw * 0.25f);
+                    d.RenderLine(prim.setup, pos + wUp, pos + wUp * 0.75f + wRt * 0.25f);
+                    d.RenderLine(prim.setup, pos + wUp * 0.9f, pos + wUp * 0.75f + wRt * 0.25f);
 
                     prim.setup.Color = Color.blue;
-                    d.RenderLine(prim.setup, prim.pos + wFw, prim.pos + wFw * 0.75f + wUp * 0.25f);
-                    d.RenderLine(prim.setup, prim.pos + wFw * 0.9f, prim.pos + wFw * 0.75f + wUp * 0.25f);
-                    d.RenderLine(prim.setup, prim.pos + wFw, prim.pos + wFw * 0.75f + wRt * 0.25f);
-                    d.RenderLine(prim.setup, prim.pos + wFw * 0.9f, prim.pos + wFw * 0.75f + wRt * 0.25f);
+                    d.RenderLine(prim.setup, pos + wFw, pos + wFw * 0.75f + wUp * 0.25f);
+                    d.RenderLine(prim.setup, pos + wFw * 0.9f, pos + wFw * 0.75f + wUp * 0.25f);
+                    d.RenderLine(prim.setup, pos + wFw, pos + wFw * 0.75f + wRt * 0.25f);
+                    d.RenderLine(prim.setup, pos + wFw * 0.9f, pos + wFw * 0.75f + wRt * 0.25f);
                     break;
                 }
                 case PrimitiveType.Box:
                 {
-                    var posUp = prim.pos + wUp;
-                    var posDn = prim.pos - wUp;
+                    var posUp = pos + wUp;
+                    var posDn = pos - wUp;
 
                     d.RenderLine(prim.setup, posUp - wRt + wFw, posUp + wRt + wFw);
                     d.RenderLine(prim.setup, posUp - wRt - wFw, posUp + wRt - wFw);
@@ -489,7 +496,7 @@ namespace Prateek.Debug
                         var angle1 = prim.range.x + j * step;
                         var p0 = wRt * Mathf.Cos(angle0 * Mathf.Deg2Rad) + wUp * Mathf.Sin(angle0 * Mathf.Deg2Rad);
                         var p1 = wRt * Mathf.Cos(angle1 * Mathf.Deg2Rad) + wUp * Mathf.Sin(angle1 * Mathf.Deg2Rad);
-                        d.RenderLine(prim.setup, prim.pos + p0, prim.pos + p1);
+                        d.RenderLine(prim.setup, pos + p0, pos + p1);
                     }
                     break;
                 }
@@ -554,20 +561,20 @@ namespace Prateek.Debug
 
                 case PrimitiveType.Cone:
                 {
-                    var start = prim.pos - wFw;
+                    var start = pos - wFw;
                     for (int i = 0; i < prim.setup.Precision; ++i)
                     {
                         var a = ((float)i / (float)prim.setup.Precision) * Mathf.PI * 2.0f;
                         var x = Mathf.Sin(a) * wRt;
                         var y = Mathf.Cos(a) * wUp;
 
-                        d.RenderLine(prim.setup, start, prim.pos + wFw + x + y);
+                        d.RenderLine(prim.setup, start, pos + wFw + x + y);
                     }
 
                     var other = prim;
                     other.type = PrimitiveType.Arc;
                     other.range = vec2(0, 360);
-                    other.pos = prim.pos + wFw;
+                    other.pos = pos + wFw;
                     Render(d, other);
                     break;
                 }
@@ -594,7 +601,7 @@ namespace Prateek.Debug
                     }
 
                     //Center line
-                    d.RenderLine(prim.setup, prim.pos - wFw * prim.extents.z, prim.pos + wFw * prim.extents.z);
+                    d.RenderLine(prim.setup, pos - wFw * prim.extents.z, pos + wFw * prim.extents.z);
 
                     //Draw sides and inner lines
                     var segments = prim.setup.Precision;
@@ -604,20 +611,20 @@ namespace Prateek.Debug
                         var j = i + 1;
                         var angle = prim.range.x + i * step;
                         var p = wRt * prim.extents.x * Mathf.Cos(angle * Mathf.Deg2Rad) + wUp * prim.extents.y * Mathf.Sin(angle * Mathf.Deg2Rad);
-                        d.RenderLine(prim.setup, prim.pos + p - wFw * prim.extents.z, prim.pos + p + wFw * prim.extents.z);
+                        d.RenderLine(prim.setup, pos + p - wFw * prim.extents.z, pos + p + wFw * prim.extents.z);
 
                         if (i == 0 || i == segments)
                         {
-                            d.RenderLine(prim.setup, prim.pos - wFw * prim.extents.z, prim.pos + p - wFw * prim.extents.z);
-                            d.RenderLine(prim.setup, prim.pos + wFw * prim.extents.z, prim.pos + p + wFw * prim.extents.z);
+                            d.RenderLine(prim.setup, pos - wFw * prim.extents.z, pos + p - wFw * prim.extents.z);
+                            d.RenderLine(prim.setup, pos + wFw * prim.extents.z, pos + p + wFw * prim.extents.z);
                         }
                     }
                     break;
                 }
                 case PrimitiveType.Arrow:
                 {
-                    var end = prim.pos + wFw * prim.extents.z;
-                    d.RenderLine(prim.setup, end, prim.pos);
+                    var end = pos + wFw * prim.extents.z;
+                    d.RenderLine(prim.setup, end, pos);
                     d.RenderLine(prim.setup, end, end - wFw * prim.extents.y - wRt * prim.extents.x);
                     d.RenderLine(prim.setup, end, end - wFw * prim.extents.y + wRt * prim.extents.x);
                     d.RenderLine(prim.setup, end, end - wFw * prim.extents.y - wUp * prim.extents.x);
@@ -633,16 +640,16 @@ namespace Prateek.Debug
 
                 case PrimitiveType.Plane:
                 {
-                    d.RenderLine(prim.setup, prim.pos - wRt - wUp, prim.pos + wRt - wUp);
-                    d.RenderLine(prim.setup, prim.pos - wRt + wUp, prim.pos + wRt + wUp);
-                    d.RenderLine(prim.setup, prim.pos - wRt - wUp, prim.pos - wRt + wUp);
-                    d.RenderLine(prim.setup, prim.pos + wRt - wUp, prim.pos + wRt + wUp);
+                    d.RenderLine(prim.setup, pos - wRt - wUp, pos + wRt - wUp);
+                    d.RenderLine(prim.setup, pos - wRt + wUp, pos + wRt + wUp);
+                    d.RenderLine(prim.setup, pos - wRt - wUp, pos - wRt + wUp);
+                    d.RenderLine(prim.setup, pos + wRt - wUp, pos + wRt + wUp);
                     break;
                 }
                 case PrimitiveType.LineCast:
                 {
-                    var a = prim.pos - wFw * prim.extents.z;
-                    var b = prim.pos + wFw * prim.extents.z;
+                    var a = pos - wFw * prim.extents.z;
+                    var b = pos + wFw * prim.extents.z;
                     d.RenderLine(prim.setup, a, b);
 
                     var other = prim;
@@ -656,9 +663,9 @@ namespace Prateek.Debug
                 }
                 case PrimitiveType.SphereCast:
                 {
-                    var pos = prim.pos;
-                    var pos0 = pos - wFw * (prim.extents.z - prim.extents.x);
-                    var pos1 = pos + wFw * (prim.extents.z - prim.extents.x);
+                    var pos_ = pos;
+                    var pos0 = pos_ - wFw * (prim.extents.z - prim.extents.x);
+                    var pos1 = pos_ + wFw * (prim.extents.z - prim.extents.x);
                     var other = prim;
                     other.type = PrimitiveType.Sphere;
                     other.extents = vec3(prim.extents.x);
