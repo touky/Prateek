@@ -124,17 +124,17 @@ namespace Prateek.Debug
         {
             //-----------------------------------------------------------------
             private DebugDisplayManager owner;
-            private List<DebugDraw.PrimitiveSetup> primitives;
+            private List<DebugDraw.PrimitiveSetup> framePrimitives;
 
             //-----------------------------------------------------------------
             public FrameRecorderManager.IRecorderBase Owner { get { return owner; } }
-            public List<DebugDraw.PrimitiveSetup> Primitives
+            public List<DebugDraw.PrimitiveSetup> FramePrimitives
             {
                 get
                 {
-                    if (primitives == null)
-                        primitives = new List<DebugDraw.PrimitiveSetup>();
-                    return primitives;
+                    if (framePrimitives == null)
+                        framePrimitives = new List<DebugDraw.PrimitiveSetup>();
+                    return framePrimitives;
                 }
             }
 
@@ -142,16 +142,30 @@ namespace Prateek.Debug
             public DebugRecording(DebugDisplayManager owner)
             {
                 this.owner = owner;
-                primitives = new List<DebugDraw.PrimitiveSetup>();
-            }
+                framePrimitives = new List<DebugDraw.PrimitiveSetup>();
         }
+    }
         #endregion Declarations
 
         //---------------------------------------------------------------------
         #region Fields
         private DebugRecording recordings;
         private DebugLineDisplayer lineDisplay;
+        private List<DebugDraw.PrimitiveSetup> timedPrimitives;
         #endregion Fields
+
+        //---------------------------------------------------------------------
+        #region Properties
+        public List<DebugDraw.PrimitiveSetup> TimedPrimitives
+        {
+            get
+            {
+                if (timedPrimitives == null)
+                    timedPrimitives = new List<DebugDraw.PrimitiveSetup>();
+                return timedPrimitives;
+            }
+        }
+        #endregion Properties
 
         //---------------------------------------------------------------------
         #region IGlobalManager integration
@@ -176,6 +190,27 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
+        public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds)
+        {
+            if (tickEvent != Registry.TickEvent.FrameBeginning)
+                return;
+
+            for (int p = 0; p < timedPrimitives.Count; p++)
+            {
+                var prim = timedPrimitives[p];
+                prim.setup.Duration -= seconds;
+                if (prim.setup.Duration < 0)
+                {
+                    timedPrimitives.RemoveAt(p--);
+                }
+                else
+                {
+                    timedPrimitives[p] = prim;
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------
         public override void OnUnregister()
         {
             Destroy(lineDisplay.gameObject);
@@ -194,6 +229,10 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         public FrameRecorderManager.Frame.IData EndFrame()
         {
+            for (int p = 0; p < timedPrimitives.Count; p++)
+            {
+                recordings.FramePrimitives.Add(timedPrimitives[p]);
+            }
             var old = recordings;
             recordings = new DebugRecording(this);
             return old;
@@ -203,9 +242,9 @@ namespace Prateek.Debug
         public void PlayFrame(FrameRecorderManager.Frame.IData data)
         {
             var recordings = (DebugRecording)data;
-            for (int r = 0; r < recordings.Primitives.Count; r++)
+            for (int r = 0; r < recordings.FramePrimitives.Count; r++)
             {
-                DebugDraw.Render(lineDisplay, recordings.Primitives[r]);
+                DebugDraw.Render(lineDisplay, recordings.FramePrimitives[r]);
             }
         }
         #endregion FrameRecorder.IRecorderBase
@@ -218,7 +257,13 @@ namespace Prateek.Debug
             if (instance == null)
                 return;
 
-            instance.recordings.Primitives.Add(primitive);
+            if (instance.IsAppPaused)
+                return;
+
+            if (primitive.setup.Duration < 0)
+                instance.recordings.FramePrimitives.Add(primitive);
+            else
+                instance.TimedPrimitives.Add(primitive);
         }
         #endregion Recording datas
     }

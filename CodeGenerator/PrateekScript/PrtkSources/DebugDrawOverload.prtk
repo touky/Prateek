@@ -4,6 +4,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
     {
         PRATEEK_CLASS_INFO(DebugStyle)
 		{
+			PRATEEK_NAMES(MaskFlag, flag)
 			PRATEEK_NAMES(Space, space)
 			PRATEEK_NAMES(Matrix4x4, matrix)
 			PRATEEK_NAMES(Color, color)
@@ -54,6 +55,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
     {
         PRATEEK_CLASS_INFO(DebugStyle)
 		{
+			PRATEEK_NAMES(MaskFlag, flag)
 			PRATEEK_NAMES(Space, space)
 			PRATEEK_NAMES(Matrix4x4, matrix)
 			PRATEEK_NAMES(Color, color)

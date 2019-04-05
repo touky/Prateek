@@ -93,8 +93,9 @@ namespace Prateek.Debug
             //-----------------------------------------------------------------
             public struct HierarchyInfos
             {
-                public ulong parent;
-                public List<ulong> children;
+                public bool active;
+                public uint parent;
+                public List<uint> children;
             }
 
             //-----------------------------------------------------------------
@@ -102,7 +103,55 @@ namespace Prateek.Debug
             public List<HierarchyInfos> hierarchy;
 
             //-----------------------------------------------------------------
-            public void Add(ulong parent, params ulong[] children)
+            public void Build(ref Mask256 mask)
+            {
+                mask.Reset();
+                for (int h = 0; h < hierarchy.Count; h++)
+                {
+                    if (!IsActive(hierarchy[h].parent))
+                        continue;
+                    mask += hierarchy[h].parent;
+                }
+            }
+
+            //-----------------------------------------------------------------
+            public void SetStatus(uint value, bool enable)
+            {
+                for (int h = 0; h < hierarchy.Count; h++)
+                {
+                    var block = hierarchy[h];
+                    if (block.parent == value)
+                    {
+                        block.active = enable;
+                        hierarchy[h] = block;
+                        break;
+                    }
+                }
+            }
+
+            //-----------------------------------------------------------------
+            public bool IsActive(uint value)
+            {
+                for (int h = 0; h < hierarchy.Count; h++)
+                {
+                    if (hierarchy[h].parent == value)
+                    {
+                        if (!hierarchy[h].active)
+                            return false;
+
+                        uint parent = 0;
+                        if (GetParent(value, ref parent))
+                        {
+                            return IsActive(parent);
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            //-----------------------------------------------------------------
+            public void Add(uint parent, params uint[] children)
             {
                 if (hierarchy == null)
                     hierarchy = new List<HierarchyInfos>();
@@ -120,7 +169,7 @@ namespace Prateek.Debug
                 if (i < 0)
                 {
                     i = hierarchy.Count;
-                    hierarchy.Add(new HierarchyInfos() { parent = parent, children = new List<ulong>() } );
+                    hierarchy.Add(new HierarchyInfos() { parent = parent, children = new List<uint>() } );
                 }
 
                 if (children == null)
@@ -139,7 +188,7 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
-            public bool GetParent(ulong value, ref ulong parent)
+            public bool GetParent(uint value, ref uint parent)
             {
                 for (int h = 0; h < hierarchy.Count; h++)
                 {
@@ -156,7 +205,7 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
-            public int CountParent(ulong value)
+            public int CountParent(uint value)
             {
                 var i = -1;
                 for (int h = 0; h < hierarchy.Count; h++)
@@ -173,7 +222,7 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
-            public bool HasChildren(ulong value)
+            public bool HasChildren(uint value)
             {
                 var i = -1;
                 for (int h = 0; h < hierarchy.Count; h++)
@@ -191,17 +240,17 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         #region Fields
         protected static FlagData flagDatas;
+        private Mask256 mask;
 
-        private Editors.Prefs.Mask256s mask;
         private bool deactivateAll = false;
-        private ulong[] values = null;
-        private string[] names = null;
-        private int[] parents = null;
+        //private ulong[] values = null;
+        //private string[] names = null;
+        //private int[] parents = null;
         #endregion Fields
 
         //---------------------------------------------------------------------
         #region Properties
-        public static FlagData FlagDatas { get { return flagDatas; } }
+        public static FlagData FlagDatas { get { return flagDatas; } set { flagDatas = value; } }
         #endregion Properties
 
         //---------------------------------------------------------------------
@@ -217,27 +266,33 @@ namespace Prateek.Debug
                 return;
             }
 
-            var values = (ulong[])Enum.GetValues(type);
-            var default_mask = new Helpers.Mask256();
-            if (values.Length < Helpers.Mask256.MAX_SIZE)
-            {
-                Registry.Instance.Unregister(GetType());
-                return;
-            }
+            //var values = (ulong[])Enum.GetValues(type);
+            //var default_mask = new Helpers.Mask256();
+            //if (values.Length < Helpers.Mask256.MAX_SIZE)
+            //{
+            //    Registry.Instance.Unregister(GetType());
+            //    return;
+            //}
 
-            this.values = values;
-            names = Enum.GetNames(type);
-            mask = Editors.Prefs.Get(String.Format("{0}_{1}", GetType().Name, type.Name), default_mask);
-            parents = new int[values.Length];
-            for (int i = 0; i < parents.Length; i++)
-            {
-                parents[i] = -1;
-            }
+            //this.values = values;
+            //names = Enum.GetNames(type);
+            //mask = Editors.Prefs.Get(String.Format("{0}_{1}", GetType().Name, type.Name), default_mask);
+            //parents = new int[values.Length];
+            //for (int i = 0; i < parents.Length; i++)
+            //{
+            //    parents[i] = -1;
+            //}
         }
         #endregion FrameRecorder.IRecorderBase
 
         //---------------------------------------------------------------------
         #region Flag manageement
+        public void Build()
+        {
+            flagDatas.Build(ref mask);
+        }
+
+        //---------------------------------------------------------------------
         protected bool IsWrongType<T>() where T : struct, IConvertible
         {
             if (flagDatas.maskType == null)
@@ -250,14 +305,9 @@ namespace Prateek.Debug
         }
 
         //---------------------------------------------------------------------
-        protected bool IsActive(MaskFlag mask)
+        public bool IsActive(MaskFlag flag)
         {
-            var parent = parents[mask.flag];
-            if (parent >= 0 && !IsActive(parent))
-            {
-                return false;
-            }
-            return (this.mask.data & mask) != 0;
+            return mask == flag;
         }
 
         //---------------------------------------------------------------------
@@ -266,68 +316,6 @@ namespace Prateek.Debug
             if (IsWrongType<T>())
                 return MaskFlag.zero;
             return value.GetHashCode();
-        }
-
-        //---------------------------------------------------------------------
-        public bool HasParent<T>(T child) where T : struct, IConvertible
-        {
-            if (IsWrongType<T>())
-                return false;
-
-            var mask = ToMask(child);
-            if (parents == null || mask.flag >= parents.Length)
-                return false;
-
-            return parents[mask.flag] >= 0;
-        }
-
-        //---------------------------------------------------------------------
-        public int CountParents<T>(T child) where T : struct, IConvertible
-        {
-            if (IsWrongType<T>())
-                return 0;
-
-            if (!HasParent(child))
-                return 0;
-
-            var mask = ToMask(child);
-            var count = 1;
-            var parent = parents[mask.flag];
-            while (parent != 0 && parents[parent] >= 0)
-            {
-                count++;
-                parent = parents[parent];
-            }
-            return count;
-        }
-
-        //---------------------------------------------------------------------
-        public void SetParent<T>(T child) where T : struct, IConvertible
-        {
-            if (IsWrongType<T>())
-                return;
-
-            var mask = ToMask(child);
-            if (parents == null || mask.flag >= parents.Length)
-                return;
-
-            parents[mask.flag] = -1;
-        }
-
-        //---------------------------------------------------------------------
-        public void SetParent<T>(T child, T parent) where T : struct, IConvertible
-        {
-            if (IsWrongType<T>())
-                return;
-
-            var mask0 = ToMask(child);
-            var mask1 = ToMask(parent);
-            if (values == null
-                || mask0.flag >= values.Length
-                || mask1.flag >= values.Length)
-                return;
-
-            parents[mask0.flag] = mask1.flag;
         }
 
         //---------------------------------------------------------------------
@@ -340,49 +328,6 @@ namespace Prateek.Debug
                 return false;
 
             return IsActive(ToMask(value));
-        }
-
-        //---------------------------------------------------------------------
-        public bool IsActiveAndSelected<T>(T value, MonoBehaviour behaviour) where T : struct, IConvertible
-        {
-            if (IsWrongType<T>())
-                return false;
-
-            if (!IsActive(value))
-                return false;
-
-#if UNITY_EDITOR
-            var gameObject = UnityEditor.Selection.activeGameObject;
-            if (gameObject == null || !behaviour.gameObject.transform.IsChildOf(gameObject.transform))
-            {
-                return false;
-            }
-#endif // UNITY_EDITOR
-
-            return true;
-        }
-
-        //---------------------------------------------------------------------
-        public void SetActive<T>(T value, bool active) where T : struct, IConvertible
-        {
-            if (IsWrongType<T>())
-                return;
-
-            var mask = ToMask(value);
-            if (active)
-            {
-                this.mask.data |= mask;
-            }
-            else
-            {
-                this.mask.data &= ~(new Helpers.Mask256(mask));
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public void SetActive(bool active)
-        {
-            deactivateAll = !active;
         }
         #endregion Flag manageement
     }

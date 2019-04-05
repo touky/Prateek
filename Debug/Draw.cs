@@ -137,6 +137,7 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
+            private MaskFlag flag;
             private Space space;
             private Matrix4x4 matrix;
             private Color color;
@@ -145,6 +146,7 @@ namespace Prateek.Debug
             private int precision;
 
             //-----------------------------------------------------------------
+            public MaskFlag Flag { get { return flag; } set { flag = value; } }
             public Space Space { get { return space; } set { space = value; } }
             public Matrix4x4 Matrix { get { return matrix; } set { matrix = value; } }
             public Color Color { get { return color; } set { color = value; } }
@@ -164,6 +166,7 @@ namespace Prateek.Debug
                     }
                     default:
                     {
+                        flag = 0;
                         space = Space.World;
                         matrix = Matrix4x4.identity;
                         color = Color.white;

@@ -295,6 +295,8 @@ namespace Prateek.Debug
 
             //-----------------------------------------------------------------
             private int index;
+            private GameObject gameObject;
+            private Material material;
             private MeshContainer mesh;
             private BufferContainer positions;
             private BufferContainer colors;
@@ -303,8 +305,11 @@ namespace Prateek.Debug
             public bool IsDirty { get { return index > 0; } }
 
             //-----------------------------------------------------------------
-            public LineData(int capacity, MeshRenderer renderer, int borderThickness)
+            public LineData(int capacity, GameObject gameObject, MeshRenderer renderer, Material material, int borderThickness)
             {
+                this.gameObject = gameObject;
+                this.material = material;
+
                 index = 0;
                 mesh = new MeshContainer(capacity, renderer, borderThickness);
                 positions = new BufferContainer(capacity);
@@ -334,7 +339,7 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
-            public void RefreshBuffers(Material material, int lineThickness, int borderThickness)
+            public void RefreshBuffers(int lineThickness, int borderThickness)
             {
                 positions.RefreshBuffers();
                 colors.RefreshBuffers();
@@ -406,10 +411,8 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Fields
-        private GameObject lineRenderer;
-        private LineData lineData;
-        private Shader lineShader = null;
-        private Material lineMaterial = null;
+        private LineData lineDataBackFront;
+        private LineData lineDataFront;
         private int instanceCount = 50;
         #endregion //Fields
 
@@ -459,48 +462,66 @@ namespace Prateek.Debug
         #region Lines Pool
         private void EnableRendering()
         {
-            lineShader = Shader.Find("Prateek/DebugLineShader");
-            lineMaterial = new Material(lineShader);
+            for (int p = 0; p < 2; p++)
+            {
+                var text = p == 0 ? "BackFront" : "Front";
+                var lineShader = Shader.Find("Prateek/DebugLineShader" + text);
+                var lineMaterial = new Material(lineShader);
 
-            lineRenderer = new GameObject("DebugLineRenderer", typeof(MeshFilter), typeof(MeshRenderer));
-            lineRenderer.transform.SetParent(transform);
-            lineRenderer.transform.localPosition = Vector3.zero;
-            lineRenderer.transform.localRotation = Quaternion.identity;
+                var go = new GameObject("DebugLineRenderer" + text, typeof(MeshFilter), typeof(MeshRenderer));
+                go.transform.SetParent(transform);
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localRotation = Quaternion.identity;
 
-            var renderer = lineRenderer.GetComponent<MeshRenderer>();
-            renderer.material = lineMaterial;
-            lineMaterial = renderer.material;
+                var renderer = go.GetComponent<MeshRenderer>();
+                renderer.material = lineMaterial;
+                lineMaterial = renderer.material;
 
-            lineData = new LineData(instanceCount, renderer, borderThickness);
+                if (p == 0)
+                    lineDataBackFront = new LineData(instanceCount, go, renderer, lineMaterial, borderThickness);
+                else
+                    lineDataFront = new LineData(instanceCount, go, renderer, lineMaterial, borderThickness);
+            }
         }
 
         //---------------------------------------------------------------------
         private void UpdateRendering()
         {
-            if (!lineData.IsDirty)
+            if (!lineDataBackFront.IsDirty || !lineDataBackFront.IsDirty)
                 return;
 
-            lineData.RefreshBuffers(lineMaterial, lineThickness, borderThickness);
-            lineData.Clear();
+            lineDataBackFront.RefreshBuffers(lineThickness, borderThickness);
+            lineDataFront.RefreshBuffers(lineThickness, borderThickness);
+
+            lineDataBackFront.Clear();
+            lineDataFront.Clear();
         }
 
         //---------------------------------------------------------------------
         private void DisableRendering()
         {
-            lineData.Destroy();
+            lineDataBackFront.Destroy();
+            lineDataFront.Destroy();
         }
 
         //---------------------------------------------------------------------
-        public LineData.LineSetup GetLine()
+        public LineData.LineSetup GetLine(bool useDepth)
         {
-            return lineData.GetPoint();
+            return useDepth ? lineDataBackFront.GetPoint() : lineDataBackFront.GetPoint();
         }
         #endregion //Lines Pool
 
         //---------------------------------------------------------------------
         public void RenderLine(DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
         {
-            var line = GetLine();
+            var manager = Registry.GetManager<DebugDisplayManager>();
+            if (manager != null)
+            {
+                if (!manager.IsActive(setup.Flag))
+                    return;
+            }
+
+            var line = GetLine(setup.DepthTest);
             line.SetLine(start, end);
             line.SetColor(setup.Color, setup.Color);
         }

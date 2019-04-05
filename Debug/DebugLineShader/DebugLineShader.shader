@@ -1,4 +1,4 @@
-﻿Shader "Prateek/DebugLineShader"
+﻿Shader "Prateek/DebugLineShader_ABSTRACT"
 {
     Properties { }
     SubShader

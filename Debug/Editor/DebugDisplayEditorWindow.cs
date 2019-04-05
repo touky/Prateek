@@ -109,7 +109,7 @@ namespace Prateek.Editors
             public struct Data
             {
                 public string name;
-                public ulong value;
+                public uint value;
             }
 
             //-----------------------------------------------------------------
@@ -138,7 +138,7 @@ namespace Prateek.Editors
                     var value = values.GetValue(i);
                     datas[i] = new EnumInfos.Data()
                     {
-                        value = (ulong)value,
+                        value = (uint)value,
                         name = names[i]
                     };
                 }
@@ -348,9 +348,9 @@ namespace Prateek.Editors
         private void Update() { }
 
         //---------------------------------------------------------------------
-        private bool IsExpanded(ulong value, ref DebugDisplayManager.FlagData flagDatas)
+        private bool IsExpanded(uint value, ref DebugDisplayManager.FlagData flagDatas)
         {
-            ulong parent = 0;
+            uint parent = 0;
             while (flagDatas.GetParent(value, ref parent))
             {
                 int i = enumInfos.Find(parent);
@@ -380,8 +380,6 @@ namespace Prateek.Editors
             activeFlags.Count = enumInfos.Count;
             expandedFlags.Count = enumInfos.Count;
 
-            var manager = (DebugDisplayManager)null;// Registry.GetManager<DebugDisplayManager>();
-
             if (styleSetup == null)
             {
                 styleSetup = new GUISetup();
@@ -393,6 +391,7 @@ namespace Prateek.Editors
             var lineMargin = 4;
             #endregion Draw setup
 
+            var maskHasChanged = false;
             var itemCount = 0;
             for (int e = 0; e < enumInfos.Count; e++)
             {
@@ -436,6 +435,7 @@ namespace Prateek.Editors
                         var activeRect = GUIDraw.Square(GUIDraw.Square(ref line, 2), 0, styleSetup.actives[activeFlags[e] ? 1 : 0]);
                         if (Event.current.type == EventType.MouseUp && activeRect.Contains(Event.current.mousePosition))
                         {
+                            maskHasChanged = true;
                             activeFlags[e] = !activeFlags[e];
                             Repaint();
                         }
@@ -459,6 +459,21 @@ namespace Prateek.Editors
 
                         lineRect = lineRect.NextLine();
                     }
+
+                }
+            }
+
+            var manager = !EditorApplication.isPlaying ? null : Registry.GetManager<DebugDisplayManager>();
+            if (manager != null)
+            {
+                if (maskHasChanged)
+                {
+                    for (int e = 0; e < enumInfos.Count; e++)
+                    {
+                        flagDatas.SetStatus(enumInfos[e].value, activeFlags[e]);
+                    }
+                    DebugDisplayManager.FlagDatas = flagDatas;
+                    manager.Build();
                 }
             }
             return;
