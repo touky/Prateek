@@ -112,12 +112,14 @@ namespace Prateek.CodeGeneration.Editors
 
         //---------------------------------------------------------------------
         #region Unity Defaults
+#if PRATEEK_ALLOW_INTERNAL_TOOLS
         [MenuItem("Prateek/Window/Prateek Tools Window")]
         static void CreateWindow()
         {
             var window = (PrateekEditorWindow)EditorWindow.GetWindow(typeof(PrateekEditorWindow));
             window.Show();
         }
+#endif //PRATEEK_ALLOW_INTERNAL_TOOLS
 
         //---------------------------------------------------------------------
         private void Awake()
@@ -157,6 +159,7 @@ namespace Prateek.CodeGeneration.Editors
         private void Update() { }
 
         //---------------------------------------------------------------------
+#if PRATEEK_ALLOW_INTERNAL_TOOLS
         private void OnGUI()
         {
             InitDatas();
@@ -218,12 +221,14 @@ namespace Prateek.CodeGeneration.Editors
                 scrollPosition2 = scrollScope.scrollPosition;
             }
         }
+#endif //PRATEEK_ALLOW_INTERNAL_TOOLS
         #endregion Unity Defaults
 
         //---------------------------------------------------------------------
         #region Behaviour
         private void InitDatas()
         {
+#if PRATEEK_ALLOW_INTERNAL_TOOLS
             if (scriptTemplateUpdater == null)
             {
                 scriptTemplateUpdater = Tools.GetScriptTemplateUpdater();
@@ -247,6 +252,7 @@ namespace Prateek.CodeGeneration.Editors
                 prateekScriptGenerator = Tools.GetPrateekScriptGenerator(prateekExportDir.Value, new List<string>(new string[] { prateekSourceDir.Value }));
                 prateekScriptGenerator.Init();
             }
+#endif //PRATEEK_ALLOW_INTERNAL_TOOLS
         }
         #endregion Behaviour
     }
