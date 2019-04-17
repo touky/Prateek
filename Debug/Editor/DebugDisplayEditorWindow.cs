@@ -109,7 +109,7 @@ namespace Prateek.Editors
             public struct Data
             {
                 public string name;
-                public uint value;
+                public int value;
             }
 
             //-----------------------------------------------------------------
@@ -138,14 +138,14 @@ namespace Prateek.Editors
                     var value = values.GetValue(i);
                     datas[i] = new EnumInfos.Data()
                     {
-                        value = (uint)value,
+                        value = (int)value,
                         name = names[i]
                     };
                 }
             }
 
             //-----------------------------------------------------------------
-            public int Find(ulong value)
+            public int Find(int value)
             {
                 for (int d = 0; d < datas.Length; d++)
                 {
@@ -348,9 +348,9 @@ namespace Prateek.Editors
         private void Update() { }
 
         //---------------------------------------------------------------------
-        private bool IsExpanded(uint value, ref DebugDisplayManager.FlagData flagDatas)
+        private bool IsExpanded(int value, ref DebugDisplayManager.FlagHierarchy flagDatas)
         {
-            uint parent = 0;
+            int parent = 0;
             while (flagDatas.GetParent(value, ref parent))
             {
                 int i = enumInfos.Find(parent);
@@ -371,8 +371,8 @@ namespace Prateek.Editors
             TryInit();
 
             #region Main setup
-            var flagDatas = DebugDisplayManager.FlagDatas;
-            var enumType = flagDatas.maskType;
+            var debugFlags = DebugDisplayManager.DebugFlags;
+            var enumType = debugFlags.maskType;
             if (enumType == null || !enumType.IsEnum)
                 return;
 
@@ -396,7 +396,7 @@ namespace Prateek.Editors
             for (int e = 0; e < enumInfos.Count; e++)
             {
                 var value = enumInfos[e].value;
-                if (IsExpanded(value, ref flagDatas))
+                if (IsExpanded(value, ref debugFlags))
                     itemCount += 1;
             }
 
@@ -417,9 +417,9 @@ namespace Prateek.Editors
                 for (int e = 0; e < enumInfos.Count; e++)
                 {
                     var value = enumInfos[e].value;
-                    var parentCount = flagDatas.CountParent(value);
-                    var hasChildren = flagDatas.HasChildren(value);
-                    if (IsExpanded(value, ref flagDatas))
+                    var parentCount = debugFlags.CountParent(value);
+                    var hasChildren = debugFlags.HasChildren(value);
+                    if (IsExpanded(value, ref debugFlags))
                     {
                         var line = lineRect;
                         var lockSize = 0.8f;
@@ -470,9 +470,9 @@ namespace Prateek.Editors
                 {
                     for (int e = 0; e < enumInfos.Count; e++)
                     {
-                        flagDatas.SetStatus(enumInfos[e].value, activeFlags[e]);
+                        debugFlags.SetStatus(enumInfos[e].value, activeFlags[e]);
                     }
-                    DebugDisplayManager.FlagDatas = flagDatas;
+                    DebugDisplayManager.DebugFlags = debugFlags;
                     manager.Build();
                 }
             }

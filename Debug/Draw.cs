@@ -166,7 +166,7 @@ namespace Prateek.Debug
                     }
                     default:
                     {
-                        flag = 0;
+                        flag = -1;
                         space = Space.World;
                         matrix = Matrix4x4.identity;
                         color = Color.white;

@@ -149,6 +149,7 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Fields
+        private static FlagHierarchy flagHierarchy;
         private DebugRecording recordings;
         private DebugLineDisplayer lineDisplay;
         private List<DebugDraw.PrimitiveSetup> timedPrimitives;
@@ -165,6 +166,9 @@ namespace Prateek.Debug
                 return timedPrimitives;
             }
         }
+
+        //---------------------------------------------------------------------
+        public static FlagHierarchy DebugFlags { get { return flagHierarchy; } set { flagHierarchy = value; } }
         #endregion Properties
 
         //---------------------------------------------------------------------
@@ -187,6 +191,14 @@ namespace Prateek.Debug
 
             Registry.Instance.Register(typeof(DebugDisplayManager), this);
             FrameRecorder.Register(this);
+        }
+
+        //---------------------------------------------------------------------
+        public override void OnInitialize()
+        {
+            flagDatas = flagHierarchy;
+
+            base.OnInitialize();
         }
 
         //---------------------------------------------------------------------
@@ -221,6 +233,14 @@ namespace Prateek.Debug
             base.OnUnregister();
         }
         #endregion IGlobalManager integration
+
+        //---------------------------------------------------------------------
+        #region Flags setups
+        protected static void SetupFlags(FlagHierarchy hierarchy)
+        {
+            DebugDisplayManager.flagHierarchy = hierarchy;
+        }
+        #endregion Flags setups
 
         //---------------------------------------------------------------------
         #region FrameRecorder.IRecorderBase

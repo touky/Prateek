@@ -188,7 +188,7 @@ namespace Prateek.Debug
                         }
 
                         var oldTris = triangles;
-                        triangles = new int[(size + offset) * triCount];
+                        triangles = new int[(size + offset) * triCount * 2];
                         if (oldTris != null)
                         {
                             oldTris.CopyTo(triangles, 0);
@@ -294,6 +294,7 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
+            private bool forceDirtyPass;
             private int index;
             private GameObject gameObject;
             private Material material;
@@ -302,7 +303,7 @@ namespace Prateek.Debug
             private BufferContainer colors;
 
             //-----------------------------------------------------------------
-            public bool IsDirty { get { return index > 0; } }
+            public bool IsDirty { get { return forceDirtyPass || index > 0; } }
 
             //-----------------------------------------------------------------
             public LineData(int capacity, GameObject gameObject, MeshRenderer renderer, Material material, int borderThickness)
@@ -310,6 +311,7 @@ namespace Prateek.Debug
                 this.gameObject = gameObject;
                 this.material = material;
 
+                forceDirtyPass = false;
                 index = 0;
                 mesh = new MeshContainer(capacity, renderer, borderThickness);
                 positions = new BufferContainer(capacity);
@@ -361,6 +363,7 @@ namespace Prateek.Debug
             //-----------------------------------------------------------------
             public void Clear()
             {
+                forceDirtyPass = index != 0;
                 index = 0;
                 positions.Clear();
                 colors.Clear();

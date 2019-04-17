@@ -85,19 +85,19 @@ namespace Prateek.Helpers
     //-------------------------------------------------------------------------
     public struct MaskFlag
     {
-        private int m_flag;
-        private ulong m_mask;
-        private int m_offset;
+        private int flag;
+        private ulong mask;
+        private int offset;
 
-        public int flag { get { return m_flag; } }
-        public ulong mask { get { return m_mask; } }
-        public int offset { get { return m_offset; } }
+        public int Flag { get { return flag; } }
+        public ulong Mask { get { return mask; } }
+        public int Offset { get { return offset; } }
         public static MaskFlag zero { get { return new MaskFlag(); } }
 
         //---------------------------------------------------------------------
-        public static implicit operator MaskFlag(int flag_index)
+        public static implicit operator MaskFlag(int flagIndex)
         {
-            return new MaskFlag(flag_index);
+            return new MaskFlag(flagIndex);
         }
 
         //---------------------------------------------------------------------
@@ -107,24 +107,24 @@ namespace Prateek.Helpers
         }
 
         //---------------------------------------------------------------------
-        private MaskFlag(int flag_index)
+        private MaskFlag(int flagIndex)
         {
-            m_flag = flag_index;
-            m_offset = flag_index / 64;
-            m_mask = ((ulong)1) << (flag_index % 64);
+            flag = flagIndex < 0 ? 0 : flagIndex;
+            offset = flagIndex < 0 ? 0 : (flagIndex / 64);
+            mask = (ulong)1 << (flag % 64);
         }
 
         //---------------------------------------------------------------------
         private MaskFlag(ulong mask)
         {
-            m_offset = 0;
-            m_mask = mask;
-            m_flag = 0;
+            this.offset = 0;
+            this.mask = mask;
+            this.flag = 0;
             for (int i = 0; i < 64; i++)
             {
                 if (((((ulong)1) << i) & mask) != 0)
                 {
-                    m_flag = i;
+                    flag = i;
                     break;
                 }
             }
@@ -421,14 +421,14 @@ namespace Prateek.Helpers
         #region Add/Remove/Invert
         public static Mask128 operator +(Mask128 mask, MaskFlag flag)
         {
-            mask[flag.offset] |= flag.mask;
+            mask[flag.Offset] |= flag.Mask;
             return mask;
         }
 
         //---------------------------------------------------------------------
         public static Mask128 operator -(Mask128 mask, MaskFlag flag)
         {
-            mask[flag.offset] &= ~flag.mask;
+            mask[flag.Offset] &= ~flag.Mask;
             return mask;
         }
 
@@ -457,9 +457,9 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Mask128 operator &(Mask128 mask0, MaskFlag mask1)
         {
-            if (mask1.offset < MAX_SIZE)
+            if (mask1.Offset < MAX_SIZE)
             {
-                mask0[mask1.offset] &= mask1.mask;
+                mask0[mask1.Offset] &= mask1.Mask;
             }
             return mask0;
         }
@@ -477,9 +477,9 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Mask128 operator |(Mask128 mask0, MaskFlag mask1)
         {
-            if (mask1.offset < MAX_SIZE)
+            if (mask1.Offset < MAX_SIZE)
             {
-                mask0[mask1.offset] |= mask1.mask;
+                mask0[mask1.Offset] |= mask1.Mask;
             }
             return mask0;
         }
@@ -496,9 +496,9 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Mask128 operator ^(Mask128 mask0, MaskFlag mask1)
         {
-            if (mask1.offset < MAX_SIZE)
+            if (mask1.Offset < MAX_SIZE)
             {
-                mask0[mask1.offset] ^= mask1.mask;
+                mask0[mask1.Offset] ^= mask1.Mask;
             }
             return mask0;
         }
@@ -593,9 +593,9 @@ namespace Prateek.Helpers
         public static bool operator !=(Mask128 mask, MaskFlag flag) { return !(mask == flag); }
         public static bool operator ==(Mask128 mask, MaskFlag flag)
         {
-            if (flag.offset >= MAX_SIZE)
+            if (flag.Offset >= MAX_SIZE)
                 return false;
-            return (mask[flag.offset] & flag.mask) != 0;
+            return (mask[flag.Offset] & flag.Mask) != 0;
         }
 
         //---------------------------------------------------------------------
@@ -694,14 +694,14 @@ namespace Prateek.Helpers
         #region Add/Remove/Invert
         public static Mask256 operator +(Mask256 mask, MaskFlag flag)
         {
-            mask[flag.offset] |= flag.mask;
+            mask[flag.Offset] |= flag.Mask;
             return mask;
         }
 
         //---------------------------------------------------------------------
         public static Mask256 operator -(Mask256 mask, MaskFlag flag)
         {
-            mask[flag.offset] &= ~flag.mask;
+            mask[flag.Offset] &= ~flag.Mask;
             return mask;
         }
 
@@ -730,9 +730,9 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Mask256 operator &(Mask256 mask0, MaskFlag mask1)
         {
-            if (mask1.offset < MAX_SIZE)
+            if (mask1.Offset < MAX_SIZE)
             {
-                mask0[mask1.offset] &= mask1.mask;
+                mask0[mask1.Offset] &= mask1.Mask;
             }
             return mask0;
         }
@@ -750,9 +750,9 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Mask256 operator |(Mask256 mask0, MaskFlag mask1)
         {
-            if (mask1.offset < MAX_SIZE)
+            if (mask1.Offset < MAX_SIZE)
             {
-                mask0[mask1.offset] |= mask1.mask;
+                mask0[mask1.Offset] |= mask1.Mask;
             }
             return mask0;
         }
@@ -769,9 +769,9 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Mask256 operator ^(Mask256 mask0, MaskFlag mask1)
         {
-            if (mask1.offset < MAX_SIZE)
+            if (mask1.Offset < MAX_SIZE)
             {
-                mask0[mask1.offset] ^= mask1.mask;
+                mask0[mask1.Offset] ^= mask1.Mask;
             }
             return mask0;
         }
@@ -866,9 +866,9 @@ namespace Prateek.Helpers
         public static bool operator !=(Mask256 mask, MaskFlag flag) { return !(mask == flag); }
         public static bool operator ==(Mask256 mask, MaskFlag flag)
         {
-            if (flag.offset >= MAX_SIZE)
+            if (flag.Offset >= MAX_SIZE)
                 return false;
-            return (mask[flag.offset] & flag.mask) != 0;
+            return (mask[flag.Offset] & flag.Mask) != 0;
         }
 
         //---------------------------------------------------------------------
@@ -965,14 +965,14 @@ namespace Prateek.Helpers
         #region Add/Remove/Invert
         public static Mask512 operator +(Mask512 mask, MaskFlag flag)
         {
-            mask[flag.offset] |= flag.mask;
+            mask[flag.Offset] |= flag.Mask;
             return mask;
         }
 
         //---------------------------------------------------------------------
         public static Mask512 operator -(Mask512 mask, MaskFlag flag)
         {
-            mask[flag.offset] &= ~flag.mask;
+            mask[flag.Offset] &= ~flag.Mask;
             return mask;
         }
 
@@ -1001,9 +1001,9 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Mask512 operator &(Mask512 mask0, MaskFlag mask1)
         {
-            if (mask1.offset < MAX_SIZE)
+            if (mask1.Offset < MAX_SIZE)
             {
-                mask0[mask1.offset] &= mask1.mask;
+                mask0[mask1.Offset] &= mask1.Mask;
             }
             return mask0;
         }
@@ -1021,9 +1021,9 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Mask512 operator |(Mask512 mask0, MaskFlag mask1)
         {
-            if (mask1.offset < MAX_SIZE)
+            if (mask1.Offset < MAX_SIZE)
             {
-                mask0[mask1.offset] |= mask1.mask;
+                mask0[mask1.Offset] |= mask1.Mask;
             }
             return mask0;
         }
@@ -1040,9 +1040,9 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Mask512 operator ^(Mask512 mask0, MaskFlag mask1)
         {
-            if (mask1.offset < MAX_SIZE)
+            if (mask1.Offset < MAX_SIZE)
             {
-                mask0[mask1.offset] ^= mask1.mask;
+                mask0[mask1.Offset] ^= mask1.Mask;
             }
             return mask0;
         }
@@ -1137,9 +1137,9 @@ namespace Prateek.Helpers
         public static bool operator !=(Mask512 mask, MaskFlag flag) { return !(mask == flag); }
         public static bool operator ==(Mask512 mask, MaskFlag flag)
         {
-            if (flag.offset >= MAX_SIZE)
+            if (flag.Offset >= MAX_SIZE)
                 return false;
-            return (mask[flag.offset] & flag.mask) != 0;
+            return (mask[flag.Offset] & flag.Mask) != 0;
         }
 
         //---------------------------------------------------------------------

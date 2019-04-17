@@ -88,58 +88,58 @@ namespace Prateek.Debug
     {
         //---------------------------------------------------------------------
         #region Declarations
-        public struct FlagData
+        public struct FlagHierarchy
         {
             //-----------------------------------------------------------------
-            public struct HierarchyInfos
+            public struct Data
             {
                 public bool active;
-                public uint parent;
-                public List<uint> children;
+                public int parent;
+                public List<int> children;
             }
 
             //-----------------------------------------------------------------
             public Type maskType;
-            public List<HierarchyInfos> hierarchy;
+            public List<Data> datas;
 
             //-----------------------------------------------------------------
             public void Build(ref Mask256 mask)
             {
                 mask.Reset();
-                for (int h = 0; h < hierarchy.Count; h++)
+                for (int h = 0; h < datas.Count; h++)
                 {
-                    if (!IsActive(hierarchy[h].parent))
+                    if (!IsActive(datas[h].parent))
                         continue;
-                    mask += hierarchy[h].parent;
+                    mask += datas[h].parent;
                 }
             }
 
             //-----------------------------------------------------------------
-            public void SetStatus(uint value, bool enable)
+            public void SetStatus(int value, bool enable)
             {
-                for (int h = 0; h < hierarchy.Count; h++)
+                for (int h = 0; h < datas.Count; h++)
                 {
-                    var block = hierarchy[h];
+                    var block = datas[h];
                     if (block.parent == value)
                     {
                         block.active = enable;
-                        hierarchy[h] = block;
+                        datas[h] = block;
                         break;
                     }
                 }
             }
 
             //-----------------------------------------------------------------
-            public bool IsActive(uint value)
+            public bool IsActive(int value)
             {
-                for (int h = 0; h < hierarchy.Count; h++)
+                for (int h = 0; h < datas.Count; h++)
                 {
-                    if (hierarchy[h].parent == value)
+                    if (datas[h].parent == value)
                     {
-                        if (!hierarchy[h].active)
+                        if (!datas[h].active)
                             return false;
 
-                        uint parent = 0;
+                        int parent = 0;
                         if (GetParent(value, ref parent))
                         {
                             return IsActive(parent);
@@ -151,15 +151,15 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
-            public void Add(uint parent, params uint[] children)
+            public void Add(int parent, params int[] children)
             {
-                if (hierarchy == null)
-                    hierarchy = new List<HierarchyInfos>();
+                if (datas == null)
+                    datas = new List<Data>();
 
                 int i = -1;
-                for (int h = 0; h < hierarchy.Count; h++)
+                for (int h = 0; h < datas.Count; h++)
                 {
-                    if (hierarchy[h].parent == parent)
+                    if (datas[h].parent == parent)
                     {
                         i = h;
                         break;
@@ -168,18 +168,18 @@ namespace Prateek.Debug
 
                 if (i < 0)
                 {
-                    i = hierarchy.Count;
-                    hierarchy.Add(new HierarchyInfos() { parent = parent, children = new List<uint>() } );
+                    i = datas.Count;
+                    datas.Add(new Data() { parent = parent, children = new List<int>() } );
                 }
 
                 if (children == null)
                     return;
 
-                var info = hierarchy[i];
+                var info = datas[i];
                 {
                     info.children.AddRange(children);
                 }
-                hierarchy[i] = info;
+                datas[i] = info;
 
                 for (int c = 0; c < children.Length; c++)
                 {
@@ -188,15 +188,15 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
-            public bool GetParent(uint value, ref uint parent)
+            public bool GetParent(int child, ref int parent)
             {
-                for (int h = 0; h < hierarchy.Count; h++)
+                for (int h = 0; h < datas.Count; h++)
                 {
-                    for (int c = 0; c < hierarchy[h].children.Count; c++)
+                    for (int c = 0; c < datas[h].children.Count; c++)
                     {
-                        if (hierarchy[h].children[c] == value)
+                        if (datas[h].children[c] == child)
                         {
-                            parent = hierarchy[h].parent;
+                            parent = datas[h].parent;
                             return true;
                         }
                     }
@@ -205,16 +205,15 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
-            public int CountParent(uint value)
+            public int CountParent(int child)
             {
-                var i = -1;
-                for (int h = 0; h < hierarchy.Count; h++)
+                for (int h = 0; h < datas.Count; h++)
                 {
-                    for (int c = 0; c < hierarchy[h].children.Count; c++)
+                    for (int c = 0; c < datas[h].children.Count; c++)
                     {
-                        if (hierarchy[h].children[c] == value)
+                        if (datas[h].children[c] == child)
                         {
-                            return CountParent(hierarchy[h].parent) + 1;
+                            return CountParent(datas[h].parent) + 1;
                         }
                     }
                 }
@@ -222,14 +221,14 @@ namespace Prateek.Debug
             }
 
             //-----------------------------------------------------------------
-            public bool HasChildren(uint value)
+            public bool HasChildren(int parent)
             {
                 var i = -1;
-                for (int h = 0; h < hierarchy.Count; h++)
+                for (int h = 0; h < datas.Count; h++)
                 {
-                    if (hierarchy[h].parent == value)
+                    if (datas[h].parent == parent)
                     {
-                        return hierarchy[h].children.Count > 0;
+                        return datas[h].children.Count > 0;
                     }
                 }
                 return false;
@@ -239,22 +238,13 @@ namespace Prateek.Debug
 
         //---------------------------------------------------------------------
         #region Fields
-        protected static FlagData flagDatas;
+        protected FlagHierarchy flagDatas;
         private Mask256 mask;
-
         private bool deactivateAll = false;
-        //private ulong[] values = null;
-        //private string[] names = null;
-        //private int[] parents = null;
         #endregion Fields
 
         //---------------------------------------------------------------------
-        #region Properties
-        public static FlagData FlagDatas { get { return flagDatas; } set { flagDatas = value; } }
-        #endregion Properties
-
-        //---------------------------------------------------------------------
-        #region FrameRecorder.IRecorderBase
+        #region IGlobalManager integration
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -283,7 +273,7 @@ namespace Prateek.Debug
             //    parents[i] = -1;
             //}
         }
-        #endregion FrameRecorder.IRecorderBase
+        #endregion IGlobalManager integration
 
         //---------------------------------------------------------------------
         #region Flag manageement

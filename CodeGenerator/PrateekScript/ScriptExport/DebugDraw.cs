@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 02/04/2019
+//  Header last update date: 16/04/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -104,6 +104,1158 @@ namespace Prateek.Debug
         #region DrawSetup overload
         public partial struct DebugStyle
         {
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, float duration, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, float duration, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, float duration, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, float duration) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, float duration) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.matrix = matrix;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, float duration, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Color color, float duration, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, float duration, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Color color, float duration) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, float duration) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Color color, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Color color, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Color color, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, Color color) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, float duration, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, float duration, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, float duration, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, float duration) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, float duration) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Space space) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.space = space;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Space space) : this(mode)
+        {
+            this.flag = flag;
+            this.space = space;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, float duration, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, float duration, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, float duration, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, float duration) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, float duration) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, float duration, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, float duration, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, float duration, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, float duration) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, float duration) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Matrix4x4 matrix) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix) : this(mode)
+        {
+            this.flag = flag;
+            this.matrix = matrix;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Color color, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Color color, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Color color, float duration, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Color color, float duration, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Color color, float duration, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Color color, float duration) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Color color, float duration) : this(mode)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Color color, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Color color, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Color color, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Color color, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Color color, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Color color, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.color = color;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, Color color) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, Color color) : this(mode)
+        {
+            this.flag = flag;
+            this.color = color;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, float duration, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, float duration, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.duration = duration;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, float duration, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, float duration, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.duration = duration;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, float duration, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, float duration, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.duration = duration;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, float duration) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, float duration) : this(mode)
+        {
+            this.flag = flag;
+            this.duration = duration;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, bool depthTest, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, bool depthTest, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.depthTest = depthTest;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, bool depthTest) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, bool depthTest) : this(mode)
+        {
+            this.flag = flag;
+            this.depthTest = depthTest;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag, int precision) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag, int precision) : this(mode)
+        {
+            this.flag = flag;
+            this.precision = precision;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(MaskFlag flag) : this(InitMode.Reset)
+        {
+            this.flag = flag;
+        }
+        
+        //---------------------------------------------------------------------
+        public DebugStyle(InitMode mode, MaskFlag flag) : this(mode)
+        {
+            this.flag = flag;
+        }
         
         //---------------------------------------------------------------------
         public DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) : this(InitMode.Reset)
@@ -1138,6 +2290,518 @@ namespace Prateek.Debug
             //-----------------------------------------------------------------
             public static class QuickCTor
             {
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, color, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, space, matrix, color, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest)
+                { return new DebugStyle(mode, flag, space, matrix, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, color, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration, int precision)
+                { return new DebugStyle(mode, flag, space, matrix, color, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, float duration)
+                { return new DebugStyle(mode, flag, space, matrix, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, color, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, space, matrix, color, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, bool depthTest)
+                { return new DebugStyle(mode, flag, space, matrix, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, color, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color, int precision)
+                { return new DebugStyle(mode, flag, space, matrix, color, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, Color color) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, color); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, Color color)
+                { return new DebugStyle(mode, flag, space, matrix, color); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, space, matrix, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, float duration, bool depthTest)
+                { return new DebugStyle(mode, flag, space, matrix, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, float duration, int precision)
+                { return new DebugStyle(mode, flag, space, matrix, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, float duration) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, float duration)
+                { return new DebugStyle(mode, flag, space, matrix, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, space, matrix, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, bool depthTest)
+                { return new DebugStyle(mode, flag, space, matrix, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix, int precision)
+                { return new DebugStyle(mode, flag, space, matrix, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Matrix4x4 matrix) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, matrix); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Matrix4x4 matrix)
+                { return new DebugStyle(mode, flag, space, matrix); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Color color, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, color, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, space, color, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Color color, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, float duration, bool depthTest)
+                { return new DebugStyle(mode, flag, space, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Color color, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, color, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, float duration, int precision)
+                { return new DebugStyle(mode, flag, space, color, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Color color, float duration) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, float duration)
+                { return new DebugStyle(mode, flag, space, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Color color, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, color, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, space, color, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Color color, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, bool depthTest)
+                { return new DebugStyle(mode, flag, space, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Color color, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, color, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color, int precision)
+                { return new DebugStyle(mode, flag, space, color, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, Color color) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, color); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, Color color)
+                { return new DebugStyle(mode, flag, space, color); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, space, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, float duration, bool depthTest)
+                { return new DebugStyle(mode, flag, space, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, float duration, int precision)
+                { return new DebugStyle(mode, flag, space, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, float duration) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, float duration)
+                { return new DebugStyle(mode, flag, space, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, space, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, bool depthTest)
+                { return new DebugStyle(mode, flag, space, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, space, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space, int precision)
+                { return new DebugStyle(mode, flag, space, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Space space) 
+                { return new DebugStyle(InitMode.UseLast, flag, space); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Space space)
+                { return new DebugStyle(mode, flag, space); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, color, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, matrix, color, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, float duration, bool depthTest)
+                { return new DebugStyle(mode, flag, matrix, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, color, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, float duration, int precision)
+                { return new DebugStyle(mode, flag, matrix, color, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, float duration) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, float duration)
+                { return new DebugStyle(mode, flag, matrix, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, color, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, matrix, color, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, bool depthTest)
+                { return new DebugStyle(mode, flag, matrix, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, color, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color, int precision)
+                { return new DebugStyle(mode, flag, matrix, color, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, Color color) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, color); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, Color color)
+                { return new DebugStyle(mode, flag, matrix, color); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, matrix, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, float duration, bool depthTest)
+                { return new DebugStyle(mode, flag, matrix, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, float duration, int precision)
+                { return new DebugStyle(mode, flag, matrix, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, float duration) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, float duration)
+                { return new DebugStyle(mode, flag, matrix, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, matrix, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, bool depthTest)
+                { return new DebugStyle(mode, flag, matrix, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix, int precision)
+                { return new DebugStyle(mode, flag, matrix, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Matrix4x4 matrix) 
+                { return new DebugStyle(InitMode.UseLast, flag, matrix); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Matrix4x4 matrix)
+                { return new DebugStyle(mode, flag, matrix); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Color color, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, color, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Color color, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, color, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Color color, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Color color, float duration, bool depthTest)
+                { return new DebugStyle(mode, flag, color, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Color color, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, color, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Color color, float duration, int precision)
+                { return new DebugStyle(mode, flag, color, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Color color, float duration) 
+                { return new DebugStyle(InitMode.UseLast, flag, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Color color, float duration)
+                { return new DebugStyle(mode, flag, color, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Color color, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, color, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Color color, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, color, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Color color, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Color color, bool depthTest)
+                { return new DebugStyle(mode, flag, color, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Color color, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, color, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Color color, int precision)
+                { return new DebugStyle(mode, flag, color, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, Color color) 
+                { return new DebugStyle(InitMode.UseLast, flag, color); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, Color color)
+                { return new DebugStyle(mode, flag, color); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, float duration, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, float duration, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, duration, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, float duration, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, float duration, bool depthTest)
+                { return new DebugStyle(mode, flag, duration, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, float duration, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, float duration, int precision)
+                { return new DebugStyle(mode, flag, duration, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, float duration) 
+                { return new DebugStyle(InitMode.UseLast, flag, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, float duration)
+                { return new DebugStyle(mode, flag, duration); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, bool depthTest, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, bool depthTest, int precision)
+                { return new DebugStyle(mode, flag, depthTest, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, bool depthTest) 
+                { return new DebugStyle(InitMode.UseLast, flag, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, bool depthTest)
+                { return new DebugStyle(mode, flag, depthTest); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag, int precision) 
+                { return new DebugStyle(InitMode.UseLast, flag, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag, int precision)
+                { return new DebugStyle(mode, flag, precision); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(MaskFlag flag) 
+                { return new DebugStyle(InitMode.UseLast, flag); }
+        
+                //-------------------------------------------------------------
+                public static DebugStyle DebugStyle(InitMode mode, MaskFlag flag)
+                { return new DebugStyle(mode, flag); }
         
                 //-------------------------------------------------------------
                 public static DebugStyle DebugStyle(Space space, Matrix4x4 matrix, Color color, float duration, bool depthTest, int precision) 
