@@ -99,6 +99,7 @@ namespace Prateek.CodeGeneration.Editors
         private Vector2 scrollPosition = Vector2.zero;
         private Vector2 scrollPosition2 = Vector2.zero;
         private Prefs.Bools prateekRunInTestMode;
+        private Prefs.Strings prateekUpdaterDir;
         private CodeBuilder scriptTemplateUpdater = null;
 
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
@@ -166,20 +167,28 @@ namespace Prateek.CodeGeneration.Editors
         {
             InitDatas();
 
-            if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute updater"))
+            prateekUpdaterDir.Value = EditorGUILayout.TextField("Updater dir", prateekUpdaterDir.Value);
+            if (scriptTemplateUpdater == null)
             {
-                scriptTemplateUpdater.RunInTestMode = prateekRunInTestMode.Value;
-                scriptTemplateUpdater.StartWork();
+                EditorGUILayout.LabelField("Source script folder not found");
             }
-
-            EditorGUILayout.LabelField("File count: " + scriptTemplateUpdater.WorkFileCount);
-            using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.MaxHeight(350)))
+            else
             {
-                for (int w = 0; w < scriptTemplateUpdater.WorkFileCount; w++)
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute updater"))
                 {
-                    EditorGUILayout.LabelField(" - " + scriptTemplateUpdater[w].source.name.Extension(scriptTemplateUpdater[w].source.extension));
+                    scriptTemplateUpdater.RunInTestMode = prateekRunInTestMode.Value;
+                    scriptTemplateUpdater.StartWork();
                 }
-                scrollPosition = scrollScope.scrollPosition;
+
+                EditorGUILayout.LabelField("File count: " + scriptTemplateUpdater.WorkFileCount);
+                using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.MaxHeight(350)))
+                {
+                    for (int w = 0; w < scriptTemplateUpdater.WorkFileCount; w++)
+                    {
+                        EditorGUILayout.LabelField(" - " + scriptTemplateUpdater[w].source.name.Extension(scriptTemplateUpdater[w].source.extension));
+                    }
+                    scrollPosition = scrollScope.scrollPosition;
+                }
             }
 
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
@@ -231,14 +240,18 @@ namespace Prateek.CodeGeneration.Editors
         #region Behaviour
         private void InitDatas()
         {
-            if (scriptTemplateUpdater == null)
-            {
-                scriptTemplateUpdater = Tools.GetScriptTemplateUpdater();
-                scriptTemplateUpdater.Init();
-            }
+            if (prateekUpdaterDir == null)
+                prateekUpdaterDir = Prefs.Get(GetType().Name + ".prateekUpdaterDir", "/Scripts");
 
             if (prateekRunInTestMode == null)
                 prateekRunInTestMode = Prefs.Get(GetType().Name + ".prateekRunInTestMode", false);
+
+            if (scriptTemplateUpdater == null)
+            {
+                scriptTemplateUpdater = Tools.GetScriptTemplateUpdater(prateekUpdaterDir.Value);
+                if (scriptTemplateUpdater != null)
+                    scriptTemplateUpdater.Init();
+            }
 
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
             if (prateekExportDir == null)

@@ -112,9 +112,9 @@ namespace Prateek.CodeGeneration.Editors
         }
 
         //---------------------------------------------------------------------
-        public static CodeBuilder GetScriptTemplateUpdater()
+        public static CodeBuilder GetScriptTemplateUpdater(string sourceDir = "/Scripts")
         {
-            var path = Application.dataPath + "/Scripts";
+            var path = Application.dataPath + sourceDir;
             if (!Directory.Exists(path))
                 return null;
 
