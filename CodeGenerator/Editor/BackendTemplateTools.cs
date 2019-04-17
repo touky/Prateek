@@ -90,7 +90,6 @@ namespace Prateek.CodeGeneration.Editors
     public static class Tools
     {
         //---------------------------------------------------------------------
-#if PRATEEK_ALLOW_INTERNAL_TOOLS
         internal sealed class ScriptKeywordProcessor : UnityEditor.AssetModificationProcessor
         {
             //-----------------------------------------------------------------
@@ -129,6 +128,7 @@ namespace Prateek.CodeGeneration.Editors
         }
 
         //---------------------------------------------------------------------
+#if PRATEEK_ALLOW_INTERNAL_TOOLS
         public static CodeBuilder GetPrateekScriptGenerator(string destinationDirectory, List<string> sourceDirectories)
         {
             var builder = new PrateekScriptBuilder();

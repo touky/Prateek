@@ -98,12 +98,15 @@ namespace Prateek.CodeGeneration.Editors
         #region Fields
         private Vector2 scrollPosition = Vector2.zero;
         private Vector2 scrollPosition2 = Vector2.zero;
+        private Prefs.Bools prateekRunInTestMode;
         private CodeBuilder scriptTemplateUpdater = null;
+
+#if PRATEEK_ALLOW_INTERNAL_TOOLS
         private CodeBuilder prateekScriptGenerator = null;
         private Prefs.Strings prateekExportDir;
         private Prefs.Strings prateekSourceDir;
-        private Prefs.Bools prateekRunInTestMode;
         private Prefs.ListStrings prateekSourceDir0;
+#endif //PRATEEK_ALLOW_INTERNAL_TOOLS
         #endregion Fields
 
         //---------------------------------------------------------------------
@@ -112,14 +115,12 @@ namespace Prateek.CodeGeneration.Editors
 
         //---------------------------------------------------------------------
         #region Unity Defaults
-#if PRATEEK_ALLOW_INTERNAL_TOOLS
         [MenuItem("Prateek/Window/Prateek Tools Window")]
         static void CreateWindow()
         {
             var window = (PrateekEditorWindow)EditorWindow.GetWindow(typeof(PrateekEditorWindow));
             window.Show();
         }
-#endif //PRATEEK_ALLOW_INTERNAL_TOOLS
 
         //---------------------------------------------------------------------
         private void Awake()
@@ -160,6 +161,7 @@ namespace Prateek.CodeGeneration.Editors
 
         //---------------------------------------------------------------------
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
+#endif //PRATEEK_ALLOW_INTERNAL_TOOLS
         private void OnGUI()
         {
             InitDatas();
@@ -180,6 +182,7 @@ namespace Prateek.CodeGeneration.Editors
                 scrollPosition = scrollScope.scrollPosition;
             }
 
+#if PRATEEK_ALLOW_INTERNAL_TOOLS
             EditorGUILayout.Space();
             if (GUI.Button(EditorGUILayout.GetControlRect(), "Reload"))
             {
@@ -220,29 +223,29 @@ namespace Prateek.CodeGeneration.Editors
                 }
                 scrollPosition2 = scrollScope.scrollPosition;
             }
-        }
 #endif //PRATEEK_ALLOW_INTERNAL_TOOLS
+        }
         #endregion Unity Defaults
 
         //---------------------------------------------------------------------
         #region Behaviour
         private void InitDatas()
         {
-#if PRATEEK_ALLOW_INTERNAL_TOOLS
             if (scriptTemplateUpdater == null)
             {
                 scriptTemplateUpdater = Tools.GetScriptTemplateUpdater();
                 scriptTemplateUpdater.Init();
             }
 
+            if (prateekRunInTestMode == null)
+                prateekRunInTestMode = Prefs.Get(GetType().Name + ".prateekRunInTestMode", false);
+
+#if PRATEEK_ALLOW_INTERNAL_TOOLS
             if (prateekExportDir == null)
                 prateekExportDir = Prefs.Get(GetType().Name + ".prateekExportDir", string.Empty);
 
             if (prateekSourceDir == null)
                 prateekSourceDir = Prefs.Get(GetType().Name + ".prateekSourceDir", string.Empty);
-
-            if (prateekRunInTestMode == null)
-                prateekRunInTestMode = Prefs.Get(GetType().Name + ".prateekRunInTestMode", false);
 
             if (prateekSourceDir0 == null)
                 prateekSourceDir0 = Prefs.Get(GetType().Name + ".prateekSourceDir0", (List<string>)null);
