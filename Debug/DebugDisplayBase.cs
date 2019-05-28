@@ -204,7 +204,7 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds)
         {
-            if (tickEvent != Registry.TickEvent.FrameBeginning)
+            if (timedPrimitives == null || tickEvent != Registry.TickEvent.FrameBeginning)
                 return;
 
             for (int p = 0; p < timedPrimitives.Count; p++)
@@ -249,6 +249,9 @@ namespace Prateek.Debug
         //---------------------------------------------------------------------
         public FrameRecorderManager.Frame.IData EndFrame()
         {
+            if (timedPrimitives == null)
+                return null;
+
             for (int p = 0; p < timedPrimitives.Count; p++)
             {
                 recordings.FramePrimitives.Add(timedPrimitives[p]);

@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 30/03/2019
+//  Header last update date: 16/04/2019
 //
 //  Copyright � 2017-2019 "Touky" <touky@prateek.top>
 //
@@ -15,17 +15,26 @@
 
 // -BEGIN_PRATEEK_CSHARP_NAMESPACE-
 //
+//-----------------------------------------------------------------------------
 #region C# Prateek Namespaces
-#if UNITY_EDITOR && !PRATEEK_DEBUG
+
+//Auto activate some of the prateek defines
+#if UNITY_EDITOR
+
+#if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
+#endif //!PRATEEK_DEBUG
+
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
+//-----------------------------------------------------------------------------
 #region System
 using System;
 using System.Collections;
 using System.Collections.Generic;
 #endregion System
 
+//-----------------------------------------------------------------------------
 #region Unity
 using Unity.Jobs;
 using Unity.Collections;
@@ -35,18 +44,21 @@ using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.Serialization;
 
+//-----------------------------------------------------------------------------
 #if UNITY_PROFILING
 using UnityEngine.Profiling;
 #endif //UNITY_PROFILING
+
 #endregion Engine
 
-#region Editor
+//-----------------------------------------------------------------------------
 #if UNITY_EDITOR
 using UnityEditor;
 #endif //UNITY_EDITOR
-#endregion Editor
+
 #endregion Unity
 
+//-----------------------------------------------------------------------------
 #region Prateek
 using Prateek;
 using Prateek.Base;
@@ -55,20 +67,25 @@ using Prateek.Helpers;
 using Prateek.Attributes;
 using Prateek.Manager;
 
+//-----------------------------------------------------------------------------
 #region Using static
 using static Prateek.ShaderTo.CSharp;
 #endregion Using static
 
-#region Editor
+//-----------------------------------------------------------------------------
 #if UNITY_EDITOR
 using Prateek.CodeGeneration;
 #endif //UNITY_EDITOR
-#endregion Editor
 
+//-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
 using Prateek.Debug;
 using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
+using DebugDraw = Prateek.Debug.DebugDraw;
+using DebugPlace = Prateek.Debug.DebugDraw.DebugPlace;
+using DebugStyle = Prateek.Debug.DebugDraw.DebugStyle;
 #endif //PRATEEK_DEBUG
+
 #endregion Prateek
 
 #endregion C# Prateek Namespaces
@@ -86,11 +103,15 @@ using System.Text.RegularExpressions;
 namespace Prateek.CodeGeneration
 {
     //-------------------------------------------------------------------------
+#if UNITY_EDITOR
     [InitializeOnLoad]
     class PrateekScriptLoader : ScriptTemplate
     {
         static PrateekScriptLoader()
         {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
+
             NewScript(PrateekScriptBuilder.Tag.importExtension.Extension(PrateekScriptBuilder.Tag.exportExtension), PrateekScriptBuilder.Tag.exportExtension)
             .SetAutorun(false)
             .SetTemplateFile(String.Empty)
@@ -98,6 +119,7 @@ namespace Prateek.CodeGeneration
             .Commit();
         }
     }
+#endif //UNITY_EDITOR
 
     //-------------------------------------------------------------------------
     public partial class PrateekScriptBuilder
@@ -372,7 +394,7 @@ namespace Prateek.CodeGeneration
 
                 else if (keyRule.Match(Tag.Macro.DefaultInfo, codeBlock))
                 {
-                    { keyRule.args = 2; }
+                    { keyRule.args = new Utils.KeyRule.ArgRange(2, 3); }
                 }
                 else if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
@@ -421,6 +443,7 @@ namespace Prateek.CodeGeneration
                 {
                     activeData.classDefaultType = args[0];
                     activeData.classDefaultValue = args[1];
+                    activeData.classDefaultExportOnly = (args.Count == 2 || args[2] == "false") ? false : true;
                 }
                 else if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {

@@ -24,6 +24,21 @@ using System.Collections.Generic;
 using Unity.Jobs;
 using Unity.Collections;
 
+//using Unity.Mathematics;
+//using static Unity.Mathematics.math;
+//using vec2 = Unity.Mathematics.float2;
+//using vec3 = Unity.Mathematics.float3;
+//using vec4 = Unity.Mathematics.float4;
+//using ivec2 = Unity.Mathematics.int2;
+//using ivec3 = Unity.Mathematics.int3;
+//using ivec4 = Unity.Mathematics.int4;
+//using bvec2 = Unity.Mathematics.bool2;
+//using bvec3 = Unity.Mathematics.bool3;
+//using bvec4 = Unity.Mathematics.bool4;
+//using mat2 = Unity.Mathematics.float2x2;
+//using mat3 = Unity.Mathematics.float3x3;
+//using mat4 = Unity.Mathematics.float4x4;
+
 //-----------------------------------------------------------------------------
 #region Engine
 using UnityEngine;
