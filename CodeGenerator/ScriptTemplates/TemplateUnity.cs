@@ -199,9 +199,10 @@ namespace Prateek.CodeGeneration
                 this.extension = path.Substring(ext1 + 1, (ext0 - ext1) - 1);
 
                 SetContent(FileHelpers.ReadAllTextCleaned(path));
-                parts = new List<string>(content.Split(tags, StringSplitOptions.RemoveEmptyEntries));
+                parts = new List<string>(Content.Split(tags, StringSplitOptions.RemoveEmptyEntries));
                 return this;
             }
         }
     }
 }
+

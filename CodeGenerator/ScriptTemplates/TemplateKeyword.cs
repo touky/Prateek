@@ -151,7 +151,7 @@ namespace Prateek.CodeGeneration
 
                 if (mode == KeywordMode.ZoneDelimiter)
                 {
-                    this.content = tag.KeywordBegin() + this.content + tag.KeywordEnd();
+                    this.Content = tag.KeywordBegin() + this.Content + tag.KeywordEnd();
                 }
                 return this;
             }

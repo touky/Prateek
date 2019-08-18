@@ -110,11 +110,23 @@ namespace Prateek.CodeGeneration
         {
             //-----------------------------------------------------------------
             protected string extension;
-            protected string content;
+            private string contentPath = string.Empty;
+            private string content = string.Empty;
 
             //-----------------------------------------------------------------
             public string Extension { get { return extension; } }
-            public string Content { get { return content; } }
+            public string Content
+            {
+                get
+                {
+                    if (content == string.Empty && contentPath != string.Empty)
+                    {
+                        DoLoadContent();
+                    }
+                    return content;
+                }
+                protected set { content = value; }
+            }
 
             //-----------------------------------------------------------------
             protected BaseTemplate(string extension)
@@ -132,10 +144,8 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public virtual BaseTemplate SetFileContent(string filePath)
             {
-                var files = new List<string>();
-                if (!FileHelpers.GatherFilesAt(Application.dataPath, files, "(" + filePath + ")$", true))
-                    return this;
-                return SetContent(FileHelpers.ReadAllTextCleaned(files[0]));
+                contentPath = filePath;
+                return SetContent(string.Empty);
             }
 
             //-----------------------------------------------------------------
@@ -144,6 +154,15 @@ namespace Prateek.CodeGeneration
                 if (this.extension == string.Empty || this.extension == extension)
                     return true;
                 return false;
+            }
+
+            //-----------------------------------------------------------------
+            protected void DoLoadContent()
+            {
+                var files = new List<string>();
+                if (!FileHelpers.GatherFilesAt(Application.dataPath, files, "(" + contentPath + ")$", true))
+                    return;
+                SetContent(FileHelpers.ReadAllTextCleaned(files[0]));
             }
 
             //-----------------------------------------------------------------
