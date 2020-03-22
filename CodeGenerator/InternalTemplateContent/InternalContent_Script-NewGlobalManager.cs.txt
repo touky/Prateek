@@ -1,14 +1,12 @@
 #PRATEEK_COPYRIGHT#
 
-#PRATEEK_CSHARP_NAMESPACE#
+#PRATEEK_CSHARP_IFDEF#
 
 //-----------------------------------------------------------------------------
-#region File namespaces
-#endregion File namespaces
-
-//-----------------------------------------------------------------------------
-namespace Prateek.Manager
+namespace #NAMESPACE#
 {
+    #PRATEEK_CSHARP_NAMESPACE#
+
     //-------------------------------------------------------------------------
     #region Null#SCRIPTNAME#
     public sealed class Null#SCRIPTNAME# : GlobalManager

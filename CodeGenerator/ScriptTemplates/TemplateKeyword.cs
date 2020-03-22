@@ -14,29 +14,21 @@
 // -END_PRATEEK_COPYRIGHT-
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
-//
 //-----------------------------------------------------------------------------
-#region C# Prateek Namespaces
+#region Prateek Ifdefs
 
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
+//Auto activate debug
 #if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-#endregion C# Prateek Namespaces
-//
+#endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
-
-//-----------------------------------------------------------------------------
-#region File namespaces
-using System.IO;
-using Prateek.IO;
-using System.Text.RegularExpressions;
-#endregion File namespaces
 
 //-----------------------------------------------------------------------------
 namespace Prateek.CodeGeneration
@@ -91,9 +83,14 @@ namespace Prateek.CodeGeneration
             {
                 base.SetContent(content);
 
+                if (string.IsNullOrEmpty(content))
+                {
+                    return this;
+                }
+
                 if (mode == KeywordMode.ZoneDelimiter)
                 {
-                    this.Content = tag.KeywordBegin() + this.Content + tag.KeywordEnd();
+                    this.Content = TagBegin + content + TagEnd;
                 }
                 return this;
             }

@@ -14,50 +14,59 @@
 // -END_PRATEEK_COPYRIGHT-
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
-//
 //-----------------------------------------------------------------------------
-#region C# Prateek Namespaces
+#region Prateek Ifdefs
 
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
+//Auto activate debug
 #if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-#endregion C# Prateek Namespaces
-//
+#endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
-
-//-----------------------------------------------------------------------------
-#region File namespaces
-#endregion File namespaces
 
 //-----------------------------------------------------------------------------
 namespace Prateek.Attributes
 {
     using System;
-    using UnityEngine;
+
+    //-------------------------------------------------------------------------
+    public abstract class BaseNameAttribute : Attribute
+    {
+        //---------------------------------------------------------------------
+        protected string value;
+
+        //---------------------------------------------------------------------
+        public string Value { get { return value; } }
+
+        //---------------------------------------------------------------------
+        protected BaseNameAttribute(string new_value)
+        {
+            value = new_value;
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    //Custom name that can be set to anything
+    //-------------------------------------------------------------------------
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
+    public class NameAttribute : BaseNameAttribute
+    {
+        public NameAttribute(string name) : base(name) { }
+    }
 
     //-------------------------------------------------------------------------
     //Add a category attribute for any of the targets
     //Can be used to store variables in submenus
     //-------------------------------------------------------------------------
-    [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
-    public class TypeRefAttribute : PropertyAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field, AllowMultiple = false)]
+    public class CategoryAttribute : BaseNameAttribute
     {
-        //---------------------------------------------------------------------
-        private Type value = null;
-
-        //---------------------------------------------------------------------
-        public Type Value { get { return value; } }
-
-        //---------------------------------------------------------------------
-        public TypeRefAttribute(Type value)
-        {
-            this.value = value;
-        }
+        public CategoryAttribute(string name) : base(name) { }
     }
 }

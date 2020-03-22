@@ -14,26 +14,21 @@
 // -END_PRATEEK_COPYRIGHT-
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
-//
 //-----------------------------------------------------------------------------
-#region C# Prateek Namespaces
+#region Prateek Ifdefs
 
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
+//Auto activate debug
 #if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-#endregion C# Prateek Namespaces
-//
+#endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
-
-//-----------------------------------------------------------------------------
-#region File namespaces
-#endregion File namespaces
 
 //-----------------------------------------------------------------------------
 namespace Prateek.Manager
@@ -52,8 +47,8 @@ namespace Prateek.Manager
         public override void OnCreate() { }
 
         //---------------------------------------------------------------------
-        public override void OnRegister() { Registry.Instance.Register(typeof(DebugDisplayManager), this); }
-        public override void OnUnregister() { Registry.Instance.Unregister(typeof(DebugDisplayManager)); }
+        public override void OnRegister() { Registry.Instance.Register(typeof(FrameRecorderManager), this); }
+        public override void OnUnregister() { Registry.Instance.Unregister(typeof(FrameRecorderManager)); }
 
         //-- Object Lifetime Messages------------------------------------------
         public override void OnInitialize() { }

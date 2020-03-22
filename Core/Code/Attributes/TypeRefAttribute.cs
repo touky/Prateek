@@ -31,22 +31,28 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Base
+namespace Prateek.Attributes
 {
+    using System;
+    using UnityEngine;
+
     //-------------------------------------------------------------------------
-    public abstract class Singleton<T> : System.Object, ISingleton where T : Singleton<T>, new()
+    //Add a category attribute for any of the targets
+    //Can be used to store variables in submenus
+    //-------------------------------------------------------------------------
+    [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
+    public class TypeRefAttribute : PropertyAttribute
     {
-        private static T instance = null;
-        public static T Instance
+        //---------------------------------------------------------------------
+        private Type value = null;
+
+        //---------------------------------------------------------------------
+        public Type Value { get { return value; } }
+
+        //---------------------------------------------------------------------
+        public TypeRefAttribute(Type value)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new T();
-                }
-                return instance;
-            }
+            this.value = value;
         }
     }
 }

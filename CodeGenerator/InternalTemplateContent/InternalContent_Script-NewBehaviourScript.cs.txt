@@ -1,14 +1,12 @@
 #PRATEEK_COPYRIGHT#
 
-#PRATEEK_CSHARP_NAMESPACE#
+#PRATEEK_CSHARP_IFDEF#
 
 //-----------------------------------------------------------------------------
-#region File namespaces
-#endregion File namespaces
-
-//-----------------------------------------------------------------------------
-namespace Gameplay
+namespace #NAMESPACE#
 {
+    #PRATEEK_CSHARP_NAMESPACE#
+
     //-------------------------------------------------------------------------
     public partial class #SCRIPTNAME# : BaseBehaviour
     {

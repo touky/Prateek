@@ -14,31 +14,26 @@
 // -END_PRATEEK_COPYRIGHT-
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
-//
 //-----------------------------------------------------------------------------
-#region C# Prateek Namespaces
+#region Prateek Ifdefs
 
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
+//Auto activate debug
 #if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-#endregion C# Prateek Namespaces
-//
+#endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
-
-//-----------------------------------------------------------------------------
-#region File namespaces
-using Prateek.Editors;
-#endregion File namespaces
 
 //-----------------------------------------------------------------------------
 namespace Prateek.CodeGeneration.Editors
 {
+    using Prateek.Editors;
     using Prateek.Helpers;
     using UnityEditor;
     using UnityEngine;
