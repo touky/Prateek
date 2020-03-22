@@ -1,6 +1,7 @@
 #PRATEEK_COPYRIGHT#
 
-#PRATEEK_CSHARP_NAMESPACE#
+#PRATEEK_CSHARP_IFDEF#
+
 #PRATEEK_SCRIPT_STARTS_HERE#
 //-----------------------------------------------------------------------------
 namespace #PRATEEK_EXTENSION_NAMESPACE#

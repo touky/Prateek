@@ -1,4 +1,4 @@
-// -BEGIN_PRATEEK_COPYRIGHT-// -BEGIN_PRATEEK_COPYRIGHT-
+// -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
 //  Header last update date: 22/03/2020
@@ -11,7 +11,7 @@
 //  to Public License, Version 2, as published by the WTFPL Task Force.
 //  See http://www.wtfpl.net/ for more details.
 //
-// -END_PRATEEK_COPYRIGHT-// -END_PRATEEK_COPYRIGHT-// -END_PRATEEK_COPYRIGHT-
+// -END_PRATEEK_COPYRIGHT-
 
 #region Namespaces
 #if UNITY_EDITOR && !PRATEEK_DEBUG

@@ -1,16 +1,13 @@
 
-//
 //-----------------------------------------------------------------------------
-#region C# Prateek Namespaces
+#region Prateek useful namspaces
 
-//Auto activate some of the prateek defines
-#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
-#if !PRATEEK_DEBUG
-#define PRATEEK_DEBUG
-#endif //!PRATEEK_DEBUG
+using Prateek;
+using Prateek.Extensions;
+using static Prateek.ShaderTo.CSharp;
 
-#endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
-#endregion C# Prateek Namespaces
-//
+#endregion Prateek useful namspaces

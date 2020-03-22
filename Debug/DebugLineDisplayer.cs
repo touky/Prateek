@@ -1,4 +1,4 @@
-// -BEGIN_PRATEEK_COPYRIGHT-// -BEGIN_PRATEEK_COPYRIGHT-
+// -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
 //  Header last update date: 22/03/2020
@@ -11,9 +11,9 @@
 //  to Public License, Version 2, as published by the WTFPL Task Force.
 //  See http://www.wtfpl.net/ for more details.
 //
-// -END_PRATEEK_COPYRIGHT-// -END_PRATEEK_COPYRIGHT-// -END_PRATEEK_COPYRIGHT-
+// -END_PRATEEK_COPYRIGHT-
 
-// -BEGIN_PRATEEK_CSHARP_NAMESPACE-// -BEGIN_PRATEEK_CSHARP_NAMESPACE-
+// -BEGIN_PRATEEK_CSHARP_IFDEF-
 //
 //-----------------------------------------------------------------------------
 #region C# Prateek Namespaces
@@ -29,7 +29,7 @@
 
 #endregion C# Prateek Namespaces
 //
-// -END_PRATEEK_CSHARP_NAMESPACE-// -END_PRATEEK_CSHARP_NAMESPACE-// -END_PRATEEK_CSHARP_NAMESPACE-
+// -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
 #region File namespaces
@@ -39,6 +39,8 @@
 #if PRATEEK_DEBUG
 namespace Prateek.Debug
 {
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
     using Prateek.Base;
     using UnityEditor;

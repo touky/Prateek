@@ -1,4 +1,4 @@
-// -BEGIN_PRATEEK_COPYRIGHT-// -BEGIN_PRATEEK_COPYRIGHT-
+// -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
 //  Header last update date: 22/03/2020
@@ -11,9 +11,9 @@
 //  to Public License, Version 2, as published by the WTFPL Task Force.
 //  See http://www.wtfpl.net/ for more details.
 //
-// -END_PRATEEK_COPYRIGHT-// -END_PRATEEK_COPYRIGHT-// -END_PRATEEK_COPYRIGHT-
+// -END_PRATEEK_COPYRIGHT-
 
-// -BEGIN_PRATEEK_CSHARP_NAMESPACE-// -BEGIN_PRATEEK_CSHARP_NAMESPACE-
+// -BEGIN_PRATEEK_CSHARP_IFDEF-
 //
 //-----------------------------------------------------------------------------
 #region C# Prateek Namespaces
@@ -29,7 +29,7 @@
 
 #endregion C# Prateek Namespaces
 //
-// -END_PRATEEK_CSHARP_NAMESPACE-// -END_PRATEEK_CSHARP_NAMESPACE-// -END_PRATEEK_CSHARP_NAMESPACE-
+// -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
 #region File namespaces
@@ -71,9 +71,14 @@ namespace Prateek.CodeGeneration
             .Commit();
 
             NewKeyword("cs")
-            .SetTag("PRATEEK_CSHARP_NAMESPACE", KeywordMode.ZoneDelimiter)
-            .SetFileContent("InternalContent_PRATEEK_CSHARP_NAMESPACE.cs")
-            .Commit();
+                .SetTag("PRATEEK_CSHARP_NAMESPACE", KeywordMode.ZoneDelimiter)
+                .SetFileContent("InternalContent_PRATEEK_CSHARP_NAMESPACE.cs")
+                .Commit();
+
+            NewKeyword("cs")
+                .SetTag("PRATEEK_CSHARP_IFDEF", KeywordMode.ZoneDelimiter)
+                .SetFileContent("InternalContent_PRATEEK_CSHARP_IFDEF.cs")
+                .Commit();
         }
     }
 #endif //UNITY_EDITOR
