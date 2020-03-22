@@ -1,9 +1,9 @@
-// -BEGIN_PRATEEK_COPYRIGHT-
+// -BEGIN_PRATEEK_COPYRIGHT-// -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 30/03/2019
+//  Header last update date: 22/03/2020
 //
-//  Copyright � 2017-2019 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2020 "Touky" <touky@prateek.top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -11,9 +11,9 @@
 //  to Public License, Version 2, as published by the WTFPL Task Force.
 //  See http://www.wtfpl.net/ for more details.
 //
-// -END_PRATEEK_COPYRIGHT-
+// -END_PRATEEK_COPYRIGHT-// -END_PRATEEK_COPYRIGHT-// -END_PRATEEK_COPYRIGHT-
 
-// -BEGIN_PRATEEK_CSHARP_NAMESPACE-
+// -BEGIN_PRATEEK_CSHARP_NAMESPACE-// -BEGIN_PRATEEK_CSHARP_NAMESPACE-
 //
 //-----------------------------------------------------------------------------
 #region C# Prateek Namespaces
@@ -27,68 +27,9 @@
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-//-----------------------------------------------------------------------------
-#region System
-using System;
-using System.Collections;
-using System.Collections.Generic;
-#endregion System
-
-//-----------------------------------------------------------------------------
-#region Unity
-using Unity.Jobs;
-using Unity.Collections;
-
-//-----------------------------------------------------------------------------
-#region Engine
-using UnityEngine;
-using UnityEngine.Jobs;
-using UnityEngine.Serialization;
-
-//-----------------------------------------------------------------------------
-#if UNITY_PROFILING
-using UnityEngine.Profiling;
-#endif //UNITY_PROFILING
-
-#endregion Engine
-
-//-----------------------------------------------------------------------------
-#if UNITY_EDITOR
-using UnityEditor;
-#endif //UNITY_EDITOR
-
-#endregion Unity
-
-//-----------------------------------------------------------------------------
-#region Prateek
-using Prateek;
-using Prateek.Base;
-using Prateek.Extensions;
-using Prateek.Helpers;
-using Prateek.Attributes;
-using Prateek.Manager;
-
-//-----------------------------------------------------------------------------
-#region Using static
-using static Prateek.ShaderTo.CSharp;
-#endregion Using static
-
-//-----------------------------------------------------------------------------
-#if UNITY_EDITOR
-using Prateek.CodeGeneration;
-#endif //UNITY_EDITOR
-
-//-----------------------------------------------------------------------------
-#if PRATEEK_DEBUG
-using Prateek.Debug;
-using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
-#endif //PRATEEK_DEBUG
-
-#endregion Prateek
-
 #endregion C# Prateek Namespaces
 //
-// -END_PRATEEK_CSHARP_NAMESPACE-
+// -END_PRATEEK_CSHARP_NAMESPACE-// -END_PRATEEK_CSHARP_NAMESPACE-// -END_PRATEEK_CSHARP_NAMESPACE-
 
 //-----------------------------------------------------------------------------
 #region File namespaces
@@ -98,6 +39,16 @@ using static Prateek.Debug.DebugDraw.DebugStyle.QuickCTor;
 #if PRATEEK_DEBUG
 namespace Prateek.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using Prateek.Base;
+    using Prateek.Debug;
+    using Prateek.Extensions;
+    using Prateek.Helpers;
+    using UnityEditor;
+    using UnityEngine;
+    using static Prateek.ShaderTo.CSharp;
+
     //-------------------------------------------------------------------------
     public class DebugDisplayEditorWindow : EditorWindow
     {
@@ -159,7 +110,7 @@ namespace Prateek.Editors
         //---------------------------------------------------------------------
         public static class GUIDraw
         {
-            //-- Returns interior rect --
+            //-- Returns interior rect ----------------------------------------
             public static Rect BackgroundAuto(int lineCount, int lineMargin, int bgMargin, GUIStyle style)
             {
                 var lineHeight = EditorGUIUtility.singleLineHeight;
@@ -168,7 +119,7 @@ namespace Prateek.Editors
                 return rect.Inflate(-bgMargin);
             }
 
-            //-- Returns interior rect --
+            //-- Returns interior rect ----------------------------------------
             public static Rect Background(Rect rect, int margin = 0, GUIStyle style = null)
             {
                 if (style != null)
@@ -177,7 +128,7 @@ namespace Prateek.Editors
                 return rect.Inflate(-margin);
             }
 
-            //-- Returns interior rect --
+            //-- Returns interior rect ----------------------------------------
             public static Rect Square(Rect rect, int margin = 0, GUIStyle style = null) { return Square(ref rect, margin, style); }
             public static Rect Square(ref Rect rect, int margin = 0, GUIStyle style = null)
             {
