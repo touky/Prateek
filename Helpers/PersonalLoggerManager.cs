@@ -36,6 +36,7 @@ namespace Prateek.Helpers {
     using System.Collections.Generic;
     using Prateek.CodeGenerator.PrateekScript.ScriptExport;
     using Prateek.Debug;
+    using Prateek.Debug.Code;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine;
@@ -194,7 +195,7 @@ namespace Prateek.Helpers {
         public class RegisteredLogger
         {
             public Helpers.PersonalLogger logger;
-            public Prateek.Debug.Flag.Overridable show = false;
+            public Flag.Overridable show = false;
             public Vector2 scroll = new Vector2(0, 0);
             public float scroll_inner_width = 600f;
         }
@@ -263,7 +264,7 @@ namespace Prateek.Helpers {
                                                      Mathf.Clamp(robotPos.y, style.WindowRect.y, style.WindowRect.y + style.WindowRect.height));
                             guiPos.y = Screen.height - guiPos.y;
                             var worldGuiPos = camera.ScreenToWorldPoint(guiPos.xyn(1f));
-                            Prateek.Debug.DebugDraw.Line(Prateek.Debug.DebugDraw.DebugPlace.AToB(worldGuiPos, box.logger.transform.position), new DebugDraw.DebugStyle(Prateek.Debug.DebugDraw.Space.World, Color.white));
+                            DebugDraw.Line(DebugDraw.DebugPlace.AToB(worldGuiPos, box.logger.transform.position), new DebugDraw.DebugStyle(DebugDraw.Space.World, Color.white));
                         }
                         break;
                     }

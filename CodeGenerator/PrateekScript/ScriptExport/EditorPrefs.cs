@@ -51,7 +51,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Bools : Prateek.Debug.Prefs.TypedStorage<bool>
+        public class Bools : Prateek.Debug.Code.Prefs.TypedStorage<bool>
         {
             //-----------------------------------------------------------------
             public Bools(string name, bool defaultValue) : base(name, defaultValue) { }
@@ -86,7 +86,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Ints : Prateek.Debug.Prefs.TypedStorage<int>
+        public class Ints : Prateek.Debug.Code.Prefs.TypedStorage<int>
         {
             //-----------------------------------------------------------------
             public Ints(string name, int defaultValue) : base(name, defaultValue) { }
@@ -121,7 +121,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Floats : Prateek.Debug.Prefs.TypedStorage<float>
+        public class Floats : Prateek.Debug.Code.Prefs.TypedStorage<float>
         {
             //-----------------------------------------------------------------
             public Floats(string name, float defaultValue) : base(name, defaultValue) { }
@@ -156,7 +156,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Strings : Prateek.Debug.Prefs.TypedStorage<string>
+        public class Strings : Prateek.Debug.Code.Prefs.TypedStorage<string>
         {
             //-----------------------------------------------------------------
             public Strings(string name, string defaultValue) : base(name, defaultValue) { }
@@ -198,7 +198,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Vector2Ints : Prateek.Debug.Prefs.ValueStorage
+        public class Vector2Ints : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -245,7 +245,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Vector3Ints : Prateek.Debug.Prefs.ValueStorage
+        public class Vector3Ints : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -295,7 +295,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Vector2s : Prateek.Debug.Prefs.ValueStorage
+        public class Vector2s : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -342,7 +342,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Vector3s : Prateek.Debug.Prefs.ValueStorage
+        public class Vector3s : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -392,7 +392,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Vector4s : Prateek.Debug.Prefs.ValueStorage
+        public class Vector4s : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -445,7 +445,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class Rects : Prateek.Debug.Prefs.ValueStorage
+        public class Rects : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -498,7 +498,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class RectInts : Prateek.Debug.Prefs.ValueStorage
+        public class RectInts : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -558,7 +558,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListStrings : Prateek.Debug.Prefs.ValueStorage
+        public class ListStrings : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -703,7 +703,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListBools : Prateek.Debug.Prefs.ValueStorage
+        public class ListBools : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -848,7 +848,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListInts : Prateek.Debug.Prefs.ValueStorage
+        public class ListInts : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -993,7 +993,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListFloats : Prateek.Debug.Prefs.ValueStorage
+        public class ListFloats : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1138,12 +1138,12 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListULongs : Prateek.Debug.Prefs.ValueStorage
+        public class ListULongs : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
             protected Ints count;
-            protected List<Prateek.Debug.Prefs.ULongs> prefValues = new List<Prateek.Debug.Prefs.ULongs>();
+            protected List<Prateek.Debug.Code.Prefs.ULongs> prefValues = new List<Prateek.Debug.Code.Prefs.ULongs>();
             protected List<ulong> realValues = new List<ulong>();
             #endregion Fields
         
@@ -1215,7 +1215,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
             //-----------------------------------------------------------------
             public void Add(ulong value)
             {
-                prefValues.Add(new Prateek.Debug.Prefs.ULongs(GetName(prefValues.Count), value));
+                prefValues.Add(new Prateek.Debug.Code.Prefs.ULongs(GetName(prefValues.Count), value));
                 realValues.Add(prefValues.Last().Value);
                 count.Value = realValues.Count;
             }
@@ -1283,7 +1283,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListVector2Ints : Prateek.Debug.Prefs.ValueStorage
+        public class ListVector2Ints : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1428,7 +1428,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListVector3Ints : Prateek.Debug.Prefs.ValueStorage
+        public class ListVector3Ints : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1573,7 +1573,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListVector2s : Prateek.Debug.Prefs.ValueStorage
+        public class ListVector2s : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1718,7 +1718,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListVector3s : Prateek.Debug.Prefs.ValueStorage
+        public class ListVector3s : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1863,7 +1863,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListVector4s : Prateek.Debug.Prefs.ValueStorage
+        public class ListVector4s : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -2008,7 +2008,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListRects : Prateek.Debug.Prefs.ValueStorage
+        public class ListRects : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -2153,7 +2153,7 @@ namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
         }
         
         //---------------------------------------------------------------------
-        public class ListRectInts : Prateek.Debug.Prefs.ValueStorage
+        public class ListRectInts : Prateek.Debug.Code.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields

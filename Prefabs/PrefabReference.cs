@@ -31,83 +31,74 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Helpers.Prefabs
+namespace Prateek.Prefabs
 {
     using Prateek.Base.Behaviour;
+    using UnityEditor;
     using UnityEngine;
 
     //-------------------------------------------------------------------------
-    public class PrefabInstantiator : BaseBehaviour
+    public class PrefabReference : BaseBehaviour
     {
         //---------------------------------------------------------------------
         #region Settings
-        [SerializeField]
-        protected bool destroyOnSpawn = true;
-        [SerializeField]
-        protected GameObject prefab = null;
+        [SerializeField] //TODO:, Readonly]
+        private GameObject prefab;
         #endregion Settings
 
         //---------------------------------------------------------------------
-        #region Fields
-        protected GameObject instance;
-        #endregion Fields
-
-        //---------------------------------------------------------------------
         #region Properties
-        public bool DestroyOnSpawn { get { return destroyOnSpawn; } }
-        public GameObject Prefab { get { return prefab; } }
-        public GameObject Instance { get { return instance; } }
+        public GameObject Prefab { get { return prefab; } set { prefab = value; } }
         #endregion Properties
 
         //---------------------------------------------------------------------
+#if UNITY_EDITOR
         #region Unity Defaults
-        private void Awake()
+        protected void Reset()
         {
-            Spawn();
+            Verify(true);
+        }
+
+        //---------------------------------------------------------------------
+        protected void OnEnable()
+        {
+            Verify(false);
+        }
+
+        //---------------------------------------------------------------------
+        protected void OnValidate()
+        {
+            Verify(true);
         }
         #endregion Unity Defaults
 
         //---------------------------------------------------------------------
-        #region Instantiation
-        protected void Spawn()
+        #region Behaviour
+        void Verify(bool force)
         {
-            CreateInstance();
-            if (instance != null)
+            if (force || prefab == null)
             {
-                CreateChildrenInstances(instance);
+                var root = PrefabUtility.FindPrefabRoot(gameObject);
+                var parent = PrefabUtility.GetCorrespondingObjectFromSource(root) as GameObject;
+
+                //we have a parent for the found root, use it
+                if (parent)
+                {
+                    prefab = parent;
+                }
+                //We're not the highest gameobject in the prefab, reference our "local parent"
+                else if (root)
+                {
+                    prefab = root;
+                }
+                //We're the prefab in the editor AND the highest GameObject in it, so reference ourselves
+                else
+                {
+                    prefab = gameObject;
+                }
             }
         }
-
-        //---------------------------------------------------------------------
-        public static void CreateChildrenInstances(GameObject gameObject)
-        {
-            if (Application.isPlaying == false || gameObject == null)
-                return;
-
-            var instantiators = gameObject.GetComponentsInChildren<PrefabInstantiator>();
-            foreach (var instantiator in instantiators)
-            {
-                instantiator.Spawn();
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public virtual GameObject CreateInstance()
-        {
-            if (!Application.isPlaying || instance != null || prefab == null)
-                return null;
-
-            instance = Instantiate(prefab);
-            Prefabs.AddPrefabInstance(instance.gameObject, prefab);
-
-            instance.transform.SetParent(transform.parent);
-            instance.transform.position = transform.position;
-            instance.transform.rotation = transform.rotation;
-
-            Destroy(gameObject);
-
-            return instance;
-        }
-        #endregion Instantiation
+        #endregion Behaviour
+#endif //UNITY_EDITOR
     }
 }

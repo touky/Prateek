@@ -1,8 +1,7 @@
 {
-    "name": "Prateek",
+    "name": "Prateek.Core.Editor",
     "references": [
-        "GUID:4b4491f2f353c0b44a038afb3e9dbb85",
-        "GUID:5b8899b53114820428445393f83bcd9a"
+        "GUID:4b4491f2f353c0b44a038afb3e9dbb85"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

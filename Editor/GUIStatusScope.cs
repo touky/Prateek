@@ -30,52 +30,49 @@
 #endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
 
-//-----------------------------------------------------------------------------
-#if PRATEEK_DEBUG
-namespace Prateek.Debug
+namespace Prateek.Editor
 {
-    using System.Collections.Generic;
-    using Prateek.Helpers;
     using UnityEngine;
 
-    public class DebugDisplayManager_ : MonoBehaviour
+    public class GUIStatusScope : GUI.Scope
     {
         //---------------------------------------------------------------------
         #region Fields
-        private PersonalLoggerManager loggerManager = new PersonalLoggerManager();
-        private List<Helpers.StringBlurp> blurps = new List<Helpers.StringBlurp>();
-
-        #endregion //Fields
+        private bool enable;
+        private Color color;
+        #endregion Fields
 
         //---------------------------------------------------------------------
-        #region Unity Defaults
-        void LateUpdate()
+        #region Properties
+        public bool Enable { set { GUI.enabled = value; } }
+        public Color Color { set { GUI.color = value; } }
+        #endregion Properties
+
+        //---------------------------------------------------------------------
+        #region Scope
+        public GUIStatusScope(bool enable) : this(enable, GUI.color) { }
+        public GUIStatusScope(Color color) : this(true, color) { }
+        public GUIStatusScope(bool enable, Color color) : base()
         {
-            loggerManager.DisplayDebug();
+            this.enable = GUI.enabled;
+            this.color = GUI.color;
+
+            GUI.enabled = GUI.enabled && enable;
+            GUI.color = color;
         }
 
         //---------------------------------------------------------------------
-        void OnGUI()
+        public void Reset()
         {
-            loggerManager.DisplayGUI();
-        }
-        #endregion //Unity Defaults
-
-        //---------------------------------------------------------------------
-        #region Logger
-        public void Register(Helpers.PersonalLogger logger)
-        {
-            if (loggerManager == null)
-                loggerManager = new PersonalLoggerManager();
-            loggerManager.Register(logger);
+            GUI.enabled = enable;
+            GUI.color = color;
         }
 
         //---------------------------------------------------------------------
-        public void Unregister(Helpers.PersonalLogger logger)
+        protected override void CloseScope()
         {
-            loggerManager.Unregister(logger);
+            Reset();
         }
-        #endregion //Logger
+        #endregion Scope
     }
 }
-#endif //PRATEEK_DEBUG

@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Debug
+namespace Prateek.Debug.Code
 {
     using System;
     using UnityEngine;

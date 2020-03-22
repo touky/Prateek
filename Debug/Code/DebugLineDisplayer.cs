@@ -32,16 +32,13 @@
 
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
-namespace Prateek.Debug
+namespace Prateek.Debug.Code
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using Prateek.Base;
     using Prateek.Base.Registry;
+    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
     using UnityEditor;
     using UnityEngine;
-    using static CodeGenerator.PrateekScript.ScriptExport.CSharp;
 
     public class DebugLineDisplayer : MonoBehaviour
     {
@@ -112,7 +109,7 @@ namespace Prateek.Debug
                         this.borderThickness = borderThickness;
                     }
 
-                    size = min(size, (1 << 16) / (borderThickness == 0 ? 4 : 12));
+                    size = CSharp.min(size, (1 << 16) / (borderThickness == 0 ? 4 : 12));
 
                     var vtxCount = borderThickness == 0 ? 2 : 6;
                     var triCount = borderThickness == 0 ? 3 : 9;
@@ -129,21 +126,21 @@ namespace Prateek.Debug
 
                         for (int v = (oldVert == null ? 0 : oldVert.Length); v < vertices.Length; v += vtxCount * 2)
                         {
-                            vertices[v + 0] = vec3((v / vtxCount) + 0, -1, (v / vtxCount) + 1);
-                            vertices[v + 1] = vec3((v / vtxCount) + 0, +1, (v / vtxCount) + 1);
-                            vertices[v + 2] = vec3((v / vtxCount) + 1, +1, (v / vtxCount) + 0);
-                            vertices[v + 3] = vec3((v / vtxCount) + 1, -1, (v / vtxCount) + 0);
+                            vertices[v + 0] = CSharp.vec3((v / vtxCount) + 0, -1, (v / vtxCount) + 1);
+                            vertices[v + 1] = CSharp.vec3((v / vtxCount) + 0, +1, (v / vtxCount) + 1);
+                            vertices[v + 2] = CSharp.vec3((v / vtxCount) + 1, +1, (v / vtxCount) + 0);
+                            vertices[v + 3] = CSharp.vec3((v / vtxCount) + 1, -1, (v / vtxCount) + 0);
                             if (borderThickness > 0)
                             {
-                                vertices[v + 0 + 4] = vec3((v / vtxCount) + 0, -4, (v / vtxCount) + 1);
-                                vertices[v + 1 + 4] = vec3((v / vtxCount) + 0, -3, (v / vtxCount) + 1);
-                                vertices[v + 2 + 4] = vec3((v / vtxCount) + 1, +4, (v / vtxCount) + 0);
-                                vertices[v + 3 + 4] = vec3((v / vtxCount) + 1, +3, (v / vtxCount) + 0);
+                                vertices[v + 0 + 4] = CSharp.vec3((v / vtxCount) + 0, -4, (v / vtxCount) + 1);
+                                vertices[v + 1 + 4] = CSharp.vec3((v / vtxCount) + 0, -3, (v / vtxCount) + 1);
+                                vertices[v + 2 + 4] = CSharp.vec3((v / vtxCount) + 1, +4, (v / vtxCount) + 0);
+                                vertices[v + 3 + 4] = CSharp.vec3((v / vtxCount) + 1, +3, (v / vtxCount) + 0);
 
-                                vertices[v + 0 + 8] = vec3((v / vtxCount) + 0, +3, (v / vtxCount) + 1);
-                                vertices[v + 1 + 8] = vec3((v / vtxCount) + 0, +4, (v / vtxCount) + 1);
-                                vertices[v + 2 + 8] = vec3((v / vtxCount) + 1, -3, (v / vtxCount) + 0);
-                                vertices[v + 3 + 8] = vec3((v / vtxCount) + 1, -4, (v / vtxCount) + 0);
+                                vertices[v + 0 + 8] = CSharp.vec3((v / vtxCount) + 0, +3, (v / vtxCount) + 1);
+                                vertices[v + 1 + 8] = CSharp.vec3((v / vtxCount) + 0, +4, (v / vtxCount) + 1);
+                                vertices[v + 2 + 8] = CSharp.vec3((v / vtxCount) + 1, -3, (v / vtxCount) + 0);
+                                vertices[v + 3 + 8] = CSharp.vec3((v / vtxCount) + 1, -4, (v / vtxCount) + 0);
                             }
                         }
 
@@ -475,7 +472,7 @@ namespace Prateek.Debug
         #endregion //Lines Pool
 
         //---------------------------------------------------------------------
-        public void RenderLine(Prateek.Debug.DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
+        public void RenderLine(DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
         {
             var manager = Registry.GetManager<DebugDisplayManager>();
             if (manager != null)

@@ -32,7 +32,7 @@
 
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
-namespace Prateek.Debug
+namespace Prateek.Debug.Code
 {
     using System;
     using UnityEngine;

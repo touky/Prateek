@@ -35,10 +35,9 @@ namespace Prateek.Helpers
 {
     using System.Collections.Generic;
     using Prateek.CodeGenerator.PrateekScript.ScriptExport;
-    using Prateek.Extensions;
     using UnityEngine;
+    using static CodeGenerator.PrateekScript.ScriptExport.CSharp;
     using static Prateek.Helpers.CSharp;
-    using static Prateek.CodeGenerator.PrateekScript.ScriptExport.CSharp;
 
     //-------------------------------------------------------------------------
     public class Textures : SharedStorage

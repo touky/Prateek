@@ -124,13 +124,13 @@ namespace Prateek.FrameRecorder.Editor
 
             var isRecord = FrameRecorder.State == FrameRecorderManager.StateType.Recording;
             var isPlayback = FrameRecorder.State == FrameRecorderManager.StateType.Playback;
-            using (var enableScope = new GUIs.StatusScope(Application.isPlaying))
+            using (var enableScope = new GUIStatusScope(Application.isPlaying))
             {
                 using (new EditorGUILayout.HorizontalScope(GUILayout.Height(40)))
                 {
                     var newState = FrameRecorder.State;
 
-                    using (new GUIs.StatusScope(!isPlayback))
+                    using (new GUIStatusScope(!isPlayback))
                     {
                         if (!isRecord)
                         {
@@ -164,24 +164,24 @@ namespace Prateek.FrameRecorder.Editor
                     var rX = (float)range.x;
                     var rY = (float)range.y;
                     var size = rY - rX;
-                    using (new GUIs.StatusScope(frameCount > 0 && isPlayback))
+                    using (new GUIStatusScope(frameCount > 0 && isPlayback))
                     {
                         var zone = EditorGUILayout.GetControlRect();
                         var width = CSharp.max(0, zone.width - 55);
                         {
                             zone.width = width;
-                            using (new GUIs.StatusScope(Color.black))
+                            using (new GUIStatusScope(Color.black))
                             { GUI.Box(zone, GUIContent.none); }
 
                             if (frameCount > 0)
                             {
                                 zone.width = width * ((float)frameCount / (float)recordLimit);
-                                using (new GUIs.StatusScope(new Color(0, 0.6f, 0)))
+                                using (new GUIStatusScope(new Color(0, 0.6f, 0)))
                                 { GUI.Box(zone, GUIContent.none); }
 
                                 zone.x += width * ((float)rX / (float)recordLimit);
                                 zone.width = width * ((float)(size + 1) / (float)recordLimit);
-                                using (new GUIs.StatusScope(Color.green))
+                                using (new GUIStatusScope(Color.green))
                                 { GUI.Box(zone, GUIContent.none); }
                             }
                         }

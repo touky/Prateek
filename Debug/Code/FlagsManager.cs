@@ -32,11 +32,10 @@
 
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
-namespace Prateek.Debug
+namespace Prateek.Debug.Code
 {
     using System;
     using System.Collections.Generic;
-    using Prateek.Base;
     using Prateek.Base.Registry;
     using Prateek.Helpers;
 

@@ -38,6 +38,7 @@ namespace Prateek.Debug.Editor
     using System.Collections.Generic;
     using Prateek.Base.Registry;
     using Prateek.CodeGenerator.PrateekScript.ScriptExport;
+    using Prateek.Debug.Code;
     using Prateek.Extensions;
     using Prateek.Helpers;
     using UnityEditor;
@@ -240,8 +241,8 @@ namespace Prateek.Debug.Editor
 
         private GUISetup styleSetup;
 
-        private Prefs.ListBools activeFlags;
-        private Prefs.ListBools expandedFlags;
+        private CodeGenerator.PrateekScript.ScriptExport.Prefs.ListBools activeFlags;
+        private CodeGenerator.PrateekScript.ScriptExport.Prefs.ListBools expandedFlags;
         #endregion Fields
 
         //---------------------------------------------------------------------
@@ -284,8 +285,8 @@ namespace Prateek.Debug.Editor
         {
             if (activeFlags == null)
             {
-                activeFlags = new Prefs.ListBools(GetType().Name + ".activeFlags", null);
-                expandedFlags = new Prefs.ListBools(GetType().Name + ".expandedFlags", null);
+                activeFlags = new CodeGenerator.PrateekScript.ScriptExport.Prefs.ListBools(GetType().Name + ".activeFlags", null);
+                expandedFlags = new CodeGenerator.PrateekScript.ScriptExport.Prefs.ListBools(GetType().Name + ".expandedFlags", null);
             }
         }
 
