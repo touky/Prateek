@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Base
+namespace Prateek.Base.Registry
 {
     //-------------------------------------------------------------------------
     public interface IGlobalManager

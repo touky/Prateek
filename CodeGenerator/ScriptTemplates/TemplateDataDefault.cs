@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using UnityEditor;
 
@@ -39,24 +39,24 @@ namespace Prateek.CodeGeneration
 #if UNITY_EDITOR
     //todo: fix that
     [InitializeOnLoad]
-    class PrateekDefaultLoader : ScriptTemplate
+    class PrateekDefaultLoader : CodeGenerator.ScriptTemplates.ScriptTemplate
     {
         static PrateekDefaultLoader()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 
-            NewKeyword("cs")
-            .SetTag("PRATEEK_COPYRIGHT", KeywordMode.ZoneDelimiter)
+            ScriptTemplate.NewKeyword("cs")
+            .SetTag("PRATEEK_COPYRIGHT", ScriptTemplate.KeywordMode.ZoneDelimiter)
             .SetFileContent("InternalContent_PRATEEK_COPYRIGHT.cs")
             .Commit();
 
-            NewKeyword(string.Empty)
+            ScriptTemplate.NewKeyword(string.Empty)
             .SetTag("PRATEEK_DATE_YEAR")
             .SetContent(System.DateTime.Now.ToString("yyyy"))
             .Commit();
 
-            NewKeyword(string.Empty)
+            ScriptTemplate.NewKeyword(string.Empty)
             .SetTag("PRATEEK_DATE_UPDATE")
             .SetContent(string.Format("{0}", System.DateTime.Now.ToString("dd/MM/yyyy")))
             .Commit();

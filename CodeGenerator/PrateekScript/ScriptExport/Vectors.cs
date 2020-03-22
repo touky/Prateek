@@ -17,24 +17,25 @@
 //-----------------------------------------------------------------------------
 #region Prateek Ifdefs
 
-//Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
-//Auto activate debug
+    //Auto activate debug
 #if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-#endregion Prateek Ifdefs
-// -END_PRATEEK_CSHARP_IFDEF-
+    #endregion Prateek Ifdefs
+    // -END_PRATEEK_CSHARP_IFDEF-
 
-//-----------------------------------------------------------------------------
-namespace Prateek.Extensions
-{
+//Auto activate some of the prateek defines
+namespace Prateek.CodeGenerator.PrateekScript.ScriptExport {
+    using UnityEngine;
+    using UnityEngine;
     using UnityEngine;
 
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static  partial class VectorExt
     {
@@ -1295,13 +1296,8 @@ namespace Prateek.Extensions
         #endregion Swizzle Vector4 to Vector4
         
     }
-}
 
-//-----------------------------------------------------------------------------
-namespace Prateek.ShaderTo
-{
-    using UnityEngine;
-
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static  partial class CSharp
     {
@@ -1336,13 +1332,8 @@ namespace Prateek.ShaderTo
         #endregion Mixed Ctor Vector4
         
     }
-}
 
-//-----------------------------------------------------------------------------
-namespace Prateek.ShaderTo
-{
-    using UnityEngine;
-
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static  partial class CSharp
     {

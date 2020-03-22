@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Base
+namespace Prateek.Base.Registry
 {
     //-------------------------------------------------------------------------
     public abstract class Singleton<T> : System.Object, ISingleton where T : Singleton<T>, new()

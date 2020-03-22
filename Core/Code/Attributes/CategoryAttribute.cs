@@ -31,6 +31,6 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Attributes
+namespace Prateek.Core.Code.Attributes
 {
 }

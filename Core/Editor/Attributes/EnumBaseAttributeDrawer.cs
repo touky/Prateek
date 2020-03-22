@@ -31,9 +31,10 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Drawers
+namespace Prateek.Core.Editor.Attributes
 {
-    using Prateek.Attributes;
+    using Prateek.Core.Code.Attributes;
+    using Prateek.Helpers.Editor;
     using UnityEditor;
     using UnityEngine;
 
@@ -48,7 +49,7 @@ namespace Prateek.Drawers
 
             var type = (enumMask == null || enumMask.Value == null) ? fieldInfo.FieldType : enumMask.Value;
 
-            string[] names = Helpers.Editors.GetEnumNames(type, property);
+            string[] names = Editors.GetEnumNames(type, property);
             if (names != null)
             {
                 if (enumAllow != null)

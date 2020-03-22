@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Menus
+namespace Prateek.Helpers.Editor
 {
     using System;
     using System.Collections.Generic;

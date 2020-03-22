@@ -31,13 +31,14 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using Prateek.CodeGenerator.ScriptTemplates;
     using Prateek.Helpers;
-    using Prateek.IO;
+    using Prateek.Helpers.Files;
     using UnityEditor;
     using UnityEngine;
 
@@ -497,7 +498,7 @@ namespace Prateek.CodeGeneration
         {
             var keywords = ScriptTemplate.Keywords;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
-            var stack = new ScriptTemplate.KeywordStack(ScriptTemplate.KeywordMode.ZoneDelimiter, fileData.destination.content);
+            var stack = new ScriptTemplates.ScriptTemplate.KeywordStack(ScriptTemplates.ScriptTemplate.KeywordMode.ZoneDelimiter, fileData.destination.content);
 
             for (int r = 0; r < keywords.Count; r++)
             {
@@ -505,13 +506,13 @@ namespace Prateek.CodeGeneration
                 if (!keyword.Match(fileData.destination.name, fileData.destination.extension, fileData.destination.content))
                     continue;
 
-                if (keyword.Mode == ScriptTemplate.KeywordMode.KeywordOnly)
+                if (keyword.Mode == ScriptTemplates.ScriptTemplate.KeywordMode.KeywordOnly)
                     continue;
 
                 var start = 0;
                 while ((start = fileData.destination.content.IndexOf(keyword.TagBegin, start)) >= 0)
                 {
-                    var safety = ignorers.AdvanceToSafety(start, ScriptTemplate.Ignorable.Style.Text);
+                    var safety = ignorers.AdvanceToSafety(start, ScriptTemplates.ScriptTemplate.Ignorable.Style.Text);
                     if (safety != start)
                     {
                         start = safety;
@@ -552,12 +553,12 @@ namespace Prateek.CodeGeneration
         {
             var comment = Strings.Comment;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
-            var stack = new ScriptTemplate.KeywordStack(ScriptTemplate.KeywordMode.ZoneDelimiter, fileData.destination.content);
+            var stack = new ScriptTemplates.ScriptTemplate.KeywordStack(ScriptTemplates.ScriptTemplate.KeywordMode.ZoneDelimiter, fileData.destination.content);
 
             var position = 0;
             while ((position = fileData.destination.content.IndexOf(comment, position)) >= 0)
             {
-                var safety = ignorers.AdvanceToSafety(position, ScriptTemplate.Ignorable.Style.Text);
+                var safety = ignorers.AdvanceToSafety(position, ScriptTemplates.ScriptTemplate.Ignorable.Style.Text);
                 if (safety != position)
                 {
                     position = safety;

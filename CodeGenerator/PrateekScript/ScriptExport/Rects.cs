@@ -16,8 +16,6 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
 #region Prateek Ifdefs
-
-//Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
 //Auto activate debug
@@ -30,11 +28,14 @@
 #endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
 
-//-----------------------------------------------------------------------------
-namespace Prateek.Extensions
-{
+
+//Auto activate some of the prateek defines
+namespace Prateek.CodeGenerator.PrateekScript.ScriptExport {
+    using UnityEngine;
+    using UnityEngine;
     using UnityEngine;
 
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static  partial class RectExt
     {
@@ -668,53 +669,41 @@ namespace Prateek.Extensions
         #endregion Swizzle Rect
         
     }
-}
 
-//-----------------------------------------------------------------------------
-namespace Prateek.Extensions
-{
-    using UnityEngine;
-    using static Prateek.ShaderTo.CSharp;
-
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static  partial class RectExt
     {
         
         //---------------------------------------------------------------------
         #region Swizzle Rect
-        public static Rect xx(this Rect v) { return new Rect(vec2(v.x, v.x), v.size); }
-        public static Rect xy(this Rect v) { return new Rect(vec2(v.x, v.y), v.size); }
-        public static Rect xn(this Rect v, float n_0 = 0) { return new Rect(vec2(v.x, n_0), v.size); }
-        public static Rect yx(this Rect v) { return new Rect(vec2(v.y, v.x), v.size); }
-        public static Rect yy(this Rect v) { return new Rect(vec2(v.y, v.y), v.size); }
-        public static Rect yn(this Rect v, float n_0 = 0) { return new Rect(vec2(v.y, n_0), v.size); }
-        public static Rect nx(this Rect v, float n_0 = 0) { return new Rect(vec2(n_0, v.x), v.size); }
-        public static Rect ny(this Rect v, float n_0 = 0) { return new Rect(vec2(n_0, v.y), v.size); }
+        public static Rect xx(this Rect v) { return new Rect(CSharp.vec2(v.x, v.x), v.size); }
+        public static Rect xy(this Rect v) { return new Rect(CSharp.vec2(v.x, v.y), v.size); }
+        public static Rect xn(this Rect v, float n_0 = 0) { return new Rect(CSharp.vec2(v.x, n_0), v.size); }
+        public static Rect yx(this Rect v) { return new Rect(CSharp.vec2(v.y, v.x), v.size); }
+        public static Rect yy(this Rect v) { return new Rect(CSharp.vec2(v.y, v.y), v.size); }
+        public static Rect yn(this Rect v, float n_0 = 0) { return new Rect(CSharp.vec2(v.y, n_0), v.size); }
+        public static Rect nx(this Rect v, float n_0 = 0) { return new Rect(CSharp.vec2(n_0, v.x), v.size); }
+        public static Rect ny(this Rect v, float n_0 = 0) { return new Rect(CSharp.vec2(n_0, v.y), v.size); }
         #endregion Swizzle Rect
         
     }
-}
 
-//-----------------------------------------------------------------------------
-namespace Prateek.Extensions
-{
-    using UnityEngine;
-    using static Prateek.ShaderTo.CSharp;
-
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static  partial class RectExt
     {
         
         //---------------------------------------------------------------------
         #region Swizzle Rect
-        public static Rect ww(this Rect v) { return new Rect(v.position, vec2(v.width, v.width)); }
-        public static Rect wh(this Rect v) { return new Rect(v.position, vec2(v.width, v.height)); }
-        public static Rect wn(this Rect v, float n_0 = 0) { return new Rect(v.position, vec2(v.width, n_0)); }
-        public static Rect hw(this Rect v) { return new Rect(v.position, vec2(v.height, v.width)); }
-        public static Rect hh(this Rect v) { return new Rect(v.position, vec2(v.height, v.height)); }
-        public static Rect hn(this Rect v, float n_0 = 0) { return new Rect(v.position, vec2(v.height, n_0)); }
-        public static Rect nw(this Rect v, float n_0 = 0) { return new Rect(v.position, vec2(n_0, v.width)); }
-        public static Rect nh(this Rect v, float n_0 = 0) { return new Rect(v.position, vec2(n_0, v.height)); }
+        public static Rect ww(this Rect v) { return new Rect(v.position, CSharp.vec2(v.width, v.width)); }
+        public static Rect wh(this Rect v) { return new Rect(v.position, CSharp.vec2(v.width, v.height)); }
+        public static Rect wn(this Rect v, float n_0 = 0) { return new Rect(v.position, CSharp.vec2(v.width, n_0)); }
+        public static Rect hw(this Rect v) { return new Rect(v.position, CSharp.vec2(v.height, v.width)); }
+        public static Rect hh(this Rect v) { return new Rect(v.position, CSharp.vec2(v.height, v.height)); }
+        public static Rect hn(this Rect v, float n_0 = 0) { return new Rect(v.position, CSharp.vec2(v.height, n_0)); }
+        public static Rect nw(this Rect v, float n_0 = 0) { return new Rect(v.position, CSharp.vec2(n_0, v.width)); }
+        public static Rect nh(this Rect v, float n_0 = 0) { return new Rect(v.position, CSharp.vec2(n_0, v.height)); }
         #endregion Swizzle Rect
         
     }

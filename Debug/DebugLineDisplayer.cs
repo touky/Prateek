@@ -38,9 +38,10 @@ namespace Prateek.Debug
     using System.Collections;
     using System.Collections.Generic;
     using Prateek.Base;
+    using Prateek.Base.Registry;
     using UnityEditor;
     using UnityEngine;
-    using static Prateek.ShaderTo.CSharp;
+    using static CodeGenerator.PrateekScript.ScriptExport.CSharp;
 
     public class DebugLineDisplayer : MonoBehaviour
     {
@@ -474,7 +475,7 @@ namespace Prateek.Debug
         #endregion //Lines Pool
 
         //---------------------------------------------------------------------
-        public void RenderLine(DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
+        public void RenderLine(Prateek.Debug.DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
         {
             var manager = Registry.GetManager<DebugDisplayManager>();
             if (manager != null)

@@ -8,6 +8,6 @@ using System.Collections.Generic;
 
 using Prateek;
 using Prateek.Extensions;
-using static Prateek.ShaderTo.CSharp;
+using static Prateek.Helpers.CSharp;
 
 #endregion Prateek useful namspaces

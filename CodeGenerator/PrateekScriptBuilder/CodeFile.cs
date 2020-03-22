@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -170,17 +170,17 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public BuildResult Generate(string genHeader, string genCode)
+            public CodeGenerator.CodeBuilder.BuildResult Generate(string genHeader, string genCode)
             {
-                var genNSpc = (Utils.SwapInfo)Tag.Macro.codeGenNSpc.Keyword();
-                var genExtn = (Utils.SwapInfo)Tag.Macro.codeGenExtn.Keyword();
-                var genPrfx = (Utils.SwapInfo)Tag.Macro.codeGenPrfx.Keyword();
-                var genData = (Utils.SwapInfo)Tag.Macro.codeGenData.Keyword();
-                var genTabs = (Utils.SwapInfo)Tag.Macro.codeGenTabs.Keyword();
+                var genNSpc = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenNSpc.Keyword();
+                var genExtn = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenExtn.Keyword();
+                var genPrfx = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenPrfx.Keyword();
+                var genData = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenData.Keyword();
+                var genTabs = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenTabs.Keyword();
 
                 var i = genCode.IndexOf(genData.Original);
                 if (i < 0)
-                    return BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;
+                    return CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;
 
                 var r = genCode.LastIndexOf(Strings.Separator.LineFeed.C(), i);
                 if (r >= 0)
@@ -209,7 +209,7 @@ namespace Prateek.CodeGeneration
                     codeGenerated += genPrfx.Apply(genExtn.Apply(genData.Apply(genNSpc.Apply(genCode))));
                 }
 
-                return BuildResult.ValueType.Success;
+                return CodeGenerator.CodeBuilder.BuildResult.ValueType.Success;
             }
         }
     }

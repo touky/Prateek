@@ -31,8 +31,9 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Base
+namespace Prateek.Base.Registry
 {
+    using Prateek.Base.Behaviour;
     using UnityEditor;
     using UnityEngine;
 

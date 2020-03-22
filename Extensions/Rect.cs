@@ -34,7 +34,7 @@
 namespace Prateek.Extensions
 {
     using UnityEngine;
-    using static Prateek.ShaderTo.CSharp;
+    using static CodeGenerator.PrateekScript.ScriptExport.CSharp;
 
     //-------------------------------------------------------------------------
     public static partial class RectExt

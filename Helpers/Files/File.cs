@@ -31,13 +31,12 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.IO
+namespace Prateek.Helpers.Files
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text.RegularExpressions;
-    using Prateek.Helpers;
     using UnityEditor;
     using UnityEngine;
 

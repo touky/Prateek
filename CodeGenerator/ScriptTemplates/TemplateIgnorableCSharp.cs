@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using UnityEditor;
     using UnityEngine;
@@ -40,14 +40,14 @@ namespace Prateek.CodeGeneration
 #if UNITY_EDITOR
     //todo: fix that
     [InitializeOnLoad]
-    class CSharpIgnorableLoader : ScriptTemplate
+    class CSharpIgnorableLoader : CodeGenerator.ScriptTemplates.ScriptTemplate
     {
         static CSharpIgnorableLoader()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 
-            NewIgnorableCSharp("cs").Commit();
+            ScriptTemplate.NewIgnorableCSharp("cs").Commit();
         }
     }
 #endif //UNITY_EDITOR
@@ -101,7 +101,7 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                ScriptTemplate.Add(this);
+                CodeGenerator.ScriptTemplate.Add(this);
             }
 
             //-----------------------------------------------------------------

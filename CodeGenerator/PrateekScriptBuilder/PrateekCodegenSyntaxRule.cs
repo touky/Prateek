@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
@@ -41,7 +41,7 @@ namespace Prateek.CodeGeneration
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
     //todo: fix that [InitializeOnLoad]
-    class PrateekSyntaxNPPLoader : ScriptTemplate
+    class PrateekSyntaxNPPLoader : ScriptTemplates.ScriptTemplate
     {
         static PrateekSyntaxNPPLoader()
         {

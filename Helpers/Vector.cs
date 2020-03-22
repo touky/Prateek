@@ -17,7 +17,6 @@
 //-----------------------------------------------------------------------------
 #region Prateek Ifdefs
 
-//Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
 //Auto activate debug
@@ -30,9 +29,11 @@
 #endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
 
-//-----------------------------------------------------------------------------
-namespace Prateek.ShaderTo
+
+//Auto activate some of the prateek defines
+namespace Prateek.Helpers
 {
+    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
     using UnityEngine;
 
     //-------------------------------------------------------------------------
@@ -60,19 +61,13 @@ namespace Prateek.ShaderTo
         public static Vector4 mix(Vector4 v0, Vector4 v1, float alpha) { return Vector4.Lerp(v0, v1, alpha); }
         public static Color mix(Color v0, Color v1, float alpha) { return Color.Lerp(v0, v1, alpha); }
         public static Vector3 cross(Vector3 v0, Vector3 v1) { return Vector3.Cross(v0, v1); }
-        public static Vector2Int Int(this Vector2 v) { return vec2i((int)v.x, (int)v.y); }
-        public static Vector3Int Int(this Vector3 v) { return vec3i((int)v.x, (int)v.y, (int)v.z); }
-        public static Vector2 Float(this Vector2Int v) { return vec2(v.x, v.y); }
-        public static Vector3 Float(this Vector3Int v) { return vec3(v.x, v.y, v.z); }
+        public static Vector2Int Int(this Vector2 v) { return CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2i((int)v.x, (int)v.y); }
+        public static Vector3Int Int(this Vector3 v) { return CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3i((int)v.x, (int)v.y, (int)v.z); }
+        public static Vector2 Float(this Vector2Int v) { return CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(v.x, v.y); }
+        public static Vector3 Float(this Vector3Int v) { return CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(v.x, v.y, v.z); }
     }
-}
 
-//-----------------------------------------------------------------------------
-namespace Prateek.Helpers
-{
-    using Prateek.Extensions;
-    using UnityEngine;
-
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static class Vectors
     {
@@ -82,7 +77,7 @@ namespace Prateek.Helpers
         {
             var d = v0 - v1;
             return -epsilon < d.x && d.x < epsilon
-                && -epsilon < d.y && d.y < epsilon;
+                                  && -epsilon < d.y && d.y < epsilon;
         }
 
         //---------------------------------------------------------------------
@@ -110,8 +105,8 @@ namespace Prateek.Helpers
         {
             var d = v0 - v1;
             return -epsilon < d.x && d.x < epsilon
-                && -epsilon < d.y && d.y < epsilon
-                && -epsilon < d.z && d.z < epsilon;
+                                  && -epsilon < d.y && d.y < epsilon
+                                  && -epsilon < d.z && d.z < epsilon;
         }
 
         //---------------------------------------------------------------------
@@ -129,7 +124,7 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Vector3 FromIndex(int index3D, Vector3 dimensions)
         {
-            var area2D = dimensions.xy().Area();
+            var area2D  = dimensions.xy().Area();
             var index2D = index3D % area2D;
             return new Vector3(index2D % (int)dimensions.x, index2D / (int)dimensions.x, index3D / (int)area2D);
         }
@@ -141,9 +136,9 @@ namespace Prateek.Helpers
         {
             var d = v0 - v1;
             return -epsilon < d.x && d.x < epsilon
-                && -epsilon < d.y && d.y < epsilon
-                && -epsilon < d.z && d.z < epsilon
-                && -epsilon < d.w && d.w < epsilon;
+                                  && -epsilon < d.y && d.y < epsilon
+                                  && -epsilon < d.z && d.z < epsilon
+                                  && -epsilon < d.w && d.w < epsilon;
         }
 
         //---------------------------------------------------------------------
@@ -161,8 +156,8 @@ namespace Prateek.Helpers
         //---------------------------------------------------------------------
         public static Vector4 FromIndex(int index4D, Vector4 dimensions)
         {
-            var area3D = dimensions.xyz().Area();
-            var area2D = dimensions.xy().Area();
+            var area3D  = dimensions.xyz().Area();
+            var area2D  = dimensions.xy().Area();
             var index3D = index4D % area3D;
             var index2D = index3D % area2D;
             return new Vector4(index2D % (int)dimensions.x, index2D / (int)dimensions.x, index3D / (int)area2D, index4D / (int)area3D);

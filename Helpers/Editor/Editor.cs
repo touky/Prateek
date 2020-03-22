@@ -31,11 +31,11 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Helpers
+namespace Prateek.Helpers.Editor
 {
     using System;
     using System.Reflection;
-    using Prateek.Attributes;
+    using Prateek.Core.Code.Attributes;
     using UnityEditor;
 
     //-------------------------------------------------------------------------

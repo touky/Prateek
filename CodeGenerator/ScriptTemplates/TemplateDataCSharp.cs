@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using UnityEditor;
 
@@ -39,7 +39,7 @@ namespace Prateek.CodeGeneration
 #if UNITY_EDITOR
     //todo: fix that
     [InitializeOnLoad]
-    class CSharpScriptLoader : ScriptTemplate
+    class CSharpScriptLoader : CodeGenerator.ScriptTemplates.ScriptTemplate
     {
         static CSharpScriptLoader()
         {
@@ -63,13 +63,13 @@ namespace Prateek.CodeGeneration
             .SetFileContent("InternalContent_Script-NewBehaviourScript.cs.txt")
             .Commit();
 
-            NewKeyword("cs")
-                .SetTag("PRATEEK_CSHARP_NAMESPACE", KeywordMode.ZoneDelimiter)
+            ScriptTemplate.NewKeyword("cs")
+                .SetTag("PRATEEK_CSHARP_NAMESPACE", ScriptTemplate.KeywordMode.ZoneDelimiter)
                 .SetFileContent("InternalContent_PRATEEK_CSHARP_NAMESPACE.cs")
                 .Commit();
 
-            NewKeyword("cs")
-                .SetTag("PRATEEK_CSHARP_IFDEF", KeywordMode.ZoneDelimiter)
+            ScriptTemplate.NewKeyword("cs")
+                .SetTag("PRATEEK_CSHARP_IFDEF", ScriptTemplate.KeywordMode.ZoneDelimiter)
                 .SetFileContent("InternalContent_PRATEEK_CSHARP_IFDEF.cs")
                 .Commit();
         }

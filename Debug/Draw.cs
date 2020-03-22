@@ -36,10 +36,12 @@ namespace Prateek.Debug
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
     using Prateek.Helpers;
     using UnityEngine;
     using Prateek.Extensions;
-    using static Prateek.ShaderTo.CSharp;
+    using static Helpers.CSharp;
+    using static Prateek.CodeGenerator.PrateekScript.ScriptExport.CSharp;
 
     //-------------------------------------------------------------------------
     public partial class DebugDraw

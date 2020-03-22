@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator
 {
     using System.Collections.Generic;
 
@@ -39,7 +39,7 @@ namespace Prateek.CodeGeneration
     public partial class ScriptTemplate
     {
         //---------------------------------------------------------------------
-        public struct Group<T> where T: ScriptTemplate.BaseTemplate
+        public struct Group<T> where T: ScriptTemplates.ScriptTemplate.BaseTemplate
         {
             //-----------------------------------------------------------------
             private List<T> list;
@@ -58,29 +58,29 @@ namespace Prateek.CodeGeneration
 
         //---------------------------------------------------------------------
         #region Scripts
-        private static List<ScriptFile> scripts = new List<ScriptFile>();
-        public static Group<ScriptFile> Scripts { get { return new Group<ScriptFile>(scripts); } }
-        public static void Add(ScriptFile data) { scripts.Add(data); }
+        private static List<ScriptTemplates.ScriptTemplate.ScriptFile> scripts = new List<ScriptTemplates.ScriptTemplate.ScriptFile>();
+        public static Group<ScriptTemplates.ScriptTemplate.ScriptFile> Scripts { get { return new Group<ScriptTemplates.ScriptTemplate.ScriptFile>(scripts); } }
+        public static void Add(ScriptTemplates.ScriptTemplate.ScriptFile data) { scripts.Add(data); }
         #endregion Scripts
 
         //---------------------------------------------------------------------
         #region Keywords
-        private static List<Keyword> keywords = new List<Keyword>();
-        public static Group<Keyword> Keywords { get { return new Group<Keyword>(keywords); } }
-        public static void Add(Keyword data) { keywords.Add(data); }
+        private static List<ScriptTemplates.ScriptTemplate.Keyword> keywords = new List<ScriptTemplates.ScriptTemplate.Keyword>();
+        public static Group<ScriptTemplates.ScriptTemplate.Keyword> Keywords { get { return new Group<ScriptTemplates.ScriptTemplate.Keyword>(keywords); } }
+        public static void Add(ScriptTemplates.ScriptTemplate.Keyword data) { keywords.Add(data); }
         #endregion Keywords
 
         //---------------------------------------------------------------------
         #region Ignorables
-        private static List<Ignorable> ignorables = new List<Ignorable>();
-        public static Group<Ignorable> Ignorables { get { return new Group<Ignorable>(ignorables); } }
-        public static void Add(Ignorable data) { ignorables.Add(data); }
+        private static List<ScriptTemplates.ScriptTemplate.Ignorable> ignorables = new List<ScriptTemplates.ScriptTemplate.Ignorable>();
+        public static Group<ScriptTemplates.ScriptTemplate.Ignorable> Ignorables { get { return new Group<ScriptTemplates.ScriptTemplate.Ignorable>(ignorables); } }
+        public static void Add(ScriptTemplates.ScriptTemplate.Ignorable data) { ignorables.Add(data); }
         #endregion Ignorables
 
         //---------------------------------------------------------------------
         #region Unity templates
-        private static List<UnityFile> templates = new List<UnityFile>();
-        public static void Add(UnityFile data) { templates.Add(data); }
+        private static List<ScriptTemplates.ScriptTemplate.UnityFile> templates = new List<ScriptTemplates.ScriptTemplate.UnityFile>();
+        public static void Add(ScriptTemplates.ScriptTemplate.UnityFile data) { templates.Add(data); }
         public static bool MatchTemplate(string filePath, string extension, string content)
         {
             for (int t = 0; t < templates.Count; t++)

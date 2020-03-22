@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using System;
 
@@ -45,7 +45,7 @@ namespace Prateek.CodeGeneration
         public static ScriptTemplate.Ignorable.BuildResult GatherValidIgnorables(string fileName, string fileContent, string fileExtension)
         {
             var results = default(ScriptTemplate.Ignorable.BuildResult);
-            var ignorables = ScriptTemplate.Ignorables;
+            var ignorables = CodeGenerator.ScriptTemplate.Ignorables;
             for (int i = 0; i < ignorables.Count; i++)
             {
                 var ignorable = ignorables[i];
@@ -69,7 +69,7 @@ namespace Prateek.CodeGeneration
         //---------------------------------------------------------------------
         public static void ApplyKeywords(ref string fileContent, string fileName, string fileExtension)
         {
-            var keywords = ScriptTemplate.Keywords;
+            var keywords = CodeGenerator.ScriptTemplate.Keywords;
             var doAnotherPass = true;
             while (doAnotherPass)
             {

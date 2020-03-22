@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Helpers
+namespace Prateek.Helpers.Files
 {
     using System;
     using System.Collections.Generic;

@@ -34,9 +34,11 @@
 namespace Prateek.Helpers
 {
     using System.Collections.Generic;
+    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
     using Prateek.Extensions;
     using UnityEngine;
-    using static Prateek.ShaderTo.CSharp;
+    using static Prateek.Helpers.CSharp;
+    using static Prateek.CodeGenerator.PrateekScript.ScriptExport.CSharp;
 
     //-------------------------------------------------------------------------
     public class Textures : SharedStorage
@@ -275,7 +277,7 @@ namespace Prateek.Helpers
                     var k = vec3(-0.8660254f, 0.5f, 0.57735f);
                     point = point.xzy();
                     point = abs(point);
-                    point = vec3(point.xy() - 2.0f * min(dot(k.xy(), point.xy()), 0.0f) * k.xy(), point.z);
+                    point = vec3(point.xy() - 2.0f * min(dot(VectorExt.xy((Vector3) k), point.xy()), 0.0f) * VectorExt.xy((Vector3) k), point.z);
                     var d = vec2(
                        length(point.xy() - vec2(clamp(point.x, -k.z * size.x, k.z * size.x), size.x)) * sign(point.y - size.x),
                        point.z - size.y);
@@ -455,7 +457,7 @@ namespace Prateek.Helpers
                 
                 for (int c = 0; c < colors.Length; c++)
                 {
-                    var point = rect.position + mul(rect.size, div(vec2i(c % texture.width, c / texture.height).Float(), vec2(texture.width, texture.height)));
+                    var point = rect.position + mul(rect.size, div(CSharp.Float((Vector2Int) vec2i(c % texture.width, c / texture.height)), vec2(texture.width, texture.height)));
                     var result = background;
                     for (int o = 0; o < operations.Count; o++)
                     {

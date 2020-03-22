@@ -31,9 +31,9 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Helpers
+namespace Prateek.Helpers.Prefabs
 {
-    using Prateek.Base;
+    using Prateek.Base.Behaviour;
     using UnityEngine;
 
     //-------------------------------------------------------------------------
@@ -98,7 +98,7 @@ namespace Helpers
                 return null;
 
             instance = Instantiate(prefab);
-            Helpers.Prefabs.AddPrefabInstance(instance.gameObject, prefab);
+            Prefabs.AddPrefabInstance(instance.gameObject, prefab);
 
             instance.transform.SetParent(transform.parent);
             instance.transform.position = transform.position;

@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Editors
+namespace Prateek.Editor
 {
     using UnityEditor;
     using UnityEngine;
@@ -65,7 +65,7 @@ namespace Prateek.Editors
         //---------------------------------------------------------------------
         private static bool Foldout(bool isLayout, Rect rect, GUIContent content, string key, bool toggleOnLabelClick = true)
         {
-            var foldoutActive = Prateek.Editors.Prefs.Get(key, false);
+            var foldoutActive = CodeGenerator.PrateekScript.ScriptExport.Prefs.Get(key, false);
             EditorGUI.BeginChangeCheck();
             var tempActive = foldoutActive.Value;
             if (!isLayout)

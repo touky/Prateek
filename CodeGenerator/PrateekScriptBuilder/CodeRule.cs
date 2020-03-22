@@ -31,18 +31,18 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
     using Prateek.Helpers;
     using UnityEditor;
-    using static Prateek.ShaderTo.CSharp;
+    using Prateek.CodeGenerator;
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
     //todo: fix that [InitializeOnLoad]
-    class PrateekScriptLoader : ScriptTemplate
+    class PrateekScriptLoader : Prateek.CodeGenerator.ScriptTemplates.ScriptTemplate
     {
         static PrateekScriptLoader()
         {
@@ -62,7 +62,7 @@ namespace Prateek.CodeGeneration
     public partial class PrateekScriptBuilder
     {
         //---------------------------------------------------------------------
-        public abstract class CodeRule : ScriptTemplate.BaseTemplate
+        public abstract class CodeRule : ScriptTemplates.ScriptTemplate.BaseTemplate
         {
             //-----------------------------------------------------------------
             public struct FuncVariant
@@ -145,8 +145,8 @@ namespace Prateek.CodeGeneration
             public string CodeBlock { get { return codeBlock; } }
 
             //-----------------------------------------------------------------
-            public Utils.SwapInfo ClassDst { get { return Tag.Macro.dstClass; } }
-            public Utils.SwapInfo ClassSrc { get { return Tag.Macro.srcClass; } }
+            public CodeBuilder.Utils.SwapInfo ClassDst { get { return Tag.Macro.dstClass; } }
+            public CodeBuilder.Utils.SwapInfo ClassSrc { get { return Tag.Macro.srcClass; } }
             public Tag.NumberedVars Names { get { return Tag.Macro.Names; } }
             public Tag.NumberedVars Funcs { get { return Tag.Macro.Funcs; } }
             public Tag.NumberedVars Vars { get { return Tag.Macro.Vars; } }
@@ -170,7 +170,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public bool RetrieveRuleContent(CodeFile codeFile, Utils.KeyRule keyRule, List<string> args, string data)
+            public bool RetrieveRuleContent(CodeFile codeFile, CodeBuilder.Utils.KeyRule keyRule, List<string> args, string data)
             {
                 var activeData = codeFile.ActiveData;
                 if (activeData == null)
@@ -186,13 +186,13 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region Utils
-            protected void AddCode(string code, CodeFile.ContentInfos data, Utils.SwapInfo swapSrc)
+            protected void AddCode(string code, CodeFile.ContentInfos data, CodeBuilder.Utils.SwapInfo swapSrc)
             {
-                AddCode(code, data, swapSrc, new Utils.SwapInfo());
+                AddCode(code, data, swapSrc, new CodeBuilder.Utils.SwapInfo());
             }
 
             //-----------------------------------------------------------------
-            protected void AddCode(string code, CodeFile.ContentInfos data, Utils.SwapInfo swapSrc, Utils.SwapInfo swapDst)
+            protected void AddCode(string code, CodeFile.ContentInfos data, CodeBuilder.Utils.SwapInfo swapSrc, CodeBuilder.Utils.SwapInfo swapDst)
             {
                 code = swapSrc.Apply(code);
                 code = swapDst.Apply(code);
@@ -202,7 +202,7 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region CodeRule overridable
-            public BuildResult Generate(CodeFile.ContentInfos data)
+            public CodeGenerator.CodeBuilder.BuildResult Generate(CodeFile.ContentInfos data)
             {
                 var variants = new List<FuncVariant>();
                 //If needed, Add the default value as a possible class
@@ -259,7 +259,7 @@ namespace Prateek.CodeGeneration
                             //Error out if the requested funcs result are not available
                             if (funcCount > variant.Count)
                             {
-                                return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.className;
+                                return (CodeGenerator.CodeBuilder.BuildResult)CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.className;
                             }
 
                             //Apply variants
@@ -272,11 +272,11 @@ namespace Prateek.CodeGeneration
                             var nameCount = Names.GetCount(code);
                             if (nameCount > infoSrc.NameCount)
                             {
-                                return (BuildResult)BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
+                                return (CodeGenerator.CodeBuilder.BuildResult)CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
                             }
 
                             //Apply names
-                            for (int r = 0; r < min(nameCount, infoSrc.NameCount); r++)
+                            for (int r = 0; r < PrateekScript.ScriptExport.CSharp.min(nameCount, infoSrc.NameCount); r++)
                             {
                                 code = (Names[r] + infoSrc.names[r]).Apply(code);
                             }
@@ -305,16 +305,16 @@ namespace Prateek.CodeGeneration
 
                 data.codeGenerated = data.codeGenerated.Replace(Strings.NewLine(String.Empty), Strings.NewLine(String.Empty) + Tag.Macro.codeGenTabs.Keyword());
 
-                return BuildResult.ValueType.Success;
+                return CodeGenerator.CodeBuilder.BuildResult.ValueType.Success;
             }
 
             //-----------------------------------------------------------------
-            public virtual Utils.KeyRule GetKeyRule(string keyword, string activeScope)
+            public virtual CodeBuilder.Utils.KeyRule GetKeyRule(string keyword, string activeScope)
             {
-                var keyRule = new Utils.KeyRule(keyword, activeScope);
+                var keyRule = new CodeBuilder.Utils.KeyRule(keyword, activeScope);
                 if (keyRule.Match(CodeBlock, Tag.Macro.FileInfo))
                 {
-                    { keyRule.args = new Utils.KeyRule.ArgRange(2, -1); keyRule.needOpenScope = true; }
+                    { keyRule.args = new CodeBuilder.Utils.KeyRule.ArgRange(2, -1); keyRule.needOpenScope = true; }
                 }
                 else if (keyRule.Match(Tag.Macro.ClassInfo, codeBlock))
                 {
@@ -322,16 +322,16 @@ namespace Prateek.CodeGeneration
                 }
                 else if (keyRule.Match(Tag.Macro.ClassNames, Tag.Macro.ClassInfo))
                 {
-                    { keyRule.args = new Utils.KeyRule.ArgRange(1, -1); }
+                    { keyRule.args = new CodeBuilder.Utils.KeyRule.ArgRange(1, -1); }
                 }
                 else if (keyRule.Match(Tag.Macro.ClassVars, Tag.Macro.ClassInfo))
                 {
-                    { keyRule.args = new Utils.KeyRule.ArgRange(1, -1); }
+                    { keyRule.args = new CodeBuilder.Utils.KeyRule.ArgRange(1, -1); }
                 }
 
                 else if (keyRule.Match(Tag.Macro.DefaultInfo, codeBlock))
                 {
-                    { keyRule.args = new Utils.KeyRule.ArgRange(2, 3); }
+                    { keyRule.args = new CodeBuilder.Utils.KeyRule.ArgRange(2, 3); }
                 }
                 else if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
@@ -345,13 +345,13 @@ namespace Prateek.CodeGeneration
                 }
                 else
                 {
-                    return new Utils.KeyRule() { usage = Utils.KeyRule.Usage.Ignore };
+                    return new CodeBuilder.Utils.KeyRule() { usage = CodeBuilder.Utils.KeyRule.Usage.Ignore };
                 }
                 return keyRule;
             }
 
             //-----------------------------------------------------------------
-            protected virtual bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
+            protected virtual bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, CodeBuilder.Utils.KeyRule keyRule, List<string> args, string data)
             {
                 if (keyRule.Match(CodeBlock, Tag.Macro.FileInfo))
                 {

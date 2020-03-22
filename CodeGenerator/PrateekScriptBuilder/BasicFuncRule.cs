@@ -31,11 +31,11 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
+    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
     using UnityEditor;
-    using static Prateek.ShaderTo.CSharp;
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
@@ -91,7 +91,7 @@ namespace Prateek.CodeGeneration
                         for (int v = 0; v < infoSrc.variables.Count; v++)
                         {
                             var funcData = funcInfo.data;
-                            for (int n = 0; n < min(varsCount, Vars.Count); n++)
+                            for (int n = 0; n < CSharp.min(varsCount, Vars.Count); n++)
                             {
                                 var vars = (Vars[n] + infoSrc.variables[v]);
                                 funcData = vars.Apply(funcData);

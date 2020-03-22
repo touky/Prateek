@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Editors
+namespace Prateek.Debug
 {
     using System;
     using UnityEngine;
@@ -169,8 +169,8 @@ namespace Prateek.Editors
         public class ULongs : ValueStorage
         {
             #region Fields
-            protected Ints m_0f;
-            protected Ints m_f0;
+            protected CodeGenerator.PrateekScript.ScriptExport.Prefs.Ints m_0f;
+            protected CodeGenerator.PrateekScript.ScriptExport.Prefs.Ints m_f0;
             #endregion Fields
 
             public ulong Value
@@ -189,8 +189,8 @@ namespace Prateek.Editors
             public ULongs(string name, ulong default_value)
                 : base(name)
             {
-                m_0f = new Ints(name + ".0f", (int)((default_value << 32) >> 32));
-                m_f0 = new Ints(name + ".f0", (int)(default_value >> 32));
+                m_0f = new CodeGenerator.PrateekScript.ScriptExport.Prefs.Ints(name + ".0f", (int)((default_value << 32) >> 32));
+                m_f0 = new CodeGenerator.PrateekScript.ScriptExport.Prefs.Ints(name + ".f0", (int)(default_value >> 32));
             }
 
             //-----------------------------------------------------------------

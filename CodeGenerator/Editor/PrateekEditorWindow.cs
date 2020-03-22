@@ -31,9 +31,9 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration.Editors
+namespace Prateek.CodeGenerator.Editor
 {
-    using Prateek.Editors;
+    using Prateek.CodeGenerator.PrateekScriptBuilder;
     using Prateek.Helpers;
     using UnityEditor;
     using UnityEngine;
@@ -53,9 +53,9 @@ namespace Prateek.CodeGeneration.Editors
         #region Fields
         private Vector2 scrollPosition = Vector2.zero;
         private Vector2 scrollPosition2 = Vector2.zero;
-        private Prefs.Bools prateekRunInTestMode;
-        private Prefs.Strings prateekUpdaterDir;
-        private CodeBuilder scriptTemplateUpdater = null;
+        private PrateekScript.ScriptExport.Prefs.Bools prateekRunInTestMode;
+        private PrateekScript.ScriptExport.Prefs.Strings prateekUpdaterDir;
+        private Prateek.CodeGenerator.CodeBuilder scriptTemplateUpdater = null;
 
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
         private CodeBuilder prateekScriptGenerator = null;
@@ -140,7 +140,7 @@ namespace Prateek.CodeGeneration.Editors
                 {
                     for (int w = 0; w < scriptTemplateUpdater.WorkFileCount; w++)
                     {
-                        EditorGUILayout.LabelField(" - " + scriptTemplateUpdater[w].source.name.Extension(scriptTemplateUpdater[w].source.extension));
+                        EditorGUILayout.LabelField(" - " + Strings.Extension(scriptTemplateUpdater[w].source.name, scriptTemplateUpdater[w].source.extension));
                     }
                     scrollPosition = scrollScope.scrollPosition;
                 }
@@ -196,10 +196,10 @@ namespace Prateek.CodeGeneration.Editors
         private void InitDatas()
         {
             if (prateekUpdaterDir == null)
-                prateekUpdaterDir = Prefs.Get(GetType().Name + ".prateekUpdaterDir", "/Scripts");
+                prateekUpdaterDir = PrateekScript.ScriptExport.Prefs.Get(GetType().Name + ".prateekUpdaterDir", "/Scripts");
 
             if (prateekRunInTestMode == null)
-                prateekRunInTestMode = Prefs.Get(GetType().Name + ".prateekRunInTestMode", false);
+                prateekRunInTestMode = PrateekScript.ScriptExport.Prefs.Get(GetType().Name + ".prateekRunInTestMode", false);
 
             if (scriptTemplateUpdater == null)
             {

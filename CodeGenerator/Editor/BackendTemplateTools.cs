@@ -31,10 +31,11 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration.Editors
+namespace Prateek.CodeGenerator.Editor
 {
     using System.IO;
     using System.Text.RegularExpressions;
+    using Prateek.CodeGenerator.PrateekScriptBuilder;
     using Prateek.Helpers;
     using UnityEngine;
 
@@ -52,11 +53,11 @@ namespace Prateek.CodeGeneration.Editors
                 if (index < 0)
                     return;
 
-                var builder = new CodeBuilder();
+                var builder = new Prateek.CodeGenerator.CodeBuilder();
                 if (!Regex.Match(path, builder.SearchPattern).Success)
                     return;
 
-                builder.AddFile(new CodeBuilder.FileData(path, string.Empty));
+                builder.AddFile(new CodeGenerator.CodeBuilder.FileData(path, string.Empty));
 
                 builder.Init();
                 builder.StartWork(true);
@@ -64,17 +65,17 @@ namespace Prateek.CodeGeneration.Editors
         }
 
         //---------------------------------------------------------------------
-        public static CodeBuilder GetScriptTemplateUpdater(string sourceDir = "/Scripts")
+        public static Prateek.CodeGenerator.CodeBuilder GetScriptTemplateUpdater(string sourceDir = "/Scripts")
         {
             var path = Application.dataPath + sourceDir;
             if (!Directory.Exists(path))
                 return null;
 
-            var builder = new CodeBuilder();
+            var builder = new Prateek.CodeGenerator.CodeBuilder();
 
             builder.AddDirectory(path);
 
-            builder.Operations = CodeBuilder.OperationApplied.ALL & ~CodeBuilder.OperationApplied.ApplyScriptTemplate;
+            builder.Operations = CodeGenerator.CodeBuilder.OperationApplied.ALL & ~CodeGenerator.CodeBuilder.OperationApplied.ApplyScriptTemplate;
 
             return builder;
         }

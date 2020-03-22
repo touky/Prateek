@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
     using Prateek.Helpers;
@@ -74,9 +74,9 @@ namespace Prateek.CodeGeneration
 
             //-----------------------------------------------------------------
             #region CodeRule override
-            public override Utils.KeyRule GetKeyRule(string keyword, string activeScope)
+            public override CodeBuilder.Utils.KeyRule GetKeyRule(string keyword, string activeScope)
             {
-                var keyRule = new Utils.KeyRule(keyword, activeScope);
+                var keyRule = new CodeBuilder.Utils.KeyRule(keyword, activeScope);
                 if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {
                     { keyRule.args = 1; keyRule.needOpenScope = true; keyRule.needScopeData = true; }
@@ -89,7 +89,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            protected override bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, Utils.KeyRule keyRule, List<string> args, string data)
+            protected override bool DoRetrieveRuleContent(CodeFile.ContentInfos activeData, CodeBuilder.Utils.KeyRule keyRule, List<string> args, string data)
             {
                 if (keyRule.Match(Tag.Macro.Func, CodeBlock))
                 {

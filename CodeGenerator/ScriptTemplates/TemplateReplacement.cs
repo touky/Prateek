@@ -31,10 +31,10 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using System.Collections.Generic;
-    using Prateek.IO;
+    using Prateek.Helpers.Files;
     using UnityEngine;
 
     //-------------------------------------------------------------------------

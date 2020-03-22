@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.ScriptTemplates
 {
     //-------------------------------------------------------------------------
     public partial class ScriptTemplate
@@ -86,7 +86,7 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                ScriptTemplate.Add(this);
+                CodeGenerator.ScriptTemplate.Add(this);
             }
 
             //-----------------------------------------------------------------
@@ -100,7 +100,7 @@ namespace Prateek.CodeGeneration
                     return false;
 
                 if (templateFile != string.Empty)
-                    return MatchTemplate(templateFile, extension, content);
+                    return CodeGenerator.ScriptTemplate.MatchTemplate(templateFile, extension, content);
                 return true;
 #else //!UNITY_EDITOR
                 return false;

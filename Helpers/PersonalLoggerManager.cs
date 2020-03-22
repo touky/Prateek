@@ -17,30 +17,31 @@
 //-----------------------------------------------------------------------------
 #region Prateek Ifdefs
 
-//Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
-//Auto activate debug
+    //Auto activate debug
 #if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-#endregion Prateek Ifdefs
+    #endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
 
-//-----------------------------------------------------------------------------
-#if PRATEEK_DEBUG
-namespace Prateek.Debug
-{
+//Auto activate some of the prateek defines
+namespace Prateek.Helpers {
+    using System;
     using System;
     using System.Collections.Generic;
-    using Helpers;
-    using Extensions;
+    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
+    using Prateek.Debug;
     using UnityEditor;
     using UnityEngine;
-    using static Prateek.ShaderTo.CSharp;
+    using UnityEngine;
+
+    //-----------------------------------------------------------------------------
+#if PRATEEK_DEBUG
 
     //-------------------------------------------------------------------------
     public class PersonalLoggerManager
@@ -247,14 +248,14 @@ namespace Prateek.Debug
         public void DisplayDebug()
         {
             var camera = UnityEngine.Camera.current;
-            var style = m_gui_setup;
+            var style  = m_gui_setup;
             if (style != null && style.HasAnyActiveItem)
             {
                 for (int i = 0; i < m_loggers.Count; i++)
                 {
                     if (i == style.ActiveBox)
                     {
-                        var box = m_loggers[i];
+                        var box      = m_loggers[i];
                         var robotPos = camera.WorldToScreenPoint(box.logger.transform.position);
                         {
                             robotPos.y = Screen.height - robotPos.y;
@@ -262,7 +263,7 @@ namespace Prateek.Debug
                                                      Mathf.Clamp(robotPos.y, style.WindowRect.y, style.WindowRect.y + style.WindowRect.height));
                             guiPos.y = Screen.height - guiPos.y;
                             var worldGuiPos = camera.ScreenToWorldPoint(guiPos.xyn(1f));
-                            DebugDraw.Line(DebugDraw.DebugPlace.AToB(worldGuiPos, box.logger.transform.position), new DebugDraw.DebugStyle(DebugDraw.Space.World, Color.white));
+                            Prateek.Debug.DebugDraw.Line(Prateek.Debug.DebugDraw.DebugPlace.AToB(worldGuiPos, box.logger.transform.position), new DebugDraw.DebugStyle(Prateek.Debug.DebugDraw.Space.World, Color.white));
                         }
                         break;
                     }
@@ -279,7 +280,7 @@ namespace Prateek.Debug
             }
             //TODO BHU ---------------------
             var settings = new Helpers.PersonalLogger.GUISettings(); //GlobalSettings.OcpBlackBoxDebugSettings;
-            var style = m_gui_setup;
+            var style    = m_gui_setup;
 
             style.HasAnyActiveItem = false;
             if (style.ActiveBox >= 0 && style.ActiveBox < m_loggers.Count)
@@ -310,9 +311,9 @@ namespace Prateek.Debug
 
             var minNameSize = 50f;
 
-            var logSize = new Vector2(settings.WindowCharacterCount.x * style.CharacterRefSize.x, settings.WindowCharacterCount.y * style.CharacterRefSize.y);
-            var headerSize = new Vector2(logSize.x, style.ToolbarActive.lineHeight * 2f);
-            var buttonsSize = new Vector2(style.ToolbarActive.lineHeight * 4, style.ToolbarActive.lineHeight * 1.5f);
+            var logSize           = new Vector2(settings.WindowCharacterCount.x * style.CharacterRefSize.x, settings.WindowCharacterCount.y * style.CharacterRefSize.y);
+            var headerSize        = new Vector2(logSize.x, style.ToolbarActive.lineHeight * 2f);
+            var buttonsSize       = new Vector2(style.ToolbarActive.lineHeight * 4, style.ToolbarActive.lineHeight * 1.5f);
             var windowDefaultRect = new Rect(style.WindowRect.position, logSize + Vector2.up * headerSize.y);
 
             var windowPosition = style.DefaultWindowRect.position;
@@ -320,20 +321,20 @@ namespace Prateek.Debug
             style.WindowRect.size = new Vector2(windowDefaultRect.width, windowDefaultRect.height);
 
             //Resize to fit the screen
-            style.WindowRect.size = (min(style.WindowRect.position + style.WindowRect.size, new Vector2(Screen.width, Screen.height)) - style.WindowRect.position);
-            style.WindowRect.size = min(style.WindowRect.size, style.WindowRect.size - (max(style.WindowRect.position, 0) - style.WindowRect.position));
-            style.WindowRect.position = max(style.WindowRect.position, 0);
+            style.WindowRect.size = (CodeGenerator.PrateekScript.ScriptExport.CSharp.min(style.WindowRect.position + style.WindowRect.size, new Vector2(Screen.width, Screen.height)) - style.WindowRect.position);
+            style.WindowRect.size = CodeGenerator.PrateekScript.ScriptExport.CSharp.min(style.WindowRect.size, style.WindowRect.size - (CodeGenerator.PrateekScript.ScriptExport.CSharp.max(style.WindowRect.position, 0) - style.WindowRect.position));
+            style.WindowRect.position = CodeGenerator.PrateekScript.ScriptExport.CSharp.max(style.WindowRect.position, 0);
 
             //Build rects
-            var buttonsRect = new Rect(style.WindowRect.position + max(Vector2.right * (style.WindowRect.width - buttonsSize.x), 0), buttonsSize);
-            var headerRect = new Rect(style.WindowRect.position, max(vec2(style.WindowRect.width - (buttonsRect.width + 10), headerSize.y), 0));
-            var scrollViewRect = new Rect(style.WindowRect.position + Vector2.up * headerRect.height, max(style.WindowRect.size - Vector2.up * headerSize.y, 0));
+            var buttonsRect    = new Rect(style.WindowRect.position + CodeGenerator.PrateekScript.ScriptExport.CSharp.max(Vector2.right * (style.WindowRect.width - buttonsSize.x), 0), buttonsSize);
+            var headerRect     = new Rect(style.WindowRect.position, CodeGenerator.PrateekScript.ScriptExport.CSharp.max(CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(style.WindowRect.width - (buttonsRect.width + 10), headerSize.y), 0));
+            var scrollViewRect = new Rect(style.WindowRect.position + Vector2.up * headerRect.height, CodeGenerator.PrateekScript.ScriptExport.CSharp.max(style.WindowRect.size - Vector2.up * headerSize.y, 0));
 
             GUI.Box(style.WindowRect, GUIContent.none, style.BGBoxStyle);
 
-            var newActiveBox = style.ActiveBox;
-            var content = new GUIContent();
-            var cursorRect = new Rect(style.WindowRect.position, Vector2.up * headerRect.height);
+            var newActiveBox       = style.ActiveBox;
+            var content            = new GUIContent();
+            var cursorRect         = new Rect(style.WindowRect.position, Vector2.up * headerRect.height);
             var hasItemsOnTheRight = false;
             for (int i = 0; i < m_loggers.Count; i++)
             {
@@ -347,7 +348,7 @@ namespace Prateek.Debug
                             //Draw selection Tabs
                             content.text = m_loggers[i].logger.name;
                             content.tooltip = m_loggers[i].logger.name;
-                            var nameSize = min(max(style.ToolbarActive.CalcSize(content), minNameSize), headerRect.width).x;
+                            var nameSize   = CodeGenerator.PrateekScript.ScriptExport.CSharp.min(CodeGenerator.PrateekScript.ScriptExport.CSharp.max(style.ToolbarActive.CalcSize(content), minNameSize), headerRect.width).x;
                             var toggleRect = new Rect(cursorRect.position, new Vector2(nameSize, cursorRect.height));
 
                             if (GUI.Toggle(toggleRect, isToggled, content, isToggled ? style.ToolbarActive : style.ToolbarInactive) != isToggled)
@@ -355,7 +356,7 @@ namespace Prateek.Debug
                                 newActiveBox = i;
                             }
 
-                            var offset = min(Vector2.right * toggleRect.width, headerRect.width);
+                            var offset = CodeGenerator.PrateekScript.ScriptExport.CSharp.min(Vector2.right * toggleRect.width, headerRect.width);
                             cursorRect.position += offset;
                             headerRect.size -= offset;
                             headerRect.position += offset;
@@ -378,7 +379,7 @@ namespace Prateek.Debug
             {
                 buttonsRect.size = new Vector2(buttonsRect.width / 2f, buttonsRect.height);
                 var hasPrev = style.BoxOffset > 0;
-                var goPrev = GUI.Toggle(buttonsRect, hasPrev, "<", hasPrev ? style.OffsetLeftActive : style.OffsetLeftInactive);
+                var goPrev  = GUI.Toggle(buttonsRect, hasPrev, "<", hasPrev ? style.OffsetLeftActive : style.OffsetLeftInactive);
                 if (hasPrev && hasPrev != goPrev)
                 {
                     style.BoxOffset = Mathf.Max(0, style.BoxOffset - 1);
@@ -396,34 +397,34 @@ namespace Prateek.Debug
             switch (Event.current.type)
             {
                 case EventType.MouseDown:
+                {
+                    if (scrollViewRect.Contains(Event.current.mousePosition))
                     {
-                        if (scrollViewRect.Contains(Event.current.mousePosition))
+                        if (style.LastMousePosition == null)
                         {
-                            if (style.LastMousePosition == null)
-                            {
-                                style.LastMousePosition = Event.current.mousePosition;
-                            }
-                        }
-                        break;
-                    }
-                case EventType.MouseDrag:
-                    {
-                        if (style.LastMousePosition != null)
-                        {
-                            windowPosition += Event.current.mousePosition - style.LastMousePosition.Value;
                             style.LastMousePosition = Event.current.mousePosition;
                         }
-                        break;
                     }
+                    break;
+                }
+                case EventType.MouseDrag:
+                {
+                    if (style.LastMousePosition != null)
+                    {
+                        windowPosition += Event.current.mousePosition - style.LastMousePosition.Value;
+                        style.LastMousePosition = Event.current.mousePosition;
+                    }
+                    break;
+                }
                 case EventType.MouseUp:
                 case EventType.DragExited:
-                    {
-                        style.LastMousePosition = null;
-                        break;
-                    }
+                {
+                    style.LastMousePosition = null;
+                    break;
+                }
             }
 
-            windowPosition = max(min(windowPosition, new Vector2(Screen.width, Screen.height) - Vector2.one * headerRect.height * 4f), -(windowDefaultRect.size - Vector2.one * headerRect.height * 2f));
+            windowPosition = CodeGenerator.PrateekScript.ScriptExport.CSharp.max(CodeGenerator.PrateekScript.ScriptExport.CSharp.min(windowPosition, new Vector2(Screen.width, Screen.height) - Vector2.one * headerRect.height * 4f), -(windowDefaultRect.size - Vector2.one * headerRect.height * 2f));
             style.ActiveBox = newActiveBox;
 
             //Set position after moving the mouse
@@ -440,14 +441,6 @@ namespace Prateek.Debug
         }
         #endregion GUI
     }
-}
-
-namespace Prateek.Helpers
-{
-    using System;
-    using Debug;
-    using Extensions;
-    using UnityEngine;
 
     //-------------------------------------------------------------------------
     public partial class PersonalLogger : MonoBehaviour
@@ -475,20 +468,20 @@ namespace Prateek.Helpers
             public string LogTimeText = "{2:D2}:{1:D2}:{0:D3}> ";
             public string LogTimeHourText = "{3:D2}:";
             public Color[] LogColors = new Color[(int)PersonalLogger.LogType.MAX]
-                    {
-                    /* Nothing******/ Color.black,
-                    /* Error *******/ Color.red,
-                    /* Warning *****/ Color.yellow,
+            {
+                /* Nothing******/ Color.black,
+                /* Error *******/ Color.red,
+                /* Warning *****/ Color.yellow,
 
-                    /* Minor *******/ new Color(0.5f, 0.5f, 0.5f),
-                    /* Medium ******/ new Color(0.75f, 0.75f, 0.75f),
-                    /* Major *******/ Color.white,
-                    /* Extreme *****/ Color.cyan,
+                /* Minor *******/ new Color(0.5f, 0.5f, 0.5f),
+                /* Medium ******/ new Color(0.75f, 0.75f, 0.75f),
+                /* Major *******/ Color.white,
+                /* Extreme *****/ Color.cyan,
 
-                    /* TaskStart ***/ new Color(125f / 255f, 161f / 255f, 245f / 255f),
-                    /* TaskEnd *****/ new Color(153f / 255f, 165f / 255f, 194f / 255f),
-                    /* TaskEndFail */ new Color(235f / 255f, 183f / 255f, 63f / 255f),
-                    };
+                /* TaskStart ***/ new Color(125f / 255f, 161f / 255f, 245f / 255f),
+                /* TaskEnd *****/ new Color(153f / 255f, 165f / 255f, 194f / 255f),
+                /* TaskEndFail */ new Color(235f / 255f, 183f / 255f, 63f / 255f),
+            };
         };
         #endregion Declarations
 
@@ -512,15 +505,15 @@ namespace Prateek.Helpers
             scrollPos = GUI.BeginScrollView(rect, scrollPos, scrollView);
             logger.scroll = new Vector2(scrollPos.x, (scrollView.height - rect.height) - scrollPos.y);
             {
-                var startPos = Vector2.zero;
+                var startPos   = Vector2.zero;
                 var currentPos = startPos;
 
-                LogData lastLog = new LogData();
-                var logContent = new GUIContent();
+                LogData lastLog    = new LogData();
+                var     logContent = new GUIContent();
                 foreach (var log in logHistory)
                 {
-                    var logText = string.Empty;
-                    var usedColor = settings.LogColors[(int)log.Type];
+                    var logText    = string.Empty;
+                    var usedColor  = settings.LogColors[(int)log.Type];
                     var minorColor = settings.LogColors[(int)PersonalLogger.LogType.Minor];
 
                     //DATA -----------------------------------------------
@@ -541,8 +534,8 @@ namespace Prateek.Helpers
                     }
 
                     //Build owner name
-                    var ownerCount = log.Owners.Count;
-                    var objName = string.Empty;
+                    var  ownerCount         = log.Owners.Count;
+                    var  objName            = string.Empty;
                     bool atLeastOneNewOwner = false;
                     for (int i = 0; i < ownerCount; i++)
                     {
@@ -604,5 +597,6 @@ namespace Prateek.Helpers
             GUI.color = oldGUIColor;
         }
     }
-}
+
 #endif //PRATEEK_DEBUG
+}

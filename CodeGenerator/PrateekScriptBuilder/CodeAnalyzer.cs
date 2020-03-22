@@ -31,13 +31,12 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
     using Prateek.Extensions;
-    using static Prateek.ShaderTo.CSharp;
 
     //-------------------------------------------------------------------------
     public partial class PrateekScriptBuilder
@@ -115,7 +114,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public BuildResult FindKeyword(ref string keyword)
+            public CodeGenerator.CodeBuilder.BuildResult FindKeyword(ref string keyword)
             {
                 keyword = String.Empty;
                 while (position < content.Length)
@@ -127,7 +126,7 @@ namespace Prateek.CodeGeneration
                         case SymbolType.Letter:
                         {
                             if (type == SymbolType.Numeric && keyword.Length == 0)
-                                return (BuildResult)BuildResult.ValueType.PrateekScriptKeywordCannotStartWithNumeric + string.Format("at line: {0}", lineCount);
+                                return (CodeGenerator.CodeBuilder.BuildResult)CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptKeywordCannotStartWithNumeric + string.Format("at line: {0}", lineCount);
                             keyword += content[position];
                             break;
                         }
@@ -140,7 +139,7 @@ namespace Prateek.CodeGeneration
                                 lineCount++;
 
                             if (keyword.Length > 0)
-                                return BuildResult.ValueType.Success;
+                                return CodeGenerator.CodeBuilder.BuildResult.ValueType.Success;
 
                             if (type == SymbolType.ScopeStart)
                                 scopes.Add(string.Empty);
@@ -148,23 +147,23 @@ namespace Prateek.CodeGeneration
                         }
                         case SymbolType.ScopeEnd:
                         {
-                            return BuildResult.ValueType.Ignored;
+                            return CodeGenerator.CodeBuilder.BuildResult.ValueType.Ignored;
                         }
                         default:
                         {
                             if (keyword.Length > 0)
-                                return BuildResult.ValueType.Success;
-                            return (BuildResult)BuildResult.ValueType.PrateekScriptWrongKeywordChar + content[position].ToString() + string.Format("at line: {0}", lineCount);
+                                return CodeGenerator.CodeBuilder.BuildResult.ValueType.Success;
+                            return (CodeGenerator.CodeBuilder.BuildResult)CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptWrongKeywordChar + content[position].ToString() + string.Format("at line: {0}", lineCount);
                         }
                     }
 
                     position++;
                 }
-                return keyword.Length > 0 ? BuildResult.ValueType.Success : BuildResult.ValueType.Ignored;
+                return keyword.Length > 0 ? CodeGenerator.CodeBuilder.BuildResult.ValueType.Success : CodeGenerator.CodeBuilder.BuildResult.ValueType.Ignored;
             }
 
             //-----------------------------------------------------------------
-            public bool FindArgs(List<string> args, Utils.KeyRule keyRule)
+            public bool FindArgs(List<string> args, CodeBuilder.Utils.KeyRule keyRule)
             {
                 args.Clear();
 
@@ -274,7 +273,7 @@ namespace Prateek.CodeGeneration
             }
 
             //-----------------------------------------------------------------
-            public bool FindData(ref string data, Utils.KeyRule setup)
+            public bool FindData(ref string data, CodeBuilder.Utils.KeyRule setup)
             {
                 if (!setup.needScopeData)
                     return true;
@@ -400,7 +399,7 @@ namespace Prateek.CodeGeneration
                 for (int i = 0; i < content.Length; i++)
                 {
                     var value0 = content[i];
-                    var value1 = content[min(i + 1, content.Length - 1)];
+                    var value1 = content[CSharp.min(i + 1, content.Length - 1)];
                     if (ignoreAllToLiteralEnd)
                     {
                         if (value0 == charIgnore[1] || value0 == charLiteral[1])

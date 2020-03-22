@@ -31,12 +31,12 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Editors
+namespace Prateek.FrameRecorder.Editor
 {
     using System;
-    using Prateek.Base;
-    using Prateek.Manager;
-    using static Prateek.ShaderTo.CSharp;
+    using Prateek.Base.Registry;
+    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
+    using Prateek.Editor;
     using UnityEditor;
     using UnityEngine;
 
@@ -53,7 +53,7 @@ namespace Prateek.Editors
 
         //---------------------------------------------------------------------
         #region Fields
-        private Prefs.Ints maxFrameRecorded;
+        private CodeGenerator.PrateekScript.ScriptExport.Prefs.Ints maxFrameRecorded;
         #endregion Fields
 
         //---------------------------------------------------------------------
@@ -100,7 +100,7 @@ namespace Prateek.Editors
         {
             if (maxFrameRecorded == null)
             {
-                maxFrameRecorded = new Prefs.Ints("FrameRecorderEditorWindow.maxFrameRecorded", 50);
+                maxFrameRecorded = new CodeGenerator.PrateekScript.ScriptExport.Prefs.Ints("FrameRecorderEditorWindow.maxFrameRecorded", 50);
             }
         }
 
@@ -167,7 +167,7 @@ namespace Prateek.Editors
                     using (new GUIs.StatusScope(frameCount > 0 && isPlayback))
                     {
                         var zone = EditorGUILayout.GetControlRect();
-                        var width = max(0, zone.width - 55);
+                        var width = CSharp.max(0, zone.width - 55);
                         {
                             zone.width = width;
                             using (new GUIs.StatusScope(Color.black))
@@ -189,7 +189,7 @@ namespace Prateek.Editors
                         using (new EditorGUILayout.HorizontalScope())
                         {
                             var oldX = rX;
-                            rX = min(recordLimit - (size + 1), EditorGUILayout.IntSlider((int)rX, 0, recordLimit - 1));
+                            rX = CSharp.min(recordLimit - (size + 1), EditorGUILayout.IntSlider((int)rX, 0, recordLimit - 1));
                             rY += rX - oldX;
                         }
 
@@ -209,7 +209,7 @@ namespace Prateek.Editors
                             GUILayout.Label("Range: ", GUILayout.MaxWidth(40));
                             size = rY - rX;
                             size -= GUILayout.Button("|<", GUILayout.MaxWidth(40)) ? 1 : 0;
-                            size = max(0, EditorGUILayout.IntField((int)size, GUILayout.MaxWidth(40)));
+                            size = CSharp.max(0, EditorGUILayout.IntField((int)size, GUILayout.MaxWidth(40)));
                             size += GUILayout.Button(">|", GUILayout.MaxWidth(40)) ? 1 : 0;
                             rY = rX + size;
 

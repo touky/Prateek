@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using System.Collections.Generic;
     using Prateek.Helpers;
@@ -98,7 +98,7 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                ScriptTemplate.Add(this);
+                CodeGenerator.ScriptTemplate.Add(this);
             }
         }
 

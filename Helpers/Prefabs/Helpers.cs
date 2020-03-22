@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Helpers
+namespace Prateek.Helpers.Prefabs
 {
     using UnityEngine;
 

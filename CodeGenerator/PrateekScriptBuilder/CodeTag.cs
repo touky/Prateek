@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace Prateek.CodeGeneration
 
                 //-------------------------------------------------------------
                 public int Count { get { return datas.Count; } }
-                public Utils.SwapInfo this[int i]
+                public CodeBuilder.Utils.SwapInfo this[int i]
                 {
                     get
                     {

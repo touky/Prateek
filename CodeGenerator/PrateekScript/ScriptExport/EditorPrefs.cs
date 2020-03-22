@@ -17,24 +17,28 @@
 //-----------------------------------------------------------------------------
 #region Prateek Ifdefs
 
-//Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
-//Auto activate debug
+    //Auto activate debug
 #if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-#endregion Prateek Ifdefs
-// -END_PRATEEK_CSHARP_IFDEF-
+    #endregion Prateek Ifdefs
+    // -END_PRATEEK_CSHARP_IFDEF-
 
-//-----------------------------------------------------------------------------
-namespace Prateek.Editors
+//Auto activate some of the prateek defines
+namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using Prateek.Extensions;
+    using UnityEngine;
+    using UnityEngine;
 
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static  partial class Prefs
     {
@@ -47,7 +51,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Bools : TypedStorage<bool>
+        public class Bools : Prateek.Debug.Prefs.TypedStorage<bool>
         {
             //-----------------------------------------------------------------
             public Bools(string name, bool defaultValue) : base(name, defaultValue) { }
@@ -59,7 +63,7 @@ namespace Prateek.Editors
             }
              
             //-----------------------------------------------------------------
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             protected override void GetFromPrefs()
             {
                 value = UnityEditor.EditorPrefs.GetBool(name, defaultValue);
@@ -70,7 +74,7 @@ namespace Prateek.Editors
             {
                 UnityEditor.EditorPrefs.SetBool(name, value);
             }
-            #endif //UNITY_EDITOR
+#endif //UNITY_EDITOR
         }
         #endregion bool
         
@@ -82,7 +86,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Ints : TypedStorage<int>
+        public class Ints : Prateek.Debug.Prefs.TypedStorage<int>
         {
             //-----------------------------------------------------------------
             public Ints(string name, int defaultValue) : base(name, defaultValue) { }
@@ -94,7 +98,7 @@ namespace Prateek.Editors
             }
              
             //-----------------------------------------------------------------
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             protected override void GetFromPrefs()
             {
                 value = UnityEditor.EditorPrefs.GetInt(name, defaultValue);
@@ -105,7 +109,7 @@ namespace Prateek.Editors
             {
                 UnityEditor.EditorPrefs.SetInt(name, value);
             }
-            #endif //UNITY_EDITOR
+#endif //UNITY_EDITOR
         }
         #endregion int
         
@@ -117,7 +121,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Floats : TypedStorage<float>
+        public class Floats : Prateek.Debug.Prefs.TypedStorage<float>
         {
             //-----------------------------------------------------------------
             public Floats(string name, float defaultValue) : base(name, defaultValue) { }
@@ -129,7 +133,7 @@ namespace Prateek.Editors
             }
              
             //-----------------------------------------------------------------
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             protected override void GetFromPrefs()
             {
                 value = UnityEditor.EditorPrefs.GetFloat(name, defaultValue);
@@ -140,7 +144,7 @@ namespace Prateek.Editors
             {
                 UnityEditor.EditorPrefs.SetFloat(name, value);
             }
-            #endif //UNITY_EDITOR
+#endif //UNITY_EDITOR
         }
         #endregion float
         
@@ -152,7 +156,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Strings : TypedStorage<string>
+        public class Strings : Prateek.Debug.Prefs.TypedStorage<string>
         {
             //-----------------------------------------------------------------
             public Strings(string name, string defaultValue) : base(name, defaultValue) { }
@@ -164,7 +168,7 @@ namespace Prateek.Editors
             }
              
             //-----------------------------------------------------------------
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             protected override void GetFromPrefs()
             {
                 value = UnityEditor.EditorPrefs.GetString(name, defaultValue);
@@ -175,19 +179,13 @@ namespace Prateek.Editors
             {
                 UnityEditor.EditorPrefs.SetString(name, value);
             }
-            #endif //UNITY_EDITOR
+#endif //UNITY_EDITOR
         }
         #endregion string
         
     }
-}
 
-//-----------------------------------------------------------------------------
-namespace Prateek.Editors
-{
-    using UnityEngine;
-    using Prateek.Extensions;
-
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static  partial class Prefs
     {
@@ -200,7 +198,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Vector2Ints : ValueStorage
+        public class Vector2Ints : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -247,7 +245,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Vector3Ints : ValueStorage
+        public class Vector3Ints : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -297,7 +295,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Vector2s : ValueStorage
+        public class Vector2s : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -344,7 +342,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Vector3s : ValueStorage
+        public class Vector3s : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -394,7 +392,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Vector4s : ValueStorage
+        public class Vector4s : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -447,7 +445,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class Rects : ValueStorage
+        public class Rects : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -500,7 +498,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class RectInts : ValueStorage
+        public class RectInts : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -546,17 +544,8 @@ namespace Prateek.Editors
         #endregion RectInt
         
     }
-}
 
-//-----------------------------------------------------------------------------
-namespace Prateek.Editors
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using UnityEngine;
-    using static Prateek.ShaderTo.CSharp;
-    using Prateek.Extensions;
-
+    //-----------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     public static  partial class Prefs
     {
@@ -569,7 +558,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListStrings : ValueStorage
+        public class ListStrings : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -609,7 +598,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -714,7 +703,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListBools : ValueStorage
+        public class ListBools : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -754,7 +743,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -859,7 +848,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListInts : ValueStorage
+        public class ListInts : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -899,7 +888,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -1004,7 +993,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListFloats : ValueStorage
+        public class ListFloats : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1044,7 +1033,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -1149,12 +1138,12 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListULongs : ValueStorage
+        public class ListULongs : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
             protected Ints count;
-            protected List<ULongs> prefValues = new List<ULongs>();
+            protected List<Prateek.Debug.Prefs.ULongs> prefValues = new List<Prateek.Debug.Prefs.ULongs>();
             protected List<ulong> realValues = new List<ulong>();
             #endregion Fields
         
@@ -1189,7 +1178,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -1226,7 +1215,7 @@ namespace Prateek.Editors
             //-----------------------------------------------------------------
             public void Add(ulong value)
             {
-                prefValues.Add(new ULongs(GetName(prefValues.Count), value));
+                prefValues.Add(new Prateek.Debug.Prefs.ULongs(GetName(prefValues.Count), value));
                 realValues.Add(prefValues.Last().Value);
                 count.Value = realValues.Count;
             }
@@ -1294,7 +1283,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListVector2Ints : ValueStorage
+        public class ListVector2Ints : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1334,7 +1323,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -1439,7 +1428,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListVector3Ints : ValueStorage
+        public class ListVector3Ints : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1479,7 +1468,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -1584,7 +1573,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListVector2s : ValueStorage
+        public class ListVector2s : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1624,7 +1613,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -1729,7 +1718,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListVector3s : ValueStorage
+        public class ListVector3s : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1769,7 +1758,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -1874,7 +1863,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListVector4s : ValueStorage
+        public class ListVector4s : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -1914,7 +1903,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -2019,7 +2008,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListRects : ValueStorage
+        public class ListRects : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -2059,7 +2048,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];
@@ -2164,7 +2153,7 @@ namespace Prateek.Editors
         }
         
         //---------------------------------------------------------------------
-        public class ListRectInts : ValueStorage
+        public class ListRectInts : Prateek.Debug.Prefs.ValueStorage
         {
             //-----------------------------------------------------------------
             #region Fields
@@ -2204,7 +2193,7 @@ namespace Prateek.Editors
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length = min(Count, valueCount);
+                    var length     = CSharp.min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];

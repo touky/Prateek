@@ -31,20 +31,20 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration
+namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using Prateek.Helpers;
-    using Prateek.IO;
+    using Prateek.Helpers.Files;
     using UnityEditor;
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
     //todo: fix that
     [InitializeOnLoad]
-    class UnityFileLoader : ScriptTemplate
+    class UnityFileLoader : CodeGenerator.ScriptTemplates.ScriptTemplate
     {
         static UnityFileLoader()
         {
@@ -61,7 +61,7 @@ namespace Prateek.CodeGeneration
                 if (!files[f].EndsWith(".txt"))
                     continue;
 
-                NewUnityTemplate("txt").Load(files[f]).Commit();
+                ScriptTemplate.NewUnityTemplate("txt").Load(files[f]).Commit();
             }
         }
     }
@@ -95,7 +95,7 @@ namespace Prateek.CodeGeneration
             //-----------------------------------------------------------------
             public override void Commit()
             {
-                ScriptTemplate.Add(this);
+                CodeGenerator.ScriptTemplate.Add(this);
             }
 
             //-----------------------------------------------------------------

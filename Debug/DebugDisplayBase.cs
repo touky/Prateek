@@ -36,7 +36,8 @@ namespace Prateek.Debug
 {
     using System.Collections.Generic;
     using Prateek.Base;
-    using Prateek.Manager;
+    using Prateek.Base.Registry;
+    using Prateek.FrameRecorder;
     using UnityEngine;
 
     //-------------------------------------------------------------------------

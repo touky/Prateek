@@ -35,6 +35,7 @@
 namespace Prateek.Debug
 {
     using System.Collections.Generic;
+    using Prateek.Helpers;
     using UnityEngine;
 
     public class DebugDisplayManager_ : MonoBehaviour

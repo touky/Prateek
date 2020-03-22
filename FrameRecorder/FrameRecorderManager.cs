@@ -31,13 +31,12 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Manager
+namespace Prateek.FrameRecorder
 {
     using System.Collections.Generic;
-    using Prateek.Base;
-    using Prateek.Debug;
+    using Prateek.Base.Registry;
+    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
     using UnityEngine;
-    using static Prateek.ShaderTo.CSharp;
 
     //-------------------------------------------------------------------------
     #region NullFrameRecorderManager
@@ -147,7 +146,7 @@ namespace Prateek.Manager
         public Vector2Int CurrentFrameRange
         {
             get { return frameRange; }
-            set { frameRange = clamp(value, 0, frameCapacity - 1); }
+            set { frameRange = CSharp.clamp(value, 0, frameCapacity - 1); }
         }
         #endregion Properties
 
@@ -306,8 +305,8 @@ namespace Prateek.Manager
         //---------------------------------------------------------------------
         private void DoPlayback()
         {
-            frameRange = clamp(frameRange, 0, frameCapacity - 1);
-            for (int h = frameRange.x; h < min(frameRange.y + 1, history.Count); h++)
+            frameRange = CSharp.clamp(frameRange, 0, frameCapacity - 1);
+            for (int h = frameRange.x; h < CSharp.min(frameRange.y + 1, history.Count); h++)
             {
                 var frame = history[history.Count - (1 + h)];
                 if (frame == null)

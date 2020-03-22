@@ -35,7 +35,7 @@
 namespace Prateek.Debug
 {
     using UnityEngine;
-    using static Prateek.ShaderTo.CSharp;
+    using static CodeGenerator.PrateekScript.ScriptExport.CSharp;
 
     //-------------------------------------------------------------------------
     public partial class DebugDraw
