@@ -1,6 +1,8 @@
 {
-    "name": "Prateek.Core.Code",
-    "references": [],
+    "name": "Prateek.CodeGenerator.Code",
+    "references": [
+        "GUID:4b4491f2f353c0b44a038afb3e9dbb85"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
