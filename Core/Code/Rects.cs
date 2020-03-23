@@ -30,9 +30,7 @@
 
 
 //Auto activate some of the prateek defines
-namespace Prateek.CodeGenerator.PrateekScript.ScriptExport {
-    using UnityEngine;
-    using UnityEngine;
+namespace Prateek.Core.Code {
     using UnityEngine;
 
     //-----------------------------------------------------------------------------

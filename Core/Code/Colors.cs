@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
+namespace Prateek.Core.Code
 {
     using UnityEngine;
 

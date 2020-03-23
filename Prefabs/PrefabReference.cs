@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 namespace Prateek.Prefabs
 {
-    using Prateek.Base.Behaviour;
+    using Prateek.Core.Code.Behaviours;
     using UnityEditor;
     using UnityEngine;
 

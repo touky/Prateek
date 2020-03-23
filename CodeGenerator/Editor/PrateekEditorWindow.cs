@@ -34,6 +34,8 @@
 namespace Prateek.CodeGenerator.Editor
 {
     using Prateek.CodeGenerator.PrateekScriptBuilder;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.Core.Editor.EditorPrefs;
     using Prateek.Helpers;
     using UnityEditor;
     using UnityEngine;
@@ -53,8 +55,8 @@ namespace Prateek.CodeGenerator.Editor
         #region Fields
         private Vector2 scrollPosition = Vector2.zero;
         private Vector2 scrollPosition2 = Vector2.zero;
-        private PrateekScript.ScriptExport.Prefs.Bools prateekRunInTestMode;
-        private PrateekScript.ScriptExport.Prefs.Strings prateekUpdaterDir;
+        private Prefs.Bools prateekRunInTestMode;
+        private Prefs.Strings prateekUpdaterDir;
         private Prateek.CodeGenerator.CodeBuilder scriptTemplateUpdater = null;
 
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
@@ -196,10 +198,10 @@ namespace Prateek.CodeGenerator.Editor
         private void InitDatas()
         {
             if (prateekUpdaterDir == null)
-                prateekUpdaterDir = PrateekScript.ScriptExport.Prefs.Get(GetType().Name + ".prateekUpdaterDir", "/Scripts");
+                prateekUpdaterDir = Prefs.Get(GetType().Name + ".prateekUpdaterDir", "/Scripts");
 
             if (prateekRunInTestMode == null)
-                prateekRunInTestMode = PrateekScript.ScriptExport.Prefs.Get(GetType().Name + ".prateekRunInTestMode", false);
+                prateekRunInTestMode = Prefs.Get(GetType().Name + ".prateekRunInTestMode", false);
 
             if (scriptTemplateUpdater == null)
             {

@@ -35,6 +35,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
+    using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
     using UnityEditor;
 
@@ -43,7 +44,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
     {
         //---------------------------------------------------------------------
 #if UNITY_EDITOR
-        //todo: fix that [InitializeOnLoad]
+        [InitializeOnLoad]
         class TagLoader
         {
             static TagLoader()

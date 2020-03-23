@@ -36,6 +36,7 @@ namespace Prateek.CodeGenerator.Editor
     using System.IO;
     using System.Text.RegularExpressions;
     using Prateek.CodeGenerator.PrateekScriptBuilder;
+    using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
     using UnityEngine;
 

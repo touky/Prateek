@@ -35,12 +35,13 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
+    using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
     using UnityEditor;
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
-    //todo: fix that [InitializeOnLoad]
+    [InitializeOnLoad]
     class PrateekSyntaxNPPLoader : ScriptTemplates.ScriptTemplate
     {
         static PrateekSyntaxNPPLoader()
@@ -65,7 +66,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
     }
 
     //-------------------------------------------------------------------------
-    //todo: fix that [InitializeOnLoad]
+    [InitializeOnLoad]
     class PrateekCodegenSyntaxRuleLoader : PrateekScriptBuilder
     {
         static PrateekCodegenSyntaxRuleLoader()

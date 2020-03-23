@@ -35,6 +35,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
 
     //-------------------------------------------------------------------------

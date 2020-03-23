@@ -34,7 +34,7 @@
 namespace Prateek.Core.Editor.Attributes
 {
     using Prateek.Core.Code.Attributes;
-    using Prateek.Helpers.Editor;
+    using Prateek.Core.Editor.Helpers;
     using UnityEditor;
     using UnityEngine;
 

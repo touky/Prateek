@@ -38,10 +38,11 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
     using Prateek.Helpers;
     using UnityEditor;
     using Prateek.CodeGenerator;
+    using Prateek.Core.Code.Helpers;
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
-    //todo: fix that [InitializeOnLoad]
+    [InitializeOnLoad]
     class PrateekScriptLoader : Prateek.CodeGenerator.ScriptTemplates.ScriptTemplate
     {
         static PrateekScriptLoader()
@@ -276,7 +277,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                             }
 
                             //Apply names
-                            for (int r = 0; r < PrateekScript.ScriptExport.CSharp.min(nameCount, infoSrc.NameCount); r++)
+                            for (int r = 0; r < Core.Code.CSharp.min(nameCount, infoSrc.NameCount); r++)
                             {
                                 code = (Names[r] + infoSrc.names[r]).Apply(code);
                             }

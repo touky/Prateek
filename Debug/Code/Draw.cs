@@ -35,8 +35,9 @@
 namespace Prateek.Debug.Code
 {
     using System.Collections.Generic;
-    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
-    using Prateek.Extensions;
+    using Prateek.Core.Code;
+    using Prateek.Core.Code.Extensions;
+    using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
     using UnityEngine;
 
@@ -171,18 +172,18 @@ namespace Prateek.Debug.Code
             }
 
             //-----------------------------------------------------------------
-            public static DebugPlace AToB(Vector3 a, Vector3 b) { return AToB(Pivot.Center, a, b, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(0), Vector3.up); }
-            public static DebugPlace AToB(Vector3 a, Vector3 b, Vector3 up) { return AToB(Pivot.Center, a, b, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(0), Vector3.up); }
-            public static DebugPlace AToB(Vector3 a, Vector3 b, float size) { return AToB(Pivot.Center, a, b, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size), Vector3.up); }
-            public static DebugPlace AToB(Vector3 a, Vector3 b, float size, Vector3 up) { return AToB(Pivot.Center, a, b, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size), up); }
+            public static DebugPlace AToB(Vector3 a, Vector3 b) { return AToB(Pivot.Center, a, b, Core.Code.CSharp.vec3(0), Vector3.up); }
+            public static DebugPlace AToB(Vector3 a, Vector3 b, Vector3 up) { return AToB(Pivot.Center, a, b, Core.Code.CSharp.vec3(0), Vector3.up); }
+            public static DebugPlace AToB(Vector3 a, Vector3 b, float size) { return AToB(Pivot.Center, a, b, Core.Code.CSharp.vec3(size), Vector3.up); }
+            public static DebugPlace AToB(Vector3 a, Vector3 b, float size, Vector3 up) { return AToB(Pivot.Center, a, b, Core.Code.CSharp.vec3(size), up); }
             public static DebugPlace AToB(Vector3 a, Vector3 b, Vector2 size, Vector3 up) { return AToB(Pivot.Center, a, b, size.yyx() , up); }
             public static DebugPlace AToB(Vector3 a, Vector3 b, Vector3 size, Vector3 up) { return AToB(Pivot.Center, a, b, size, up); }
 
             //-----------------------------------------------------------------
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b) { return AToB(pivot, a, b, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(0), Vector3.up); }
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector3 up) { return AToB(pivot, a, b, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(0), Vector3.up); }
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, float size) { return AToB(pivot, a, b, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size), Vector3.up); }
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, float size, Vector3 up) { return AToB(pivot, a, b, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size), up); }
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b) { return AToB(pivot, a, b, Core.Code.CSharp.vec3(0), Vector3.up); }
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector3 up) { return AToB(pivot, a, b, Core.Code.CSharp.vec3(0), Vector3.up); }
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, float size) { return AToB(pivot, a, b, Core.Code.CSharp.vec3(size), Vector3.up); }
+            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, float size, Vector3 up) { return AToB(pivot, a, b, Core.Code.CSharp.vec3(size), up); }
             public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector2 size, Vector3 up) { return AToB(pivot, a, b, size.yyx(), up); }
             public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector3 size, Vector3 up)
             {
@@ -191,22 +192,22 @@ namespace Prateek.Debug.Code
                 return new DebugPlace(true)
                 {
                     position = a + dir * 0.5f + offset,
-                    rotation = Quaternion.LookRotation(Helpers.CSharp.normalize(dir), up),
-                    extents = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(0, 0, Helpers.CSharp.length(dir) * 0.5f) + size * 0.5f
+                    rotation = Quaternion.LookRotation(Core.Code.Helpers.CSharp.normalize(dir), up),
+                    extents = Core.Code.CSharp.vec3(0, 0, Core.Code.Helpers.CSharp.length(dir) * 0.5f) + size * 0.5f
                 };
             }
 
             //-----------------------------------------------------------------
-            public static DebugPlace Ray(Vector3 position, float distance) { return Ray(Pivot.Center, position, Vector3.forward, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(distance), Vector3.up); }
-            public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance) { return Ray(Pivot.Center, position, dir, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(distance), Vector3.up); }
-            public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(Pivot.Center, position, dir, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(distance), up); }
+            public static DebugPlace Ray(Vector3 position, float distance) { return Ray(Pivot.Center, position, Vector3.forward, Core.Code.CSharp.vec3(distance), Vector3.up); }
+            public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance) { return Ray(Pivot.Center, position, dir, Core.Code.CSharp.vec3(distance), Vector3.up); }
+            public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(Pivot.Center, position, dir, Core.Code.CSharp.vec3(distance), up); }
             public static DebugPlace Ray(Vector3 position, Vector3 dir, Vector2 size, Vector3 up) { return Ray(Pivot.Center, position, dir, size.yyx(), up); }
             public static DebugPlace Ray(Vector3 position, Vector3 dir, Vector3 size, Vector3 up) { return Ray(Pivot.Center, position, dir, size, up); }
 
             //-----------------------------------------------------------------
-            public static DebugPlace Ray(Pivot pivot, Vector3 position, float distance) { return Ray(pivot, position, Vector3.forward, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(distance), Vector3.up); }
-            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance) { return Ray(pivot, position, dir, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(distance), Vector3.up); }
-            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(pivot, position, dir, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(distance), up); }
+            public static DebugPlace Ray(Pivot pivot, Vector3 position, float distance) { return Ray(pivot, position, Vector3.forward, Core.Code.CSharp.vec3(distance), Vector3.up); }
+            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance) { return Ray(pivot, position, dir, Core.Code.CSharp.vec3(distance), Vector3.up); }
+            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(pivot, position, dir, Core.Code.CSharp.vec3(distance), up); }
             public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, Vector2 size, Vector3 up) { return Ray(pivot, position, dir, size.yyx(), up); }
             public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, Vector3 size, Vector3 up)
             {
@@ -220,24 +221,24 @@ namespace Prateek.Debug.Code
             }
 
             //-----------------------------------------------------------------
-            public static DebugPlace At(float size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size)); }
+            public static DebugPlace At(float size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, Core.Code.CSharp.vec3(size)); }
             public static DebugPlace At(Vector2 size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, size.yyx()); }
             public static DebugPlace At(Vector3 size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, size); }
-            public static DebugPlace At(Vector3 position, float size) { return At(Pivot.Center, position, Quaternion.identity, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size)); }
+            public static DebugPlace At(Vector3 position, float size) { return At(Pivot.Center, position, Quaternion.identity, Core.Code.CSharp.vec3(size)); }
             public static DebugPlace At(Vector3 position, Vector2 size) { return At(Pivot.Center, position, Quaternion.identity, size.yyx()); }
             public static DebugPlace At(Vector3 position, Vector3 size) { return At(Pivot.Center, position, Quaternion.identity, size); }
-            public static DebugPlace At(Vector3 position, Quaternion rotation, float size) { return At(Pivot.Center, position, rotation, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size)); }
+            public static DebugPlace At(Vector3 position, Quaternion rotation, float size) { return At(Pivot.Center, position, rotation, Core.Code.CSharp.vec3(size)); }
             public static DebugPlace At(Vector3 position, Quaternion rotation, Vector2 size) { return At(Pivot.Center, position, rotation, size.yyx()); }
             public static DebugPlace At(Vector3 position, Quaternion rotation, Vector3 size) { return At(Pivot.Center, position, rotation, size); }
 
             //-----------------------------------------------------------------
-            public static DebugPlace At(Pivot pivot, float size) { return At(pivot, Vector3.zero, Quaternion.identity, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size)); }
+            public static DebugPlace At(Pivot pivot, float size) { return At(pivot, Vector3.zero, Quaternion.identity, Core.Code.CSharp.vec3(size)); }
             public static DebugPlace At(Pivot pivot, Vector2 size) { return At(pivot, Vector3.zero, Quaternion.identity, size.yyx()); }
             public static DebugPlace At(Pivot pivot, Vector3 size) { return At(pivot, Vector3.zero, Quaternion.identity, size); }
-            public static DebugPlace At(Pivot pivot, Vector3 position, float size) { return At(pivot, position, Quaternion.identity, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size)); }
+            public static DebugPlace At(Pivot pivot, Vector3 position, float size) { return At(pivot, position, Quaternion.identity, Core.Code.CSharp.vec3(size)); }
             public static DebugPlace At(Pivot pivot, Vector3 position, Vector2 size) { return At(Pivot.Center, position, Quaternion.identity, size.yyx()); }
             public static DebugPlace At(Pivot pivot, Vector3 position, Vector3 size) { return At(pivot, position, Quaternion.identity, size); }
-            public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, float size) { return At(pivot, position, rotation, CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(size)); }
+            public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, float size) { return At(pivot, position, rotation, Core.Code.CSharp.vec3(size)); }
             public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, Vector2 size) { return At(pivot, position, rotation, size.yyx()); }
             public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, Vector3 size)
             {
@@ -311,7 +312,7 @@ namespace Prateek.Debug.Code
                 pos = Vector3.zero;
                 rot = Quaternion.identity;
                 extents = Vector3.one;
-                range = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(0, 1);
+                range = Core.Code.CSharp.vec2(0, 1);
             }
     }
 
@@ -464,7 +465,7 @@ namespace Prateek.Debug.Code
                 {
                     var other = prim;
                     other.type = PrimitiveType.Arc;
-                    other.range = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(0, 360);
+                    other.range = Core.Code.CSharp.vec2(0, 360);
                     Render(d, other);
                     break;
                 }
@@ -472,7 +473,7 @@ namespace Prateek.Debug.Code
                 {
                     var other = prim;
                     other.type = PrimitiveType.Arc;
-                    other.range = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(0, 360);
+                    other.range = Core.Code.CSharp.vec2(0, 360);
                     Render(d, other);
                     other.rot = Quaternion.LookRotation(wUp, wFw);
                     other.extents = prim.extents.xzy();
@@ -484,27 +485,27 @@ namespace Prateek.Debug.Code
                 }
                 case PrimitiveType.Capsule:
                 {
-                    var z = CodeGenerator.PrateekScript.ScriptExport.CSharp.min(CodeGenerator.PrateekScript.ScriptExport.CSharp.min(prim.extents.x, prim.extents.y), CodeGenerator.PrateekScript.ScriptExport.CSharp.abs(prim.extents.z));
-                    var h = CodeGenerator.PrateekScript.ScriptExport.CSharp.max(0, prim.extents.z - z);
+                    var z = Core.Code.CSharp.min(Core.Code.CSharp.min(prim.extents.x, prim.extents.y), Core.Code.CSharp.abs(prim.extents.z));
+                    var h = Core.Code.CSharp.max(0, prim.extents.z - z);
 
                     var other0 = prim;
                     other0.type = PrimitiveType.Arc;
-                    other0.range = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(0, 360);
+                    other0.range = Core.Code.CSharp.vec2(0, 360);
                     var other1 = other0;
-                    other0.pos -= other0.rot * CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(0, 0, h);
+                    other0.pos -= other0.rot * Core.Code.CSharp.vec3(0, 0, h);
                     Render(d, other0);
                     other0.rot = Quaternion.LookRotation(wUp, wFw);
                     other0.extents = prim.extents.xny(z);
-                    other0.range = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(180, 360);
+                    other0.range = Core.Code.CSharp.vec2(180, 360);
                     Render(d, other0);
                     other0.rot = Quaternion.LookRotation(wRt, wFw);
                     Render(d, other0);
 
-                    other1.pos += other1.rot * CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(0, 0, h);
+                    other1.pos += other1.rot * Core.Code.CSharp.vec3(0, 0, h);
                     Render(d, other1);
                     other1.rot = Quaternion.LookRotation(wUp, wFw);
                     other1.extents = prim.extents.xny(z);
-                    other1.range = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(0, 180);
+                    other1.range = Core.Code.CSharp.vec2(0, 180);
                     Render(d, other1);
                     other1.rot = Quaternion.LookRotation(wRt, wFw);
                     Render(d, other1);
@@ -533,19 +534,19 @@ namespace Prateek.Debug.Code
 
                     var other = prim;
                     other.type = PrimitiveType.Arc;
-                    other.range = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(0, 360);
+                    other.range = Core.Code.CSharp.vec2(0, 360);
                     other.pos = pos + wFw;
                     Render(d, other);
                     break;
                 }
                 case PrimitiveType.Pie:
                 {
-                    var pieDiff = CodeGenerator.PrateekScript.ScriptExport.CSharp.abs(prim.range.y - prim.range.x);
+                    var pieDiff = Core.Code.CSharp.abs(prim.range.y - prim.range.x);
                     if (pieDiff >= 360 && prim.extents.z == 0)
                     {
                         var other = prim;
                         other.type = PrimitiveType.Arc;
-                        other.range = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec2(0, 360);
+                        other.range = Core.Code.CSharp.vec2(0, 360);
                         Render(d, other);
                         break;
                     }
@@ -614,7 +615,7 @@ namespace Prateek.Debug.Code
 
                     var other = prim;
                     other.type = PrimitiveType.Sphere;
-                    other.extents = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(prim.extents.x);
+                    other.extents = Core.Code.CSharp.vec3(prim.extents.x);
                     other.pos = a;
                     Render(d, other);
                     other.pos = b;
@@ -628,7 +629,7 @@ namespace Prateek.Debug.Code
                     var pos1 = pos_ + wFw * (prim.extents.z - prim.extents.x);
                     var other = prim;
                     other.type = PrimitiveType.Sphere;
-                    other.extents = CodeGenerator.PrateekScript.ScriptExport.CSharp.vec3(prim.extents.x);
+                    other.extents = Core.Code.CSharp.vec3(prim.extents.x);
                     other.pos = pos0;
                     Render(d, other);
                     other.pos = pos1;

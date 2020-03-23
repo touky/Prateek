@@ -7,7 +7,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Prateek;
-using Prateek.Extensions;
-using static Prateek.Helpers.CSharp;
+using static Prateek.Core.Code.Helpers.CSharp;
 
 #endregion Prateek useful namspaces

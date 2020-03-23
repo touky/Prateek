@@ -33,6 +33,7 @@
 //Auto activate some of the prateek defines
 namespace Prateek.Debug.Code
 {
+    using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
     using UnityEngine;
 

@@ -34,12 +34,13 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
+    using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
     using UnityEditor;
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
-    //todo: fix that [InitializeOnLoad]
+    [InitializeOnLoad]
     class MixedFuncRuleLoader : PrateekScriptBuilder
     {
         static MixedFuncRuleLoader()

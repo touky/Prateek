@@ -36,7 +36,9 @@ namespace Prateek.Debug.Code
 {
     using System;
     using System.Collections.Generic;
-    using Prateek.Base.Registry;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.DaemonCore;
+    using Prateek.DaemonCore.Code;
     using Prateek.Helpers;
 
     //-------------------------------------------------------------------------

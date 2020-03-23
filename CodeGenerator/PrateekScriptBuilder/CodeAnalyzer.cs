@@ -35,8 +35,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
-    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
-    using Prateek.Extensions;
+    using Prateek.Core.Code;
+    using Prateek.Core.Code.Extensions;
 
     //-------------------------------------------------------------------------
     public partial class PrateekScriptBuilder

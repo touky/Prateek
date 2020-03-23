@@ -36,10 +36,13 @@ namespace Prateek.Debug.Editor
 {
     using System;
     using System.Collections.Generic;
-    using Prateek.Base.Registry;
-    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
+    using Prateek.Core.Code;
+    using Prateek.Core.Code.Extensions;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.Core.Editor.EditorPrefs;
+    using Prateek.DaemonCore;
+    using Prateek.DaemonCore.Code;
     using Prateek.Debug.Code;
-    using Prateek.Extensions;
     using Prateek.Helpers;
     using UnityEditor;
     using UnityEngine;
@@ -128,7 +131,7 @@ namespace Prateek.Debug.Editor
             public static Rect Square(ref Rect rect, int margin = 0, GUIStyle style = null)
             {
                 var box = rect;
-                box.width = CodeGenerator.PrateekScript.ScriptExport.CSharp.min(box.width, box.height);
+                box.width = Core.Code.CSharp.min(box.width, box.height);
                 box.width = box.height;
 
                 if (rect.width == box.width)
@@ -161,12 +164,12 @@ namespace Prateek.Debug.Editor
                 var texSize1 = new Rect(1, 1, 1, 1);
                 var texSize2 = new Rect(2, 2, 1, 1);
 
-                font = font != null ? font : Helpers.Fonts.Get("Consolas", GUI.skin.font.fontSize);
+                font = font != null ? font : Fonts.Get("Consolas", GUI.skin.font.fontSize);
 
                 if (background == null)
                 {
-                    background = Helpers.GUIStyles.Get(GUI.skin.box, Vector2.zero, border2, 8, new Color(1f, 1f, 1f));
-                    background.normal.background = Helpers.Textures.Make(texSize2, new Color(0.3f, 0.3f, 0.3f), Color.black);
+                    background = GUIStyles.Get(GUI.skin.box, Vector2.zero, border2, 8, new Color(1f, 1f, 1f));
+                    background.normal.background = Textures.Make(texSize2, new Color(0.3f, 0.3f, 0.3f), Color.black);
                 }
 
                 if (itemBG == null)
@@ -176,8 +179,8 @@ namespace Prateek.Debug.Editor
                     float color = 0.8f;
                     for (int i = 0; i < 5; i++)
                     {
-                        style = Helpers.GUIStyles.Get(String.Format("item_{0}_", i), GUI.skin.box, Vector2.zero, border1, 8, new Color(1f, 1f, 1f));
-                        style.normal.background = Helpers.Textures.Make(texSize1, new Color(color, color, color), Color.black);
+                        style = GUIStyles.Get(String.Format("item_{0}_", i), GUI.skin.box, Vector2.zero, border1, 8, new Color(1f, 1f, 1f));
+                        style.normal.background = Textures.Make(texSize1, new Color(color, color, color), Color.black);
                         itemBG.Add(style);
                         color -= 0.05f;
                     }
@@ -185,7 +188,7 @@ namespace Prateek.Debug.Editor
 
                 if (titleText == null)
                 {
-                    titleText = Helpers.GUIStyles.Get("text", GUI.skin.label, Vector2.zero, border1, 18, Color.black);
+                    titleText = GUIStyles.Get("text", GUI.skin.label, Vector2.zero, border1, 18, Color.black);
                     titleText.fontStyle = FontStyle.Bold;
                     titleText.alignment = TextAnchor.MiddleCenter;
                     titleText.padding = new RectOffset();
@@ -193,7 +196,7 @@ namespace Prateek.Debug.Editor
 
                 if (itemText == null)
                 {
-                    itemText = Helpers.GUIStyles.Get("text", GUI.skin.label, Vector2.zero, border1, 10, Color.black);
+                    itemText = GUIStyles.Get("text", GUI.skin.label, Vector2.zero, border1, 10, Color.black);
                     itemText.alignment = TextAnchor.MiddleLeft;
                     itemText.padding = new RectOffset();
                 }
@@ -202,11 +205,11 @@ namespace Prateek.Debug.Editor
                 {
                     actives = new GUIStyle[2];
 
-                    actives[0] = Helpers.GUIStyles.Get("active_off_", GUI.skin.box, Vector2.zero, border1, 8, new Color(1f, 1f, 1f));
-                    actives[0].normal.background = Helpers.Textures.Make(texSize1, new Color(0.1f, 0.3f, 0.1f), Color.grey);
+                    actives[0] = GUIStyles.Get("active_off_", GUI.skin.box, Vector2.zero, border1, 8, new Color(1f, 1f, 1f));
+                    actives[0].normal.background = Textures.Make(texSize1, new Color(0.1f, 0.3f, 0.1f), Color.grey);
 
-                    actives[1] = Helpers.GUIStyles.Get("active_on__", GUI.skin.box, Vector2.zero, border1, 8, new Color(1f, 1f, 1f));
-                    actives[1].normal.background = Helpers.Textures.Make(texSize1, new Color(0.1f, 1.0f, 0.1f), Color.black);
+                    actives[1] = GUIStyles.Get("active_on__", GUI.skin.box, Vector2.zero, border1, 8, new Color(1f, 1f, 1f));
+                    actives[1].normal.background = Textures.Make(texSize1, new Color(0.1f, 1.0f, 0.1f), Color.black);
                 }
 
                 //d.Init(new Color(194f / 255f, 0, 0).rrrn(1), 512, 512, new Rect(vec2(-10), vec2(20)), "test");
@@ -241,8 +244,8 @@ namespace Prateek.Debug.Editor
 
         private GUISetup styleSetup;
 
-        private CodeGenerator.PrateekScript.ScriptExport.Prefs.ListBools activeFlags;
-        private CodeGenerator.PrateekScript.ScriptExport.Prefs.ListBools expandedFlags;
+        private Prefs.ListBools activeFlags;
+        private Prefs.ListBools expandedFlags;
         #endregion Fields
 
         //---------------------------------------------------------------------
@@ -285,8 +288,8 @@ namespace Prateek.Debug.Editor
         {
             if (activeFlags == null)
             {
-                activeFlags = new CodeGenerator.PrateekScript.ScriptExport.Prefs.ListBools(GetType().Name + ".activeFlags", null);
-                expandedFlags = new CodeGenerator.PrateekScript.ScriptExport.Prefs.ListBools(GetType().Name + ".expandedFlags", null);
+                activeFlags = new Prefs.ListBools(GetType().Name + ".activeFlags", null);
+                expandedFlags = new Prefs.ListBools(GetType().Name + ".expandedFlags", null);
             }
         }
 

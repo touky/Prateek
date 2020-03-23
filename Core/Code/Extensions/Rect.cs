@@ -31,10 +31,9 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Extensions
+namespace Prateek.Core.Code.Extensions
 {
     using UnityEngine;
-    using static CodeGenerator.PrateekScript.ScriptExport.CSharp;
 
     //-------------------------------------------------------------------------
     public static partial class RectExt
@@ -49,8 +48,8 @@ namespace Prateek.Extensions
         //---------------------------------------------------------------------
         public static Rect Inflate(this Rect rect, Vector2 value)
         {
-            rect.position -= value * sign(rect.size);
-            rect.size += value * sign(rect.size) * 2;
+            rect.position -= value * CSharp.sign(rect.size);
+            rect.size += value * CSharp.sign(rect.size) * 2;
             return rect;
         }
 
@@ -61,7 +60,7 @@ namespace Prateek.Extensions
             {
                 rect.x += size;
             }
-            rect.width -= abs(size);
+            rect.width -= CSharp.abs(size);
             return rect;
         }
 
@@ -72,7 +71,7 @@ namespace Prateek.Extensions
             {
                 rect.y += size;
             }
-            rect.height -= abs(size);
+            rect.height -= CSharp.abs(size);
             return rect;
         }
 

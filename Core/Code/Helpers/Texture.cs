@@ -31,13 +31,10 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Helpers
+namespace Prateek.Core.Code.Helpers
 {
     using System.Collections.Generic;
-    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
     using UnityEngine;
-    using static CodeGenerator.PrateekScript.ScriptExport.CSharp;
-    using static Prateek.Helpers.CSharp;
 
     //-------------------------------------------------------------------------
     public class Textures : SharedStorage
@@ -146,7 +143,7 @@ namespace Prateek.Helpers
                     if (d < fallout)
                     {
                         if (fallout > 0)
-                            return Color.Lerp(color, color.rgbn(0), saturate(d / fallout));
+                            return Color.Lerp(color, color.rgbn(0), Code.CSharp.saturate(d / fallout));
                         return color;
                     }
                     return Color.clear;
@@ -155,7 +152,7 @@ namespace Prateek.Helpers
                 //-------------------------------------------------------------
                 protected Vector3 Elongate(Vector3 point)
                 {
-                    return point - clamp(point, -elongate, elongate);
+                    return point - Code.CSharp.clamp(point, -elongate, elongate);
                 }
 
                 //-------------------------------------------------------------
@@ -177,7 +174,7 @@ namespace Prateek.Helpers
 
                     if (skin > 0)
                     {
-                        d = abs(d) - skin;
+                        d = Code.CSharp.abs(d) - skin;
                     }
 
                     return d;
@@ -207,7 +204,7 @@ namespace Prateek.Helpers
                 //-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
-                    return length(point) - size;
+                    return CSharp.length(point) - size;
                 }
             }
 
@@ -228,9 +225,9 @@ namespace Prateek.Helpers
                 //-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
-                    var d = abs(point) - size;
-                    return length(max(d, 0))
-                           + min(max(d.x, max(d.y, d.z)), 0); // remove this line for an only partially signed sdf 
+                    var d = Code.CSharp.abs(point) - size;
+                    return CSharp.length(Code.CSharp.max(d, 0))
+                           + Code.CSharp.min(Code.CSharp.max(d.x, Code.CSharp.max(d.y, d.z)), 0); // remove this line for an only partially signed sdf 
                 }
             }
 
@@ -251,8 +248,8 @@ namespace Prateek.Helpers
                 //-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
-                    var q = vec2(length(point.xz()) - size.x, point.y);
-                    return length(q) - size.y;
+                    var q = Code.CSharp.vec2(CSharp.length(point.xz()) - size.x, point.y);
+                    return CSharp.length(q) - size.y;
                 }
             }
 
@@ -273,14 +270,14 @@ namespace Prateek.Helpers
                 //-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
-                    var k = vec3(-0.8660254f, 0.5f, 0.57735f);
+                    var k = Code.CSharp.vec3(-0.8660254f, 0.5f, 0.57735f);
                     point = point.xzy();
-                    point = abs(point);
-                    point = vec3(point.xy() - 2.0f * min(dot(VectorExt.xy((Vector3) k), point.xy()), 0.0f) * VectorExt.xy((Vector3) k), point.z);
-                    var d = vec2(
-                       length(point.xy() - vec2(clamp(point.x, -k.z * size.x, k.z * size.x), size.x)) * sign(point.y - size.x),
+                    point = Code.CSharp.abs(point);
+                    point = Code.CSharp.vec3(point.xy() - 2.0f * Code.CSharp.min(CSharp.dot(VectorExt.xy((Vector3) k), point.xy()), 0.0f) * VectorExt.xy((Vector3) k), point.z);
+                    var d = Code.CSharp.vec2(
+                       CSharp.length(point.xy() - Code.CSharp.vec2(Code.CSharp.clamp(point.x, -k.z * size.x, k.z * size.x), size.x)) * Code.CSharp.sign(point.y - size.x),
                        point.z - size.y);
-                    return min(max(d.x, d.y), 0.0f) + length(max(d, 0.0f));
+                    return Code.CSharp.min(Code.CSharp.max(d.x, d.y), 0.0f) + CSharp.length(Code.CSharp.max(d, 0.0f));
                 }
             }
 
@@ -303,25 +300,25 @@ namespace Prateek.Helpers
                 }
 
                 //-------------------------------------------------------------
-                private float dot2(Vector3 v) { return dot(v, v); }
+                private float dot2(Vector3 v) { return CSharp.dot(v, v); }
                 public override float Distance(Vector3 point)
                 {
                     var ba = b - a; var pa = point - a;
                     var cb = c - b; var pb = point - b;
                     var ac = a - c; var pc = point - c;
-                    var nor = cross(ba, ac);
+                    var nor = CSharp.cross(ba, ac);
 
-                    return sqrt(
-                    (sign(dot(cross(ba, nor), pa)) +
-                     sign(dot(cross(cb, nor), pb)) +
-                     sign(dot(cross(ac, nor), pc)) < 2.0)
+                    return Code.CSharp.sqrt(
+                    (Code.CSharp.sign(CSharp.dot(CSharp.cross(ba, nor), pa)) +
+                     Code.CSharp.sign(CSharp.dot(CSharp.cross(cb, nor), pb)) +
+                     Code.CSharp.sign(CSharp.dot(CSharp.cross(ac, nor), pc)) < 2.0)
                      ?
-                     min(min(
-                     dot2(ba * clamp(dot(ba, pa) / dot2(ba), 0.0f, 1.0f) - pa),
-                     dot2(cb * clamp(dot(cb, pb) / dot2(cb), 0.0f, 1.0f) - pb)),
-                     dot2(ac * clamp(dot(ac, pc) / dot2(ac), 0.0f, 1.0f) - pc))
+                     Code.CSharp.min(Code.CSharp.min(
+                     dot2(ba * Code.CSharp.clamp(CSharp.dot(ba, pa) / dot2(ba), 0.0f, 1.0f) - pa),
+                     dot2(cb * Code.CSharp.clamp(CSharp.dot(cb, pb) / dot2(cb), 0.0f, 1.0f) - pb)),
+                     dot2(ac * Code.CSharp.clamp(CSharp.dot(ac, pc) / dot2(ac), 0.0f, 1.0f) - pc))
                      :
-                     dot(nor, pa) * dot(nor, pa) / dot2(nor)) - 0.001f;
+                     CSharp.dot(nor, pa) * CSharp.dot(nor, pa) / dot2(nor)) - 0.001f;
                 }
             }
 
@@ -358,21 +355,21 @@ namespace Prateek.Helpers
             public class Union : DualBase
             {
                 public Union(Base a, Base b) : base(a, b) { }
-                protected override float Apply(float d1, float d2) { return min(d1, d2); }
+                protected override float Apply(float d1, float d2) { return Code.CSharp.min(d1, d2); }
             }
 
             //-----------------------------------------------------------------
             public class Substraction : DualBase
             {
                 public Substraction(Base a, Base b) : base(a, b) { }
-                protected override float Apply(float d1, float d2) { return max(d1, -d2); }
+                protected override float Apply(float d1, float d2) { return Code.CSharp.max(d1, -d2); }
             }
 
             //-----------------------------------------------------------------
             public class Intersection : DualBase
             {
                 public Intersection(Base a, Base b) : base(a, b) { }
-                protected override float Apply(float d1, float d2) { return max(d1, d2); }
+                protected override float Apply(float d1, float d2) { return Code.CSharp.max(d1, d2); }
             }
 
             //-----------------------------------------------------------------
@@ -382,8 +379,8 @@ namespace Prateek.Helpers
                 public SmoothUnion(Base a, Base b, float smooth) : base(a, b) { this.smooth = smooth; }
                 protected override float Apply(float d1, float d2)
                 {
-                    float h = clamp(0.5f + 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
-                    return mix(d2, d1, h) - smooth * h * (1.0f - h);
+                    float h = Code.CSharp.clamp(0.5f + 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
+                    return CSharp.mix(d2, d1, h) - smooth * h * (1.0f - h);
                 }
             }
 
@@ -394,8 +391,8 @@ namespace Prateek.Helpers
                 public SmoothSubstraction(Base a, Base b, float smooth) : base(a, b) { this.smooth = smooth; }
                 protected override float Apply(float d1, float d2)
                 {
-                    float h = clamp(0.5f - 0.5f * (d2 + d1) / smooth, 0.0f, 1.0f);
-                    return mix(d2, -d1, h) + smooth * h * (1.0f - h);
+                    float h = Code.CSharp.clamp(0.5f - 0.5f * (d2 + d1) / smooth, 0.0f, 1.0f);
+                    return CSharp.mix(d2, -d1, h) + smooth * h * (1.0f - h);
                 }
             }
 
@@ -406,8 +403,8 @@ namespace Prateek.Helpers
                 public SmoothIntersection(Base a, Base b, float smooth) : base(a, b) { this.smooth = smooth; }
                 protected override float Apply(float d1, float d2)
                 {
-                    float h = clamp(0.5f - 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
-                    return mix(d2, d1, h) + smooth * h * (1.0f - h);
+                    float h = Code.CSharp.clamp(0.5f - 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
+                    return CSharp.mix(d2, d1, h) + smooth * h * (1.0f - h);
                 }
             }
 
@@ -456,13 +453,13 @@ namespace Prateek.Helpers
                 
                 for (int c = 0; c < colors.Length; c++)
                 {
-                    var point = rect.position + mul(rect.size, div(CSharp.Float((Vector2Int) vec2i(c % texture.width, c / texture.height)), vec2(texture.width, texture.height)));
+                    var point = rect.position + Code.CSharp.mul(rect.size, Code.CSharp.div(CSharp.Float((Vector2Int) Code.CSharp.vec2i(c % texture.width, c / texture.height)), Code.CSharp.vec2(texture.width, texture.height)));
                     var result = background;
                     for (int o = 0; o < operations.Count; o++)
                     {
                         var operation = operations[o];
                         var color = operation.GetColor(point.xny());
-                        var a = max(result.a, color.a);
+                        var a = Code.CSharp.max(result.a, color.a);
                         result = Color.Lerp(result.rgbn(a), color.rgbn(a), color.a);
                     }
                     colors[c] = result;

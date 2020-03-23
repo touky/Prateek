@@ -33,6 +33,7 @@
 //-----------------------------------------------------------------------------
 namespace Prateek.Debug.Editor
 {
+    using Prateek.Core.Code.Helpers;
     using UnityEditor;
     using UnityEngine;
 
@@ -591,11 +592,11 @@ namespace Prateek.Debug.Editor
         {
             //-----------------------------------------------------------------
             #region Properties
-            public Helpers.Mask128 data
+            public Mask128 data
             {
                 get
                 {
-                    return new Helpers.Mask128(this[0], this[1]);
+                    return new Mask128(this[0], this[1]);
                 }
                 set
                 {
@@ -609,8 +610,8 @@ namespace Prateek.Debug.Editor
 
             //-----------------------------------------------------------------
             #region ctor
-            public static implicit operator Mask128s(Helpers.Mask128 value) { return new Mask128s(value); }
-            public Mask128s(Helpers.Mask128 value) : base(value.Get(0), value.Get(1)) { }
+            public static implicit operator Mask128s(Mask128 value) { return new Mask128s(value); }
+            public Mask128s(Mask128 value) : base(value.Get(0), value.Get(1)) { }
             #endregion ctor
         }
 
@@ -619,11 +620,11 @@ namespace Prateek.Debug.Editor
         {
             //-----------------------------------------------------------------
             #region Properties
-            public Helpers.Mask128 data
+            public Mask128 data
             {
                 get
                 {
-                    return new Helpers.Mask128(this[0], this[1], this[2], this[3]);
+                    return new Mask128(this[0], this[1], this[2], this[3]);
                 }
                 set
                 {
@@ -637,8 +638,8 @@ namespace Prateek.Debug.Editor
 
             //-----------------------------------------------------------------
             #region ctor
-            public static implicit operator Mask256s(Helpers.Mask256 value) { return new Mask256s(value); }
-            public Mask256s(Helpers.Mask256 value) : base(value.Get(0), value.Get(1), value.Get(2), value.Get(3)) { }
+            public static implicit operator Mask256s(Mask256 value) { return new Mask256s(value); }
+            public Mask256s(Mask256 value) : base(value.Get(0), value.Get(1), value.Get(2), value.Get(3)) { }
             #endregion ctor
         }
 
@@ -647,11 +648,11 @@ namespace Prateek.Debug.Editor
         {
             //-----------------------------------------------------------------
             #region Properties
-            public Helpers.Mask512 data
+            public Mask512 data
             {
                 get
                 {
-                    return new Helpers.Mask512(this[0], this[1], this[2], this[3],
+                    return new Mask512(this[0], this[1], this[2], this[3],
                                                this[4], this[5], this[6], this[7]);
                 }
                 set
@@ -666,8 +667,8 @@ namespace Prateek.Debug.Editor
 
             //-----------------------------------------------------------------
             #region ctor
-            public static implicit operator Mask512s(Helpers.Mask512 value) { return new Mask512s(value); }
-            public Mask512s(Helpers.Mask512 value) : base(value.Get(0), value.Get(1), value.Get(2), value.Get(3),
+            public static implicit operator Mask512s(Mask512 value) { return new Mask512s(value); }
+            public Mask512s(Mask512 value) : base(value.Get(0), value.Get(1), value.Get(2), value.Get(3),
                                                           value.Get(4), value.Get(5), value.Get(6), value.Get(7))
             { }
             #endregion ctor

@@ -26,7 +26,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //Auto activate some of the prateek defines
-namespace Prateek.CodeGenerator.PrateekScript.ScriptExport
+namespace Prateek.Core.Code
 {
     using UnityEngine;
 

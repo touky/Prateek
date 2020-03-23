@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Helpers.Files
+namespace Prateek.Core.Code.Helpers.Files
 {
     using System;
     using System.IO;

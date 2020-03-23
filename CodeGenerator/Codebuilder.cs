@@ -37,14 +37,19 @@ namespace Prateek.CodeGenerator
     using System.Collections.Generic;
     using System.IO;
     using Prateek.CodeGenerator.ScriptTemplates;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.Core.Code.Helpers.Files;
     using Prateek.Helpers;
-    using Prateek.Helpers.Files;
     using UnityEditor;
     using UnityEngine;
 
     //-------------------------------------------------------------------------
     public partial class CodeBuilder
     {
+        private const string TEST_PREFIX = "TEST_";
+        private const string TEST_EXTENSION = "txt";
+        private const string GENERATED_EXTENSION = "g";
+
         //---------------------------------------------------------------------
         #region Declarations
         public struct BuildResult
@@ -618,12 +623,14 @@ namespace Prateek.CodeGenerator
             path = dir;
             if (runInTestMode)
             {
-                path += "TEST_";
+                path += TEST_PREFIX;
             }
-            path += dst.name.Extension(dst.extension);
+
+            path += dst.name.Extension(GENERATED_EXTENSION, dst.extension);
+
             if (runInTestMode)
             {
-                path = path.Extension("txt");
+                path = path.Extension(TEST_EXTENSION);
             }
 
             File.WriteAllText(path, dst.content.ApplyCRLF());

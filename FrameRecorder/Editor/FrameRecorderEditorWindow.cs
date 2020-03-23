@@ -34,9 +34,12 @@
 namespace Prateek.FrameRecorder.Editor
 {
     using System;
-    using Prateek.Base.Registry;
-    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
-    using Prateek.Editor;
+    using Prateek.Core.Code;
+    using Prateek.Core.Editor.EditorPrefs;
+    using Prateek.Core.Editor.GUI;
+    using Prateek.DaemonCore;
+    using Prateek.DaemonCore.Code;
+    using Prateek.FrameRecorder.Code;
     using UnityEditor;
     using UnityEngine;
 
@@ -53,7 +56,7 @@ namespace Prateek.FrameRecorder.Editor
 
         //---------------------------------------------------------------------
         #region Fields
-        private CodeGenerator.PrateekScript.ScriptExport.Prefs.Ints maxFrameRecorded;
+        private Prefs.Ints maxFrameRecorded;
         #endregion Fields
 
         //---------------------------------------------------------------------
@@ -100,7 +103,7 @@ namespace Prateek.FrameRecorder.Editor
         {
             if (maxFrameRecorded == null)
             {
-                maxFrameRecorded = new CodeGenerator.PrateekScript.ScriptExport.Prefs.Ints("FrameRecorderEditorWindow.maxFrameRecorded", 50);
+                maxFrameRecorded = new Prefs.Ints("FrameRecorderEditorWindow.maxFrameRecorded", 50);
             }
         }
 

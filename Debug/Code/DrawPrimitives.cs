@@ -34,7 +34,7 @@
 #if PRATEEK_DEBUG
 namespace Prateek.Debug.Code
 {
-    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
+    using Prateek.Core.Code;
     using UnityEngine;
 
     //-------------------------------------------------------------------------

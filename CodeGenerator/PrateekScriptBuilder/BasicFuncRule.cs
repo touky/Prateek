@@ -34,12 +34,12 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
-    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
+    using Prateek.Core.Code;
     using UnityEditor;
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
-    //todo: fix that [InitializeOnLoad]
+    [InitializeOnLoad]
     class BasicFuncRuleLoader : PrateekScriptBuilder
     {
         static BasicFuncRuleLoader()

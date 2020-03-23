@@ -34,7 +34,7 @@
 namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using System.Collections.Generic;
-    using Prateek.Helpers.Files;
+    using Prateek.Core.Code.Helpers.Files;
     using UnityEngine;
 
     //-------------------------------------------------------------------------

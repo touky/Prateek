@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Helpers
+namespace Prateek.Core.Code.Helpers
 {
     using System;
     using System.Collections.Generic;
@@ -278,9 +278,14 @@ namespace Prateek.Helpers
         }
 
         //---------------------------------------------------------------------
-        public static string Extension(this string left, string right)
+        public static string Extension(this string left, string extension, string extension2)
         {
-            return left + fileExtension[0] + right;
+            return left.Extension(extension).Extension(extension2);
+        }
+
+        public static string Extension(this string left, string extension)
+        {
+            return left.Extension() + extension;
         }
 
         public static string Extension(this string left)

@@ -1,0 +1,19 @@
+{
+    "name": "Prateek.Debug.Editor",
+    "references": [
+        "GUID:4b4491f2f353c0b44a038afb3e9dbb85",
+        "GUID:5b8899b53114820428445393f83bcd9a",
+        "GUID:fbe0fcf44802f7b42bb710774736de39",
+        "GUID:6afbddc146ca8c44dbf71f6adf7a5263",
+        "GUID:2d9fc8ba24215884bbf9c068048ea17e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

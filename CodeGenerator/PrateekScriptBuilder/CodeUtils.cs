@@ -34,6 +34,7 @@
 //-----------------------------------------------------------------------------
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
+    using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
 
     //-------------------------------------------------------------------------

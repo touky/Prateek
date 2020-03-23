@@ -35,8 +35,9 @@
 namespace Prateek.Debug.Code
 {
     using System.Collections.Generic;
-    using Prateek.Base.Registry;
-    using Prateek.CodeGenerator.PrateekScript.ScriptExport;
+    using Prateek.Core.Code;
+    using Prateek.DaemonCore;
+    using Prateek.DaemonCore.Code;
     using UnityEditor;
     using UnityEngine;
 

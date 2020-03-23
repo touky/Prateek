@@ -38,7 +38,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
-    //todo: fix that [InitializeOnLoad]
+    [InitializeOnLoad]
     class MixedCTorRuleLoader : PrateekScriptBuilder
     {
         static MixedCTorRuleLoader()
