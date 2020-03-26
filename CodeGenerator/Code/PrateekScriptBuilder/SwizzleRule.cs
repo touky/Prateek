@@ -38,7 +38,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
-    [InitializeOnLoad]
+    //todo [InitializeOnLoad]
     class SwizzleRuleLoader : PrateekScriptBuilder
     {
         static SwizzleRuleLoader()

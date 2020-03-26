@@ -41,7 +41,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
-    [InitializeOnLoad]
+    //todo [InitializeOnLoad]
     class PrateekSyntaxNPPLoader : ScriptTemplates.ScriptTemplate
     {
         static PrateekSyntaxNPPLoader()
@@ -66,7 +66,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
     }
 
     //-------------------------------------------------------------------------
-    [InitializeOnLoad]
+    //todo [InitializeOnLoad]
     class PrateekCodegenSyntaxRuleLoader : PrateekScriptBuilder
     {
         static PrateekCodegenSyntaxRuleLoader()

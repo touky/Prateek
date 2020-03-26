@@ -42,7 +42,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
-    [InitializeOnLoad]
+    //todo [InitializeOnLoad]
     class PrateekScriptLoader : Prateek.CodeGenerator.ScriptTemplates.ScriptTemplate
     {
         static PrateekScriptLoader()

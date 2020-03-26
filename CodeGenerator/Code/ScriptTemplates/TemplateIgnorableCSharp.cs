@@ -39,7 +39,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
     //todo: fix that
-    [InitializeOnLoad]
+    //todo [InitializeOnLoad]
     class CSharpIgnorableLoader : CodeGenerator.ScriptTemplates.ScriptTemplate
     {
         static CSharpIgnorableLoader()

@@ -40,7 +40,7 @@ namespace Prateek.DaemonCore.Code
     using UnityEngine;
 
     //-------------------------------------------------------------------------
-    [InitializeOnLoad]
+    //todo [InitializeOnLoad]
     class RegistryLoader
     {
         static RegistryLoader()
