@@ -33,32 +33,16 @@
 //-----------------------------------------------------------------------------
 namespace Prateek.DaemonCore.Code
 {
-    using System;
-    using Prateek.Core.Code.Behaviours;
-    using UnityEngine;
-
     //-------------------------------------------------------------------------
-    [Serializable]
-    public abstract class RegistrableBehaviour : NamedBehaviour
+    internal sealed class DaemonRegistryTickerFrameEnd : DaemonRegistryTicker
     {
-        #region Unity Methods
         //---------------------------------------------------------------------
-        protected virtual void OnEnable()
+        #region Properties
+        internal override TickType TickerOffset
         {
-            if (Application.isPlaying)
-            {
-                //todo DaemonRegistry.Instance.Register(this);
-            }
-        }
-
-        //---------------------------------------------------------------------
-        protected virtual void OnDisable()
-        {
-            if (Application.isPlaying)
-            {
-                //todo DaemonRegistry.Instance.Unregister(this);
-            }
+            get { return TickType.OFFSET_END; }
         }
         #endregion
     }
 }
+

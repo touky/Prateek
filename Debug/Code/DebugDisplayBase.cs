@@ -49,16 +49,16 @@ namespace Prateek.Debug.Code
         public override void OnCreate() { }
 
         //---------------------------------------------------------------------
-        public override void OnRegister() { Registry.Instance.Register(typeof(DebugDisplayManager), this); }
-        public override void OnUnregister() { Registry.Instance.Unregister(typeof(DebugDisplayManager)); }
+        public override void OnRegister() { } //todo DaemonRegistry.Instance.Register(typeof(DebugDisplayManager), this); }
+        public override void OnUnregister() { } //todo DaemonRegistry.Instance.Unregister(typeof(DebugDisplayManager)); }
 
         //-- Object Lifetime Messages------------------------------------------
         public override void OnInitialize() { }
         public override void OnStart() { }
-        public override void OnUpdate(Registry.TickEvent tickEvent, float seconds) { }
-        public override void OnUpdateUnscaled(Registry.TickEvent tickEvent, float seconds) { }
-        public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds) { }
-        public override void OnFixedUpdate(Registry.TickEvent tickEvent, float seconds) { }
+        public override void OnUpdate(TickType tickType, float seconds) { }
+        public override void OnUpdateUnscaled(TickType tickType, float seconds) { }
+        public override void OnLateUpdate(TickType tickType, float seconds) { }
+        public override void OnFixedUpdate(TickType tickType, float seconds) { }
         public override void OnDispose() { }
 
         //-- Application Messages----------------------------------------------
@@ -141,14 +141,14 @@ namespace Prateek.Debug.Code
         {
             base.OnRegister();
 
-            var go = new GameObject("DebugDisplayLine");
-            go.transform.SetParent(Registry.Instance.TickerObject.transform);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localRotation = Quaternion.identity;
-            lineDisplay = go.AddComponent<DebugLineDisplayer>();
+            //todo var go = new GameObject("DebugDisplayLine");
+            //todo go.transform.SetParent(DaemonRegistry.Instance.TickerObject.transform);
+            //todo go.transform.localPosition = Vector3.zero;
+            //todo go.transform.localRotation = Quaternion.identity;
+            //todo lineDisplay = go.AddComponent<DebugLineDisplayer>();
 
-            Registry.Instance.Register(typeof(DebugDisplayManager), this);
-            FrameRecorder.Register(this);
+            //todo DaemonRegistry.Instance.Register(typeof(DebugDisplayManager), this);
+            //todo FrameRecorder.Register(this);
         }
 
         //---------------------------------------------------------------------
@@ -160,9 +160,9 @@ namespace Prateek.Debug.Code
         }
 
         //---------------------------------------------------------------------
-        public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds)
+        public override void OnLateUpdate(TickType tickType, float seconds)
         {
-            if (timedPrimitives == null || tickEvent != Registry.TickEvent.FrameBeginning)
+            //if (timedPrimitives == null || tickType != TickType.BeginFrame)
                 return;
 
             for (int p = 0; p < timedPrimitives.Count; p++)
@@ -186,7 +186,7 @@ namespace Prateek.Debug.Code
             Destroy(lineDisplay.gameObject);
 
             FrameRecorder.Unregister(this);
-            Registry.Instance.Unregister(typeof(DebugDisplayManager));
+            //todo DaemonRegistry.Instance.Unregister(typeof(DebugDisplayManager));
 
             base.OnUnregister();
         }
@@ -234,7 +234,7 @@ namespace Prateek.Debug.Code
         #region Recording datas
         public static void Add(DebugDraw.PrimitiveSetup primitive)
         {
-            var instance = Registry.GetManager<DebugDisplayManager>();
+            var instance = DaemonRegistry.GetManager<DebugDisplayManager>();
             if (instance == null)
                 return;
 

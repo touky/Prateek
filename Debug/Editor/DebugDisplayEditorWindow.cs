@@ -412,7 +412,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            var manager = !EditorApplication.isPlaying ? null : Registry.GetManager<DebugDisplayManager>();
+            var manager = !EditorApplication.isPlaying ? null : DaemonRegistry.GetManager<DebugDisplayManager>();
             if (manager != null)
             {
                 if (maskHasChanged)

@@ -210,7 +210,7 @@ namespace Prateek.Debug.Code
             var type = flagDatas.maskType;
             if (type == null || !type.IsEnum)
             {
-                Registry.Instance.Unregister(GetType());
+                //todo DaemonRegistry.Instance.Unregister(GetType());
                 return;
             }
 

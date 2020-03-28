@@ -71,7 +71,7 @@ namespace Prateek.DaemonCore.Code
                     continue; //TODO: ERROR OUT
                 }
 
-                Registry.Instance.Register(instance.GetType(), instance);
+                //DaemonRegistry.Instance.Register(instance.GetType(), instance);
             }
 
             //Create listed classes
@@ -84,7 +84,7 @@ namespace Prateek.DaemonCore.Code
         //---------------------------------------------------------------------
         public static void TryCreating(Type type, bool force_null = false)
         {
-            var builder = Registry.GetBuilder(type);
+            var builder = DaemonRegistry.GetBuilder(type);
             if (builder == null)
             {
                 var method_info = type.GetMethod(GlobalManager.CREATE_METHOD, BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
@@ -96,7 +96,7 @@ namespace Prateek.DaemonCore.Code
 
             if (builder != null)
             {
-                Registry.Instance.Register(type, builder);
+                //DaemonRegistry.Instance.Register(type, builder);
 
                 if (!force_null
                  && builder.realType != null
@@ -123,7 +123,7 @@ namespace Prateek.DaemonCore.Code
         {
             var instance = CreateInstance(type) as GlobalManager;
             instance.name = type.Name + "(Instance)";
-            Registry.Instance.Register(type, instance);
+            //DaemonRegistry.Instance.Register(type, instance);
         }
         #endregion
 

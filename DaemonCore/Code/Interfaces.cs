@@ -65,26 +65,26 @@ namespace Prateek.DaemonCore.Code
         ///     OnUpdate is called every frame.
         /// </summary>
         /// <param name="deltaTime"></param>
-        void OnUpdate(Registry.TickEvent tickEvent, float seconds);
+        void OnUpdate(TickType tickType, float seconds);
 
         /// <summary>
         ///     OnTimescaleIndependantUpdate is called every frame, after every OnUpdate has been called but before any
         ///     OnLateUpdate has been called. It's deltaTime is timscale independant.
         /// </summary>
         /// <param name="deltaTime"></param>
-        void OnUpdateUnscaled(Registry.TickEvent tickEvent, float seconds);
+        void OnUpdateUnscaled(TickType tickType, float seconds);
 
         /// <summary>
         ///     OnLateUpdate is called every frame after the OnUpdate for every object has been called.
         /// </summary>
         /// <param name="deltaTime"></param>
-        void OnLateUpdate(Registry.TickEvent tickEvent, float seconds);
+        void OnLateUpdate(TickType tickType, float seconds);
 
         /// <summary>
         ///     OnFixedUpdate is called every fixed physics engine update.
         /// </summary>
         /// <param name="deltaTime"></param>
-        void OnFixedUpdate(Registry.TickEvent tickEvent, float seconds);
+        void OnFixedUpdate(TickType tickType, float seconds);
 
         /// <summary>
         ///     OnDispose is called just before the object is destroyed.

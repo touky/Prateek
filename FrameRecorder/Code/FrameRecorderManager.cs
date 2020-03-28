@@ -47,16 +47,16 @@ namespace Prateek.FrameRecorder.Code
         public override void OnCreate() { }
 
         //---------------------------------------------------------------------
-        public override void OnRegister() { Registry.Instance.Register(typeof(FrameRecorderManager), this); }
-        public override void OnUnregister() { Registry.Instance.Unregister(typeof(FrameRecorderManager)); }
+        public override void OnRegister() { } //todo DaemonRegistry.Instance.Register(typeof(FrameRecorderManager), this); }
+        public override void OnUnregister() { } //todo DaemonRegistry.Instance.Unregister(typeof(FrameRecorderManager)); }
 
         //-- Object Lifetime Messages------------------------------------------
         public override void OnInitialize() { }
         public override void OnStart() { }
-        public override void OnUpdate(Registry.TickEvent tickEvent, float seconds) { }
-        public override void OnUpdateUnscaled(Registry.TickEvent tickEvent, float seconds) { }
-        public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds) { }
-        public override void OnFixedUpdate(Registry.TickEvent tickEvent, float seconds) { }
+        public override void OnUpdate(TickType tickType, float seconds) { }
+        public override void OnUpdateUnscaled(TickType tickType, float seconds) { }
+        public override void OnLateUpdate(TickType tickType, float seconds) { }
+        public override void OnFixedUpdate(TickType tickType, float seconds) { }
         public override void OnDispose() { }
 
         //-- Application Messages----------------------------------------------
@@ -122,7 +122,7 @@ namespace Prateek.FrameRecorder.Code
 
         //---------------------------------------------------------------------
         #region Properties
-        public override Registry.TickEvent TickEvent { get { return Registry.TickEvent.FrameBeginning | Registry.TickEvent.FrameEnding; } }
+        public override TickType TickType { get { return TickType.ALL; } } //todo TickType.BeginFrame | TickType.EndFrame; } }
         public StateType State { get { return state; } set { state = value; } }
         public bool PlaybackActive { get { return state == StateType.Playback; } }
         public int FrameCount { get { return history.Count; } }
@@ -178,9 +178,9 @@ namespace Prateek.FrameRecorder.Code
         }
 
         //---------------------------------------------------------------------
-        public override void OnUpdate(Registry.TickEvent tickEvent, float seconds)
+        public override void OnUpdate(TickType tickType, float seconds)
         {
-            if (tickEvent != Registry.TickEvent.FrameBeginning)
+            //if (tickType != TickType.BeginFrame)
                 return;
 
             BeginFrame();
@@ -190,15 +190,15 @@ namespace Prateek.FrameRecorder.Code
 #if UNITY_EDITOR
         public void OnFakeUpdate()
         {
-            OnUpdate(Registry.TickEvent.FrameBeginning, 0);
-            OnLateUpdate(Registry.TickEvent.FrameEnding, 0);
+            //OnUpdate(TickType.BeginFrame, 0);
+            //OnLateUpdate(TickType.EndFrame, 0);
         }
 #endif //UNITY_EDITOR
 
         //---------------------------------------------------------------------
-        public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds)
+        public override void OnLateUpdate(TickType tickType, float seconds)
         {
-            if (tickEvent != Registry.TickEvent.FrameEnding)
+            //if (tickType != TickType.EndFrame)
                 return;
 
             var lastFrame = EndFrame();
@@ -328,14 +328,14 @@ namespace Prateek.FrameRecorder.Code
         {
             get
             {
-                var instance = Registry.GetManager<FrameRecorderManager>();
+                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
                 if (instance == null)
                     return FrameRecorderManager.StateType.Inactive;
                 return instance.State;
             }
             set
             {
-                var instance = Registry.GetManager<FrameRecorderManager>();
+                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
                 if (instance == null)
                     return;
                 instance.State = value;
@@ -347,7 +347,7 @@ namespace Prateek.FrameRecorder.Code
         {
             get
             {
-                var instance = Registry.GetManager<FrameRecorderManager>();
+                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
                 if (instance == null)
                     return false;
                 return instance.PlaybackActive;
@@ -359,7 +359,7 @@ namespace Prateek.FrameRecorder.Code
         {
             get
             {
-                var instance = Registry.GetManager<FrameRecorderManager>();
+                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
                 if (instance == null)
                     return 0;
                 return instance.FrameCount;
@@ -371,14 +371,14 @@ namespace Prateek.FrameRecorder.Code
         {
             get
             {
-                var instance = Registry.GetManager<FrameRecorderManager>();
+                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
                 if (instance == null)
                     return 0;
                 return instance.MaxFrameRecorded;
             }
             set
             {
-                var instance = Registry.GetManager<FrameRecorderManager>();
+                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
                 if (instance == null)
                     return;
                 instance.MaxFrameRecorded = value;
@@ -390,14 +390,14 @@ namespace Prateek.FrameRecorder.Code
         {
             get
             {
-                var instance = Registry.GetManager<FrameRecorderManager>();
+                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
                 if (instance == null)
                     return Vector2Int.zero;
                 return instance.CurrentFrameRange;
             }
             set
             {
-                var instance = Registry.GetManager<FrameRecorderManager>();
+                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
                 if (instance == null)
                     return;
                 instance.CurrentFrameRange = value;
@@ -409,7 +409,7 @@ namespace Prateek.FrameRecorder.Code
         #region External Access
         public static void Register(FrameRecorderManager.IRecorderBase recorder)
         {
-            var instance = Registry.GetManager<FrameRecorderManager>();
+            var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
             if (instance == null)
                 return;
 
@@ -419,7 +419,7 @@ namespace Prateek.FrameRecorder.Code
         //---------------------------------------------------------------------
         public static void Unregister(FrameRecorderManager.IRecorderBase recorder)
         {
-            var instance = Registry.GetManager<FrameRecorderManager>();
+            var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
             if (instance == null)
                 return;
 
@@ -430,7 +430,7 @@ namespace Prateek.FrameRecorder.Code
         //---------------------------------------------------------------------
         public static void ClearHistory()
         {
-            var instance = Registry.GetManager<FrameRecorderManager>();
+            var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
             if (instance == null)
                 return;
 

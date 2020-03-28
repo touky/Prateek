@@ -475,7 +475,7 @@ namespace Prateek.Debug.Code
         //---------------------------------------------------------------------
         public void RenderLine(DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
         {
-            var manager = Registry.GetManager<DebugDisplayManager>();
+            var manager = DaemonRegistry.GetManager<DebugDisplayManager>();
             if (manager != null)
             {
                 if (!manager.IsActive(setup.Flag))

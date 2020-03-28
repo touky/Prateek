@@ -70,9 +70,9 @@ namespace Prateek.DaemonCore.Code
             get { return isAppPaused; }
         }
 
-        public virtual Registry.TickEvent TickEvent
+        public virtual TickType TickType
         {
-            get { return Registry.TickEvent.FrameBeginning; }
+            get { return TickType.ALL; } //todo return TickType.BeginFrame; }
         }
         #endregion
 
@@ -105,23 +105,16 @@ namespace Prateek.DaemonCore.Code
         #endregion Declarations
 
         //---------------------------------------------------------------------
-
-        //---------------------------------------------------------------------
-
-        //---------------------------------------------------------------------
-
-        //---------------------------------------------------------------------
-
         #region IGlobalManager integration
         public virtual void OnCreate() { }
 
         //-- Object Lifetime Messages -----------------------------------------
         public virtual void OnInitialize() { }
         public virtual void OnStart() { }
-        public virtual void OnUpdate(Registry.TickEvent tickEvent, float seconds) { }
-        public virtual void OnUpdateUnscaled(Registry.TickEvent tickEvent, float seconds) { }
-        public virtual void OnLateUpdate(Registry.TickEvent tickEvent, float seconds) { }
-        public virtual void OnFixedUpdate(Registry.TickEvent tickEvent, float seconds) { }
+        public virtual void OnUpdate(TickType tickType, float seconds) { }
+        public virtual void OnUpdateUnscaled(TickType tickType, float seconds) { }
+        public virtual void OnLateUpdate(TickType tickType, float seconds) { }
+        public virtual void OnFixedUpdate(TickType tickType, float seconds) { }
         public virtual void OnDispose() { }
         public virtual void OnRegister() { }
         public virtual void OnUnregister() { }
