@@ -12,7 +12,7 @@ namespace Mayfair.Core.Code.TimeService.DebugMenu
     using Utils.Debug.Reflection;
     using Object = UnityEngine.Object;
 
-    public class TimeServiceMenuPage : DebugMenuPage<TimeService>
+    public class TimeServiceMenuPage : DebugMenuPage<TimeDaemonCore>
     {
         private const float MIN_PER_SECOND = 60f;
         private const string TIME_RATE_FORMAT = "N1";
@@ -31,19 +31,19 @@ namespace Mayfair.Core.Code.TimeService.DebugMenu
         private InputField timeRateInput;
         private float timeRateValue;
 
-        public TimeServiceMenuPage(TimeService owner, string title) : base(owner, title)
+        public TimeServiceMenuPage(TimeDaemonCore owner, string title) : base(owner, title)
         {
-            timeTracker = TimeService.CreateTimeTracker<ITimeInterest>();
+            timeTracker = TimeDaemonCore.CreateTimeTracker<ITimeInterest>();
             timeData = new TimeControlData(timeTracker.Interest.CurrentTime);
             InitializeTimeInputFields();
 
-            timeRateValue = TimeService.DEFAULT_RATE;
-            timeRateSlider = new FloatSliderField("Time Rate Slider", new Vector2(TimeService.DEFAULT_RATE, MIN_PER_SECOND), TimeService.DEFAULT_RATE);
-            timeRateInput = new InputField(TimeService.DEFAULT_RATE.ToString(TIME_RATE_FORMAT));
+            timeRateValue = TimeDaemonCore.DEFAULT_RATE;
+            timeRateSlider = new FloatSliderField("Time Rate Slider", new Vector2(TimeDaemonCore.DEFAULT_RATE, MIN_PER_SECOND), TimeDaemonCore.DEFAULT_RATE);
+            timeRateInput = new InputField(TimeDaemonCore.DEFAULT_RATE.ToString(TIME_RATE_FORMAT));
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void CreatePage(TimeService owner)
+        public static void CreatePage(TimeDaemonCore owner)
         {
             DebugMenuNotebook debugNotebook = new DebugMenuNotebook("TIMS", "Time Service");
 
@@ -60,7 +60,7 @@ namespace Mayfair.Core.Code.TimeService.DebugMenu
             minuteInput = new InputField(timeData.minute.ToString());
         }
 
-        protected override void Draw(TimeService owner, DebugMenuContext context)
+        protected override void Draw(TimeDaemonCore owner, DebugMenuContext context)
         {
             DrawGameTime(context);
             DrawTimeTools(context);
@@ -154,14 +154,14 @@ namespace Mayfair.Core.Code.TimeService.DebugMenu
 
         private void DispatchSetReferenceTime(DateTime newTime)
         {
-            TimeService timeService = Object.FindObjectOfType<TimeService>();
-            ReflectionUtils.CallMethod("ChangeTimeReference", timeService, newTime);
+            TimeDaemonCore timeDaemonCore = Object.FindObjectOfType<TimeDaemonCore>();
+            ReflectionUtils.CallMethod("ChangeTimeReference", timeDaemonCore, newTime);
         }
 
         private void DispatchChangeTimeRate(float value)
         {
-            TimeService timeService = Object.FindObjectOfType<TimeService>();
-            ReflectionUtils.CallMethod("ChangeTimeRate", timeService, value);
+            TimeDaemonCore timeDaemonCore = Object.FindObjectOfType<TimeDaemonCore>();
+            ReflectionUtils.CallMethod("ChangeTimeRate", timeDaemonCore, value);
         }
 
         private struct TimeControlData

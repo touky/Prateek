@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,8 +26,8 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
@@ -39,51 +39,79 @@ namespace Prateek.DaemonCore.Code
     //-------------------------------------------------------------------------
     public abstract class GlobalManager : ScriptableObject, IGlobalManager, IUpdatable
     {
+        #region Static and Constants
         //---------------------------------------------------------------------
         public const string CREATE_METHOD = "GetBuilder";
+        #endregion
+
+        #region Settings
+        [SerializeField]
+        protected int priority;
+        #endregion
+
+        #region Fields
+        private bool isAppFocused = false;
+        private bool isAppPaused = false;
+        #endregion
+
+        #region Properties
+        public int Priority
+        {
+            get { return priority; }
+        }
+
+        protected bool IsAppFocused
+        {
+            get { return isAppFocused; }
+        }
+
+        protected bool IsAppPaused
+        {
+            get { return isAppPaused; }
+        }
+
+        public virtual Registry.TickEvent TickEvent
+        {
+            get { return Registry.TickEvent.FrameBeginning; }
+        }
+        #endregion
 
         //---------------------------------------------------------------------
+
         #region Declarations
         public abstract class BuilderBase
         {
+            #region Fields
             public Type realType = null;
             public Type emptyType = null;
+            #endregion
 
+            #region Constructors
             public BuilderBase(Type realType, Type emptyType)
             {
                 this.realType = realType;
                 this.emptyType = emptyType;
             }
+            #endregion
         }
 
         //---------------------------------------------------------------------
         public class Builder<REAL, FAKE> : BuilderBase where REAL : class where FAKE : class
         {
+            #region Constructors
             public Builder() : base(typeof(REAL), typeof(FAKE)) { }
+            #endregion
         }
         #endregion Declarations
 
         //---------------------------------------------------------------------
-        #region Settings
-        [SerializeField]
-        protected int priority;
-        #endregion Settings
 
         //---------------------------------------------------------------------
-        #region Fields
-        private bool isAppFocused = false;
-        private bool isAppPaused = false;
-        #endregion Fields
 
         //---------------------------------------------------------------------
-        #region Properties
-        public int Priority { get { return priority; } }
-        protected bool IsAppFocused { get { return isAppFocused; } }
-        protected bool IsAppPaused { get { return isAppPaused; } }
-        public virtual Registry.TickEvent TickEvent { get { return Registry.TickEvent.FrameBeginning; } }
-        #endregion Properties
 
         //---------------------------------------------------------------------
+
         #region IGlobalManager integration
         public virtual void OnCreate() { }
 
@@ -99,8 +127,16 @@ namespace Prateek.DaemonCore.Code
         public virtual void OnUnregister() { }
 
         //-- Application Messages ---------------------------------------------
-        public virtual void OnApplicationFocus(bool focusStatus) { isAppFocused = focusStatus; }
-        public virtual void OnApplicationPause(bool pauseStatus) { isAppPaused = pauseStatus; }
+        public virtual void OnApplicationFocus(bool focusStatus)
+        {
+            isAppFocused = focusStatus;
+        }
+
+        public virtual void OnApplicationPause(bool pauseStatus)
+        {
+            isAppPaused = pauseStatus;
+        }
+
         public virtual void OnApplicationQuit() { }
 
         //-- Ui Messages ------------------------------------------------------

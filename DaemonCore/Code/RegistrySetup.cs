@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,8 +26,8 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
@@ -43,34 +43,39 @@ namespace Prateek.DaemonCore.Code
     [CreateAssetMenu(fileName = "RegistrySetup", menuName = "Prateek/Create registry setup")]
     public sealed class RegistrySetup : ScriptableObject
     {
-        //---------------------------------------------------------------------
         #region Settings
         [SerializeField]
         private List<string> loadOnInit = new List<string>();
 
-        [SerializeField, TypeRef(typeof(GlobalManager))]
+        [SerializeField]
+        [TypeRef(typeof(GlobalManager))]
         private List<string> createOnInit = new List<string>();
-        #endregion Settings
+        #endregion
 
+        #region Class Methods
         //---------------------------------------------------------------------
         public void Initialize()
         {
             //Load stored resources
-            for (int i = 0; i < loadOnInit.Count; i++)
+            for (var i = 0; i < loadOnInit.Count; i++)
             {
                 var resource = Resources.Load(loadOnInit[i]);
                 if (resource == null)
+                {
                     continue; //TODO: ERROR OUT
+                }
 
-                var instance = GameObject.Instantiate(resource) as GlobalManager;
+                var instance = Instantiate(resource) as GlobalManager;
                 if (instance == null)
+                {
                     continue; //TODO: ERROR OUT
+                }
 
                 Registry.Instance.Register(instance.GetType(), instance);
             }
 
             //Create listed classes
-            for (int i = 0; i < createOnInit.Count; i++)
+            for (var i = 0; i < createOnInit.Count; i++)
             {
                 TryCreating(Core.Code.Helpers.Types.GetType(createOnInit[i]));
             }
@@ -94,15 +99,15 @@ namespace Prateek.DaemonCore.Code
                 Registry.Instance.Register(type, builder);
 
                 if (!force_null
-                && builder.realType != null
-                && !builder.realType.IsAbstract
-                && !builder.realType.IsInterface)
+                 && builder.realType != null
+                 && !builder.realType.IsAbstract
+                 && !builder.realType.IsInterface)
                 {
                     DoCreate(builder.realType);
                 }
                 else if (builder.emptyType != null
-                     && !builder.emptyType.IsAbstract
-                     && !builder.emptyType.IsInterface)
+                      && !builder.emptyType.IsAbstract
+                      && !builder.emptyType.IsInterface)
                 {
                     DoCreate(builder.emptyType);
                 }
@@ -116,9 +121,12 @@ namespace Prateek.DaemonCore.Code
         //---------------------------------------------------------------------
         private static void DoCreate(Type type)
         {
-            var instance = ScriptableObject.CreateInstance(type) as GlobalManager;
+            var instance = CreateInstance(type) as GlobalManager;
             instance.name = type.Name + "(Instance)";
             Registry.Instance.Register(type, instance);
         }
+        #endregion
+
+        //---------------------------------------------------------------------
     }
 }

@@ -10,7 +10,7 @@ namespace Mayfair.Core.Code.DebugMenu.Content
     ///     To implement debug menu content, you need to create a DebugMenuNotebook and add pages to it.
     ///     Note that the notebook can be Registered/Unregistered on the fly, allowing for scene-dependent DebugMenu
     /// </summary>
-    public class DebugMenuNotebook : DebugMenuService.AbstractDebugNotebook
+    public class DebugMenuNotebook : DebugMenuDaemonCore.AbstractDebugNotebook
     {
         #region Fields
         private List<DebugMenuPage> pages = new List<DebugMenuPage>();

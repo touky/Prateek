@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,8 +26,8 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
@@ -43,10 +43,14 @@ namespace Prateek.DaemonCore.Code
     //-------------------------------------------------------------------------
     public sealed class RegistryTickerFrameBegin : RegistryTicker
     {
-        //---------------------------------------------------------------------
-        public delegate void TickableEvent(Registry.TickEvent tickEvent, float seconds);
+        #region Delegates
         public delegate void ApplicationEvent(bool status);
 
+        //---------------------------------------------------------------------
+        public delegate void TickableEvent(Registry.TickEvent tickEvent, float seconds);
+        #endregion
+
+        #region Fields
         //---------------------------------------------------------------------
         private TickableEvent onUpdate;
         private TickableEvent onUpdateUnscaled;
@@ -56,7 +60,41 @@ namespace Prateek.DaemonCore.Code
         private ApplicationEvent onPause;
         private ApplicationEvent onQuit;
         private ApplicationEvent onGUI;
+        #endregion
 
+        #region Unity Methods
+        private void OnApplicationQuit()
+        {
+            onQuit(true);
+        }
+
+        private void FixedUpdate()
+        {
+            onFixedUpdate(Registry.TickEvent.FrameBeginning, Time.fixedDeltaTime);
+        }
+
+        //---------------------------------------------------------------------
+        private void Update()
+        {
+            onUpdate.Invoke(Registry.TickEvent.FrameBeginning, Time.deltaTime);
+            onUpdateUnscaled(Registry.TickEvent.FrameBeginning, Time.unscaledDeltaTime);
+        }
+
+        private void LateUpdate()
+        {
+            onLateUpdate(Registry.TickEvent.FrameBeginning, Time.deltaTime);
+        }
+        #endregion
+
+        #region Unity EditorOnly Methods
+        //---------------------------------------------------------------------
+        private void OnGUI()
+        {
+            onGUI(true);
+        }
+        #endregion
+
+        #region Service
         //---------------------------------------------------------------------
         public void Register(TickableEvent onUpdate, TickableEvent onUpdateUnscaled, TickableEvent onLateUpdate, TickableEvent onFixedUpdate,
                              ApplicationEvent onFocus, ApplicationEvent onPause, ApplicationEvent onQuit,
@@ -74,8 +112,23 @@ namespace Prateek.DaemonCore.Code
             EditorApplication.pauseStateChanged += PauseStateChanged;
 #endif //UNITY_EDITOR
         }
+        #endregion
+
+        #region Class Methods
+        //---------------------------------------------------------------------
+        private void OnApplicationFocus(bool focusStatus)
+        {
+            onFocus(focusStatus);
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            onPause(pauseStatus);
+        }
+        #endregion
 
         //---------------------------------------------------------------------
+
         #region Editor behaviour
 #if UNITY_EDITOR
         private void PauseStateChanged(PauseState state)
@@ -90,23 +143,5 @@ namespace Prateek.DaemonCore.Code
         }
 #endif //UNITY_EDITOR
         #endregion Editor behaviour
-
-        //---------------------------------------------------------------------
-        private void Update()
-        {
-            onUpdate.Invoke(Registry.TickEvent.FrameBeginning, Time.deltaTime);
-            onUpdateUnscaled(Registry.TickEvent.FrameBeginning, Time.unscaledDeltaTime);
-        }
-        private void LateUpdate() { onLateUpdate(Registry.TickEvent.FrameBeginning, Time.deltaTime); }
-        private void FixedUpdate() { onFixedUpdate(Registry.TickEvent.FrameBeginning, Time.fixedDeltaTime); }
-
-        //---------------------------------------------------------------------
-        private void OnApplicationFocus(bool focusStatus) { onFocus(focusStatus); }
-        private void OnApplicationPause(bool pauseStatus) { onPause(pauseStatus); }
-        private void OnApplicationQuit() { onQuit(true); }
-
-        //---------------------------------------------------------------------
-        private void OnGUI() { onGUI(true); }
     }
 }
-

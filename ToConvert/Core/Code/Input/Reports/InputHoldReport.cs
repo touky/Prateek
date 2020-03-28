@@ -19,7 +19,7 @@ namespace Mayfair.Core.Code.Input.Reports
 
         public float Progression
         {
-            get { return IsHolding ? Mathf.Clamp01((Time.time - startTime) / InputService.HOLD_LONG_TAP) : 0; }
+            get { return IsHolding ? Mathf.Clamp01((Time.time - startTime) / InputDaemonCore.HOLD_LONG_TAP) : 0; }
         }
 
         public bool HasShortTapped
@@ -44,12 +44,12 @@ namespace Mayfair.Core.Code.Input.Reports
         internal void Update(Vector2 position)
         {
             // Check how long finger has been pressed down for
-            if (Vector2.Distance(position, startPosition) > InputService.HOLD_THRESHOLD)
+            if (Vector2.Distance(position, startPosition) > InputDaemonCore.HOLD_THRESHOLD)
             {
                 holdState &= ~HoldState.Holding;
             }
 
-            if (IsHolding && Time.time >= startTime + InputService.HOLD_LONG_TAP)
+            if (IsHolding && Time.time >= startTime + InputDaemonCore.HOLD_LONG_TAP)
             {
                 holdState |= HoldState.LongTap;
             }
@@ -61,7 +61,7 @@ namespace Mayfair.Core.Code.Input.Reports
         {
             Update(position);
 
-            if (IsHolding && Time.time <= startTime + InputService.HOLD_SHORT_TAP)
+            if (IsHolding && Time.time <= startTime + InputDaemonCore.HOLD_SHORT_TAP)
             {
                 holdState |= HoldState.ShortTap;
             }

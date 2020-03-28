@@ -22,7 +22,7 @@ namespace Mayfair.Core.Code.GameAction
             GameActionMessage<T> message = Create<GameActionMessage<T>>();
             message.targetValue = targetValue;
             message.Add(id0);
-            MessageService.DefaultCommunicator.Broadcast(message);
+            MessageDaemonCore.DefaultCommunicator.Broadcast(message);
         }
 
         public static void Broadcast(ILightMessageCommunicator communicator, Keyname id0, Keyname id1, float targetValue = 1)
@@ -31,7 +31,7 @@ namespace Mayfair.Core.Code.GameAction
             message.targetValue = targetValue;
             message.Add(id0);
             message.Add(id1);
-            MessageService.DefaultCommunicator.Broadcast(message);
+            MessageDaemonCore.DefaultCommunicator.Broadcast(message);
         }
         #endregion
     }

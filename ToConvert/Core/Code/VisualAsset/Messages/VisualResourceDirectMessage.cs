@@ -23,7 +23,7 @@ namespace Mayfair.Core.Code.VisualAsset.Messages
         #endregion
 
         #region Class Methods
-        public abstract bool AllowTransfer(VisualResourceServiceProvider provider);
+        public abstract bool AllowTransfer(VisualResourceDaemonBranch branch);
 
         //todo benjaminh: this is not pratical, we can't have multiple uniqueids for one assignable
         //todo benjaminh: This should be re-evaluated at some point. Maybe split the two, or require the assignable to return the needed IIdentifiable

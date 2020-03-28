@@ -1,6 +1,7 @@
 namespace Mayfair.Core.Code.UpdateService
 {
     using System;
+    using Prateek.DaemonCore.Code.Branches;
     using Service;
     using Types.Extensions;
 
@@ -8,11 +9,11 @@ namespace Mayfair.Core.Code.UpdateService
     /// This should not be used as an example of Service/Provider/Messaging interaction
     /// as it violates the asynchronicity goals of our systems.
     /// </summary>
-    public class UpdateProvider : ServiceProviderBehaviour
+    public class UpdateProvider : DaemonBranchBehaviour<UpdateDaemonCore, UpdateProvider>
     {
         public Action updateAction;
 
-        public override bool IsProviderValid
+        protected override bool IsAliveInternal
         {
             get => true;
         }
@@ -30,10 +31,5 @@ namespace Mayfair.Core.Code.UpdateService
         }
 
         #endregion
-
-        protected override void OnIdentificationRequested()
-        {
-            SendIdentificationFor<UpdateService, UpdateProvider>(this);
-        }
     }
 }

@@ -13,15 +13,15 @@ namespace Mayfair.Core.Code.Input
         #region Fields
         private ReflectedField<List<Touch>> touches = "touches";
         private ReflectedField<List<Touch>> fakeTouches = "fakeTouches";
-        private ReflectedField<List<InputServiceProvider>> providers = "providers";
+        private ReflectedField<List<InputDaemonBranch>> providers = "providers";
 
         private Texture2D touchCircle;
 
-        private InputService owner;
+        private InputDaemonCore owner;
         #endregion
 
         #region Constructors
-        public InputDebugMenuNotebook(InputService owner, string title) : base(title)
+        public InputDebugMenuNotebook(InputDaemonCore owner, string title) : base(title)
         {
             this.owner = owner;
             touches.Init(this.owner);
@@ -30,7 +30,7 @@ namespace Mayfair.Core.Code.Input
             Init();
         }
 
-        public InputDebugMenuNotebook(InputService owner, string shortTitle, string title) : base(shortTitle, title)
+        public InputDebugMenuNotebook(InputDaemonCore owner, string shortTitle, string title) : base(shortTitle, title)
         {
             this.owner = owner;
             touches.Init(this.owner);
@@ -51,9 +51,9 @@ namespace Mayfair.Core.Code.Input
 
         public override void OnGUI()
         {
-            foreach (InputServiceProvider provider in providers.Value)
+            foreach (InputDaemonBranch branch in providers.Value)
             {
-                if (!fakeTouches.TryInit(provider))
+                if (!fakeTouches.TryInit(branch))
                 {
                     continue;
                 }

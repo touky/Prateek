@@ -30,7 +30,7 @@ namespace Mayfair.Core.Code.BaseBehaviour
         #region Class Methods
         protected void InitCommunicator()
         {
-            this.communicator = MessageService.CreateNewCommunicator(this);
+            this.communicator = MessageDaemonCore.CreateNewCommunicator(this);
             SetupCommunicatorCallback();
             this.communicator.ApplyCallbacks();
         }

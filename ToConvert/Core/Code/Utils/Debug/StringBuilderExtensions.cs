@@ -6,8 +6,9 @@ namespace Mayfair.Core.Code.Utils.Debug
     using Mayfair.Core.Code.Messaging.Communicator;
     using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.Service;
-    using Mayfair.Core.Code.Service.Interfaces;
     using Mayfair.Core.Code.Utils.Helpers;
+    using Prateek.DaemonCore.Code.Branches;
+    using Prateek.DaemonCore.Code.Interfaces;
     using UnityEngine;
 
     public static class StringBuilderExtensions
@@ -23,63 +24,63 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void AddLogHeader(this StringBuilder builder, IService service, string message)
+        public static void AddLogHeader(this StringBuilder builder, IDaemonCore daemonCore, string message)
         {
             if (builder == null)
             {
-                throw new Exception($"Builder is null for {service.GetType().Name}");
+                throw new Exception($"Builder is null for {daemonCore.GetType().Name}");
             }
 
-            builder.Append($"SERVICE<{service.GetType().Name}>");
-            builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(service.GetType(), colorOffset)));
+            builder.Append($"SERVICE<{daemonCore.GetType().Name}>");
+            builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(daemonCore.GetType(), colorOffset)));
             builder.AppendLine(message);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void AddLogHeader(this StringBuilder builder, ServiceProvider provider, string message)
+        public static void AddLogHeader(this StringBuilder builder, DaemonBranch branch, string message)
         {
             if (builder == null)
             {
-                throw new Exception($"Builder is null for {provider.GetType().Name}");
+                throw new Exception($"Builder is null for {branch.GetType().Name}");
             }
 
-            builder.Append($"SERVICE<{provider.GetType().Name}>");
-            builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(provider.GetType(), colorOffset)));
+            builder.Append($"SERVICE<{branch.GetType().Name}>");
+            builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(branch.GetType(), colorOffset)));
             builder.AppendLine(message);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void AddLogHeader(this StringBuilder builder, ServiceProviderBehaviour provider, string message)
+        public static void AddLogHeader(this StringBuilder builder, DaemonBranchBehaviour branch, string message)
         {
             if (builder == null)
             {
-                throw new Exception($"Builder is null for {provider.GetType().Name}");
+                throw new Exception($"Builder is null for {branch.GetType().Name}");
             }
 
-            builder.Append($"SERVICE<{provider.name} ({provider.GetType().Name})>");
-            builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(provider.GetType(), colorOffset)));
+            builder.Append($"SERVICE<{branch.name} ({branch.GetType().Name})>");
+            builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(branch.GetType(), colorOffset)));
             builder.AppendLine(message);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void AddReceivedMessage(this StringBuilder builder, IService service, Message message)
+        public static void AddReceivedMessage(this StringBuilder builder, IDaemonCore daemonCore, Message message)
         {
             if (builder == null)
             {
                 builder = new StringBuilder();
-                builder.AddLogHeader(service, ", Messages received this frame:");
+                builder.AddLogHeader(daemonCore, ", Messages received this frame:");
             }
 
             builder.AppendLine($"> Message {message.ToString()} from {message.Sender.Owner.Name} was received by:");
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void AddCommunicator(this StringBuilder builder, IService service, ILightMessageCommunicator communicator)
+        public static void AddCommunicator(this StringBuilder builder, IDaemonCore daemonCore, ILightMessageCommunicator communicator)
         {
             if (builder == null)
             {
                 builder = new StringBuilder();
-                builder.AddLogHeader(service, ", live Communicators:");
+                builder.AddLogHeader(daemonCore, ", live Communicators:");
             }
 
             builder.AppendLine($"  - Owner: {communicator.Owner.Name}");

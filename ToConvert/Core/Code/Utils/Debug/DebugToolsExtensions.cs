@@ -6,90 +6,91 @@ namespace Mayfair.Core.Code.Utils.Debug
     using Mayfair.Core.Code.Resources.Loader;
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Service;
-    using Mayfair.Core.Code.Service.Interfaces;
     using Mayfair.Core.Code.Utils.Debug.Reflection;
+    using Prateek.DaemonCore.Code.Branches;
+    using Prateek.DaemonCore.Code.Interfaces;
 
     public static partial class DebugTools
     {
         #region Class Methods
         [Conditional("NVIZZIO_DEV")]
-        public static void Log(IService service, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void Log(IDaemonCore daemonCore, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(service, message);
-            Log(builder.ToString(), service, logPriority);
+            builder.AddLogHeader(daemonCore, message);
+            Log(builder.ToString(), daemonCore, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void Log(ServiceProvider provider, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void Log(DaemonBranch branch, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(provider, message);
-            Log(builder.ToString(), provider, logPriority);
+            builder.AddLogHeader(branch, message);
+            Log(builder.ToString(), branch, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void Log(ServiceProviderBehaviour provider, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void Log(DaemonBranchBehaviour branch, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(provider, message);
-            Log(builder.ToString(), provider, logPriority);
+            builder.AddLogHeader(branch, message);
+            Log(builder.ToString(), branch, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogWarning(IService service, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void LogWarning(IDaemonCore daemonCore, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(service, message);
-            LogWarning(builder.ToString(), service, logPriority);
+            builder.AddLogHeader(daemonCore, message);
+            LogWarning(builder.ToString(), daemonCore, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogWarning(ServiceProvider provider, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void LogWarning(DaemonBranch branch, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(provider, message);
-            LogWarning(builder.ToString(), provider, logPriority);
+            builder.AddLogHeader(branch, message);
+            LogWarning(builder.ToString(), branch, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogWarning(ServiceProviderBehaviour provider, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void LogWarning(DaemonBranchBehaviour branch, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(provider, message);
-            LogWarning(builder.ToString(), provider, logPriority);
+            builder.AddLogHeader(branch, message);
+            LogWarning(builder.ToString(), branch, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogError(IService service, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void LogError(IDaemonCore daemonCore, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(service, message);
-            LogWarning(builder.ToString(), service, logPriority);
+            builder.AddLogHeader(daemonCore, message);
+            LogWarning(builder.ToString(), daemonCore, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogError(ServiceProvider provider, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void LogError(DaemonBranch branch, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(provider, message);
-            LogWarning(builder.ToString(), provider, logPriority);
+            builder.AddLogHeader(branch, message);
+            LogWarning(builder.ToString(), branch, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogError(ServiceProviderBehaviour provider, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void LogError(DaemonBranchBehaviour branch, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(provider, message);
-            LogWarning(builder.ToString(), provider, logPriority);
+            builder.AddLogHeader(branch, message);
+            LogWarning(builder.ToString(), branch, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void Log<TResourceType, TResourceRef>(ServiceProviderBehaviour provider, ResourcesHaveChangedResponse<TResourceRef, TResourceType> message)
+        public static void Log<TResourceType, TResourceRef>(DaemonBranchBehaviour branch, ResourcesHaveChangedResponse<TResourceRef, TResourceType> message)
             where TResourceRef : AbstractResourceReference<TResourceType, TResourceRef>
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(provider, ", data to load are:");
+            builder.AddLogHeader(branch, ", data to load are:");
 
             ReflectedField<List<TResourceRef>> references = "references";
             references.Init(message);

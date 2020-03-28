@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,8 +26,8 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
@@ -38,22 +38,23 @@ namespace Prateek.DaemonCore.Code
     //-------------------------------------------------------------------------
     public sealed class RegistryTickerFrameEnd : RegistryTicker
     {
+        #region Delegates
         //---------------------------------------------------------------------
         public delegate void TickableEvent(Registry.TickEvent tickEvent, float seconds);
+        #endregion
 
+        #region Fields
         //---------------------------------------------------------------------
         private TickableEvent onUpdate;
         private TickableEvent onUpdateUnscaled;
         private TickableEvent onLateUpdate;
         private TickableEvent onFixedUpdate;
+        #endregion
 
-        //---------------------------------------------------------------------
-        public void Register(TickableEvent onUpdate, TickableEvent onUpdateUnscaled, TickableEvent onLateUpdate, TickableEvent onFixedUpdate)
+        #region Unity Methods
+        private void FixedUpdate()
         {
-            this.onUpdate = onUpdate;
-            this.onUpdateUnscaled = onUpdateUnscaled;
-            this.onLateUpdate = onLateUpdate;
-            this.onFixedUpdate = onFixedUpdate;
+            onFixedUpdate(Registry.TickEvent.FrameEnding, Time.fixedDeltaTime);
         }
 
         //---------------------------------------------------------------------
@@ -62,7 +63,22 @@ namespace Prateek.DaemonCore.Code
             onUpdate(Registry.TickEvent.FrameEnding, Time.deltaTime);
             onUpdateUnscaled(Registry.TickEvent.FrameEnding, Time.unscaledDeltaTime);
         }
-        private void LateUpdate() { onLateUpdate(Registry.TickEvent.FrameEnding, Time.deltaTime); }
-        private void FixedUpdate() { onFixedUpdate(Registry.TickEvent.FrameEnding, Time.fixedDeltaTime); }
+
+        private void LateUpdate()
+        {
+            onLateUpdate(Registry.TickEvent.FrameEnding, Time.deltaTime);
+        }
+        #endregion
+
+        #region Service
+        //---------------------------------------------------------------------
+        public void Register(TickableEvent onUpdate, TickableEvent onUpdateUnscaled, TickableEvent onLateUpdate, TickableEvent onFixedUpdate)
+        {
+            this.onUpdate = onUpdate;
+            this.onUpdateUnscaled = onUpdateUnscaled;
+            this.onLateUpdate = onLateUpdate;
+            this.onFixedUpdate = onFixedUpdate;
+        }
+        #endregion
     }
 }

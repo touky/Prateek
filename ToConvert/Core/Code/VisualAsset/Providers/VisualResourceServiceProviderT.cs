@@ -11,7 +11,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.Utils.Types.UniqueId;
     using UnityEngine.Assertions;
 
-    public abstract class VisualResourceServiceProvider<TResourceReference> : VisualResourceServiceProvider
+    public abstract class VisualResourceDaemonBranch<TResourceReference> : VisualResourceDaemonBranch
         where TResourceReference : class, IAbstractResourceReference
     {
         #region Fields
@@ -31,11 +31,6 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         #endregion
 
         #region Class Methods
-        protected override void OnIdentificationRequested()
-        {
-            SendIdentificationFor<VisualResourceService, VisualResourceServiceProvider>(this);
-        }
-
         protected void AddSupportedAssignable(string keyword, string defaultResource)
         {
             supportedAssignables.Add(new SupportedAssignable(keyword, defaultResource));

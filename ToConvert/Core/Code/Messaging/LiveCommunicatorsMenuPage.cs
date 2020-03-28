@@ -8,14 +8,14 @@ namespace Mayfair.Core.Code.Messaging
     using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.Utils;
 
-    internal class LiveCommunicatorsMenuPage : MessageService.InternalLiveCommunicatorsMenuPage
+    internal class LiveCommunicatorsMenuPage : MessageDaemonCore.InternalLiveCommunicatorsMenuPage
     {
         #region Fields
         private Dictionary<long, Type> messageTypes = new Dictionary<long, Type>();
         #endregion
 
         #region Constructors
-        public LiveCommunicatorsMenuPage(MessageService owner, string title) : base(owner, title) { }
+        public LiveCommunicatorsMenuPage(MessageDaemonCore owner, string title) : base(owner, title) { }
         #endregion
 
         #region Class Methods
@@ -30,7 +30,7 @@ namespace Mayfair.Core.Code.Messaging
             messageTypes.Add(validId, type);
         }
 
-        protected override void Draw(MessageService owner, DebugMenuContext context)
+        protected override void Draw(MessageDaemonCore owner, DebugMenuContext context)
         {
             for (int k = 0; k < KeyCount; k++)
             {

@@ -94,7 +94,7 @@ namespace Mayfair.Core.Code.Input.Reports
             bool isRotating = Mathf.Abs(twistAngle) > 0.5f && (centerOfMass < distA * 0.9f || centerOfMass < distB * 0.9f);
 
             //Add this && !isRotating; below to make actions happen one at a time
-            bool isPinching = Mathf.Abs(pinchDifference) > Screen.height * InputService.PINCH_MIN_THRESHOLD;
+            bool isPinching = Mathf.Abs(pinchDifference) > Screen.height * InputDaemonCore.PINCH_MIN_THRESHOLD;
 
             //Disable tilting motion if one finger isn't moving
             tiltingBlocked = oldToNewA.magnitude <= 0.1f || oldToNewB.magnitude <= 0.1f;

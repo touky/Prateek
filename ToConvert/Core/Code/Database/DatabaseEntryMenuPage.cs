@@ -8,18 +8,18 @@ namespace Mayfair.Core.Code.Database
     using Mayfair.Core.Code.DebugMenu.Pages;
     using Mayfair.Core.Code.Utils.Debug.Reflection;
 
-    internal class DatabaseEntryMenuPage : DebugMenuPage<DatabaseService>
+    internal class DatabaseEntryMenuPage : DebugMenuPage<DatabaseDaemonCore>
     {
         #region Fields
         private ReflectedField<Dictionary<Type, List<IDatabaseEntry>>> databaseEntries = "databaseEntries";
         #endregion
 
         #region Constructors
-        public DatabaseEntryMenuPage(DatabaseService owner, string title) : base(owner, title) { }
+        public DatabaseEntryMenuPage(DatabaseDaemonCore owner, string title) : base(owner, title) { }
         #endregion
 
         #region Class Methods
-        protected override void Draw(DatabaseService owner, DebugMenuContext context)
+        protected override void Draw(DatabaseDaemonCore owner, DebugMenuContext context)
         {
             foreach (Type key in databaseEntries.Value.Keys)
             {

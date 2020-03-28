@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,8 +26,8 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
@@ -41,6 +41,7 @@ namespace Prateek.DaemonCore.Code
     [Serializable]
     public abstract class RegistrableBehaviour : NamedBehaviour
     {
+        #region Unity Methods
         //---------------------------------------------------------------------
         protected virtual void OnEnable()
         {
@@ -58,5 +59,6 @@ namespace Prateek.DaemonCore.Code
                 Registry.Instance.Unregister(this);
             }
         }
+        #endregion
     }
 }

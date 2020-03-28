@@ -8,18 +8,18 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.Utils.Types.UniqueId;
     using Mayfair.Core.Code.VisualAsset.Providers;
 
-    internal class VisualResourceMenuPage : DebugMenuPage<VisualResourceServiceProvider>
+    internal class VisualResourceMenuPage : DebugMenuPage<VisualResourceDaemonBranch>
     {
         #region Fields
         protected ReflectedField<Dictionary<string, Dictionary<Keyname, IAbstractResourceReference>>> resources = "resources";
         #endregion
 
         #region Constructors
-        public VisualResourceMenuPage(VisualResourceServiceProvider owner, string title) : base(owner, title) { }
+        public VisualResourceMenuPage(VisualResourceDaemonBranch owner, string title) : base(owner, title) { }
         #endregion
 
         #region Class Methods
-        protected override void Draw(VisualResourceServiceProvider owner, DebugMenuContext context)
+        protected override void Draw(VisualResourceDaemonBranch owner, DebugMenuContext context)
         {
             if (NewCategory.Draw(context, "Available resources", true))
             {

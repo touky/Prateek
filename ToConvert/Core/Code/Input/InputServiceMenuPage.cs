@@ -11,7 +11,7 @@ namespace Mayfair.Core.Code.Input
     using Mayfair.Core.Code.Utils.Debug.Reflection;
     using UnityEngine;
 
-    internal class InputServiceMenuPage : DebugMenuPage<InputService>
+    internal class InputServiceMenuPage : DebugMenuPage<InputDaemonCore>
     {
         #region Fields
         private CategoryField defaultDebug = new CategoryField("Default debug");
@@ -23,7 +23,7 @@ namespace Mayfair.Core.Code.Input
         private ReflectedField<List<InputLayer>> layers = "layers";
         private ReflectedField<InputLayer> activeLayer = "activeLayer";
         private ReflectedField<InputReport> inputReport = "inputReport";
-        private ReflectedField<Dictionary<Type, List<InputService.InputReceiver>>> receiverLayers = "receiverLayers";
+        private ReflectedField<Dictionary<Type, List<InputDaemonCore.InputReceiver>>> receiverLayers = "receiverLayers";
         private ReflectedField<InputRaycast[]> inputRaycasts = "inputRaycasts";
         private ReflectedField<List<string>> layersNames = "layersNames";
         private ReflectedField<InputRaycastHits> inputRaycastHits = "inputRaycastHits";
@@ -35,12 +35,12 @@ namespace Mayfair.Core.Code.Input
         #endregion
 
         #region Constructors
-        public InputServiceMenuPage(InputService owner, string title)
+        public InputServiceMenuPage(InputDaemonCore owner, string title)
             : base(owner, title) { }
         #endregion
 
         #region Class Methods
-        protected override void Draw(InputService owner, DebugMenuContext context)
+        protected override void Draw(InputDaemonCore owner, DebugMenuContext context)
         {
             defaultDebug.Draw(context);
             if (defaultDebug.ShowContent)
@@ -89,14 +89,14 @@ namespace Mayfair.Core.Code.Input
             {
                 using (new ContextIndentScope(context, 1))
                 {
-                    foreach (KeyValuePair<Type, List<InputService.InputReceiver>> pair in receiverLayers.Value)
+                    foreach (KeyValuePair<Type, List<InputDaemonCore.InputReceiver>> pair in receiverLayers.Value)
                     {
                         GetField<CategoryField>().Draw(context, pair.Key.Name);
                         if (title.ShowContent)
                         {
                             using (new ContextIndentScope(context, 1))
                             {
-                                foreach (InputService.InputReceiver receiver in pair.Value)
+                                foreach (InputDaemonCore.InputReceiver receiver in pair.Value)
                                 {
                                     using (new ContextColorScope(context, receiver.IsActive ? Color.white : Color.red))
                                     {

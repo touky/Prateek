@@ -9,7 +9,7 @@ namespace Mayfair.Core.Code.SaveGame.StateMachine
         #endregion
 
         #region Constructors
-        protected TimeOutState(SaveService service, int timeOutTicker = -1) : base(service)
+        protected TimeOutState(SaveDaemonCore daemonCore, int timeOutTicker = -1) : base(daemonCore)
         {
             this.timeOutTicker = timeOutTicker;
         }

@@ -10,18 +10,18 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.Utils.Helpers;
     using UnityEngine;
 
-    internal class TrackedTaskPage : DebugMenuPage<LoadingProcessService>
+    internal class TrackedTaskPage : DebugMenuPage<LoadingProcessDaemonCore>
     {
         #region Fields
         private ReflectedField<List<LoadingTaskTracker>> trackers = "trackers";
         #endregion
 
         #region Constructors
-        public TrackedTaskPage(LoadingProcessService owner, string title) : base(owner, title) { }
+        public TrackedTaskPage(LoadingProcessDaemonCore owner, string title) : base(owner, title) { }
         #endregion
 
         #region Class Methods
-        protected override void Draw(LoadingProcessService owner, DebugMenuContext context)
+        protected override void Draw(LoadingProcessDaemonCore owner, DebugMenuContext context)
         {
             foreach (LoadingTaskTracker tracker in trackers.Value)
             {

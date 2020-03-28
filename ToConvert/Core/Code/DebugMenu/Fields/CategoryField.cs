@@ -16,8 +16,8 @@ namespace Mayfair.Core.Code.DebugMenu.Fields
         #region Properties
         public bool ShowContent
         {
-            get { return DebugMenuService.Get(showContent, $"{GetType().Name}{CATEGORY_PREFS}{text}", false); }
-            set { DebugMenuService.Set(ref showContent, $"{GetType().Name}{CATEGORY_PREFS}{text}", ShowContent, value); }
+            get { return DebugMenuDaemonCore.Get(showContent, $"{GetType().Name}{CATEGORY_PREFS}{text}", false); }
+            set { DebugMenuDaemonCore.Set(ref showContent, $"{GetType().Name}{CATEGORY_PREFS}{text}", ShowContent, value); }
         }
         #endregion
 

@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,17 +26,21 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
 namespace Prateek.DaemonCore.Code
 {
     //-------------------------------------------------------------------------
-    public abstract class Singleton<T> : System.Object, ISingleton where T : Singleton<T>, new()
+    public abstract class Singleton<T> : object, ISingleton where T : Singleton<T>, new()
     {
+        #region Static and Constants
         private static T instance = null;
+        #endregion
+
+        #region Properties
         public static T Instance
         {
             get
@@ -45,8 +49,10 @@ namespace Prateek.DaemonCore.Code
                 {
                     instance = new T();
                 }
+
                 return instance;
             }
         }
+        #endregion
     }
 }

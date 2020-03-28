@@ -28,7 +28,7 @@ namespace Mayfair.Core.Code.Localization
         {
             TaskLoadingMessage taskLoadingMessage = Message.Create<TaskLoadingMessage>();
 
-            if (!LocalizationService.SetLanguage(SystemLanguage.English, false))
+            if (!LocalizationDaemonCore.SetLanguage(SystemLanguage.English, false))
             {
                 throw new MissingFullLocalizationException(SystemLanguage.English);
             }

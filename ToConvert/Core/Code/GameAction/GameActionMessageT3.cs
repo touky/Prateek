@@ -25,14 +25,14 @@ namespace Mayfair.Core.Code.GameAction
         {
             GameActionMessage<T0, T1, T2> message = Create<GameActionMessage<T0, T1, T2>>();
             message.targetValue = targetValue;
-            MessageService.DefaultCommunicator.Broadcast(message);
+            MessageDaemonCore.DefaultCommunicator.Broadcast(message);
         }
 
         public static void Broadcast(ILightMessageCommunicator communicator, Keyname uniqueId1, float targetValue = 1)
         {
             GameActionMessage<T0, T1, T2> message = Create<GameActionMessage<T0, T1, T2>>();
             message.targetValue = targetValue;
-            MessageService.DefaultCommunicator.Broadcast(message);
+            MessageDaemonCore.DefaultCommunicator.Broadcast(message);
         }
 
         #endregion

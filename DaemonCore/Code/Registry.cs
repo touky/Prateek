@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,8 +26,8 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
@@ -41,24 +41,28 @@ namespace Prateek.DaemonCore.Code
 
     //-------------------------------------------------------------------------
     //todo [InitializeOnLoad]
-    class RegistryLoader
+    internal class RegistryLoader
     {
+        #region Constructors
         static RegistryLoader()
         {
 #if UNITY_EDITOR
             if (EditorApplication.isPlayingOrWillChangePlaymode
-                && !Application.isPlaying)
+             && !Application.isPlaying)
 #endif //UNITY_EDITOR
             {
                 //Registry.Instance.Initialize();
             }
         }
+        #endregion
     }
 
     //-------------------------------------------------------------------------
     public sealed class Registry : Singleton<Registry>
     {
+        #region TickEvent enum
         //---------------------------------------------------------------------
+
         #region Declarations
         [Flags]
         public enum TickEvent
@@ -69,8 +73,8 @@ namespace Prateek.DaemonCore.Code
             MAX
         }
         #endregion Declarations
+        #endregion
 
-        //---------------------------------------------------------------------
         #region Fields
         private bool sortManagers = true;
         private GameObject tickerObject;
@@ -83,18 +87,34 @@ namespace Prateek.DaemonCore.Code
 
         private List<GlobalManager> managersToStart = new List<GlobalManager>();
         private List<GlobalManager> managersToUpdate = new List<GlobalManager>();
-        #endregion Fields
+        #endregion
 
-        //---------------------------------------------------------------------
         #region Properties
-        public GameObject TickerObject { get { return tickerObject; } }
-        #endregion Properties
+        public GameObject TickerObject
+        {
+            get { return tickerObject; }
+        }
+        #endregion
 
+        #region Service
+        //---------------------------------------------------------------------
+
+        #region Builders
+        public void Register(Type type, GlobalManager.BuilderBase builder)
+        {
+            registryBuilders[type] = builder;
+        }
+        #endregion Builders
+        #endregion
+
+        #region Class Methods
         //---------------------------------------------------------------------
         public void Initialize()
         {
             if (tickerBegin != null || tickerEnd != null)
+            {
                 return;
+            }
 
             tickerObject = new GameObject("Registry Tickers");
             tickerObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -104,7 +124,7 @@ namespace Prateek.DaemonCore.Code
             tickerBegin.Register(OnUpdate, OnUpdateUnscaled, OnLateUpdate, OnFixedUpdate,
                                  OnApplicationFocus, OnApplicationPause, OnApplicationQuit, OnGUI);
             tickerEnd.Register(OnUpdate, OnUpdateUnscaled, OnLateUpdate, OnFixedUpdate);
-            GameObject.DontDestroyOnLoad(tickerObject);
+            UnityEngine.Object.DontDestroyOnLoad(tickerObject);
 
             var setup = Resources.Load<RegistrySetup>("RegistrySetup");
             if (setup != null)
@@ -112,21 +132,21 @@ namespace Prateek.DaemonCore.Code
                 setup.Initialize();
             }
         }
+        #endregion
 
         //---------------------------------------------------------------------
-        #region Builders
-        public void Register(Type type, GlobalManager.BuilderBase builder)
-        {
-            registryBuilders[type] = builder;
-        }
-        #endregion Builders
 
         //---------------------------------------------------------------------
+
+        //---------------------------------------------------------------------
+
         #region Managers
         public void Register(Type type, GlobalManager manager)
         {
             if (type == null || manager == null)
+            {
                 return;
+            }
 
             if (registryManagers.ContainsKey(type))
             {
@@ -155,7 +175,11 @@ namespace Prateek.DaemonCore.Code
         }
 
         //---------------------------------------------------------------------
-        public void Unregister(GlobalManager manager) { Unregister(manager.GetType()); }
+        public void Unregister(GlobalManager manager)
+        {
+            Unregister(manager.GetType());
+        }
+
         public void Unregister(Type type)
         {
             var manager = registryManagers[type];
@@ -172,6 +196,7 @@ namespace Prateek.DaemonCore.Code
         #endregion Managers
 
         //---------------------------------------------------------------------
+
         #region RegistrableBehaviour
         public void Register(RegistrableBehaviour behaviour)
         {
@@ -183,7 +208,7 @@ namespace Prateek.DaemonCore.Code
             {
                 if (registryBehaviours.TryGetValue(type, out behaviours) == false)
                 {
-                    registryBehaviours[type] = (behaviours = new List<RegistrableBehaviour>());
+                    registryBehaviours[type] = behaviours = new List<RegistrableBehaviour>();
                 }
 
                 behaviours.AddUnique(behaviour);
@@ -204,33 +229,39 @@ namespace Prateek.DaemonCore.Code
                 {
                     behaviours.Remove(behaviour);
                 }
+
                 type = type.BaseType;
             }
         }
         #endregion RegistrableBehaviour
 
         //---------------------------------------------------------------------
+
         #region Getters
         public static T GetManager<T>() where T : class, IGlobalManager
         {
             if (Instance == null)
+            {
                 return null;
+            }
 
             var type = typeof(T);
 
             if (Instance.registryManagers.ContainsKey(type))
+            {
                 return Instance.registryManagers[type] as T;
+            }
 
-//#if UNITY_EDITOR
-//            for (int i = 0; i < createOnAwake.Count; i++)
-//            {
-//                var testType = Helpers.Types.GetType(createOnAwake[i]);
-//                if (testType.IsSubclassOf(type))
-//                {
-//                    type = testType;
-//                }
-//            }
-//#endif // UNITY_EDITOR
+            //#if UNITY_EDITOR
+            //            for (int i = 0; i < createOnAwake.Count; i++)
+            //            {
+            //                var testType = Helpers.Types.GetType(createOnAwake[i]);
+            //                if (testType.IsSubclassOf(type))
+            //                {
+            //                    type = testType;
+            //                }
+            //            }
+            //#endif // UNITY_EDITOR
 
             RegistrySetup.TryCreating(type);
 
@@ -241,10 +272,15 @@ namespace Prateek.DaemonCore.Code
         public static GlobalManager.BuilderBase GetBuilder(Type type)
         {
             if (Instance == null)
+            {
                 return null;
+            }
 
             if (Instance.registryBuilders.ContainsKey(type))
+            {
                 return Instance.registryBuilders[type];
+            }
+
             return null;
         }
 
@@ -252,10 +288,12 @@ namespace Prateek.DaemonCore.Code
         public static List<T> GetRegistrable<T>() where T : RegistrableBehaviour
         {
             if (Instance == null)
+            {
                 return null;
+            }
 
-            var behaviours = (List<T>)null;
-            GetRegistrable<T>(ref behaviours);
+            var behaviours = (List<T>) null;
+            GetRegistrable(ref behaviours);
             return behaviours;
         }
 
@@ -263,27 +301,32 @@ namespace Prateek.DaemonCore.Code
         public static bool GetRegistrable<T>(ref List<T> behaviours) where T : RegistrableBehaviour
         {
             if (Instance == null)
+            {
                 return false;
+            }
 
-            var temp = (List<RegistrableBehaviour>)null;
+            var temp = (List<RegistrableBehaviour>) null;
             behaviours = null;
             if (Instance.registryBehaviours.TryGetValue(typeof(T), out temp))
             {
                 if (behaviours.Count > 0)
                 {
                     behaviours = new List<T>();
-                    for (int i = 0; i < temp.Count; i++)
+                    for (var i = 0; i < temp.Count; i++)
                     {
                         behaviours.Add(temp[i] as T);
                     }
                 }
+
                 return behaviours.Count > 0;
             }
+
             return false;
         }
         #endregion Getters
 
         //---------------------------------------------------------------------
+
         #region Tickable events
         private void OnUpdate(TickEvent tickEvent, float seconds)
         {
@@ -294,10 +337,11 @@ namespace Prateek.DaemonCore.Code
                 if (managersToStart.Count > 0)
                 {
                     managersToStart.Sort((a, b) => a.Priority - b.Priority);
-                    for (int i = 0; i < managersToStart.Count; i++)
+                    for (var i = 0; i < managersToStart.Count; i++)
                     {
                         managersToStart[i].OnStart();
                     }
+
                     managersToStart.Clear();
                 }
 
@@ -313,34 +357,58 @@ namespace Prateek.DaemonCore.Code
         }
 
         //---------------------------------------------------------------------
-        private void OnUpdateUnscaled(TickEvent tickEvent, float seconds) { UpdateUnscaledManagers(tickEvent, seconds); }
-        private void OnLateUpdate(TickEvent tickEvent, float seconds) { LateUpdateManagers(tickEvent, seconds); }
-        private void OnFixedUpdate(TickEvent tickEvent, float seconds) { FixedUpdateManagers(tickEvent, seconds); }
+        private void OnUpdateUnscaled(TickEvent tickEvent, float seconds)
+        {
+            UpdateUnscaledManagers(tickEvent, seconds);
+        }
+
+        private void OnLateUpdate(TickEvent tickEvent, float seconds)
+        {
+            LateUpdateManagers(tickEvent, seconds);
+        }
+
+        private void OnFixedUpdate(TickEvent tickEvent, float seconds)
+        {
+            FixedUpdateManagers(tickEvent, seconds);
+        }
         #endregion Tickable events
 
         //---------------------------------------------------------------------
+
         #region Unity events
-        private void OnApplicationFocus(bool focusStatus) { OnApplicationFocusManagers(focusStatus); }
-        private void OnApplicationPause(bool pauseStatus) { OnApplicationPauseManagers(pauseStatus); }
+        private void OnApplicationFocus(bool focusStatus)
+        {
+            OnApplicationFocusManagers(focusStatus);
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            OnApplicationPauseManagers(pauseStatus);
+        }
+
         private void OnApplicationQuit(bool status)
         {
             OnApplicationQuitManagers();
 
-            GameObject.Destroy(tickerBegin.gameObject);
+            UnityEngine.Object.Destroy(tickerBegin.gameObject);
 
             tickerBegin = null;
             tickerEnd = null;
         }
 
         //---------------------------------------------------------------------
-        private void OnGUI(bool status) { OnGUIManagers(); }
+        private void OnGUI(bool status)
+        {
+            OnGUIManagers();
+        }
         #endregion Unity events
 
         //---------------------------------------------------------------------
+
         #region Manager Events
         private void UpdateManagers(TickEvent tickEvent, float seconds)
         {
-            for (int i = 0; i < managersToUpdate.Count; ++i)
+            for (var i = 0; i < managersToUpdate.Count; ++i)
             {
                 managersToUpdate[i].OnUpdate(tickEvent, seconds);
             }
@@ -349,7 +417,7 @@ namespace Prateek.DaemonCore.Code
         //---------------------------------------------------------------------
         private void UpdateUnscaledManagers(TickEvent tickEvent, float seconds)
         {
-            for (int i = 0; i < managersToUpdate.Count; ++i)
+            for (var i = 0; i < managersToUpdate.Count; ++i)
             {
                 managersToUpdate[i].OnUpdateUnscaled(tickEvent, seconds);
             }
@@ -358,7 +426,7 @@ namespace Prateek.DaemonCore.Code
         //---------------------------------------------------------------------
         private void LateUpdateManagers(TickEvent tickEvent, float seconds)
         {
-            for (int i = 0; i < managersToUpdate.Count; ++i)
+            for (var i = 0; i < managersToUpdate.Count; ++i)
             {
                 managersToUpdate[i].OnLateUpdate(tickEvent, seconds);
             }
@@ -367,7 +435,7 @@ namespace Prateek.DaemonCore.Code
         //---------------------------------------------------------------------
         private void FixedUpdateManagers(TickEvent tickEvent, float seconds)
         {
-            for (int i = 0; i < managersToUpdate.Count; ++i)
+            for (var i = 0; i < managersToUpdate.Count; ++i)
             {
                 managersToUpdate[i].OnFixedUpdate(tickEvent, seconds);
             }
@@ -376,7 +444,7 @@ namespace Prateek.DaemonCore.Code
         //---------------------------------------------------------------------
         private void OnApplicationFocusManagers(bool focusStatus)
         {
-            for (int i = 0; i < managersToUpdate.Count; ++i)
+            for (var i = 0; i < managersToUpdate.Count; ++i)
             {
                 managersToUpdate[i].OnApplicationFocus(focusStatus);
             }
@@ -385,7 +453,7 @@ namespace Prateek.DaemonCore.Code
         //---------------------------------------------------------------------
         private void OnApplicationPauseManagers(bool pauseStatus)
         {
-            for (int i = 0; i < managersToUpdate.Count; ++i)
+            for (var i = 0; i < managersToUpdate.Count; ++i)
             {
                 managersToUpdate[i].OnApplicationPause(pauseStatus);
             }
@@ -394,7 +462,7 @@ namespace Prateek.DaemonCore.Code
         //---------------------------------------------------------------------
         private void OnApplicationQuitManagers()
         {
-            for (int i = 0; i < managersToUpdate.Count; ++i)
+            for (var i = 0; i < managersToUpdate.Count; ++i)
             {
                 managersToUpdate[i].OnApplicationQuit();
             }
@@ -403,7 +471,7 @@ namespace Prateek.DaemonCore.Code
         //---------------------------------------------------------------------
         private void OnGUIManagers()
         {
-            for (int i = 0; i < managersToUpdate.Count; ++i)
+            for (var i = 0; i < managersToUpdate.Count; ++i)
             {
                 managersToUpdate[i].OnGUI();
             }

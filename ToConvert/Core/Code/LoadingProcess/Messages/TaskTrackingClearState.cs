@@ -3,16 +3,16 @@ namespace Mayfair.Core.Code.LoadingProcess.Messages
     using Mayfair.Core.Code.LoadingProcess.StateMachine;
     using Mayfair.Core.Code.StateMachines.FSM.Common;
 
-    internal class TaskTrackingClearState : ServiceState<LoadingProcessTrigger, LoadingProcessService>
+    internal class TaskTrackingClearState : ServiceState<LoadingProcessTrigger, LoadingProcessDaemonCore>
     {
         #region Constructors
-        public TaskTrackingClearState(LoadingProcessService service) : base(service) { }
+        public TaskTrackingClearState(LoadingProcessDaemonCore daemonCore) : base(daemonCore) { }
         #endregion
 
         #region Class Methods
         protected override void Begin()
         {
-            this.service.ClearTaskTracking();
+            this.daemonCore.ClearTaskTracking();
         }
         #endregion
     }

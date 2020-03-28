@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,26 +26,30 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
 namespace Prateek.DaemonCore.Code
 {
-    using System;
     using Prateek.Core.Code.Behaviours;
     using UnityEngine;
 
     /// <summary>
-    /// Base class for a singleton NamedBehaviour.
-    /// Creates an empty game object in your scene and adds itself as a component on it the first time you call the Instance accessor
+    ///     Base class for a singleton NamedBehaviour.
+    ///     Creates an empty game object in your scene and adds itself as a component on it the first time you call the
+    ///     Instance accessor
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class BehaviourSingleton<T> : NamedBehaviour, ISingleton where T : BehaviourSingleton<T>
     {
+        #region Static and Constants
         //---------------------------------------------------------------------
         private static T instance;
+        #endregion
+
+        #region Properties
         public static T Instance
         {
             get
@@ -63,10 +67,13 @@ namespace Prateek.DaemonCore.Code
                         DontDestroyOnLoad(instance.gameObject);
                     }
                 }
+
                 return instance;
             }
         }
+        #endregion
 
+        #region Unity Methods
         //---------------------------------------------------------------------
         protected virtual void Awake()
         {
@@ -80,15 +87,9 @@ namespace Prateek.DaemonCore.Code
             }
             else if (this != instance)
             {
-                UnityEngine.Debug.LogError(String.Format("Singleton for {0} already exists. Destroying {1}.", typeof(T).ToString(), name));
+                Debug.LogError(string.Format("Singleton for {0} already exists. Destroying {1}.", typeof(T).ToString(), name));
                 Destroy(gameObject);
             }
-        }
-
-        //---------------------------------------------------------------------
-        protected virtual void OnApplicationQuit()
-        {
-            Destroy(gameObject);
         }
 
         //---------------------------------------------------------------------
@@ -99,5 +100,12 @@ namespace Prateek.DaemonCore.Code
                 instance = null;
             }
         }
+
+        //---------------------------------------------------------------------
+        protected virtual void OnApplicationQuit()
+        {
+            Destroy(gameObject);
+        }
+        #endregion
     }
 }
