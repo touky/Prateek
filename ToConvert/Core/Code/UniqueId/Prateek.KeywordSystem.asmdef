@@ -1,0 +1,16 @@
+{
+    "name": "Prateek.Keywords",
+    "references": [
+        "Prateek.StaticArray",
+        "Prateek.Consts"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

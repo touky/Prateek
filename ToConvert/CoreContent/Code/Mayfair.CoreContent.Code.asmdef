@@ -1,0 +1,17 @@
+{
+    "name": "Mayfair.Tags.Code",
+    "references": [
+        "GUID:a0e8e7c3003bc6344abda0d25c504c3c",
+        "GUID:fa601e39e44079b4f8418f398988c37b",
+        "GUID:785c9e84b3c4b68449a769ddedf9422b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
