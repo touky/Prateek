@@ -1,4 +1,4 @@
-namespace Prateek.DaemonCore.Code
+namespace Prateek.TickableFramework.Code.Enums
 {
     using System;
 
@@ -16,6 +16,7 @@ namespace Prateek.DaemonCore.Code
         OnApplicationQuit = 1 << 8,
         OnGUI = 1 << 9,
 
+        MAX = OnGUI << 1,
         ALL = ~0,
 
         OFFSET_BEGIN = 0,

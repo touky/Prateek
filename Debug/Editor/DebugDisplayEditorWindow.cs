@@ -412,19 +412,19 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            var manager = !EditorApplication.isPlaying ? null : DaemonRegistry.GetManager<DebugDisplayManager>();
-            if (manager != null)
-            {
-                if (maskHasChanged)
-                {
-                    for (int e = 0; e < enumInfos.Count; e++)
-                    {
-                        debugFlags.SetStatus(enumInfos[e].value, activeFlags[e]);
-                    }
-                    DebugDisplayManager.DebugFlags = debugFlags;
-                    manager.Build();
-                }
-            }
+            //todo var manager = !EditorApplication.isPlaying ? null : TickableRegistry.GetManager<DebugDisplayManager>();
+            //todo if (manager != null)
+            //todo {
+            //todo     if (maskHasChanged)
+            //todo     {
+            //todo         for (int e = 0; e < enumInfos.Count; e++)
+            //todo         {
+            //todo             debugFlags.SetStatus(enumInfos[e].value, activeFlags[e]);
+            //todo         }
+            //todo         DebugDisplayManager.DebugFlags = debugFlags;
+            //todo         manager.Build();
+            //todo     }
+            //todo }
             return;
 
 

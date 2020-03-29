@@ -1,19 +1,18 @@
-namespace Prateek.DaemonCore.Code.Interfaces
+namespace Prateek.TickableFramework.Code.Interfaces
 {
     using Mayfair.Core.Code.Utils.Types.Priority;
-
-    public interface IDaemonCore<TDaemonBranch> : IDaemonCore
-        where TDaemonBranch : IDaemonBranch
-    {
-        #region Registering
-        void Register(TDaemonBranch branch);
-        void Unregister(TDaemonBranch branch);
-        #endregion
-    }
+    using Prateek.TickableFramework.Code.Enums;
 
     public interface ITickable : IPriority
     {
-        #region Class Methods
+        #region Properties
+        /// <summary>
+        ///     Implement this to tell what tick event this class implements
+        /// </summary>
+        TickType TickType { get; }
+        #endregion
+
+        #region Unity Methods
         /// <summary>
         ///     OnInitialize is called when the object is created. OnInitialize is not called during deserialization.
         /// </summary>
@@ -26,11 +25,19 @@ namespace Prateek.DaemonCore.Code.Interfaces
         void Start();
 
         /// <summary>
+        ///     OnFixedUpdate is called every fixed physics engine update.
+        /// </summary>
+        /// <param name="frameEvent"></param>
+        /// <param name="seconds"></param>
+        void FixedUpdate(FrameEvent frameEvent, float seconds);
+
+        /// <summary>
         ///     OnUpdate is called every frame.
         /// </summary>
         /// <param name="frameEvent"></param>
         /// <param name="seconds"></param>
-        void Update(FrameEvent frameEvent, float seconds, float UnscaledSeconds);
+        /// <param name="unscaledSeconds"></param>
+        void Update(FrameEvent frameEvent, float seconds, float unscaledSeconds);
 
         /// <summary>
         ///     OnLateUpdate is called every frame after the OnUpdate for every object has been called.
@@ -38,22 +45,18 @@ namespace Prateek.DaemonCore.Code.Interfaces
         /// <param name="frameEvent"></param>
         /// <param name="seconds"></param>
         void LateUpdate(FrameEvent frameEvent, float seconds);
-
-        /// <summary>
-        ///     OnFixedUpdate is called every fixed physics engine update.
-        /// </summary>
-        /// <param name="frameEvent"></param>
-        /// <param name="seconds"></param>
-        void FixedUpdate(FrameEvent frameEvent, float seconds);
         #endregion
-        
+
+        #region Unity Application Methods
         // Application Messages
+        void OnApplicationQuit();
         void OnApplicationFocus(bool appStatus);
         void OnApplicationPause(bool appStatus);
-        void OnApplicationQuit();
+        #endregion
 
+        #region Class Methods
         // Ui Messages
         void DrawGUI();
+        #endregion
     }
-
 }

@@ -39,39 +39,8 @@ namespace Prateek.Debug.Code
     using Prateek.DaemonCore.Code;
     using Prateek.FrameRecorder;
     using Prateek.FrameRecorder.Code;
+    using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
-
-    //-------------------------------------------------------------------------
-    #region NullDebugDisplay
-    public sealed class NullDebugDisplay : DebugDisplayManager
-    {
-        //---------------------------------------------------------------------
-        public override void OnCreate() { }
-
-        //---------------------------------------------------------------------
-        public override void OnRegister() { } //todo DaemonRegistry.Instance.Register(typeof(DebugDisplayManager), this); }
-        public override void OnUnregister() { } //todo DaemonRegistry.Instance.Unregister(typeof(DebugDisplayManager)); }
-
-        //-- Object Lifetime Messages------------------------------------------
-        public override void OnInitialize() { }
-        public override void OnStart() { }
-        public override void OnUpdate(TickType tickType, float seconds) { }
-        public override void OnUpdateUnscaled(TickType tickType, float seconds) { }
-        public override void OnLateUpdate(TickType tickType, float seconds) { }
-        public override void OnFixedUpdate(TickType tickType, float seconds) { }
-        public override void OnDispose() { }
-
-        //-- Application Messages----------------------------------------------
-        public override void OnApplicationFocus(bool focusStatus) { }
-        public override void OnApplicationPause(bool pauseStatus) { }
-        public override void OnApplicationQuit() { }
-
-#if UNITY_EDITOR
-        //-- Ui Messages-------------------------------------------------------
-        public override void OnGUI() { }
-#endif //UNITY_EDITOR
-    }
-    #endregion NullDebugDisplay
 
     //-------------------------------------------------------------------------
     public abstract class DebugDisplayManager : FlagManager, FrameRecorderManager.IRecorderBase
@@ -133,7 +102,7 @@ namespace Prateek.Debug.Code
         #region IGlobalManager integration
         public static GlobalManager.BuilderBase GetBuilder()
         {
-            return new GlobalManager.Builder<DebugDisplayManager, NullDebugDisplay>();
+            return null;// new GlobalManager.Builder<DebugDisplayManager, NullDebugDisplay>();
         }
 
         //---------------------------------------------------------------------
@@ -234,17 +203,18 @@ namespace Prateek.Debug.Code
         #region Recording datas
         public static void Add(DebugDraw.PrimitiveSetup primitive)
         {
-            var instance = DaemonRegistry.GetManager<DebugDisplayManager>();
-            if (instance == null)
-                return;
+            return;
+            //var instance = TickableRegistry.GetManager<DebugDisplayManager>();
+            //if (instance == null)
+            //    return;
 
-            if (instance.IsAppPaused)
-                return;
+            //if (instance.IsAppPaused)
+            //    return;
 
-            if (primitive.setup.Duration < 0)
-                instance.recordings.FramePrimitives.Add(primitive);
-            else
-                instance.TimedPrimitives.Add(primitive);
+            //if (primitive.setup.Duration < 0)
+            //    instance.recordings.FramePrimitives.Add(primitive);
+            //else
+            //    instance.TimedPrimitives.Add(primitive);
         }
         #endregion Recording datas
     }

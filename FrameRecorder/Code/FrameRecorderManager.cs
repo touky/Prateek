@@ -37,39 +37,8 @@ namespace Prateek.FrameRecorder.Code
     using Prateek.Core.Code;
     using Prateek.DaemonCore;
     using Prateek.DaemonCore.Code;
+    using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
-
-    //-------------------------------------------------------------------------
-    #region NullFrameRecorderManager
-    public sealed class NullFrameRecorderManager : GlobalManager
-    {
-        //---------------------------------------------------------------------
-        public override void OnCreate() { }
-
-        //---------------------------------------------------------------------
-        public override void OnRegister() { } //todo DaemonRegistry.Instance.Register(typeof(FrameRecorderManager), this); }
-        public override void OnUnregister() { } //todo DaemonRegistry.Instance.Unregister(typeof(FrameRecorderManager)); }
-
-        //-- Object Lifetime Messages------------------------------------------
-        public override void OnInitialize() { }
-        public override void OnStart() { }
-        public override void OnUpdate(TickType tickType, float seconds) { }
-        public override void OnUpdateUnscaled(TickType tickType, float seconds) { }
-        public override void OnLateUpdate(TickType tickType, float seconds) { }
-        public override void OnFixedUpdate(TickType tickType, float seconds) { }
-        public override void OnDispose() { }
-
-        //-- Application Messages----------------------------------------------
-        public override void OnApplicationFocus(bool focusStatus) { }
-        public override void OnApplicationPause(bool pauseStatus) { }
-        public override void OnApplicationQuit() { }
-
-#if UNITY_EDITOR
-        //-- Ui Messages-------------------------------------------------------
-        public override void OnGUI() { }
-#endif //UNITY_EDITOR
-    }
-    #endregion NullFrameRecorderManager
 
     //-------------------------------------------------------------------------
     public sealed class FrameRecorderManager : GlobalManager
@@ -155,7 +124,7 @@ namespace Prateek.FrameRecorder.Code
         #region IGlobalManager integration
         public static BuilderBase GetBuilder()
         {
-            return new Builder<FrameRecorderManager, NullFrameRecorderManager>();
+            return null; //new Builder<FrameRecorderManager, NullFrameRecorderManager>();
         }
 
         //---------------------------------------------------------------------
@@ -317,124 +286,5 @@ namespace Prateek.FrameRecorder.Code
             }
         }
         #endregion Instance Methods
-    }
-
-    //-------------------------------------------------------------------------
-    public static class FrameRecorder
-    {
-        //---------------------------------------------------------------------
-        #region Properties
-        public static FrameRecorderManager.StateType State
-        {
-            get
-            {
-                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-                if (instance == null)
-                    return FrameRecorderManager.StateType.Inactive;
-                return instance.State;
-            }
-            set
-            {
-                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-                if (instance == null)
-                    return;
-                instance.State = value;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public static bool PlaybackActive
-        {
-            get
-            {
-                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-                if (instance == null)
-                    return false;
-                return instance.PlaybackActive;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public static int FrameCount
-        {
-            get
-            {
-                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-                if (instance == null)
-                    return 0;
-                return instance.FrameCount;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public static int MaxFrameRecorded
-        {
-            get
-            {
-                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-                if (instance == null)
-                    return 0;
-                return instance.MaxFrameRecorded;
-            }
-            set
-            {
-                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-                if (instance == null)
-                    return;
-                instance.MaxFrameRecorded = value;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public static Vector2Int CurrentFrameRange
-        {
-            get
-            {
-                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-                if (instance == null)
-                    return Vector2Int.zero;
-                return instance.CurrentFrameRange;
-            }
-            set
-            {
-                var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-                if (instance == null)
-                    return;
-                instance.CurrentFrameRange = value;
-            }
-        }
-        #endregion Properties
-
-        //---------------------------------------------------------------------
-        #region External Access
-        public static void Register(FrameRecorderManager.IRecorderBase recorder)
-        {
-            var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-            if (instance == null)
-                return;
-
-            instance.Register(recorder);
-        }
-
-        //---------------------------------------------------------------------
-        public static void Unregister(FrameRecorderManager.IRecorderBase recorder)
-        {
-            var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-            if (instance == null)
-                return;
-
-            instance.Unregister(recorder);
-        }
-        #endregion External Access
-
-        //---------------------------------------------------------------------
-        public static void ClearHistory()
-        {
-            var instance = DaemonRegistry.GetManager<FrameRecorderManager>();
-            if (instance == null)
-                return;
-
-            instance.InternalClearHistory();
-        }
     }
 }

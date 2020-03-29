@@ -1,7 +1,8 @@
 {
-    "name": "Prateek.DaemonCore.Code",
+    "name": "Prateek.DaemonFramework.Code",
     "references": [
-        "GUID:4b4491f2f353c0b44a038afb3e9dbb85"
+        "GUID:4b4491f2f353c0b44a038afb3e9dbb85",
+        "GUID:c8cf59f7a6fd435488bd132a70a64315"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.DaemonCore.Code
+namespace Prateek.TickableFramework.Code
 {
     using System;
     using Prateek.Core.Code.Behaviours;

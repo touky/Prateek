@@ -475,16 +475,16 @@ namespace Prateek.Debug.Code
         //---------------------------------------------------------------------
         public void RenderLine(DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
         {
-            var manager = DaemonRegistry.GetManager<DebugDisplayManager>();
-            if (manager != null)
-            {
-                if (!manager.IsActive(setup.Flag))
-                    return;
-            }
+            //todo var manager = TickableRegistry.GetManager<DebugDisplayManager>();
+            //if (manager != null)
+            //{
+            //    if (!manager.IsActive(setup.Flag))
+            //        return;
+            //}
 
-            var line = GetLine(setup.DepthTest);
-            line.SetLine(start, end);
-            line.SetColor(setup.Color, setup.Color);
+            //var line = GetLine(setup.DepthTest);
+            //line.SetLine(start, end);
+            //line.SetColor(setup.Color, setup.Color);
         }
     }
 }

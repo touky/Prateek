@@ -116,8 +116,8 @@ namespace Prateek.FrameRecorder.Editor
                 Repaint();
 
 
-            if (EditorApplication.isPaused)
-                DaemonRegistry.GetManager<FrameRecorderManager>().OnFakeUpdate();
+            //todo if (EditorApplication.isPaused)
+            //todo     TickableRegistry.GetManager<FrameRecorderManager>().OnFakeUpdate();
         }
 
         //---------------------------------------------------------------------

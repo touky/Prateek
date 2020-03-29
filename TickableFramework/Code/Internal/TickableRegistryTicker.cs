@@ -5,18 +5,12 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-
-namespace Prateek.DaemonCore.Code
+namespace Prateek.TickableFramework.Code.Internal
 {
-    using Prateek.Core.Code.Behaviours;
+    using Prateek.TickableFramework.Code.Enums;
 
-    internal abstract class DaemonRegistryTicker : NamedBehaviour
+    internal abstract class TickableRegistryTicker : TickableRegistryHelper
     {
-        //---------------------------------------------------------------------
-        #region Fields
-        internal DaemonRegistry registry;
-        #endregion
-        
         //---------------------------------------------------------------------
         #region Properties
         internal abstract TickType TickerOffset { get; }

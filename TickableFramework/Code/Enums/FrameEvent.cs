@@ -1,4 +1,4 @@
-namespace Prateek.DaemonCore.Code
+namespace Prateek.TickableFramework.Code.Enums
 {
     public enum FrameEvent
     {

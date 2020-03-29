@@ -31,10 +31,12 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.DaemonCore.Code
+namespace Prateek.TickableFramework.Code.Internal
 {
+    using Prateek.TickableFramework.Code.Enums;
+
     //-------------------------------------------------------------------------
-    internal sealed class DaemonRegistryTickerFrameEnd : DaemonRegistryTicker
+    internal sealed class TickableRegistryFrameEnd : TickableRegistryTicker
     {
         //---------------------------------------------------------------------
         #region Properties

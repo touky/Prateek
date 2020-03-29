@@ -34,6 +34,7 @@
 namespace Prateek.DaemonCore.Code
 {
     using System;
+    using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
     //-------------------------------------------------------------------------
