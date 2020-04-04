@@ -30,13 +30,13 @@ namespace Mayfair.Core.Code.VisualAsset
         #endregion
 
         #region Messaging
-        public override void MessageReceived() { }
+        public override void NoticeReceived() { }
 
-        protected override void SetupCommunicatorCallback()
+        protected override void SetupNoticeReceiverCallback()
         {
-            base.SetupCommunicatorCallback();
+            base.SetupNoticeReceiverCallback();
 
-            Communicator.AddCallback<VisualResourceDirectMessage>(OnVisualResourceMessage);
+            NoticeReceiver.AddCallback<VisualResourceDirectNotice>(OnVisualResourceMessage);
         }
         #endregion
 
@@ -48,17 +48,17 @@ namespace Mayfair.Core.Code.VisualAsset
             branch.SetupDebugContent(debugNotebook, debugMainPage);
         }
 
-        private void OnVisualResourceMessage(VisualResourceDirectMessage message)
+        private void OnVisualResourceMessage(VisualResourceDirectNotice notice)
         {
             IEnumerable<VisualResourceDaemonBranch> providers = GetValidBranches();
             foreach (VisualResourceDaemonBranch branch in providers)
             {
-                if (!message.AllowTransfer(branch))
+                if (!notice.AllowTransfer(branch))
                 {
                     continue;
                 }
 
-                branch.OnVisualResourceMessage(message);
+                branch.OnVisualResourceMessage(notice);
             }
         }
 

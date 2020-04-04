@@ -1,7 +1,7 @@
 namespace Mayfair.Core.Code.Database.Messages
 {
     using Mayfair.Core.Code.Database.Interfaces;
-    using Mayfair.Core.Code.Messaging.Messages;
+    using Prateek.NoticeFramework.Notices;
 
     public abstract class DatabaseContentByIdRequest : ContentByIdRequest<DatabaseContentByIdRequest>
     {

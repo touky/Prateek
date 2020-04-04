@@ -15,7 +15,7 @@ namespace Mayfair.Core.Code.DebugMenu.Pages
         #region Fields
         private Dictionary<Type, Field> fields;
         private DebugMenuPage parent;
-        private int parentCount = Consts.RESET;
+        private int parentCount = 0;//todo Consts.RESET;
         private bool enabled = true;
         #endregion
 
@@ -121,7 +121,7 @@ namespace Mayfair.Core.Code.DebugMenu.Pages
 
             this.parent = parent;
 
-            parentCount = Consts.RESET;
+            parentCount = 0;//todo Consts.RESET;
             while (parent != null)
             {
                 if (parents.Contains(parent))

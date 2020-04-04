@@ -43,7 +43,7 @@ namespace Mayfair.Core.Code.Statistics
         #endregion
 
         #region Class Methods
-        public abstract void ProcessMessage(GameActionMessage message);
+        public abstract void ProcessMessage(GameActionNotice notice);
 
         public void AddRelevantTag<T>()
             where T : MasterTag

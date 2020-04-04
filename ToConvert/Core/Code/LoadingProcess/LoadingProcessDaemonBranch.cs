@@ -44,7 +44,7 @@ namespace Mayfair.Core.Code.LoadingProcess
         }
 
         protected abstract void InternalInit(LoadingProcessDaemonCore daemonCore);
-        public abstract void GameLoadingRestart(GameLoadingNeedRestart message);
+        public abstract void GameLoadingRestart(GameLoadingNeedRestart notice);
         #endregion
 
         #region Nested type: LoadingEndState

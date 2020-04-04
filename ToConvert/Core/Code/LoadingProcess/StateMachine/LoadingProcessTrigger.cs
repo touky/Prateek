@@ -12,7 +12,7 @@ namespace Mayfair.Core.Code.LoadingProcess.StateMachine
     {
         public bool doTrigger;
         public LoadingTrackingStatus trackerStatus;
-        public GameLoadingNeedRestart message;
+        public GameLoadingNeedRestart notice;
 
         public static implicit operator LoadingProcessTrigger(bool doTrigger)
         {
@@ -24,9 +24,9 @@ namespace Mayfair.Core.Code.LoadingProcess.StateMachine
             return new LoadingProcessTrigger {trackerStatus = trackerStatus};
         }
 
-        public static implicit operator LoadingProcessTrigger(GameLoadingNeedRestart message)
+        public static implicit operator LoadingProcessTrigger(GameLoadingNeedRestart notice)
         {
-            return new LoadingProcessTrigger {message = message};
+            return new LoadingProcessTrigger {notice = notice};
         }
     }
 }

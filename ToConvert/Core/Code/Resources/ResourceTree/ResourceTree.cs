@@ -98,7 +98,7 @@
                 }
 
                 if (activeBranch.branches == null
-                 || !activeBranch.branches.ContainsKey(tags[Consts.FIRST_ITEM]))
+                 || !activeBranch.branches.ContainsKey(tags[0])) //todo Consts.FIRST_ITEM
                 {
                     continue;
                 }

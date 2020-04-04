@@ -2,10 +2,10 @@ namespace Mayfair.Core.Code.Animation
 {
     using Mayfair.Core.Code.Animation.Messages;
     using Mayfair.Core.Code.DebugMenu.Content;
-    using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Utils.Helpers;
     using Mayfair.Core.Code.VisualAsset.Providers;
+    using Prateek.NoticeFramework.Notices.Core;
 
     public class AnimationLibraryResourceDaemonBranch : ScriptableObjectResourceDaemonBranch<AnimationLibrary>, IDebugMenuNotebookOwner
     {
@@ -31,7 +31,7 @@ namespace Mayfair.Core.Code.Animation
 
         protected override RequestCallbackOnChange CreateResourceChangeRequest()
         {
-            return Message.Create<RequestCallbackOnScriptableResourceChange<AnimationLibraryResourceHasChanged, AnimationLibrary>>();
+            return Notice.Create<RequestCallbackOnScriptableResourceChange<AnimationLibraryResourceHasChanged, AnimationLibrary>>();
         }
 
         protected override bool IsResponseAccepted(ScriptableResourcesHaveChanged<AnimationLibrary> response)

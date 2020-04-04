@@ -4,7 +4,6 @@ namespace Mayfair.Core.Code.Resources.Loader
     using System.Diagnostics;
     using Mayfair.Core.Code.Resources.Enums;
     using Mayfair.Core.Code.Resources.ResourceTree;
-    using Mayfair.Core.Code.Utils.Debug;
 
     [DebuggerDisplay("{resource.ToString()}, Location: {location}, Status: {status}")]
     public abstract class ResourceLoader : IResourceLoader, ITreeLeafLocator

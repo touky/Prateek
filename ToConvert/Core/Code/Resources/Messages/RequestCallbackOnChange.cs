@@ -3,18 +3,30 @@ namespace Mayfair.Core.Code.Resources.Messages
     using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
-    using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.Resources.ResourceTree;
-    using Mayfair.Core.Code.Utils.Helpers.Regexp;
+    using Prateek.NoticeFramework.Notices.Core;
 
-    public abstract class RequestCallbackOnChange : RequestMessage, ITreeIdentification
+    internal static class RegexContent
+    {
+        internal static readonly Regex FOLDER_SPLIT_REGEX = new Regex("([^\\/]+)(?:\\/)+");
+    }
+
+    internal static class RegexHelper
+    {
+        public static Regex FolderSplit
+        {
+            get { return RegexContent.FOLDER_SPLIT_REGEX; }
+        }
+    }
+
+    public abstract class RequestCallbackOnChange : RequestNotice, ITreeIdentification
     {
         #region Fields
         private List<string[]> resourceTags = new List<string[]>();
         #endregion
 
         #region Properties
-        public override long MessageID
+        public override long NoticeID
         {
             get { return ConvertToId(typeof(RequestCallbackOnChange)); }
         }

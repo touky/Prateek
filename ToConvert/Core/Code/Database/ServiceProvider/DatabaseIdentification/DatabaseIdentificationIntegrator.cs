@@ -3,7 +3,7 @@ namespace Mayfair.Core.Code.Database.ServiceProvider.DatabaseIdentification
     using Mayfair.Core.Code.BaseBehaviour;
     using Mayfair.Core.Code.Utils;
 
-    public abstract class DatabaseIdentificationIntegrator : CommunicatorBehaviour
+    public abstract class DatabaseIdentificationIntegrator : NoticeReceiverOwner
     {
         #region Fields
         private int destroyTicker = Consts.WAIT_5_FRAMES;
@@ -27,8 +27,8 @@ namespace Mayfair.Core.Code.Database.ServiceProvider.DatabaseIdentification
         #endregion
 
         #region Class Methods
-        protected override void SetupCommunicatorCallback() { }
-        public override void MessageReceived() { }
+        protected override void SetupNoticeReceiverCallback() { }
+        public override void NoticeReceived() { }
 
         public abstract void Create();
         #endregion

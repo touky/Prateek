@@ -2,7 +2,7 @@ namespace Mayfair.Core.Code.VisualAsset.Messages
 {
     using Mayfair.Core.Code.VisualAsset.Providers;
 
-    public abstract class VisualResourceDirectMessage<TDaemonBranch> : VisualResourceDirectMessage
+    public abstract class VisualResourceDirectNotice<TDaemonBranch> : VisualResourceDirectNotice
         where TDaemonBranch : VisualResourceDaemonBranch
     {
         #region Class Methods

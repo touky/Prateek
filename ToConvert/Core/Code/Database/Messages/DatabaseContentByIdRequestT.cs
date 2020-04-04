@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.Database.Messages
 {
-    using Mayfair.Core.Code.Messaging.Messages;
+    using Prateek.NoticeFramework.Notices.Core;
 
     public class DatabaseContentByIdRequest<TResponseType> : DatabaseContentByIdRequest
         where TResponseType : DatabaseContentByIdResponse, new()
@@ -11,7 +11,7 @@ namespace Mayfair.Core.Code.Database.Messages
             return base.GetResponse() as TResponseType;
         }
 
-        protected override ResponseMessage CreateNewResponse()
+        protected override ResponseNotice CreateNewResponse()
         {
             return Create<TResponseType>();
         }

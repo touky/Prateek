@@ -1,14 +1,14 @@
 namespace Mayfair.Core.Code.LoadingProcess.StateMachine
 {
-    using Mayfair.Core.Code.Messaging.Communicator;
-    using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.StateMachines.FSM.Common;
+    using Prateek.NoticeFramework.Notices.Core;
+    using Prateek.NoticeFramework.TransmitterReceiver;
 
     internal class NoticeState<TNotice> : NoticeState<LoadingProcessTrigger, TNotice>
-        where TNotice : BroadcastMessage, new()
+        where TNotice : BroadcastNotice, new()
     {
         #region Constructors
-        public NoticeState(IMessageCommunicator communicator, int timeOut = -1) : base(communicator, timeOut) { }
+        public NoticeState(INoticeReceiver noticeReceiver, int timeOut = -1) : base(noticeReceiver, timeOut) { }
         #endregion
 
         #region Class Methods

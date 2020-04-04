@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.GameScene.Messages
 {
-    using Messaging.Messages;
+    using Prateek.NoticeFramework.Notices.Core;
 
-    public class UnloadSceneResponse : ResponseMessage
+    public class UnloadSceneResponse : ResponseNotice
     {
 
     }

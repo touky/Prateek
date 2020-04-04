@@ -2,7 +2,6 @@ namespace Mayfair.Core.Code.DebugMenu
 {
     using Mayfair.Core.Code.DebugMenu.Content;
     using Mayfair.Core.Code.DebugMenu.Pages;
-    using Mayfair.Core.Code.Service;
     using Prateek.DaemonCore.Code.Branches;
 
     public abstract class DebugMenuDaemonBranch : DaemonBranchBehaviour<DebugMenuDaemonCore, DebugMenuDaemonBranch>

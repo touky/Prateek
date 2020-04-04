@@ -1,16 +1,16 @@
 namespace Mayfair.Core.Code.VisualAsset.Messages
 {
-    using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.Resources.Messages;
+    using Prateek.NoticeFramework.Notices.Core;
     using UnityEngine;
 
     public class RequestCallbackOnVisualChange<TChangeMessage> : RequestCallbackOnChange<GameObject>
         where TChangeMessage : VisualResourceHasChanged, new()
     {
         #region Class Methods
-        protected override ResponseMessage CreateNewResponse()
+        protected override ResponseNotice CreateNewResponse()
         {
-            return Message.Create<TChangeMessage>();
+            return Notice.Create<TChangeMessage>();
         }
         #endregion
     }

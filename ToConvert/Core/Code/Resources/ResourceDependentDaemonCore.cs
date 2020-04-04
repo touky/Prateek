@@ -3,11 +3,10 @@ namespace Mayfair.Core.Code.Resources
     using System;
     using System.Collections.Generic;
     using Mayfair.Core.Code.Resources.Messages;
-    using Mayfair.Core.Code.Service;
-    using Mayfair.Core.Code.Utils.Helpers;
+    using Prateek.NoticeFramework.Tools;
 
-    public abstract class ResourceDependentDaemonCore<TDaemonCore, TDaemonBranch> : DaemonCoreCommunicator<TDaemonCore, TDaemonBranch>
-        where TDaemonCore : DaemonCoreCommunicator<TDaemonCore, TDaemonBranch>
+    public abstract class ResourceDependentDaemonCore<TDaemonCore, TDaemonBranch> : NoticeReceiverDaemonCore<TDaemonCore, TDaemonBranch>
+        where TDaemonCore : NoticeReceiverDaemonCore<TDaemonCore, TDaemonBranch>
         where TDaemonBranch : ResourceDependentDaemonBranch<TDaemonCore, TDaemonBranch>
     {
         #region ServiceProviderUsageRuleType enum
@@ -32,9 +31,9 @@ namespace Mayfair.Core.Code.Resources
         #endregion
 
         #region Messaging
-        protected override void SetupCommunicatorCallback()
+        protected override void SetupNoticeReceiverCallback()
         {
-            Communicator.AddCallback<ResourcesHaveChangedResponse>(OnResourceUpdateCallback);
+            NoticeReceiver.AddCallback<ResourcesHaveChangedResponse>(OnResourceUpdateCallback);
         }
         #endregion
 
@@ -44,16 +43,16 @@ namespace Mayfair.Core.Code.Resources
             PerformProviderAction(ServiceProviderUsageRule,
                  branch =>
                  {
-                     Communicator.Send(branch.GetResourceChangeRequest(Communicator));
+                     NoticeReceiver.Send(branch.GetResourceChangeRequest(NoticeReceiver));
                  });
         }
 
-        private void OnResourceUpdateCallback(ResourcesHaveChangedResponse message)
+        private void OnResourceUpdateCallback(ResourcesHaveChangedResponse notice)
         {
             PerformProviderAction(ServiceProviderUsageRule,
                  branch =>
                  {
-                     branch.OnResourceChanged(Instance, message);
+                     branch.OnResourceChanged(Instance, notice);
                  });
         }
 

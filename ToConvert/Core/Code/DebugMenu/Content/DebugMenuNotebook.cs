@@ -4,7 +4,6 @@ namespace Mayfair.Core.Code.DebugMenu.Content
     using Mayfair.Core.Code.DebugMenu.Fields;
     using Mayfair.Core.Code.DebugMenu.Pages;
     using Mayfair.Core.Code.Utils;
-    using Mayfair.Core.Code.Utils.Helpers.Regexp;
 
     /// <summary>
     ///     To implement debug menu content, you need to create a DebugMenuNotebook and add pages to it.
@@ -28,17 +27,17 @@ namespace Mayfair.Core.Code.DebugMenu.Content
         #region Class Methods
         private static string GetShortTitle(string title)
         {
-            List<string> matches = new List<string>(10);
-            if (RegexHelper.TryFetchingMatches(title, RegexHelper.UpperCase, matches))
-            {
-                string result = string.Empty;
-                foreach (string match in matches)
-                {
-                    result += match;
-                }
-
-                return result;
-            }
+            //todo List<string> matches = new List<string>(10);
+            //todo if (RegexHelper.TryFetchingMatches(title, RegexHelper.UpperCase, matches))
+            //todo {
+            //todo     string result = string.Empty;
+            //todo     foreach (string match in matches)
+            //todo     {
+            //todo         result += match;
+            //todo     }
+            //todo 
+            //todo     return result;
+            //todo }
 
             return string.Empty;
         }
@@ -106,7 +105,7 @@ namespace Mayfair.Core.Code.DebugMenu.Content
 
                         if (page.ShowContent || !page.HasParent)
                         {
-                            using (new ContextIndentScope(context, page.ParentCount + Consts.ONE_ITEM))
+                            using (new ContextIndentScope(context, page.ParentCount + 1))
                             {
                                 page.Draw(context);
                             }

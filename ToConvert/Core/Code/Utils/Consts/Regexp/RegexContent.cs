@@ -19,7 +19,7 @@ namespace Mayfair.Core.Code.Utils.Helpers.Regexp
         internal static readonly Regex NAME_SURROUNDED_REGEX = new Regex("_*([A-Za-z]+)_*");
         internal static readonly Regex UPPERCASE_REGEX = new Regex("([A-Z]+)");
         internal static readonly Regex XML_COMMENT_REGEX = new Regex("\\/\\/\\/([a-zA-Z0-9_\\- .:;,?!(){}'\"]*)(?:[$\r\n])"); //(?:[^\r\n])
-        internal static readonly Regex PROTOCOL_MESSAGE_REGEX = new Regex("(?:[^\r\n])\\s*message\\s*([a-zA-Z0-9_]*)");
+        internal static readonly Regex PROTOCOL_MESSAGE_REGEX = new Regex("(?:[^\r\n])\\s*notice\\s*([a-zA-Z0-9_]*)");
         internal static readonly string FOLDER_ROOT = $"\\/{REPLACEMENT}\\/([a-zA-Z]+)";
         #endregion
     }

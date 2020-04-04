@@ -1,12 +1,12 @@
 namespace Mayfair.Core.Code.GameScene
 {
-    using Mayfair.Core.Code.Messaging.Communicator;
-    using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.Resources;
     using Mayfair.Core.Code.Resources.Loader;
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Helpers;
+    using Prateek.NoticeFramework.Notices.Core;
+    using Prateek.NoticeFramework.TransmitterReceiver;
     using UnityEngine;
 
     public sealed class GameSceneDaemonBranch : ResourceDependentDaemonBranch<GameSceneDaemonCore, GameSceneDaemonBranch>
@@ -23,28 +23,28 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Class Methods
-        public override RequestCallbackOnChange GetResourceChangeRequest(ILightMessageCommunicator communicator)
+        public override RequestCallbackOnChange GetResourceChangeRequest(INoticeTransmitter transmitter)
         {
-            RequestCallbackOnSceneChange<SceneResourceHasChanged> request = Message.Create<RequestCallbackOnSceneChange<SceneResourceHasChanged>>();
+            RequestCallbackOnSceneChange<SceneResourceHasChanged> request = Notice.Create<RequestCallbackOnSceneChange<SceneResourceHasChanged>>();
             request.Init(ResourceKeywords);
             return request;
         }
 
-        public override void OnResourceChanged(GameSceneDaemonCore daemonCore, ResourcesHaveChangedResponse message)
+        public override void OnResourceChanged(GameSceneDaemonCore daemonCore, ResourcesHaveChangedResponse notice)
         {
-            if (message is SceneResourceHasChanged)
+            if (notice is SceneResourceHasChanged)
             {
-                OnSceneResourceChanged(daemonCore, (SceneResourceHasChanged) message);
+                OnSceneResourceChanged(daemonCore, (SceneResourceHasChanged) notice);
             }
         }
 
-        private void OnSceneResourceChanged(GameSceneDaemonCore daemonCore, SceneResourceHasChanged message)
+        private void OnSceneResourceChanged(GameSceneDaemonCore daemonCore, SceneResourceHasChanged notice)
         {
-            DebugTools.Log(this, message);
+            //todo DebugTools.Log(this, notice);
 
-            for (int r = 0; r < message.References.Count; r++)
+            for (int r = 0; r < notice.References.Count; r++)
             {
-                SceneReference resource = message.References[r];
+                SceneReference resource = notice.References[r];
 
                 daemonCore.Add(resource);
             }

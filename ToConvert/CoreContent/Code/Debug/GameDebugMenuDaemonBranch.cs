@@ -1,18 +1,18 @@
 namespace Mayfair.CoreContent.Code.Debug
 {
-    using Mayfair.Core.Code.DebugMenu;
-    using Mayfair.Core.Code.DebugMenu.Content;
-    using Mayfair.Core.Code.DebugMenu.Pages;
-
-    public class GameDebugMenuDaemonBranch : DebugMenuDaemonBranch
-    {
-        #region Class Methods
-        public override void AddDebugContent(DebugMenuNotebook notebook, DebugMenuPage rootPage)
-        {
-            DebugSettingsPage newPage = new DebugSettingsPage("Debug Settings");
-            notebook.AddPagesWithParent(rootPage, newPage);
-            newPage.Build(notebook, GameDebugOptions.Instance);
-        }
-        #endregion
-    }
+    //todo using Mayfair.Core.Code.DebugMenu;
+    //todo using Mayfair.Core.Code.DebugMenu.Content;
+    //todo using Mayfair.Core.Code.DebugMenu.Pages;
+    //todo 
+    //todo public class GameDebugMenuDaemonBranch : DebugMenuDaemonBranch
+    //todo {
+    //todo     #region Class Methods
+    //todo     public override void AddDebugContent(DebugMenuNotebook notebook, DebugMenuPage rootPage)
+    //todo     {
+    //todo         DebugSettingsPage newPage = new DebugSettingsPage("Debug Settings");
+    //todo         notebook.AddPagesWithParent(rootPage, newPage);
+    //todo         newPage.Build(notebook, GameDebugOptions.Instance);
+    //todo     }
+    //todo     #endregion
+    //todo }
 }

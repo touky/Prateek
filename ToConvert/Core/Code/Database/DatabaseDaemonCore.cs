@@ -10,12 +10,12 @@
     using Mayfair.Core.Code.Database.ServiceProvider;
     using Mayfair.Core.Code.DebugMenu.Content;
     using Mayfair.Core.Code.DebugMenu.Pages;
-    using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.Resources;
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Types;
     using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.NoticeFramework.Notices.Core;
     using DatabaseContentByFilterRequest = Mayfair.Core.Code.Database.Messages.DatabaseContentMatchingWithFilterRequest<Messages.DatabaseContentMatchingWithFilterResponse>;
 
     public sealed class DatabaseDaemonCore : ResourceDependentDaemonCore<DatabaseDaemonCore, DatabaseDaemonBranch>, IDebugMenuNotebookOwner
@@ -85,18 +85,18 @@
         #endregion
 
         #region Messaging
-        public override void MessageReceived()
+        public override void NoticeReceived()
         {
             //Empty
         }
 
-        protected override void SetupCommunicatorCallback()
+        protected override void SetupNoticeReceiverCallback()
         {
-            base.SetupCommunicatorCallback();
+            base.SetupNoticeReceiverCallback();
 
-            Communicator.AddCallback<DatabaseIdentifierResponse>(OnIdentifiersReceived);
-            Communicator.AddCallback<DatabaseContentByIdRequest>(OnRequestContentById);
-            Communicator.AddCallback<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
+            NoticeReceiver.AddCallback<DatabaseIdentifierResponse>(OnIdentifiersReceived);
+            NoticeReceiver.AddCallback<DatabaseContentByIdRequest>(OnRequestContentById);
+            NoticeReceiver.AddCallback<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
         }
         #endregion
 
@@ -176,7 +176,7 @@
                 }
             }
 
-            Communicator.Send(response);
+            NoticeReceiver.Send(response);
         }
 
         private void SendRequestForIdentifiers()
@@ -184,10 +184,10 @@
             if (!identifierStatus.Equals(IdentifierRequestStatus.WaitingForIdentifiers))
             {
                 identifierStatus = IdentifierRequestStatus.WaitingForIdentifiers;
-                DatabaseIdentifierRequest<DatabaseIdentifierResponse> message =
-                    Message.Create<DatabaseIdentifierRequest<DatabaseIdentifierResponse>>();
+                DatabaseIdentifierRequest<DatabaseIdentifierResponse> notice =
+                    Notice.Create<DatabaseIdentifierRequest<DatabaseIdentifierResponse>>();
 
-                Communicator.Send(message);
+                NoticeReceiver.Send(notice);
             }
         }
 
@@ -219,7 +219,7 @@
 
             DebugTools.Log(this, "OnDatabaseContentMatchingFilter request received and handled. Sending result now");
 
-            Communicator.Send(response);
+            NoticeReceiver.Send(response);
         }
 
         private void PatternContainsAll(List<string> filters, List<ICompositeContent> results)

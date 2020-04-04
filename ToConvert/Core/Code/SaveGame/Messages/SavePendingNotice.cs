@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.SaveGame.Messages
 {
-    using Mayfair.Core.Code.Messaging.Messages;
+    using Prateek.NoticeFramework.Notices.Core;
 
-    public class SavePendingNotice : BroadcastMessage { }
+    public class SavePendingNotice : BroadcastNotice { }
 }

@@ -5,13 +5,11 @@
     using Mayfair.Core.Code.Resources.Loader;
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Resources.ResourceTree;
-    using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.StateMachines;
     using Mayfair.Core.Code.StateMachines.Interfaces;
-    using Mayfair.Core.Code.Utils.Helpers;
-    using Mayfair.Core.Code.Utils.Helpers.Regexp;
+    using Prateek.NoticeFramework.Tools;
 
-    public sealed class ResourceDaemonCore : DaemonCoreCommunicator<ResourceDaemonCore, ResourceDaemonBranch>,
+    public sealed class ResourceDaemonCore : NoticeReceiverDaemonCore<ResourceDaemonCore, ResourceDaemonBranch>,
                                           ISequentialStateMachineOwner<ServiceState>
     {
         #region Fields
@@ -59,11 +57,11 @@
                 {
                     foreach (RequestCallbackOnChange callback in this.resourceUpdateCallbacks)
                     {
-                        ResourcesHaveChangedResponse message = callback.GetResponse() as ResourcesHaveChangedResponse;
+                        ResourcesHaveChangedResponse notice = callback.GetResponse() as ResourcesHaveChangedResponse;
 
-                        this.resourceTree.RetrieveResources(callback, message);
+                        this.resourceTree.RetrieveResources(callback, notice);
 
-                        Communicator.Send(message);
+                        NoticeReceiver.Send(notice);
                     }
 
                     break;
@@ -98,26 +96,26 @@
         #endregion
 
         #region Communicator
-        public override void MessageReceived()
+        public override void NoticeReceived()
         {
             //Empty
         }
 
-        protected override void SetupCommunicatorCallback()
+        protected override void SetupNoticeReceiverCallback()
         {
-            Communicator.AddCallback<RequestCallbackOnChange>(OnResourceUpdateCallback);
+            NoticeReceiver.AddCallback<RequestCallbackOnChange>(OnResourceUpdateCallback);
         }
 
-        private void OnResourceUpdateCallback(RequestCallbackOnChange message)
+        private void OnResourceUpdateCallback(RequestCallbackOnChange notice)
         {
             int foundIndex = this.resourceUpdateCallbacks.FindIndex(x =>
             {
-                return x.GetType() == message.GetType();
+                return x.GetType() == notice.GetType();
             });
 
             if (foundIndex < 0)
             {
-                this.resourceUpdateCallbacks.Add(message);
+                this.resourceUpdateCallbacks.Add(notice);
             }
         }
 

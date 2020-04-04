@@ -1,10 +1,10 @@
 namespace Mayfair.Core.Code.VisualAsset.Providers
 {
-    using Mayfair.Core.Code.Messaging.Communicator;
     using Mayfair.Core.Code.Resources.Loader;
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.VisualAsset.Messages;
+    using Prateek.NoticeFramework.TransmitterReceiver;
 
     public abstract class GameObjectResourceDaemonBranch : VisualResourceDaemonBranch<GameObjectResourceReference>
     {
@@ -18,9 +18,9 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         #endregion
         
         #region Class Methods
-        public override void OnResourceChanged(VisualResourceDaemonCore daemonCore, ResourcesHaveChangedResponse message)
+        public override void OnResourceChanged(VisualResourceDaemonCore daemonCore, ResourcesHaveChangedResponse notice)
         {
-            if (message is GameObjectResourcesHaveChanged typedMessage)
+            if (notice is GameObjectResourcesHaveChanged typedMessage)
             {
                 if (IsResponseAccepted(typedMessage))
                 {
@@ -29,31 +29,31 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
 
-        public override void OnVisualResourceMessage(VisualResourceDirectMessage message)
+        public override void OnVisualResourceMessage(VisualResourceDirectNotice notice)
         {
-            if (message.Instance != null)
+            if (notice.Instance != null)
             {
-                AddPendingInit(message.Instance.AssignmentIndex, message.Instance);
+                AddPendingInit(notice.Instance.AssignmentIndex, notice.Instance);
             }
             else
             {
-                DebugTools.LogError($"message.Instance is null in OnVisualResourceMessage for {name}: Message: {message.GetType().Name}");
+                DebugTools.LogError($"notice.Instance is null in OnVisualResourceMessage for {name}: Message: {notice.GetType().Name}");
             }
         }
 
-        protected void OnResourceChanged(GameObjectResourcesHaveChanged message)
+        protected void OnResourceChanged(GameObjectResourcesHaveChanged notice)
         {
-            DebugTools.Log(this, message);
+            //todo DebugTools.Log(this, notice);
 
-            for (int r = 0; r < message.References.Count; r++)
+            for (int r = 0; r < notice.References.Count; r++)
             {
-                GameObjectResourceReference resource = message.References[r];
+                GameObjectResourceReference resource = notice.References[r];
 
                 Store(resource);
             }
         }
 
-        public override RequestCallbackOnChange GetResourceChangeRequest(ILightMessageCommunicator communicator)
+        public override RequestCallbackOnChange GetResourceChangeRequest(INoticeTransmitter transmitter)
         {
             RequestCallbackOnChange request = CreateResourceChangeRequest();
             request.Init(ResourceKeywords);

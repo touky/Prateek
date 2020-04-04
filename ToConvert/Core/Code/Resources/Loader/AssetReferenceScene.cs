@@ -1,7 +1,5 @@
 namespace Mayfair.Core.Code.Resources.Loader
 {
-    using Mayfair.Core.Code.Utils.Debug;
-    using UnityEngine;
     using UnityEngine.AddressableAssets;
     using UnityEngine.ResourceManagement.AsyncOperations;
     using UnityEngine.ResourceManagement.ResourceProviders;

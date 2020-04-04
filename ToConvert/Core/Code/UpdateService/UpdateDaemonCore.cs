@@ -5,6 +5,7 @@ namespace Mayfair.Core.Code.UpdateService
     using Interfaces;
     using Mayfair.Core.Code.LoadingProcess;
     using Messages;
+    using Prateek.NoticeFramework.Tools;
     using Service;
     using UnityEngine;
     using Utils.Debug;
@@ -13,13 +14,13 @@ namespace Mayfair.Core.Code.UpdateService
     /// This should not be used as an example of Service/Provider/Messaging interaction
     /// as it violates the asynchronicity goals of our systems.
     /// </summary>
-    public class UpdateDaemonCore : DaemonCoreCommunicator<UpdateDaemonCore, UpdateProvider>
+    public class UpdateDaemonCore : NoticeReceiverDaemonCore<UpdateDaemonCore, UpdateProvider>
     {
         private Dictionary<UpdateFrequency, List<HashSet<IUpdatable>>> registeredUpdatables;
         private Dictionary<UpdateFrequency, int> updateFrequencyIndex;
         private Dictionary<IUpdatable, UpdateFrequency> registeredUpdatablesToFrequency;
 
-        public override void MessageReceived() { }
+        public override void NoticeReceived() { }
 
         protected override void OnBranchRegistered(UpdateProvider branch)
         {
@@ -55,10 +56,10 @@ namespace Mayfair.Core.Code.UpdateService
             registeredUpdatablesToFrequency = new Dictionary<IUpdatable, UpdateFrequency>();
         }
 
-        protected override void SetupCommunicatorCallback()
+        protected override void SetupNoticeReceiverCallback()
         {
-            Communicator.AddCallback<RegisterForUpdate>(OnRegisterForUpdate);
-            Communicator.AddCallback<UnregisterForUpdate>(OnUnregisterForUpdate);
+            NoticeReceiver.AddCallback<RegisterForUpdate>(OnRegisterForUpdate);
+            NoticeReceiver.AddCallback<UnregisterForUpdate>(OnUnregisterForUpdate);
         }
 
         private void AddUpdatablesList(UpdateFrequency updateFrequency)
@@ -72,16 +73,16 @@ namespace Mayfair.Core.Code.UpdateService
             registeredUpdatables.Add(updateFrequency, newUpdatablesList);
         }
 
-        private void OnRegisterForUpdate(RegisterForUpdate message)
+        private void OnRegisterForUpdate(RegisterForUpdate notice)
         {
-            RemoveExistingRegistrationIfExists(message.UpdatableObject, message.UpdateFrequency);
+            RemoveExistingRegistrationIfExists(notice.UpdatableObject, notice.UpdateFrequency);
 
-            List<HashSet<IUpdatable>> updatablesList = registeredUpdatables[message.UpdateFrequency];
+            List<HashSet<IUpdatable>> updatablesList = registeredUpdatables[notice.UpdateFrequency];
 
             int leastPopulatedIndex = GetLeastPopulatedIndex(updatablesList);
 
-            updatablesList[leastPopulatedIndex].Add(message.UpdatableObject);
-            registeredUpdatablesToFrequency.Add(message.UpdatableObject, message.UpdateFrequency);
+            updatablesList[leastPopulatedIndex].Add(notice.UpdatableObject);
+            registeredUpdatablesToFrequency.Add(notice.UpdatableObject, notice.UpdateFrequency);
         }
 
         private int GetLeastPopulatedIndex(List<HashSet<IUpdatable>> updatablesList)
@@ -106,14 +107,14 @@ namespace Mayfair.Core.Code.UpdateService
             return leastPopulatedIndex;
         }
 
-        private void OnUnregisterForUpdate(UnregisterForUpdate message)
+        private void OnUnregisterForUpdate(UnregisterForUpdate notice)
         {
-            if (!registeredUpdatablesToFrequency.TryGetValue(message.UpdatableObject, out UpdateFrequency updateFrequency))
+            if (!registeredUpdatablesToFrequency.TryGetValue(notice.UpdatableObject, out UpdateFrequency updateFrequency))
             {
                 throw new ArgumentException("Updatable object is not registered to receive updates");
             }
 
-            RemoveRegisteredUpdatable(message.UpdatableObject, updateFrequency);
+            RemoveRegisteredUpdatable(notice.UpdatableObject, updateFrequency);
         }
 
         private void RemoveExistingRegistrationIfExists(IUpdatable updatableObject, UpdateFrequency newUpdateFrequency)

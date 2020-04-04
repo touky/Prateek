@@ -5,10 +5,10 @@ namespace Mayfair.Core.Code.DebugMenu
     using System.Diagnostics;
     using Mayfair.Core.Code.DebugMenu.Content;
     using Mayfair.Core.Code.DebugMenu.Pages;
-    using Mayfair.Core.Code.Input;
-    using Mayfair.Core.Code.Input.InputLayers;
-    using Mayfair.Core.Code.Service;
-    using Mayfair.Core.Code.Utils.Types;
+    //todo using Mayfair.Core.Code.Input;
+    //todo using Mayfair.Core.Code.Input.InputLayers;
+    //todo using Mayfair.Core.Code.Service;
+    //todo using Mayfair.Core.Code.Utils.Types;
     using Prateek.DaemonCore.Code;
     using UnityEngine;
 #if UNITY_EDITOR
@@ -128,10 +128,10 @@ namespace Mayfair.Core.Code.DebugMenu
         #region Service
         protected override void OnAwake()
         {
-            InputDaemonCore.RegisterLayer<DebugInputLayer>(() =>
-            {
-                return new DebugInputLayer(this);
-            });
+            //todo InputDaemonCore.RegisterLayer<DebugInputLayer>(() =>
+            //todo {
+            //todo     return new DebugInputLayer(this);
+            //todo });
 
             SetupDebugContent();
 
@@ -465,64 +465,64 @@ namespace Mayfair.Core.Code.DebugMenu
         #endregion
 
         #region Nested type: DebugInputLayer
-        private class DebugInputLayer : InputLayer
-        {
-            #region Fields
-            private DebugMenuDaemonCore daemonCore;
-            #endregion
-
-            #region Properties
-            public override bool IsActive
-            {
-                get { return daemonCore.IsOpen; }
-            }
-
-            public override bool SupportsMultiInput
-            {
-                get { return true; }
-            }
-
-            public override bool NeedActiveReceiverToLock
-            {
-                get { return false; }
-            }
-
-            public override bool CanUnlockIfActive
-            {
-                get { return false; }
-            }
-
-            public override int Priority
-            {
-                get { return 100000; }
-            }
-            #endregion
-
-            #region Constructors
-            public DebugInputLayer(DebugMenuDaemonCore daemonCore)
-            {
-                this.daemonCore = daemonCore;
-            }
-            #endregion
-
-            #region Class Methods
-            public override bool RefreshLayerLocking(Vector2 cursorPosition, RaycastHit[] hits)
-            {
-                return daemonCore.titlesRect.Contains(cursorPosition)
-                    || daemonCore.screenRect.Contains(cursorPosition);
-            }
-
-            public override bool RefreshLayerLocking(Vector2 cursorPosition0, RaycastHit[] hits0, Vector2 cursorPosition1, RaycastHit[] hits1)
-            {
-                if (!RefreshLayerLocking(cursorPosition0, hits0))
-                {
-                    return RefreshLayerLocking(cursorPosition1, hits1);
-                }
-
-                return false;
-            }
-            #endregion
-        }
+        //todo private class DebugInputLayer : InputLayer
+        //todo {
+        //todo     #region Fields
+        //todo     private DebugMenuDaemonCore daemonCore;
+        //todo     #endregion
+        //todo 
+        //todo     #region Properties
+        //todo     public override bool IsActive
+        //todo     {
+        //todo         get { return daemonCore.IsOpen; }
+        //todo     }
+        //todo 
+        //todo     public override bool SupportsMultiInput
+        //todo     {
+        //todo         get { return true; }
+        //todo     }
+        //todo 
+        //todo     public override bool NeedActiveReceiverToLock
+        //todo     {
+        //todo         get { return false; }
+        //todo     }
+        //todo 
+        //todo     public override bool CanUnlockIfActive
+        //todo     {
+        //todo         get { return false; }
+        //todo     }
+        //todo 
+        //todo     public override int Priority
+        //todo     {
+        //todo         get { return 100000; }
+        //todo     }
+        //todo     #endregion
+        //todo 
+        //todo     #region Constructors
+        //todo     public DebugInputLayer(DebugMenuDaemonCore daemonCore)
+        //todo     {
+        //todo         this.daemonCore = daemonCore;
+        //todo     }
+        //todo     #endregion
+        //todo 
+        //todo     #region Class Methods
+        //todo     public override bool RefreshLayerLocking(Vector2 cursorPosition, RaycastHit[] hits)
+        //todo     {
+        //todo         return daemonCore.titlesRect.Contains(cursorPosition)
+        //todo             || daemonCore.screenRect.Contains(cursorPosition);
+        //todo     }
+        //todo 
+        //todo     public override bool RefreshLayerLocking(Vector2 cursorPosition0, RaycastHit[] hits0, Vector2 cursorPosition1, RaycastHit[] hits1)
+        //todo     {
+        //todo         if (!RefreshLayerLocking(cursorPosition0, hits0))
+        //todo         {
+        //todo             return RefreshLayerLocking(cursorPosition1, hits1);
+        //todo         }
+        //todo 
+        //todo         return false;
+        //todo     }
+        //todo     #endregion
+        //todo }
         #endregion
 
         #region Nested type: MainDebugMenuNotebook

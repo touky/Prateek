@@ -7,9 +7,9 @@ namespace Mayfair.Core.Code.TimeService
     using Interfaces;
     using JetBrains.Annotations;
     using Messages;
-    using Messaging;
-    using Messaging.Messages;
     using Prateek.DaemonCore.Code;
+    using Prateek.NoticeFramework;
+    using Prateek.NoticeFramework.Notices.Core;
     using Service;
     using ServiceProviders;
     using UnityEngine;
@@ -44,12 +44,12 @@ namespace Mayfair.Core.Code.TimeService
 
         private void ChangeTimeReference(DateTime newReferenceTime)
         {
-            ReferenceTimeChanged message = Message.Create<ReferenceTimeChanged>();
-            message.Init(gameTime.CurrentTime, newReferenceTime);
+            ReferenceTimeChanged notice = Notice.Create<ReferenceTimeChanged>();
+            notice.Init(gameTime.CurrentTime, newReferenceTime);
 
             gameTime.CacheTimeReference(newReferenceTime);
 
-            MessageDaemonCore.DefaultCommunicator.Broadcast(message);
+            NoticeDaemonCore.DefaultNoticeTransmitter.Broadcast(notice);
         }
 
         private void PreserveScheduledTimers(DateTime newReferenceTime)

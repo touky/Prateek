@@ -1,12 +1,12 @@
 namespace Mayfair.Core.Code.Resources.Messages
 {
-    using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.Resources.ResourceTree;
+    using Prateek.NoticeFramework.Notices.Core;
 
-    public abstract class ResourcesHaveChangedResponse : ResponseMessage, ITreeIdentificationResult
+    public abstract class ResourcesHaveChangedResponse : ResponseNotice, ITreeIdentificationResult
     {
         #region Properties
-        public override long MessageID
+        public override long NoticeID
         {
             get { return ConvertToId(typeof(ResourcesHaveChangedResponse), Recipient); }
         }

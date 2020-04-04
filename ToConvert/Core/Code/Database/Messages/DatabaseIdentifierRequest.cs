@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.Database.Messages
 {
-    using Messaging.Messages;
+    using Prateek.NoticeFramework.Notices.Core;
 
-    public class DatabaseIdentifierRequest<TResponseType> : RequestMessage<TResponseType>
+    public class DatabaseIdentifierRequest<TResponseType> : RequestNotice<TResponseType>
         where TResponseType : DatabaseIdentifierResponse, new()
     {
         

@@ -3,7 +3,6 @@ namespace Mayfair.Core.Code.StateMachines
     using System;
     using System.Collections.Generic;
     using Mayfair.Core.Code.StateMachines.Interfaces;
-    using Mayfair.Core.Code.Utils;
 
     [Serializable]
     public abstract class SimpleStateMachine<TState, TTrigger> : IStateMachine<TState, TTrigger>
@@ -163,13 +162,13 @@ namespace Mayfair.Core.Code.StateMachines
             this.owner = user;
             this.states = initStates;
 
-#if ENABLE_PROFILER
-            this.debug.InitProfiling(stateProfilerFormat, triggerProfilerFormat, (stateTexts, stateFormat, triggerTexts, triggerFormat) =>
-            {
-                EnumHelper.CacheEnum(stateTexts, stateFormat);
-                EnumHelper.CacheEnum(triggerTexts, triggerFormat);
-            });
-#endif
+//todo #if ENABLE_PROFILER
+//todo             this.debug.InitProfiling(stateProfilerFormat, triggerProfilerFormat, (stateTexts, stateFormat, triggerTexts, triggerFormat) =>
+//todo             {
+//todo                 EnumHelper.CacheEnum(stateTexts, stateFormat);
+//todo                 EnumHelper.CacheEnum(triggerTexts, triggerFormat);
+//todo             });
+//todo #endif
 
             Restart();
         }

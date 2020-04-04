@@ -1,7 +1,5 @@
 namespace Mayfair.Core.Code.DebugMenu.Fields
 {
-    using Mayfair.Core.Code.GUIExt;
-    using Mayfair.Core.Code.Utils.Helpers;
     using UnityEngine;
 
     public class ProgressBarField : StringField
@@ -10,7 +8,7 @@ namespace Mayfair.Core.Code.DebugMenu.Fields
         private float progressMargin = 0.2f;
         protected Color unloadedColor = Color.red;
         protected Color loadingColor = Color.yellow;
-        protected Color loadedColor = ColorHelper.green.pastel;
+        protected Color loadedColor = Color.green;//todo ColorHelper.green.pastel;
 
         private float progress;
         #endregion
@@ -37,15 +35,15 @@ namespace Mayfair.Core.Code.DebugMenu.Fields
             Rect rect = GUILayoutUtility.GetLastRect();
             Rect progressRect = rect;
             progressRect.width *= this.progress;
-            using (ColorScope scope = new ColorScope(GetProgressColor(this.progress)))
-            {
-                GUI.Box(progressRect, GUIContent.none, context.ProgressBar[1]);
-            }
-
-            using (new ColorScope(Color.black))
-            {
-                GUI.Label(rect, this.text, context.LabelCenter);
-            }
+            //todo using (ColorScope scope = new ColorScope(GetProgressColor(this.progress)))
+            //todo {
+            //todo     GUI.Box(progressRect, GUIContent.none, context.ProgressBar[1]);
+            //todo }
+            //todo 
+            //todo using (new ColorScope(Color.black))
+            //todo {
+            //todo     GUI.Label(rect, this.text, context.LabelCenter);
+            //todo }
         }
         #endregion
 
@@ -68,7 +66,7 @@ namespace Mayfair.Core.Code.DebugMenu.Fields
         {
             this.unloadedColor = Color.red;
             this.loadingColor = Color.yellow;
-            this.loadedColor = ColorHelper.green.pastel;
+            this.loadedColor = Color.green;//todo ColorHelper.green.pastel;
         }
 
         private Color GetProgressColor(float progress)

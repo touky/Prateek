@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.LoadingProcess.Messages
 {
-    using Mayfair.Core.Code.Messaging.Messages;
+    using Prateek.NoticeFramework.Notices.Core;
 
-    public abstract class GameLoadingNotice : BroadcastMessage { }
+    public abstract class GameLoadingNotice : BroadcastNotice { }
 }

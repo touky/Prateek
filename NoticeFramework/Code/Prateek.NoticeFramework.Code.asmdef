@@ -1,0 +1,18 @@
+{
+    "name": "Prateek.NoticeFramework.Code",
+    "references": [
+        "GUID:4b4491f2f353c0b44a038afb3e9dbb85",
+        "GUID:fbe0fcf44802f7b42bb710774736de39",
+        "GUID:730408196424a394a80e4ec7fc48f298",
+        "GUID:785c9e84b3c4b68449a769ddedf9422b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

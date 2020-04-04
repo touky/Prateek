@@ -5,7 +5,7 @@ namespace Mayfair.Core.Code.LoadingProcess.StateMachine
         #region Class Methods
         public override void TryTriggering(LoadingProcessTrigger trigger)
         {
-            if (trigger.message != null)
+            if (trigger.notice != null)
             {
                 Trigger();
             }

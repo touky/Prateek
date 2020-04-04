@@ -46,9 +46,9 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
             }
         }
 
-        public override void GameLoadingRestart(GameLoadingNeedRestart message)
+        public override void GameLoadingRestart(GameLoadingNeedRestart notice)
         {
-            stateMachine.Trigger(message);
+            stateMachine.Trigger(notice);
             stateMachine.Advance();
         }
 
@@ -59,19 +59,19 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
             TaskTrackingClearState taskClear = new TaskTrackingClearState(daemonCore);
 
             //Send notice
-            NoticeState<GameLoadingPrerequisiteNotice> prereqNotice = new NoticeState<GameLoadingPrerequisiteNotice>(daemonCore.Communicator, Consts.WAIT_5_FRAMES);
+            NoticeState<GameLoadingPrerequisiteNotice> prereqNotice = new NoticeState<GameLoadingPrerequisiteNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
             LoadingIdleState prereqIdle = new LoadingIdleState();
 
             //Send notice
-            NoticeState<GameLoadingGameplayNotice> gameplayNotice = new NoticeState<GameLoadingGameplayNotice>(daemonCore.Communicator, Consts.WAIT_5_FRAMES);
+            NoticeState<GameLoadingGameplayNotice> gameplayNotice = new NoticeState<GameLoadingGameplayNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
             LoadingIdleState gameplayIdle = new LoadingIdleState();
 
             //Send notice
-            NoticeState<GameLoadingFinalizeNotice> finalizeNotice = new NoticeState<GameLoadingFinalizeNotice>(daemonCore.Communicator, Consts.WAIT_5_FRAMES);
+            NoticeState<GameLoadingFinalizeNotice> finalizeNotice = new NoticeState<GameLoadingFinalizeNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
             LoadingIdleState finalizeIdle = new LoadingIdleState();
 
             //Send notice
-            NoticeState<GameLoadingFinishedNotice> finishedNotice = new NoticeState<GameLoadingFinishedNotice>(daemonCore.Communicator);
+            NoticeState<GameLoadingFinishedNotice> finishedNotice = new NoticeState<GameLoadingFinishedNotice>(daemonCore.NoticeReceiver);
 
             //Loading end
             LoadingStatusState<LoadingProcessTrigger> endLoading = new LoadingStatusState<LoadingProcessTrigger>(this, true);
@@ -79,7 +79,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
             //Send notice
             LoadingStatusState<LoadingProcessTrigger> restartLoading = new LoadingStatusState<LoadingProcessTrigger>(this, false);
             TaskTrackingClearState restartClear = new TaskTrackingClearState(daemonCore);
-            NoticeState<GameLoadingRestartNotice> restartNotice = new NoticeState<GameLoadingRestartNotice>(daemonCore.Communicator, Consts.WAIT_5_FRAMES);
+            NoticeState<GameLoadingRestartNotice> restartNotice = new NoticeState<GameLoadingRestartNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
             LoadingIdleState restartIdle = new LoadingIdleState();
 
             new LoadingBoolTransition().From(idle).To(taskClear);

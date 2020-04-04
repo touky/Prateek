@@ -2,9 +2,9 @@ namespace Mayfair.Core.Code.Database.Messages
 {
     using System.Collections.Generic;
     using Mayfair.Core.Code.Database.Interfaces;
-    using Mayfair.Core.Code.Messaging.Messages;
+    using Prateek.NoticeFramework.Notices.Core;
 
-    public class DatabaseIdentifierSetup : DirectMessage
+    public class DatabaseIdentifierSetup : DirectNotice
     {
         #region Fields
         private List<ICompositeIdentifier> identifiers = new List<ICompositeIdentifier>();

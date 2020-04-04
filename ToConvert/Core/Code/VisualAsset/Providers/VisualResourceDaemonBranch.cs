@@ -15,7 +15,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             debugNotebook.AddPagesWithParent(parent, new VisualResourceMenuPage(this, name));
         }
 
-        public abstract void OnVisualResourceMessage(VisualResourceDirectMessage message);
+        public abstract void OnVisualResourceMessage(VisualResourceDirectNotice notice);
         #endregion
     }
 }

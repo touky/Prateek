@@ -1,18 +1,16 @@
-using Mayfair.Core.Code.Messaging;
-using Mayfair.Core.Code.Messaging.Communicator;
-
-
 namespace Mayfair.Core.Code.GameAction
 {
     using Mayfair.Core.Code.TagSystem;
     using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.NoticeFramework;
+    using Prateek.NoticeFramework.TransmitterReceiver;
 
-    public class GameActionMessage<T0, T1> : GameActionMessage
+    public class GameActionNotice<T0, T1> : GameActionNotice
         where T0 : MasterTag
         where T1 : MasterTag
     {
         #region Constructors
-        public GameActionMessage()
+        public GameActionNotice()
         {
             tags.Add(Keyname.Create<T0>());
             tags.Add(Keyname.Create<T1>());
@@ -20,19 +18,19 @@ namespace Mayfair.Core.Code.GameAction
         #endregion
 
         #region Class Methods
-        public static void Broadcast(ILightMessageCommunicator communicator, float targetValue = 1)
+        public static void Broadcast(INoticeTransmitter transmitter, float targetValue = 1)
         {
-            GameActionMessage<T0, T1> message = Create<GameActionMessage<T0, T1>>();
-            message.targetValue = targetValue;
-            MessageDaemonCore.DefaultCommunicator.Broadcast(message);
+            GameActionNotice<T0, T1> notice = Create<GameActionNotice<T0, T1>>();
+            notice.targetValue = targetValue;
+            NoticeDaemonCore.DefaultNoticeTransmitter.Broadcast(notice);
         }
 
-        public static void Broadcast(ILightMessageCommunicator communicator, Keyname id0, float targetValue = 1)
+        public static void Broadcast(INoticeTransmitter transmitter, Keyname id0, float targetValue = 1)
         {
-            GameActionMessage<T0, T1> message = Create<GameActionMessage<T0, T1>>();
-            message.targetValue = targetValue;
-            message.Add(id0);
-            MessageDaemonCore.DefaultCommunicator.Broadcast(message);
+            GameActionNotice<T0, T1> notice = Create<GameActionNotice<T0, T1>>();
+            notice.targetValue = targetValue;
+            notice.Add(id0);
+            NoticeDaemonCore.DefaultNoticeTransmitter.Broadcast(notice);
         }
         #endregion
     }

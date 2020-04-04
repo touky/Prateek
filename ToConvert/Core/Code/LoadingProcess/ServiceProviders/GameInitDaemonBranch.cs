@@ -68,7 +68,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
 
         public override void UpdateProcess(List<LoadingTaskTracker> trackers) { }
 
-        public override void GameLoadingRestart(GameLoadingNeedRestart message)
+        public override void GameLoadingRestart(GameLoadingNeedRestart notice)
         {
             //Do nothing
         }

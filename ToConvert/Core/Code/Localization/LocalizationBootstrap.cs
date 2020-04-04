@@ -2,15 +2,15 @@ using Mayfair.Core.Code.BaseBehaviour;
 using Mayfair.Core.Code.LoadingProcess;
 using Mayfair.Core.Code.LoadingProcess.Enums;
 using Mayfair.Core.Code.LoadingProcess.Messages;
-using Mayfair.Core.Code.Messaging.Messages;
 
 namespace Mayfair.Core.Code.Localization
 {
     using System.Collections;
     using System.Collections.Generic;
+    using Prateek.NoticeFramework.Notices.Core;
     using UnityEngine;
 
-    public class LocalizationBootstrap : CommunicatorBehaviour
+    public class LocalizationBootstrap : NoticeReceiverOwner
     {
         #region Fields
         #endregion
@@ -19,22 +19,22 @@ namespace Mayfair.Core.Code.Localization
         #endregion
 
         #region Methods
-        protected override void SetupCommunicatorCallback()
+        protected override void SetupNoticeReceiverCallback()
         {
-            Communicator.AddCallback<GameLoadingPrerequisiteNotice>(OnGameLoadingPrerequisiteNoticeReceived);
+            NoticeReceiver.AddCallback<GameLoadingPrerequisiteNotice>(OnGameLoadingPrerequisiteNoticeReceived);
         }
 
         private void OnGameLoadingPrerequisiteNoticeReceived(GameLoadingPrerequisiteNotice notice)
         {
-            TaskLoadingMessage taskLoadingMessage = Message.Create<TaskLoadingMessage>();
+            TaskLoadingNotice taskLoadingNotice = Notice.Create<TaskLoadingNotice>();
 
             if (!LocalizationDaemonCore.SetLanguage(SystemLanguage.English, false))
             {
                 throw new MissingFullLocalizationException(SystemLanguage.English);
             }
 
-            taskLoadingMessage.trackerState = new LoadingTaskTracker(GetType(), LoadingTrackingStatus.HasLoadedPrerequisite);
-            Communicator.Send(taskLoadingMessage);
+            taskLoadingNotice.trackerState = new LoadingTaskTracker(GetType(), LoadingTrackingStatus.HasLoadedPrerequisite);
+            NoticeReceiver.Send(taskLoadingNotice);
         }
         #endregion
     }

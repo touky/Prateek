@@ -7,13 +7,13 @@ namespace Mayfair.Core.Code.GameScene
     using Mayfair.Core.Code.LoadingProcess;
     using Mayfair.Core.Code.LoadingProcess.Enums;
     using Mayfair.Core.Code.LoadingProcess.Messages;
-    using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.Resources;
     using Mayfair.Core.Code.Resources.Enums;
     using Mayfair.Core.Code.Resources.Loader;
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Helpers.Regexp;
     using Messages;
+    using Prateek.NoticeFramework.Notices.Core;
     using UnityEngine.ResourceManagement.ResourceProviders;
     using UnityEngine.SceneManagement;
     using Utils.Debug;
@@ -46,7 +46,7 @@ namespace Mayfair.Core.Code.GameScene
 
         #region Fields
         private ServiceState serviceState = ServiceState.Idle;
-        private TaskLoadingMessage taskMessage;
+        private TaskLoadingNotice taskNotice;
         private GameSessionOpen activeSession;
         private AvailableScenes activeContainer;
         private int completedActions = Consts.INDEX_NONE;
@@ -78,19 +78,19 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Messaging
-        public override void MessageReceived() { }
+        public override void NoticeReceived() { }
 
-        protected override void SetupCommunicatorCallback()
+        protected override void SetupNoticeReceiverCallback()
         {
-            base.SetupCommunicatorCallback();
+            base.SetupNoticeReceiverCallback();
 
-            this.Communicator.AddCallback<GameSessionOpen>(OnGameSessionOpen);
-            this.Communicator.AddCallback<GameSessionClose>(OnGameSessionClose);
-            this.Communicator.AddCallback<GameLoadingGameplayNotice>(OnGameLoadingGameplay);
-            this.Communicator.AddCallback<GameLoadingRestartNotice>(OnGameLoadingRestart);
+            this.NoticeReceiver.AddCallback<GameSessionOpen>(OnGameSessionOpen);
+            this.NoticeReceiver.AddCallback<GameSessionClose>(OnGameSessionClose);
+            this.NoticeReceiver.AddCallback<GameLoadingGameplayNotice>(OnGameLoadingGameplay);
+            this.NoticeReceiver.AddCallback<GameLoadingRestartNotice>(OnGameLoadingRestart);
 
-            this.Communicator.AddCallback<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
-            this.Communicator.AddCallback<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
+            this.NoticeReceiver.AddCallback<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
+            this.NoticeReceiver.AddCallback<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
         }
         #endregion
 
@@ -135,31 +135,31 @@ namespace Mayfair.Core.Code.GameScene
 
                 this.availableScenes[context] = container;
 
-                SessionDebugAvailable message = Message.Create<SessionDebugAvailable>();
-                message.Init(context);
-                this.Communicator.Send(message);
+                SessionDebugAvailable notice = Notice.Create<SessionDebugAvailable>();
+                notice.Init(context);
+                this.NoticeReceiver.Send(notice);
             }
         }
 
         private void SendStatusMessage(LoadingTrackingStatus status, float progress = 1)
         {
-            if (taskMessage == null)
+            if (taskNotice == null)
             {
-                taskMessage = Message.Create<TaskLoadingMessage>();
+                taskNotice = Notice.Create<TaskLoadingNotice>();
             }
 
-            taskMessage.trackerState = new LoadingTaskTracker(GetType(), status)
+            taskNotice.trackerState = new LoadingTaskTracker(GetType(), status)
             {
                 StepProgress = progress
             };
 
-            Communicator.Send(taskMessage);
+            NoticeReceiver.Send(taskNotice);
         }
 
         private void UpdateLoadingTask()
         {
             if (serviceState == ServiceState.Idle
-             || taskMessage == null
+             || taskNotice == null
              || activeContainer.scenes == null)
             {
                 return;
@@ -196,19 +196,19 @@ namespace Mayfair.Core.Code.GameScene
             else if (isDone && completedActions == activeContainer.scenes.Count)
             {
                 SendStatusMessage(LoadingTrackingStatus.Finished);
-                taskMessage = null;
+                taskNotice = null;
                 serviceState = ServiceState.Idle;
 
                 HandlePostponedRequests();
             }
         }
 
-        private void OnGameSessionOpen(GameSessionOpen message)
+        private void OnGameSessionOpen(GameSessionOpen notice)
         {
-            activeSession = message;
+            activeSession = notice;
         }
 
-        private void OnGameSessionClose(GameSessionClose message)
+        private void OnGameSessionClose(GameSessionClose notice)
         {
             foreach (AvailableScenes container in activeContainers)
             {
@@ -228,7 +228,7 @@ namespace Mayfair.Core.Code.GameScene
             StartUnloadSceneProcess();
         }
 
-        private void OnGameLoadingGameplay(GameLoadingGameplayNotice message)
+        private void OnGameLoadingGameplay(GameLoadingGameplayNotice notice)
         {
             completedActions = Consts.RESET;
 
@@ -253,7 +253,7 @@ namespace Mayfair.Core.Code.GameScene
             StartLoadSceneProcess();
         }
 
-        private void OnGameLoadingRestart(GameLoadingRestartNotice message)
+        private void OnGameLoadingRestart(GameLoadingRestartNotice notice)
         {
             SendStatusMessage(LoadingTrackingStatus.StartedLoading);
         }
@@ -368,7 +368,7 @@ namespace Mayfair.Core.Code.GameScene
             DebugTools.Log($"Game scene request to load '{request.Scene}' received", DebugTools.LogLevel.LowPriority);
             if (!availableScenes.TryGetValue(request.Scene, out AvailableScenes containerRequested))
             {
-                Communicator.Send(request.GetResponse());
+                NoticeReceiver.Send(request.GetResponse());
 
                 Debug.Assert(false, $"Requested scene {request.Scene} does not exist or does not have an address.");
                 return;
@@ -398,7 +398,7 @@ namespace Mayfair.Core.Code.GameScene
             RefreshLoadingStatus();
             LoadSceneResponse response = request.GetResponse();
             response.SceneReference = sceneReference;
-            Communicator.Send(response);
+            NoticeReceiver.Send(response);
         }
 
         private void OnUnloadSceneRequestReceived(UnloadSceneRequest<UnloadSceneResponse> request)
@@ -433,7 +433,7 @@ namespace Mayfair.Core.Code.GameScene
         {
             RefreshLoadingStatus();
             UnloadSceneResponse response = request.GetResponse();
-            Communicator.Send(response);
+            NoticeReceiver.Send(response);
         }
 
         #endregion

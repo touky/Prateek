@@ -1,15 +1,16 @@
 namespace Mayfair.Core.Code.SaveGame
 {
     using System.Collections.Generic;
-    using Mayfair.Core.Code.Messaging.Messages;
     using Mayfair.Core.Code.SaveGame.Enums;
     using Mayfair.Core.Code.SaveGame.Messages;
     using Mayfair.Core.Code.SaveGame.StateMachine;
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.Utils;
+    using Prateek.NoticeFramework.Notices.Core;
+    using Prateek.NoticeFramework.Tools;
 
-    public class SaveDaemonCore : DaemonCoreCommunicator<SaveDaemonCore, SaveDaemonBranch>
+    public class SaveDaemonCore : NoticeReceiverDaemonCore<SaveDaemonCore, SaveDaemonBranch>
     {
         #region Fields
         private FiniteStateMachine<SaveState> stateMachine;
@@ -81,19 +82,19 @@ namespace Mayfair.Core.Code.SaveGame
             for (int r = 0; r < this.loadingRequests.Count; r++)
             {
                 LoadDataRequest request = this.loadingRequests[r];
-                ResponseMessage response = request.GetResponse();
+                ResponseNotice response = request.GetResponse();
                 response.Init(request);
-                Communicator.Send(response);
+                NoticeReceiver.Send(response);
             }
 
             this.loadingRequests.Clear();
         }
 
-        public override void MessageReceived() { }
+        public override void NoticeReceived() { }
 
-        protected override void SetupCommunicatorCallback()
+        protected override void SetupNoticeReceiverCallback()
         {
-            Communicator.AddCallback<LoadDataRequest>(OnLoadingRequest);
+            NoticeReceiver.AddCallback<LoadDataRequest>(OnLoadingRequest);
         }
 
         private void OnLoadingRequest(LoadDataRequest request)

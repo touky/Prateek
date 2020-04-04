@@ -5,11 +5,6 @@ namespace Mayfair.Core.Code.TimeService.ServiceProviders
 
     public class PlayFabTimeDaemonBranch : BaseTimeDaemonBranch
     {
-        public override bool IsAlive
-        {
-            get => true;
-        }
-
         public override int Priority
         {
             get => (int)TimeServiceProviderPriority.Server;

@@ -1,7 +1,6 @@
 namespace Mayfair.Core.Code.DebugMenu.Pages
 {
     using Mayfair.Core.Code.DebugMenu.Content;
-    using Mayfair.Core.Code.Utils.Debug.Reflection;
 
     /// <summary>
     ///     Main class for debug menu pages that need debug from inside of a system
@@ -18,7 +17,7 @@ namespace Mayfair.Core.Code.DebugMenu.Pages
         {
             this.owner = owner;
 
-            ReflectionUtils.InitAllReflectedFields(this, this.owner);
+            //todo ReflectionUtils.InitAllReflectedFields(this, this.owner);
         }
         #endregion
 

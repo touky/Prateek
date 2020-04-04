@@ -1,9 +1,9 @@
 namespace Mayfair.Core.Code.GameScene.Messages
 {
-    using Messaging.Messages;
+    using Prateek.NoticeFramework.Notices.Core;
     using Resources.Loader;
 
-    public class LoadSceneResponse : ResponseMessage
+    public class LoadSceneResponse : ResponseNotice
     {
         public SceneReference SceneReference { get; set; }
     }

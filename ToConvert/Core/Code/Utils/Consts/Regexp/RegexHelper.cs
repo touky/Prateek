@@ -111,7 +111,7 @@ namespace Mayfair.Core.Code.Utils.Helpers.Regexp
         }
 
         /// <summary>
-        ///     Matches "message MyThing" into { MyThing }
+        ///     Matches "notice MyThing" into { MyThing }
         /// </summary>
         public static Regex ProtocolMessage
         {

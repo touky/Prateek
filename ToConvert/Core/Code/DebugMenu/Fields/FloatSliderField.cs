@@ -1,6 +1,5 @@
 namespace Mayfair.Core.Code.DebugMenu.Fields
 {
-    using Mayfair.Core.Code.MathExt;
     using UnityEngine;
 
     /// <summary>
@@ -85,42 +84,42 @@ namespace Mayfair.Core.Code.DebugMenu.Fields
 
         private void DrawSliderLabels(GUIContent content, DebugMenuContext context)
         {
-            Rect sliderRect = GUILayoutUtility.GetRect(content, context.LabelLeft);
-
-            float posX = 0;
-            RectHelper.ConvertWeightsIntoRealSizes(sliderRect.width, ref this.widths);
-            for (int w = 0; w < this.widths.Length; w++)
-            {
-                Rect rect = sliderRect;
-                rect.x += posX;
-                rect.width = this.widths[w];
-
-                switch (w)
-                {
-                    case Rects_Value:
-                    {
-                        GUI.Label(rect, content, context.LabelLeft);
-                        break;
-                    }
-                    case Rects_Min:
-                    {
-                        GUI.Label(rect, this.minMaxContent[0], context.LabelLeft);
-                        break;
-                    }
-                    case Rects_Slider:
-                    {
-                        this.Value = GUI.HorizontalSlider(rect, this.Value, this.minMax.x, this.minMax.y, context.Sliders[DebugMenuStyle.SLIDER_BG], context.Sliders[DebugMenuStyle.SLIDER_THUMB]);
-                        break;
-                    }
-                    case Rects_Max:
-                    {
-                        GUI.Label(rect, this.minMaxContent[1], context.LabelRight);
-                        break;
-                    }
-                }
-
-                posX += rect.width;
-            }
+            //todo Rect sliderRect = GUILayoutUtility.GetRect(content, context.LabelLeft);
+            //todo 
+            //todo float posX = 0;
+            //todo RectHelper.ConvertWeightsIntoRealSizes(sliderRect.width, ref this.widths);
+            //todo for (int w = 0; w < this.widths.Length; w++)
+            //todo {
+            //todo     Rect rect = sliderRect;
+            //todo     rect.x += posX;
+            //todo     rect.width = this.widths[w];
+            //todo 
+            //todo     switch (w)
+            //todo     {
+            //todo         case Rects_Value:
+            //todo         {
+            //todo             GUI.Label(rect, content, context.LabelLeft);
+            //todo             break;
+            //todo         }
+            //todo         case Rects_Min:
+            //todo         {
+            //todo             GUI.Label(rect, this.minMaxContent[0], context.LabelLeft);
+            //todo             break;
+            //todo         }
+            //todo         case Rects_Slider:
+            //todo         {
+            //todo             this.Value = GUI.HorizontalSlider(rect, this.Value, this.minMax.x, this.minMax.y, context.Sliders[DebugMenuStyle.SLIDER_BG], context.Sliders[DebugMenuStyle.SLIDER_THUMB]);
+            //todo             break;
+            //todo         }
+            //todo         case Rects_Max:
+            //todo         {
+            //todo             GUI.Label(rect, this.minMaxContent[1], context.LabelRight);
+            //todo             break;
+            //todo         }
+            //todo     }
+            //todo 
+            //todo     posX += rect.width;
+            //todo }
         }
 
         public void Draw(DebugMenuContext context, float value)

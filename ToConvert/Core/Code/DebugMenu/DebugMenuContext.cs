@@ -158,7 +158,7 @@ namespace Mayfair.Core.Code.DebugMenu
 
         public static void DrawTextureDebug()
         {
-            TextureDebug.DrawTextureDebug();
+            //TextureDebug.DrawTextureDebug();
         }
 
         public static void DrawStyleDebug(GUIStyle style)

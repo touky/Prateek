@@ -1,10 +1,10 @@
 namespace Mayfair.Core.Code.VisualAsset.Providers
 {
-    using Mayfair.Core.Code.Messaging.Communicator;
     using Mayfair.Core.Code.Resources.Loader;
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.VisualAsset.Messages;
+    using Prateek.NoticeFramework.TransmitterReceiver;
     using UnityEngine;
 
     public abstract class ScriptableObjectResourceDaemonBranch<TScriptableResourceType> : VisualResourceDaemonBranch<ScriptableObjectResourceReference<TScriptableResourceType>>
@@ -20,9 +20,9 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         #endregion
 
         #region Class Methods
-        public override void OnResourceChanged(VisualResourceDaemonCore daemonCore, ResourcesHaveChangedResponse message)
+        public override void OnResourceChanged(VisualResourceDaemonCore daemonCore, ResourcesHaveChangedResponse notice)
         {
-            if (message is ScriptableResourcesHaveChanged<TScriptableResourceType> typedMessage)
+            if (notice is ScriptableResourcesHaveChanged<TScriptableResourceType> typedMessage)
             {
                 if (IsResponseAccepted(typedMessage))
                 {
@@ -31,24 +31,24 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
 
-        public override void OnVisualResourceMessage(VisualResourceDirectMessage message)
+        public override void OnVisualResourceMessage(VisualResourceDirectNotice notice)
         {
-            AddPendingInit(message.Instance.AssignmentIndex, message.Instance);
+            AddPendingInit(notice.Instance.AssignmentIndex, notice.Instance);
         }
 
-        protected void OnResourceChanged(ScriptableResourcesHaveChanged<TScriptableResourceType> message)
+        protected void OnResourceChanged(ScriptableResourcesHaveChanged<TScriptableResourceType> notice)
         {
-            //todo DebugTools.Log(this, message);
+            //todo DebugTools.Log(this, notice);
 
-            for (int r = 0; r < message.References.Count; r++)
+            for (int r = 0; r < notice.References.Count; r++)
             {
-                ScriptableObjectResourceReference<TScriptableResourceType> resource = message.References[r];
+                ScriptableObjectResourceReference<TScriptableResourceType> resource = notice.References[r];
 
                 Store(resource);
             }
         }
         
-        public override RequestCallbackOnChange GetResourceChangeRequest(ILightMessageCommunicator communicator)
+        public override RequestCallbackOnChange GetResourceChangeRequest(INoticeTransmitter transmitter)
         {
             RequestCallbackOnChange request = CreateResourceChangeRequest();
             request.Init(ResourceKeywords);
