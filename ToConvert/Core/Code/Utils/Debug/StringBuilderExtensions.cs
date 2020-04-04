@@ -37,27 +37,14 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void AddLogHeader(this StringBuilder builder, DaemonBranch branch, string message)
+        public static void AddLogHeader(this StringBuilder builder, IDaemonBranch branch, string message)
         {
             if (builder == null)
             {
                 throw new Exception($"Builder is null for {branch.GetType().Name}");
             }
 
-            builder.Append($"SERVICE<{branch.GetType().Name}>");
-            builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(branch.GetType(), colorOffset)));
-            builder.AppendLine(message);
-        }
-
-        [Conditional("NVIZZIO_DEV")]
-        public static void AddLogHeader(this StringBuilder builder, DaemonBranchBehaviour branch, string message)
-        {
-            if (builder == null)
-            {
-                throw new Exception($"Builder is null for {branch.GetType().Name}");
-            }
-
-            builder.Append($"SERVICE<{branch.name} ({branch.GetType().Name})>");
+            builder.Append($"SERVICE<{branch.Name} ({branch.GetType().Name})>");
             builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(branch.GetType(), colorOffset)));
             builder.AppendLine(message);
         }

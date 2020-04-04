@@ -18,15 +18,10 @@ namespace Mayfair.Core.Code.Resources.ServiceProvider
         #endregion
 
         #region Properties
-        protected override bool IsAliveInternal
+        public override bool IsAlive
         {
             //TODO: re-inject this.addressSystemInitialized within this logic
-            get { return true; }
-        }
-
-        public override int Priority
-        {
-            get { return 0; }
+            get { return base.IsAlive; }
         }
         #endregion
 

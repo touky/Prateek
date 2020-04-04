@@ -100,65 +100,59 @@ namespace Prateek.Debug.Code
 
         //---------------------------------------------------------------------
         #region IGlobalManager integration
-        public static GlobalManager.BuilderBase GetBuilder()
-        {
-            return null;// new GlobalManager.Builder<DebugDisplayManager, NullDebugDisplay>();
-        }
+        //public override void OnRegister()
+        //{
+        //    base.OnRegister();
+
+        //    //todo var go = new GameObject("DebugDisplayLine");
+        //    //todo go.transform.SetParent(DaemonRegistry.Instance.TickerObject.transform);
+        //    //todo go.transform.localPosition = Vector3.zero;
+        //    //todo go.transform.localRotation = Quaternion.identity;
+        //    //todo lineDisplay = go.AddComponent<DebugLineDisplayer>();
+
+        //    //todo DaemonRegistry.Instance.Register(typeof(DebugDisplayManager), this);
+        //    //todo FrameRecorder.Register(this);
+        //}
 
         //---------------------------------------------------------------------
-        public override void OnRegister()
-        {
-            base.OnRegister();
+        //public override void OnInitialize()
+        //{
+        //    flagDatas = flagHierarchy;
 
-            //todo var go = new GameObject("DebugDisplayLine");
-            //todo go.transform.SetParent(DaemonRegistry.Instance.TickerObject.transform);
-            //todo go.transform.localPosition = Vector3.zero;
-            //todo go.transform.localRotation = Quaternion.identity;
-            //todo lineDisplay = go.AddComponent<DebugLineDisplayer>();
-
-            //todo DaemonRegistry.Instance.Register(typeof(DebugDisplayManager), this);
-            //todo FrameRecorder.Register(this);
-        }
+        //    base.OnInitialize();
+        //}
 
         //---------------------------------------------------------------------
-        public override void OnInitialize()
-        {
-            flagDatas = flagHierarchy;
+        //public override void OnLateUpdate(TickType tickType, float seconds)
+        //{
+        //    //if (timedPrimitives == null || tickType != TickType.BeginFrame)
+        //        return;
 
-            base.OnInitialize();
-        }
-
-        //---------------------------------------------------------------------
-        public override void OnLateUpdate(TickType tickType, float seconds)
-        {
-            //if (timedPrimitives == null || tickType != TickType.BeginFrame)
-                return;
-
-            for (int p = 0; p < timedPrimitives.Count; p++)
-            {
-                var prim = timedPrimitives[p];
-                prim.setup.Duration -= seconds;
-                if (prim.setup.Duration < 0)
-                {
-                    timedPrimitives.RemoveAt(p--);
-                }
-                else
-                {
-                    timedPrimitives[p] = prim;
-                }
-            }
-        }
+        //    for (int p = 0; p < timedPrimitives.Count; p++)
+        //    {
+        //        var prim = timedPrimitives[p];
+        //        prim.setup.Duration -= seconds;
+        //        if (prim.setup.Duration < 0)
+        //        {
+        //            timedPrimitives.RemoveAt(p--);
+        //        }
+        //        else
+        //        {
+        //            timedPrimitives[p] = prim;
+        //        }
+        //    }
+        //}
 
         //---------------------------------------------------------------------
-        public override void OnUnregister()
-        {
-            Destroy(lineDisplay.gameObject);
+        //public override void OnUnregister()
+        //{
+        //    Destroy(lineDisplay.gameObject);
 
-            FrameRecorder.Unregister(this);
-            //todo DaemonRegistry.Instance.Unregister(typeof(DebugDisplayManager));
+        //    FrameRecorder.Unregister(this);
+        //    //todo DaemonRegistry.Instance.Unregister(typeof(DebugDisplayManager));
 
-            base.OnUnregister();
-        }
+        //    base.OnUnregister();
+        //}
         #endregion IGlobalManager integration
 
         //---------------------------------------------------------------------

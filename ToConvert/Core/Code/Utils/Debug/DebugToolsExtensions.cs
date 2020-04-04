@@ -22,15 +22,7 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void Log(DaemonBranch branch, string message, LogLevel logPriority = LogLevel.Normal)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(branch, message);
-            Log(builder.ToString(), branch, logPriority);
-        }
-
-        [Conditional("NVIZZIO_DEV")]
-        public static void Log(DaemonBranchBehaviour branch, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void Log(IDaemonBranch branch, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
             builder.AddLogHeader(branch, message);
@@ -46,15 +38,7 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogWarning(DaemonBranch branch, string message, LogLevel logPriority = LogLevel.Normal)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(branch, message);
-            LogWarning(builder.ToString(), branch, logPriority);
-        }
-
-        [Conditional("NVIZZIO_DEV")]
-        public static void LogWarning(DaemonBranchBehaviour branch, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void LogWarning(IDaemonBranch branch, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
             builder.AddLogHeader(branch, message);
@@ -70,7 +54,7 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogError(DaemonBranch branch, string message, LogLevel logPriority = LogLevel.Normal)
+        public static void LogError(IDaemonBranch branch, string message, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
             builder.AddLogHeader(branch, message);
@@ -78,15 +62,7 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogError(DaemonBranchBehaviour branch, string message, LogLevel logPriority = LogLevel.Normal)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(branch, message);
-            LogWarning(builder.ToString(), branch, logPriority);
-        }
-
-        [Conditional("NVIZZIO_DEV")]
-        public static void Log<TResourceType, TResourceRef>(DaemonBranchBehaviour branch, ResourcesHaveChangedResponse<TResourceRef, TResourceType> message)
+        public static void Log<TResourceType, TResourceRef>(IDaemonBranch branch, ResourcesHaveChangedResponse<TResourceRef, TResourceType> message)
             where TResourceRef : AbstractResourceReference<TResourceType, TResourceRef>
         {
             StringBuilder builder = new StringBuilder();

@@ -13,12 +13,12 @@
         #endregion
 
         #region Properties
-        protected override bool IsAliveInternal
+        public override bool IsAlive
         {
             get
             {
 #if UNITY_EDITOR
-                return true;
+                return base.IsAlive;
 #else
                 return false;
 #endif

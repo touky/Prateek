@@ -7,14 +7,14 @@ namespace Mayfair.Core.Code.Input.Providers
     public class TouchInputDaemonBranch : InputDaemonBranch
     {
         #region Properties
-        protected override bool IsAliveInternal
+        public override bool IsAlive
         {
             get
             {
 #if UNITY_EDITOR
                 return false;
 #else
-                return true;
+                return base.IsAlive;
 #endif
             }
         }

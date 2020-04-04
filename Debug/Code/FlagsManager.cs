@@ -42,7 +42,7 @@ namespace Prateek.Debug.Code
     using Prateek.Helpers;
 
     //-------------------------------------------------------------------------
-    public abstract class FlagManager : GlobalManager
+    public abstract class FlagManager
     {
         //---------------------------------------------------------------------
         #region Declarations
@@ -203,34 +203,34 @@ namespace Prateek.Debug.Code
 
         //---------------------------------------------------------------------
         #region IGlobalManager integration
-        public override void OnInitialize()
-        {
-            base.OnInitialize();
+        //public override void OnInitialize()
+        //{
+        //    base.OnInitialize();
 
-            var type = flagDatas.maskType;
-            if (type == null || !type.IsEnum)
-            {
-                //todo DaemonRegistry.Instance.Unregister(GetType());
-                return;
-            }
+        //    var type = flagDatas.maskType;
+        //    if (type == null || !type.IsEnum)
+        //    {
+        //        //todo DaemonRegistry.Instance.Unregister(GetType());
+        //        return;
+        //    }
 
-            //var values = (ulong[])Enum.GetValues(type);
-            //var default_mask = new Helpers.Mask256();
-            //if (values.Length < Helpers.Mask256.MAX_SIZE)
-            //{
-            //    Registry.Instance.Unregister(GetType());
-            //    return;
-            //}
+        //    //var values = (ulong[])Enum.GetValues(type);
+        //    //var default_mask = new Helpers.Mask256();
+        //    //if (values.Length < Helpers.Mask256.MAX_SIZE)
+        //    //{
+        //    //    Registry.Instance.Unregister(GetType());
+        //    //    return;
+        //    //}
 
-            //this.values = values;
-            //names = Enum.GetNames(type);
-            //mask = Editors.Prefs.Get(String.Format("{0}_{1}", GetType().Name, type.Name), default_mask);
-            //parents = new int[values.Length];
-            //for (int i = 0; i < parents.Length; i++)
-            //{
-            //    parents[i] = -1;
-            //}
-        }
+        //    //this.values = values;
+        //    //names = Enum.GetNames(type);
+        //    //mask = Editors.Prefs.Get(String.Format("{0}_{1}", GetType().Name, type.Name), default_mask);
+        //    //parents = new int[values.Length];
+        //    //for (int i = 0; i < parents.Length; i++)
+        //    //{
+        //    //    parents[i] = -1;
+        //    //}
+        //}
         #endregion IGlobalManager integration
 
         //---------------------------------------------------------------------

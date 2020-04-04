@@ -4,6 +4,11 @@ namespace Mayfair.Core.Code.TimeService.ServiceProviders
 
     public class LocalTimeDaemonBranch : BaseTimeDaemonBranch
     {
+        public override string Name
+        {
+            get => GetType().Name;
+        }
+
         public override bool IsAlive
         {
             get => true;

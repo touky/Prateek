@@ -6,11 +6,6 @@ namespace Mayfair.Core.Code.BaseBehaviour
     public sealed class AutoDisableDaemonBranch : DaemonBranchBehaviour<AutoDisableDaemonCore, AutoDisableDaemonBranch>
     {
         #region Properties
-        protected override bool IsAliveInternal
-        {
-            get { return true; }
-        }
-
         public override int Priority
         {
             get { return 0; }

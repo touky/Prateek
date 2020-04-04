@@ -45,7 +45,6 @@ namespace Mayfair.Core.Code.Localization
         protected List<LanguageJSON> fullJSON;
 
         public SystemLanguage Language { get; protected set; }
-        protected override bool IsAliveInternal => true;
         public override int Priority => Consts.FIRST_ITEM;
 
         protected Dictionary<string, string> translationLookup;

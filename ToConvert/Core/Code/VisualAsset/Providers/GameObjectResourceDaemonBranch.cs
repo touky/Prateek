@@ -8,22 +8,10 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
 
     public abstract class GameObjectResourceDaemonBranch : VisualResourceDaemonBranch<GameObjectResourceReference>
     {
-        #region Properties
-        protected override bool IsAliveInternal
-        {
-            get { return true; }
-        }
-
-        public override int Priority
-        {
-            get { return 0; }
-        }
-        #endregion
-
         #region Unity Methods
-        protected override void Awake()
+        public override void Startup()
         {
-            base.Awake();
+            base.Startup();
 
             Init();
         }

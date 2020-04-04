@@ -2,15 +2,16 @@ namespace Mayfair.Core.Code.Utils.Helpers
 {
     using System;
     using Prateek.DaemonCore.Code.Branches;
+    using Prateek.DaemonCore.Code.Interfaces;
     using Service;
     using UnityEngine;
 
     public class DaemonBranchBootstrap<TDaemonBranch> : MonoBehaviour
-        where TDaemonBranch : DaemonBranch
+        where TDaemonBranch : class, IDaemonBranch
     {
         private void Awake()
         {
-            DaemonBranch instance = Activator.CreateInstance<TDaemonBranch>();
+            TDaemonBranch instance = Activator.CreateInstance<TDaemonBranch>();
             instance.Startup();
         }
     }

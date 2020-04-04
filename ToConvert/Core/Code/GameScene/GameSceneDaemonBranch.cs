@@ -20,16 +20,6 @@ namespace Mayfair.Core.Code.GameScene
         {
             get { return KEYWORDS; }
         }
-
-        protected override bool IsAliveInternal
-        {
-            get { return true; }
-        }
-
-        public override int Priority
-        {
-            get { return 0; }
-        }
         #endregion
 
         #region Class Methods

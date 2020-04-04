@@ -41,7 +41,7 @@ namespace Prateek.FrameRecorder.Code
     using UnityEngine;
 
     //-------------------------------------------------------------------------
-    public sealed class FrameRecorderManager : GlobalManager
+    public sealed class FrameRecorderManager
     {
         //---------------------------------------------------------------------
         #region Declarations
@@ -76,10 +76,6 @@ namespace Prateek.FrameRecorder.Code
         #endregion Declarations
 
         //---------------------------------------------------------------------
-        #region Settings
-        #endregion Settings
-
-        //---------------------------------------------------------------------
         #region Fields
         private StateType state = StateType.Inactive;
         private int frameCapacity = 50;
@@ -91,7 +87,7 @@ namespace Prateek.FrameRecorder.Code
 
         //---------------------------------------------------------------------
         #region Properties
-        public override TickType TickType { get { return TickType.ALL; } } //todo TickType.BeginFrame | TickType.EndFrame; } }
+        //public override TickType TickType { get { return TickType.ALL; } } //todo TickType.BeginFrame | TickType.EndFrame; } }
         public StateType State { get { return state; } set { state = value; } }
         public bool PlaybackActive { get { return state == StateType.Playback; } }
         public int FrameCount { get { return history.Count; } }
@@ -122,38 +118,20 @@ namespace Prateek.FrameRecorder.Code
 
         //---------------------------------------------------------------------
         #region IGlobalManager integration
-        public static BuilderBase GetBuilder()
-        {
-            return null; //new Builder<FrameRecorderManager, NullFrameRecorderManager>();
-        }
+        //public override void OnInitialize()
+        //{
+        //    priority = int.MaxValue;
+        //    lastActiveFrame = new Frame();
+        //}
 
         //---------------------------------------------------------------------
-        public override void OnRegister()
-        {
-            base.OnRegister();
-        }
+        //public override void OnUpdate(TickType tickType, float seconds)
+        //{
+        //    //if (tickType != TickType.BeginFrame)
+        //        return;
 
-        //---------------------------------------------------------------------
-        public override void OnUnregister()
-        {
-            base.OnUnregister();
-        }
-
-        //---------------------------------------------------------------------
-        public override void OnInitialize()
-        {
-            priority = int.MaxValue;
-            lastActiveFrame = new Frame();
-        }
-
-        //---------------------------------------------------------------------
-        public override void OnUpdate(TickType tickType, float seconds)
-        {
-            //if (tickType != TickType.BeginFrame)
-                return;
-
-            BeginFrame();
-        }
+        //    BeginFrame();
+        //}
 
         //---------------------------------------------------------------------
 #if UNITY_EDITOR
@@ -165,35 +143,35 @@ namespace Prateek.FrameRecorder.Code
 #endif //UNITY_EDITOR
 
         //---------------------------------------------------------------------
-        public override void OnLateUpdate(TickType tickType, float seconds)
-        {
-            //if (tickType != TickType.EndFrame)
-                return;
+        //public override void OnLateUpdate(TickType tickType, float seconds)
+        //{
+        //    //if (tickType != TickType.EndFrame)
+        //        return;
 
-            var lastFrame = EndFrame();
-            {
-                if (!IsAppPaused && state == StateType.Recording)
-                {
-                    if (history.Count == frameCapacity)
-                    {
-                        history.RemoveAt(0);
-                    }
+        //    var lastFrame = EndFrame();
+        //    {
+        //        if (!IsAppPaused && state == StateType.Recording)
+        //        {
+        //            if (history.Count == frameCapacity)
+        //            {
+        //                history.RemoveAt(0);
+        //            }
 
-                    history.Add(lastFrame);
-                }
-            }
+        //            history.Add(lastFrame);
+        //        }
+        //    }
 
-            if (state != StateType.Playback)
-            {
-                if (!IsAppPaused)
-                    lastActiveFrame = lastFrame;
-                PlayFrame(lastFrame);
-            }
-            else
-            {
-                DoPlayback();
-            }
-        }
+        //    if (state != StateType.Playback)
+        //    {
+        //        if (!IsAppPaused)
+        //            lastActiveFrame = lastFrame;
+        //        PlayFrame(lastFrame);
+        //    }
+        //    else
+        //    {
+        //        DoPlayback();
+        //    }
+        //}
         #endregion IGlobalManager integration
 
         //---------------------------------------------------------------------

@@ -8,11 +8,6 @@ namespace Mayfair.Core.Code.DebugMenu
     public abstract class DebugMenuDaemonBranch : DaemonBranchBehaviour<DebugMenuDaemonCore, DebugMenuDaemonBranch>
     {
         #region Properties
-        protected override bool IsAliveInternal
-        {
-            get { return true; }
-        }
-
         public override int Priority
         {
             get { return 0; }

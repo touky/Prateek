@@ -6,6 +6,7 @@
     using Prateek.DaemonCore.Code.Enumerators;
     using Prateek.DaemonCore.Code.Enums;
     using Prateek.DaemonCore.Code.Interfaces;
+    using Prateek.TickableFramework.Code.Interfaces;
 
     public abstract class DaemonCore<TDaemonCore, TDaemonBranch> : SingletonBehaviour<TDaemonCore>, IDaemonCore<TDaemonBranch>
         where TDaemonCore : DaemonCore<TDaemonCore, TDaemonBranch>

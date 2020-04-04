@@ -13,16 +13,6 @@ namespace Mayfair.Core.Code.UpdateService
     {
         public Action updateAction;
 
-        protected override bool IsAliveInternal
-        {
-            get => true;
-        }
-
-        public override int Priority
-        {
-            get => 0;
-        }
-
         #region  Unity Methods
 
         private void Update()

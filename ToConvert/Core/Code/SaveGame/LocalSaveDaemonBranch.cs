@@ -16,22 +16,10 @@ namespace Mayfair.Core.Code.SaveGame
         private string gameSavePath = string.Empty;
         #endregion
 
-        #region Properties
-        protected override bool IsAliveInternal
-        {
-            get { return true; }
-        }
-
-        public override int Priority
-        {
-            get { return 0; }
-        }
-        #endregion
-
         #region Unity Methods
-        protected override void Awake()
+        public override void Startup()
         {
-            base.Awake();
+            base.Startup();
 
             this.gameSavePath = Path.Combine(Application.persistentDataPath, SAVE_FOLDER_PATH);
             CreateSaveFolder(string.Empty);

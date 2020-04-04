@@ -17,9 +17,9 @@ namespace Mayfair.Core.Code.LoadingProcess
         #endregion
 
         #region Properties
-        protected override bool IsAliveInternal
+        public override bool IsAlive
         {
-            get { return !this.initHasEnded; }
+            get { return !this.initHasEnded && base.IsAlive; }
         }
 
         protected bool LoadingHasEnded

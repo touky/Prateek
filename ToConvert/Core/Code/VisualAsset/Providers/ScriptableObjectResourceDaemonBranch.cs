@@ -10,22 +10,10 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     public abstract class ScriptableObjectResourceDaemonBranch<TScriptableResourceType> : VisualResourceDaemonBranch<ScriptableObjectResourceReference<TScriptableResourceType>>
         where TScriptableResourceType : ScriptableObject
     {
-        #region Properties
-        protected override bool IsAliveInternal
-        {
-            get { return true; }
-        }
-
-        public override int Priority
-        {
-            get { return 0; }
-        }
-        #endregion
-
         #region Unity Methods
-        protected override void Awake()
+        public override void Startup()
         {
-            base.Awake();
+            base.Startup();
 
             Init();
         }
@@ -50,7 +38,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
 
         protected void OnResourceChanged(ScriptableResourcesHaveChanged<TScriptableResourceType> message)
         {
-            DebugTools.Log(this, message);
+            //todo DebugTools.Log(this, message);
 
             for (int r = 0; r < message.References.Count; r++)
             {
