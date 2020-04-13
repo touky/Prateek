@@ -7,7 +7,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Prateek.NoticeFramework.TransmitterReceiver;
     using UnityEngine;
 
-    public abstract class ScriptableObjectResourceDaemonBranch<TScriptableResourceType> : VisualResourceDaemonBranch<ScriptableObjectResourceReference<TScriptableResourceType>>
+    public abstract class ScriptableObjectResourceDaemonBranch<TScriptableResourceType> : VisualResourceDaemonBranch<ScriptableObjectContentHandle<TScriptableResourceType>>
         where TScriptableResourceType : ScriptableObject
     {
         #region Unity Methods
@@ -42,20 +42,20 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
 
             for (int r = 0; r < notice.References.Count; r++)
             {
-                ScriptableObjectResourceReference<TScriptableResourceType> resource = notice.References[r];
+                ScriptableObjectContentHandle<TScriptableResourceType> resource = notice.References[r];
 
                 Store(resource);
             }
         }
         
-        public override RequestCallbackOnChange GetResourceChangeRequest(INoticeTransmitter transmitter)
+        public override RequestAccessToContent GetResourceChangeRequest(INoticeTransmitter transmitter)
         {
-            RequestCallbackOnChange request = CreateResourceChangeRequest();
+            RequestAccessToContent request = CreateResourceChangeRequest();
             request.Init(ResourceKeywords);
             return request;
         }
 
-        protected abstract RequestCallbackOnChange CreateResourceChangeRequest();
+        protected abstract RequestAccessToContent CreateResourceChangeRequest();
         protected abstract bool IsResponseAccepted(ScriptableResourcesHaveChanged<TScriptableResourceType> response);
 
         protected abstract void Init();

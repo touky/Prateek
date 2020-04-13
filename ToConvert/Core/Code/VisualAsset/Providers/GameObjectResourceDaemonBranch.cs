@@ -6,7 +6,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.VisualAsset.Messages;
     using Prateek.NoticeFramework.TransmitterReceiver;
 
-    public abstract class GameObjectResourceDaemonBranch : VisualResourceDaemonBranch<GameObjectResourceReference>
+    public abstract class GameObjectResourceDaemonBranch : VisualResourceDaemonBranch<GameObjectContentHandle>
     {
         #region Unity Methods
         public override void Startup()
@@ -47,20 +47,20 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
 
             for (int r = 0; r < notice.References.Count; r++)
             {
-                GameObjectResourceReference resource = notice.References[r];
+                GameObjectContentHandle resource = notice.References[r];
 
                 Store(resource);
             }
         }
 
-        public override RequestCallbackOnChange GetResourceChangeRequest(INoticeTransmitter transmitter)
+        public override RequestAccessToContent GetResourceChangeRequest(INoticeTransmitter transmitter)
         {
-            RequestCallbackOnChange request = CreateResourceChangeRequest();
+            RequestAccessToContent request = CreateResourceChangeRequest();
             request.Init(ResourceKeywords);
             return request;
         }
 
-        protected abstract RequestCallbackOnChange CreateResourceChangeRequest();
+        protected abstract RequestAccessToContent CreateResourceChangeRequest();
         protected abstract bool IsResponseAccepted(GameObjectResourcesHaveChanged response);
 
         protected abstract void Init();

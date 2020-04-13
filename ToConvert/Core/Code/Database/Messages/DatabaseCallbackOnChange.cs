@@ -3,7 +3,8 @@
     using Mayfair.Core.Code.Resources.Messages;
     using UnityEngine;
 
-    public class DatabaseCallbackOnChange<TResourceType> : RequestCallbackOnScriptableResourceChange<DatabaseHasChanged<TResourceType>, TResourceType>
+    public class DatabaseCallbackOnChange<TResourceType>
+        : RequestCallbackOnScriptableResourceChange<DatabaseHasChanged<TResourceType>, TResourceType>
         where TResourceType : ScriptableObject
     {
     }

@@ -4,7 +4,7 @@ namespace Mayfair.Core.Code.VisualAsset
 
     public abstract class VisualGameObjectInstance<TResourceReference>
         : VisualIdentifiableInstance, IAssignableVisualResource<TResourceReference>
-        where TResourceReference : class, IAbstractResourceReference
+        where TResourceReference : class, IContentHandle
     {
         #region IAssignableVisualResource<TResourceReference> Members
         public abstract int AssignmentIndex { get; }
@@ -12,7 +12,7 @@ namespace Mayfair.Core.Code.VisualAsset
         public abstract void Assign(TResourceReference reference);
 
         public void Assign<THigherResourceReference>(THigherResourceReference reference)
-            where THigherResourceReference : class, IAbstractResourceReference
+            where THigherResourceReference : class, IContentHandle
         {
             Assign(reference as TResourceReference);
         }

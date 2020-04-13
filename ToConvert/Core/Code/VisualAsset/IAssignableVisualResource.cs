@@ -11,7 +11,7 @@ namespace Mayfair.Core.Code.VisualAsset
 
         #region Class Methods
         void Assign<TResourceReference>(TResourceReference reference)
-            where TResourceReference : class, IAbstractResourceReference;
+            where TResourceReference : class, IContentHandle;
         #endregion
     }
 }

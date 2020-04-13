@@ -6,7 +6,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.Resources;
     using Mayfair.Core.Code.VisualAsset.Messages;
 
-    public abstract class VisualResourceDaemonBranch : ResourceDependentDaemonBranch<VisualResourceDaemonCore, VisualResourceDaemonBranch>, IDebugMenuNotebookOwner
+    public abstract class VisualResourceDaemonBranch : ContentAccessDaemonBranch<VisualResourceDaemonCore, VisualResourceDaemonBranch>, IDebugMenuNotebookOwner
     {
         #region Class Methods
         [Conditional("NVIZZIO_DEV")]

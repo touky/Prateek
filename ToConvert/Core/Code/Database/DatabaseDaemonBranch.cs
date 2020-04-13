@@ -2,7 +2,7 @@ namespace Mayfair.Core.Code.Database
 {
     using Mayfair.Core.Code.Resources;
 
-    public abstract class DatabaseDaemonBranch : ResourceDependentDaemonBranch<DatabaseDaemonCore, DatabaseDaemonBranch>
+    public abstract class DatabaseDaemonBranch : ContentAccessDaemonBranch<DatabaseDaemonCore, DatabaseDaemonBranch>
     {
         #region Static and Constants
         public static readonly string[] KEYWORDS = { "Database/" };

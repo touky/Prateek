@@ -18,7 +18,7 @@
     using Prateek.NoticeFramework.Notices.Core;
     using DatabaseContentByFilterRequest = Mayfair.Core.Code.Database.Messages.DatabaseContentMatchingWithFilterRequest<Messages.DatabaseContentMatchingWithFilterResponse>;
 
-    public sealed class DatabaseDaemonCore : ResourceDependentDaemonCore<DatabaseDaemonCore, DatabaseDaemonBranch>, IDebugMenuNotebookOwner
+    public sealed class DatabaseDaemonCore : ContentAccessDaemonCore<DatabaseDaemonCore, DatabaseDaemonBranch>, IDebugMenuNotebookOwner
     {
         #region IdentifierRequestStatus enum
         private enum IdentifierRequestStatus

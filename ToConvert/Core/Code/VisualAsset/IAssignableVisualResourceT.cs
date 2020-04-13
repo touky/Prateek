@@ -3,7 +3,7 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.Resources.Loader;
 
     public interface IAssignableVisualResource<TResourceReference> : IAssignableVisualResource
-        where TResourceReference : class, IAbstractResourceReference
+        where TResourceReference : class, IContentHandle
     {
         #region Class Methods
         void Assign(TResourceReference reference);

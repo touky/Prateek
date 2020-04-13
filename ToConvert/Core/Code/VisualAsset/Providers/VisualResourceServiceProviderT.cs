@@ -12,10 +12,10 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using UnityEngine.Assertions;
 
     public abstract class VisualResourceDaemonBranch<TResourceReference> : VisualResourceDaemonBranch
-        where TResourceReference : class, IAbstractResourceReference
+        where TResourceReference : class, IContentHandle
     {
         #region Fields
-        protected Dictionary<string, Dictionary<Keyname, IAbstractResourceReference>> resources = new Dictionary<string, Dictionary<Keyname, IAbstractResourceReference>>();
+        protected Dictionary<string, Dictionary<Keyname, IContentHandle>> resources = new Dictionary<string, Dictionary<Keyname, IContentHandle>>();
         private List<SupportedAssignable> supportedAssignables = new List<SupportedAssignable>();
         #endregion
 
@@ -48,7 +48,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
                 return;
             }
 
-            Dictionary<Keyname, IAbstractResourceReference> references = GetReferences(container.Keyword);
+            Dictionary<Keyname, IContentHandle> references = GetReferences(container.Keyword);
             if (references == null)
             {
                 //Not yet loaded, wait for that
@@ -64,7 +64,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
                     throw new Exception($"MAJOR ERROR ! {assignable} is not an IIdentifiable");
                 }
 
-                IAbstractResourceReference iRreference;
+                IContentHandle iRreference;
                 if (!references.TryGetValue(identifiable.Keyname, out iRreference))
                 {
                     string logText = $"{GetType().Name}: Visual resource for {identifiable.Keyname.RawValue} could not be found, FIX IT !";
@@ -113,7 +113,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             instances.Add(instance);
         }
 
-        private void ResourceLoadCompleted(IAbstractResourceReference reference)
+        private void ResourceLoadCompleted(IContentHandle reference)
         {
             foreach (SupportedAssignable container in supportedAssignables)
             {
@@ -146,10 +146,10 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             string root = location.Substring(0, index);
             string name = location.Substring(index + Consts.NEXT_ITEM, location.Length - (index + Consts.NEXT_ITEM));
 
-            Dictionary<Keyname, IAbstractResourceReference> references = null;
+            Dictionary<Keyname, IContentHandle> references = null;
             if (!resources.TryGetValue(root, out references))
             {
-                references = new Dictionary<Keyname, IAbstractResourceReference>();
+                references = new Dictionary<Keyname, IContentHandle>();
                 resources.Add(root, references);
             }
 
@@ -164,9 +164,9 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
 
-        protected Dictionary<Keyname, IAbstractResourceReference> GetReferences(string key)
+        protected Dictionary<Keyname, IContentHandle> GetReferences(string key)
         {
-            Dictionary<Keyname, IAbstractResourceReference> result;
+            Dictionary<Keyname, IContentHandle> result;
             if (!resources.TryGetValue(key, out result))
             {
                 return null;
@@ -183,7 +183,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             private string keyword = null;
             private Keyname defaultResource;
             public List<IAssignableVisualResource> pendingInit = new List<IAssignableVisualResource>();
-            public Dictionary<IAbstractResourceReference, HashSet<IAssignableVisualResource>> pendingLoad = new Dictionary<IAbstractResourceReference, HashSet<IAssignableVisualResource>>();
+            public Dictionary<IContentHandle, HashSet<IAssignableVisualResource>> pendingLoad = new Dictionary<IContentHandle, HashSet<IAssignableVisualResource>>();
             #endregion
 
             #region Properties

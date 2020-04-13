@@ -9,7 +9,7 @@ namespace Mayfair.Core.Code.GameScene
     using Prateek.NoticeFramework.TransmitterReceiver;
     using UnityEngine;
 
-    public sealed class GameSceneDaemonBranch : ResourceDependentDaemonBranch<GameSceneDaemonCore, GameSceneDaemonBranch>
+    public sealed class GameSceneDaemonBranch : ContentAccessDaemonBranch<GameSceneDaemonCore, GameSceneDaemonBranch>
     {
         #region Static and Constants
         public static readonly string[] KEYWORDS = {"Scenes/"};
@@ -23,7 +23,7 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Class Methods
-        public override RequestCallbackOnChange GetResourceChangeRequest(INoticeTransmitter transmitter)
+        public override RequestAccessToContent GetResourceChangeRequest(INoticeTransmitter transmitter)
         {
             RequestCallbackOnSceneChange<SceneResourceHasChanged> request = Notice.Create<RequestCallbackOnSceneChange<SceneResourceHasChanged>>();
             request.Init(ResourceKeywords);

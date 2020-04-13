@@ -8,7 +8,7 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.VisualAsset.Messages;
     using Mayfair.Core.Code.VisualAsset.Providers;
 
-    public sealed class VisualResourceDaemonCore : ResourceDependentDaemonCore<VisualResourceDaemonCore, VisualResourceDaemonBranch>
+    public sealed class VisualResourceDaemonCore : ContentAccessDaemonCore<VisualResourceDaemonCore, VisualResourceDaemonBranch>
     {
         #region Fields
         private DebugMenuNotebook debugNotebook;

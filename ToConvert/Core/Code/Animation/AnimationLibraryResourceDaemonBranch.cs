@@ -29,7 +29,7 @@ namespace Mayfair.Core.Code.Animation
             AddSupportedAssignable(PathHelper.RemoveLeadingAndTrailingSlashes(COMMON_LIBRARY_KEYWORD), DEFAULT_PREFAB_NAME);
         }
 
-        protected override RequestCallbackOnChange CreateResourceChangeRequest()
+        protected override RequestAccessToContent CreateResourceChangeRequest()
         {
             return Notice.Create<RequestCallbackOnScriptableResourceChange<AnimationLibraryResourceHasChanged, AnimationLibrary>>();
         }

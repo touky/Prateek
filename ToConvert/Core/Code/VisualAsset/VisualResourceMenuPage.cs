@@ -11,7 +11,7 @@ namespace Mayfair.Core.Code.VisualAsset
     internal class VisualResourceMenuPage : DebugMenuPage<VisualResourceDaemonBranch>
     {
         #region Fields
-        protected ReflectedField<Dictionary<string, Dictionary<Keyname, IAbstractResourceReference>>> resources = "resources";
+        protected ReflectedField<Dictionary<string, Dictionary<Keyname, IContentHandle>>> resources = "resources";
         #endregion
 
         #region Constructors
@@ -31,7 +31,7 @@ namespace Mayfair.Core.Code.VisualAsset
                         {
                             using (new ContextIndentScope(context))
                             {
-                                Dictionary<Keyname, IAbstractResourceReference> storedResources = resources.Value[groupKey];
+                                Dictionary<Keyname, IContentHandle> storedResources = resources.Value[groupKey];
                                 foreach (Keyname resourceKey in storedResources.Keys)
                                 {
                                     NewLabel.Draw(context, resourceKey);

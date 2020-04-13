@@ -18,7 +18,7 @@ namespace Mayfair.Core.Code.GameScene
     using UnityEngine.SceneManagement;
     using Utils.Debug;
 
-    public sealed class GameSceneDaemonCore : ResourceDependentDaemonCore<GameSceneDaemonCore, GameSceneDaemonBranch>
+    public sealed class GameSceneDaemonCore : ContentAccessDaemonCore<GameSceneDaemonCore, GameSceneDaemonBranch>
     {
         #region LightingSceneType enum
         public enum LightingSceneType
@@ -454,7 +454,7 @@ namespace Mayfair.Core.Code.GameScene
             public ServiceState state;
             public Action<SceneReference> onFinished;
 
-            public void OnFinished(IAbstractResourceReference reference)
+            public void OnFinished(IContentHandle reference)
             {
                 onFinished(reference as SceneReference);
             }

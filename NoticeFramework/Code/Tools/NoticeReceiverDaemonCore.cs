@@ -68,7 +68,7 @@ namespace Prateek.NoticeFramework.Tools
             get { return transform; }
         }
 
-        public abstract void NoticeReceived();
+        public virtual void NoticeReceived() { }
         #endregion
     }
 }
