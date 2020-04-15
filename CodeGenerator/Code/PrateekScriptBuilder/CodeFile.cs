@@ -67,7 +67,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             //-----------------------------------------------------------------
             public class ContentInfos
             {
-                public CodeRule activeRule;
+                public ScriptAction activeRule;
                 public string blockNamespace;
                 public string blockClassName;
                 public List<string> blockClassPrefix = new List<string>();
@@ -139,7 +139,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             public ContentInfos this[int index] { get { return datas[index]; } }
 
             //-----------------------------------------------------------------
-            public bool AllowRule(CodeRule rule)
+            public bool AllowRule(ScriptAction rule)
             {
                 if (activeData == null)
                     return true;
@@ -151,7 +151,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             }
 
             //-----------------------------------------------------------------
-            public ContentInfos NewData(CodeRule codeSettings)
+            public ContentInfos NewData(ScriptAction codeSettings)
             {
                 if (activeData != null)
                     return null;

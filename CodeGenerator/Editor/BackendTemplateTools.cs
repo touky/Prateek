@@ -1,3 +1,4 @@
+#define PRATEEK_ALLOW_INTERNAL_TOOLS
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
@@ -33,6 +34,7 @@
 //-----------------------------------------------------------------------------
 namespace Prateek.CodeGenerator.Editor
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Text.RegularExpressions;
     using Prateek.CodeGenerator.PrateekScriptBuilder;
@@ -83,7 +85,7 @@ namespace Prateek.CodeGenerator.Editor
 
         //---------------------------------------------------------------------
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
-        public static CodeBuilder GetPrateekScriptGenerator(string destinationDirectory, List<string> sourceDirectories)
+        public static CodeGenerator.CodeBuilder GetPrateekScriptGenerator(string destinationDirectory, List<string> sourceDirectories)
         {
             var builder = new PrateekScriptBuilder();
 

@@ -209,7 +209,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 }
 
                 //-------------------------------------------------------------
-                public static void GetTags(SyntaxCodeRule syntaxer)
+                public static void GetTags(SyntaxScriptAction syntaxer)
                 {
                     syntaxer.AddKeyword(FileInfo);
                     for (int d = 1; d < data.Count; d++)
@@ -220,7 +220,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     syntaxer.AddIdentifier(srcClass.Keyword(false));
                     syntaxer.AddIdentifier(dstClass.Keyword(false));
 
-                    var rules = PrateekScriptBuilder.Database.CodeRules;
+                    var rules = ScriptActionDatabase.Actions;
                     for (int r = 0; r < rules.Count; r++)
                     {
                         var rule = rules[r];

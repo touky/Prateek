@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,73 +26,68 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
-    using System;
     using System.Collections.Generic;
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Code.Helpers.Files;
-    using Prateek.Helpers;
-    using static Prateek.CodeGenerator.PrateekScriptBuilder.CodeBuilder;
+    using static CodeBuilder;
 
     //-------------------------------------------------------------------------
-    public partial class PrateekScriptBuilder : Prateek.CodeGenerator.CodeBuilder
+    public partial class PrateekScriptBuilder : CodeGenerator.CodeBuilder
     {
+        #region Properties
         //---------------------------------------------------------------------
-        public class Database : ScriptTemplate
+        public override string SearchPattern
         {
-            #region Code rules
-            private static List<CodeRule> rules = new List<PrateekScriptBuilder.CodeRule>();
-            public static Group<CodeRule> CodeRules { get { return new Group<CodeRule>(rules); } }
-            public static void Add(CodeRule data) { rules.Add(data); }
-            #endregion Code rules
+            get { return FileHelpers.BuildExtensionMatch(Tag.importExtension); }
         }
+        #endregion
 
+        #region Class Methods
         //---------------------------------------------------------------------
-        public abstract class SyntaxCodeRule : CodeRule
-        {
-            public SyntaxCodeRule(string extension) : base(extension) { }
-
-            public abstract void AddKeyword(string content);
-            public abstract void AddIdentifier(string content);
-        }
-
-        //---------------------------------------------------------------------
-        public override string SearchPattern { get { return FileHelpers.BuildExtensionMatch(Tag.importExtension); } }
-
-        //---------------------------------------------------------------------
-        protected CodeGenerator.CodeBuilder.BuildResult Error(CodeGenerator.CodeBuilder.BuildResult result, ref CodeGenerator.CodeBuilder.FileData fileData)
+        protected BuildResult Error(BuildResult result, ref FileData fileData)
         {
             return result + "in File: " + fileData.source.name.Extension(fileData.source.extension);
         }
 
         //---------------------------------------------------------------------
-        protected override CodeGenerator.CodeBuilder.BuildResult DoApplyValidTemplate(ref CodeGenerator.CodeBuilder.FileData fileData)
+        protected override BuildResult DoApplyValidTemplate(ref FileData fileData)
         {
             if (fileData.source.extension != Tag.importExtension)
-                return CodeGenerator.CodeBuilder.BuildResult.ValueType.Success | CodeGenerator.CodeBuilder.BuildResult.ValueType.Ignored;
+            {
+                return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
+            }
 
-            var analyzer = new Analyzer();
-            var activeCodeFile = (CodeFile)null;
-            var activeScope = string.Empty;
-            var codeFiles = new List<CodeFile>();
-            var codeDepth = 0;
+            var analyzer       = new Analyzer();
+            var activeCodeFile = (CodeFile) null;
+            var activeScope    = string.Empty;
+            var codeFiles      = new List<CodeFile>();
+            var codeDepth      = 0;
 
             analyzer.Init(fileData.source.content);
+            var symbols = analyzer.FindAllSymbols();
+            for (int s = 0; s < symbols.Count; s++)
+            {
+                var symbol = symbols[s];
+                symbol = symbol;
+            }
+            return BuildResult.ValueType.LoadingFailed;
 
-            var args = new List<string>();
+
+            var args    = new List<string>();
             var keyword = string.Empty;
-            var data = String.Empty;
+            var data    = string.Empty;
             while (analyzer.ShouldContinue)
             {
                 activeScope = analyzer.Scope;
                 var keywordResult = analyzer.FindKeyword(ref keyword);
-                if (!keywordResult && !keywordResult.Is(CodeGenerator.CodeBuilder.BuildResult.ValueType.Ignored))
+                if (!keywordResult && !keywordResult.Is(BuildResult.ValueType.Ignored))
                 {
                     return Error(keywordResult, ref fileData);
                 }
@@ -103,37 +98,51 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     if (dataResult < 1)
                     {
                         if (dataResult < 0)
+                        {
                             break;
+                        }
                     }
                     else
                     {
                         var foundMatch = false;
-                        var rules = Database.CodeRules;
-                        for (int s = 0; s < rules.Count; s++)
+                        var rules      = ScriptActionDatabase.Actions;
+                        for (var s = 0; s < rules.Count; s++)
                         {
                             var rule = rules[s];
                             if (!activeCodeFile.AllowRule(rule))
+                            {
                                 continue;
+                            }
 
                             var keyRule = rule.GetKeyRule(keyword, activeScope);
-                            if (keyRule.usage != CodeBuilder.Utils.KeyRule.Usage.Match)
+                            if (keyRule.usage != Utils.KeyRule.Usage.Match)
+                            {
                                 continue;
+                            }
 
                             if (!analyzer.FindArgs(args, keyRule))
-                                return Error((CodeGenerator.CodeBuilder.BuildResult)CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptArgNotFound + keyword, ref fileData);
+                            {
+                                return Error((BuildResult) BuildResult.ValueType.PrateekScriptArgNotFound + keyword, ref fileData);
+                            }
 
                             if (!analyzer.FindData(ref data, keyRule))
-                                return Error((CodeGenerator.CodeBuilder.BuildResult)CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptDataNotFound + keyword, ref fileData);
+                            {
+                                return Error((BuildResult) BuildResult.ValueType.PrateekScriptDataNotFound + keyword, ref fileData);
+                            }
 
                             if (!rule.RetrieveRuleContent(activeCodeFile, keyRule, args, data))
-                                return Error((CodeGenerator.CodeBuilder.BuildResult)CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptDataNotTreated + keyword, ref fileData);
+                            {
+                                return Error((BuildResult) BuildResult.ValueType.PrateekScriptDataNotTreated + keyword, ref fileData);
+                            }
 
                             foundMatch = true;
                             break;
                         }
 
                         if (!foundMatch)
-                            return Error((CodeGenerator.CodeBuilder.BuildResult)CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptInvalidKeyword + keyword, ref fileData);
+                        {
+                            return Error((BuildResult) BuildResult.ValueType.PrateekScriptInvalidKeyword + keyword, ref fileData);
+                        }
                     }
                 }
                 else
@@ -146,10 +155,14 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                             if (activeCodeFile.ActiveData != null)
                             {
                                 if (activeCodeFile.ActiveData.activeRule == null)
+                                {
                                     break;
+                                }
 
                                 if (activeCodeFile.ActiveData.activeRule.CloseScope(activeCodeFile, scopeName))
+                                {
                                     codeDepth--;
+                                }
                             }
                             else if (codeDepth == 1 && scopeName == Tag.Macro.FileInfo)
                             {
@@ -162,9 +175,10 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             }
 
             //code files have been filled
-            for (int f = 0; f < codeFiles.Count; f++)
+            for (var f = 0; f < codeFiles.Count; f++)
             {
                 var codeFile = codeFiles[f];
+
                 //{ // Log shit
                 //    var log = String.Format("FOUND: {0}.{1}\n", codeFile.fileName, codeFile.fileExtension);
                 //    for (int d = 0; d < codeFile.DataCount; d++)
@@ -190,9 +204,9 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 //}
 
                 var newData = fileData;
-                var ext = newData.source.extension.Extension(codeFile.fileExtension);
+                var ext     = newData.source.extension.Extension(codeFile.fileExtension);
                 var swap = new Utils.SwapInfo(newData.source.name.Extension(newData.source.extension))
-                                            + codeFile.fileName.Extension(ext);
+                         + codeFile.fileName.Extension(ext);
                 newData.source.name = codeFile.fileName;
                 newData.source.extension = ext;
                 newData.source.absPath = swap.Apply(newData.source.absPath);
@@ -204,15 +218,20 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 newData.destination.relPath = swap.Apply(newData.destination.relPath);
 
                 var applyResult = base.DoApplyValidTemplate(ref newData);
-                if (applyResult.Is(CodeGenerator.CodeBuilder.BuildResult.ValueType.NoMatchingTemplate))
+                if (applyResult.Is(BuildResult.ValueType.NoMatchingTemplate))
+                {
                     return Error(applyResult, ref newData);
+                }
 
-                var genStart = Tag.Macro.codeGenStart.Keyword();
+                var genStart   = Tag.Macro.codeGenStart.Keyword();
                 var startIndex = newData.destination.content.IndexOf(genStart);
                 if (startIndex < 0)
-                    return Error(CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptSourceStartTagInvalid, ref newData);
+                {
+                    return Error(BuildResult.ValueType.PrateekScriptSourceStartTagInvalid, ref newData);
+                }
+
                 var genHeader = newData.destination.content.Substring(0, startIndex);
-                var genCode = newData.destination.content.Substring(startIndex + genStart.Length);
+                var genCode   = newData.destination.content.Substring(startIndex + genStart.Length);
 
                 // Build the actual code
                 var result = codeFile.Generate(genHeader, genCode);
@@ -235,7 +254,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 //}
             }
 
-            return CodeGenerator.CodeBuilder.BuildResult.ValueType.Ignored;
+            return BuildResult.ValueType.Ignored;
         }
 
         //---------------------------------------------------------------------
@@ -244,22 +263,28 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             if (keyword == Tag.Macro.FileInfo)
             {
                 if (scope != string.Empty)
+                {
                     return -1;
+                }
 
-                var keyRule = new Utils.KeyRule(keyword, scope) { args = 2, needOpenScope = true };
+                var keyRule = new Utils.KeyRule(keyword, scope) {args = 2, needOpenScope = true};
                 if (!analyzer.FindArgs(args, keyRule))
+                {
                     return -1;
+                }
 
-                activeCodeFile = codeFiles.Find((x) => { return x.fileName == args[0] && x.fileExtension == args[1]; });
+                activeCodeFile = codeFiles.Find(x => { return x.fileName == args[0] && x.fileExtension == args[1]; });
                 if (activeCodeFile == null)
                 {
-                    activeCodeFile = new CodeFile() { fileName = args[0], fileExtension = args[1] };
+                    activeCodeFile = new CodeFile {fileName = args[0], fileExtension = args[1]};
                     codeFiles.Add(activeCodeFile);
                 }
+
                 return 0;
             }
 
             return 1;
         }
+        #endregion
     }
 }

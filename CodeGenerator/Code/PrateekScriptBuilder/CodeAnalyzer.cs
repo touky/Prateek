@@ -35,6 +35,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
     using Prateek.Core.Code;
     using Prateek.Core.Code.Extensions;
 
@@ -45,23 +47,6 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         protected class Analyzer
         {
             //-----------------------------------------------------------------
-            public enum SymbolType
-            {
-                WhiteSpace,
-                LineFeed,
-                Numeric,
-                Letter,
-                Literal,
-                LiteralEnd,
-                ScopeStart,
-                ScopeEnd,
-                CallStart,
-                CallEnd,
-                ArgSplit,
-                Comment,
-
-                MAX
-            }
 
             //-----------------------------------------------------------------
             public string content;
@@ -110,7 +95,67 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
                 this.content = content;
 
-                RemoveComments();
+                //RemoveComments();
+            }
+
+            private List<Symbol> registry = new List<Symbol>();
+            public List<Symbol> FindAllSymbols()
+            {
+                if (registry.Count == 0)
+                {
+                    registry.Add(new MultilineComment());
+                    registry.Add(new SingleLineComment());
+                    registry.Add(new LiteralValue());
+                    registry.Add(new CodeStartScope());
+                    registry.Add(new CodeEndScope());
+                    registry.Add(new InvokeStartScope());
+                    registry.Add(new InvokeEndScope());
+                    registry.Add(new VariableSeparator());
+                    registry.Add(new Keyword());
+                    registry.Add(new Value());
+                }
+
+                var foundSymbols = new List<Symbol>();
+                while (position < content.Length)
+                {
+                    var closestMatch = (Match) null;
+                    var closestSymbol = (Symbol) null;
+                    foreach (var symbol in registry)
+                    {
+                        var match = symbol.Start.Match(content, position);
+                        if (match.Success && (closestMatch == null || match.Index < closestMatch.Index))
+                        {
+                            closestMatch = match;
+                            closestSymbol = symbol;
+                        }
+                    }
+
+                    if (closestSymbol == null)
+                    {
+                        break;
+                    }
+
+                    position = closestMatch.Index + closestMatch.Length;
+                    if (closestSymbol.End != null)
+                    {
+                        var matchEnd = closestSymbol.End.Match(content, position);
+                        if (matchEnd.Success)
+                        {
+                            foundSymbols.Add(closestSymbol.Clone(content.Substring(position, matchEnd.Index - position)));
+                            position = matchEnd.Index + matchEnd.Length;
+                        }
+                        else
+                        {
+                            foundSymbols.Add(closestSymbol.Clone(closestMatch.Value));
+                        }
+                    }
+                    else
+                    {
+                        foundSymbols.Add(closestSymbol.Clone(closestMatch.Value));
+                    }
+                }
+
+                return foundSymbols;
             }
 
             //-----------------------------------------------------------------
