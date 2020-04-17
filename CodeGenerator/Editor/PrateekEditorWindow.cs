@@ -1,3 +1,4 @@
+#define PRATEEK_ALLOW_INTERNAL_TOOLS
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
@@ -33,7 +34,7 @@
 //-----------------------------------------------------------------------------
 namespace Prateek.CodeGenerator.Editor
 {
-    using Prateek.CodeGenerator.PrateekScriptBuilder;
+    using System.Collections.Generic;
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Editor.EditorPrefs;
     using Prateek.Helpers;
@@ -150,11 +151,13 @@ namespace Prateek.CodeGenerator.Editor
 
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
             EditorGUILayout.Space();
+            
             if (GUI.Button(EditorGUILayout.GetControlRect(), "Reload"))
             {
                 prateekScriptGenerator = null;
                 InitDatas();
             }
+
             prateekRunInTestMode.Value = EditorGUILayout.ToggleLeft("Run in test mode", prateekRunInTestMode.Value);
 
             if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute generator"))
@@ -162,8 +165,10 @@ namespace Prateek.CodeGenerator.Editor
                 prateekScriptGenerator.RunInTestMode = prateekRunInTestMode.Value;
                 prateekScriptGenerator.StartWork();
             }
+
             prateekExportDir.Value = EditorGUILayout.TextField("Export dir", prateekExportDir.Value);
             prateekSourceDir.Value = EditorGUILayout.TextField("Source dir", prateekSourceDir.Value);
+            
             {
                 if (GUI.Button(EditorGUILayout.GetControlRect(), "Add folder"))
                 {
@@ -180,6 +185,7 @@ namespace Prateek.CodeGenerator.Editor
                     prateekSourceDir0[v] = EditorGUILayout.TextField(prateekSourceDir0[v]);
                 }
             }
+            
             EditorGUILayout.LabelField("File count: " + prateekScriptGenerator.WorkFileCount);
             using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition2, GUILayout.MaxHeight(350)))
             {

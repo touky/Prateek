@@ -57,7 +57,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer
         }
     }
 
-    public class MultilineComment : Symbol<MultilineComment>
+    public interface IComment { }
+
+    public class MultilineComment : Symbol<MultilineComment>, IComment
     {
         private static readonly Regex START = new Regex($@"/\*");
         private static readonly Regex END = new Regex($@"\*/");
@@ -73,7 +75,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer
         }
     }
 
-    public class SingleLineComment : Symbol<SingleLineComment>
+    public class SingleLineComment : Symbol<SingleLineComment>, IComment
     {
         private static readonly Regex START = new Regex($@"//");
         private static readonly Regex END = new Regex($@"([\r\n$]+)");

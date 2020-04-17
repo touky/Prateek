@@ -7,7 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder {
     using UnityEditor;
 
-    ///todo [InitializeOnLoad]
+    [InitializeOnLoad]
     class MixedCTorScriptActionLoader : PrateekScriptBuilder
     {
         static MixedCTorScriptActionLoader()

@@ -7,7 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder {
     using UnityEditor;
 
-    ///todo [InitializeOnLoad]
+    [InitializeOnLoad]
     class OverloadFuncScriptActionLoader : PrateekScriptBuilder
     {
         static OverloadFuncScriptActionLoader()

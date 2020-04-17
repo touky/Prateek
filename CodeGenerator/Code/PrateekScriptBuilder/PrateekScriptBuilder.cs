@@ -34,6 +34,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Code.Helpers.Files;
     using static CodeBuilder;
@@ -69,111 +70,144 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             var activeScope    = string.Empty;
             var codeFiles      = new List<CodeFile>();
             var codeDepth      = 0;
+            var args           = new List<string>();
 
             analyzer.Init(fileData.source.content);
-            var symbols = analyzer.FindAllSymbols();
-            for (int s = 0; s < symbols.Count; s++)
+            if (true)
             {
-                var symbol = symbols[s];
-                symbol = symbol;
-            }
-            return BuildResult.ValueType.LoadingFailed;
-
-
-            var args    = new List<string>();
-            var keyword = string.Empty;
-            var data    = string.Empty;
-            while (analyzer.ShouldContinue)
-            {
-                activeScope = analyzer.Scope;
-                var keywordResult = analyzer.FindKeyword(ref keyword);
-                if (!keywordResult && !keywordResult.Is(BuildResult.ValueType.Ignored))
+                var symbols = analyzer.FindAllSymbols();
+                for (int s = 0; s < symbols.Count; s++)
                 {
-                    return Error(keywordResult, ref fileData);
+                    var symbol = symbols[s];
+                    if (symbol is IComment)
+                    {
+                        continue;
+                    }
+
+                    if (!(symbol is Keyword keyword))
+                    {
+                        return BuildResult.ValueType.LoadingFailed;
+                    }
+
+                    if (RetrieveCodeFile(keyword, analyzer, symbols, ref s, ref activeCodeFile, codeFiles, args) < 0)
+                    {
+                        return BuildResult.ValueType.LoadingFailed;
+                    }
+
+                    var rules = ScriptActionDatabase.Actions;
+                    for (var r = 0; r < rules.Count; r++)
+                    {
+                        var rule = rules[r];
+                        if (!activeCodeFile.AllowRule(rule))
+                        {
+                            continue;
+                        }
+
+                        var keyRule = rule.GetKeyRule(keyword.Content, activeScope);
+                        if (keyRule.usage != Utils.KeyRule.Usage.Match)
+                        {
+                            continue;
+                        }
+                    }
                 }
 
-                if (keywordResult)
+                return BuildResult.ValueType.LoadingFailed;
+            }
+            else
+            {
+                var keyword = string.Empty;
+                var data    = string.Empty;
+                while (analyzer.ShouldContinue)
                 {
-                    var dataResult = CheckGenericData(activeScope, keyword, analyzer, ref activeCodeFile, codeFiles, args);
-                    if (dataResult < 1)
+                    activeScope = analyzer.Scope;
+                    var keywordResult = analyzer.FindKeyword(ref keyword);
+                    if (!keywordResult && !keywordResult.Is(BuildResult.ValueType.Ignored))
                     {
-                        if (dataResult < 0)
+                        return Error(keywordResult, ref fileData);
+                    }
+
+                    if (keywordResult)
+                    {
+                        var dataResult = RetrieveCodeFile(activeScope, keyword, analyzer, ref activeCodeFile, codeFiles, args);
+                        if (dataResult < 1)
                         {
-                            break;
+                            if (dataResult < 0)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            var foundMatch = false;
+                            var rules      = ScriptActionDatabase.Actions;
+                            for (var s = 0; s < rules.Count; s++)
+                            {
+                                var rule = rules[s];
+                                if (!activeCodeFile.AllowRule(rule))
+                                {
+                                    continue;
+                                }
+
+                                var keyRule = rule.GetKeyRule(keyword, activeScope);
+                                if (keyRule.usage != Utils.KeyRule.Usage.Match)
+                                {
+                                    continue;
+                                }
+
+                                if (!analyzer.FindArgs(args, keyRule))
+                                {
+                                    return Error((BuildResult) BuildResult.ValueType.PrateekScriptArgNotFound + keyword, ref fileData);
+                                }
+
+                                if (!analyzer.FindData(ref data, keyRule))
+                                {
+                                    return Error((BuildResult) BuildResult.ValueType.PrateekScriptDataNotFound + keyword, ref fileData);
+                                }
+
+                                if (!rule.RetrieveRuleContent(activeCodeFile, keyRule, args, data))
+                                {
+                                    return Error((BuildResult) BuildResult.ValueType.PrateekScriptDataNotTreated + keyword, ref fileData);
+                                }
+
+                                foundMatch = true;
+                                break;
+                            }
+
+                            if (!foundMatch)
+                            {
+                                return Error((BuildResult) BuildResult.ValueType.PrateekScriptInvalidKeyword + keyword, ref fileData);
+                            }
                         }
                     }
                     else
                     {
-                        var foundMatch = false;
-                        var rules      = ScriptActionDatabase.Actions;
-                        for (var s = 0; s < rules.Count; s++)
+                        var scopeName = string.Empty;
+                        if (analyzer.FindScopeEnd(ref scopeName))
                         {
-                            var rule = rules[s];
-                            if (!activeCodeFile.AllowRule(rule))
+                            if (activeCodeFile != null)
                             {
-                                continue;
-                            }
-
-                            var keyRule = rule.GetKeyRule(keyword, activeScope);
-                            if (keyRule.usage != Utils.KeyRule.Usage.Match)
-                            {
-                                continue;
-                            }
-
-                            if (!analyzer.FindArgs(args, keyRule))
-                            {
-                                return Error((BuildResult) BuildResult.ValueType.PrateekScriptArgNotFound + keyword, ref fileData);
-                            }
-
-                            if (!analyzer.FindData(ref data, keyRule))
-                            {
-                                return Error((BuildResult) BuildResult.ValueType.PrateekScriptDataNotFound + keyword, ref fileData);
-                            }
-
-                            if (!rule.RetrieveRuleContent(activeCodeFile, keyRule, args, data))
-                            {
-                                return Error((BuildResult) BuildResult.ValueType.PrateekScriptDataNotTreated + keyword, ref fileData);
-                            }
-
-                            foundMatch = true;
-                            break;
-                        }
-
-                        if (!foundMatch)
-                        {
-                            return Error((BuildResult) BuildResult.ValueType.PrateekScriptInvalidKeyword + keyword, ref fileData);
-                        }
-                    }
-                }
-                else
-                {
-                    var scopeName = string.Empty;
-                    if (analyzer.FindScopeEnd(ref scopeName))
-                    {
-                        if (activeCodeFile != null)
-                        {
-                            if (activeCodeFile.ActiveData != null)
-                            {
-                                if (activeCodeFile.ActiveData.activeRule == null)
+                                if (activeCodeFile.ActiveData != null)
                                 {
-                                    break;
+                                    if (activeCodeFile.ActiveData.activeRule == null)
+                                    {
+                                        break;
+                                    }
+
+                                    if (activeCodeFile.ActiveData.activeRule.CloseScope(activeCodeFile, scopeName))
+                                    {
+                                        codeDepth--;
+                                    }
                                 }
-
-                                if (activeCodeFile.ActiveData.activeRule.CloseScope(activeCodeFile, scopeName))
+                                else if (codeDepth == 1 && scopeName == Tag.Macro.FileInfo)
                                 {
+                                    activeCodeFile = null;
                                     codeDepth--;
                                 }
-                            }
-                            else if (codeDepth == 1 && scopeName == Tag.Macro.FileInfo)
-                            {
-                                activeCodeFile = null;
-                                codeDepth--;
                             }
                         }
                     }
                 }
             }
-
             //code files have been filled
             for (var f = 0; f < codeFiles.Count; f++)
             {
@@ -258,7 +292,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         }
 
         //---------------------------------------------------------------------
-        private int CheckGenericData(string scope, string keyword, Analyzer analyzer, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
+        private int RetrieveCodeFile(string scope, string keyword, Analyzer analyzer, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
         {
             if (keyword == Tag.Macro.FileInfo)
             {
@@ -269,6 +303,55 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
                 var keyRule = new Utils.KeyRule(keyword, scope) {args = 2, needOpenScope = true};
                 if (!analyzer.FindArgs(args, keyRule))
+                {
+                    return -1;
+                }
+
+                activeCodeFile = codeFiles.Find(x => { return x.fileName == args[0] && x.fileExtension == args[1]; });
+                if (activeCodeFile == null)
+                {
+                    activeCodeFile = new CodeFile {fileName = args[0], fileExtension = args[1]};
+                    codeFiles.Add(activeCodeFile);
+                }
+
+                return 0;
+            }
+
+            return 1;
+        }
+
+        private int RetrieveCodeFile(Keyword keyword, Analyzer analyzer, List<Symbol> symbols, ref int symbolIndex, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
+        {
+            if (keyword.Content == Tag.Macro.FileInfo)
+            {
+                var keyRule = new Utils.KeyRule(keyword.Content, string.Empty) {args = 2, needOpenScope = true};
+                if (!(symbols[++symbolIndex] is InvokeStartScope))
+                {
+                    return -1;
+                }
+
+                for (++symbolIndex; symbolIndex < symbols.Count; symbolIndex++)
+                {
+                    var symbol = symbols[symbolIndex];
+                    if (symbol is VariableSeparator)
+                    {
+                        continue;
+                    }
+
+                    if (symbol is InvokeEndScope)
+                    {
+                        break;
+                    }
+
+                    if (!(symbol is Keyword arg))
+                    {
+                        return -1;
+                    }
+
+                    args.Add(arg.Content);
+                }
+
+                if (!(symbols[++symbolIndex] is CodeStartScope))
                 {
                     return -1;
                 }

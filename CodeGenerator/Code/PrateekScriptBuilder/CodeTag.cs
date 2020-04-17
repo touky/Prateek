@@ -44,7 +44,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
     {
         //---------------------------------------------------------------------
 #if UNITY_EDITOR
-        //todo [InitializeOnLoad]
+        [InitializeOnLoad]
         class TagLoader
         {
             static TagLoader()
