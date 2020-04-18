@@ -35,10 +35,12 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
     using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
     using Prateek.Core.Code;
     using Prateek.Core.Code.Extensions;
+    using UnityEditor.Build.Content;
 
     //-------------------------------------------------------------------------
     public partial class PrateekScriptBuilder
@@ -99,23 +101,29 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             }
 
             private List<Symbol> registry = new List<Symbol>();
-            public List<Symbol> FindAllSymbols()
+            private List<Symbol> contentSymbols = new List<Symbol>();
+            private CodeScope contentRootScope = null;
+            public CodeScope ContentRootScope {
+                get { return contentRootScope;}
+            }
+
+            public void FindAllSymbols()
             {
                 if (registry.Count == 0)
                 {
                     registry.Add(new MultilineComment());
                     registry.Add(new SingleLineComment());
                     registry.Add(new LiteralValue());
-                    registry.Add(new CodeStartScope());
+                    registry.Add(new CodeBeginScope());
                     registry.Add(new CodeEndScope());
-                    registry.Add(new InvokeStartScope());
+                    registry.Add(new InvokeBeginScope());
                     registry.Add(new InvokeEndScope());
                     registry.Add(new VariableSeparator());
                     registry.Add(new Keyword());
                     registry.Add(new Value());
                 }
 
-                var foundSymbols = new List<Symbol>();
+                contentSymbols.Clear();
                 while (position < content.Length)
                 {
                     var closestMatch = (Match) null;
@@ -141,21 +149,189 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                         var matchEnd = closestSymbol.End.Match(content, position);
                         if (matchEnd.Success)
                         {
-                            foundSymbols.Add(closestSymbol.Clone(content.Substring(position, matchEnd.Index - position)));
+                            contentSymbols.Add(closestSymbol.Clone(content.Substring(position, matchEnd.Index - position)));
                             position = matchEnd.Index + matchEnd.Length;
                         }
                         else
                         {
-                            foundSymbols.Add(closestSymbol.Clone(closestMatch.Value));
+                            contentSymbols.Add(closestSymbol.Clone(closestMatch.Value));
                         }
                     }
                     else
                     {
-                        foundSymbols.Add(closestSymbol.Clone(closestMatch.Value));
+                        contentSymbols.Add(closestSymbol.Clone(closestMatch.Value));
                     }
                 }
+            }
 
-                return foundSymbols;
+            private int cursorSymbol = 0;
+
+            private Symbol CurrentSymbol { get { return cursorSymbol < contentSymbols.Count ? contentSymbols[cursorSymbol] : null; } }
+
+            private Symbol NextSymbol
+            {
+                get
+                {
+                    var cursor = cursorSymbol + 1;
+                    return cursor < contentSymbols.Count ? contentSymbols[cursor] : null;
+                }
+            }
+
+            public bool BuildCodeCommands()
+            {
+                var scopes = new Stack<CodeScope>();
+
+                var latestComments = new CodeComment();
+                var activeScope = (contentRootScope = new CodeScope());
+                var latestCommand = (CodeCommand)null;
+
+                while (CurrentSymbol != null)
+                {
+                    var currentSymbol = CurrentSymbol;
+                    if (currentSymbol is IComment commentSymbol)
+                    {
+                        latestComments.Set(commentSymbol);
+
+                        cursorSymbol++;
+                        continue;
+                    }
+                    
+                    if (currentSymbol is CodeBeginScope)
+                    {
+                        if (latestCommand != null && !latestCommand.AllowInternalScope)
+                        {
+                            return false;
+                        }
+
+                        var newScope = new CodeScope();
+                        newScope.Add(latestComments);
+                        if (latestCommand != null)
+                        {
+                            latestCommand.Add(newScope);
+                        }
+                        else
+                        {
+                            activeScope.Add(newScope);
+                        }
+
+                        scopes.Push(activeScope);
+                        activeScope = newScope;
+                        latestCommand = null;
+                    }
+                    else if (currentSymbol is CodeEndScope)
+                    {
+                        if (scopes.Count == 0)
+                        {
+                            return false;
+                        }
+
+                        activeScope = scopes.Pop();
+                        latestComments = new CodeComment();
+                        latestCommand = null;
+                    }
+
+                    if (currentSymbol is Keyword keywordSymbol)
+                    {
+                        var newKeyword = new CodeKeyword() {keyword = keywordSymbol};
+                        newKeyword.Add(latestComments);
+                        activeScope.Add(newKeyword);
+                                                
+                        latestCommand = newKeyword;
+
+                        if (!(NextSymbol is InvokeBeginScope))
+                        {
+                            if (NextSymbol == null)
+                            {
+                                return false;
+                            }
+
+                            cursorSymbol++;
+                            continue;
+                        }
+                        cursorSymbol++;
+
+                        var latestSymbol = (Symbol)null;
+                        var foundInvokeEnd = false;
+                        cursorSymbol++;
+                        while (CurrentSymbol != null)
+                        {
+                            currentSymbol = CurrentSymbol;
+                            if (currentSymbol is VariableSeparator)
+                            {
+                                if (!(latestSymbol is Keyword))
+                                {
+                                    return false;
+                                }
+                            }
+                            else if (currentSymbol is Keyword argSymbol)
+                            {
+                                if (latestSymbol is Keyword)
+                                {
+                                    return false;
+                                }
+
+                                newKeyword.Add(argSymbol);
+                            }
+                            else if (currentSymbol is InvokeEndScope)
+                            {
+                                foundInvokeEnd = true;
+                                break;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+
+                            latestSymbol = currentSymbol;
+                            cursorSymbol++;
+                        }
+
+                        if (!foundInvokeEnd)
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (currentSymbol is LiteralValue literalSymbol)
+                    {
+                        var newLiteral = new CodeLiteral();
+                        newLiteral.Add(literalSymbol);
+                        
+                        activeScope.Add(newLiteral);
+
+                        if (!(NextSymbol is LiteralValue))
+                        {
+                            if (NextSymbol == null)
+                            {
+                                return false;
+                            }
+
+                            cursorSymbol++;
+                            continue;
+                        }
+
+                        cursorSymbol++;
+                        while (CurrentSymbol != null)
+                        {
+                            currentSymbol = CurrentSymbol;
+                            if (currentSymbol is LiteralValue nextLiteral)
+                            {
+                                newLiteral.Add(nextLiteral);
+                            }
+
+                            if (!(NextSymbol is LiteralValue))
+                            {
+                                break;
+                            }
+
+                            cursorSymbol++;
+                        }
+                    }
+
+                    cursorSymbol++;
+                }
+
+                return true;
             }
 
             //-----------------------------------------------------------------
@@ -208,7 +384,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             }
 
             //-----------------------------------------------------------------
-            public bool FindArgs(List<string> args, CodeBuilder.Utils.KeyRule keyRule)
+            public bool FindArgs(List<string> args, CodeBuilder.Utils.KeywordRule keywordRule)
             {
                 args.Clear();
 
@@ -224,7 +400,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     {
                         case SymbolType.CallStart:
                         {
-                            if (keyRule.args.NoneNeeded)
+                            if (keywordRule.arguments.NoneNeeded)
                                 return false;
 
                             if (argScope != SymbolType.MAX)
@@ -236,7 +412,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                         }
                         case SymbolType.CallEnd:
                         {
-                            if (keyRule.args.NoneNeeded)
+                            if (keywordRule.arguments.NoneNeeded)
                                 return false;
 
                             if (argScope != SymbolType.CallStart)
@@ -245,7 +421,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                             argSplit = SymbolType.ArgSplit;
                             argScope = SymbolType.CallEnd;
 
-                            allowContinue = keyRule.needOpenScope;
+                            allowContinue = keywordRule.needOpenScope;
                             if (keyword.Length > 0)
                             {
                                 args.Add(keyword);
@@ -256,7 +432,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                         case SymbolType.Numeric:
                         case SymbolType.Letter:
                         {
-                            if (keyRule.args.NoneNeeded)
+                            if (keywordRule.arguments.NoneNeeded)
                                 return false;
 
                             keyword += content[position];
@@ -272,7 +448,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
                             if (type == SymbolType.ArgSplit)
                             {
-                                if (keyRule.args.NoneNeeded)
+                                if (keywordRule.arguments.NoneNeeded)
                                     return false;
 
                                 if (argSplit == SymbolType.ArgSplit)
@@ -289,11 +465,11 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                         }
                         case SymbolType.ScopeStart:
                         {
-                            scopes.Add(keyRule.needOpenScope ? keyRule.key : string.Empty);
+                            scopes.Add(keywordRule.needOpenScope ? keywordRule.keyword : string.Empty);
 
                             foundScope = true;
                             allowContinue = false;
-                            if (!keyRule.needOpenScope)
+                            if (!keywordRule.needOpenScope)
                                 break;
 
                             if (argScope != SymbolType.CallEnd && argSplit == SymbolType.ArgSplit)
@@ -312,13 +488,13 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     position++;
                 }
 
-                if (keyRule.needOpenScope && !foundScope)
+                if (keywordRule.needOpenScope && !foundScope)
                     return false;
-                return keyRule.args.Check(args.Count);
+                return keywordRule.arguments.Check(args.Count);
             }
 
             //-----------------------------------------------------------------
-            public bool FindData(ref string data, CodeBuilder.Utils.KeyRule setup)
+            public bool FindData(ref string data, CodeBuilder.Utils.KeywordRule setup)
             {
                 if (!setup.needScopeData)
                     return true;

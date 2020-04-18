@@ -35,6 +35,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
     using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
 
@@ -97,6 +98,29 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     return true;
                 }
 
+                public bool SetClassNames(List<Keyword> arguments)
+                {
+                    if (classInfos.Count == 0)
+                    {
+                        return false;
+                    }
+
+                    var infos = classInfos.Last();
+                    if (infos.names == null)
+                    {
+                        infos.names = new List<string>();
+                    }
+                    
+                    foreach (var argument in arguments)
+                    {
+                        infos.names.Add(argument.Content);
+                    }
+
+                    classInfos[classInfos.Count - 1] = infos;
+                    
+                    return true;
+                }
+
                 //-------------------------------------------------------------
                 public bool SetClassVars(List<string> args)
                 {
@@ -106,6 +130,20 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     if (infos.variables == null)
                         infos.variables = new List<string>();
                     infos.variables.AddRange(args);
+                    classInfos[classInfos.Count - 1] = infos;
+                    return true;
+                }
+                public bool SetClassVars(List<Keyword> arguments)
+                {
+                    if (classInfos.Count == 0)
+                        return false;
+                    var infos = classInfos.Last();
+                    if (infos.variables == null)
+                        infos.variables = new List<string>();
+                    foreach (var argument in arguments)
+                    {
+                        infos.variables.Add(argument.Content);
+                    }
                     classInfos[classInfos.Count - 1] = infos;
                     return true;
                 }
@@ -128,44 +166,44 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             public string fileNamespace;
 
             //-----------------------------------------------------------------
-            private ContentInfos activeData;
+            private ContentInfos codeInfos;
             private string codeGenerated;
             private List<ContentInfos> datas = new List<ContentInfos>();
 
             //-----------------------------------------------------------------
             public string CodeGenerated { get { return codeGenerated; } }
-            public ContentInfos ActiveData { get { return activeData; } }
+            public ContentInfos CodeInfos { get { return codeInfos; } }
             public int DataCount { get { return datas.Count; } }
             public ContentInfos this[int index] { get { return datas[index]; } }
 
             //-----------------------------------------------------------------
             public bool AllowRule(ScriptAction rule)
             {
-                if (activeData == null)
+                if (codeInfos == null)
                     return true;
 
-                if (activeData.activeRule == null)
+                if (codeInfos.activeRule == null)
                     return true;
 
-                return activeData.activeRule == rule;
+                return codeInfos.activeRule == rule;
             }
 
             //-----------------------------------------------------------------
             public ContentInfos NewData(ScriptAction codeSettings)
             {
-                if (activeData != null)
+                if (codeInfos != null)
                     return null;
-                activeData = new ContentInfos() { activeRule = codeSettings };
-                return activeData;
+                codeInfos = new ContentInfos() { activeRule = codeSettings };
+                return codeInfos;
             }
 
             //-----------------------------------------------------------------
             public bool Commit()
             {
-                var hasSubmitted = activeData != null;
-                if (activeData != null)
-                    datas.Add(activeData);
-                activeData = null;
+                var hasSubmitted = codeInfos != null;
+                if (codeInfos != null)
+                    datas.Add(codeInfos);
+                codeInfos = null;
 
                 return hasSubmitted;
             }

@@ -1,22 +1,26 @@
-namespace Prateek.CodeGenerator.PrateekScriptBuilder {
-    using System;
+namespace Prateek.CodeGenerator.PrateekScriptBuilder
+{
+    using Prateek.CodeGenerator.ScriptTemplates;
     using Prateek.Core.Code.Helpers;
     using UnityEditor;
 
-    ///todo
     [InitializeOnLoad]
-    class ScriptActionLoader : Prateek.CodeGenerator.ScriptTemplates.ScriptTemplate
+    internal class ScriptActionSyntaxLoader : ScriptTemplate
     {
-        static ScriptActionLoader()
+        #region Constructors
+        static ScriptActionSyntaxLoader()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
                 return;
+            }
 
             NewScript(PrateekScriptBuilder.Tag.importExtension.Extension(PrateekScriptBuilder.Tag.exportExtension), PrateekScriptBuilder.Tag.exportExtension)
                 .SetAutorun(false)
-                .SetTemplateFile(String.Empty)
+                .SetTemplateFile(string.Empty)
                 .SetFileContent("InternalContent_Prateek_script.txt")
                 .Commit();
         }
+        #endregion
     }
 }

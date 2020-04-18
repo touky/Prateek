@@ -41,6 +41,19 @@ namespace Prateek.Core.Code.Helpers.Files
     using UnityEngine;
 
     //-------------------------------------------------------------------------
+    public static class PathPlus
+    {
+        public static string GetExtension(string file)
+        {
+            return Path.GetExtension(file).TrimStart(Strings.Separator.FileExtension.C());
+        }
+
+        public static string GetFilenameOnly(string file)
+        {
+            return Path.GetFileNameWithoutExtension(file);
+        }
+    }
+
     public static class FileHelpers
     {
         //---------------------------------------------------------------------
@@ -171,6 +184,7 @@ namespace Prateek.Core.Code.Helpers.Files
         public static string GetValidFile(string path) { return GetValidIO(path, true); }
 
         //---------------------------------------------------------------------
+        //todo check if still valid
         private static string GetValidIO(string path, bool isFile)
         {
             for (int p = 0; ; p++)

@@ -35,6 +35,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
     using Prateek.Helpers;
     using Prateek.CodeGenerator;
     using Prateek.Core.Code.Helpers;
@@ -45,6 +46,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
     public abstract class ScriptAction : ScriptTemplates.ScriptTemplate.BaseTemplate
     {
+        protected List<CodeBuilder.Utils.KeywordRule> keywordRules = new List<CodeBuilder.Utils.KeywordRule>();
+
         //-----------------------------------------------------------------
         public struct FuncVariant
         {
@@ -145,24 +148,158 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         }
 
         //-----------------------------------------------------------------
-        private void Init()
+        protected virtual void Init()
         {
+            PrateekScriptBuilder.Tag.Macro.Init();
+
             codeBlock = String.Format("{0}_{1}_{2}", PrateekScriptBuilder.Tag.Macro.prefix, PrateekScriptBuilder.Tag.Macro.To(PrateekScriptBuilder.Tag.Macro.FuncName.BLOCK), ScopeTag);
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(codeBlock, PrateekScriptBuilder.Tag.Macro.FileInfo)
+            {
+                arguments = ArgumentRange.AtLeast(2), needOpenScope = true,
+                onFeedCodeFile = (codeInfos, arguments, data) =>
+                {
+                    codeInfos.blockNamespace = arguments[0].Content;
+                    codeInfos.blockClassName = arguments[1].Content;
+                    if (arguments.Count > 2)
+                    {
+                        var additionalArguments = arguments.GetRange(2, arguments.Count - 2);
+                        foreach (var argument in additionalArguments)
+                        {
+                            codeInfos.blockClassPrefix.Add(argument.Content);
+                        }
+                    }
+
+                    return true;
+                },
+                onCloseScope = (codeFile, scope) =>
+                {
+                    codeFile.Commit();
+                    return scope == codeBlock;
+                }
+            });
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.ClassInfo, codeBlock)
+            {
+                arguments = 1,
+                needOpenScope = true,
+                onFeedCodeFile = (codeInfos, arguments, data) =>
+                {
+                    codeInfos.classInfos.Add(new PrateekScriptBuilder.CodeFile.ClassInfos() {className = arguments[0].Content});
+                    return true;
+                }
+            });
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.ClassNames, PrateekScriptBuilder.Tag.Macro.ClassInfo)
+            {
+                arguments = ArgumentRange.AtLeast(1),
+                onFeedCodeFile = (codeInfos, arguments, data) =>
+                {
+                    return codeInfos.SetClassNames(arguments);
+                }
+            });
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.ClassVars, PrateekScriptBuilder.Tag.Macro.ClassInfo)
+            {
+                arguments = ArgumentRange.AtLeast(1),
+                onFeedCodeFile = (codeInfos, arguments, data) =>
+                {
+                    return codeInfos.SetClassVars(arguments);
+                }
+            });
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.DefaultInfo, codeBlock)
+            {
+                arguments = ArgumentRange.Between(2, 3),
+                onFeedCodeFile = (codeInfos, arguments, data) =>
+                {
+                    codeInfos.classDefaultType = arguments[0].Content;
+                    codeInfos.classDefaultValue = arguments[1].Content;
+                    codeInfos.classDefaultExportOnly = (arguments.Count == 2 || arguments[2].Content == "false") ? false : true;
+                    return true;
+                }
+            });
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.Func, codeBlock)
+            {
+                needOpenScope = true,
+                needScopeData = true,
+                onFeedCodeFile = (codeInfos, arguments, data) =>
+                {
+                    codeInfos.funcInfos.Add(new PrateekScriptBuilder.CodeFile.FuncInfos());
+                    codeInfos.SetFuncData(data);
+                    return true;
+                },
+                onCloseScope = (codeFile, scope) => { return true; }
+            });
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.CodePartPrefix, codeBlock)
+            {
+                arguments = 0, needOpenScope = true, needScopeData = true,
+                onFeedCodeFile = (codeInfos, arguments, data) =>
+                {
+                    codeInfos.codePrefix = data;
+                    return true;
+                },
+                onCloseScope = (codeFile, scope) => { return true; }
+            });
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.CodePartMain, codeBlock)
+            {
+                arguments = 0, needOpenScope = true, needScopeData = true,
+                onFeedCodeFile = (codeInfos, arguments, data) =>
+                {
+                    codeInfos.codeMain = data;
+                    return true;
+                },
+                onCloseScope = (codeFile, scope) => { return true; }
+            });
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.CodePartSuffix, codeBlock)
+            {
+                arguments = 0, needOpenScope = true, needScopeData = true,
+                onFeedCodeFile = (codeInfos, arguments, data) =>
+                {
+                    codeInfos.codePostfix = data;
+                    return true;
+                },
+                onCloseScope = (codeFile, scope) => { return true; }
+            });
+
+            keywordRules.Add(new CodeBuilder.Utils.KeywordRule() {usage = CodeBuilder.Utils.KeywordRule.Usage.Ignore});
         }
 
-        //-----------------------------------------------------------------
-        public bool RetrieveRuleContent(PrateekScriptBuilder.CodeFile codeFile, CodeBuilder.Utils.KeyRule keyRule, List<string> args, string data)
+        public bool FeedCodeFile(PrateekScriptBuilder.CodeFile codeFile, CodeBuilder.Utils.KeywordRule keywordRule, CodeKeyword rootKeyword)
         {
-            var activeData = codeFile.ActiveData;
-            if (activeData == null)
+            var codeInfos = codeFile.CodeInfos;
+            if (codeInfos == null)
             {
-                activeData = codeFile.NewData(this);
+                codeInfos = codeFile.NewData(this);
             }
 
-            if (activeData.activeRule == null || activeData.activeRule != this)
+            if (codeInfos.activeRule == null || codeInfos.activeRule != this)
+            {
                 return false;
+            }
 
-            return DoRetrieveRuleContent(activeData, keyRule, args, data);
+            var data = string.Empty;
+            if (keywordRule.needScopeData)
+            {
+                foreach (var codeCommand in rootKeyword.scopeContent.commands)
+                {
+                    if (!(codeCommand is CodeLiteral codeLiteral))
+                    {
+                        return false;
+                    }
+
+                    foreach (var literalValue in codeLiteral.literals)
+                    {
+                        data += $"{literalValue.Content}\r\n";
+                    }
+                }
+            }
+
+            return keywordRule.onFeedCodeFile.Invoke(codeInfos, rootKeyword.arguments, data);
         }
 
         //-----------------------------------------------------------------
@@ -290,97 +427,19 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         }
 
         //-----------------------------------------------------------------
-        public virtual CodeBuilder.Utils.KeyRule GetKeyRule(string keyword, string activeScope)
+        public CodeBuilder.Utils.KeywordRule GetKeywordRule(CodeKeyword keyword, string activeScope)
         {
-            var keyRule = new CodeBuilder.Utils.KeyRule(keyword, activeScope);
-            if (keyRule.Match(CodeBlock, PrateekScriptBuilder.Tag.Macro.FileInfo))
+            foreach (var keywordRule in keywordRules)
             {
-                { keyRule.args = new CodeBuilder.Utils.KeyRule.ArgRange(2, -1); keyRule.needOpenScope = true; }
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.ClassInfo, codeBlock))
-            {
-                { keyRule.args = 1; keyRule.needOpenScope = true; }
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.ClassNames, PrateekScriptBuilder.Tag.Macro.ClassInfo))
-            {
-                { keyRule.args = new CodeBuilder.Utils.KeyRule.ArgRange(1, -1); }
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.ClassVars, PrateekScriptBuilder.Tag.Macro.ClassInfo))
-            {
-                { keyRule.args = new CodeBuilder.Utils.KeyRule.ArgRange(1, -1); }
-            }
-
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.DefaultInfo, codeBlock))
-            {
-                { keyRule.args = new CodeBuilder.Utils.KeyRule.ArgRange(2, 3); }
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.Func, CodeBlock))
-            {
-                { keyRule.needOpenScope = true; keyRule.needScopeData = true; }
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.CodePartPrefix, codeBlock)
-                  || keyRule.Match(PrateekScriptBuilder.Tag.Macro.CodePartMain, codeBlock)
-                  || keyRule.Match(PrateekScriptBuilder.Tag.Macro.CodePartSuffix, codeBlock))
-            {
-                { keyRule.args = 0; keyRule.needOpenScope = true; keyRule.needScopeData = true; }
-            }
-            else
-            {
-                return new CodeBuilder.Utils.KeyRule() { usage = CodeBuilder.Utils.KeyRule.Usage.Ignore };
-            }
-            return keyRule;
-        }
-
-        //-----------------------------------------------------------------
-        protected virtual bool DoRetrieveRuleContent(PrateekScriptBuilder.CodeFile.ContentInfos activeData, CodeBuilder.Utils.KeyRule keyRule, List<string> args, string data)
-        {
-            if (keyRule.Match(CodeBlock, PrateekScriptBuilder.Tag.Macro.FileInfo))
-            {
-                activeData.blockNamespace = args[0];
-                activeData.blockClassName = args[1];
-                if (args.Count > 2)
+                if (!keywordRule.ValidateRule(keyword, activeScope))
                 {
-                    activeData.blockClassPrefix.AddRange(args.GetRange(2, args.Count - 2));
+                    continue;
                 }
+
+                return keywordRule;
             }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.ClassInfo, codeBlock))
-            {
-                activeData.classInfos.Add(new PrateekScriptBuilder.CodeFile.ClassInfos() { className = args[0] });
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.ClassNames, PrateekScriptBuilder.Tag.Macro.ClassInfo))
-            {
-                if (!activeData.SetClassNames(args))
-                    return false;
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.ClassVars, PrateekScriptBuilder.Tag.Macro.ClassInfo))
-            {
-                if (!activeData.SetClassVars(args))
-                    return false;
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.DefaultInfo, codeBlock))
-            {
-                activeData.classDefaultType = args[0];
-                activeData.classDefaultValue = args[1];
-                activeData.classDefaultExportOnly = (args.Count == 2 || args[2] == "false") ? false : true;
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.Func, CodeBlock))
-            {
-                activeData.funcInfos.Add(new PrateekScriptBuilder.CodeFile.FuncInfos());
-                activeData.SetFuncData(data);
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.CodePartPrefix, codeBlock))
-            {
-                activeData.codePrefix = data;
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.CodePartMain, codeBlock))
-            {
-                activeData.codeMain = data;
-            }
-            else if (keyRule.Match(PrateekScriptBuilder.Tag.Macro.CodePartSuffix, codeBlock))
-            {
-                activeData.codePostfix = data;
-            }
-            return true;
+
+            return default;
         }
 
         //-----------------------------------------------------------------

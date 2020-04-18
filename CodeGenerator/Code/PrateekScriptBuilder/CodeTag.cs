@@ -190,6 +190,11 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 //-------------------------------------------------------------
                 public static void Init()
                 {
+                    if (data.Count != 0)
+                    {
+                        return;
+                    }
+
                     data.Add(string.Format("{0}_{1}", prefix, To(FuncName.FILE_INFO)));
                     data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.PREFIX)));
                     data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.MAIN)));

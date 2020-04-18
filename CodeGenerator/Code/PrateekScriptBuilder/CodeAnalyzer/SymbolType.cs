@@ -131,7 +131,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer
         }
     }
 
-    public class CodeStartScope : Scope<CodeStartScope>
+    public class CodeBeginScope : Scope<CodeBeginScope>
     {
         private static readonly Regex START = new Regex("{");
 
@@ -151,7 +151,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer
         }
     }
 
-    public class InvokeStartScope : Scope<InvokeStartScope>
+    public class InvokeBeginScope : Scope<InvokeBeginScope>
     {
         private static readonly Regex START = new Regex($"\\(");
 

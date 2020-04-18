@@ -197,6 +197,16 @@ namespace Prateek.Core.Code.Helpers
             return result;
         }
 
+        public static char First(this string mask)
+        {
+            return mask.Length > 0 ? mask[0] : default;
+        }
+
+        public static char Last(this string mask)
+        {
+            return mask.Length > 0 ? mask[mask.Length - 1] : default;
+        }
+
         //---------------------------------------------------------------------
         public static string NewLine(this string left, bool addBoth = false)
         {
@@ -285,12 +295,25 @@ namespace Prateek.Core.Code.Helpers
 
         public static string Extension(this string left, string extension)
         {
-            return left.Extension() + extension;
+            if (string.IsNullOrEmpty(extension))
+            {
+                return left;
+            }
+
+            if (extension[0] == fileExtension[0])
+            {
+                return $"{left}{fileExtension[0]}{extension.TrimStart(fileExtension[0])}";
+            }
+            return $"{left}{fileExtension[0]}{extension}";
         }
 
         public static string Extension(this string left)
         {
-            return left + fileExtension[0];
+            if (left.Last() != fileExtension[0])
+            {
+                return $"{left}{fileExtension[0]}";
+            }
+            return left;
         }
 
         //---------------------------------------------------------------------

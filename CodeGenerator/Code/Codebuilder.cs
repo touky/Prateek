@@ -135,10 +135,18 @@ namespace Prateek.CodeGenerator
             //-----------------------------------------------------------------
             public struct Infos
             {
-                public string absPath;
-                public string relPath;
+                public FileInfo fileInfo;
+                public DirectoryInfo directoryInfo;
+
+                public string directory;
                 public string name;
                 public string extension;
+
+                public void SetupFileInfo()
+                {
+                    fileInfo = new FileInfo(Path.Combine(directory, name.Extension(extension)));
+                    directoryInfo = fileInfo.Directory;
+                }
 
                 public string content;
             }
@@ -162,17 +170,19 @@ namespace Prateek.CodeGenerator
                     return;
                 }
 
-                var iExt = file.LastIndexOf(Strings.Separator.FileExtension.C());
-                var iName = Mathf.Max(file.LastIndexOf(Strings.Separator.DirSlash.C()), file.LastIndexOf(Strings.Separator.DirBackslash.C()));
+                source.fileInfo = null;
+                source.directoryInfo = null;
+                source.directory = Path.GetDirectoryName(file);
+                source.name = PathPlus.GetFilenameOnly(file);
+                source.extension = PathPlus.GetExtension(file);
 
-                source.absPath = file;
-                source.relPath = sourceDir == string.Empty ? file : file.Replace(sourceDir, string.Empty);
-                source.extension = file.Substring(iExt + 1);
-                source.name = file.Substring(iName + 1, iExt - (iName + 1));
                 source.content = content;
+                
+                source.SetupFileInfo();
 
                 destination = source;
             }
+
 
             //-----------------------------------------------------------------
             public bool Load(bool forceReload = false)
@@ -184,7 +194,7 @@ namespace Prateek.CodeGenerator
                 }
 
                 source.content = string.Empty;
-                var path = FileHelpers.GetValidFile(source.absPath);
+                var path = source.fileInfo.Exists ? source.fileInfo.FullName : string.Empty;//FileHelpers.GetValidFile(source.absPath);
                 if (path != string.Empty)
                 {
                     source.content = FileHelpers.ReadAllTextCleaned(path);
@@ -305,7 +315,7 @@ namespace Prateek.CodeGenerator
             for (int f = 0; f < source.files.Count; f++)
             {
                 var file = source.files[f];
-                if (workFiles.FindIndex((x) => { return x.source.absPath == file; }) != -1)
+                if (workFiles.FindIndex((x) => { return x.source.fileInfo.FullName == file; }) != -1)
                     continue;
 
                 string rootPath = ((operations & OperationApplied.RelativeDestination) != 0) ? source.sourceDir : string.Empty;
@@ -383,7 +393,9 @@ namespace Prateek.CodeGenerator
                     }
 
                     if (nextFile)
+                    {
                         continue;
+                    }
                 }
                 else if (!result.Is(BuildResult.ValueType.Ignored))
                 {
@@ -486,12 +498,7 @@ namespace Prateek.CodeGenerator
             content = content.Replace("#SCRIPTNAME#", fileData.source.name);
 
             fileData.destination.extension = extension;
-            fileData.destination.relPath = fileData.destination.relPath
-                        .Replace(fileData.source.name.Extension(fileData.source.extension),
-                                 fileData.destination.name.Extension(fileData.destination.extension));
-            fileData.destination.absPath = fileData.destination.absPath
-                        .Replace(fileData.source.name.Extension(fileData.source.extension),
-                                 fileData.destination.name.Extension(fileData.destination.extension));
+            fileData.destination.SetupFileInfo();
 
             fileData.destination.content = content;
 
@@ -612,28 +619,21 @@ namespace Prateek.CodeGenerator
         //---------------------------------------------------------------------
         protected virtual BuildResult DoWriteData(ref FileData fileData)
         {
-            var dst = fileData.destination;
-            var path = destinationDirectory + dst.relPath;
-            var dir = path.Replace(dst.name.Extension(dst.extension), string.Empty);
-            var newDir = FileHelpers.GetValidDirectory(dir);
-            if (newDir == string.Empty)
-                return (BuildResult)BuildResult.ValueType.WritingFailedDirDoesntExist + dir;
-            dir = newDir;
-
-            path = dir;
             if (runInTestMode)
             {
-                path += TEST_PREFIX;
+                fileData.destination.name = TEST_PREFIX + fileData.destination.name;
+                fileData.destination.extension = fileData.destination.extension.Extension(TEST_EXTENSION);
             }
 
-            path += dst.name.Extension(GENERATED_EXTENSION, dst.extension);
+            fileData.source.SetupFileInfo();
+            fileData.destination.SetupFileInfo();
 
-            if (runInTestMode)
+            if (!fileData.destination.directoryInfo.Exists)
             {
-                path = path.Extension(TEST_EXTENSION);
+                return (BuildResult)BuildResult.ValueType.WritingFailedDirDoesntExist + fileData.destination.directoryInfo.Name;
             }
 
-            File.WriteAllText(path, dst.content.ApplyCRLF());
+            File.WriteAllText(fileData.destination.fileInfo.FullName, fileData.destination.content.ApplyCRLF());
 
             return BuildResult.ValueType.Success;
         }
