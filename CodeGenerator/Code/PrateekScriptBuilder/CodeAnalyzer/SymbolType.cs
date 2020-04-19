@@ -31,6 +31,10 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer
             get { return content; }
         }
         public abstract Regex Start { get; }
+        public virtual bool CanStopWithEndOfLine
+        {
+            get { return false; }
+        }
         public abstract Regex End { get; }
 
         public abstract Symbol Clone(string content);
@@ -78,7 +82,11 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer
     public class SingleLineComment : Symbol<SingleLineComment>, IComment
     {
         private static readonly Regex START = new Regex($@"//");
-        private static readonly Regex END = new Regex($@"([\r\n$]+)");
+        private static readonly Regex END = null;
+        public override bool CanStopWithEndOfLine
+        {
+            get { return true; }
+        }
 
         public override Regex Start
         {
@@ -94,7 +102,11 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer
     public class LiteralValue : Symbol<LiteralValue>
     {
         private static readonly Regex START = new Regex($@"\@");
-        private static readonly Regex END = new Regex($@"([\r\n\$])");
+        private static readonly Regex END = new Regex($@"(\$)");
+        public override bool CanStopWithEndOfLine
+        {
+            get { return true; }
+        }
 
         public override Regex Start
         {
@@ -106,7 +118,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer
             get { return END; }
         }
     }
-
+    
     public class VariableSeparator : Symbol<VariableSeparator>
     {
         private static readonly Regex START = new Regex(",");

@@ -100,6 +100,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 //RemoveComments();
             }
 
+            private Regex endOfLine = new Regex($@"([\r\n$]+)");
             private List<Symbol> registry = new List<Symbol>();
             private List<Symbol> contentSymbols = new List<Symbol>();
             private CodeScope contentRootScope = null;
@@ -144,17 +145,36 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     }
 
                     position = closestMatch.Index + closestMatch.Length;
-                    if (closestSymbol.End != null)
+                    if (closestSymbol.End != null || closestSymbol.CanStopWithEndOfLine)
                     {
-                        var matchEnd = closestSymbol.End.Match(content, position);
-                        if (matchEnd.Success)
+                        var length = 0;
+                        var closestEndMatch = (Match) null;
+                        if (closestSymbol.End != null)
                         {
-                            contentSymbols.Add(closestSymbol.Clone(content.Substring(position, matchEnd.Index - position)));
-                            position = matchEnd.Index + matchEnd.Length;
+                            var matchEnd = closestSymbol.End.Match(content, position);
+                            if (matchEnd.Success)
+                            {
+                                closestEndMatch = matchEnd;
+                                length = 0;
+                            }
                         }
-                        else
+
+                        if (closestSymbol.CanStopWithEndOfLine)
                         {
-                            contentSymbols.Add(closestSymbol.Clone(closestMatch.Value));
+                            var matchEnd = endOfLine.Match(content, position);
+                            if (matchEnd.Success && (closestEndMatch == null || matchEnd.Index < closestEndMatch.Index))
+                            {
+                                closestEndMatch = matchEnd;
+                                length = matchEnd.Length;
+                            }
+                        }
+
+                        if (closestEndMatch != null && closestEndMatch.Success)
+                        {
+                            var subStringLength = (closestEndMatch.Index + length) - position;
+                            var foundContent = content.Substring(position, subStringLength);
+                            contentSymbols.Add(closestSymbol.Clone(foundContent));
+                            position += subStringLength;
                         }
                     }
                     else

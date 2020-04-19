@@ -102,7 +102,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             //-------------------------------------------------------------
             private void Set(ref string dst, string value)
             {
-                if (dst != null && dst.Length > 0 && !dst.EndsWith(Strings.Separator.LineFeed.S()))
+                if (!string.IsNullOrEmpty(dst) && !dst.EndsWith(Strings.Separator.LineFeed.S()))
                     dst += PrateekScriptBuilder.Tag.Code.argVarSeparator;
                 dst += value;
             }
@@ -294,7 +294,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
                     foreach (var literalValue in codeLiteral.literals)
                     {
-                        data += $"{literalValue.Content}\r\n";
+                        data += literalValue.Content;
                     }
                 }
             }

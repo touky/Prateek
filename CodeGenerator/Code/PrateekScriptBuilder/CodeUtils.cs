@@ -70,6 +70,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
     }
 
+    [DebuggerDisplay("{GetType().Name}>{keyword.Content}")]
     public class CodeKeyword : CodeCommand
     {
         public override bool AllowInternalScope { get { return true; } }
