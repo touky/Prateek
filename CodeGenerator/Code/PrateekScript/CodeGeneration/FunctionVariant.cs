@@ -58,7 +58,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration 
         private void Set(ref string dst, string value)
         {
             if (!String.IsNullOrEmpty(dst) && !dst.EndsWith(Strings.Separator.LineFeed.S()))
-                dst += PrateekScriptBuilder.Tag.Code.argVarSeparator;
+                dst += global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.Glossary.Code.argVarSeparator;
             dst += value;
         }
     }

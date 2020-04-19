@@ -34,6 +34,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
     using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Utils;
     using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeCommands;
@@ -48,7 +49,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         //---------------------------------------------------------------------
         public override string SearchPattern
         {
-            get { return FileHelpers.BuildExtensionMatch(Tag.importExtension); }
+            get { return FileHelpers.BuildExtensionMatch(Glossary.importExtension); }
         }
         #endregion
 
@@ -62,7 +63,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         //---------------------------------------------------------------------
         protected override BuildResult DoApplyValidTemplate(ref FileData fileData)
         {
-            if (fileData.source.extension != Tag.importExtension)
+            if (fileData.source.extension != Glossary.importExtension)
             {
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             }
@@ -236,7 +237,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     return Error(applyResult, ref newData);
                 }
 
-                var genStart   = Tag.Macro.codeGenStart.Keyword();
+                var genStart   = Glossary.Macro.codeGenStart.Keyword();
                 var startIndex = newData.destination.content.IndexOf(genStart);
                 if (startIndex < 0)
                 {
@@ -331,7 +332,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         //---------------------------------------------------------------------
         private CodeFile RetrieveCodeFile(ScriptAnalyzer scriptAnalyzer, CodeKeyword codeKeyword, List<CodeFile> codeFiles)
         {
-            var fileInfoRule = new KeywordUsage(Tag.Macro.FileInfo, string.Empty) {arguments = 2, needOpenScope = true};
+            var fileInfoRule = new KeywordUsage(Glossary.Macro.FileInfo, string.Empty) {arguments = 2, needOpenScope = true};
             if (!fileInfoRule.ValidateRule(codeKeyword, string.Empty))
             {
                 return null;
@@ -351,7 +352,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
         private int RetrieveCodeFile(string scope, string keyword, ScriptAnalyzer scriptAnalyzer, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
         {
-            if (keyword == Tag.Macro.FileInfo)
+            if (keyword == Glossary.Macro.FileInfo)
             {
                 if (scope != string.Empty)
                 {

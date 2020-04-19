@@ -31,8 +31,8 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Ut
         public ArgumentRange arguments;
         public bool needOpenScope;
         public bool needScopeData;
-        public Func<PrateekScriptBuilder.CodeFile.ContentInfos, List<Keyword>, string, bool> onFeedCodeFile;
-        public Func<PrateekScriptBuilder.CodeFile, string, bool> onCloseScope;
+        public Func<global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.ContentInfos, List<Keyword>, string, bool> onFeedCodeFile;
+        public Func<global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.CodeFile, string, bool> onCloseScope;
 
         //-------------------------------------------------------------
         public KeywordUsage(string keyword, string scope)

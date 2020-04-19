@@ -5,6 +5,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 namespace Prateek.CodeGenerator.PrateekScriptBuilder {
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using UnityEditor;
 
     [InitializeOnLoad]
@@ -15,7 +16,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 
-            SwizzleScriptAction.Create(Tag.importExtension).Commit();
+            SwizzleScriptAction.Create(Glossary.importExtension).Commit();
         }
     }
 }

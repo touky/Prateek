@@ -7,6 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
 
     public partial class OverloadFuncScriptAction : ScriptAction
@@ -44,7 +45,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         ///-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ContentInfos data, ClassInfos infoSrc, ClassInfos infoDst)
         {
             variants.Clear();
             var slots = new int[infoSrc.NameCount / 2];
@@ -52,7 +53,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         }
 
         ///-----------------------------------------------------------------
-        private void GatherVariants(int s, int[] slots, List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        private void GatherVariants(int s, int[] slots, List<FunctionVariant> variants, ContentInfos data, ClassInfos infoSrc, ClassInfos infoDst)
         {
             if (s < slots.Length)
             {

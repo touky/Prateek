@@ -7,6 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
     using Prateek.Core.Code;
 
@@ -45,7 +46,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         ///-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ContentInfos data, ClassInfos infoSrc, ClassInfos infoDst)
         {
             variants.Clear();
             if (data.funcInfos.Count == 0)

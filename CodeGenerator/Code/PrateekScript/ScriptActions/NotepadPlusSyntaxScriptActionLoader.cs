@@ -5,6 +5,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 namespace Prateek.CodeGenerator.PrateekScriptBuilder {
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using UnityEditor;
 
     ///todo [InitializeOnLoad]
@@ -15,8 +16,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 
-            NotepadPlusSyntaxColorScriptAction.Create(Tag.importExtension).Commit();
-            NotepadPlusSyntaxAutoCompleteScriptAction.Create(Tag.importExtension).Commit();
+            NotepadPlusSyntaxColorScriptAction.Create(Glossary.importExtension).Commit();
+            NotepadPlusSyntaxAutoCompleteScriptAction.Create(Glossary.importExtension).Commit();
         }
     }
 }

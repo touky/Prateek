@@ -6,6 +6,7 @@
 
 namespace Prateek.CodeGenerator.PrateekScriptBuilder {
     using System;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using Prateek.Core.Code.Helpers;
     using UnityEditor;
 
@@ -17,14 +18,14 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 
-            NewScript(PrateekScriptBuilder.Tag.importExtension.Extension("xml"), "xml")
+            NewScript(Glossary.importExtension.Extension("xml"), "xml")
                 .SetAutorun(false)
                 .SetEndsWith("SyntaxAutoComplete")
                 .SetTemplateFile(String.Empty)
                 .SetFileContent("InternalContent_PrateekCodegenSyntaxAutoComplete.xml.txt")
                 .Commit();
 
-            NewScript(PrateekScriptBuilder.Tag.importExtension.Extension("xml"), "xml")
+            NewScript(Glossary.importExtension.Extension("xml"), "xml")
                 .SetAutorun(false)
                 .SetTemplateFile(String.Empty)
                 .SetEndsWith("SyntaxColor")

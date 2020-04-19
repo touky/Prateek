@@ -1,5 +1,6 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using Prateek.CodeGenerator.ScriptTemplates;
     using Prateek.Core.Code.Helpers;
     using UnityEditor;
@@ -15,7 +16,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 return;
             }
 
-            NewScript(PrateekScriptBuilder.Tag.importExtension.Extension(PrateekScriptBuilder.Tag.exportExtension), PrateekScriptBuilder.Tag.exportExtension)
+            NewScript(Glossary.importExtension.Extension(Glossary.exportExtension), Glossary.exportExtension)
                 .SetAutorun(false)
                 .SetTemplateFile(string.Empty)
                 .SetFileContent("InternalContent_Prateek_script.txt")
