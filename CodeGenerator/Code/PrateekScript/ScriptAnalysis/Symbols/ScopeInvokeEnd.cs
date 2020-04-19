@@ -2,10 +2,10 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Sy
 {
     using System.Text.RegularExpressions;
 
-    public class CodeBeginScope : Scope<CodeBeginScope>
+    public class ScopeInvokeEnd : Scope<ScopeInvokeEnd>
     {
         #region Static and Constants
-        private static readonly Regex START = new Regex("{");
+        private static readonly Regex START = new Regex("\\)");
         #endregion
 
         #region Properties

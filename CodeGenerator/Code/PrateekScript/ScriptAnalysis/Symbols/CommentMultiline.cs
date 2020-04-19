@@ -2,19 +2,14 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Sy
 {
     using System.Text.RegularExpressions;
 
-    public class SingleLineComment : Symbol<SingleLineComment>, IComment
+    public class CommentMultiline : Symbol<CommentMultiline>, IComment
     {
         #region Static and Constants
-        private static readonly Regex START = new Regex(@"//");
-        private static readonly Regex END = null;
+        private static readonly Regex START = new Regex(@"/\*");
+        private static readonly Regex END = new Regex(@"\*/");
         #endregion
 
         #region Properties
-        public override bool CanStopWithEndOfLine
-        {
-            get { return true; }
-        }
-
         public override Regex Start
         {
             get { return START; }

@@ -74,13 +74,13 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer {
         {
             if (registry.Count == 0)
             {
-                registry.Add(new MultilineComment());
-                registry.Add(new SingleLineComment());
+                registry.Add(new CommentMultiline());
+                registry.Add(new CommentSingleLine());
                 registry.Add(new LiteralValue());
-                registry.Add(new CodeBeginScope());
-                registry.Add(new CodeEndScope());
-                registry.Add(new InvokeBeginScope());
-                registry.Add(new InvokeEndScope());
+                registry.Add(new ScopeCodeBegin());
+                registry.Add(new ScopeCodeEnd());
+                registry.Add(new ScopeInvokeBegin());
+                registry.Add(new ScopeInvokeEnd());
                 registry.Add(new VariableSeparator());
                 registry.Add(new Keyword());
                 registry.Add(new Value());
@@ -178,7 +178,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer {
                     continue;
                 }
                     
-                if (currentSymbol is CodeBeginScope)
+                if (currentSymbol is ScopeCodeBegin)
                 {
                     if (latestCommand != null && !latestCommand.AllowInternalScope)
                     {
@@ -200,7 +200,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer {
                     activeScope = newScope;
                     latestCommand = null;
                 }
-                else if (currentSymbol is CodeEndScope)
+                else if (currentSymbol is ScopeCodeEnd)
                 {
                     if (scopes.Count == 0)
                     {
@@ -220,7 +220,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer {
                                                 
                     latestCommand = newKeyword;
 
-                    if (!(NextSymbol is InvokeBeginScope))
+                    if (!(NextSymbol is ScopeInvokeBegin))
                     {
                         if (NextSymbol == null)
                         {
@@ -254,7 +254,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer {
 
                             newKeyword.Add(argSymbol);
                         }
-                        else if (currentSymbol is InvokeEndScope)
+                        else if (currentSymbol is ScopeInvokeEnd)
                         {
                             foundInvokeEnd = true;
                             break;
