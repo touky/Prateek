@@ -7,6 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
     using Prateek.Core.Code;
 
     public partial class BasicFuncScriptAction : ScriptAction
@@ -44,16 +45,16 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         ///-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
         {
             variants.Clear();
             if (data.funcInfos.Count == 0)
             {
-                variants.Add(new FuncVariant());
+                variants.Add(new FunctionVariant());
             }
             else
             {
-                var variant = new FuncVariant(string.Empty, data.funcInfos.Count - 1);
+                var variant = new FunctionVariant(string.Empty, data.funcInfos.Count - 1);
                 for (var d = 0; d < data.funcInfos.Count; d++)
                 {
                     var funcInfo  = data.funcInfos[d];

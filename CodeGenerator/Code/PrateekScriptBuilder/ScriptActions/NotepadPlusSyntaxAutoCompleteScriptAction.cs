@@ -7,6 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder {
     using System;
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
 
     public partial class NotepadPlusSyntaxAutoCompleteScriptAction : SyntaxScriptAction
     {
@@ -48,7 +49,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
 
         //-----------------------------------------------------------------
         #region Rule internal
-        protected override void GatherVariants(List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
         {
             infos.Clear();
             PrateekScriptBuilder.Tag.Macro.GetTags(this);
@@ -58,7 +59,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
                 return;
 
             var result  = String.Empty;
-            var variant = new FuncVariant(result);
+            var variant = new FunctionVariant(result);
             for (int k = 0; k < infos.Count; k++)
             {
                 result += data.funcInfos[0].data;

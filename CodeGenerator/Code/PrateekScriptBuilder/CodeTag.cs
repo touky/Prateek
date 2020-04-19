@@ -35,6 +35,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System;
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.Utils;
     using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
     using UnityEditor;
@@ -72,7 +73,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
                 //-------------------------------------------------------------
                 public int Count { get { return datas.Count; } }
-                public CodeBuilder.Utils.SwapInfo this[int i]
+                public StringSwap this[int i]
                 {
                     get
                     {

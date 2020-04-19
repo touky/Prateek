@@ -7,6 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder {
     using System;
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
 
     public class NotepadPlusSyntaxColorScriptAction : SyntaxScriptAction
     {
@@ -43,7 +44,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
 
         //-----------------------------------------------------------------
         #region Rule internal
-        protected override void GatherVariants(List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
         {
             keywords.Clear();
             identifiers.Clear();
@@ -60,7 +61,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
                 result = (Vars[0] + keywords[k]).Apply(result);
             }
 
-            var variant = new FuncVariant(result, 1);
+            var variant = new FunctionVariant(result, 1);
             result = String.Empty;
             for (int i = 0; i < identifiers.Count; i++)
             {

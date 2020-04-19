@@ -36,6 +36,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
     using System.Collections.Generic;
     using System.Linq;
     using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Symbols;
+    using Assets.Prateek.CodeGenerator.Code.Utils;
     using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
 
@@ -211,11 +213,11 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             //-----------------------------------------------------------------
             public CodeGenerator.CodeBuilder.BuildResult Generate(string genHeader, string genCode)
             {
-                var genNSpc = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenNSpc.Keyword();
-                var genExtn = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenExtn.Keyword();
-                var genPrfx = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenPrfx.Keyword();
-                var genData = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenData.Keyword();
-                var genTabs = (CodeBuilder.Utils.SwapInfo)Tag.Macro.codeGenTabs.Keyword();
+                var genNSpc = (StringSwap)Tag.Macro.codeGenNSpc.Keyword();
+                var genExtn = (StringSwap)Tag.Macro.codeGenExtn.Keyword();
+                var genPrfx = (StringSwap)Tag.Macro.codeGenPrfx.Keyword();
+                var genData = (StringSwap)Tag.Macro.codeGenData.Keyword();
+                var genTabs = (StringSwap)Tag.Macro.codeGenTabs.Keyword();
 
                 var i = genCode.IndexOf(genData.Original);
                 if (i < 0)

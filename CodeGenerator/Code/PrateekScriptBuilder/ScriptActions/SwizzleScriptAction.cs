@@ -7,6 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder {
     using System;
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
 
     public partial class SwizzleScriptAction : ScriptAction
     {
@@ -23,7 +24,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
 
         //-----------------------------------------------------------------
         #region Rule internal
-        protected override void GatherVariants(List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
         {
             var slots = new int[infoDst.VarCount];
             for (int s = 0; s < slots.Length; s++)
@@ -36,7 +37,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
         }
 
         //-----------------------------------------------------------------
-        private void GatherVariantsSlots(int s, int[] slots, List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        private void GatherVariantsSlots(int s, int[] slots, List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
         {
             var varCount = infoSrc.VarCount + 1;
             for (int c = 0; c < varCount; c++)
@@ -65,7 +66,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
                     }
 
                     var sn      = 0;
-                    var variant = new FuncVariant(String.Empty, 2);
+                    var variant = new FunctionVariant(String.Empty, 2);
                     variant[1] += PrateekScriptBuilder.Tag.Code.argsV;
                     for (int v = 0; v < slots.Length; v++)
                     {

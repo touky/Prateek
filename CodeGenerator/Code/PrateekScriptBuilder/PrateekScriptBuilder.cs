@@ -35,6 +35,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
     using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Utils;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeCommands;
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Code.Helpers.Files;
     using static CodeBuilder;
@@ -65,7 +67,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             }
 
-            var analyzer       = new Analyzer();
+            var analyzer       = new ScriptAnalyzer();
             var activeCodeFile = (CodeFile) null;
             var activeScope    = string.Empty;
             var codeFiles      = new List<CodeFile>();
@@ -271,7 +273,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         private BuildResult FeedCodeFile(ref FileData fileData, CodeFile codeFile, CodeKeyword rootKeyword, string rootScope)
         {
             var scriptActions = ScriptActionDatabase.Actions;
-            var scopeRule = (Utils.KeywordRule)default;
+            var scopeRule = (KeywordUsage)default;
             for (var s = 0; s < scriptActions.Count; s++)
             {
                 var action = scriptActions[s];
@@ -281,8 +283,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 }
 
                 var keywordRule = action.GetKeywordRule(rootKeyword, rootScope);
-                if (keywordRule.usage == Utils.KeywordRule.Usage.None
-                 || keywordRule.usage == Utils.KeywordRule.Usage.Ignore)
+                if (keywordRule.usage == KeywordUsage.Usage.None
+                 || keywordRule.usage == KeywordUsage.Usage.Ignore)
                 {
                     continue;
                 }
@@ -318,7 +320,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 scopes.InsertRange(s + 1, scope.scopeContent);
             }
 
-            if (scopeRule.usage != Utils.KeywordRule.Usage.None && scopeRule.onCloseScope != null)
+            if (scopeRule.usage != KeywordUsage.Usage.None && scopeRule.onCloseScope != null)
             {
                 scopeRule.onCloseScope(codeFile, rootKeyword.keyword.Content);
             }
@@ -327,9 +329,9 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         }
 
         //---------------------------------------------------------------------
-        private CodeFile RetrieveCodeFile(Analyzer analyzer, CodeKeyword codeKeyword, List<CodeFile> codeFiles)
+        private CodeFile RetrieveCodeFile(ScriptAnalyzer scriptAnalyzer, CodeKeyword codeKeyword, List<CodeFile> codeFiles)
         {
-            var fileInfoRule = new Utils.KeywordRule(Tag.Macro.FileInfo, string.Empty) {arguments = 2, needOpenScope = true};
+            var fileInfoRule = new KeywordUsage(Tag.Macro.FileInfo, string.Empty) {arguments = 2, needOpenScope = true};
             if (!fileInfoRule.ValidateRule(codeKeyword, string.Empty))
             {
                 return null;
@@ -347,7 +349,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             return codeFile;
         }
 
-        private int RetrieveCodeFile(string scope, string keyword, Analyzer analyzer, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
+        private int RetrieveCodeFile(string scope, string keyword, ScriptAnalyzer scriptAnalyzer, ref CodeFile activeCodeFile, List<CodeFile> codeFiles, List<string> args)
         {
             if (keyword == Tag.Macro.FileInfo)
             {
@@ -356,8 +358,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     return -1;
                 }
 
-                var keyRule = new Utils.KeywordRule(keyword, scope) {arguments = 2, needOpenScope = true};
-                if (!analyzer.FindArgs(args, keyRule))
+                var keyRule = new KeywordUsage(keyword, scope) {arguments = 2, needOpenScope = true};
+                if (!scriptAnalyzer.FindArgs(args, keyRule))
                 {
                     return -1;
                 }

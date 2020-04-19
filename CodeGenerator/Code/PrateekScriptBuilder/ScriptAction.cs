@@ -36,6 +36,10 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
     using System;
     using System.Collections.Generic;
     using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Utils;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeCommands;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
+    using Assets.Prateek.CodeGenerator.Code.Utils;
     using Prateek.Helpers;
     using Prateek.CodeGenerator;
     using Prateek.Core.Code.Helpers;
@@ -46,67 +50,9 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
     public abstract class ScriptAction : ScriptTemplates.ScriptTemplate.BaseTemplate
     {
-        protected List<CodeBuilder.Utils.KeywordRule> keywordRules = new List<CodeBuilder.Utils.KeywordRule>();
+        protected List<KeywordUsage> keywordUsages = new List<KeywordUsage>();
 
         //-----------------------------------------------------------------
-        public struct FuncVariant
-        {
-            //-------------------------------------------------------------
-            private List<string> results;
-
-            //-------------------------------------------------------------
-            public string Call { get { return results[0]; } set { results[0] += value; } }
-            public int Count { get { return results == null ? 0 : results.Count; } }
-            public string this[int i]
-            {
-                get
-                {
-                    if (i < 0 || i >= results.Count)
-                        return String.Empty;
-                    return results[i];
-                }
-                set
-                {
-                    if (i < 0 || i >= results.Count)
-                        return;
-                    var result = results[i];
-                    Set(ref result, value);
-                    results[i] = result;
-                }
-            }
-
-            //-------------------------------------------------------------
-            public FuncVariant(string value) : this(value, 0) { }
-            public FuncVariant(string value, int emptySlot)
-            {
-                results = new List<string>();
-                results.Add(value);
-                while (emptySlot-- > 0)
-                {
-                    results.Add(String.Empty);
-                }
-            }
-
-            //-------------------------------------------------------------
-            public FuncVariant(FuncVariant other)
-            {
-                results = new List<string>(other.results);
-            }
-
-            //-------------------------------------------------------------
-            public void Add(string value)
-            {
-                results.Add(value);
-            }
-
-            //-------------------------------------------------------------
-            private void Set(ref string dst, string value)
-            {
-                if (!string.IsNullOrEmpty(dst) && !dst.EndsWith(Strings.Separator.LineFeed.S()))
-                    dst += PrateekScriptBuilder.Tag.Code.argVarSeparator;
-                dst += value;
-            }
-        }
 
         //-----------------------------------------------------------------
         public enum GenerationMode
@@ -129,8 +75,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         public string CodeBlock { get { return codeBlock; } }
 
         //-----------------------------------------------------------------
-        public CodeBuilder.Utils.SwapInfo ClassDst { get { return PrateekScriptBuilder.Tag.Macro.dstClass; } }
-        public CodeBuilder.Utils.SwapInfo ClassSrc { get { return PrateekScriptBuilder.Tag.Macro.srcClass; } }
+        public StringSwap ClassDst { get { return PrateekScriptBuilder.Tag.Macro.dstClass; } }
+        public StringSwap ClassSrc { get { return PrateekScriptBuilder.Tag.Macro.srcClass; } }
         public PrateekScriptBuilder.Tag.NumberedVars Names { get { return PrateekScriptBuilder.Tag.Macro.Names; } }
         public PrateekScriptBuilder.Tag.NumberedVars Funcs { get { return PrateekScriptBuilder.Tag.Macro.Funcs; } }
         public PrateekScriptBuilder.Tag.NumberedVars Vars { get { return PrateekScriptBuilder.Tag.Macro.Vars; } }
@@ -154,7 +100,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
             codeBlock = String.Format("{0}_{1}_{2}", PrateekScriptBuilder.Tag.Macro.prefix, PrateekScriptBuilder.Tag.Macro.To(PrateekScriptBuilder.Tag.Macro.FuncName.BLOCK), ScopeTag);
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(codeBlock, PrateekScriptBuilder.Tag.Macro.FileInfo)
+            keywordUsages.Add(new KeywordUsage(codeBlock, PrateekScriptBuilder.Tag.Macro.FileInfo)
             {
                 arguments = ArgumentRange.AtLeast(2), needOpenScope = true,
                 onFeedCodeFile = (codeInfos, arguments, data) =>
@@ -179,7 +125,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 }
             });
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.ClassInfo, codeBlock)
+            keywordUsages.Add(new KeywordUsage(PrateekScriptBuilder.Tag.Macro.ClassInfo, codeBlock)
             {
                 arguments = 1,
                 needOpenScope = true,
@@ -190,7 +136,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 }
             });
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.ClassNames, PrateekScriptBuilder.Tag.Macro.ClassInfo)
+            keywordUsages.Add(new KeywordUsage(PrateekScriptBuilder.Tag.Macro.ClassNames, PrateekScriptBuilder.Tag.Macro.ClassInfo)
             {
                 arguments = ArgumentRange.AtLeast(1),
                 onFeedCodeFile = (codeInfos, arguments, data) =>
@@ -199,7 +145,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 }
             });
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.ClassVars, PrateekScriptBuilder.Tag.Macro.ClassInfo)
+            keywordUsages.Add(new KeywordUsage(PrateekScriptBuilder.Tag.Macro.ClassVars, PrateekScriptBuilder.Tag.Macro.ClassInfo)
             {
                 arguments = ArgumentRange.AtLeast(1),
                 onFeedCodeFile = (codeInfos, arguments, data) =>
@@ -208,7 +154,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 }
             });
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.DefaultInfo, codeBlock)
+            keywordUsages.Add(new KeywordUsage(PrateekScriptBuilder.Tag.Macro.DefaultInfo, codeBlock)
             {
                 arguments = ArgumentRange.Between(2, 3),
                 onFeedCodeFile = (codeInfos, arguments, data) =>
@@ -220,7 +166,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 }
             });
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.Func, codeBlock)
+            keywordUsages.Add(new KeywordUsage(PrateekScriptBuilder.Tag.Macro.Func, codeBlock)
             {
                 needOpenScope = true,
                 needScopeData = true,
@@ -233,7 +179,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.CodePartPrefix, codeBlock)
+            keywordUsages.Add(new KeywordUsage(PrateekScriptBuilder.Tag.Macro.CodePartPrefix, codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
                 onFeedCodeFile = (codeInfos, arguments, data) =>
@@ -244,7 +190,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.CodePartMain, codeBlock)
+            keywordUsages.Add(new KeywordUsage(PrateekScriptBuilder.Tag.Macro.CodePartMain, codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
                 onFeedCodeFile = (codeInfos, arguments, data) =>
@@ -255,7 +201,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.CodePartSuffix, codeBlock)
+            keywordUsages.Add(new KeywordUsage(PrateekScriptBuilder.Tag.Macro.CodePartSuffix, codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
                 onFeedCodeFile = (codeInfos, arguments, data) =>
@@ -266,10 +212,10 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordRules.Add(new CodeBuilder.Utils.KeywordRule() {usage = CodeBuilder.Utils.KeywordRule.Usage.Ignore});
+            keywordUsages.Add(new KeywordUsage() {usage = KeywordUsage.Usage.Ignore});
         }
 
-        public bool FeedCodeFile(PrateekScriptBuilder.CodeFile codeFile, CodeBuilder.Utils.KeywordRule keywordRule, CodeKeyword rootKeyword)
+        public bool FeedCodeFile(PrateekScriptBuilder.CodeFile codeFile, KeywordUsage keywordUsage, CodeKeyword rootKeyword)
         {
             var codeInfos = codeFile.CodeInfos;
             if (codeInfos == null)
@@ -283,7 +229,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             }
 
             var data = string.Empty;
-            if (keywordRule.needScopeData)
+            if (keywordUsage.needScopeData)
             {
                 foreach (var codeCommand in rootKeyword.scopeContent.commands)
                 {
@@ -299,21 +245,21 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 }
             }
 
-            return keywordRule.onFeedCodeFile.Invoke(codeInfos, rootKeyword.arguments, data);
+            return keywordUsage.onFeedCodeFile.Invoke(codeInfos, rootKeyword.arguments, data);
         }
 
         //-----------------------------------------------------------------
         #region Utils
-        protected void AddCode(string code, PrateekScriptBuilder.CodeFile.ContentInfos data, CodeBuilder.Utils.SwapInfo swapSrc)
+        protected void AddCode(string code, PrateekScriptBuilder.CodeFile.ContentInfos data, StringSwap stringSwapSrc)
         {
-            AddCode(code, data, swapSrc, new CodeBuilder.Utils.SwapInfo());
+            AddCode(code, data, stringSwapSrc, new StringSwap());
         }
 
         //-----------------------------------------------------------------
-        protected void AddCode(string code, PrateekScriptBuilder.CodeFile.ContentInfos data, CodeBuilder.Utils.SwapInfo swapSrc, CodeBuilder.Utils.SwapInfo swapDst)
+        protected void AddCode(string code, PrateekScriptBuilder.CodeFile.ContentInfos data, StringSwap stringSwapSrc, StringSwap stringSwapDst)
         {
-            code = swapSrc.Apply(code);
-            code = swapDst.Apply(code);
+            code = stringSwapSrc.Apply(code);
+            code = stringSwapDst.Apply(code);
             data.codeGenerated += code;
         }
         #endregion Utils
@@ -322,7 +268,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         #region CodeRule overridable
         public CodeGenerator.CodeBuilder.BuildResult Generate(PrateekScriptBuilder.CodeFile.ContentInfos data)
         {
-            var variants = new List<FuncVariant>();
+            var variants = new List<FunctionVariant>();
             //If needed, Add the default value as a possible class
             var maxSrc = data.classInfos.Count + (GenerateDefault ? 1 : 0);
             //Only loop through the dst classes if required
@@ -427,9 +373,9 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         }
 
         //-----------------------------------------------------------------
-        public CodeBuilder.Utils.KeywordRule GetKeywordRule(CodeKeyword keyword, string activeScope)
+        public KeywordUsage GetKeywordRule(CodeKeyword keyword, string activeScope)
         {
-            foreach (var keywordRule in keywordRules)
+            foreach (var keywordRule in keywordUsages)
             {
                 if (!keywordRule.ValidateRule(keyword, activeScope))
                 {
@@ -463,7 +409,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
         //-----------------------------------------------------------------
         #region CodeRule abstract
-        protected abstract void GatherVariants(List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst);
+        protected abstract void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst);
         #endregion CodeRule abstract
     }
 }

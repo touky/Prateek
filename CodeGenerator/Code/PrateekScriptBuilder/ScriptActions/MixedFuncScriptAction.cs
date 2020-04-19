@@ -7,6 +7,8 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Utils;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
     using Prateek.Core.Code.Helpers;
 
     public partial class MixedFuncScriptAction : ScriptAction
@@ -47,14 +49,14 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         {
             base.Init();
 
-            var rule = keywordRules.Find(x =>
+            var rule = keywordUsages.Find(x =>
             {
                 return x.keyword == PrateekScriptBuilder.Tag.Macro.Func && x.scope == CodeBlock;
             });
 
-            if (rule.usage != CodeBuilder.Utils.KeywordRule.Usage.Ignore)
+            if (rule.usage != KeywordUsage.Usage.Ignore)
             {
-                keywordRules.Add(new CodeBuilder.Utils.KeywordRule(PrateekScriptBuilder.Tag.Macro.Func, CodeBlock)
+                keywordUsages.Add(new KeywordUsage(PrateekScriptBuilder.Tag.Macro.Func, CodeBlock)
                 {
                     arguments = 1, needOpenScope = true, needScopeData = true,
                     onFeedCodeFile = (codeInfos, arguments, data) =>
@@ -70,7 +72,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         //-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
         {
             variants.Clear();
 
@@ -85,7 +87,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     }
 
                     var funcInfo = data.funcInfos[d];
-                    var variant  = new FuncVariant(funcInfo.funcName, 2);
+                    var variant  = new FunctionVariant(funcInfo.funcName, 2);
 
                     var varsCount = Vars.GetCount(funcInfo.data);
                     if (p == 1 && varsCount == 1)
@@ -128,7 +130,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                             variant[2] = varsA;
                         }
 
-                        var v2 = new FuncVariant(variant.Call, 2);
+                        var v2 = new FunctionVariant(variant.Call, 2);
                         v2[1] = variant[1];
                         v2[2] = PrateekScriptBuilder.Tag.Code.varNew + infoSrc.className + Strings.Separator.ParenthesisOpen.C() + variant[2] + Strings.Separator.ParenthesisClose.C();
                         variant = v2;

@@ -7,6 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder {
     using System;
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
 
     public class MixedCTorScriptAction : ScriptAction
     {
@@ -24,7 +25,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
 
         //-----------------------------------------------------------------
         #region Rule internal
-        protected override void GatherVariants(List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
         {
             var slots = new int[infoSrc.VarCount];
             for (int s = 0; s < slots.Length; s++)
@@ -36,7 +37,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
             GatherVariants(0, slots, slots.Length, variants, data, infoSrc);
 
             //Add Default vec(f)
-            var variant = new FuncVariant(infoSrc.names[0], 2);
+            var variant = new FunctionVariant(infoSrc.names[0], 2);
             variant[1] = String.Format(PrateekScriptBuilder.Tag.Code.argsN, data.classDefaultType, 0);
             for (int v = 0; v < infoSrc.VarCount; v++)
             {
@@ -46,7 +47,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
         }
 
         //-----------------------------------------------------------------
-        private void GatherVariants(int s, int[] slots, int count, List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc)
+        private void GatherVariants(int s, int[] slots, int count, List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc)
         {
             var classCount = data.classInfos.Count + 1;
             for (int c = 0; c < classCount; c++)
@@ -61,7 +62,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
                 {
                     var sn      = 0;
                     var sv      = 0;
-                    var variant = new FuncVariant(infoSrc.names[0], 2);
+                    var variant = new FunctionVariant(infoSrc.names[0], 2);
                     for (int v = 0; v < slots.Length && v < s + 1; v++)
                     {
                         var sl = slots[v];

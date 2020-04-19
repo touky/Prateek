@@ -7,6 +7,7 @@
 namespace Prateek.CodeGenerator.PrateekScriptBuilder
 {
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
 
     public partial class OverloadFuncScriptAction : ScriptAction
     {
@@ -43,7 +44,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         ///-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
         {
             variants.Clear();
             var slots = new int[infoSrc.NameCount / 2];
@@ -51,7 +52,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         }
 
         ///-----------------------------------------------------------------
-        private void GatherVariants(int s, int[] slots, List<FuncVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
+        private void GatherVariants(int s, int[] slots, List<FunctionVariant> variants, PrateekScriptBuilder.CodeFile.ContentInfos data, PrateekScriptBuilder.CodeFile.ClassInfos infoSrc, PrateekScriptBuilder.CodeFile.ClassInfos infoDst)
         {
             if (s < slots.Length)
             {
@@ -63,7 +64,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
             }
             else
             {
-                var variant = new FuncVariant(string.Empty, 1);
+                var variant = new FunctionVariant(string.Empty, 1);
                 for (var sv = 0; sv < slots.Length; sv++)
                 {
                     if (slots[sv] == 0)
