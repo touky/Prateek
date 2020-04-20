@@ -4,11 +4,10 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGenerator.PrateekScriptBuilder
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
 
     public partial class OverloadFuncScriptAction : ScriptAction
     {
@@ -45,22 +44,22 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         ///-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FunctionVariant> variants, ContentInfos data, ClassInfos infoSrc, ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
         {
             variants.Clear();
-            var slots = new int[infoSrc.NameCount / 2];
-            GatherVariants(0, slots, variants, data, infoSrc, infoDst);
+            var slots = new int[contentSrc.NameCount / 2];
+            GatherVariants(0, slots, variants, data, contentSrc, contentDst);
         }
 
         ///-----------------------------------------------------------------
-        private void GatherVariants(int s, int[] slots, List<FunctionVariant> variants, ContentInfos data, ClassInfos infoSrc, ClassInfos infoDst)
+        private void GatherVariants(int s, int[] slots, List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
         {
             if (s < slots.Length)
             {
                 for (var p = 0; p < 2; p++)
                 {
                     slots[s] = p;
-                    GatherVariants(s + 1, slots, variants, data, infoSrc, infoDst);
+                    GatherVariants(s + 1, slots, variants, data, contentSrc, contentDst);
                 }
             }
             else
@@ -70,11 +69,11 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 {
                     if (slots[sv] == 0)
                     {
-                        for (var i = 0; i < data.funcInfos.Count; i++)
+                        for (var i = 0; i < data.functionContents.Count; i++)
                         {
-                            var info = data.funcInfos[i].data;
-                            info = (Names[0] + infoSrc.names[sv * 2 + 0]).Apply(info);
-                            info = (Names[1] + infoSrc.names[sv * 2 + 1]).Apply(info);
+                            var info = data.functionContents[i].data;
+                            info = (Names[0] + contentSrc.names[sv * 2 + 0]).Apply(info);
+                            info = (Names[1] + contentSrc.names[sv * 2 + 1]).Apply(info);
                             variant[i] = info;
                         }
                     }

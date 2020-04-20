@@ -4,13 +4,12 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGenerator.PrateekScriptBuilder
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Utils;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
-    using Prateek.Core.Code.Helpers;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils;
+    using global::Prateek.Core.Code.Helpers;
 
     public partial class MixedFuncScriptAction : ScriptAction
     {
@@ -55,14 +54,14 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 return x.keyword == Glossary.Macro.Func && x.scope == CodeBlock;
             });
 
-            if (rule.usage != KeywordUsage.Usage.Ignore)
+            if (rule.keywordUsageType != KeywordUsageType.Ignore)
             {
                 keywordUsages.Add(new KeywordUsage(Glossary.Macro.Func, CodeBlock)
                 {
                     arguments = 1, needOpenScope = true, needScopeData = true,
                     onFeedCodeFile = (codeInfos, arguments, data) =>
                     {
-                        codeInfos.funcInfos.Add(new FuncInfos {funcName = arguments[0].Content, data = data});
+                        codeInfos.functionContents.Add(new FunctionContent {funcName = arguments[0].Content, data = data});
                         return true;
                     }
                 });
@@ -73,12 +72,12 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         //-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FunctionVariant> variants, ContentInfos data, ClassInfos infoSrc, ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
         {
             variants.Clear();
 
-            var isDefault = infoSrc.VarCount == 0;
-            for (var d = 0; d < data.funcInfos.Count; d++)
+            var isDefault = contentSrc.VarCount == 0;
+            for (var d = 0; d < data.functionContents.Count; d++)
             {
                 for (var p = 0; p < (isDefault ? 1 : 2); p++)
                 {
@@ -87,7 +86,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                         continue;
                     }
 
-                    var funcInfo = data.funcInfos[d];
+                    var funcInfo = data.functionContents[d];
                     var variant  = new FunctionVariant(funcInfo.funcName, 2);
 
                     var varsCount = Vars.GetCount(funcInfo.data);
@@ -108,7 +107,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                         {
                             variant[1] = p == 1 && a != 0
                                 ? string.Format(Glossary.Code.argsN, data.classDefaultType, a)
-                                : string.Format(Glossary.Code.argsV_, infoSrc.className, a);
+                                : string.Format(Glossary.Code.argsV_, contentSrc.className, a);
                         }
                     }
 
@@ -118,14 +117,14 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                     }
                     else
                     {
-                        for (var v = 0; v < infoSrc.VarCount; v++)
+                        for (var v = 0; v < contentSrc.VarCount; v++)
                         {
                             var varsA = vars;
                             for (var a = 0; a < varsCount; a++)
                             {
                                 varsA = p == 1 && a != 0
                                     ? (Vars[a] + string.Format(Glossary.Code.varsN, a)).Apply(varsA)
-                                    : (Vars[a] + string.Format(Glossary.Code.varsV_, a, infoSrc.variables[v])).Apply(varsA);
+                                    : (Vars[a] + string.Format(Glossary.Code.varsV_, a, contentSrc.variables[v])).Apply(varsA);
                             }
 
                             variant[2] = varsA;
@@ -133,7 +132,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
                         var v2 = new FunctionVariant(variant.Call, 2);
                         v2[1] = variant[1];
-                        v2[2] = Glossary.Code.varNew + infoSrc.className + Strings.Separator.ParenthesisOpen.C() + variant[2] + Strings.Separator.ParenthesisClose.C();
+                        v2[2] = Glossary.Code.varNew + contentSrc.className + Strings.Separator.ParenthesisOpen.C() + variant[2] + Strings.Separator.ParenthesisClose.C();
                         variant = v2;
                     }
 

@@ -4,58 +4,72 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGenerator.PrateekScriptBuilder {
-    using System;
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
+{
     using System.Collections.Generic;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
 
     public partial class SwizzleScriptAction : ScriptAction
     {
+        #region Properties
+        //-----------------------------------------------------------------
+        public override string ScopeTag
+        {
+            get { return "SWIZZLE"; }
+        }
+
+        public override GenerationMode GenMode
+        {
+            get { return GenerationMode.ForeachSrcXDest; }
+        }
+        #endregion
+
+        #region Constructors
+        //-----------------------------------------------------------------
+        public SwizzleScriptAction(string extension) : base(extension) { }
+        #endregion
+
+        #region Class Methods
         public static SwizzleScriptAction Create(string extension)
         {
             return new SwizzleScriptAction(extension);
         }
-        //-----------------------------------------------------------------
-        public override string ScopeTag { get { return "SWIZZLE"; } }
-        public override GenerationMode GenMode { get { return GenerationMode.ForeachSrcXDest; } }
+        #endregion
 
         //-----------------------------------------------------------------
-        public SwizzleScriptAction(string extension) : base(extension) { }
 
-        //-----------------------------------------------------------------
         #region Rule internal
-        protected override void GatherVariants(List<FunctionVariant> variants, ContentInfos data, ClassInfos infoSrc, ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
         {
-            var slots = new int[infoDst.VarCount];
-            for (int s = 0; s < slots.Length; s++)
+            var slots = new int[contentDst.VarCount];
+            for (var s = 0; s < slots.Length; s++)
             {
                 slots[s] = 0;
             }
 
             variants.Clear();
-            GatherVariantsSlots(0, slots, variants, data, infoSrc, infoDst);
+            GatherVariantsSlots(0, slots, variants, data, contentSrc, contentDst);
         }
 
         //-----------------------------------------------------------------
-        private void GatherVariantsSlots(int s, int[] slots, List<FunctionVariant> variants, ContentInfos data, ClassInfos infoSrc, ClassInfos infoDst)
+        private void GatherVariantsSlots(int s, int[] slots, List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
         {
-            var varCount = infoSrc.VarCount + 1;
-            for (int c = 0; c < varCount; c++)
+            var varCount = contentSrc.VarCount + 1;
+            for (var c = 0; c < varCount; c++)
             {
                 slots[s] = c;
                 if (s + 1 < slots.Length)
                 {
-                    GatherVariantsSlots(s + 1, slots, variants, data, infoSrc, infoDst);
+                    GatherVariantsSlots(s + 1, slots, variants, data, contentSrc, contentDst);
                 }
                 else
                 {
                     if (data.classDefaultExportOnly)
                     {
-                        bool foundValid = false;
-                        for (int exp = 0; exp < slots.Length; exp++)
+                        var foundValid = false;
+                        for (var exp = 0; exp < slots.Length; exp++)
                         {
-                            if (slots[exp] >= infoSrc.VarCount)
+                            if (slots[exp] >= contentSrc.VarCount)
                             {
                                 foundValid = true;
                                 break;
@@ -63,27 +77,29 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder {
                         }
 
                         if (!foundValid)
+                        {
                             continue;
+                        }
                     }
 
                     var sn      = 0;
-                    var variant = new FunctionVariant(String.Empty, 2);
+                    var variant = new FunctionVariant(string.Empty, 2);
                     variant[1] += Glossary.Code.argsV;
-                    for (int v = 0; v < slots.Length; v++)
+                    for (var v = 0; v < slots.Length; v++)
                     {
                         var sv = slots[v];
-                        if (sv < infoSrc.VarCount)
+                        if (sv < contentSrc.VarCount)
                         {
-                            var name = sv < infoSrc.NameCount ? infoSrc.names[sv] : infoSrc.variables[sv];
+                            var name = sv < contentSrc.NameCount ? contentSrc.names[sv] : contentSrc.variables[sv];
                             variant.Call = name;
-                            var variable = infoSrc.variables[sv];
-                            variant[2] = String.Format(Glossary.Code.varsV, variable);
+                            var variable = contentSrc.variables[sv];
+                            variant[2] = string.Format(Glossary.Code.varsV, variable);
                         }
                         else
                         {
                             variant.Call = Glossary.Code.callN;
-                            variant[1] = String.Format(Glossary.Code.argsNOpt, data.classDefaultType, sn, data.classDefaultValue);
-                            variant[2] = String.Format(Glossary.Code.varsN, sn);
+                            variant[1] = string.Format(Glossary.Code.argsNOpt, data.classDefaultType, sn, data.classDefaultValue);
+                            variant[2] = string.Format(Glossary.Code.varsN, sn);
                             sn++;
                         }
                     }

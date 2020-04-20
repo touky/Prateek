@@ -35,17 +35,17 @@ namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using System;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class TemplateHelpers
     {
-        //---------------------------------------------------------------------
-        public static ScriptTemplate.Ignorable.BuildResult GatherValidIgnorables(string fileContent, string fileExtension)
+        ///---------------------------------------------------------------------
+        public static IgnorableContent GatherValidIgnorables(string fileContent, string fileExtension)
         { return GatherValidIgnorables(String.Empty, fileContent, fileExtension); }
-        //---------------------------------------------------------------------
-        public static ScriptTemplate.Ignorable.BuildResult GatherValidIgnorables(string fileName, string fileContent, string fileExtension)
+        ///---------------------------------------------------------------------
+        public static IgnorableContent GatherValidIgnorables(string fileName, string fileContent, string fileExtension)
         {
-            var results = default(ScriptTemplate.Ignorable.BuildResult);
-            var ignorables = CodeGenerator.ScriptTemplate.Ignorables;
+            var results = default(IgnorableContent);
+            var ignorables = CodeGenerator.TemplateRegistry.Ignorables;
             for (int i = 0; i < ignorables.Count; i++)
             {
                 var ignorable = ignorables[i];
@@ -63,19 +63,19 @@ namespace Prateek.CodeGenerator.ScriptTemplates
             return results;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void ApplyKeywords(ref string fileContent, string fileExtension)
         { ApplyKeywords(ref fileContent, string.Empty, fileExtension); }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void ApplyKeywords(ref string fileContent, string fileName, string fileExtension)
         {
-            var keywords = CodeGenerator.ScriptTemplate.Keywords;
+            var keywords = CodeGenerator.TemplateRegistry.Keywords;
             var doAnotherPass = true;
             while (doAnotherPass)
             {
                 doAnotherPass = false;
                 var ignorers = GatherValidIgnorables(fileContent, fileExtension);
-                var stack = new ScriptTemplate.KeywordStack(ScriptTemplate.KeywordMode.KeywordOnly, fileContent);
+                var stack = new KeywordTemplateStack(KeywordTemplateMode.KeywordOnly, fileContent);
                 for (int r = 0; r < keywords.Count; r++)
                 {
                     var keyword = keywords[r];
@@ -86,7 +86,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates
                     var start = 0;
                     while ((start = fileContent.IndexOf(tag, start)) >= 0)
                     {
-                        var safety = ignorers.AdvanceToSafety(start, ScriptTemplate.Ignorable.Style.Text);
+                        var safety = ignorers.AdvanceToSafety(start, IgnorableStyle.Text);
                         if (safety != start)
                         {
                             start = safety;

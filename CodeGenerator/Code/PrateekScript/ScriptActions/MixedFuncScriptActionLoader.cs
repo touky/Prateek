@@ -4,19 +4,24 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGenerator.PrateekScriptBuilder {
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
+{
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using UnityEditor;
 
     [InitializeOnLoad]
-    class MixedFuncScriptActionLoader : PrateekScriptBuilder
+    internal class MixedFuncScriptActionLoader : PrateekScriptBuilder
     {
+        #region Constructors
         static MixedFuncScriptActionLoader()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
                 return;
+            }
 
             MixedFuncScriptAction.Create(Glossary.importExtension).Commit();
         }
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-namespace Prateek.CodeGenerator.PrateekScriptBuilder {
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
+{
     public abstract class SyntaxScriptAction : ScriptAction
     {
         #region Constructors

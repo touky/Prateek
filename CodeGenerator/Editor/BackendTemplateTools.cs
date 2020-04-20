@@ -37,7 +37,8 @@ namespace Prateek.CodeGenerator.Editor
     using System.Collections.Generic;
     using System.IO;
     using System.Text.RegularExpressions;
-    using Prateek.CodeGenerator.PrateekScriptBuilder;
+    using Assets.Prateek.CodeGenerator.Code.CodeBuilder;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript;
     using Prateek.Core.Code.Helpers;
     using Prateek.Helpers;
     using UnityEngine;
@@ -60,7 +61,7 @@ namespace Prateek.CodeGenerator.Editor
                 if (!Regex.Match(path, builder.SearchPattern).Success)
                     return;
 
-                builder.AddFile(new CodeGenerator.CodeBuilder.FileData(path, string.Empty));
+                builder.AddFile(new FileData(path, string.Empty));
 
                 builder.Init();
                 builder.StartWork(true);
@@ -78,7 +79,7 @@ namespace Prateek.CodeGenerator.Editor
 
             builder.AddDirectory(path);
 
-            builder.Operations = CodeGenerator.CodeBuilder.OperationApplied.ALL & ~CodeGenerator.CodeBuilder.OperationApplied.ApplyScriptTemplate;
+            builder.Operations = OperationApplied.ALL & ~OperationApplied.ApplyScriptTemplate;
 
             return builder;
         }

@@ -31,19 +31,21 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGenerator.PrateekScriptBuilder
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
 {
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.CodeBuilder;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Utils;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeCommands;
-    using Prateek.Core.Code.Helpers;
-    using Prateek.Core.Code.Helpers.Files;
-    using static CodeBuilder;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils;
+    using global::Prateek.CodeGenerator;
+    using global::Prateek.Core.Code.Helpers;
+    using global::Prateek.Core.Code.Helpers.Files;
 
     //-------------------------------------------------------------------------
-    public class PrateekScriptBuilder : CodeGenerator.CodeBuilder
+    public class PrateekScriptBuilder : CodeBuilder
     {
         #region Properties
         //---------------------------------------------------------------------
@@ -134,7 +136,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 newData.destination.name = codeFile.fileName.Extension(newData.source.extension);
                 newData.destination.extension = codeFile.fileExtension;
                 newData.source.extension = newData.source.extension.Extension(codeFile.fileExtension);
-                
+
                 var applyResult = base.DoApplyValidTemplate(ref newData);
                 if (applyResult.Is(BuildResult.ValueType.NoMatchingTemplate))
                 {
@@ -177,8 +179,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
 
         private BuildResult FeedCodeFile(ref FileData fileData, CodeFile codeFile, CodeKeyword rootKeyword, string rootScope)
         {
-            var scriptActions = ScriptActionDatabase.Actions;
-            var scopeRule = (KeywordUsage)default;
+            var scriptActions = ScriptActionRegistry.Actions;
+            var scopeRule     = (KeywordUsage) default;
             for (var s = 0; s < scriptActions.Count; s++)
             {
                 var action = scriptActions[s];
@@ -188,8 +190,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 }
 
                 var keywordRule = action.GetKeywordRule(rootKeyword, rootScope);
-                if (keywordRule.usage == KeywordUsage.Usage.None
-                 || keywordRule.usage == KeywordUsage.Usage.Ignore)
+                if (keywordRule.keywordUsageType == KeywordUsageType.None
+                 || keywordRule.keywordUsageType == KeywordUsageType.Ignore)
                 {
                     continue;
                 }
@@ -203,8 +205,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 break;
             }
 
-            var scopes = rootKeyword.scopeContent != null ? new List<CodeScope>() {rootKeyword.scopeContent} : null;
-            for (int s = 0; scopes != null && s < scopes.Count; s++)
+            var scopes = rootKeyword.scopeContent != null ? new List<CodeScope> {rootKeyword.scopeContent} : null;
+            for (var s = 0; scopes != null && s < scopes.Count; s++)
             {
                 var scope = scopes[s];
                 foreach (var codeCommand in scope.commands)
@@ -225,7 +227,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 scopes.InsertRange(s + 1, scope.scopeContent);
             }
 
-            if (scopeRule.usage != KeywordUsage.Usage.None && scopeRule.onCloseScope != null)
+            if (scopeRule.keywordUsageType != KeywordUsageType.None && scopeRule.onCloseScope != null)
             {
                 scopeRule.onCloseScope(codeFile, rootKeyword.keyword.Content);
             }
@@ -242,8 +244,8 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 return null;
             }
 
-            var arg0 = codeKeyword.arguments[0].Content;
-            var arg1 = codeKeyword.arguments[1].Content;
+            var arg0     = codeKeyword.arguments[0].Content;
+            var arg1     = codeKeyword.arguments[1].Content;
             var codeFile = codeFiles.Find(x => { return x.fileName == arg0 && x.fileExtension == arg1; });
             if (codeFile == null)
             {

@@ -4,33 +4,39 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGenerator.PrateekScriptBuilder {
-    using System;
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
+{
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Prateek.Core.Code.Helpers;
+    using global::Prateek.CodeGenerator;
+    using global::Prateek.CodeGenerator.ScriptTemplates;
+    using global::Prateek.Core.Code.Helpers;
     using UnityEditor;
 
     ///todo [InitializeOnLoad]
-    class NotepadPlusSyntaxTemplateLoader : ScriptTemplates.ScriptTemplate
+    internal class NotepadPlusSyntaxTemplateLoader
     {
+        #region Constructors
         static NotepadPlusSyntaxTemplateLoader()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
                 return;
+            }
 
-            NewScript(Glossary.importExtension.Extension("xml"), "xml")
+            ScriptFileTemplate.Create(Glossary.importExtension.Extension("xml"), "xml")
                 .SetAutorun(false)
                 .SetEndsWith("SyntaxAutoComplete")
-                .SetTemplateFile(String.Empty)
+                .SetTemplateFile(string.Empty)
                 .SetFileContent("InternalContent_PrateekCodegenSyntaxAutoComplete.xml.txt")
                 .Commit();
 
-            NewScript(Glossary.importExtension.Extension("xml"), "xml")
+            ScriptFileTemplate.Create(Glossary.importExtension.Extension("xml"), "xml")
                 .SetAutorun(false)
-                .SetTemplateFile(String.Empty)
+                .SetTemplateFile(string.Empty)
                 .SetEndsWith("SyntaxColor")
                 .SetFileContent("InternalContent_PrateekCodegenSyntaxColor.xml.txt")
                 .Commit();
         }
+        #endregion
     }
 }

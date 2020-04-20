@@ -4,12 +4,11 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGenerator.PrateekScriptBuilder
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeGeneration;
-    using Prateek.Core.Code;
+    using global::Prateek.Core.Code;
 
     public partial class BasicFuncScriptAction : ScriptAction
     {
@@ -46,26 +45,26 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
         ///-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FunctionVariant> variants, ContentInfos data, ClassInfos infoSrc, ClassInfos infoDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
         {
             variants.Clear();
-            if (data.funcInfos.Count == 0)
+            if (data.functionContents.Count == 0)
             {
                 variants.Add(new FunctionVariant());
             }
             else
             {
-                var variant = new FunctionVariant(string.Empty, data.funcInfos.Count - 1);
-                for (var d = 0; d < data.funcInfos.Count; d++)
+                var variant = new FunctionVariant(string.Empty, data.functionContents.Count - 1);
+                for (var d = 0; d < data.functionContents.Count; d++)
                 {
-                    var funcInfo  = data.funcInfos[d];
+                    var funcInfo  = data.functionContents[d];
                     var varsCount = Vars.GetCount(funcInfo.data);
-                    for (var v = 0; v < infoSrc.variables.Count; v++)
+                    for (var v = 0; v < contentSrc.variables.Count; v++)
                     {
                         var funcData = funcInfo.data;
                         for (var n = 0; n < CSharp.min(varsCount, Vars.Count); n++)
                         {
-                            var vars = Vars[n] + infoSrc.variables[v];
+                            var vars = Vars[n] + contentSrc.variables[v];
                             funcData = vars.Apply(funcData);
                         }
 

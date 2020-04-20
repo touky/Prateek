@@ -4,19 +4,24 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGenerator.PrateekScriptBuilder {
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
+{
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using UnityEditor;
 
     [InitializeOnLoad]
-    class SwizzleScriptActionLoader : PrateekScriptBuilder
+    internal class SwizzleScriptActionLoader : PrateekScriptBuilder
     {
+        #region Constructors
         static SwizzleScriptActionLoader()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
                 return;
+            }
 
             SwizzleScriptAction.Create(Glossary.importExtension).Commit();
         }
+        #endregion
     }
 }

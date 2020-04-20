@@ -4,20 +4,25 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGenerator.PrateekScriptBuilder {
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
+{
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using UnityEditor;
 
     ///todo [InitializeOnLoad]
-    class NotepadPlusSyntaxScriptActionLoader : PrateekScriptBuilder
+    internal class NotepadPlusSyntaxScriptActionLoader : PrateekScriptBuilder
     {
+        #region Constructors
         static NotepadPlusSyntaxScriptActionLoader()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
                 return;
+            }
 
             NotepadPlusSyntaxColorScriptAction.Create(Glossary.importExtension).Commit();
             NotepadPlusSyntaxAutoCompleteScriptAction.Create(Glossary.importExtension).Commit();
         }
+        #endregion
     }
 }

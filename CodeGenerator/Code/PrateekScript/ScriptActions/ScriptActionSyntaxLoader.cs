@@ -1,12 +1,13 @@
-namespace Prateek.CodeGenerator.PrateekScriptBuilder
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 {
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Prateek.CodeGenerator.ScriptTemplates;
-    using Prateek.Core.Code.Helpers;
+    using global::Prateek.CodeGenerator;
+    using global::Prateek.CodeGenerator.ScriptTemplates;
+    using global::Prateek.Core.Code.Helpers;
     using UnityEditor;
 
     [InitializeOnLoad]
-    internal class ScriptActionSyntaxLoader : ScriptTemplate
+    internal class ScriptActionSyntaxLoader
     {
         #region Constructors
         static ScriptActionSyntaxLoader()
@@ -16,7 +17,7 @@ namespace Prateek.CodeGenerator.PrateekScriptBuilder
                 return;
             }
 
-            NewScript(Glossary.importExtension.Extension(Glossary.exportExtension), Glossary.exportExtension)
+            ScriptFileTemplate.Create(Glossary.importExtension.Extension(Glossary.exportExtension), Glossary.exportExtension)
                 .SetAutorun(false)
                 .SetTemplateFile(string.Empty)
                 .SetFileContent("InternalContent_Prateek_script.txt")

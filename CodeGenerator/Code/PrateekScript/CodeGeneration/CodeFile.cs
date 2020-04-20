@@ -1,12 +1,14 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration {
-    using System;
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
+{
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions;
     using Assets.Prateek.CodeGenerator.Code.Utils;
-    using global::Prateek.CodeGenerator.PrateekScriptBuilder;
+    using global::Prateek.CodeGenerator;
     using global::Prateek.Core.Code.Helpers;
 
     public class CodeFile
     {
+        #region Fields
         //-----------------------------------------------------------------
 
         //-----------------------------------------------------------------
@@ -19,71 +21,104 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration {
         public string fileNamespace;
 
         //-----------------------------------------------------------------
-        private ContentInfos codeInfos;
+        private ScriptContent scriptContent;
         private string codeGenerated;
-        private List<ContentInfos> datas = new List<ContentInfos>();
+        private List<ScriptContent> datas = new List<ScriptContent>();
+        #endregion
 
+        #region Properties
         //-----------------------------------------------------------------
-        public string CodeGenerated { get { return codeGenerated; } }
-        public ContentInfos CodeInfos { get { return codeInfos; } }
-        public int DataCount { get { return datas.Count; } }
-        public ContentInfos this[int index] { get { return datas[index]; } }
+        public string CodeGenerated
+        {
+            get { return codeGenerated; }
+        }
 
+        public ScriptContent ScriptContent
+        {
+            get { return scriptContent; }
+        }
+
+        public int DataCount
+        {
+            get { return datas.Count; }
+        }
+
+        public ScriptContent this[int index]
+        {
+            get { return datas[index]; }
+        }
+        #endregion
+
+        #region Class Methods
         //-----------------------------------------------------------------
         public bool AllowRule(ScriptAction rule)
         {
-            if (codeInfos == null)
+            if (scriptContent == null)
+            {
                 return true;
+            }
 
-            if (codeInfos.activeRule == null)
+            if (scriptContent.scriptAction == null)
+            {
                 return true;
+            }
 
-            return codeInfos.activeRule == rule;
+            return scriptContent.scriptAction == rule;
         }
 
         //-----------------------------------------------------------------
-        public ContentInfos NewData(ScriptAction codeSettings)
+        public ScriptContent NewData(ScriptAction codeSettings)
         {
-            if (codeInfos != null)
+            if (scriptContent != null)
+            {
                 return null;
-            codeInfos = new ContentInfos() { activeRule = codeSettings };
-            return codeInfos;
+            }
+
+            scriptContent = new ScriptContent {scriptAction = codeSettings};
+            return scriptContent;
         }
 
         //-----------------------------------------------------------------
         public bool Commit()
         {
-            var hasSubmitted = codeInfos != null;
-            if (codeInfos != null)
-                datas.Add(codeInfos);
-            codeInfos = null;
+            var hasSubmitted = scriptContent != null;
+            if (scriptContent != null)
+            {
+                datas.Add(scriptContent);
+            }
+
+            scriptContent = null;
 
             return hasSubmitted;
         }
 
         //-----------------------------------------------------------------
-        public global::Prateek.CodeGenerator.CodeBuilder.BuildResult Generate(string genHeader, string genCode)
+        public global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult Generate(string genHeader, string genCode)
         {
-            var genNSpc = (StringSwap)global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.Glossary.Macro.codeGenNSpc.Keyword();
-            var genExtn = (StringSwap)global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.Glossary.Macro.codeGenExtn.Keyword();
-            var genPrfx = (StringSwap)global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.Glossary.Macro.codeGenPrfx.Keyword();
-            var genData = (StringSwap)global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.Glossary.Macro.codeGenData.Keyword();
-            var genTabs = (StringSwap)global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.Glossary.Macro.codeGenTabs.Keyword();
+            var genNSpc = (StringSwap) Glossary.Macro.codeGenNSpc.Keyword();
+            var genExtn = (StringSwap) Glossary.Macro.codeGenExtn.Keyword();
+            var genPrfx = (StringSwap) Glossary.Macro.codeGenPrfx.Keyword();
+            var genData = (StringSwap) Glossary.Macro.codeGenData.Keyword();
+            var genTabs = (StringSwap) Glossary.Macro.codeGenTabs.Keyword();
 
             var i = genCode.IndexOf(genData.Original);
             if (i < 0)
-                return global::Prateek.CodeGenerator.CodeBuilder.BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;
+            {
+                return global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;
+            }
 
             var r = genCode.LastIndexOf(Strings.Separator.LineFeed.C(), i);
             if (r >= 0)
+            {
                 genTabs = genTabs + genCode.Substring(r + 1, i - (r + 1));
+            }
 
             codeGenerated = genHeader;
-            for (int d = 0; d < datas.Count; d++)
+            for (var d = 0; d < datas.Count; d++)
             {
                 var data = datas[d];
 
-                var result = data.activeRule.Generate(data);
+                var result = data.scriptAction.Generate(data);
                 if (!result)
                 {
                     return result;
@@ -92,16 +127,18 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration {
                 var code = genTabs.Apply(data.codeGenerated);
                 genNSpc += data.blockNamespace;
                 genExtn += data.blockClassName;
-                var prefix = String.Empty;
-                for (int p = 0; p < data.blockClassPrefix.Count; p++)
+                var prefix = string.Empty;
+                for (var p = 0; p < data.blockClassPrefix.Count; p++)
                 {
                     genPrfx += data.blockClassPrefix[p] + Strings.Separator.Space.S();
                 }
+
                 genData += code;
                 codeGenerated += genPrfx.Apply(genExtn.Apply(genData.Apply(genNSpc.Apply(genCode))));
             }
 
-            return global::Prateek.CodeGenerator.CodeBuilder.BuildResult.ValueType.Success;
+            return global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.Success;
         }
+        #endregion
     }
 }

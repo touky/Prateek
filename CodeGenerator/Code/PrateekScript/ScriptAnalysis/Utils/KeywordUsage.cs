@@ -1,45 +1,32 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Utils {
+namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils
+{
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Symbols;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeCommands;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
+    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
     using Assets.Prateek.CodeGenerator.Code.Utils;
-    using global::Prateek.CodeGenerator.PrateekScriptBuilder;
 
     [DebuggerDisplay("{scope}/{keyword}")]
     public struct KeywordUsage
     {
         //-------------------------------------------------------------
-        public enum Usage
-        {
-            None,
-
-            Match,
-            Forbidden,
-            Ignore,
-
-            MAX
-        }
-
-        //-------------------------------------------------------------
-
-        //-------------------------------------------------------------
         public string keyword;
         public string scope;
-        public Usage usage;
+        public KeywordUsageType keywordUsageType;
         public ArgumentRange arguments;
         public bool needOpenScope;
         public bool needScopeData;
-        public Func<global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.ContentInfos, List<Keyword>, string, bool> onFeedCodeFile;
-        public Func<global::Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration.CodeFile, string, bool> onCloseScope;
+        public Func<ScriptContent, List<Keyword>, string, bool> onFeedCodeFile;
+        public Func<CodeFile, string, bool> onCloseScope;
 
         //-------------------------------------------------------------
         public KeywordUsage(string keyword, string scope)
         {
             this.keyword = keyword;
             this.scope = scope;
-            usage = Usage.Match;
+            keywordUsageType = KeywordUsageType.Match;
             arguments = 0;
             needOpenScope = false;
             needScopeData = false;
@@ -50,7 +37,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScriptBuilder.CodeAnalyzer.Ut
         //-------------------------------------------------------------
         public bool Match(string key, string scope)
         {
-            return key == this.keyword && scope == this.scope;
+            return key == keyword && scope == this.scope;
         }
 
         public bool ValidateRule(CodeKeyword codeKeyword, string scope)
