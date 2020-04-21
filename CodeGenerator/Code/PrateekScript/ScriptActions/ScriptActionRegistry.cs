@@ -2,17 +2,23 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 {
     using System;
     using System.Collections.Generic;
+    using Assets.Prateek.EditorJobSystem;
     using global::Prateek.CodeGenerator;
     using UnityEngine;
 
     public class ScriptActionRegistry
     {
         #region Code rules
-        private static List<ScriptAction> actions = new List<ScriptAction>();
+        private static ConcurrentList<ScriptAction> actions = new ConcurrentList<ScriptAction>();
 
-        public static TemplateGroup<ScriptAction> Actions
+        public static IReadOnlyList<ScriptAction> Actions
         {
-            get { return new TemplateGroup<ScriptAction>(actions); }
+            get
+            {
+                EditorJobSystem.JoinWork();
+
+                return actions.Copy;
+            }
         }
 
         public static void Add(ScriptAction data)

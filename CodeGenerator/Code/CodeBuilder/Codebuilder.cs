@@ -92,7 +92,7 @@ namespace Prateek.CodeGenerator
 
         public virtual string SearchPattern
         {
-            get { return FileHelpers.BuildExtensionMatch(TemplateRegistry.Keywords.List); }
+            get { return FileHelpers.BuildExtensionMatch(TemplateRegistry.Keywords); }
             private set { }
         }
 

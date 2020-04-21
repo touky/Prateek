@@ -1,183 +1,104 @@
-namespace Prateek.CodeGenerator {
+namespace Prateek.CodeGenerator
+{
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Threading;
+    using Assets.Prateek.EditorJobSystem;
     using Prateek.CodeGenerator.ScriptTemplates;
     using UnityEngine;
 
     public static class TemplateRegistry
     {
         //---------------------------------------------------------------------
-        #region Scripts
-        private static List<ScriptFileTemplate> scripts = new List<ScriptFileTemplate>();
-        private static System.Object scriptsLock = new object();
 
-        public static TemplateGroup<ScriptFileTemplate> Scripts
+        #region Scripts
+        private static ConcurrentList<ScriptFileTemplate> scripts = new ConcurrentList<ScriptFileTemplate>();
+
+        public static IReadOnlyList<ScriptFileTemplate> Scripts
         {
             get
             {
-                WaitForLoad();
-                return new TemplateGroup<ScriptFileTemplate>(scripts);
+                EditorJobSystem.JoinWork();
+
+                return scripts.Copy;
             }
         }
 
         public static void Add(ScriptFileTemplate data)
         {
-            lock (scriptsLock)
-            {
-                scripts.Add(data);
-            }
+            scripts.Add(data);
         }
         #endregion Scripts
 
         //---------------------------------------------------------------------
-        #region Keywords
-        private static List<KeywordTemplate> keywords = new List<KeywordTemplate>();
-        private static System.Object keywordsLock = new object();
 
-        public static TemplateGroup<KeywordTemplate> Keywords
+        #region Keywords
+        private static ConcurrentList<KeywordTemplate> keywords = new ConcurrentList<KeywordTemplate>();
+
+        public static IReadOnlyList<KeywordTemplate> Keywords
         {
             get
             {
-                WaitForLoad();
-                return new TemplateGroup<KeywordTemplate>(keywords);
+                EditorJobSystem.JoinWork();
+
+                return keywords.Copy;
             }
         }
 
         public static void Add(KeywordTemplate data)
         {
-            lock (keywordsLock)
-            {
-                keywords.Add(data);
-            }
+            keywords.Add(data);
         }
         #endregion Keywords
 
         //---------------------------------------------------------------------
-        #region Ignorables
-        private static List<IgnorableTemplate> ignorables = new List<IgnorableTemplate>();
-        private static System.Object ignorablesLock = new object();
 
-        public static TemplateGroup<IgnorableTemplate> Ignorables
+        #region Ignorables
+        private static ConcurrentList<IgnorableTemplate> ignorables = new ConcurrentList<IgnorableTemplate>();
+
+        public static IReadOnlyList<IgnorableTemplate> Ignorables
         {
             get
             {
-                WaitForLoad();
-                return new TemplateGroup<IgnorableTemplate>(ignorables);
+                EditorJobSystem.JoinWork();
+
+                return ignorables.Copy;
             }
         }
 
         public static void Add(IgnorableTemplate data)
         {
-            lock (keywordsLock)
-            {
-                ignorables.Add(data);
-            }
+            ignorables.Add(data);
         }
         #endregion Ignorables
 
         //---------------------------------------------------------------------
+
         #region Unity templates
-        private static List<UnityFileTemplate> templates = new List<UnityFileTemplate>();
-        private static System.Object templatesLock = new object();
+        private static ConcurrentList<UnityFileTemplate> templates = new ConcurrentList<UnityFileTemplate>();
 
         public static void Add(UnityFileTemplate data)
         {
-            lock (templatesLock)
-            {
-                templates.Add(data);
-            }
+            templates.Add(data);
         }
 
         public static bool MatchTemplate(string filePath, string extension, string content)
         {
-            WaitForLoad();
-            for (int t = 0; t < templates.Count; t++)
+            EditorJobSystem.JoinWork();
+
+            var list = templates.Copy;
+            for (int t = 0; t < list.Count; t++)
             {
-                var template = templates[t];
+                var template = list[t];
                 if (template.FullName != filePath)
                     continue;
 
                 return template.Match(template.FileName, extension, content);
             }
+
             return false;
         }
-
-        private static System.Object jobLock = new object();
-        private static Thread mainThread = null;
-        private static Queue<LoadJob> jobQueue = new Queue<LoadJob>();
-        public static void Add(LoadJob job)
-        {
-            if (mainThread == null)
-            {
-                mainThread = new Thread(ThreadUpdate);
-                mainThread.Name = "TemplateRegistry.ThreadUpdate";
-                mainThread.Start();
-            }
-
-            lock (jobLock)
-            {
-                jobQueue.Enqueue(job);
-            }
-        }
-
-        private static void WaitForLoad()
-        {
-            if (mainThread == null)
-            {
-                return;
-            }
-
-            mainThread.Join();
-        }
-
-        private static void ThreadUpdate()
-        {
-            int loadedFiles = 0;
-            int exitFrameCount = 10;
-            while (true)
-            {
-                var newJob = (LoadJob) null;
-                lock (jobLock)
-                {
-                    if (jobQueue.Count > 0)
-                    {
-                        newJob = jobQueue.Dequeue();
-                    }
-                }
-
-                if (newJob != null)
-                {
-                    newJob.template.LoadFile(newJob.contentPath).Commit();
-                    loadedFiles++;
-
-                    exitFrameCount = 10;
-                }
-
-                exitFrameCount--;
-                if (exitFrameCount < 0)
-                {
-                    break;
-                }
-                else
-                {
-                    Thread.Sleep(100);
-                }
-            }
-
-            mainThread = null;
-        }
         #endregion Unity templates
-    }
-
-    public class LoadJob
-    {
-        public string contentPath;
-        public BaseTemplate template;
-
-        public void Commit()
-        {
-            TemplateRegistry.Add(this);
-        }
     }
 }

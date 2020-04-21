@@ -59,7 +59,12 @@ namespace Prateek.Core.Code.Helpers.Files
         //---------------------------------------------------------------------
         public interface IExtensionMatcher { string Extension { get; } }
         public static string BuildExtensionMatch(string extension) { return string.Format("\\.({0})$", extension); }
-        public static string BuildExtensionMatch<T>(List<T> list) where T : IExtensionMatcher
+
+        public static string BuildExtensionMatch<T>(IList<T> list) where T : IExtensionMatcher
+        {
+            return BuildExtensionMatch((IReadOnlyList<T>)list);
+        }
+        public static string BuildExtensionMatch<T>(IReadOnlyList<T> list) where T : IExtensionMatcher
         {
             if (list == null)
                 return string.Empty;

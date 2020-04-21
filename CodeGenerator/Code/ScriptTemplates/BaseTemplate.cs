@@ -38,11 +38,11 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         }
 
         //-----------------------------------------------------------------
-        public LoadJob Load(string filePath)
+        public TemplateLoadJob Load(string filePath)
         {
             FileHelpers.InitIO();
 
-            return new LoadJob()
+            return new TemplateLoadJob()
             {
                 contentPath = filePath,
                 template = this
