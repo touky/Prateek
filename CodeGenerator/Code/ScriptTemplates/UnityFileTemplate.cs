@@ -4,6 +4,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
     using System.IO;
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Code.Helpers.Files;
+    using UnityEngine;
 
     public class UnityFileTemplate : BaseTemplate
     {
@@ -28,7 +29,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         //-----------------------------------------------------------------
         public override void Commit()
         {
-            CodeGenerator.TemplateRegistry.Add(this);
+            TemplateRegistry.Add(this);
         }
 
         //-----------------------------------------------------------------
@@ -51,28 +52,32 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         }
 
         //-----------------------------------------------------------------
-        public UnityFileTemplate Load(string path)
+        public override BaseTemplate LoadFile(string filePath)
         {
-            if (!File.Exists(path))
+            base.LoadFile(filePath);
+
+            filePath = FileHelpers.GetValidFile(filePath);
+            if (string.IsNullOrEmpty(filePath))
+            {
                 return this;
+            }
 
-            var lastSlash = path.LastIndexOf(Strings.Separator.DirSlash.C());
-            if (lastSlash < 0)
+            var fileInfo = new FileInfo(filePath);
+            if (!fileInfo.Exists)
+            {
                 return this;
+            }
 
-            var ext0 = path.LastIndexOf(Strings.Separator.FileExtension.C());
-            if (ext0 < 0)
+            var lastTime = fileInfo.LastWriteTime.ToFileTime();
+            if (lastTime <= lastWriteTime)
+            {
                 return this;
+            }
 
-            var ext1 = path.LastIndexOf(Strings.Separator.FileExtension.C(), ext0 - 1);
-            if (ext1 < 0)
-                return this;
+            this.fullName = Path.GetFileName(fileInfo.Name);
+            this.fileName = Path.GetFileNameWithoutExtension(fileInfo.Name);
+            this.extension = fileInfo.Extension.TrimStart(Strings.Separator.FileExtension.C());
 
-            this.fullName = path.Substring(lastSlash + 1, path.Length - (lastSlash + 1));
-            this.fileName = path.Substring(0, ext1);
-            this.extension = path.Substring(ext1 + 1, (ext0 - ext1) - 1);
-
-            SetContent(FileHelpers.ReadAllTextCleaned(path));
             parts = new List<string>(Content.Split(tags, StringSplitOptions.RemoveEmptyEntries));
             return this;
         }

@@ -36,8 +36,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates
     using UnityEditor;
 
     ///-------------------------------------------------------------------------
-    ///todo: fix that
-    ///todo [InitializeOnLoad]
+    [InitializeOnLoad]
     class CSharpScriptLoader
     {
         static CSharpScriptLoader()
@@ -48,28 +47,28 @@ namespace Prateek.CodeGenerator.ScriptTemplates
             ScriptFileTemplate.Create("cs")
                               .SetEndsWith("Manager")
                               .SetTemplateFile("81-C# Script-NewBehaviourScript.cs.txt")
-                              .SetFileContent("InternalContent_Script-NewGlobalManager.cs.txt")
+                              .Load("InternalContent_Script-NewGlobalManager.cs.txt")
                               .Commit();
 
             ScriptFileTemplate.Create("cs")
                               .SetEndsWith("EditorWindow")
                               .SetTemplateFile("81-C# Script-NewBehaviourScript.cs.txt")
-                              .SetFileContent("InternalContent_Script-NewEditorWindowScript.cs.txt")
+                              .Load("InternalContent_Script-NewEditorWindowScript.cs.txt")
                               .Commit();
 
             ScriptFileTemplate.Create("cs")
                               .SetTemplateFile("81-C# Script-NewBehaviourScript.cs.txt")
-                              .SetFileContent("InternalContent_Script-NewBehaviourScript.cs.txt")
+                              .Load("InternalContent_Script-NewBehaviourScript.cs.txt")
                               .Commit();
 
             KeywordTemplate.Create("cs")
-                           .SetTag("PRATEEK_CSHARP_NAMESPACE", KeywordTemplateMode.ZoneDelimiter)
-                           .SetFileContent("InternalContent_PRATEEK_CSHARP_NAMESPACE.cs")
+                           .SetTag("PRATEEK_CSHARP_NAMESPACE", KeywordTemplateMode.UsedAsScope)
+                           .Load("InternalContent_PRATEEK_CSHARP_NAMESPACE.cs")
                            .Commit();
 
             KeywordTemplate.Create("cs")
-                           .SetTag("PRATEEK_CSHARP_IFDEF", KeywordTemplateMode.ZoneDelimiter)
-                           .SetFileContent("InternalContent_PRATEEK_CSHARP_IFDEF.cs")
+                           .SetTag("PRATEEK_CSHARP_IFDEF", KeywordTemplateMode.UsedAsScope)
+                           .Load("InternalContent_PRATEEK_CSHARP_IFDEF.cs")
                            .Commit();
         }
     }

@@ -20,7 +20,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             ScriptFileTemplate.Create(Glossary.importExtension.Extension(Glossary.exportExtension), Glossary.exportExtension)
                 .SetAutorun(false)
                 .SetTemplateFile(string.Empty)
-                .SetFileContent("InternalContent_Prateek_script.txt")
+                .Load("InternalContent_Prateek_script.txt")
                 .Commit();
         }
         #endregion

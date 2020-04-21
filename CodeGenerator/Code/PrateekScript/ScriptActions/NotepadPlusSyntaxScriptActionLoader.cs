@@ -9,7 +9,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using UnityEditor;
 
-    ///todo [InitializeOnLoad]
+    [InitializeOnLoad]
     internal class NotepadPlusSyntaxScriptActionLoader : PrateekScriptBuilder
     {
         #region Constructors

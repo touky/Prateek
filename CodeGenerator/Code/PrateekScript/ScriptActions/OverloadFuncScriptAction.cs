@@ -9,7 +9,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
     using System.Collections.Generic;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
 
-    public partial class OverloadFuncScriptAction : ScriptAction
+    public class OverloadFuncScriptAction : ScriptAction
     {
         #region Properties
         ///-----------------------------------------------------------------

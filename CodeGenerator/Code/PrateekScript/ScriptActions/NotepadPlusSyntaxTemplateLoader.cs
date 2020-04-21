@@ -12,7 +12,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
     using global::Prateek.Core.Code.Helpers;
     using UnityEditor;
 
-    ///todo [InitializeOnLoad]
+    [InitializeOnLoad]
     internal class NotepadPlusSyntaxTemplateLoader
     {
         #region Constructors
@@ -27,14 +27,14 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                 .SetAutorun(false)
                 .SetEndsWith("SyntaxAutoComplete")
                 .SetTemplateFile(string.Empty)
-                .SetFileContent("InternalContent_PrateekCodegenSyntaxAutoComplete.xml.txt")
+                .Load("InternalContent_PrateekCodegenSyntaxAutoComplete.xml.txt")
                 .Commit();
 
             ScriptFileTemplate.Create(Glossary.importExtension.Extension("xml"), "xml")
                 .SetAutorun(false)
                 .SetTemplateFile(string.Empty)
                 .SetEndsWith("SyntaxColor")
-                .SetFileContent("InternalContent_PrateekCodegenSyntaxColor.xml.txt")
+                .Load("InternalContent_PrateekCodegenSyntaxColor.xml.txt")
                 .Commit();
         }
         #endregion

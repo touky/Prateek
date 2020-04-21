@@ -22,7 +22,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         public KeywordTemplate(string extension) : base(extension) { }
 
         //-----------------------------------------------------------------
-        public KeywordTemplate SetTag(string tag, KeywordTemplateMode tagStyle = KeywordTemplateMode.KeywordOnly)
+        public KeywordTemplate SetTag(string tag, KeywordTemplateMode tagStyle = KeywordTemplateMode.UsedAsSwap)
         {
             this.tag = tag;
             this.templateMode = tagStyle;
@@ -39,7 +39,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
                 return this;
             }
 
-            if (templateMode == KeywordTemplateMode.ZoneDelimiter)
+            if (templateMode == KeywordTemplateMode.UsedAsScope)
             {
                 this.Content = TagBegin + content + TagEnd;
             }

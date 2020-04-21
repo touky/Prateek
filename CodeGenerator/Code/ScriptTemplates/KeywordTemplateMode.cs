@@ -1,8 +1,8 @@
 namespace Prateek.CodeGenerator.ScriptTemplates {
     public enum KeywordTemplateMode
     {
-        KeywordOnly,
-        ZoneDelimiter,
+        UsedAsSwap,
+        UsedAsScope,
 
         MAX
     }

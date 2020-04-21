@@ -3,8 +3,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
     using Prateek.Core.Code.Helpers.Files;
     using UnityEditor;
 
-    ///todo: fix that
-    ///todo [InitializeOnLoad]
+    [InitializeOnLoad]
     class UnityFileTemplateLoader
     {
         static UnityFileTemplateLoader()

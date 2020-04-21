@@ -1,6 +1,7 @@
 namespace Prateek.CodeGenerator.ScriptTemplates {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Prateek.Core.Code.Helpers.Files;
     using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         protected string extension;
         private string contentPath = String.Empty;
         private string content = String.Empty;
+        protected long lastWriteTime = 0;
 
         //-----------------------------------------------------------------
         public string Extension { get { return extension; } }
@@ -17,10 +19,6 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         {
             get
             {
-                if (content == String.Empty && contentPath != String.Empty)
-                {
-                    DoLoadContent();
-                }
                 return content;
             }
             protected set { content = value; }
@@ -40,10 +38,41 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         }
 
         //-----------------------------------------------------------------
-        public virtual BaseTemplate SetFileContent(string filePath)
+        public LoadJob Load(string filePath)
         {
+            FileHelpers.InitIO();
+
+            return new LoadJob()
+            {
+                contentPath = filePath,
+                template = this
+            };
+        }
+
+        //-----------------------------------------------------------------
+        public virtual BaseTemplate LoadFile(string filePath)
+        {
+            filePath = FileHelpers.GetValidFile(filePath);
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return this;
+            }
+
+            var fileInfo = new FileInfo(filePath);
+            if (!fileInfo.Exists)
+            {
+                return this;
+            }
+
+            var lastTime = fileInfo.LastWriteTime.ToFileTime();
+            if (lastTime <= lastWriteTime)
+            {
+                return this;
+            }
+
+            lastWriteTime = fileInfo.LastWriteTime.ToFileTime();
             contentPath = filePath;
-            return SetContent(String.Empty);
+            return SetContent(FileHelpers.ReadAllTextCleaned(contentPath));
         }
 
         //-----------------------------------------------------------------
@@ -52,15 +81,6 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
             if (this.extension == String.Empty || this.extension == extension)
                 return true;
             return false;
-        }
-
-        //-----------------------------------------------------------------
-        protected void DoLoadContent()
-        {
-            var files = new List<string>();
-            if (!FileHelpers.GatherFilesAt(Application.dataPath, files, "(" + contentPath + ")$", true))
-                return;
-            SetContent(FileHelpers.ReadAllTextCleaned(files[0]));
         }
 
         //-----------------------------------------------------------------

@@ -39,13 +39,14 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils;
     using Assets.Prateek.CodeGenerator.Code.Utils;
     using global::Prateek.CodeGenerator;
+    using global::Prateek.CodeGenerator.ScriptTemplates;
     using global::Prateek.Core.Code.Helpers;
 
     //-------------------------------------------------------------------------
 #if UNITY_EDITOR
 #endif //UNITY_EDITOR
 
-    public abstract class ScriptAction : global::Prateek.CodeGenerator.ScriptTemplates.BaseTemplate
+    public abstract class ScriptAction : BaseTemplate
     {
         #region GenerationMode enum
         //-----------------------------------------------------------------

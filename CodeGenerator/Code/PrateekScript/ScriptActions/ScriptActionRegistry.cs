@@ -1,9 +1,11 @@
 namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 {
+    using System;
     using System.Collections.Generic;
     using global::Prateek.CodeGenerator;
+    using UnityEngine;
 
-    public class ScriptActionRegistry : TemplateRegistry
+    public class ScriptActionRegistry
     {
         #region Code rules
         private static List<ScriptAction> actions = new List<ScriptAction>();
@@ -20,3 +22,4 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         #endregion Code rules
     }
 }
+

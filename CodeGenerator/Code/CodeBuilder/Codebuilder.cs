@@ -437,7 +437,7 @@ namespace Prateek.CodeGenerator
         {
             var keywords = TemplateRegistry.Keywords;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
-            var stack    = new KeywordTemplateStack(KeywordTemplateMode.ZoneDelimiter, fileData.destination.content);
+            var stack    = new KeywordTemplateStack(KeywordTemplateMode.UsedAsScope, fileData.destination.content);
 
             for (var r = 0; r < keywords.Count; r++)
             {
@@ -447,7 +447,7 @@ namespace Prateek.CodeGenerator
                     continue;
                 }
 
-                if (keyword.TemplateMode == KeywordTemplateMode.KeywordOnly)
+                if (keyword.TemplateMode == KeywordTemplateMode.UsedAsSwap)
                 {
                     continue;
                 }
@@ -498,7 +498,7 @@ namespace Prateek.CodeGenerator
         {
             var comment  = Strings.Comment;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
-            var stack    = new KeywordTemplateStack(KeywordTemplateMode.ZoneDelimiter, fileData.destination.content);
+            var stack    = new KeywordTemplateStack(KeywordTemplateMode.UsedAsScope, fileData.destination.content);
 
             var position = 0;
             while ((position = fileData.destination.content.IndexOf(comment, position)) >= 0)

@@ -2,8 +2,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using UnityEditor;
 
-    ///todo: fix that
-    ///todo [InitializeOnLoad]
+    [InitializeOnLoad]
     class CSharpIgnorableLoader
     {
         #region Constructors

@@ -35,10 +35,9 @@ namespace Prateek.CodeGenerator.ScriptTemplates
 {
     using UnityEditor;
 
-    ///-------------------------------------------------------------------------
 #if UNITY_EDITOR
-    ///todo: fix that
-    ///todo [InitializeOnLoad]
+    ///-------------------------------------------------------------------------
+    [InitializeOnLoad]
     class PrateekDefaultLoader
     {
         static PrateekDefaultLoader()
@@ -47,8 +46,8 @@ namespace Prateek.CodeGenerator.ScriptTemplates
                 return;
 
             KeywordTemplate.Create("cs")
-            .SetTag("PRATEEK_COPYRIGHT", KeywordTemplateMode.ZoneDelimiter)
-            .SetFileContent("InternalContent_PRATEEK_COPYRIGHT.cs")
+            .SetTag("PRATEEK_COPYRIGHT", KeywordTemplateMode.UsedAsScope)
+            .Load("InternalContent_PRATEEK_COPYRIGHT.cs")
             .Commit();
 
             KeywordTemplate.Create(string.Empty)

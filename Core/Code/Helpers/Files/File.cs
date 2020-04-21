@@ -179,12 +179,36 @@ namespace Prateek.Core.Code.Helpers.Files
 #endif //UNITY_EDITOR
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
+        public static void InitIO()
+        {
+            applicationDataPath = Application.dataPath;
+            applicationStreamingAssetsPath = Application.streamingAssetsPath;
+            applicationPersistentDataPath = Application.persistentDataPath;
+            applicationTemporaryCachePath = Application.temporaryCachePath;
+
+#if UNITY_EDITOR
+            editorApplicationApplicationContentsPath = EditorApplication.applicationContentsPath;
+            editorApplicationApplicationPath = Path.GetDirectoryName(EditorApplication.applicationPath);
+#endif //UNITY_EDITOR
+
+            prateekInternalFolders = Directory.GetDirectories(applicationDataPath, "PrateekInternalContent", SearchOption.AllDirectories);
+        }
+
         public static string GetValidDirectory(string path) { return GetValidIO(path, false); }
         public static string GetValidFile(string path) { return GetValidIO(path, true); }
 
-        //---------------------------------------------------------------------
-        //todo check if still valid
+        ///---------------------------------------------------------------------
+        private static string applicationDataPath;
+        private static string applicationStreamingAssetsPath;
+        private static string applicationPersistentDataPath;
+        private static string applicationTemporaryCachePath;
+        private static string editorApplicationApplicationContentsPath;
+        private static string editorApplicationApplicationPath;
+        private static string[] prateekInternalFolders;
+
+        ///---------------------------------------------------------------------
+        ///todo check if still valid
         private static string GetValidIO(string path, bool isFile)
         {
             for (int p = 0; ; p++)
@@ -193,15 +217,25 @@ namespace Prateek.Core.Code.Helpers.Files
                 switch (p)
                 {
                     case 0: { break; }
-                    case 1: { tempPath = Application.dataPath.Directory(tempPath); break; }
-                    case 2: { tempPath = Application.streamingAssetsPath.Directory(tempPath); break; }
-                    case 3: { tempPath = Application.persistentDataPath.Directory(tempPath); break; }
-                    case 4: { tempPath = Application.temporaryCachePath.Directory(tempPath); break; }
+                    case 1: { tempPath = Path.Combine(applicationDataPath, tempPath); break; }
+                    case 2: { tempPath = Path.Combine(applicationStreamingAssetsPath, tempPath); break; }
+                    case 3: { tempPath = Path.Combine(applicationPersistentDataPath, tempPath); break; }
+                    case 4: { tempPath = Path.Combine(applicationTemporaryCachePath, tempPath); break; }
 #if UNITY_EDITOR
-                    case 5: { tempPath = EditorApplication.applicationContentsPath.Directory(tempPath); break; }
-                    case 6: { tempPath = EditorApplication.applicationPath.Directory(tempPath); break; }
+                    case 5: { tempPath = Path.Combine(editorApplicationApplicationContentsPath, tempPath); break; }
+                    case 6: { tempPath = Path.Combine(editorApplicationApplicationPath, tempPath); break; }
 #endif //UNITY_EDITOR
-                    default: { return string.Empty; }
+                    default:
+                    {
+                        var pi = p - 7;
+                        if (pi < prateekInternalFolders.Length)
+                        {
+                            tempPath = Path.Combine(prateekInternalFolders[pi], tempPath);
+                            break;
+                        }
+
+                        return string.Empty;
+                    }
                 }
 
                 if ((isFile && File.Exists(tempPath))

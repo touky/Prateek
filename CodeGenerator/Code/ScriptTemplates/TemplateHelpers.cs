@@ -75,7 +75,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates
             {
                 doAnotherPass = false;
                 var ignorers = GatherValidIgnorables(fileContent, fileExtension);
-                var stack = new KeywordTemplateStack(KeywordTemplateMode.KeywordOnly, fileContent);
+                var stack = new KeywordTemplateStack(KeywordTemplateMode.UsedAsSwap, fileContent);
                 for (int r = 0; r < keywords.Count; r++)
                 {
                     var keyword = keywords[r];
