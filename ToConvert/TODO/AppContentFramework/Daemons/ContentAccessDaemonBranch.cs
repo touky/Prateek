@@ -6,7 +6,7 @@ namespace Mayfair.Core.Code.Resources
     using Prateek.NoticeFramework.TransmitterReceiver;
 
     public abstract class ContentAccessDaemonBranch<TDaemonCore, TDaemonBranch>
-        : DaemonBranchBehaviour<TDaemonCore, TDaemonBranch>
+        : DaemonBranchTickableBehaviour<TDaemonCore, TDaemonBranch>
         where TDaemonCore : NoticeReceiverDaemonCore<TDaemonCore, TDaemonBranch>
         where TDaemonBranch : ContentAccessDaemonBranch<TDaemonCore, TDaemonBranch>
     {

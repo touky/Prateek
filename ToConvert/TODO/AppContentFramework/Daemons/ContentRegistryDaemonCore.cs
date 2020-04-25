@@ -8,6 +8,7 @@
     using Mayfair.Core.Code.StateMachines;
     using Mayfair.Core.Code.StateMachines.Interfaces;
     using Prateek.NoticeFramework.Tools;
+    using Prateek.TickableFramework.Code.Enums;
 
     public sealed class ContentRegistryDaemonCore
         : NoticeReceiverDaemonCore<ContentRegistryDaemonCore, ContentRegistryDaemonBranch>
@@ -19,8 +20,12 @@
         private HashSet<RequestAccessToContent> resourceUpdateCallbacks = new HashSet<RequestAccessToContent>();
         private HashSet<RequestAccessToContent> pendingCallbacks = new HashSet<RequestAccessToContent>();
         #endregion
+        public override TickableSetup TickableSetup
+        {
+            get { return TickableSetup.UpdateBegin; }
+        }
 
-        #region Unity Methods
+
         protected override void Awake()
         {
             base.Awake();
@@ -28,13 +33,12 @@
             this.stateMachine = new SimpleStepMachine<ServiceState>(this);
         }
 
-        protected override void Update()
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
         {
-            base.Update();
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
 
             this.stateMachine.Advance();
         }
-        #endregion
 
         #region Class Methods
         public void Store(ContentLoader loader)

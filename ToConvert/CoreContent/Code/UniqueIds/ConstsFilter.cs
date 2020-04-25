@@ -21,7 +21,7 @@ namespace Mayfair.CoreContent.Code.UniqueIds
         public static readonly Keyname Decoration = Keyname.Create<Decoration>();
         public static readonly Keyname Utility = Keyname.Create<Utility>();
 
-        public static readonly Keyname Size = Keyname.Create<Tags.SizeTag>();
+        public static readonly Keyname Size = Keyname.Create<Tags.SizeKeyword>();
         #endregion
     }
 }

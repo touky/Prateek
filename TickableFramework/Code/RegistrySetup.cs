@@ -38,7 +38,7 @@ namespace Prateek.TickableFramework.Code
     using Prateek.Core.Code.Attributes;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [CreateAssetMenu(fileName = "RegistrySetup", menuName = "Prateek/Create registry setup")]
     public sealed class RegistrySetup : ScriptableObject
     {
@@ -52,7 +52,7 @@ namespace Prateek.TickableFramework.Code
         #endregion
 
         #region Class Methods
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Initialize()
         {
             //todo //Load stored resources
@@ -80,7 +80,7 @@ namespace Prateek.TickableFramework.Code
             //todo }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void TryCreating(Type type, bool force_null = false)
         {
             //var builder = TickableRegistry.GetBuilder(type);
@@ -117,7 +117,7 @@ namespace Prateek.TickableFramework.Code
             //}
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private static void DoCreate(Type type)
         {
             //todo var instance = CreateInstance(type) as GlobalManager;
@@ -126,6 +126,6 @@ namespace Prateek.TickableFramework.Code
         }
         #endregion
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
     }
 }

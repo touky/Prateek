@@ -35,10 +35,10 @@ namespace Prateek.Core.Code.Helpers
 {
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public class Fonts : SharedStorage
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public struct Setup
         {
             public string name;
@@ -51,7 +51,7 @@ namespace Prateek.Core.Code.Helpers
         }
         private Setup m_setup;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private static Fonts m_instance = null;
         private static Fonts Instance
         {
@@ -63,14 +63,14 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Font Get(string name, int size)
         {
             Instance.m_setup = new Setup() { name = name, size = size };
             return Instance.GetInstance(Instance.m_setup.ToString()) as Font;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected override object CreateInstance(string key)
         {
             var font = Font.CreateDynamicFontFromOSFont(m_setup.name, m_setup.size);

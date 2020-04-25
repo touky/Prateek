@@ -38,10 +38,10 @@ namespace Prateek.Core.Editor.Helpers
     using Prateek.Core.Code.Attributes;
     using UnityEditor;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class Editors
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string[] GetEnumNames(Type type, SerializedProperty property)
         {
             string[] names = null;
@@ -104,7 +104,7 @@ namespace Prateek.Core.Editor.Helpers
             return names;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         /// <summary>
         /// Gets an attribute on an enum field value
         /// </summary>
@@ -125,7 +125,7 @@ namespace Prateek.Core.Editor.Helpers
             return null;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Attributes
         public static T GetFirstAttribute<T>(this Type type, bool inherit = false) where T : Attribute
         {
@@ -135,13 +135,13 @@ namespace Prateek.Core.Editor.Helpers
             return null;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool HasAttribute<T>(this Type type, bool inherit = false) where T : Attribute
         {
             return type.GetCustomAttributes(typeof(T), inherit).Length > 0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static T GetFirstAttribute<T>(this MemberInfo member_info, bool inherit = false) where T : Attribute
         {
             var attributes = member_info.GetCustomAttributes(typeof(T), inherit);
@@ -150,7 +150,7 @@ namespace Prateek.Core.Editor.Helpers
             return null;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool HasAttribute<T>(this MemberInfo memberInfo, bool inherit = false) where T : Attribute
         {
             return memberInfo.GetCustomAttributes(typeof(T), inherit).Length > 0;

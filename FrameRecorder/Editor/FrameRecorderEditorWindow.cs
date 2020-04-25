@@ -43,27 +43,27 @@ namespace Prateek.FrameRecorder.Editor
     using UnityEditor;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial class FrameRecorderEditorWindow : EditorWindow
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         #endregion Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Settings
         #endregion Settings
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private Prefs.Ints maxFrameRecorded;
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
         #endregion Properties
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unity Defaults
         [MenuItem("Prateek/Window/FrameRecorderEditorWindow")]
         static void CreateWindow()
@@ -72,33 +72,33 @@ namespace Prateek.FrameRecorder.Editor
             window.Show();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void OnDestroy() { }
 
-        //---------------------------------------------------------------------
-        //-- Keyboard focus ---------------------------------------------------
+        ///---------------------------------------------------------------------
+        ///-- Keyboard focus ---------------------------------------------------
         private void OnFocus() { }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void OnLostFocus() { }
 
-        //---------------------------------------------------------------------
-        //-- Sent when an object or group of objects in the hierarchy changes -
+        ///---------------------------------------------------------------------
+        ///-- Sent when an object or group of objects in the hierarchy changes -
         private void OnHierarchyChange() { }
 
-        //---------------------------------------------------------------------
-        //-- Sent whenever the state of the project changes -------------------
+        ///---------------------------------------------------------------------
+        ///-- Sent whenever the state of the project changes -------------------
         private void OnProjectChange() { }
 
-        //---------------------------------------------------------------------
-        //-- Called whenever the selection has changed ------------------------
+        ///---------------------------------------------------------------------
+        ///-- Called whenever the selection has changed ------------------------
         private void OnSelectionChange() { }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         // Called at 10 frames per second
         private void OnInspectorUpdate() { }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void TryInit()
         {
             if (maxFrameRecorded == null)
@@ -107,7 +107,7 @@ namespace Prateek.FrameRecorder.Editor
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void Update()
         {
             var isRecord = FrameRecorder.State == FrameRecorderManager.StateType.Recording;
@@ -120,7 +120,7 @@ namespace Prateek.FrameRecorder.Editor
             //todo     TickableRegistry.GetManager<FrameRecorderManager>().OnFakeUpdate();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void OnGUI()
         {
             TryInit();
@@ -232,7 +232,7 @@ namespace Prateek.FrameRecorder.Editor
         }
         #endregion Unity Defaults
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Behaviour
         #endregion Behaviour
     }

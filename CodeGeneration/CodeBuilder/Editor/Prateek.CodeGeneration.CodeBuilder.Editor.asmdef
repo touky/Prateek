@@ -1,0 +1,16 @@
+{
+    "name": "Prateek.CodeBuilder.Code",
+    "references": [
+        "GUID:4b4491f2f353c0b44a038afb3e9dbb85",
+        "GUID:eea812c001b8e0148b3b33dc4c4943df"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

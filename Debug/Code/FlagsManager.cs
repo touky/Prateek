@@ -41,14 +41,14 @@ namespace Prateek.Debug.Code
     using Prateek.DaemonCore.Code;
     using Prateek.Helpers;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public abstract class FlagManager
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         public struct FlagHierarchy
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public struct Data
             {
                 public bool active;
@@ -56,11 +56,11 @@ namespace Prateek.Debug.Code
                 public List<int> children;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Type maskType;
             public List<Data> datas;
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Build(ref Mask256 mask)
             {
                 mask.Reset();
@@ -72,7 +72,7 @@ namespace Prateek.Debug.Code
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void SetStatus(int value, bool enable)
             {
                 for (int h = 0; h < datas.Count; h++)
@@ -87,7 +87,7 @@ namespace Prateek.Debug.Code
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public bool IsActive(int value)
             {
                 for (int h = 0; h < datas.Count; h++)
@@ -108,7 +108,7 @@ namespace Prateek.Debug.Code
                 return false;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Add(int parent, params int[] children)
             {
                 if (datas == null)
@@ -145,7 +145,7 @@ namespace Prateek.Debug.Code
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public bool GetParent(int child, ref int parent)
             {
                 for (int h = 0; h < datas.Count; h++)
@@ -162,7 +162,7 @@ namespace Prateek.Debug.Code
                 return false;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public int CountParent(int child)
             {
                 for (int h = 0; h < datas.Count; h++)
@@ -178,7 +178,7 @@ namespace Prateek.Debug.Code
                 return 0;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public bool HasChildren(int parent)
             {
                 var i = -1;
@@ -194,14 +194,14 @@ namespace Prateek.Debug.Code
         }
         #endregion Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         protected FlagHierarchy flagDatas;
         private Mask256 mask;
         private bool deactivateAll = false;
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region IGlobalManager integration
         //public override void OnInitialize()
         //{
@@ -233,14 +233,14 @@ namespace Prateek.Debug.Code
         //}
         #endregion IGlobalManager integration
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Flag manageement
         public void Build()
         {
             flagDatas.Build(ref mask);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected bool IsWrongType<T>() where T : struct, IConvertible
         {
             if (flagDatas.maskType == null)
@@ -252,13 +252,13 @@ namespace Prateek.Debug.Code
             return false;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public bool IsActive(MaskFlag flag)
         {
             return mask == flag;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected MaskFlag ToMask<T>(T value) where T : struct, IConvertible
         {
             if (IsWrongType<T>())
@@ -266,7 +266,7 @@ namespace Prateek.Debug.Code
             return value.GetHashCode();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public bool IsActive<T>(T value) where T : struct, IConvertible
         {
             if (IsWrongType<T>())

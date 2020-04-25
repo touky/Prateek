@@ -37,13 +37,13 @@ namespace Prateek.Core.Editor.EditorPrefs
     using Prateek.Core.Code.Helpers;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static partial class Prefs
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public const float UPDATE_TIME = 5f;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public abstract class ValueStorage
         {
             #region Fields
@@ -51,7 +51,7 @@ namespace Prateek.Core.Editor.EditorPrefs
             protected string name = string.Empty;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public string Name { get { return name; } }
             protected bool ShouldUpdate
@@ -70,7 +70,7 @@ namespace Prateek.Core.Editor.EditorPrefs
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region CTor
             protected ValueStorage(string name)
             {
@@ -78,7 +78,7 @@ namespace Prateek.Core.Editor.EditorPrefs
             }
             #endregion CTor
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Get/Set
             protected void TryGetting(bool forceUpdate)
             {
@@ -90,7 +90,7 @@ namespace Prateek.Core.Editor.EditorPrefs
 #endif //UNITY_EDITOR
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected void TrySetting(bool forceUpdate)
             {
 #if UNITY_EDITOR
@@ -102,7 +102,7 @@ namespace Prateek.Core.Editor.EditorPrefs
             }
             #endregion Get/Set
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Prefs
 #if UNITY_EDITOR
             public void ClearFromPrefs()
@@ -110,23 +110,23 @@ namespace Prateek.Core.Editor.EditorPrefs
                 UnityEditor.EditorPrefs.DeleteKey(name);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected abstract void GetFromPrefs();
             protected abstract void SetToPrefs();
 #endif //UNITY_EDITOR
             #endregion Prefs
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public abstract class TypedStorage<T> : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected T value;
             protected T defaultValue;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public T Value
             {
@@ -144,7 +144,7 @@ namespace Prateek.Core.Editor.EditorPrefs
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Behaviour
             public TypedStorage(string name, T defaultValue) : base(name)
             {
@@ -154,19 +154,19 @@ namespace Prateek.Core.Editor.EditorPrefs
                 TryGetting(true);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public abstract bool ShouldSetNewValue(T newValue);
             #endregion Behaviour
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region ULong
         public static ULongs Get(string name, ulong default_value)
         {
             return new ULongs(name, default_value);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class ULongs : ValueStorage
         {
             #region Fields
@@ -194,39 +194,39 @@ namespace Prateek.Core.Editor.EditorPrefs
                 m_f0 = new Prefs.Ints(name + ".f0", (int)(default_value >> 32));
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected override void GetFromPrefs() { }
             protected override void SetToPrefs() { }
         }
         #endregion ULong
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mask
         public static Mask128s Get(string name, Mask128 default_value)
         {
             return new Mask128s(name, default_value);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256s Get(string name, Mask256 default_value)
         {
             return new Mask256s(name, default_value);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512s Get(string name, Mask512 default_value)
         {
             return new Mask512s(name, default_value);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public abstract class Masks : ValueStorage
         {
             #region Fields
             protected ULongs[] m_values;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected string GetPostfix(int max)
             {
                 var postfix = "f";
@@ -237,7 +237,7 @@ namespace Prateek.Core.Editor.EditorPrefs
                 return postfix;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected void Resize(int size)
             {
                 if (m_values == null)
@@ -262,16 +262,16 @@ namespace Prateek.Core.Editor.EditorPrefs
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected Masks(string name)
                 : base(name)
             { }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class Mask128s : Masks
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Mask128 data
             {
                 get
@@ -293,22 +293,22 @@ namespace Prateek.Core.Editor.EditorPrefs
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Mask128s(string name, Mask128 default_value)
                 : base(name)
             {
                 Resize(Mask128.MAX_SIZE);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected override void GetFromPrefs() { }
             protected override void SetToPrefs() { }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class Mask256s : Masks
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Mask256 data
             {
                 get
@@ -330,22 +330,22 @@ namespace Prateek.Core.Editor.EditorPrefs
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Mask256s(string name, Mask256 default_value)
                 : base(name)
             {
                 Resize(Mask256.MAX_SIZE);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected override void GetFromPrefs() { }
             protected override void SetToPrefs() { }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class Mask512s : Masks
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Mask512 data
             {
                 get
@@ -367,14 +367,14 @@ namespace Prateek.Core.Editor.EditorPrefs
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Mask512s(string name, Mask512 default_value)
                 : base(name)
             {
                 Resize(Mask512.MAX_SIZE);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected override void GetFromPrefs() { }
             protected override void SetToPrefs() { }
         }

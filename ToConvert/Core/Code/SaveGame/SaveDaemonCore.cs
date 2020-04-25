@@ -9,6 +9,7 @@ namespace Mayfair.Core.Code.SaveGame
     using Mayfair.Core.Code.Utils;
     using Prateek.NoticeFramework.Notices.Core;
     using Prateek.NoticeFramework.Tools;
+    using Prateek.TickableFramework.Code.Enums;
 
     public class SaveDaemonCore : NoticeReceiverDaemonCore<SaveDaemonCore, SaveDaemonBranch>
     {
@@ -18,14 +19,18 @@ namespace Mayfair.Core.Code.SaveGame
         private List<LoadDataRequest> loadingRequests = new List<LoadDataRequest>();
         #endregion
 
-        #region Unity Methods
-        protected override void Update()
+        
+        public override TickableSetup TickableSetup
         {
-            base.Update();
+            get { return TickableSetup.UpdateBegin; }
+        }
+
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        {
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
 
             this.stateMachine.Advance();
         }
-        #endregion
 
         #region Class Methods
         protected override void OnAwake()

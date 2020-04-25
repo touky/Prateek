@@ -35,7 +35,7 @@ namespace Prateek.Core.Code.Helpers
 {
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static partial class CSharp
     {
         public static Vector2 normalize(Vector2 v) { return v.normalized; }
@@ -66,11 +66,11 @@ namespace Prateek.Core.Code.Helpers
         public static Vector3 Float(this Vector3Int v) { return Code.CSharp.vec3(v.x, v.y, v.z); }
     }
 
-    //-----------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
+    ///-----------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class Vectors
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Vector2
         public static bool Test(Vector2 v0, Vector2 v1, float epsilon = Vector2.kEpsilon)
         {
@@ -79,26 +79,26 @@ namespace Prateek.Core.Code.Helpers
                                   && -epsilon < d.y && d.y < epsilon;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static float Area(this Vector2 v)
         {
             return v.x * v.y;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static int ToIndex(this Vector2 v, Vector2 dimensions)
         {
             return (int)v.x + (int)v.y * (int)dimensions.x;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Vector2 FromIndex(int index2D, Vector2 dimensions)
         {
             return new Vector2(index2D % (int)dimensions.x, index2D / (int)dimensions.x);
         }
         #endregion //Vector2
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Vector3
         public static bool Test(Vector3 v0, Vector3 v1, float epsilon = Vector3.kEpsilon)
         {
@@ -108,19 +108,19 @@ namespace Prateek.Core.Code.Helpers
                                   && -epsilon < d.z && d.z < epsilon;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static float Area(this Vector3 v)
         {
             return v.x * v.y * v.z;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static int ToIndex(this Vector3 v, Vector3 dimensions)
         {
             return (int)v.x + (int)v.y * (int)dimensions.x + (int)v.z * (int)dimensions.xy().Area();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Vector3 FromIndex(int index3D, Vector3 dimensions)
         {
             var area2D  = dimensions.xy().Area();
@@ -129,7 +129,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion //Vector3
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Vector4
         public static bool Test(Vector4 v0, Vector4 v1, float epsilon = Vector4.kEpsilon)
         {
@@ -140,19 +140,19 @@ namespace Prateek.Core.Code.Helpers
                                   && -epsilon < d.w && d.w < epsilon;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static float Area(this Vector4 v)
         {
             return v.x * v.y * v.z * v.w;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static int ToIndex(this Vector4 v, Vector4 dimensions)
         {
             return (int)v.x + (int)v.y * (int)dimensions.x + (int)v.z * (int)dimensions.xy().Area() + (int)v.w * (int)dimensions.xyz().Area();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Vector4 FromIndex(int index4D, Vector4 dimensions)
         {
             var area3D  = dimensions.xyz().Area();

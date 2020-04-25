@@ -6,7 +6,7 @@ namespace Mayfair.CoreContent.Code.Tags
     {
         public interface IPropertyColor { }
 
-        public abstract class PropertyColor     : MasterTag { }
+        public abstract class PropertyColor     : MasterKeyword { }
         public abstract class Brown             : PropertyColor, IPropertyColor { }
         public abstract class LightBlue         : PropertyColor, IPropertyColor { }
         public abstract class Purple    : PropertyColor, IPropertyColor { }

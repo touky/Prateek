@@ -42,13 +42,13 @@ namespace Prateek.Helpers {
     using UnityEngine;
     using UnityEngine;
 
-    //-----------------------------------------------------------------------------
+    ///-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public class PersonalLoggerManager
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         public class GUISetup
         {
@@ -192,7 +192,7 @@ namespace Prateek.Helpers {
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class RegisteredLogger
         {
             public Helpers.PersonalLogger logger;
@@ -202,7 +202,7 @@ namespace Prateek.Helpers {
         }
         #endregion //Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private PersonalLoggerManager.GUISetup m_gui_setup = new PersonalLoggerManager.GUISetup();
         private List<PersonalLoggerManager.RegisteredLogger> m_loggers = new List<PersonalLoggerManager.RegisteredLogger>();
@@ -212,7 +212,7 @@ namespace Prateek.Helpers {
         {
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Registering
         public void Register(Helpers.PersonalLogger box)
         {
@@ -228,7 +228,7 @@ namespace Prateek.Helpers {
             m_loggers.Add(new RegisteredLogger() { logger = box, show = false });
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Unregister(Helpers.PersonalLogger logger)
         {
             if (logger == null)
@@ -245,7 +245,7 @@ namespace Prateek.Helpers {
         }
         #endregion Registering
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region GUI
         public void DisplayDebug()
         {
@@ -273,7 +273,7 @@ namespace Prateek.Helpers {
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void DisplayGUI()
         {
             if (m_gui_setup != null)
@@ -444,10 +444,10 @@ namespace Prateek.Helpers {
         #endregion GUI
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial class PersonalLogger : MonoBehaviour
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         [Serializable]
         public class GUISettings
@@ -487,7 +487,7 @@ namespace Prateek.Helpers {
         };
         #endregion Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Display(Rect rect, PersonalLoggerManager.RegisteredLogger logger, PersonalLoggerManager.GUISetup gui_setup)
         {
             var oldGUIColor = GUI.color;

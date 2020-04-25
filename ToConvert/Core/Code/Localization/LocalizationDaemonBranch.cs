@@ -1,67 +1,48 @@
-using System;
-using Mayfair.Core.Code.Utils;
-using Mayfair.Core.Code.Utils.Debug;
-
 namespace Mayfair.Core.Code.Localization
 {
-    using Mayfair.Core.Code.Service;
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
+    using Mayfair.Core.Code.Utils;
+    using Mayfair.Core.Code.Utils.Debug;
     using Prateek.DaemonCore.Code.Branches;
     using UnityEngine;
-    using UnityEngine.UIElements;
 
     public class LocalizationDaemonBranch : DaemonBranchBehaviour<LocalizationDaemonCore, LocalizationDaemonBranch>
     {
-        #region Classes
-
-        [Serializable]
-        public class LanguageJSON
-        {
-            public SystemLanguage language;
-            public TextAsset json;
-        }
-
-        #endregion
-
-        #region Statics and Consts
-
-        protected readonly string[] NO_FORMAT_ITEMS = new string[0];
-        public const string NULL_KEY = "Localization key is null";
-        public const string EMPTY_KEY = "Localization key is empty";
-        public const string KEY_NOT_FOUND_FORMAT = "Localization key \"{0}\" in \"{1}\" not found";
-        public const string NO_FORMAT_ITEMS_ERROR_FORMAT = "Localization value for \"{0}\" in \"{1}\" has format items, but none were provided";
-        public const string MISSING_OR_EXTRA_FORMAT_ITEMS_ERROR_FORMAT = "Localization value for \"{0}\" in \"{1}\" has missing or extra format items";
-
-        #endregion
-
-        #region Fields
-
+        #region Settings
         [SerializeField]
         protected List<LanguageJSON> minimalJSON;
 
         [SerializeField]
         protected List<LanguageJSON> fullJSON;
-
-        public SystemLanguage Language { get; protected set; }
-        public override int Priority => Consts.FIRST_ITEM;
-
-        protected Dictionary<string, string> translationLookup;
-
         #endregion
 
+        #region Fields
+        protected Dictionary<string, string> translationLookup;
+        #endregion
+
+        #region Properties
+        public SystemLanguage Language { get; protected set; }
+
+        public override int Priority
+        {
+            get { return Consts.FIRST_ITEM; }
+        }
+        #endregion
+
+        #region Class Methods
         public bool SetLanguage(SystemLanguage language, bool useMinimalSet)
         {
-            List<LanguageJSON> languageJsonList = useMinimalSet ? minimalJSON : fullJSON;
+            var languageJsonList = useMinimalSet ? minimalJSON : fullJSON;
 
-            LanguageJSON languageJson = languageJsonList.Find(l => l.language == language);
+            var languageJson = languageJsonList.Find(l => l.language == language);
             if (languageJson == null)
             {
                 return false;
             }
 
-            LocalizationJSON localizationData = JsonUtility.FromJson<LocalizationJSON>(languageJson.json.text);
+            var localizationData = JsonUtility.FromJson<LocalizationJSON>(languageJson.json.text);
             if (localizationData == null)
             {
                 return false;
@@ -69,7 +50,7 @@ namespace Mayfair.Core.Code.Localization
 
             Language = language;
             translationLookup = new Dictionary<string, string>();
-            foreach (LocalizationJSONKeyValuePair kvp in localizationData.kvps)
+            foreach (var kvp in localizationData.kvps)
             {
                 translationLookup.Add(kvp.k, kvp.v);
             }
@@ -96,7 +77,7 @@ namespace Mayfair.Core.Code.Localization
                 return false;
             }
 
-            if (translationLookup.TryGetValue(key, out string foundValue))
+            if (translationLookup.TryGetValue(key, out var foundValue))
             {
                 value = foundValue;
 
@@ -115,7 +96,7 @@ namespace Mayfair.Core.Code.Localization
                 return key;
             }
 
-            if (translationLookup.TryGetValue(key, out string value))
+            if (translationLookup.TryGetValue(key, out var value))
             {
                 try
                 {
@@ -148,5 +129,26 @@ namespace Mayfair.Core.Code.Localization
 
             return false;
         }
+        #endregion
+
+        #region Nested type: LanguageJSON
+        [Serializable]
+        public class LanguageJSON
+        {
+            #region Fields
+            public SystemLanguage language;
+            public TextAsset json;
+            #endregion
+        }
+        #endregion
+
+        #region Statics and Consts
+        protected readonly string[] NO_FORMAT_ITEMS = new string[0];
+        public const string NULL_KEY = "Localization key is null";
+        public const string EMPTY_KEY = "Localization key is empty";
+        public const string KEY_NOT_FOUND_FORMAT = "Localization key \"{0}\" in \"{1}\" not found";
+        public const string NO_FORMAT_ITEMS_ERROR_FORMAT = "Localization value for \"{0}\" in \"{1}\" has format items, but none were provided";
+        public const string MISSING_OR_EXTRA_FORMAT_ITEMS_ERROR_FORMAT = "Localization value for \"{0}\" in \"{1}\" has missing or extra format items";
+        #endregion
     }
 }

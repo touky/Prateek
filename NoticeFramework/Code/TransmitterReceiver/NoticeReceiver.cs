@@ -59,7 +59,7 @@
         #region IMessageCommunicator Members
         public void CleanUp()
         {
-            if (SingletonBehaviour<NoticeDaemonCore>.ApplicationIsQuitting)
+            if (SingletonBehaviour<NoticeDaemonCore>.IsApplicationQuitting)
             {
                 return;
             }

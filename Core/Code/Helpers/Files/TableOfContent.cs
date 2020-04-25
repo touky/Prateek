@@ -38,11 +38,11 @@ namespace Prateek.Core.Code.Helpers.Files
     using Prateek.Core.Code.Extensions;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [Serializable]
     public partial class TableOfContent : ISerializationCallbackReceiver
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         [Serializable]
         protected struct SerializedTOC
@@ -53,32 +53,32 @@ namespace Prateek.Core.Code.Helpers.Files
         }
         #endregion Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         protected Directory root;
         [SerializeField, HideInInspector]
         protected List<SerializedTOC> serializedDatas = new List<SerializedTOC>();
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
         public Directory Root { get { return root; } }
         #endregion Properties
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Methods
         public TableOfContent()
         {
             root = NewDirectory("Root");
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public virtual Directory NewDirectory(string name)
         {
             return new Directory(name);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Add(File file)
         {
             var fileSplit = file.FullName.Split(Strings.Separator.Directory.Get(), StringSplitOptions.RemoveEmptyEntries);
@@ -102,13 +102,13 @@ namespace Prateek.Core.Code.Helpers.Files
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public override string ToString()
         {
             return ToString(root, "$>");
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private string ToString(Directory directory, string prefix)
         {
             var result = String.Empty;
@@ -130,7 +130,7 @@ namespace Prateek.Core.Code.Helpers.Files
         }
         #endregion Methods
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Serialization
         public void OnBeforeSerialize()
         {
@@ -138,7 +138,7 @@ namespace Prateek.Core.Code.Helpers.Files
             AddTo(root);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void AddTo(Directory directory)
         {
             var data = new SerializedTOC() { directory = directory, hash = directory.GetHashCode(), parentHash = (directory.Parent != null ? directory.Parent.GetHashCode() : 0) };
@@ -149,7 +149,7 @@ namespace Prateek.Core.Code.Helpers.Files
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void OnAfterDeserialize()
         {
             root = serializedDatas[0].directory;
@@ -166,12 +166,12 @@ namespace Prateek.Core.Code.Helpers.Files
         }
         #endregion Serialization
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region File
         [Serializable]
         public class File
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             [Serializable]
             public struct Entry     // A Directory entry
             {
@@ -181,7 +181,7 @@ namespace Prateek.Core.Code.Helpers.Files
                 public static int SizeOf() { return sizeof(int) * 2; }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             [Serializable]
             public struct CustomData
             {
@@ -210,7 +210,7 @@ namespace Prateek.Core.Code.Helpers.Files
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             [SerializeField]
             protected string fullName;
             [SerializeField]
@@ -224,7 +224,7 @@ namespace Prateek.Core.Code.Helpers.Files
             [SerializeField, HideInInspector]
             protected List<CustomData> customDatas = new List<CustomData>();
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public string FullName { get { return fullName; } }
             public string Name { get { return name; } }
             public string Extension { get { return extension; } }
@@ -234,7 +234,7 @@ namespace Prateek.Core.Code.Helpers.Files
 
             public List<CustomData> CustomDatas { get { return customDatas; } }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public File(string fullName)
             {
                 var fileSplit = fullName.Split(Strings.Separator.Directory.Get(), StringSplitOptions.RemoveEmptyEntries);
@@ -248,13 +248,13 @@ namespace Prateek.Core.Code.Helpers.Files
                 entry = new Entry();
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void AddCustomData(string name, string content)
             {
                 customDatas.Add(new CustomData() { name = name, content = content, type = CustomData.DataType.CustomContent });
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void AddCustomData(string name, Entry entry)
             {
                 customDatas.Add(new CustomData() { name = name, entry = entry, type = CustomData.DataType.InnerEntry });
@@ -262,37 +262,37 @@ namespace Prateek.Core.Code.Helpers.Files
         }
         #endregion File
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Directory
         [Serializable]
         public class Directory
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             [SerializeField]
             protected string name;
             [SerializeField, HideInInspector]
             protected List<File> files = new List<File>();
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             [NonSerialized]
             protected Directory parent;
             [NonSerialized]
             protected List<Directory> directories = new List<Directory>();
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public string Name { get { return name; } }
             public List<File> Files { get { return files; } }
 
             public Directory Parent { get { return parent; } }
             public List<Directory> Directories { get { return directories; } }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Directory(string name)
             {
                 this.name = name;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void AfterDeserialize(Directory parent)
             {
                 if (directories == null)
@@ -303,7 +303,7 @@ namespace Prateek.Core.Code.Helpers.Files
                 parent.Add(this);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Add(Directory directory)
             {
                 if (directories == null)
@@ -316,7 +316,7 @@ namespace Prateek.Core.Code.Helpers.Files
             }
             public void Add(File file) { files.AddUnique(file); }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region GetFiles
             public bool GetFiles(List<File> results, string name, bool fuzzyMatch) { return GetFiles<File>(results, name, fuzzyMatch); }
             public bool GetFiles<F>(List<F> results, string name, bool fuzzyMatch) where F : File
@@ -336,7 +336,7 @@ namespace Prateek.Core.Code.Helpers.Files
                 return results.Count > 0;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public bool GetFiles(List<File> results) { return GetFiles<File>(results); }
             public bool GetFiles<F>(List<F> results) where F : File
             {
@@ -350,7 +350,7 @@ namespace Prateek.Core.Code.Helpers.Files
             }
             #endregion GetFiles
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region GetFile
             public File GetFile(string name, bool fuzzyMatch) { return GetFile(name, fuzzyMatch); }
             public F GetFile<F>(string name, bool fuzzyMatch) where F : File
@@ -366,7 +366,7 @@ namespace Prateek.Core.Code.Helpers.Files
                 return default(F);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public File GetFile(int index) { return GetFile(index); }
             public F GetFile<F>(int index) where F : File
             {

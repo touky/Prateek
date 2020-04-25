@@ -8,6 +8,8 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
 
     public abstract class VisualResourceDaemonBranch : ContentAccessDaemonBranch<VisualResourceDaemonCore, VisualResourceDaemonBranch>, IDebugMenuNotebookOwner
     {
+        public abstract void RefreshPending();
+
         #region Class Methods
         [Conditional("NVIZZIO_DEV")]
         public virtual void SetupDebugContent(DebugMenuNotebook debugNotebook, DebugMenuPage parent)

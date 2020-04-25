@@ -36,19 +36,19 @@ namespace Prateek.Core.Editor.GUI
 
     public class GUIStatusScope : GUI.Scope
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private bool enable;
         private Color color;
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
         public bool Enable { set { GUI.enabled = value; } }
         public Color Color { set { GUI.color = value; } }
         #endregion Properties
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Scope
         public GUIStatusScope(bool enable) : this(enable, GUI.color) { }
         public GUIStatusScope(Color color) : this(true, color) { }
@@ -61,14 +61,14 @@ namespace Prateek.Core.Editor.GUI
             GUI.color = color;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Reset()
         {
             GUI.enabled = enable;
             GUI.color = color;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected override void CloseScope()
         {
             Reset();

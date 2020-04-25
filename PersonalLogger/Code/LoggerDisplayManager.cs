@@ -41,28 +41,28 @@ namespace Prateek.Debug.Code
 
     public class DebugDisplayManager_ : MonoBehaviour
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private PersonalLoggerManager loggerManager = new PersonalLoggerManager();
         private List<StringBlurp> blurps = new List<StringBlurp>();
 
         #endregion //Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unity Defaults
         void LateUpdate()
         {
             loggerManager.DisplayDebug();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         void OnGUI()
         {
             loggerManager.DisplayGUI();
         }
         #endregion //Unity Defaults
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Logger
         public void Register(Helpers.PersonalLogger logger)
         {
@@ -71,7 +71,7 @@ namespace Prateek.Debug.Code
             loggerManager.Register(logger);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Unregister(Helpers.PersonalLogger logger)
         {
             loggerManager.Unregister(logger);

@@ -24,7 +24,7 @@ namespace Prateek.FrameRecorder.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool PlaybackActive
         {
             get
@@ -37,7 +37,7 @@ namespace Prateek.FrameRecorder.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static int FrameCount
         {
             get
@@ -50,7 +50,7 @@ namespace Prateek.FrameRecorder.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static int MaxFrameRecorded
         {
             get
@@ -70,7 +70,7 @@ namespace Prateek.FrameRecorder.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Vector2Int CurrentFrameRange
         {
             get
@@ -92,7 +92,7 @@ namespace Prateek.FrameRecorder.Code
         #endregion
 
         #region Class Methods
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void ClearHistory()
         {
             //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
@@ -103,9 +103,9 @@ namespace Prateek.FrameRecorder.Code
         }
         #endregion
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
 
         #region External Access
         public static void Register(FrameRecorderManager.IRecorderBase recorder)
@@ -117,7 +117,7 @@ namespace Prateek.FrameRecorder.Code
             //instance.Register(recorder);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void Unregister(FrameRecorderManager.IRecorderBase recorder)
         {
             //var instance = TickableRegistry.GetManager<FrameRecorderManager>();

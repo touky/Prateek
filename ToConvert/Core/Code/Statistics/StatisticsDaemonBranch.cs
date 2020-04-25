@@ -46,7 +46,7 @@ namespace Mayfair.Core.Code.Statistics
         public abstract void ProcessMessage(GameActionNotice notice);
 
         public void AddRelevantTag<T>()
-            where T : MasterTag
+            where T : MasterKeyword
         {
             //todo
             //KeywordHolder tag = new KeywordHolder();

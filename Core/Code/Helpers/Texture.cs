@@ -36,10 +36,10 @@ namespace Prateek.Core.Code.Helpers
     using System.Collections.Generic;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public class Textures : SharedStorage
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public struct Setup
         {
             public Rect inner_rect;
@@ -56,7 +56,7 @@ namespace Prateek.Core.Code.Helpers
         }
         private Setup m_setup;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private static Textures m_instance = null;
         private static Textures Instance
         {
@@ -68,19 +68,19 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Texture2D Make(Color content)
         {
             return Make(new Rect(1, 1, 1, 1), content, content);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Texture2D Make(Color content, Color border)
         {
             return Make(new Rect(1, 1, 1, 1), content, border);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Texture2D Make(Rect inner_rect, Color content, Color border)
         {
             Instance.m_setup = new Setup()
@@ -92,7 +92,7 @@ namespace Prateek.Core.Code.Helpers
             return Instance.GetInstance(Instance.m_setup.ToString()) as Texture2D;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected override object CreateInstance(string key)
         {
             Vector2 size = new Vector2((int)(m_setup.inner_rect.x * 2 + m_setup.inner_rect.width),
@@ -112,13 +112,13 @@ namespace Prateek.Core.Code.Helpers
             return result;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class Drawer
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public abstract class Base
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public Color color;
                 public Vector3 elongate;
                 public float fallout;
@@ -127,7 +127,7 @@ namespace Prateek.Core.Code.Helpers
                 private Vector3 position;
                 private Quaternion rotation;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public Base(Vector3 position, Quaternion rotation)
                 {
                     this.color = Color.clear;
@@ -136,7 +136,7 @@ namespace Prateek.Core.Code.Helpers
                     this.rotation = rotation;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public virtual Color GetColor(Vector3 point)
                 {
                     var d = GetDistance(point);
@@ -149,13 +149,13 @@ namespace Prateek.Core.Code.Helpers
                     return Color.clear;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 protected Vector3 Elongate(Vector3 point)
                 {
                     return point - Code.CSharp.clamp(point, -elongate, elongate);
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public float GetDistance(Vector3 point)
                 {
                     var localPoint = point - position;
@@ -180,20 +180,20 @@ namespace Prateek.Core.Code.Helpers
                     return d;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public virtual float Distance(Vector3 point)
                 {
                     return float.MaxValue;
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class Sphere : Base
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 private float size;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public Sphere(float size) : this(size, Vector3.zero, Quaternion.identity) { }
                 public Sphere(float size, Vector3 position) : this(size, position, Quaternion.identity) { }
                 public Sphere(float size, Vector3 position, Quaternion rotation) : base(position, rotation)
@@ -201,20 +201,20 @@ namespace Prateek.Core.Code.Helpers
                     this.size = size;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
                     return CSharp.length(point) - size;
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class Box : Base
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 private Vector3 size;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public Box(Vector3 size) : this(size, Vector3.zero, Quaternion.identity) { }
                 public Box(Vector3 size, Vector3 position) : this(size, position, Quaternion.identity) { }
                 public Box(Vector3 size, Vector3 position, Quaternion rotation) : base(position, rotation)
@@ -222,7 +222,7 @@ namespace Prateek.Core.Code.Helpers
                     this.size = size;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
                     var d = Code.CSharp.abs(point) - size;
@@ -231,13 +231,13 @@ namespace Prateek.Core.Code.Helpers
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class Torus : Base
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 private Vector2 size;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public Torus(Vector2 size) : this(size, Vector3.zero, Quaternion.identity) { }
                 public Torus(Vector2 size, Vector3 position) : this(size, position, Quaternion.identity) { }
                 public Torus(Vector2 size, Vector3 position, Quaternion rotation) : base(position, rotation)
@@ -245,7 +245,7 @@ namespace Prateek.Core.Code.Helpers
                     this.size = size;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
                     var q = Code.CSharp.vec2(CSharp.length(point.xz()) - size.x, point.y);
@@ -253,13 +253,13 @@ namespace Prateek.Core.Code.Helpers
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class Hexagon : Base
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 private Vector2 size;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public Hexagon(Vector2 size) : this(size, Vector3.zero, Quaternion.identity) { }
                 public Hexagon(Vector2 size, Vector3 position) : this(size, position, Quaternion.identity) { }
                 public Hexagon(Vector2 size, Vector3 position, Quaternion rotation) : base(position, rotation)
@@ -267,7 +267,7 @@ namespace Prateek.Core.Code.Helpers
                     this.size = size;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
                     var k = Code.CSharp.vec3(-0.8660254f, 0.5f, 0.57735f);
@@ -281,15 +281,15 @@ namespace Prateek.Core.Code.Helpers
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class Triangle : Base
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 private Vector3 a;
                 private Vector3 b;
                 private Vector3 c;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public Triangle(Vector3 a, Vector3 b, Vector3 c) : this(a, b, c, Vector3.zero, Quaternion.identity) { }
                 public Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 position) : this(a, b, c, position, Quaternion.identity) { }
                 public Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 position, Quaternion rotation) : base(position, rotation)
@@ -299,7 +299,7 @@ namespace Prateek.Core.Code.Helpers
                     this.c = c;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 private float dot2(Vector3 v) { return CSharp.dot(v, v); }
                 public override float Distance(Vector3 point)
                 {
@@ -322,21 +322,21 @@ namespace Prateek.Core.Code.Helpers
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class DualBase : Base
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 private Base a;
                 private Base b;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public DualBase(Base a, Base b) : base(Vector3.zero, Quaternion.identity)
                 {
                     this.a = a;
                     this.b = b;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
                     float d1 = a.GetDistance(point);
@@ -344,35 +344,35 @@ namespace Prateek.Core.Code.Helpers
                     return Apply(d1, d2);
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 protected virtual float Apply(float d1, float d2)
                 {
                     return float.MaxValue;
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class Union : DualBase
             {
                 public Union(Base a, Base b) : base(a, b) { }
                 protected override float Apply(float d1, float d2) { return Code.CSharp.min(d1, d2); }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class Substraction : DualBase
             {
                 public Substraction(Base a, Base b) : base(a, b) { }
                 protected override float Apply(float d1, float d2) { return Code.CSharp.max(d1, -d2); }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class Intersection : DualBase
             {
                 public Intersection(Base a, Base b) : base(a, b) { }
                 protected override float Apply(float d1, float d2) { return Code.CSharp.max(d1, d2); }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class SmoothUnion : DualBase
             {
                 private float smooth;
@@ -384,7 +384,7 @@ namespace Prateek.Core.Code.Helpers
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class SmoothSubstraction : DualBase
             {
                 private float smooth;
@@ -396,7 +396,7 @@ namespace Prateek.Core.Code.Helpers
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public class SmoothIntersection : DualBase
             {
                 private float smooth;
@@ -408,14 +408,14 @@ namespace Prateek.Core.Code.Helpers
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             private Rect rect;
             private Color background;
             private List<Base> operations = new List<Base>();
             private Color[] colors;
             public Texture2D texture;
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Init(Color background, int width, int height, Rect rect, string name)
             {
                 this.background = background;
@@ -435,19 +435,19 @@ namespace Prateek.Core.Code.Helpers
                 texture.Apply();
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Clear()
             {
                 operations.Clear();
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Add(Base operation)
             {
                 operations.Add(operation);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Make()
             {
                 

@@ -10,19 +10,19 @@ namespace Prateek.NoticeFramework.Notices
     public abstract class ContentByIdDirect : DirectNotice, IContentById
     {
         #region Fields
-        private TagMatchResult idMatchRequirement = TagMatchResultType.Equal;
+        private KeywordMatchResult idMatchRequirement = KeywordMatchResultType.Equal;
         private List<Keyname> uniqueIds = new List<Keyname>();
         #endregion
 
         #region Class Methods
-        public virtual void Init(TagMatchResult idMatchRequirement, Keyname keyname)
+        public virtual void Init(KeywordMatchResult idMatchRequirement, Keyname keyname)
         {
             Init(idMatchRequirement);
 
             UniqueIds.Add(keyname);
         }
 
-        public virtual void Init(TagMatchResult idMatchRequirement)
+        public virtual void Init(KeywordMatchResult idMatchRequirement)
         {
             this.idMatchRequirement = idMatchRequirement;
         }
@@ -35,7 +35,7 @@ namespace Prateek.NoticeFramework.Notices
         #endregion
 
         #region IContentById Members
-        public TagMatchResult IdMatchRequirement
+        public KeywordMatchResult IdMatchRequirement
         {
             get { return idMatchRequirement; }
         }

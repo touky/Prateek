@@ -35,10 +35,10 @@ namespace Prateek.Helpers
 {
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class Cameras
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static float ComputeHorizontalFOV(float verticalFOV)
         {
             float vFOVInRads = verticalFOV * Mathf.Deg2Rad;

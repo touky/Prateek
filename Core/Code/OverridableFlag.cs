@@ -37,11 +37,11 @@ namespace Prateek.Debug.Code
     using System;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [Serializable]
     public class Flag
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public enum OverrideMode
         {
             None,
@@ -49,7 +49,7 @@ namespace Prateek.Debug.Code
             Off
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         [Serializable]
         public struct Overridable
         {
@@ -73,7 +73,7 @@ namespace Prateek.Debug.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected bool CanUse(bool flagValue, OverrideMode overrideValue)
         {
             return (new Overridable(flagValue, overrideValue)).CanUse;

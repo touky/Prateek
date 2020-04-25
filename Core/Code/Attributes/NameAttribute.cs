@@ -35,35 +35,35 @@ namespace Prateek.Core.Code.Attributes
 {
     using System;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public abstract class BaseNameAttribute : Attribute
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected string value;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public string Value { get { return value; } }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected BaseNameAttribute(string new_value)
         {
             value = new_value;
         }
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     //Custom name that can be set to anything
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class NameAttribute : BaseNameAttribute
     {
         public NameAttribute(string name) : base(name) { }
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     //Add a category attribute for any of the targets
     //Can be used to store variables in submenus
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field, AllowMultiple = false)]
     public class CategoryAttribute : BaseNameAttribute
     {

@@ -35,10 +35,10 @@ namespace Prateek.Core.Code.Helpers
 {
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public class GUIStyles : SharedStorage
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public struct Setup
         {
             public GUIStyle source;
@@ -58,7 +58,7 @@ namespace Prateek.Core.Code.Helpers
         }
         private Setup m_setup;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private static GUIStyles m_instance = null;
         private static GUIStyles Instance
         {
@@ -70,7 +70,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static GUIStyle Get(GUIStyle source, Vector2 content_offset,
                                    RectOffset border, int font_size,
                                    Color normal_text_Color)
@@ -78,7 +78,7 @@ namespace Prateek.Core.Code.Helpers
             return Get(string.Empty, source, content_offset, border, font_size, normal_text_Color);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static GUIStyle Get(string name,
                                    GUIStyle source, Vector2 content_offset,
                                    RectOffset border, int font_size,
@@ -95,7 +95,7 @@ namespace Prateek.Core.Code.Helpers
             return Instance.GetInstance(name + Instance.m_setup.ToString()) as GUIStyle;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected override object CreateInstance(string key)
         {
             var style = new GUIStyle(Instance.m_setup.source);

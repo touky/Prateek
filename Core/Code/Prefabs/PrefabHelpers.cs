@@ -35,48 +35,48 @@ namespace Prateek.Prefabs
 {
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class Prefabs
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Behaviour
         public static T Instantiate<T>(T original) where T : MonoBehaviour
         {
             return Instantiate<T>(original, null, Vector3.zero, Quaternion.identity);
         }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static T Instantiate<T>(T original, Transform parent) where T : MonoBehaviour
         {
             return Instantiate<T>(original, parent, Vector3.zero, Quaternion.identity);
         }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static T Instantiate<T>(T original, Vector3 position, Quaternion rotation) where T : MonoBehaviour
         {
             return Instantiate<T>(original, null, position, rotation);
         }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static T Instantiate<T>(T original, Transform parent, Vector3 position, Quaternion rotation) where T : MonoBehaviour
         {
             var instance = Instantiate(original.gameObject, parent, position, rotation);
             return instance.GetComponent<T>();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static GameObject Instantiate(GameObject original)
         {
             return Instantiate(original, null, Vector3.zero, Quaternion.identity);
         }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static GameObject Instantiate(GameObject original, Transform parent)
         {
             return Instantiate(original, parent, parent.position, parent.rotation);
         }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static GameObject Instantiate(GameObject original, Vector3 position, Quaternion rotation)
         {
             return Instantiate(original, null, position, rotation);
         }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static GameObject Instantiate(GameObject original, Transform parent, Vector3 position, Quaternion rotation)
         {
             var instance = UnityEngine.Object.Instantiate(original, position, rotation) as GameObject;
@@ -106,7 +106,7 @@ namespace Prateek.Prefabs
             return instance;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void AddPrefabInstance(GameObject gameObject, GameObject prefab)
         {
             var prefabInstance = gameObject.GetComponent<PrefabReference>();
@@ -117,7 +117,7 @@ namespace Prateek.Prefabs
             prefabInstance.Prefab = prefab;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static int GetPrefabInstanceID(GameObject gameObject)
         {
             var prefabInstance = gameObject.GetComponent<PrefabReference>();

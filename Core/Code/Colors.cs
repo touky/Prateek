@@ -35,11 +35,11 @@ namespace Prateek.Core.Code
 {
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static  partial class ColorExt
     {
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Color
         public static Color rrrr(this Color v) { return new Color(v.r, v.r, v.r, v.r); }
         public static Color rrrg(this Color v) { return new Color(v.r, v.r, v.r, v.g); }

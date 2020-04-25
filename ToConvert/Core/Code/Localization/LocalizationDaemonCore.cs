@@ -12,12 +12,6 @@ namespace Mayfair.Core.Code.Localization
     {
         #region Methods
 
-        #region Unity Methods
-
-        protected override void OnAwake() { }
-
-        #endregion Unity Methods
-
         public static bool SetLanguage(SystemLanguage language, bool useMinimalSet)
         {
             return Instance.GetFirstAliveBranch().SetLanguage(language, useMinimalSet);
@@ -31,6 +25,10 @@ namespace Mayfair.Core.Code.Localization
         public static string GetDynamicValue(string key, params string[] formatItems)
         {
             return Instance.GetFirstAliveBranch().GetDynamicValue(key, formatItems);
+        }
+
+        protected override void OnAwake()
+        {
         }
 
         #endregion

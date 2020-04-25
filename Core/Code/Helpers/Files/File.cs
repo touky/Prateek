@@ -40,7 +40,7 @@ namespace Prateek.Core.Code.Helpers.Files
     using UnityEditor;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class PathPlus
     {
         public static string GetExtension(string file)
@@ -56,7 +56,7 @@ namespace Prateek.Core.Code.Helpers.Files
 
     public static class FileHelpers
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public interface IExtensionMatcher { string Extension { get; } }
         public static string BuildExtensionMatch(string extension) { return string.Format("\\.({0})$", extension); }
 
@@ -84,7 +84,7 @@ namespace Prateek.Core.Code.Helpers.Files
             return string.Format(match, extensions);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool GatherFilesAt(string path, List<string> files, string matchPattern)
         { return GatherFilesAt(path, files, matchPattern, false, string.Empty); }
         public static bool GatherFilesAt(string path, List<string> files, string matchPattern, bool recursive)
@@ -134,7 +134,7 @@ namespace Prateek.Core.Code.Helpers.Files
             return files.Count > 0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string ReadAllTextCleaned(string path)
         {
             if (!File.Exists(path))
@@ -142,13 +142,13 @@ namespace Prateek.Core.Code.Helpers.Files
             return File.ReadAllText(path).CleanText();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void WriteTextAdjusted(string path, string content)
         {
             File.WriteAllText(path, content.ApplyCRLF());
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string GetAppFolder()
         {
 #if UNITY_EDITOR
@@ -166,7 +166,7 @@ namespace Prateek.Core.Code.Helpers.Files
 #endif //UNITY_EDITOR
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string GetScriptTemplateFolder()
         {
 #if UNITY_EDITOR

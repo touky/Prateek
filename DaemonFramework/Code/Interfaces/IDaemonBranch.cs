@@ -2,9 +2,10 @@ namespace Prateek.DaemonCore.Code.Interfaces
 {
     using System;
     using Mayfair.Core.Code.Utils.Types.Priority;
-    using Prateek.DaemonCore.Code.Enums;
+    using Prateek.TickableFramework.Code.Interfaces;
 
-    public interface IDaemonBranch : IPriority
+    public interface IDaemonBranch
+        : IPriority
     {
         #region Properties
         void Startup();
@@ -12,18 +13,6 @@ namespace Prateek.DaemonCore.Code.Interfaces
 
         String Name { get; }
         bool IsAlive { get; }
-        #endregion
-    }
-
-    internal static class DeamonUtils
-    {
-        #region Class Methods
-        internal static void ChangeStatus<TDaemonCore, TDaemonBranch>(StatusAction action, TDaemonBranch branch)
-            where TDaemonCore : DaemonCore<TDaemonCore, TDaemonBranch>
-            where TDaemonBranch : class, IDaemonBranch
-        {
-            DaemonCore<TDaemonCore, TDaemonBranch>.ChangeStatus(action, branch);
-        }
         #endregion
     }
 }

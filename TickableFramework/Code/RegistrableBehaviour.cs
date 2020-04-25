@@ -37,12 +37,12 @@ namespace Prateek.TickableFramework.Code
     using Prateek.Core.Code.Behaviours;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [Serializable]
     public abstract class RegistrableBehaviour : NamedBehaviour
     {
         #region Unity Methods
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected virtual void OnEnable()
         {
             if (Application.isPlaying)
@@ -51,7 +51,7 @@ namespace Prateek.TickableFramework.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected virtual void OnDisable()
         {
             if (Application.isPlaying)

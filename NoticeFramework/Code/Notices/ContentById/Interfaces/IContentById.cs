@@ -7,7 +7,7 @@ namespace Prateek.NoticeFramework.Notices
     public interface IContentById
     {
         #region Properties
-        TagMatchResult IdMatchRequirement { get; }
+        KeywordMatchResult IdMatchRequirement { get; }
         List<Keyname> UniqueIds { get; }
         #endregion
     }

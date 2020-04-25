@@ -4,6 +4,7 @@ namespace Mayfair.Core.Code.GameScene
     using System.Collections.Generic;
     using System.Diagnostics;
     using Mayfair.Core.Code.GameData.Messages;
+    using Mayfair.Core.Code.GameScene.Messages;
     using Mayfair.Core.Code.LoadingProcess;
     using Mayfair.Core.Code.LoadingProcess.Enums;
     using Mayfair.Core.Code.LoadingProcess.Messages;
@@ -11,12 +12,11 @@ namespace Mayfair.Core.Code.GameScene
     using Mayfair.Core.Code.Resources.Enums;
     using Mayfair.Core.Code.Resources.Loader;
     using Mayfair.Core.Code.Utils;
+    using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Helpers.Regexp;
-    using Messages;
     using Prateek.NoticeFramework.Notices.Core;
-    using UnityEngine.ResourceManagement.ResourceProviders;
+    using Prateek.TickableFramework.Code.Enums;
     using UnityEngine.SceneManagement;
-    using Utils.Debug;
 
     public sealed class GameSceneDaemonCore : ContentAccessDaemonCore<GameSceneDaemonCore, GameSceneDaemonBranch>
     {
@@ -62,45 +62,33 @@ namespace Mayfair.Core.Code.GameScene
         {
             get { return ServiceProviderUsageRuleType.UseFirstValid; }
         }
-        #endregion
 
-        #region Unity Methods
-        protected override void Update()
+        public override TickableSetup TickableSetup
         {
-            base.Update();
-
-            UpdateLoadingTask();
+            get { return TickableSetup.UpdateBegin; }
         }
         #endregion
 
+        #region Register/Unregister
         #region Service
         protected override void OnAwake() { }
         #endregion
-
-        #region Messaging
-        public override void NoticeReceived() { }
-
-        protected override void SetupNoticeReceiverCallback()
-        {
-            base.SetupNoticeReceiverCallback();
-
-            this.NoticeReceiver.AddCallback<GameSessionOpen>(OnGameSessionOpen);
-            this.NoticeReceiver.AddCallback<GameSessionClose>(OnGameSessionClose);
-            this.NoticeReceiver.AddCallback<GameLoadingGameplayNotice>(OnGameLoadingGameplay);
-            this.NoticeReceiver.AddCallback<GameLoadingRestartNotice>(OnGameLoadingRestart);
-
-            this.NoticeReceiver.AddCallback<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
-            this.NoticeReceiver.AddCallback<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
-        }
         #endregion
 
         #region Class Methods
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        {
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
+
+            UpdateLoadingTask();
+        }
+
         public void Add(SceneReference scene)
         {
             matches.Clear();
             if (RegexHelper.TryFetchingMatches(scene.Loader.Location, RegexHelper.AddressTag, matches))
             {
-                string context = matches[CONTEXT_TAG];
+                var             context = matches[CONTEXT_TAG];
                 AvailableScenes container;
                 if (!availableScenes.TryGetValue(context, out container))
                 {
@@ -112,12 +100,12 @@ namespace Mayfair.Core.Code.GameScene
 
                 if (matches.Count > 1)
                 {
-                    LightingSceneType[] values = (LightingSceneType[]) Enum.GetValues(typeof(LightingSceneType));
-                    string[] names = Enum.GetNames(typeof(LightingSceneType));
-                    for (int n = 0; n < names.Length; n++)
+                    var values = (LightingSceneType[]) Enum.GetValues(typeof(LightingSceneType));
+                    var names  = Enum.GetNames(typeof(LightingSceneType));
+                    for (var n = 0; n < names.Length; n++)
                     {
-                        LightingSceneType value = values[n];
-                        string name = names[n];
+                        var value = values[n];
+                        var name  = names[n];
                         if (matches[USAGE_TAG] == name && value > container.lightingType)
                         {
                             container.lightingType = value;
@@ -131,13 +119,13 @@ namespace Mayfair.Core.Code.GameScene
                     container.lightingScene = scene;
                 }
 
-                this.PlaceLightingSceneInLast(ref container);
+                PlaceLightingSceneInLast(ref container);
 
-                this.availableScenes[context] = container;
+                availableScenes[context] = container;
 
-                SessionDebugAvailable notice = Notice.Create<SessionDebugAvailable>();
+                var notice = Notice.Create<SessionDebugAvailable>();
                 notice.Init(context);
-                this.NoticeReceiver.Send(notice);
+                NoticeReceiver.Send(notice);
             }
         }
 
@@ -165,14 +153,14 @@ namespace Mayfair.Core.Code.GameScene
                 return;
             }
 
-            float progress = 0f;
-            bool isDone = true;
+            var progress = 0f;
+            var isDone   = true;
 
             //A bit clunky, if unloadCompletedActions is < 0, it means we're loading
             if (serviceState == ServiceState.Loading)
             {
-                float step = 1f / activeContainer.scenes.Count;
-                foreach (SceneReference scene in activeContainer.scenes)
+                var step = 1f / activeContainer.scenes.Count;
+                foreach (var scene in activeContainer.scenes)
                 {
                     progress += step * scene.Loader.PercentComplete;
                     isDone = isDone && scene.Loader.IsDone;
@@ -180,15 +168,15 @@ namespace Mayfair.Core.Code.GameScene
             }
             else if (serviceState == ServiceState.Unloading)
             {
-                float step = 1f / activeContainer.scenes.Count;
+                var step = 1f / activeContainer.scenes.Count;
                 progress = completedActions / (float) activeContainer.scenes.Count;
-                foreach (SceneReference scene in activeContainer.scenes)
+                foreach (var scene in activeContainer.scenes)
                 {
                     progress += step * scene.Loader.PercentComplete;
                     isDone = isDone && scene.Loader.IsDone;
                 }
             }
-            
+
             if (!isDone)
             {
                 SendStatusMessage(LoadingTrackingStatus.LoadingPrerequisite, progress);
@@ -210,7 +198,7 @@ namespace Mayfair.Core.Code.GameScene
 
         private void OnGameSessionClose(GameSessionClose notice)
         {
-            foreach (AvailableScenes container in activeContainers)
+            foreach (var container in activeContainers)
             {
                 containersRequestedQueue.Enqueue(new SceneRequest
                 {
@@ -219,7 +207,7 @@ namespace Mayfair.Core.Code.GameScene
                     onFinished = UnloadAssetCompleted
                 });
             }
-            
+
             if (serviceState != ServiceState.Idle)
             {
                 return;
@@ -232,12 +220,12 @@ namespace Mayfair.Core.Code.GameScene
         {
             completedActions = Consts.RESET;
 
-            if (!availableScenes.TryGetValue(activeSession.SessionContext, out AvailableScenes containerRequested))
+            if (!availableScenes.TryGetValue(activeSession.SessionContext, out var containerRequested))
             {
                 Debug.Assert(false, $"Requested scene {activeSession.SessionContext} does not exist or does not have an address.");
                 return;
             }
-            
+
             containersRequestedQueue.Enqueue(new SceneRequest
             {
                 container = containerRequested,
@@ -249,7 +237,7 @@ namespace Mayfair.Core.Code.GameScene
             {
                 return;
             }
-            
+
             StartLoadSceneProcess();
         }
 
@@ -290,13 +278,13 @@ namespace Mayfair.Core.Code.GameScene
             // place lighting scene load in last position
             if (container.lightingScene != null && container.scenes.Count > 1)
             {
-                for (int i = 0; i < container.scenes.Count - 1; i++)
+                for (var i = 0; i < container.scenes.Count - 1; i++)
                 {
-                    SceneReference sceneRef = container.scenes[i];
+                    var sceneRef = container.scenes[i];
                     if (sceneRef == container.lightingScene)
                     {
-                        container.scenes[i] = container.scenes[container.scenes.Count-1];
-                        container.scenes[container.scenes.Count-1] = sceneRef;
+                        container.scenes[i] = container.scenes[container.scenes.Count - 1];
+                        container.scenes[container.scenes.Count - 1] = sceneRef;
                         break;
                     }
                 }
@@ -308,7 +296,7 @@ namespace Mayfair.Core.Code.GameScene
             if (containersRequestedQueue.Count > 0)
             {
                 DebugTools.Log("Handle postponed scene requests", DebugTools.LogLevel.LowPriority);
-                SceneRequest request = containersRequestedQueue.Peek();
+                var request = containersRequestedQueue.Peek();
                 if (request.state == ServiceState.Loading)
                 {
                     StartLoadSceneProcess();
@@ -324,14 +312,14 @@ namespace Mayfair.Core.Code.GameScene
         {
             currentRequest = containersRequestedQueue.Dequeue();
             activeContainer = currentRequest.container;
-            
+
             SendStatusMessage(LoadingTrackingStatus.StartedLoading);
 
             completedActions = Consts.RESET;
-            
+
             serviceState = ServiceState.Loading;
 
-            foreach (SceneReference scene in activeContainer.scenes)
+            foreach (var scene in activeContainer.scenes)
             {
                 scene.LoadCompleted = currentRequest.OnFinished;
                 scene.LoadAsync();
@@ -344,7 +332,7 @@ namespace Mayfair.Core.Code.GameScene
         {
             currentRequest = containersRequestedQueue.Dequeue();
             activeContainer = currentRequest.container;
-            
+
             SendStatusMessage(LoadingTrackingStatus.StartedLoading);
 
             completedActions = Consts.RESET;
@@ -353,7 +341,7 @@ namespace Mayfair.Core.Code.GameScene
 
             if (activeContainer.scenes != null)
             {
-                foreach (SceneReference scene in activeContainer.scenes)
+                foreach (var scene in activeContainer.scenes)
                 {
                     scene.LoadCompleted = currentRequest.OnFinished;
                     scene.UnloadAsync();
@@ -366,25 +354,25 @@ namespace Mayfair.Core.Code.GameScene
         private void OnLoadSceneRequestReceived(LoadSceneRequest<LoadSceneResponse> request)
         {
             DebugTools.Log($"Game scene request to load '{request.Scene}' received", DebugTools.LogLevel.LowPriority);
-            if (!availableScenes.TryGetValue(request.Scene, out AvailableScenes containerRequested))
+            if (!availableScenes.TryGetValue(request.Scene, out var containerRequested))
             {
                 NoticeReceiver.Send(request.GetResponse());
 
                 Debug.Assert(false, $"Requested scene {request.Scene} does not exist or does not have an address.");
                 return;
             }
-            
+
             containersRequestedQueue.Enqueue(new SceneRequest
             {
                 container = containerRequested,
                 state = ServiceState.Loading,
                 onFinished = sceneReference =>
                 {
-                    LoadSceneRequest<LoadSceneResponse> sceneRequest = request;
+                    var sceneRequest = request;
                     LoadSceneCompleted(sceneReference, sceneRequest);
                 }
             });
-            
+
             if (serviceState != ServiceState.Idle)
             {
                 return;
@@ -396,7 +384,7 @@ namespace Mayfair.Core.Code.GameScene
         private void LoadSceneCompleted(SceneReference sceneReference, LoadSceneRequest<LoadSceneResponse> request)
         {
             RefreshLoadingStatus();
-            LoadSceneResponse response = request.GetResponse();
+            var response = request.GetResponse();
             response.SceneReference = sceneReference;
             NoticeReceiver.Send(response);
         }
@@ -404,19 +392,19 @@ namespace Mayfair.Core.Code.GameScene
         private void OnUnloadSceneRequestReceived(UnloadSceneRequest<UnloadSceneResponse> request)
         {
             DebugTools.Log($"Game scene request to unload '{request.Scene}' received", DebugTools.LogLevel.LowPriority);
-            if (!availableScenes.TryGetValue(request.Scene, out AvailableScenes containerRequested))
+            if (!availableScenes.TryGetValue(request.Scene, out var containerRequested))
             {
                 Debug.Assert(false, $"Requested scene {request.Scene} does not exist or does not have an address.");
                 return;
             }
-            
+
             containersRequestedQueue.Enqueue(new SceneRequest
             {
                 container = containerRequested,
                 state = ServiceState.Unloading,
                 onFinished = sceneReference =>
                 {
-                    UnloadSceneRequest<UnloadSceneResponse> sceneRequest = request;
+                    var sceneRequest = request;
                     UnloadSceneCompleted(sceneReference, sceneRequest);
                 }
             });
@@ -425,17 +413,16 @@ namespace Mayfair.Core.Code.GameScene
             {
                 return;
             }
-            
+
             StartUnloadSceneProcess();
         }
 
         private void UnloadSceneCompleted(SceneReference sceneReference, UnloadSceneRequest<UnloadSceneResponse> request)
         {
             RefreshLoadingStatus();
-            UnloadSceneResponse response = request.GetResponse();
+            var response = request.GetResponse();
             NoticeReceiver.Send(response);
         }
-
         #endregion
 
         #region Nested type: AvailableScenes
@@ -447,7 +434,7 @@ namespace Mayfair.Core.Code.GameScene
         }
         #endregion
 
-        #region Nested type: AvailableScenes
+        #region Nested type: SceneRequest
         private struct SceneRequest
         {
             public AvailableScenes container;
@@ -458,6 +445,23 @@ namespace Mayfair.Core.Code.GameScene
             {
                 onFinished(reference as SceneReference);
             }
+        }
+        #endregion
+
+        #region Messaging
+        public override void NoticeReceived() { }
+
+        protected override void SetupNoticeReceiverCallback()
+        {
+            base.SetupNoticeReceiverCallback();
+
+            NoticeReceiver.AddCallback<GameSessionOpen>(OnGameSessionOpen);
+            NoticeReceiver.AddCallback<GameSessionClose>(OnGameSessionClose);
+            NoticeReceiver.AddCallback<GameLoadingGameplayNotice>(OnGameLoadingGameplay);
+            NoticeReceiver.AddCallback<GameLoadingRestartNotice>(OnGameLoadingRestart);
+
+            NoticeReceiver.AddCallback<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
+            NoticeReceiver.AddCallback<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
         }
         #endregion
     }

@@ -41,10 +41,10 @@ namespace Prateek.Debug.Code
     using Prateek.Helpers;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial class DebugDraw
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         public enum Space
         {
@@ -55,20 +55,20 @@ namespace Prateek.Debug.Code
             CameraViewPixel,
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class DebugScope : GUI.Scope
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             private DebugStyle setup;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public DebugStyle Setup { get { return setup; } }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Scope
             public DebugScope(DebugStyle setup) : base()
             {
@@ -76,7 +76,7 @@ namespace Prateek.Debug.Code
                 Add(this);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected override void CloseScope()
             {
                 Remove(this);
@@ -84,17 +84,17 @@ namespace Prateek.Debug.Code
             #endregion Scope
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public partial struct DebugStyle
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public enum InitMode
             {
                 Reset,
                 UseLast,
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             private MaskFlag flag;
             private Space space;
             private Matrix4x4 matrix;
@@ -103,7 +103,7 @@ namespace Prateek.Debug.Code
             private bool depthTest;
             private int precision;
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public MaskFlag Flag { get { return flag; } set { flag = value; } }
             public Space Space { get { return space; } set { space = value; } }
             public Matrix4x4 Matrix { get { return matrix; } set { matrix = value; } }
@@ -112,7 +112,7 @@ namespace Prateek.Debug.Code
             public bool DepthTest { get { return depthTest; } set { depthTest = value; } }
             public int Precision { get { return precision; } set { precision = value; } }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public DebugStyle(InitMode initMode)
             {
                 switch (initMode)
@@ -137,22 +137,22 @@ namespace Prateek.Debug.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public partial struct DebugPlace
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public enum Pivot
             {
                 Center,
                 Bottom,
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             private Vector3 position;
             private Quaternion rotation;
             private Vector3 extents;
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Vector3 Start { get { return position - rotation * extents.nnz(); } }
             public Vector3 End { get { return position + rotation * extents.nnz(); } }
             public Vector3 Position { get { return position; } }
@@ -163,7 +163,7 @@ namespace Prateek.Debug.Code
             public Vector3 Extents { get { return extents; } }
             public Vector3 Size { get { return extents * 2; } }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public DebugPlace(bool none)
             {
                 this.position = Vector3.zero;
@@ -171,7 +171,7 @@ namespace Prateek.Debug.Code
                 this.extents = Vector3.one;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public static DebugPlace AToB(Vector3 a, Vector3 b) { return AToB(Pivot.Center, a, b, Core.Code.CSharp.vec3(0), Vector3.up); }
             public static DebugPlace AToB(Vector3 a, Vector3 b, Vector3 up) { return AToB(Pivot.Center, a, b, Core.Code.CSharp.vec3(0), Vector3.up); }
             public static DebugPlace AToB(Vector3 a, Vector3 b, float size) { return AToB(Pivot.Center, a, b, Core.Code.CSharp.vec3(size), Vector3.up); }
@@ -179,7 +179,7 @@ namespace Prateek.Debug.Code
             public static DebugPlace AToB(Vector3 a, Vector3 b, Vector2 size, Vector3 up) { return AToB(Pivot.Center, a, b, size.yyx() , up); }
             public static DebugPlace AToB(Vector3 a, Vector3 b, Vector3 size, Vector3 up) { return AToB(Pivot.Center, a, b, size, up); }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b) { return AToB(pivot, a, b, Core.Code.CSharp.vec3(0), Vector3.up); }
             public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector3 up) { return AToB(pivot, a, b, Core.Code.CSharp.vec3(0), Vector3.up); }
             public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, float size) { return AToB(pivot, a, b, Core.Code.CSharp.vec3(size), Vector3.up); }
@@ -197,14 +197,14 @@ namespace Prateek.Debug.Code
                 };
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public static DebugPlace Ray(Vector3 position, float distance) { return Ray(Pivot.Center, position, Vector3.forward, Core.Code.CSharp.vec3(distance), Vector3.up); }
             public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance) { return Ray(Pivot.Center, position, dir, Core.Code.CSharp.vec3(distance), Vector3.up); }
             public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(Pivot.Center, position, dir, Core.Code.CSharp.vec3(distance), up); }
             public static DebugPlace Ray(Vector3 position, Vector3 dir, Vector2 size, Vector3 up) { return Ray(Pivot.Center, position, dir, size.yyx(), up); }
             public static DebugPlace Ray(Vector3 position, Vector3 dir, Vector3 size, Vector3 up) { return Ray(Pivot.Center, position, dir, size, up); }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public static DebugPlace Ray(Pivot pivot, Vector3 position, float distance) { return Ray(pivot, position, Vector3.forward, Core.Code.CSharp.vec3(distance), Vector3.up); }
             public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance) { return Ray(pivot, position, dir, Core.Code.CSharp.vec3(distance), Vector3.up); }
             public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(pivot, position, dir, Core.Code.CSharp.vec3(distance), up); }
@@ -220,7 +220,7 @@ namespace Prateek.Debug.Code
                 };
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public static DebugPlace At(float size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, Core.Code.CSharp.vec3(size)); }
             public static DebugPlace At(Vector2 size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, size.yyx()); }
             public static DebugPlace At(Vector3 size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, size); }
@@ -231,7 +231,7 @@ namespace Prateek.Debug.Code
             public static DebugPlace At(Vector3 position, Quaternion rotation, Vector2 size) { return At(Pivot.Center, position, rotation, size.yyx()); }
             public static DebugPlace At(Vector3 position, Quaternion rotation, Vector3 size) { return At(Pivot.Center, position, rotation, size); }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public static DebugPlace At(Pivot pivot, float size) { return At(pivot, Vector3.zero, Quaternion.identity, Core.Code.CSharp.vec3(size)); }
             public static DebugPlace At(Pivot pivot, Vector2 size) { return At(pivot, Vector3.zero, Quaternion.identity, size.yyx()); }
             public static DebugPlace At(Pivot pivot, Vector3 size) { return At(pivot, Vector3.zero, Quaternion.identity, size); }
@@ -251,11 +251,11 @@ namespace Prateek.Debug.Code
                 };
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public static DebugPlace Bounds(Bounds bounds) { return Bounds(Pivot.Center, bounds, Quaternion.identity); }
             public static DebugPlace Bounds(Bounds bounds, Quaternion rotation) { return Bounds(Pivot.Center, bounds, rotation); }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public static DebugPlace Bounds(Pivot pivot, Bounds bounds) { return Bounds(pivot, bounds, Quaternion.identity); }
             public static DebugPlace Bounds(Pivot pivot, Bounds bounds, Quaternion rotation)
             {
@@ -269,7 +269,7 @@ namespace Prateek.Debug.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public enum PrimitiveType
         {
             Line,
@@ -291,10 +291,10 @@ namespace Prateek.Debug.Code
             MAX
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public struct PrimitiveSetup
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public PrimitiveType type;
             public DebugStyle setup;
             public Space endSpace;
@@ -303,7 +303,7 @@ namespace Prateek.Debug.Code
             public Vector4 extents;
             public Vector2 range;
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public PrimitiveSetup(PrimitiveType type, DebugStyle setup)
             {
                 this.type = type;
@@ -316,7 +316,7 @@ namespace Prateek.Debug.Code
             }
     }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public struct LineSetup
         {
             public Vector3 start;
@@ -325,12 +325,12 @@ namespace Prateek.Debug.Code
         }
         #endregion Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private static List<DebugScope> scopes = new List<DebugScope>();
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Scopes
         public static DebugStyle ActiveSetup
         {
@@ -342,26 +342,26 @@ namespace Prateek.Debug.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void Add(DebugScope scope)
         {
             scopes.Add(scope);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void Remove(DebugScope scope)
         {
             scopes.Remove(scope);
         }
         #endregion Scopes
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected static void Add(PrimitiveSetup primitive)
         {
             DebugDisplayManager.Add(primitive);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Primitives render
         public static void Render(DebugLineDisplayer d, PrimitiveSetup prim)
         {
@@ -647,7 +647,7 @@ namespace Prateek.Debug.Code
         }
         #endregion Primitives render
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         //public static void EndFrame()
         //{
         //    if (!FrameRecorder.PlaybackActive || FrameRecorder.FrameCount == 0)
@@ -672,7 +672,7 @@ namespace Prateek.Debug.Code
         //    }
         //}
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Line operations
         //        private static void DelayedLine(ref LineSetup newData, bool useDuration = true)
         //        {
@@ -721,7 +721,7 @@ namespace Prateek.Debug.Code
 
         //        }
 
-        //        //-----------------------------------------------------------
+        //        ///-----------------------------------------------------------
         //#if UNITY_EDITOR
         //        private static void ImmediateLine(ref LineSetup data)
         //        {
@@ -737,7 +737,7 @@ namespace Prateek.Debug.Code
         //#endif //UNITY_EDITOR
         #endregion Line operations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Base primitives
         //public static void Line(Vector3 start, Vector3 end, Setup? custom_setup = null)
         //{

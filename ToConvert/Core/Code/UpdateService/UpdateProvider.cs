@@ -9,7 +9,7 @@ namespace Mayfair.Core.Code.UpdateService
     /// This should not be used as an example of Service/Provider/Messaging interaction
     /// as it violates the asynchronicity goals of our systems.
     /// </summary>
-    public class UpdateProvider : DaemonBranchBehaviour<UpdateDaemonCore, UpdateProvider>
+    public class UpdateProvider : DaemonBranchTickableBehaviour<UpdateDaemonCore, UpdateProvider>
     {
         public Action updateAction;
 

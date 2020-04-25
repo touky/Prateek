@@ -37,7 +37,7 @@ namespace Prateek.Core.Code.Helpers
 
     public static class Geometry
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void CreateBasis(Vector3 v, Vector3 up, out Vector3 x, out Vector3 y)
         {
             if (v.sqrMagnitude > 0.0001f)

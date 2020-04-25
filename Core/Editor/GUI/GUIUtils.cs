@@ -37,13 +37,13 @@ namespace Prateek.Core.Editor.GUI
     using UnityEditor;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class GUITools
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Foldout
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Overload
         public static bool Foldout(Rect rect, string text, string key, bool toggleOnLabelClick = true)
         {
@@ -63,7 +63,7 @@ namespace Prateek.Core.Editor.GUI
         }
         #endregion Overload
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private static bool Foldout(bool isLayout, Rect rect, GUIContent content, string key, bool toggleOnLabelClick = true)
         {
             var foldoutActive = Prefs.Get(key, false);
@@ -87,6 +87,6 @@ namespace Prateek.Core.Editor.GUI
         }
         #endregion Foldout
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
     }
 }

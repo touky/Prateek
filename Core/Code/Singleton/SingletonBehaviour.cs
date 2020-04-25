@@ -8,7 +8,7 @@ namespace Prateek.DaemonCore.Code
         where TInstance : MonoBehaviour
     {
         #region Static and Constants
-        private static bool applicationIsQuitting;
+        private static bool isApplicationQuitting;
         private static TInstance instance;
 
         // ReSharper disable once StaticMemberInGenericType
@@ -16,16 +16,16 @@ namespace Prateek.DaemonCore.Code
         #endregion
 
         #region Properties
-        public static bool ApplicationIsQuitting
+        public static bool IsApplicationQuitting
         {
-            get { return applicationIsQuitting; }
+            get { return isApplicationQuitting; }
         }
 
         protected static TInstance Instance
         {
             get
             {
-                if (ApplicationIsQuitting)
+                if (IsApplicationQuitting)
                 {
                     return null;
                 }
@@ -57,7 +57,7 @@ namespace Prateek.DaemonCore.Code
         {
             RegisterInstanceFor(this as TInstance);
 
-            if (!ApplicationIsQuitting)
+            if (!IsApplicationQuitting)
             {
                 DontDestroyOnLoad(gameObject);
             }
@@ -67,7 +67,7 @@ namespace Prateek.DaemonCore.Code
 
         protected virtual void OnApplicationQuit()
         {
-            applicationIsQuitting = true;
+            isApplicationQuitting = true;
 
             Destroy(gameObject);
         }

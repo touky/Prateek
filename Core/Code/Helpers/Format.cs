@@ -37,14 +37,14 @@ namespace Prateek.Core.Code.Helpers
 
     public static class Format
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Time
         public static string Time(float time, bool ignoreZeroHour = true)
         {
             return Time(time, "{3}:", "{2}:", "{1}:", "{0}", ignoreZeroHour);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Time(float time, bool litteral, bool ignoreZeroHour)
         {
             if (litteral)
@@ -52,13 +52,13 @@ namespace Prateek.Core.Code.Helpers
             return Time(time, ignoreZeroHour);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Time(float time, string MSFormat, bool ignoreZeroHour = true)
         {
             return Time(time, "{3}:", "{2}:", "{1}:", MSFormat, ignoreZeroHour);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Time(float time, string MSFormat, bool litteral, bool ignoreZeroHour)
         {
             if (litteral)
@@ -66,13 +66,13 @@ namespace Prateek.Core.Code.Helpers
             return Time(time, MSFormat, ignoreZeroHour);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Time(float time, string SFormat, string MSFormat, bool ignoreZeroHour = true)
         {
             return Time(time, "{3}:", "{2}:", SFormat, MSFormat, ignoreZeroHour);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Time(float time, string SFormat, string MSFormat, bool litteral, bool ignoreZeroHour)
         {
             if (litteral)
@@ -80,13 +80,13 @@ namespace Prateek.Core.Code.Helpers
             return Time(time, SFormat, MSFormat, ignoreZeroHour);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Time(float time, string MFormat, string SFormat, string MSFormat, bool ignoreZeroHour = true)
         {
             return Time(time, "{3}:", MFormat, SFormat, MSFormat, ignoreZeroHour);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Time(float time, string MFormat, string SFormat, string MSFormat, bool litteral, bool ignoreZeroHour)
         {
             if (litteral)
@@ -94,7 +94,7 @@ namespace Prateek.Core.Code.Helpers
             return Time(time, "{3}:", MFormat, SFormat, MSFormat, ignoreZeroHour);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Time(float time, string HFormat, string MFormat, string SFormat, string MSFormat, bool ignoreZeroHour = true)
         {
             int milliseconds = (int)((time - Mathf.Floor(time)) * 1000f);
@@ -106,7 +106,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Time
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Text coloring
         // return a color tag like "<color=#FFAA00FF">" to be rendered inside rich texts
         // Note: Color is implicitly converted to Color32, so it works for both types
@@ -115,7 +115,7 @@ namespace Prateek.Core.Code.Helpers
             return "<color=#" + col.r.ToString("X2") + col.g.ToString("X2") + col.b.ToString("X2") + col.a.ToString("X2") + ">";
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Color(this string text, Color32 col)
         {
             return ToRichText(col) + text + "</color>";

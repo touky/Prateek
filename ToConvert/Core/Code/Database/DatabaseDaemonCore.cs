@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
     using Mayfair.Core.Code.Database.Interfaces;
     using Mayfair.Core.Code.Database.Messages;
     using Mayfair.Core.Code.Database.Messages.RequestFilters;
@@ -13,26 +12,28 @@
     using Mayfair.Core.Code.Resources;
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
-    using Mayfair.Core.Code.Utils.Types;
     using Mayfair.Core.Code.Utils.Types.UniqueId;
     using Prateek.NoticeFramework.Notices.Core;
+    using Prateek.TickableFramework.Code.Enums;
     using DatabaseContentByFilterRequest = Mayfair.Core.Code.Database.Messages.DatabaseContentMatchingWithFilterRequest<Messages.DatabaseContentMatchingWithFilterResponse>;
 
     public sealed class DatabaseDaemonCore : ContentAccessDaemonCore<DatabaseDaemonCore, DatabaseDaemonBranch>, IDebugMenuNotebookOwner
     {
+        #region DatabaseRebuildStatus enum
+        private enum DatabaseRebuildStatus
+        {
+            Ready,
+            IsRebuilding,
+            ShouldRebuild
+        }
+        #endregion
+
         #region IdentifierRequestStatus enum
         private enum IdentifierRequestStatus
         {
             NotInitialized,
             WaitingForIdentifiers,
             Received
-        }
-
-        private enum DatabaseRebuildStatus
-        {
-            Ready,
-            IsRebuilding,
-            ShouldRebuild,
         }
         #endregion
 
@@ -57,19 +58,30 @@
         {
             get { return ServiceProviderUsageRuleType.UseFirstValid; }
         }
+
+        public override TickableSetup TickableSetup
+        {
+            get { return TickableSetup.UpdateBegin; }
+        }
         #endregion
 
-        #region Unity Methods
-        protected override void Start()
+        #region Register/Unregister
+        #region Service
+        protected override void OnAwake() { }
+        #endregion
+        #endregion
+
+        #region Class Methods
+        public override void InitializeTickable()
         {
-            base.Start();
+            base.InitializeTickable();
 
             SetupDebugContent();
         }
 
-        protected override void Update()
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
         {
-            base.Update();
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
 
             RefreshPendingResources();
 
@@ -78,32 +90,10 @@
                 RefreshContentRebuild();
             }
         }
-        #endregion
 
-        #region Service
-        protected override void OnAwake() { }
-        #endregion
-
-        #region Messaging
-        public override void NoticeReceived()
-        {
-            //Empty
-        }
-
-        protected override void SetupNoticeReceiverCallback()
-        {
-            base.SetupNoticeReceiverCallback();
-
-            NoticeReceiver.AddCallback<DatabaseIdentifierResponse>(OnIdentifiersReceived);
-            NoticeReceiver.AddCallback<DatabaseContentByIdRequest>(OnRequestContentById);
-            NoticeReceiver.AddCallback<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
-        }
-        #endregion
-
-        #region Class Methods
         private void OnIdentifiersReceived(DatabaseIdentifierResponse response)
         {
-            foreach (ICompositeIdentifier identifier in response.Identifiers)
+            foreach (var identifier in response.Identifiers)
             {
                 AddIdentifier(identifier);
             }
@@ -126,7 +116,7 @@
 
                 allCompositeContents.Clear();
                 identifiersToRebuild.Clear();
-                foreach (CompositeIdentifier identifier in identifiers)
+                foreach (var identifier in identifiers)
                 {
                     identifiersToRebuild.Enqueue(identifier);
                 }
@@ -148,16 +138,16 @@
                 return;
             }
 
-            DatabaseContentByIdResponse response = request.GetResponse();
+            var response = request.GetResponse();
 
             for (int i = 0, n = request.UniqueIds.Count; i < n; i++)
             {
-                Keyname keyname = request.UniqueIds[i];
+                var keyname = request.UniqueIds[i];
 
                 //Name can only match as equal, so directly try-get
                 if (keyname.Type == KeynameState.Fullname)
                 {
-                    if (allCompositeContents.TryGetValue(keyname, out ICompositeContent compositeContentFound))
+                    if (allCompositeContents.TryGetValue(keyname, out var compositeContentFound))
                     {
                         response.Content.Add(compositeContentFound);
                     }
@@ -166,7 +156,7 @@
                 //For a filter, use the IdMatchRequirement to ensure it's correctly matched
                 else if (keyname.Type == KeynameState.Keywords)
                 {
-                    foreach (KeyValuePair<Keyname, ICompositeContent> content in allCompositeContents)
+                    foreach (var content in allCompositeContents)
                     {
                         if (keyname.Match(content.Key) <= request.IdMatchRequirement)
                         {
@@ -184,7 +174,7 @@
             if (!identifierStatus.Equals(IdentifierRequestStatus.WaitingForIdentifiers))
             {
                 identifierStatus = IdentifierRequestStatus.WaitingForIdentifiers;
-                DatabaseIdentifierRequest<DatabaseIdentifierResponse> notice =
+                var notice =
                     Notice.Create<DatabaseIdentifierRequest<DatabaseIdentifierResponse>>();
 
                 NoticeReceiver.Send(notice);
@@ -206,7 +196,7 @@
                 return;
             }
 
-            DatabaseContentMatchingWithFilterResponse response = request.GetResponse();
+            var response = request.GetResponse();
 
             if (request.Operator == FilterLogicalOperators.AND)
             {
@@ -224,10 +214,10 @@
 
         private void PatternContainsAll(List<string> filters, List<ICompositeContent> results)
         {
-            foreach (KeyValuePair<Keyname, ICompositeContent> pair in allCompositeContents)
+            foreach (var pair in allCompositeContents)
             {
-                bool valid = true;
-                string uniqueIdAsString = pair.Key.RawValue;
+                var valid            = true;
+                var uniqueIdAsString = pair.Key.RawValue;
                 for (int i = 0, n = filters.Count; i < n; i++)
                 {
                     if (!uniqueIdAsString.Contains(filters[i]))
@@ -246,10 +236,10 @@
 
         private void PatternContainsAny(List<string> filters, List<ICompositeContent> results)
         {
-            foreach (KeyValuePair<Keyname, ICompositeContent> pair in allCompositeContents)
+            foreach (var pair in allCompositeContents)
             {
-                bool valid = false;
-                string uniqueIdAsString = pair.Key.RawValue;
+                var valid            = false;
+                var uniqueIdAsString = pair.Key.RawValue;
                 for (int i = 0, n = filters.Count; i < n; i++)
                 {
                     if (uniqueIdAsString.Contains(filters[i]))
@@ -268,7 +258,7 @@
 
         private void RefreshPendingResources()
         {
-            DatabaseDaemonBranch branch = GetFirstAliveBranch();
+            var branch = GetFirstAliveBranch();
             if (branch == null)
             {
                 return;
@@ -299,7 +289,7 @@
 
         private void AddIdentifier(ICompositeIdentifier identifier)
         {
-            CompositeIdentifier composite = identifier as CompositeIdentifier;
+            var composite = identifier as CompositeIdentifier;
             if (composite == null)
             {
                 throw new Exception("Invalid Composite type, useGUILayout NewIdentifier<T>()");
@@ -321,14 +311,15 @@
 #endif
             {
                 while (true)
-                //foreach (CompositeIdentifier identifier in identifiers)
+
+                    //foreach (CompositeIdentifier identifier in identifiers)
                 {
-                    CompositeIdentifier identifier = identifiersToRebuild.Dequeue();
+                    var identifier = identifiersToRebuild.Dequeue();
 #if NVIZZIO_DEV
                     using (new ProfilerScope("foreach(identifiers)"))
 #endif
                     {
-                        if (!databaseEntries.TryGetValue(identifier.rootType, out List<IDatabaseEntry> dataEntries))
+                        if (!databaseEntries.TryGetValue(identifier.rootType, out var dataEntries))
                         {
                             //On fail, continue with the next identifier
                             continue;
@@ -338,13 +329,13 @@
                         using (new ProfilerScope($"using {identifier.rootType.Name}"))
 #endif
                         {
-                            foreach (IDatabaseEntry dataEntry in dataEntries)
+                            foreach (var dataEntry in dataEntries)
                             {
 #if NVIZZIO_DEV
                                 using (new ProfilerScope("foreach(dataEntries)"))
 #endif
                                 {
-                                    ICompositeContent content = identifier.BuildCompositeContent(dataEntry.IdUnique, databaseEntries);
+                                    var content = identifier.BuildCompositeContent(dataEntry.IdUnique, databaseEntries);
                                     if (content == null)
                                     {
                                         continue;
@@ -395,17 +386,15 @@
             }
         }
 
-        #region Debug
         [Conditional("NVIZZIO_DEV")]
         public void SetupDebugContent()
         {
-            DebugMenuNotebook debugNotebook = new DebugMenuNotebook("DTBS", "Database Service");
+            var debugNotebook = new DebugMenuNotebook("DTBS", "Database Service");
 
-            EmptyMenuPage main = new EmptyMenuPage("MAIN");
+            var main = new EmptyMenuPage("MAIN");
             debugNotebook.AddPagesWithParent(main, new DatabaseEntryMenuPage(this, "Database entries"));
             debugNotebook.Register();
         }
-        #endregion
         #endregion
 
         #region Nested type: CompositeContent
@@ -462,7 +451,7 @@
 
             public IDatabaseEntry Get(Type source)
             {
-                for (int c = 0; c < contents.Count; c++)
+                for (var c = 0; c < contents.Count; c++)
                 {
                     if (contents[c].GetType() == source)
                     {
@@ -475,16 +464,16 @@
 
             public IDatabaseEntry Get(Type source, Type joiner)
             {
-                CompositeIdentifier.TypeJoint typeJoint = identifier.GetTypeJoint(source, joiner);
+                var typeJoint = identifier.GetTypeJoint(source, joiner);
                 if (!typeJoint.IsValid)
                 {
                     return null;
                 }
 
-                IDatabaseEntry sourceData = Get(source);
-                for (int c = 0; c < contents.Count; c++)
+                var sourceData = Get(source);
+                for (var c = 0; c < contents.Count; c++)
                 {
-                    IDatabaseEntry content = contents[c];
+                    var content = contents[c];
                     if (CompositeIdentifier.Match(typeJoint, sourceData, content))
                     {
                         return content;
@@ -496,10 +485,10 @@
 
             public TType[] GetAll<TType>() where TType : IDatabaseEntry
             {
-                List<TType> results = new List<TType>();
-                for (int c = 0; c < contents.Count; c++)
+                var results = new List<TType>();
+                for (var c = 0; c < contents.Count; c++)
                 {
-                    IDatabaseEntry content = contents[c];
+                    var content = contents[c];
                     if (content is TType)
                     {
                         results.Add((TType) content);
@@ -512,15 +501,15 @@
             public TJoiner[] GetAll<TSource, TJoiner>() where TSource : IDatabaseEntry
                                                         where TJoiner : IDatabaseEntry
             {
-                List<TJoiner> results = new List<TJoiner>();
-                TSource[] sourceDatas = GetAll<TSource>();
-                CompositeIdentifier.TypeJoint typeJoint = identifier.GetTypeJoint(typeof(TSource), typeof(TJoiner));
-                for (int s = 0; s < sourceDatas.Length; s++)
+                var results     = new List<TJoiner>();
+                var sourceDatas = GetAll<TSource>();
+                var typeJoint   = identifier.GetTypeJoint(typeof(TSource), typeof(TJoiner));
+                for (var s = 0; s < sourceDatas.Length; s++)
                 {
-                    TSource sourceData = sourceDatas[s];
-                    for (int c = 0; c < contents.Count; c++)
+                    var sourceData = sourceDatas[s];
+                    for (var c = 0; c < contents.Count; c++)
                     {
-                        IDatabaseEntry content = contents[c];
+                        var content = contents[c];
                         if (!(content is TJoiner))
                         {
                             continue;
@@ -541,8 +530,8 @@
 
             public IDatabaseEntry[] GetAll(Type type)
             {
-                List<IDatabaseEntry> results = new List<IDatabaseEntry>();
-                for (int c = 0; c < contents.Count; c++)
+                var results = new List<IDatabaseEntry>();
+                for (var c = 0; c < contents.Count; c++)
                 {
                     if (contents[c].GetType() == type)
                     {
@@ -555,15 +544,15 @@
 
             public IDatabaseEntry[] GetAll(Type source, Type joiner)
             {
-                List<IDatabaseEntry> results = new List<IDatabaseEntry>();
-                IDatabaseEntry[] sourceDatas = GetAll(source);
-                CompositeIdentifier.TypeJoint typeJoint = identifier.GetTypeJoint(source, joiner);
-                for (int s = 0; s < sourceDatas.Length; s++)
+                var results     = new List<IDatabaseEntry>();
+                var sourceDatas = GetAll(source);
+                var typeJoint   = identifier.GetTypeJoint(source, joiner);
+                for (var s = 0; s < sourceDatas.Length; s++)
                 {
-                    IDatabaseEntry sourceData = sourceDatas[s];
-                    for (int c = 0; c < contents.Count; c++)
+                    var sourceData = sourceDatas[s];
+                    for (var c = 0; c < contents.Count; c++)
                     {
-                        IDatabaseEntry content = contents[c];
+                        var content = contents[c];
                         if (!CompositeIdentifier.Match(typeJoint, sourceData, content))
                         {
                             continue;
@@ -634,10 +623,10 @@
 
             public TypeJoint GetTypeJoint(Type source, Type joiner)
             {
-                for (int pass = 0; pass <= Consts.SECOND_ITEM; pass++)
+                for (var pass = 0; pass <= Consts.SECOND_ITEM; pass++)
                 {
-                    List<TypeJoint> joints = pass == 0 ? requiredJoints : optionalJoints;
-                    int index = joints.FindIndex(x =>
+                    var joints = pass == 0 ? requiredJoints : optionalJoints;
+                    var index = joints.FindIndex(x =>
                     {
                         return x.source == source && x.joiner == joiner;
                     });
@@ -667,7 +656,7 @@
 
                     composite = new CompositeContent(keyname, this);
 
-                    IDatabaseEntry rootData = databaseEntries[rootType].Find(x => { return x.IdUnique == keyname; });
+                    var rootData = databaseEntries[rootType].Find(x => { return x.IdUnique == keyname; });
                     composite.AddContent(rootData);
 
                     if (RootValidationCondition != null)
@@ -686,7 +675,7 @@
                         using (new ProfilerScope("foreach(IDENTIFIER_STATUS)"))
 #endif
                         {
-                            List<TypeJoint> joints = status == IdentifierStatus.Required ? requiredJoints : optionalJoints;
+                            var joints = status == IdentifierStatus.Required ? requiredJoints : optionalJoints;
 
                             if (!SearchJoinerTypeInDatabase(joints, databaseEntries, status, composite))
                             {
@@ -705,7 +694,7 @@
                 using (new ProfilerScope("SearchJoinerTypeInDatabase"))
 #endif
                 {
-                    foreach (TypeJoint typeJoint in joints)
+                    foreach (var typeJoint in joints)
                     {
 #if NVIZZIO_DEV
                         using (new ProfilerScope("foreach(joints)"))
@@ -716,7 +705,7 @@
                                 continue;
                             }
 
-                            List<IDatabaseEntry> joinerList = databaseEntries[typeJoint.joiner];
+                            var joinerList = databaseEntries[typeJoint.joiner];
 
                             if (!TryJoinDatabaseEntryToCompositeContent(joinerList, status, typeJoint, composite))
                             {
@@ -731,13 +720,13 @@
 
             private bool TryJoinDatabaseEntryToCompositeContent(List<IDatabaseEntry> joinerList, IdentifierStatus status, TypeJoint typeJoint, CompositeContent composite)
             {
-                IDatabaseEntry[] sourceDataArray = composite.GetAll(typeJoint.source);
+                var sourceDataArray = composite.GetAll(typeJoint.source);
 
 #if NVIZZIO_DEV
                 using (new ProfilerScope("TryJoinDatabaseEntryToCompositeContent"))
 #endif
                 {
-                    foreach (IDatabaseEntry sourceData in sourceDataArray)
+                    foreach (var sourceData in sourceDataArray)
                     {
 #if NVIZZIO_DEV
                         using (new ProfilerScope("foreach(sourceDataArray)"))
@@ -760,15 +749,15 @@
                 using (new ProfilerScope("TryMatchSourceDataWithJoinerEntries"))
 #endif
                 {
-                    bool foundAtLeastOne = false;
-                    int joinerIndex = 0;
+                    var foundAtLeastOne = false;
+                    var joinerIndex     = 0;
                     while (true)
                     {
 #if NVIZZIO_DEV
                         using (new ProfilerScope("while (true)"))
 #endif
                         {
-                            int foundIndex = joinerList.FindIndex(joinerIndex, joinerData => Match(typeJoint, sourceData, joinerData));
+                            var foundIndex = joinerList.FindIndex(joinerIndex, joinerData => Match(typeJoint, sourceData, joinerData));
                             if (foundIndex == Consts.INDEX_NONE)
                             {
                                 //If the parameter is required, this data is wrong
@@ -799,7 +788,7 @@
                 Type source,
                 Func<IDatabaseEntry, Keyname> sourceIdFunc)
             {
-                List<TypeJoint> joints = status == IdentifierStatus.Required ? requiredJoints : optionalJoints;
+                var joints = status == IdentifierStatus.Required ? requiredJoints : optionalJoints;
                 if (joints.Contains(joiner))
                 {
                     return false;
@@ -972,6 +961,22 @@
                 }
             }
             #endregion
+        }
+        #endregion
+
+        #region Messaging
+        public override void NoticeReceived()
+        {
+            //Empty
+        }
+
+        protected override void SetupNoticeReceiverCallback()
+        {
+            base.SetupNoticeReceiverCallback();
+
+            NoticeReceiver.AddCallback<DatabaseIdentifierResponse>(OnIdentifiersReceived);
+            NoticeReceiver.AddCallback<DatabaseContentByIdRequest>(OnRequestContentById);
+            NoticeReceiver.AddCallback<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
         }
         #endregion
     }

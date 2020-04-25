@@ -1,13 +1,13 @@
-using Mayfair.Core.Code.Localization;
-
 namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
 {
     using System.Collections.Generic;
     using Mayfair.Core.Code.GameScene;
     using Mayfair.Core.Code.LoadingProcess.Messages;
+    using Mayfair.Core.Code.Localization;
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.StateMachines.FSM.BoolTrigger;
     using Mayfair.Core.Code.Utils;
+    using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
     public class GameInitDaemonBranch : LoadingProcessDaemonBranch
@@ -29,20 +29,24 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
         {
             get { return Consts.FIRST_ITEM; }
         }
+
+        public override TickableSetup TickableSetup
+        {
+            get { return TickableSetup.UpdateBegin; }
+        }
         #endregion
 
-        #region Unity Methods
-
-        private void Update()
+        #region Class Methods
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
         {
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
+
             if (IsAlive && stateMachine != null)
             {
                 stateMachine.Advance();
             }
         }
-        #endregion
 
-        #region Class Methods
         protected override void InternalInit(LoadingProcessDaemonCore daemonCore)
         {
             if (!LocalizationDaemonCore.SetLanguage(SystemLanguage.English, true))
@@ -50,11 +54,11 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
                 throw new MissingMinimalLocalizationException(SystemLanguage.English);
             }
 
-            IdleBoolState idle = new IdleBoolState();
-            SceneLoaderState loaderService = new SceneLoaderState(servicesScene);
-            GameInitActivatorState activator = new GameInitActivatorState();
-            SceneLoaderState loaderGame = new SceneLoaderState(gameScene);
-            LoadingStatusState<bool> loadingStatus = new LoadingStatusState<bool>(this, true);
+            var idle          = new IdleBoolState();
+            var loaderService = new SceneLoaderState(servicesScene);
+            var activator     = new GameInitActivatorState();
+            var loaderGame    = new SceneLoaderState(gameScene);
+            var loadingStatus = new LoadingStatusState<bool>(this, true);
 
             new BoolTriggerTransition().From(idle).To(loaderService);
             new BoolTriggerTransition().From(loaderService).To(activator);

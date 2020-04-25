@@ -36,21 +36,21 @@ namespace Prateek.Core.Code.Attributes
     using System;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public abstract class EnumBaseAttribute : PropertyAttribute
     { }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     //Use this on enums to take into account Categories&Names
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [AttributeUsage(AttributeTargets.Field, Inherited = true)]
     public class EnumAllowCategoriesAttribute : EnumBaseAttribute
     {
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     //Use this to treat enum as a mask or to apply an enum mask to an int/ulong/Mask{***}
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public class EnumMaskAttribute : EnumBaseAttribute
     {
         protected Type value = null;
@@ -64,9 +64,9 @@ namespace Prateek.Core.Code.Attributes
         }
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     //Use this to treat enum as a mask or to apply an enum mask to an int/ulong/Mask{***}
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class EnumMaskMethodAttribute : BaseNameAttribute
     {

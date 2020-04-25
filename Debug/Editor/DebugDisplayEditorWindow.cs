@@ -47,30 +47,30 @@ namespace Prateek.Debug.Editor
     using UnityEditor;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public class DebugDisplayEditorWindow : EditorWindow
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         public struct EnumInfos
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public struct Data
             {
                 public string name;
                 public int value;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             private Type type;
             private Data[] datas;
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public Type Type { get { return type; } }
             public int Count { get { return datas == null ? 0 : datas.Length; } }
             public Data this[int index] { get { return datas == null ? new Data() : datas[index]; } }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Init(Type type)
             {
                 if (this.type == type || !type.IsEnum)
@@ -93,7 +93,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public int Find(int value)
             {
                 for (int d = 0; d < datas.Length; d++)
@@ -105,10 +105,10 @@ namespace Prateek.Debug.Editor
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static class GUIDraw
         {
-            //-- Returns interior rect ----------------------------------------
+            ///-- Returns interior rect ----------------------------------------
             public static Rect BackgroundAuto(int lineCount, int lineMargin, int bgMargin, GUIStyle style)
             {
                 var lineHeight = EditorGUIUtility.singleLineHeight;
@@ -117,7 +117,7 @@ namespace Prateek.Debug.Editor
                 return rect.Inflate(-bgMargin);
             }
 
-            //-- Returns interior rect ----------------------------------------
+            ///-- Returns interior rect ----------------------------------------
             public static Rect Background(Rect rect, int margin = 0, GUIStyle style = null)
             {
                 if (style != null)
@@ -126,7 +126,7 @@ namespace Prateek.Debug.Editor
                 return rect.Inflate(-margin);
             }
 
-            //-- Returns interior rect ----------------------------------------
+            ///-- Returns interior rect ----------------------------------------
             public static Rect Square(Rect rect, int margin = 0, GUIStyle style = null) { return Square(ref rect, margin, style); }
             public static Rect Square(ref Rect rect, int margin = 0, GUIStyle style = null)
             {
@@ -146,7 +146,7 @@ namespace Prateek.Debug.Editor
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class GUISetup
         {
             public Font font;
@@ -233,11 +233,11 @@ namespace Prateek.Debug.Editor
         }
         #endregion Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Settings
         #endregion Settings
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private EnumInfos enumInfos;
         private Vector2 scrollPosition;
@@ -248,7 +248,7 @@ namespace Prateek.Debug.Editor
         private Prefs.ListBools expandedFlags;
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unity Defaults
         [MenuItem("Prateek/Window/DebugDisplayEditorWindow")]
         static void CreateWindow()
@@ -257,33 +257,33 @@ namespace Prateek.Debug.Editor
             window.Show();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void OnDestroy() { }
 
-        //---------------------------------------------------------------------
-        //-- Keyboard focus ---------------------------------------------------
+        ///---------------------------------------------------------------------
+        ///-- Keyboard focus ---------------------------------------------------
         private void OnFocus() { }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void OnLostFocus() { }
 
-        //---------------------------------------------------------------------
-        //-- Sent when an object or group of objects in the hierarchy changes -
+        ///---------------------------------------------------------------------
+        ///-- Sent when an object or group of objects in the hierarchy changes -
         private void OnHierarchyChange() { }
 
-        //---------------------------------------------------------------------
-        //-- Sent whenever the state of the project changes -------------------
+        ///---------------------------------------------------------------------
+        ///-- Sent whenever the state of the project changes -------------------
         private void OnProjectChange() { }
 
-        //---------------------------------------------------------------------
-        //-- Called whenever the selection has changed ------------------------
+        ///---------------------------------------------------------------------
+        ///-- Called whenever the selection has changed ------------------------
         private void OnSelectionChange() { }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         // Called at 10 frames per second
         private void OnInspectorUpdate() { }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void TryInit()
         {
             if (activeFlags == null)
@@ -293,10 +293,10 @@ namespace Prateek.Debug.Editor
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void Update() { }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private bool IsExpanded(int value, ref DebugDisplayManager.FlagHierarchy flagDatas)
         {
             int parent = 0;
@@ -313,7 +313,7 @@ namespace Prateek.Debug.Editor
             return true;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Textures.Drawer d = new Textures.Drawer();
         private void OnGUI()
         {
@@ -582,7 +582,7 @@ namespace Prateek.Debug.Editor
         }
         #endregion Unity Defaults
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Behaviour
         #endregion Behaviour
     }

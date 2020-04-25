@@ -43,18 +43,18 @@ namespace Prateek.Debug.Code
 
     public class DebugLineDisplayer : MonoBehaviour
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         public struct LineData
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             private const int offset = 20;
             private const string lineKeyword = "LINE_USE_BORDER";
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public struct MeshContainer
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public class Bound { public Bounds b; }
                 private Bound bounds;
                 private MeshRenderer renderer;
@@ -65,10 +65,10 @@ namespace Prateek.Debug.Code
                 private int[] triangles;
                 private Vector3[] vertices;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public Bound Bounds { get { return bounds; } }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public MeshContainer(int capacity, MeshRenderer renderer, int borderThickness)
                 {
                     this.bounds = new Bound() { b = new Bounds() };
@@ -84,7 +84,7 @@ namespace Prateek.Debug.Code
                     RefreshMesh(capacity, borderThickness);
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public void Destroy()
                 {
                     if (renderer == null)
@@ -99,7 +99,7 @@ namespace Prateek.Debug.Code
                     vertices = null;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public void RefreshMesh(int size, int borderThickness)
                 {
                     //borderThickness = 0;
@@ -187,20 +187,20 @@ namespace Prateek.Debug.Code
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public struct BufferContainer
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 private ComputeBuffer buffer;
                 private List<Vector4> list;
                 private Vector4[] array;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public ComputeBuffer Buffer { get { return buffer; } }
                 public int Count { get { return list.Count; } }
                 public Vector4 this[int index] { set { list[index] = value; } }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public BufferContainer(int capacity)
                 {
                     buffer = new ComputeBuffer(capacity, 16);
@@ -208,7 +208,7 @@ namespace Prateek.Debug.Code
                     array = new Vector4[capacity];
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public void Destroy()
                 {
                     if (list == null)
@@ -219,7 +219,7 @@ namespace Prateek.Debug.Code
                     array = null;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public void Increment(int index)
                 {
                     if (index * 2 < list.Count)
@@ -229,13 +229,13 @@ namespace Prateek.Debug.Code
                     list.Add(Vector4.zero);
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public void Clear()
                 {
                     list.Clear();
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public void RefreshBuffers()
                 {
                     if (list.Count > array.Length)
@@ -251,7 +251,7 @@ namespace Prateek.Debug.Code
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             private bool forceDirtyPass;
             private int index;
             private GameObject gameObject;
@@ -260,10 +260,10 @@ namespace Prateek.Debug.Code
             private BufferContainer positions;
             private BufferContainer colors;
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public bool IsDirty { get { return forceDirtyPass || index > 0; } }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public LineData(int capacity, GameObject gameObject, MeshRenderer renderer, Material material, int borderThickness)
             {
                 this.gameObject = gameObject;
@@ -276,14 +276,14 @@ namespace Prateek.Debug.Code
                 colors = new BufferContainer(capacity);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Destroy()
             {
                 positions.Destroy();
                 colors.Destroy();
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public LineSetup GetPoint()
             {
                 Increment(index + 1);
@@ -291,14 +291,14 @@ namespace Prateek.Debug.Code
                 return new LineSetup(mesh.Bounds, index++, positions, colors);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             private void Increment(int index)
             {
                 positions.Increment(index);
                 colors.Increment(index);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void RefreshBuffers(int lineThickness, int borderThickness)
             {
                 positions.RefreshBuffers();
@@ -318,7 +318,7 @@ namespace Prateek.Debug.Code
                     material.EnableKeyword(lineKeyword);
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public void Clear()
             {
                 forceDirtyPass = index != 0;
@@ -327,16 +327,16 @@ namespace Prateek.Debug.Code
                 colors.Clear();
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public struct LineSetup
             {
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 private MeshContainer.Bound bounds;
                 private int index;
                 private BufferContainer positions;
                 private BufferContainer colors;
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public LineSetup(MeshContainer.Bound bounds, int index, BufferContainer positions, BufferContainer colors)
                 {
                     this.bounds = bounds;
@@ -345,7 +345,7 @@ namespace Prateek.Debug.Code
                     this.colors = colors;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public void SetLine(Vector3 start, Vector3 end)
                 {
                     if (index == 0)
@@ -360,7 +360,7 @@ namespace Prateek.Debug.Code
                     positions[index * 2 + 1] = end;
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public void SetColor(Color front, Color back)
                 {
                     colors[index * 2] = front;
@@ -370,14 +370,14 @@ namespace Prateek.Debug.Code
         }
         #endregion //Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private LineData lineDataBackFront;
         private LineData lineDataFront;
         private int instanceCount = 50;
         #endregion //Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Settings
         [SerializeField, Min(1)]
         private int lineThickness = 1;
@@ -385,25 +385,25 @@ namespace Prateek.Debug.Code
         private int borderThickness = 1;
         #endregion //Settings
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
         public float LineRendererWidth { get { return lineThickness; } }
         #endregion //Properties
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unity Default
         private void OnEnable()
         {
             EnableRendering();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void LateUpdate()
         {
             UpdateRendering();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
 #if UNITY_EDITOR
         private void OnRenderObject()
         {
@@ -412,14 +412,14 @@ namespace Prateek.Debug.Code
         }
 #endif //UNITY_EDITOR
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void OnDisable()
         {
             DisableRendering();
         }
         #endregion //Unity Default
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Lines Pool
         private void EnableRendering()
         {
@@ -445,7 +445,7 @@ namespace Prateek.Debug.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void UpdateRendering()
         {
             if (!lineDataBackFront.IsDirty || !lineDataBackFront.IsDirty)
@@ -458,21 +458,21 @@ namespace Prateek.Debug.Code
             lineDataFront.Clear();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void DisableRendering()
         {
             lineDataBackFront.Destroy();
             lineDataFront.Destroy();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public LineData.LineSetup GetLine(bool useDepth)
         {
             return useDepth ? lineDataBackFront.GetPoint() : lineDataBackFront.GetPoint();
         }
         #endregion //Lines Pool
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void RenderLine(DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
         {
             //todo var manager = TickableRegistry.GetManager<DebugDisplayManager>();

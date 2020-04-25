@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.BaseBehaviour
 {
     using System.Collections.Generic;
-    using Mayfair.Core.Code.Service;
     using Prateek.DaemonCore.Code;
+    using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
     public sealed class AutoDisableDaemonCore : DaemonCore<AutoDisableDaemonCore, AutoDisableDaemonBranch>
@@ -16,25 +16,32 @@ namespace Mayfair.Core.Code.BaseBehaviour
         private List<DisablerContainer> disablerContainers = new List<DisablerContainer>();
         #endregion
 
-        #region Unity Methods
-        private void LateUpdate()
+        #region Properties
+        public override TickableSetup TickableSetup
         {
-            RefreshAwaken();
+            get { return TickableSetup.UpdateEndLate; }
         }
         #endregion
 
-        #region Service
+        #region Register/Unregister
         protected override void OnAwake() { }
         #endregion
 
         #region Class Methods
+        public override void TickLate(TickableFrame tickableFrame, float seconds)
+        {
+            base.TickLate(tickableFrame, seconds);
+
+            RefreshAwaken();
+        }
+
         private void RefreshAwaken()
         {
             //Remove all the behaviour that need disabling
             //All of them are ordered, so we can stop asap
             while (disablerContainers.Count > 0)
             {
-                DisablerContainer container = disablerContainers[0];
+                var container = disablerContainers[0];
                 if (Time.realtimeSinceStartup - container.lastAwakeTimeMark > MAX_TIME_AWAKE)
                 {
                     if (container.behaviour != null)
@@ -52,7 +59,7 @@ namespace Mayfair.Core.Code.BaseBehaviour
 
         private void InternalWakeUp(AutoDisableBehaviour behaviour)
         {
-            int index = disablerContainers.FindIndex(x =>
+            var index = disablerContainers.FindIndex(x =>
             {
                 return x.behaviour == behaviour;
             });
@@ -67,7 +74,7 @@ namespace Mayfair.Core.Code.BaseBehaviour
             }
             else
             {
-                DisablerContainer container = disablerContainers[index];
+                var container = disablerContainers[index];
                 container.lastAwakeTimeMark = Time.realtimeSinceStartup;
 
                 disablerContainers.RemoveAt(index);
@@ -79,7 +86,7 @@ namespace Mayfair.Core.Code.BaseBehaviour
 
         private void InternalRemove(AutoDisableBehaviour behaviour)
         {
-            int index = disablerContainers.FindIndex(x =>
+            var index = disablerContainers.FindIndex(x =>
             {
                 return x.behaviour == behaviour;
             });
@@ -92,7 +99,7 @@ namespace Mayfair.Core.Code.BaseBehaviour
 
         public static void WakeUp(AutoDisableBehaviour behaviour)
         {
-            if (ApplicationIsQuitting)
+            if (IsApplicationQuitting)
             {
                 return;
             }
@@ -102,7 +109,7 @@ namespace Mayfair.Core.Code.BaseBehaviour
 
         public static void Remove(AutoDisableBehaviour behaviour)
         {
-            if (ApplicationIsQuitting)
+            if (IsApplicationQuitting)
             {
                 return;
             }

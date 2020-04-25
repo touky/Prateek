@@ -1,7 +1,6 @@
 namespace Mayfair.Core.Code.Resources
 {
     using System;
-    using System.Collections.Generic;
     using Mayfair.Core.Code.Resources.Messages;
     using Prateek.NoticeFramework.Tools;
 
@@ -24,12 +23,13 @@ namespace Mayfair.Core.Code.Resources
         protected abstract ServiceProviderUsageRuleType ServiceProviderUsageRule { get; }
         #endregion
 
-        #region Unity Methods
-        protected virtual void Start()
+        #region Class Methods
+        public override void InitializeTickable()
         {
+            base.InitializeTickable();
+
             RegisterToResourceService();
         }
-        #endregion
 
         #region Messaging
         protected override void SetupNoticeReceiverCallback()
@@ -38,38 +38,37 @@ namespace Mayfair.Core.Code.Resources
         }
         #endregion
 
-        #region Class Methods
         private void RegisterToResourceService()
         {
             PerformProviderAction(ServiceProviderUsageRule,
-                 branch =>
-                 {
-                     NoticeReceiver.Send(branch.GetResourceChangeRequest(NoticeReceiver));
-                 });
+                                  branch =>
+                                  {
+                                      NoticeReceiver.Send(branch.GetResourceChangeRequest(NoticeReceiver));
+                                  });
         }
 
         private void OnResourceUpdateCallback(ResourcesHaveChangedResponse notice)
         {
             PerformProviderAction(ServiceProviderUsageRule,
-                 branch =>
-                 {
-                     branch.OnResourceChanged(Instance, notice);
-                 });
+                                  branch =>
+                                  {
+                                      branch.OnResourceChanged(Instance, notice);
+                                  });
         }
 
         protected void PerformProviderAction(ServiceProviderUsageRuleType rule, Action<TDaemonBranch> action)
         {
             if (rule == ServiceProviderUsageRuleType.UseAllValid)
             {
-                IEnumerable<TDaemonBranch> providers = GetValidBranches();
-                foreach (TDaemonBranch branch in providers)
+                var providers = GetValidBranches();
+                foreach (var branch in providers)
                 {
                     action(branch);
                 }
             }
             else
             {
-                TDaemonBranch branch = GetFirstAliveBranch();
+                var branch = GetFirstAliveBranch();
                 if (branch != null)
                 {
                     action(branch);

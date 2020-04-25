@@ -36,7 +36,7 @@ namespace Prateek.Core.Code.Behaviours
     using System;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [Serializable]
     public abstract class NamedBehaviour : BaseBehaviour
     {

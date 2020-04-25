@@ -38,7 +38,7 @@ namespace Prateek.Core.Editor.Attributes
     using UnityEditor;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [CustomPropertyDrawer(typeof(EnumBaseAttribute), true)]
     public class EnumBaseAttributeDrawer : PropertyDrawer
     {

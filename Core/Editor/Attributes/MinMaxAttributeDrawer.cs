@@ -38,7 +38,7 @@ namespace Prateek.Core.Editor.Attributes
     using UnityEditor;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [CustomPropertyDrawer(typeof(MathAttribute), true)]
     public class MinMaxAttributeDrawer : PropertyDrawer
     {

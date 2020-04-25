@@ -9,7 +9,7 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.StateMachines.FSM.Common;
     using Prateek.DaemonCore.Code.Branches;
 
-    public abstract class LoadingProcessDaemonBranch : DaemonBranchBehaviour<LoadingProcessDaemonCore, LoadingProcessDaemonBranch>
+    public abstract class LoadingProcessDaemonBranch : DaemonBranchTickableBehaviour<LoadingProcessDaemonCore, LoadingProcessDaemonBranch>
     {
         #region Fields
         private LoadingProcessStatus processStatus;

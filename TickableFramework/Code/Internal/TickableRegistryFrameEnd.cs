@@ -35,14 +35,14 @@ namespace Prateek.TickableFramework.Code.Internal
 {
     using Prateek.TickableFramework.Code.Enums;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     internal sealed class TickableRegistryFrameEnd : TickableRegistryTicker
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
-        internal override TickType TickerOffset
+        internal override TickableSetup TickerOffset
         {
-            get { return TickType.OFFSET_END; }
+            get { return TickableSetup.OFFSET_END; }
         }
         #endregion
     }

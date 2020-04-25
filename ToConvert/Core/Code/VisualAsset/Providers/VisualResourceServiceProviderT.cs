@@ -11,7 +11,8 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.Utils.Types.UniqueId;
     using UnityEngine.Assertions;
 
-    public abstract class VisualResourceDaemonBranch<TResourceReference> : VisualResourceDaemonBranch
+    public abstract class VisualResourceDaemonBranch<TResourceReference>
+        : VisualResourceDaemonBranch
         where TResourceReference : class, IContentHandle
     {
         #region Fields
@@ -20,8 +21,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         #endregion
 
         #region Unity Methods
-        [UsedImplicitly]
-        private void Update()
+        public override void RefreshPending()
         {
             foreach (SupportedAssignable container in supportedAssignables)
             {

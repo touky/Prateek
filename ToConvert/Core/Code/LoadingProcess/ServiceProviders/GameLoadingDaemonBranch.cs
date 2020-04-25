@@ -6,6 +6,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
     using Mayfair.Core.Code.LoadingProcess.StateMachine;
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.Utils;
+    using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
     public class GameLoadingDaemonBranch : LoadingProcessDaemonBranch
@@ -19,25 +20,30 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
         {
             get { return Consts.SECOND_ITEM; }
         }
+
+        public override TickableSetup TickableSetup
+        {
+            get { return TickableSetup.UpdateBegin; }
+        }
         #endregion
 
-        #region Unity Methods
-        private void Update()
+        #region Class Methods
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
         {
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
+
             if (IsAlive && stateMachine != null)
             {
                 stateMachine.Advance();
             }
         }
-        #endregion
 
-        #region Class Methods
         public override void UpdateProcess(List<LoadingTaskTracker> trackers)
         {
             if (stateMachine != null)
             {
-                LoadingTrackingStatus trackerStatus = LoadingTrackingStatus.Finished;
-                foreach (LoadingTaskTracker tracker in trackers)
+                var trackerStatus = LoadingTrackingStatus.Finished;
+                foreach (var tracker in trackers)
                 {
                     trackerStatus = (LoadingTrackingStatus) Mathf.Min((int) trackerStatus, (int) tracker.Status);
                 }
@@ -54,33 +60,33 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
 
         protected override void InternalInit(LoadingProcessDaemonCore daemonCore)
         {
-            LoadingIdleState idle = new LoadingIdleState();
+            var idle = new LoadingIdleState();
 
-            TaskTrackingClearState taskClear = new TaskTrackingClearState(daemonCore);
-
-            //Send notice
-            NoticeState<GameLoadingPrerequisiteNotice> prereqNotice = new NoticeState<GameLoadingPrerequisiteNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
-            LoadingIdleState prereqIdle = new LoadingIdleState();
+            var taskClear = new TaskTrackingClearState(daemonCore);
 
             //Send notice
-            NoticeState<GameLoadingGameplayNotice> gameplayNotice = new NoticeState<GameLoadingGameplayNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
-            LoadingIdleState gameplayIdle = new LoadingIdleState();
+            var prereqNotice = new NoticeState<GameLoadingPrerequisiteNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
+            var prereqIdle   = new LoadingIdleState();
 
             //Send notice
-            NoticeState<GameLoadingFinalizeNotice> finalizeNotice = new NoticeState<GameLoadingFinalizeNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
-            LoadingIdleState finalizeIdle = new LoadingIdleState();
+            var gameplayNotice = new NoticeState<GameLoadingGameplayNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
+            var gameplayIdle   = new LoadingIdleState();
 
             //Send notice
-            NoticeState<GameLoadingFinishedNotice> finishedNotice = new NoticeState<GameLoadingFinishedNotice>(daemonCore.NoticeReceiver);
+            var finalizeNotice = new NoticeState<GameLoadingFinalizeNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
+            var finalizeIdle   = new LoadingIdleState();
+
+            //Send notice
+            var finishedNotice = new NoticeState<GameLoadingFinishedNotice>(daemonCore.NoticeReceiver);
 
             //Loading end
-            LoadingStatusState<LoadingProcessTrigger> endLoading = new LoadingStatusState<LoadingProcessTrigger>(this, true);
+            var endLoading = new LoadingStatusState<LoadingProcessTrigger>(this, true);
 
             //Send notice
-            LoadingStatusState<LoadingProcessTrigger> restartLoading = new LoadingStatusState<LoadingProcessTrigger>(this, false);
-            TaskTrackingClearState restartClear = new TaskTrackingClearState(daemonCore);
-            NoticeState<GameLoadingRestartNotice> restartNotice = new NoticeState<GameLoadingRestartNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
-            LoadingIdleState restartIdle = new LoadingIdleState();
+            var restartLoading = new LoadingStatusState<LoadingProcessTrigger>(this, false);
+            var restartClear   = new TaskTrackingClearState(daemonCore);
+            var restartNotice  = new NoticeState<GameLoadingRestartNotice>(daemonCore.NoticeReceiver, Consts.WAIT_5_FRAMES);
+            var restartIdle    = new LoadingIdleState();
 
             new LoadingBoolTransition().From(idle).To(taskClear);
             new AutoTriggerTransition().From(taskClear).To(prereqNotice);

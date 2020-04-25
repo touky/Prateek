@@ -37,21 +37,21 @@ namespace Prateek.Debug.Editor
     using UnityEditor;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class AutoCheck
     {
         public const float UPDATE_TIME = 5f;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public abstract class ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected bool hasChanged = false;
             protected bool isChecking = false;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public bool HasChanged
             {
@@ -64,13 +64,13 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             protected ValueStorage()
             {
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected void Begin()
             {
                 hasChanged = false;
@@ -78,7 +78,7 @@ namespace Prateek.Debug.Editor
                 EditorGUI.BeginChangeCheck();
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             protected void End()
             {
                 hasChanged = isChecking ? EditorGUI.EndChangeCheck() : hasChanged;
@@ -87,16 +87,16 @@ namespace Prateek.Debug.Editor
             #endregion ctor
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Bool
         public class Bools : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected bool m_value;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public bool data
             {
@@ -113,7 +113,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Bools(bool value) { return new Bools(value); }
             public Bools(bool value) { m_value = value; }
@@ -121,16 +121,16 @@ namespace Prateek.Debug.Editor
         }
         #endregion Bool
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Int
         public class Ints : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected int m_value;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public int data
             {
@@ -147,7 +147,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Ints(int value) { return new Ints(value); }
             public Ints(int value) { m_value = value; }
@@ -155,16 +155,16 @@ namespace Prateek.Debug.Editor
         }
         #endregion Int
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region ULong
         public class ULongs : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected ulong m_value;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public ulong data
             {
@@ -181,7 +181,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator ULongs(ulong value) { return new ULongs(value); }
             public ULongs(ulong value) { m_value = value; }
@@ -189,16 +189,16 @@ namespace Prateek.Debug.Editor
         }
         #endregion ULong
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Float
         public class Floats : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected float m_value;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public float data
             {
@@ -215,7 +215,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Floats(float value) { return new Floats(value); }
             public Floats(float value) { m_value = value; }
@@ -223,16 +223,16 @@ namespace Prateek.Debug.Editor
         }
         #endregion Float
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region String
         public class Strings : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected string m_value;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public string data
             {
@@ -249,7 +249,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Strings(string value) { return new Strings(value); }
             public Strings(string value) { m_value = value; }
@@ -257,17 +257,17 @@ namespace Prateek.Debug.Editor
         }
         #endregion String
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Vector2
         public class Vector2s : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected Floats m_x;
             protected Floats m_y;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public float x
             {
@@ -282,7 +282,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public float y
             {
                 get
@@ -297,7 +297,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Vector2s(Vector2 value) { return new Vector2s(value); }
             public Vector2s(Vector2 value) { m_x = value.x; m_y = value.y; }
@@ -305,18 +305,18 @@ namespace Prateek.Debug.Editor
         }
         #endregion Vector2
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Vector3
         public class Vector3s : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected Floats m_x;
             protected Floats m_y;
             protected Floats m_z;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public float x
             {
@@ -331,7 +331,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public float y
             {
                 get
@@ -345,7 +345,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public float z
             {
                 get
@@ -360,7 +360,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Vector3s(Vector3 value) { return new Vector3s(value); }
             public Vector3s(Vector3 value) { m_x = value.x; m_y = value.y; m_z = value.z; }
@@ -368,11 +368,11 @@ namespace Prateek.Debug.Editor
         }
         #endregion Vector3
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Vector4
         public class Vector4s : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected Floats m_x;
             protected Floats m_y;
@@ -380,7 +380,7 @@ namespace Prateek.Debug.Editor
             protected Floats m_w;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public float x
             {
@@ -395,7 +395,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public float y
             {
                 get
@@ -409,7 +409,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public float z
             {
                 get
@@ -423,7 +423,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public float w
             {
                 get
@@ -438,7 +438,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Vector4s(Vector4 value) { return new Vector4s(value); }
             public Vector4s(Vector4 value) { m_x = value.x; m_y = value.y; m_z = value.z; m_w = value.w; }
@@ -446,11 +446,11 @@ namespace Prateek.Debug.Editor
         }
         #endregion Vector4
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Rect
         public class Rects : ValueStorage
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Fields
             protected Floats m_x;
             protected Floats m_y;
@@ -458,7 +458,7 @@ namespace Prateek.Debug.Editor
             protected Floats m_height;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public float x
             {
@@ -473,7 +473,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public float y
             {
                 get
@@ -487,7 +487,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public float width
             {
                 get
@@ -501,7 +501,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public float height
             {
                 get
@@ -516,7 +516,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Rects(Rect value) { return new Rects(value); }
             public Rects(Rect value) { m_x = value.x; m_y = value.y; m_width = value.width; m_height = value.height; }
@@ -524,7 +524,7 @@ namespace Prateek.Debug.Editor
         }
         #endregion Rect
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mask
         public abstract class Masks : ValueStorage
         {
@@ -532,7 +532,7 @@ namespace Prateek.Debug.Editor
             protected ULongs[] m_values;
             #endregion Fields
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public ulong this[int index]
             {
@@ -548,7 +548,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             protected Masks(params ulong[] values)
             {
@@ -560,7 +560,7 @@ namespace Prateek.Debug.Editor
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             private void Resize(int size)
             {
                 if (m_values == null)
@@ -587,10 +587,10 @@ namespace Prateek.Debug.Editor
             #endregion ctor
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class Mask128s : Masks
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public Mask128 data
             {
@@ -608,17 +608,17 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Mask128s(Mask128 value) { return new Mask128s(value); }
             public Mask128s(Mask128 value) : base(value.Get(0), value.Get(1)) { }
             #endregion ctor
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class Mask256s : Masks
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public Mask128 data
             {
@@ -636,17 +636,17 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Mask256s(Mask256 value) { return new Mask256s(value); }
             public Mask256s(Mask256 value) : base(value.Get(0), value.Get(1), value.Get(2), value.Get(3)) { }
             #endregion ctor
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class Mask512s : Masks
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region Properties
             public Mask512 data
             {
@@ -665,7 +665,7 @@ namespace Prateek.Debug.Editor
             }
             #endregion Properties
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             #region ctor
             public static implicit operator Mask512s(Mask512 value) { return new Mask512s(value); }
             public Mask512s(Mask512 value) : base(value.Get(0), value.Get(1), value.Get(2), value.Get(3),

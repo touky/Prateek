@@ -40,10 +40,10 @@ namespace Prateek.FrameRecorder.Code
     using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public sealed class FrameRecorderManager
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         public enum StateType
         {
@@ -52,30 +52,30 @@ namespace Prateek.FrameRecorder.Code
             Playback,
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public interface IRecorderBase
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             void BeginFrame();
             Frame.IData EndFrame();
             void PlayFrame(Frame.IData data);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public class Frame
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public interface IData
             {
                 IRecorderBase Owner { get; }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public List<IData> datas = new List<IData>();
         }
         #endregion Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private StateType state = StateType.Inactive;
         private int frameCapacity = 50;
@@ -85,14 +85,14 @@ namespace Prateek.FrameRecorder.Code
         private List<IRecorderBase> recorders = new List<IRecorderBase>();
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
         //public override TickType TickType { get { return TickType.ALL; } } //todo TickType.BeginFrame | TickType.EndFrame; } }
         public StateType State { get { return state; } set { state = value; } }
         public bool PlaybackActive { get { return state == StateType.Playback; } }
         public int FrameCount { get { return history.Count; } }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public int MaxFrameRecorded
         {
             get { return frameCapacity; }
@@ -108,7 +108,7 @@ namespace Prateek.FrameRecorder.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Vector2Int CurrentFrameRange
         {
             get { return frameRange; }
@@ -116,7 +116,7 @@ namespace Prateek.FrameRecorder.Code
         }
         #endregion Properties
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region IGlobalManager integration
         //public override void OnInitialize()
         //{
@@ -124,7 +124,7 @@ namespace Prateek.FrameRecorder.Code
         //    lastActiveFrame = new Frame();
         //}
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         //public override void OnUpdate(TickType tickType, float seconds)
         //{
         //    //if (tickType != TickType.BeginFrame)
@@ -133,7 +133,7 @@ namespace Prateek.FrameRecorder.Code
         //    BeginFrame();
         //}
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
 #if UNITY_EDITOR
         public void OnFakeUpdate()
         {
@@ -142,7 +142,7 @@ namespace Prateek.FrameRecorder.Code
         }
 #endif //UNITY_EDITOR
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         //public override void OnLateUpdate(TickType tickType, float seconds)
         //{
         //    //if (tickType != TickType.EndFrame)
@@ -174,21 +174,21 @@ namespace Prateek.FrameRecorder.Code
         //}
         #endregion IGlobalManager integration
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region External Access
         public void Register(IRecorderBase recorder)
         {
             recorders.Add(recorder);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Unregister(IRecorderBase recorder)
         {
             recorders.Remove(recorder);
         }
         #endregion External Access
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Instance Methods
         public void InternalClearHistory()
         {
@@ -196,7 +196,7 @@ namespace Prateek.FrameRecorder.Code
             frameRange = Vector2Int.zero;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void BeginFrame()
         {
             for (int r = 0; r < recorders.Count; r++)
@@ -212,7 +212,7 @@ namespace Prateek.FrameRecorder.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private Frame EndFrame()
         {
             var lastFrame = new Frame();
@@ -234,7 +234,7 @@ namespace Prateek.FrameRecorder.Code
             return lastFrame;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void PlayFrame(Frame frame)
         {
             if (frame == null)
@@ -250,7 +250,7 @@ namespace Prateek.FrameRecorder.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void DoPlayback()
         {
             frameRange = CSharp.clamp(frameRange, 0, frameCapacity - 1);

@@ -6,7 +6,8 @@ namespace Mayfair.Core.Code.Resources.ServiceProvider
     using UnityEngine.AddressableAssets.ResourceLocators;
     using UnityEngine.ResourceManagement.AsyncOperations;
 
-    public class AddressableRegistryDaemonBranch : ContentRegistryDaemonBranch
+    public class AddressableRegistryDaemonBranch
+        : ContentRegistryDaemonBranch
     {
         #region Fields
         private bool addressSystemInitialized = false;

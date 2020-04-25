@@ -30,11 +30,11 @@ namespace Prateek.Core.Code
 {
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static  partial class VectorExt
     {
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector2Int to Vector2Int
         public static Vector2Int xx(this Vector2Int v) { return new Vector2Int(v.x, v.x); }
         public static Vector2Int xy(this Vector2Int v) { return new Vector2Int(v.x, v.y); }
@@ -46,7 +46,7 @@ namespace Prateek.Core.Code
         public static Vector2Int ny(this Vector2Int v, int n_0 = 0) { return new Vector2Int(n_0, v.y); }
         #endregion Swizzle Vector2Int to Vector2Int
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector2Int to Vector3Int
         public static Vector3Int xxx(this Vector2Int v) { return new Vector3Int(v.x, v.x, v.x); }
         public static Vector3Int xxy(this Vector2Int v) { return new Vector3Int(v.x, v.x, v.y); }
@@ -76,7 +76,7 @@ namespace Prateek.Core.Code
         public static Vector3Int nny(this Vector2Int v, int n_0 = 0, int n_1 = 0) { return new Vector3Int(n_0, n_1, v.y); }
         #endregion Swizzle Vector2Int to Vector3Int
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector3Int to Vector2Int
         public static Vector2Int xx(this Vector3Int v) { return new Vector2Int(v.x, v.x); }
         public static Vector2Int xy(this Vector3Int v) { return new Vector2Int(v.x, v.y); }
@@ -95,7 +95,7 @@ namespace Prateek.Core.Code
         public static Vector2Int nz(this Vector3Int v, int n_0 = 0) { return new Vector2Int(n_0, v.z); }
         #endregion Swizzle Vector3Int to Vector2Int
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector3Int to Vector3Int
         public static Vector3Int xxx(this Vector3Int v) { return new Vector3Int(v.x, v.x, v.x); }
         public static Vector3Int xxy(this Vector3Int v) { return new Vector3Int(v.x, v.x, v.y); }
@@ -164,19 +164,19 @@ namespace Prateek.Core.Code
         
     }
 
-    //-----------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
+    ///-----------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static  partial class CSharp
     {
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Ctor Vector2Int
         public static Vector2Int vec2i(int n_0, int n_1) { return new Vector2Int(n_0, n_1); }
         public static Vector2Int vec2i(Vector2Int v_0) { return new Vector2Int(v_0.x, v_0.y); }
         public static Vector2Int vec2i(int n_0) { return new Vector2Int(n_0, n_0); }
         #endregion Mixed Ctor Vector2Int
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Ctor Vector3Int
         public static Vector3Int vec3i(int n_0, int n_1, int n_2) { return new Vector3Int(n_0, n_1, n_2); }
         public static Vector3Int vec3i(int n_0, Vector2Int v_0) { return new Vector3Int(n_0, v_0.x, v_0.y); }
@@ -187,12 +187,12 @@ namespace Prateek.Core.Code
         
     }
 
-    //-----------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
+    ///-----------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static  partial class CSharp
     {
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Func int
         public static int clamp(int n_0, int n_1, int n_2) { return Mathf.Clamp(n_0, n_1, n_2); }
         public static int random(int n_0, int n_1) { return UnityEngine.Random.Range(n_0, n_1); }
@@ -206,7 +206,7 @@ namespace Prateek.Core.Code
         public static int exp(int n_0) { return (int)Mathf.Exp(n_0); }
         #endregion Mixed Func int
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Func Vector2Int
         public static Vector2Int clamp(Vector2Int v_0, Vector2Int v_1, Vector2Int v_2) { return new Vector2Int(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y)); }
         public static Vector2Int clamp(Vector2Int v_0, int n_1, int n_2) { return new Vector2Int(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2)); }
@@ -227,7 +227,7 @@ namespace Prateek.Core.Code
         public static Vector2Int exp(Vector2Int v_0) { return new Vector2Int((int)Mathf.Exp(v_0.x), (int)Mathf.Exp(v_0.y)); }
         #endregion Mixed Func Vector2Int
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Func Vector3Int
         public static Vector3Int clamp(Vector3Int v_0, Vector3Int v_1, Vector3Int v_2) { return new Vector3Int(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y), Mathf.Clamp(v_0.z, v_1.z, v_2.z)); }
         public static Vector3Int clamp(Vector3Int v_0, int n_1, int n_2) { return new Vector3Int(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2), Mathf.Clamp(v_0.z, n_1, n_2)); }

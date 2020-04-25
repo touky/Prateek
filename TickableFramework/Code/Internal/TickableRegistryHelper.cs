@@ -4,7 +4,7 @@ namespace Prateek.TickableFramework.Code.Internal
 
     internal abstract class TickableRegistryHelper : NamedBehaviour
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         internal TickableRegistry registry;
         #endregion

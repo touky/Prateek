@@ -42,18 +42,18 @@ namespace Prateek.Debug.Code
     using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public abstract class DebugDisplayManager : FlagManager, FrameRecorderManager.IRecorderBase
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         public struct DebugRecording : FrameRecorderManager.Frame.IData
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             private DebugDisplayManager owner;
             private List<DebugDraw.PrimitiveSetup> framePrimitives;
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public FrameRecorderManager.IRecorderBase Owner { get { return owner; } }
             public List<DebugDraw.PrimitiveSetup> FramePrimitives
             {
@@ -65,7 +65,7 @@ namespace Prateek.Debug.Code
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public DebugRecording(DebugDisplayManager owner)
             {
                 this.owner = owner;
@@ -74,7 +74,7 @@ namespace Prateek.Debug.Code
     }
         #endregion Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private static FlagHierarchy flagHierarchy;
         private DebugRecording recordings;
@@ -82,7 +82,7 @@ namespace Prateek.Debug.Code
         private List<DebugDraw.PrimitiveSetup> timedPrimitives;
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
         public List<DebugDraw.PrimitiveSetup> TimedPrimitives
         {
@@ -94,11 +94,11 @@ namespace Prateek.Debug.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static FlagHierarchy DebugFlags { get { return flagHierarchy; } set { flagHierarchy = value; } }
         #endregion Properties
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region IGlobalManager integration
         //public override void OnRegister()
         //{
@@ -114,7 +114,7 @@ namespace Prateek.Debug.Code
         //    //todo FrameRecorder.Register(this);
         //}
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         //public override void OnInitialize()
         //{
         //    flagDatas = flagHierarchy;
@@ -122,7 +122,7 @@ namespace Prateek.Debug.Code
         //    base.OnInitialize();
         //}
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         //public override void OnLateUpdate(TickType tickType, float seconds)
         //{
         //    //if (timedPrimitives == null || tickType != TickType.BeginFrame)
@@ -143,7 +143,7 @@ namespace Prateek.Debug.Code
         //    }
         //}
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         //public override void OnUnregister()
         //{
         //    Destroy(lineDisplay.gameObject);
@@ -155,7 +155,7 @@ namespace Prateek.Debug.Code
         //}
         #endregion IGlobalManager integration
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Flags setups
         protected static void SetupFlags(FlagHierarchy hierarchy)
         {
@@ -163,11 +163,11 @@ namespace Prateek.Debug.Code
         }
         #endregion Flags setups
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region FrameRecorder.IRecorderBase
         public void BeginFrame() { }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public FrameRecorderManager.Frame.IData EndFrame()
         {
             if (timedPrimitives == null)
@@ -182,7 +182,7 @@ namespace Prateek.Debug.Code
             return old;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void PlayFrame(FrameRecorderManager.Frame.IData data)
         {
             var recordings = (DebugRecording)data;
@@ -193,7 +193,7 @@ namespace Prateek.Debug.Code
         }
         #endregion FrameRecorder.IRecorderBase
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Recording datas
         public static void Add(DebugDraw.PrimitiveSetup primitive)
         {

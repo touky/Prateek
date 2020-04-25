@@ -37,10 +37,10 @@ namespace Prateek.Helpers
     using Prateek.Core.Code.Helpers;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial class PersonalLogger : MonoBehaviour
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         public enum LogType
         {
@@ -62,10 +62,10 @@ namespace Prateek.Helpers
             MAX
         };
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public struct LogData
         {
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public struct OwnerData
             {
                 public object Owner0;
@@ -100,7 +100,7 @@ namespace Prateek.Helpers
                     }
                 }
 
-                //-------------------------------------------------------------
+                ///-------------------------------------------------------------
                 public void Copy(OwnerData other)
                 {
                     Owner0 = other.Owner0;
@@ -109,13 +109,13 @@ namespace Prateek.Helpers
                 }
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public LogType Type;
             public OwnerData Owners;
             public StringBlurp Log;
             public float Timestamp;
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public LogData(object owner0, object owner1, object owner2, LogType type, StringBlurp log)
             {
                 Owners = new OwnerData() { Owner0 = owner0, Owner1 = owner1, Owner2 = owner2 };
@@ -126,14 +126,14 @@ namespace Prateek.Helpers
         };
         #endregion //Declarations
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private Queue<LogData> m_log_history = new Queue<LogData>();
         private bool m_is_buffering_log = false;
         private Queue<LogData> m_log_buffer = new Queue<LogData>();
         #endregion //Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Settings
         [SerializeField]
         private int m_log_max_length = 100;
@@ -142,13 +142,13 @@ namespace Prateek.Helpers
         private bool m_silent_mode = false;
         #endregion //Settings
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
         public int LogMaxLength { get { return m_log_max_length; } }
         public bool SilentMode { get { return m_silent_mode; } set { m_silent_mode = value; } }
         #endregion //Properties
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Ocp methods
         protected void Start()
         {
@@ -156,7 +156,7 @@ namespace Prateek.Helpers
             //MainManager.Instance.DebugDisplayManager.Register(this);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected void OnDestroy()
         {
             //TODO BHU
@@ -164,10 +164,10 @@ namespace Prateek.Helpers
         }
         #endregion //Ocp methods
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Logging
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Logging TextBlob
         public void LogWarning(object owner, StringBlurp log) { Log(owner, null, LogType.Warning, log); }
         public void LogWarning(object owner0, object owner1, StringBlurp log) { Log(owner0, owner1, null, LogType.Warning, log); }
@@ -206,19 +206,19 @@ namespace Prateek.Helpers
         public void LogTaskEndFail(object owner0, object owner1, object owner2, StringBlurp log) { Log(owner0, owner1, owner2, LogType.BlockEndFail, log); }
         #endregion //Logging TextBlob
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Log(object owner, LogType type, StringBlurp log)
         {
             Log(owner, null, type, log);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Log(object owner0, object owner1, LogType type, StringBlurp log)
         {
             Log(owner0, owner1, null, type, log);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Log(object owner0, object owner1, object owner2, LogType type, StringBlurp log)
         {
             if (m_silent_mode)
@@ -227,7 +227,7 @@ namespace Prateek.Helpers
             Log(new LogData(owner0, owner1, owner2, type, log));
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void Log(LogData newLog)
         {
             var logs = m_is_buffering_log ? m_log_buffer : m_log_history;
@@ -241,13 +241,13 @@ namespace Prateek.Helpers
             logs.Enqueue(newLog);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void StartBuffering()
         {
             m_is_buffering_log = true;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void CommitBuffering()
         {
             m_is_buffering_log = false;
@@ -258,7 +258,7 @@ namespace Prateek.Helpers
             m_log_buffer.Clear();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void CancelBuffered()
         {
             m_is_buffering_log = false;

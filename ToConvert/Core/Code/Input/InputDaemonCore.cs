@@ -18,6 +18,7 @@ namespace Mayfair.Core.Code.Input
     using Mayfair.Core.Code.Utils.Extensions;
     using Mayfair.Core.Code.Utils.Types.Priority;
     using Prateek.DaemonCore.Code;
+    using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
     public class InputDaemonCore : DaemonCore<InputDaemonCore, InputDaemonBranch>, IDebugMenuNotebookOwner
@@ -80,14 +81,19 @@ namespace Mayfair.Core.Code.Input
             }
         }
         #endregion
-
-        #region Unity Methods
-        private void Update()
+        
+        public override TickableSetup TickableSetup
         {
+            get { return TickableSetup.UpdateBegin; }
+        }
+
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        {
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
+
             ProcessInput();
         }
-        #endregion
-
+        
         #region Service
         protected override void OnAwake()
         {

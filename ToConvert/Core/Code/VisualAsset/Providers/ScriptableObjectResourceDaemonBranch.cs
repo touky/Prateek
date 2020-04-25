@@ -7,7 +7,8 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Prateek.NoticeFramework.TransmitterReceiver;
     using UnityEngine;
 
-    public abstract class ScriptableObjectResourceDaemonBranch<TScriptableResourceType> : VisualResourceDaemonBranch<ScriptableObjectContentHandle<TScriptableResourceType>>
+    public abstract class ScriptableObjectResourceDaemonBranch<TScriptableResourceType>
+        : VisualResourceDaemonBranch<ScriptableObjectContentHandle<TScriptableResourceType>>
         where TScriptableResourceType : ScriptableObject
     {
         #region Unity Methods

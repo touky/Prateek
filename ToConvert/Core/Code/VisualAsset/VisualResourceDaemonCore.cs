@@ -7,6 +7,7 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.Resources;
     using Mayfair.Core.Code.VisualAsset.Messages;
     using Mayfair.Core.Code.VisualAsset.Providers;
+    using Prateek.TickableFramework.Code.Enums;
 
     public sealed class VisualResourceDaemonCore : ContentAccessDaemonCore<VisualResourceDaemonCore, VisualResourceDaemonBranch>
     {
@@ -21,6 +22,22 @@ namespace Mayfair.Core.Code.VisualAsset
             get { return ServiceProviderUsageRuleType.UseAllValid; }
         }
         #endregion
+        
+        public override TickableSetup TickableSetup
+        {
+            get { return TickableSetup.UpdateBegin; }
+        }
+
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        {
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
+
+            PerformProviderAction(ServiceProviderUsageRule,
+                                  branch =>
+                                  {
+                                      branch.RefreshPending();
+                                  });
+        }
 
         #region Service
         protected override void OnAwake()

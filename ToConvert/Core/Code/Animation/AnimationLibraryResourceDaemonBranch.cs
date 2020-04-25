@@ -7,7 +7,8 @@ namespace Mayfair.Core.Code.Animation
     using Mayfair.Core.Code.VisualAsset.Providers;
     using Prateek.NoticeFramework.Notices.Core;
 
-    public class AnimationLibraryResourceDaemonBranch : ScriptableObjectResourceDaemonBranch<AnimationLibrary>, IDebugMenuNotebookOwner
+    public class AnimationLibraryResourceDaemonBranch
+        : ScriptableObjectResourceDaemonBranch<AnimationLibrary>, IDebugMenuNotebookOwner
     {
         #region Static and Constants
         private const string COMMON_LIBRARY_KEYWORD = "AnimationLibrary/";

@@ -40,7 +40,7 @@ namespace Prateek.Core.Editor.Attributes
     using UnityEditor;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [CustomPropertyDrawer(typeof(TypeRefAttribute), true)]
     public class TypeRefAttributeDrawer : PropertyDrawer
     {

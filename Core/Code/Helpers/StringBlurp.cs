@@ -35,10 +35,10 @@ namespace Prateek.Core.Code.Helpers
 {
     using System;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public struct StringBlurp
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public struct Tag
         {
             public StaticText.Id id;
@@ -47,14 +47,14 @@ namespace Prateek.Core.Code.Helpers
                 id = new_id;
             }
 
-            //-----------------------------------------------------------------
+            ///-----------------------------------------------------------------
             public static implicit operator Tag(StaticText.Id new_id)
             {
                 return new Tag(new_id);
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public struct Value
         {
             public enum UsageType
@@ -94,7 +94,7 @@ namespace Prateek.Core.Code.Helpers
         private Helpers.CachedArray<string> m_tagsStr;
         private Helpers.CachedArray<StaticText.Id> m_tagsId;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public StringBlurp(bool dummy = false)
         {
             m_text = null;
@@ -103,7 +103,7 @@ namespace Prateek.Core.Code.Helpers
             m_tagsId = new Helpers.CachedArray<StaticText.Id>(StaticText.Id.Empty);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Value ctor/Add
         public StringBlurp(Value v0)
             : this(true)
@@ -111,7 +111,7 @@ namespace Prateek.Core.Code.Helpers
             Add(v0);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
 #region Overload
         public StringBlurp(Value v0, Value v1)
             : this(v0) { Add(v1); }
@@ -133,7 +133,7 @@ namespace Prateek.Core.Code.Helpers
             : this(v0, v1, v2, v3, v4, v5, v6, v7, v8) { Add(v9); }
         #endregion //Overload
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static implicit operator StringBlurp(Value v) { return new StringBlurp(v); }
 #region Overload
         public static implicit operator StringBlurp(StaticText.Id v) { return new StringBlurp(v); }
@@ -142,7 +142,7 @@ namespace Prateek.Core.Code.Helpers
         public static implicit operator StringBlurp(Tag v) { return new StringBlurp(v); }
         #endregion //Overload
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public StringBlurp Add(Value value)
         {
             switch (value.usage)
@@ -155,7 +155,7 @@ namespace Prateek.Core.Code.Helpers
             return this;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
 #region Overload
         public StringBlurp Add(Value v0, Value v1)
         { Add(v0); Add(v1); return this; }
@@ -179,7 +179,7 @@ namespace Prateek.Core.Code.Helpers
 
         #endregion Value ctor/Add
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public string Build()
         {
             string result = (m_text != null ? m_text : "");
@@ -211,13 +211,13 @@ namespace Prateek.Core.Code.Helpers
             return array.Length > 0 ? String.Format(result, array) : String.Format(result, "");
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public bool IsValid()
         {
             return m_ids.Count > 0 || m_tagsStr.Count > 0 || m_tagsId.Count > 0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public bool Has(StaticText.Id id)
         {
             if (id == StaticText.Id.Empty)
@@ -230,14 +230,14 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public StringBlurp SetPrefixText(string text)
         {
             m_text = text;
             return this;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static StringBlurp operator +(StringBlurp b0, StringBlurp b1)
         {
             for (int i = 0; i < b1.m_ids.Count; ++i)
@@ -258,20 +258,20 @@ namespace Prateek.Core.Code.Helpers
             return b0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void ClearIds()
         {
             m_ids.Clear();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void ClearTags()
         {
             m_tagsStr.Clear();
             m_tagsId.Clear();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Clear()
         {
             ClearIds();

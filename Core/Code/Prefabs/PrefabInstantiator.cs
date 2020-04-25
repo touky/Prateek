@@ -36,10 +36,10 @@ namespace Prateek.Prefabs
     using Prateek.Core.Code.Behaviours;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public class PrefabInstantiator : BaseBehaviour
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Settings
         [SerializeField]
         protected bool destroyOnSpawn = true;
@@ -47,19 +47,19 @@ namespace Prateek.Prefabs
         protected GameObject prefab = null;
         #endregion Settings
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         protected GameObject instance;
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
         public bool DestroyOnSpawn { get { return destroyOnSpawn; } }
         public GameObject Prefab { get { return prefab; } }
         public GameObject Instance { get { return instance; } }
         #endregion Properties
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unity Defaults
         private void Awake()
         {
@@ -67,7 +67,7 @@ namespace Prateek.Prefabs
         }
         #endregion Unity Defaults
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Instantiation
         protected void Spawn()
         {
@@ -78,7 +78,7 @@ namespace Prateek.Prefabs
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static void CreateChildrenInstances(GameObject gameObject)
         {
             if (Application.isPlaying == false || gameObject == null)
@@ -91,7 +91,7 @@ namespace Prateek.Prefabs
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public virtual GameObject CreateInstance()
         {
             if (!Application.isPlaying || instance != null || prefab == null)

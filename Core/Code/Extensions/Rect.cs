@@ -35,17 +35,17 @@ namespace Prateek.Core.Code.Extensions
 {
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static partial class RectExt
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Declarations
         public static Rect Inflate(this Rect rect, float value)
         {
             return Inflate(rect, Vector2.one * value);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Rect Inflate(this Rect rect, Vector2 value)
         {
             rect.position -= value * CSharp.sign(rect.size);
@@ -53,7 +53,7 @@ namespace Prateek.Core.Code.Extensions
             return rect;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Rect TruncateX(this Rect rect, float size)
         {
             if (size > 0)
@@ -64,7 +64,7 @@ namespace Prateek.Core.Code.Extensions
             return rect;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Rect TruncateY(this Rect rect, float size)
         {
             if (size > 0)
@@ -75,14 +75,14 @@ namespace Prateek.Core.Code.Extensions
             return rect;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Rect NextLine(this Rect rect)
         {
             rect.y += rect.height;
             return rect;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Rect NextColumn(this Rect rect)
         {
             rect.x += rect.width;

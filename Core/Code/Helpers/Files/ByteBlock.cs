@@ -37,20 +37,20 @@ namespace Prateek.Core.Code.Helpers.Files
     using System.IO;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public class ByteBlock
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private Stream source;
         private MemoryStream buffer;
         private BinaryReader reader;
         private BinaryWriter writer;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public long SourcePosition { get { return source.Position; } }
         public bool AtEnd { get { return buffer.Position >= buffer.Length; } }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Setup
         public ByteBlock(Stream source)
         {
@@ -60,7 +60,7 @@ namespace Prateek.Core.Code.Helpers.Files
             writer = new BinaryWriter(buffer);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         ~ByteBlock()
         {
             reader.Close();
@@ -68,7 +68,7 @@ namespace Prateek.Core.Code.Helpers.Files
             buffer.Dispose();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public bool SourceSeek(long offset, SeekOrigin origin = SeekOrigin.Begin)
         {
             if (source != null)
@@ -79,7 +79,7 @@ namespace Prateek.Core.Code.Helpers.Files
             return true;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public bool Load(int size, int offset = 0)
         {
             var data = new byte[size];
@@ -95,13 +95,13 @@ namespace Prateek.Core.Code.Helpers.Files
             return true;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void ResetCursor()
         {
             buffer.Seek(0, SeekOrigin.Begin);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Seek(int distance)
         {
             buffer.Seek(distance, SeekOrigin.Current);
@@ -109,12 +109,12 @@ namespace Prateek.Core.Code.Helpers.Files
 
         #endregion Setup
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Base getters
         public byte Byte() { return reader.ReadByte(); }
         public void Byte(byte value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public byte[] GetBytes(long size = 0)
         {
             var result = new byte[size <= 0 ? buffer.Length - buffer.Position : size];
@@ -126,43 +126,43 @@ namespace Prateek.Core.Code.Helpers.Files
         }
         public void Bytes(byte[] value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public char Char() { return (Char)reader.ReadByte(); }
         public void Char(Char value) { writer.Write((byte)value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Int16 Int16() { return reader.ReadInt16(); }
         public void Int16(Int16 value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public UInt16 UInt16() { return reader.ReadUInt16(); }
         public void UInt16(UInt16 value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Int32 Int32() { return reader.ReadInt32(); }
         public void Int32(Int32 value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public UInt32 UInt32() { return reader.ReadUInt32(); }
         public void UInt32(UInt32 value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Int64 Int64() { return reader.ReadInt64(); }
         public void Int64(Int64 value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public UInt64 UInt64() { return reader.ReadUInt64(); }
         public void UInt64(UInt64 value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public float Float() { return reader.ReadSingle(); }
         public void Float(float value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public double Double() { return reader.ReadDouble(); }
         public void Double(double value) { writer.Write(value); }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Floats(float[] value) { for (int f = 0; f < value.Length; f++) { Float(value[f]); } }
         public float[] Floats(int size)
         {
@@ -174,7 +174,7 @@ namespace Prateek.Core.Code.Helpers.Files
             return result;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Color ColorByteRGB() { return new Color((float)Byte(), (float)Byte(), (float)Byte(), 255f) / 255f; }
         public void ColorByteRGB(Color value)
         {
@@ -183,7 +183,7 @@ namespace Prateek.Core.Code.Helpers.Files
             Byte((byte)(value.b * 255f));
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Color ColorByteRGBA() { return new Color((float)Byte(), (float)Byte(), (float)Byte(), (float)Byte()) / 255f; }
         public void ColorByteRGBA(Color value)
         {
@@ -193,7 +193,7 @@ namespace Prateek.Core.Code.Helpers.Files
             Byte((byte)(value.a * 255f));
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Vector3 Vector3() { return new Vector3(Float(), Float(), Float()); }
         public void Vector3(Vector3 value)
         {
@@ -202,7 +202,7 @@ namespace Prateek.Core.Code.Helpers.Files
             Float(value.z);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Bounds Bounds() { return new Bounds(Vector3(), Vector3()); }
         public void Bounds(Bounds value)
         {
@@ -210,7 +210,7 @@ namespace Prateek.Core.Code.Helpers.Files
             Vector3(value.max);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void String(string value) { writer.Write(value); }
         public string String(int size, bool ignoreZeros = false)
         {

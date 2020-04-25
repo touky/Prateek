@@ -8,17 +8,22 @@ namespace Mayfair.Core.Code.Statistics
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Types.UniqueId;
     using Prateek.NoticeFramework.Tools;
+    using Prateek.TickableFramework.Code.Enums;
 
     public sealed class StatisticsDaemonCore : NoticeReceiverDaemonCore<StatisticsDaemonCore, StatisticsDaemonBranch>, IDebugMenuNotebookOwner
     {
         #region Fields
         //private Dictionary<KeywordHolder, HashSet<StatisticsServiceProvider>> trackedProviderTags = new Dictionary<KeywordHolder, HashSet<StatisticsServiceProvider>>();
         #endregion
-
-        #region Unity Methods
-        protected override void Update()
+            
+        public override TickableSetup TickableSetup
         {
-            base.Update();
+            get { return TickableSetup.UpdateBegin; }
+        }
+
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        {
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
 
             IEnumerable<StatisticsDaemonBranch> providers = GetValidBranches();
             foreach (StatisticsDaemonBranch branch in providers)
@@ -47,7 +52,6 @@ namespace Mayfair.Core.Code.Statistics
                 //}
             }
         }
-        #endregion
 
         #region Service
         protected override void OnAwake() { }

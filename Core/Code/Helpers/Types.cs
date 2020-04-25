@@ -36,7 +36,7 @@ namespace Prateek.Core.Code.Helpers
     using System;
     using System.Reflection;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class Types
     {
         public static Type GetType(string type_name)

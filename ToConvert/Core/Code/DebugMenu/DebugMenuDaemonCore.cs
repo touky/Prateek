@@ -10,6 +10,7 @@ namespace Mayfair.Core.Code.DebugMenu
     //todo using Mayfair.Core.Code.Service;
     //todo using Mayfair.Core.Code.Utils.Types;
     using Prateek.DaemonCore.Code;
+    using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 #if UNITY_EDITOR
     using UnityEditor;
@@ -89,6 +90,21 @@ namespace Mayfair.Core.Code.DebugMenu
             set { Set(ref rightSideMenu, PREFS_SCREEN_SIDE, RightSideMenu, value); }
         }
         #endregion
+        
+        public override TickableSetup TickableSetup
+        {
+            get { return TickableSetup.UpdateBegin; }
+        }
+
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        {
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
+
+            eventsThisFrame.Clear();
+            eventCount = 0;
+
+            DrawFrame();
+        }
 
         #region Unity Methods
         private void OnDestroy()
@@ -100,14 +116,6 @@ namespace Mayfair.Core.Code.DebugMenu
             }
 
             notebooks.Clear();
-        }
-
-        private void Update()
-        {
-            eventsThisFrame.Clear();
-            eventCount = 0;
-
-            DrawFrame();
         }
         #endregion
 

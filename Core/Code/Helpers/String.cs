@@ -36,18 +36,18 @@ namespace Prateek.Core.Code.Helpers
     using System;
     using System.Collections.Generic;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class TextMessage
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string INVALID_FORMAT = @"/!\ INVALID FORMAT /!\";
         public static string GENERIC_LOAD_ERROR = @"/!\ GENERIC LOAD ERROR /!\";
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class Strings
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         [Flags]
         public enum Separator : long
         {
@@ -84,10 +84,10 @@ namespace Prateek.Core.Code.Helpers
             ALL = ~0
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static readonly string Comment = "//--";
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private static readonly char[] space = { ' ' };
         private static readonly char[] newLine = { '\n', '\r' };
         private static readonly char[] directory = { '/', '\\' };
@@ -100,16 +100,16 @@ namespace Prateek.Core.Code.Helpers
         private static readonly char[] keyword = { '#' };
         private static readonly char[] operators = { '+', '-', '*', '/' };
     
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private static Dictionary<Separator, char[]> dictionnary = new Dictionary<Separator, char[]>();
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string S(this Separator mask)
         {
             return C(mask).ToString();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static char C(this Separator mask)
         {
             switch (mask)
@@ -139,7 +139,7 @@ namespace Prateek.Core.Code.Helpers
             return (char)0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private static char[] GetRaw(Separator mask)
         {
             switch (mask)
@@ -159,7 +159,7 @@ namespace Prateek.Core.Code.Helpers
             return null;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static char[] Get(this Separator mask)
         {
             var result = GetRaw(mask);
@@ -207,7 +207,7 @@ namespace Prateek.Core.Code.Helpers
             return mask.Length > 0 ? mask[mask.Length - 1] : default;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string NewLine(this string left, bool addBoth = false)
         {
             var result = left;
@@ -217,13 +217,13 @@ namespace Prateek.Core.Code.Helpers
             return result;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string CleanText(this string left)
         {
             return left.TabToSpaces().SimplifyNewLines();
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string SimplifyNewLines(this string left)
         {
             var cr = Separator.CarrRet.C().ToString();
@@ -241,19 +241,19 @@ namespace Prateek.Core.Code.Helpers
             return result;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string ApplyCRLF(this string left)
         {
             return left.Replace(Separator.LineFeed.C().ToString(), string.Empty + Separator.CarrRet.C() + Separator.LineFeed.C());
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string[] SplitLines(this string left)
         {
             return left.SimplifyNewLines().Split(Separator.NewLine.Get());
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string TabToSpaces(this string left, int spaceCount = 4)
         {
             if (!left.Contains(Separator.Tabs.C().ToString()))
@@ -266,7 +266,7 @@ namespace Prateek.Core.Code.Helpers
             return left.Replace(tab, s);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Directory(this string left)
         {
             return left + directory[0];
@@ -287,7 +287,7 @@ namespace Prateek.Core.Code.Helpers
             return left + directory[Math.Max(0, Math.Min(typeIndex, directory.Length - 1))] + right;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Extension(this string left, string extension, string extension2)
         {
             return left.Extension(extension).Extension(extension2);
@@ -316,7 +316,7 @@ namespace Prateek.Core.Code.Helpers
             return left;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string RemoveExtension(this string left)
         {
             var index = left.LastIndexOf(fileExtension[0]);
@@ -325,7 +325,7 @@ namespace Prateek.Core.Code.Helpers
             return left.Substring(0, index);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string TextParse(this string left)
         {
             return left + textParse[0];
@@ -366,7 +366,7 @@ namespace Prateek.Core.Code.Helpers
             return left + textParse[Math.Max(0, Math.Min(typeIndex, directory.Length - 1))] + space[0] + right;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string Keyword(this string left, bool enable = true)
         {
             if (enable)
@@ -384,13 +384,13 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string KeywordBegin(this string left)
         {
             return string.Format("// -BEGIN_{0}-", left);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static string KeywordEnd(this string left)
         {
             return string.Format("// -END_{0}-", left);

@@ -9,6 +9,7 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.Utils;
     using Prateek.NoticeFramework.Tools;
+    using Prateek.TickableFramework.Code.Enums;
 
     public sealed class LoadingProcessDaemonCore : NoticeReceiverDaemonCore<LoadingProcessDaemonCore, LoadingProcessDaemonBranch>, IDebugMenuNotebookOwner
     {
@@ -19,23 +20,28 @@ namespace Mayfair.Core.Code.LoadingProcess
         private List<LoadingTaskTracker> trackers = new List<LoadingTaskTracker>();
         #endregion
 
-        #region Unity Methods
-        private void Start()
+        public override TickableSetup TickableSetup
         {
+            get { return TickableSetup.UpdateBegin; }
+        }
+
+        public override void InitializeTickable()
+        {
+            base.InitializeTickable();
+
             SetupDebugContent();
         }
 
-        protected override void Update()
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
         {
-            base.Update();
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
 
             if (!TryUpdatingProvider())
             {
                 ChangeStatus(LoadingProcessStatus.Idle);
             }
         }
-        #endregion
-
+        
         #region Service
         #region Init
         protected override void OnAwake() { }

@@ -43,10 +43,10 @@ namespace Prateek.TickableFramework.Code
     using UnityEditor;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public sealed class TickableRegistry : SingletonBehaviour<TickableRegistry>
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Fields
         private GameObject tickerObject;
         private TickableRegistryFrameBegin tickerBegin;
@@ -55,11 +55,11 @@ namespace Prateek.TickableFramework.Code
         private TickableRegistryStarter tickableStarter = null;
         private List<ITickable> startingTickables = new List<ITickable>();
         private HashSet<ITickable> allTickables = new HashSet<ITickable>();
-        private Dictionary<TickType, List<ITickable>> aliveTickables = new Dictionary<TickType, List<ITickable>>();
-        private List<TickType> tickValues = new List<TickType>();
+        private Dictionary<TickableSetup, List<ITickable>> aliveTickables = new Dictionary<TickableSetup, List<ITickable>>();
+        private List<TickableSetup> tickValues = new List<TickableSetup>();
         #endregion
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unity Methods
         private void OnDestroy()
         {
@@ -67,40 +67,40 @@ namespace Prateek.TickableFramework.Code
         }
         #endregion
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unity Application Methods
         protected override void OnApplicationQuit()
         {
             base.OnApplicationQuit();
 
-            Execute(TickType.OnApplicationQuit);
+            Execute(TickableSetup.OnApplicationQuit);
 
             tickerBegin = null;
             tickerEnd = null;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void OnApplicationFocus(bool focusStatus)
         {
-            Execute(TickType.OnApplicationFocus, focusStatus);
+            Execute(TickableSetup.OnApplicationFocus, focusStatus);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void OnApplicationPause(bool pauseStatus)
         {
-            Execute(TickType.OnApplicationPause, pauseStatus);
+            Execute(TickableSetup.OnApplicationPause, pauseStatus);
         }
         #endregion
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unity EditorOnly Methods
         private void OnGUI()
         {
-            Execute(TickType.OnGUI);
+            Execute(TickableSetup.OnGUI);
         }
         #endregion
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Class Methods
         private void Initialize()
         {
@@ -128,13 +128,13 @@ namespace Prateek.TickableFramework.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void InitTickValues()
         {
-            var tickMask = (TickType) 1;
+            var tickMask = (TickableSetup) 1;
             while (true)
             {
-                if (tickMask == TickType.MAX)
+                if (tickMask == TickableSetup.MAX)
                 {
                     break;
                 }
@@ -142,11 +142,11 @@ namespace Prateek.TickableFramework.Code
                 tickValues.Add(tickMask);
                 aliveTickables.Add(tickMask, new List<ITickable>());
 
-                tickMask = (TickType) ((int) tickMask << 1);
+                tickMask = (TickableSetup) ((int) tickMask << 1);
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void RegisterInStarter(ITickable tickable)
         {
             if (tickableStarter == null)
@@ -159,12 +159,12 @@ namespace Prateek.TickableFramework.Code
             startingTickables.SortWithPriorities();
         }
 
-        //---------------------------------------------------------------------
-        internal void OnStarterStart()
+        ///---------------------------------------------------------------------
+        internal void StartTickables()
         {
             foreach (var tickable in startingTickables)
             {
-                tickable.Start();
+                tickable.InitializeTickable();
             }
 
             startingTickables.Clear();
@@ -173,105 +173,105 @@ namespace Prateek.TickableFramework.Code
             tickableStarter = null;
         }
 
-        //---------------------------------------------------------------------
-        internal void Execute(TickType tickType, bool status = false)
+        ///---------------------------------------------------------------------
+        internal void Execute(TickableSetup tickableSetup, bool status = false)
         {
-            switch (tickType)
+            switch (tickableSetup)
             {
-                case TickType.BeginUpdate:
-                case TickType.EndUpdate:
+                case TickableSetup.UpdateBegin:
+                case TickableSetup.UpdateEnd:
                 {
-                    Execute(tickType, Time.deltaTime, Time.unscaledDeltaTime);
+                    Execute(tickableSetup, Time.deltaTime, Time.unscaledDeltaTime);
                     break;
                 }
-                case TickType.BeginUpdateFixed:
-                case TickType.EndUpdateFixed:
+                case TickableSetup.UpdateBeginFixed:
+                case TickableSetup.UpdateEndFixed:
                 {
-                    Execute(tickType, Time.fixedDeltaTime);
+                    Execute(tickableSetup, Time.fixedDeltaTime);
                     break;
                 }
-                case TickType.BeginUpdateLate:
-                case TickType.EndUpdateLate:
+                case TickableSetup.UpdateBeginLate:
+                case TickableSetup.UpdateEndLate:
                 {
-                    Execute(tickType, Time.deltaTime);
+                    Execute(tickableSetup, Time.deltaTime);
                     break;
                 }
                 default:
                 {
-                    Execute(tickType, 0, 0, status);
+                    Execute(tickableSetup, 0, 0, status);
                     break;
                 }
             }
         }
 
-        //---------------------------------------------------------------------
-        private void Execute(TickType tickType, float seconds, float unscaledSeconds = 0, bool status = false)
+        ///---------------------------------------------------------------------
+        private void Execute(TickableSetup tickableSetup, float seconds, float unscaledSeconds = 0, bool status = false)
         {
-            if (aliveTickables.TryGetValue(tickType, out var list))
+            if (aliveTickables.TryGetValue(tickableSetup, out var list))
             {
-                switch (tickType)
+                switch (tickableSetup)
                 {
-                    case TickType.BeginUpdate:
-                    case TickType.EndUpdate:
+                    case TickableSetup.UpdateBegin:
+                    case TickableSetup.UpdateEnd:
                     {
-                        var frameEvent = tickType == TickType.BeginUpdate ? FrameEvent.BeginFrame : FrameEvent.EndFrame;
+                        var frameEvent = tickableSetup == TickableSetup.UpdateBegin ? TickableFrame.FrameBegin : TickableFrame.FrameEnd;
                         foreach (var tickable in list)
                         {
-                            tickable.Update(frameEvent, seconds, unscaledSeconds);
+                            tickable.Tick(frameEvent, seconds, unscaledSeconds);
                         }
 
                         break;
                     }
-                    case TickType.BeginUpdateFixed:
-                    case TickType.EndUpdateFixed:
+                    case TickableSetup.UpdateBeginFixed:
+                    case TickableSetup.UpdateEndFixed:
                     {
-                        var frameEvent = tickType == TickType.BeginUpdateFixed ? FrameEvent.BeginFrame : FrameEvent.EndFrame;
+                        var frameEvent = tickableSetup == TickableSetup.UpdateBeginFixed ? TickableFrame.FrameBegin : TickableFrame.FrameEnd;
                         foreach (var tickable in list)
                         {
-                            tickable.FixedUpdate(frameEvent, seconds);
+                            tickable.TickFixed(frameEvent, seconds);
                         }
 
                         break;
                     }
-                    case TickType.BeginUpdateLate:
-                    case TickType.EndUpdateLate:
+                    case TickableSetup.UpdateBeginLate:
+                    case TickableSetup.UpdateEndLate:
                     {
-                        var frameEvent = tickType == TickType.BeginUpdate ? FrameEvent.BeginFrame : FrameEvent.EndFrame;
+                        var frameEvent = tickableSetup == TickableSetup.UpdateBegin ? TickableFrame.FrameBegin : TickableFrame.FrameEnd;
                         foreach (var tickable in list)
                         {
-                            tickable.LateUpdate(frameEvent, seconds);
+                            tickable.TickLate(frameEvent, seconds);
                         }
 
                         break;
                     }
-                    case TickType.OnApplicationFocus:
+                    case TickableSetup.OnApplicationFocus:
                     {
                         foreach (var tickable in list)
                         {
-                            tickable.OnApplicationFocus(status);
+                            tickable.ApplicationChangeFocus(status);
                         }
 
                         break;
                     }
-                    case TickType.OnApplicationPause:
+                    case TickableSetup.OnApplicationPause:
                     {
                         foreach (var tickable in list)
                         {
-                            tickable.OnApplicationPause(status);
+                            tickable.ApplicationChangePause(status);
                         }
 
                         break;
                     }
-                    case TickType.OnApplicationQuit:
+                    case TickableSetup.OnApplicationQuit:
                     {
                         foreach (var tickable in list)
                         {
-                            tickable.OnApplicationQuit();
+                            tickable.ApplicationIsQuitting();
                         }
 
                         break;
                     }
-                    case TickType.OnGUI:
+                    case TickableSetup.OnGUI:
                     {
                         foreach (var tickable in list)
                         {
@@ -288,7 +288,7 @@ namespace Prateek.TickableFramework.Code
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void SetPauseFeedback(bool enable)
         {
 #if UNITY_EDITOR
@@ -303,7 +303,7 @@ namespace Prateek.TickableFramework.Code
 #endif //UNITY_EDITOR
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void PauseStateChanged(PauseState state)
         {
 #if UNITY_EDITOR
@@ -313,14 +313,26 @@ namespace Prateek.TickableFramework.Code
         #endregion
 
         #region Service
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected override void OnAwake()
         {
             Initialize();
         }
 
-        //---------------------------------------------------------------------
-        public void Register(ITickable tickable)
+        ///---------------------------------------------------------------------
+        public static void Register(ITickable tickable)
+        {
+            Instance.InternalRegister(tickable);
+        }
+
+        ///---------------------------------------------------------------------
+        public static void Unregister(ITickable tickable)
+        {
+            Instance.InternalUnregister(tickable);
+        }
+
+        ///---------------------------------------------------------------------
+        private void InternalRegister(ITickable tickable)
         {
             if (allTickables.Contains(tickable))
             {
@@ -331,7 +343,7 @@ namespace Prateek.TickableFramework.Code
 
             allTickables.Add(tickable);
 
-            var tickType = tickable.TickType;
+            var tickType = tickable.TickableSetup;
             foreach (var value in tickValues)
             {
                 if (!tickType.HasFlag(value))
@@ -345,8 +357,8 @@ namespace Prateek.TickableFramework.Code
             }
         }
 
-        //---------------------------------------------------------------------
-        public void Unregister(ITickable tickable)
+        ///---------------------------------------------------------------------
+        private void InternalUnregister(ITickable tickable)
         {
             if (!allTickables.Contains(tickable))
             {

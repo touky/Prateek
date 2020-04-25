@@ -36,7 +36,7 @@ namespace Prateek.Core.Code.Attributes
     using System;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public abstract class MathAttribute : PropertyAttribute
     {
         public enum ValueType
@@ -67,7 +67,7 @@ namespace Prateek.Core.Code.Attributes
         public float fMax { get { return fMaxValue; } }
         #endregion Fields
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected MathAttribute(int minValue, int maxValue)
         {
             valueType = ValueType.Int;
@@ -75,7 +75,7 @@ namespace Prateek.Core.Code.Attributes
             iMaxValue = maxValue;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected MathAttribute(float minValue, float maxValue)
         {
             valueType = ValueType.Float;
@@ -84,7 +84,7 @@ namespace Prateek.Core.Code.Attributes
         }
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
     public class MaxAttribute : MathAttribute
     {
@@ -93,7 +93,7 @@ namespace Prateek.Core.Code.Attributes
         public MaxAttribute(int value) : base(int.MinValue, value) { }
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
     public class ClampAttribute : MathAttribute
     {

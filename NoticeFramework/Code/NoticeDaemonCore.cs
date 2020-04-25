@@ -11,6 +11,7 @@
     using Prateek.NoticeFramework.Debug;
     using Prateek.NoticeFramework.Notices.Core;
     using Prateek.NoticeFramework.TransmitterReceiver;
+    using Prateek.TickableFramework.Code.Enums;
 
     #region Nested type: MessageService
     public sealed partial class NoticeDaemonCore : DaemonCore<NoticeDaemonCore, NoticeDaemonBranch>, IDebugMenuNotebookOwner
@@ -31,13 +32,18 @@
             get { return Instance.defaultReceiverOwner.NoticeReceiver; }
         }
         #endregion
-
-        #region Unity Methods
-        private void Update()
+        
+        public override TickableSetup TickableSetup
         {
+            get { return TickableSetup.UpdateBegin; }
+        }
+
+        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        {
+            base.Tick(tickableFrame, seconds, unscaledSeconds);
+
             ProcessNotices();
         }
-        #endregion
 
         #region Service
         protected override void OnAwake()

@@ -6,9 +6,9 @@ namespace Mayfair.Core.Code.GameAction
     using Prateek.NoticeFramework.TransmitterReceiver;
 
     public class GameActionNotice<T0, T1, T2> : GameActionNotice
-        where T0 : MasterTag
-        where T1 : MasterTag
-        where T2 : MasterTag
+        where T0 : MasterKeyword
+        where T1 : MasterKeyword
+        where T2 : MasterKeyword
     {
         #region Constructors
         public GameActionNotice()

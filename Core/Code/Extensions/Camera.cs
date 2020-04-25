@@ -37,13 +37,13 @@ namespace Prateek.Core.Code.Extensions
 
     public static class CameraExt
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Matrix4x4 localToCameraMatrix(this UnityEngine.Camera camera)
         {
             return camera.worldToCameraMatrix * camera.transform.localToWorldMatrix;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Matrix4x4 cameraToLocalMatrix(this UnityEngine.Camera camera)
         {
             return camera.localToCameraMatrix().inverse;

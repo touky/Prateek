@@ -11,28 +11,28 @@ namespace Prateek.TickableFramework.Code.Internal
 
     internal abstract class TickableRegistryTicker : TickableRegistryHelper
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Properties
-        internal abstract TickType TickerOffset { get; }
+        internal abstract TickableSetup TickerOffset { get; }
         #endregion
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unity Methods
         private void FixedUpdate()
         {
-            registry.Execute((TickType) ((int) TickType.BeginUpdateFixed << (int) TickerOffset));
+            registry.Execute((TickableSetup) ((int) TickableSetup.UpdateBeginFixed << (int) TickerOffset));
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void Update()
         {
-            registry.Execute((TickType) ((int) TickType.BeginUpdate << (int) TickerOffset));
+            registry.Execute((TickableSetup) ((int) TickableSetup.UpdateBegin << (int) TickerOffset));
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void LateUpdate()
         {
-            registry.Execute((TickType) ((int) TickType.EndUpdateLate << (int) TickerOffset));
+            registry.Execute((TickableSetup) ((int) TickableSetup.UpdateEndLate << (int) TickerOffset));
         }
         #endregion
     }

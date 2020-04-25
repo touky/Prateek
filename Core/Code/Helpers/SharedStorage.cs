@@ -37,7 +37,7 @@ namespace Prateek.Core.Code.Helpers
     using System.Collections.Generic;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public abstract class SharedStorage : ISerializationCallbackReceiver
     {
         [SerializeField]
@@ -47,7 +47,7 @@ namespace Prateek.Core.Code.Helpers
 
         private Dictionary<string, object> storage = new Dictionary<string, object>();
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected object GetInstance(string key)
         {
             object instance = null;
@@ -64,10 +64,10 @@ namespace Prateek.Core.Code.Helpers
             return instance;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         protected abstract object CreateInstance(string key);
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void OnBeforeSerialize()
         {
             _keys.Clear();
@@ -80,7 +80,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void OnAfterDeserialize()
         {
             storage = new Dictionary<string, object>();

@@ -33,12 +33,12 @@
 namespace Prateek.Core.Code {
     using UnityEngine;
 
-    //-----------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
+    ///-----------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static  partial class VectorExt
     {
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector2 to Vector2
         public static Vector2 xx(this Vector2 v) { return new Vector2(v.x, v.x); }
         public static Vector2 xy(this Vector2 v) { return new Vector2(v.x, v.y); }
@@ -50,7 +50,7 @@ namespace Prateek.Core.Code {
         public static Vector2 ny(this Vector2 v, float n_0 = 0) { return new Vector2(n_0, v.y); }
         #endregion Swizzle Vector2 to Vector2
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector2 to Vector3
         public static Vector3 xxx(this Vector2 v) { return new Vector3(v.x, v.x, v.x); }
         public static Vector3 xxy(this Vector2 v) { return new Vector3(v.x, v.x, v.y); }
@@ -80,7 +80,7 @@ namespace Prateek.Core.Code {
         public static Vector3 nny(this Vector2 v, float n_0 = 0, float n_1 = 0) { return new Vector3(n_0, n_1, v.y); }
         #endregion Swizzle Vector2 to Vector3
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector2 to Vector4
         public static Vector4 xxxx(this Vector2 v) { return new Vector4(v.x, v.x, v.x, v.x); }
         public static Vector4 xxxy(this Vector2 v) { return new Vector4(v.x, v.x, v.x, v.y); }
@@ -164,7 +164,7 @@ namespace Prateek.Core.Code {
         public static Vector4 nnny(this Vector2 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.y); }
         #endregion Swizzle Vector2 to Vector4
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector3 to Vector2
         public static Vector2 xx(this Vector3 v) { return new Vector2(v.x, v.x); }
         public static Vector2 xy(this Vector3 v) { return new Vector2(v.x, v.y); }
@@ -183,7 +183,7 @@ namespace Prateek.Core.Code {
         public static Vector2 nz(this Vector3 v, float n_0 = 0) { return new Vector2(n_0, v.z); }
         #endregion Swizzle Vector3 to Vector2
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector3 to Vector3
         public static Vector3 xxx(this Vector3 v) { return new Vector3(v.x, v.x, v.x); }
         public static Vector3 xxy(this Vector3 v) { return new Vector3(v.x, v.x, v.y); }
@@ -250,7 +250,7 @@ namespace Prateek.Core.Code {
         public static Vector3 nnz(this Vector3 v, float n_0 = 0, float n_1 = 0) { return new Vector3(n_0, n_1, v.z); }
         #endregion Swizzle Vector3 to Vector3
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector3 to Vector4
         public static Vector4 xxxx(this Vector3 v) { return new Vector4(v.x, v.x, v.x, v.x); }
         public static Vector4 xxxy(this Vector3 v) { return new Vector4(v.x, v.x, v.x, v.y); }
@@ -509,7 +509,7 @@ namespace Prateek.Core.Code {
         public static Vector4 nnnz(this Vector3 v, float n_0 = 0, float n_1 = 0, float n_2 = 0) { return new Vector4(n_0, n_1, n_2, v.z); }
         #endregion Swizzle Vector3 to Vector4
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector4 to Vector2
         public static Vector2 xx(this Vector4 v) { return new Vector2(v.x, v.x); }
         public static Vector2 xy(this Vector4 v) { return new Vector2(v.x, v.y); }
@@ -537,7 +537,7 @@ namespace Prateek.Core.Code {
         public static Vector2 nw(this Vector4 v, float n_0 = 0) { return new Vector2(n_0, v.w); }
         #endregion Swizzle Vector4 to Vector2
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector4 to Vector3
         public static Vector3 xxx(this Vector4 v) { return new Vector3(v.x, v.x, v.x); }
         public static Vector3 xxy(this Vector4 v) { return new Vector3(v.x, v.x, v.y); }
@@ -665,7 +665,7 @@ namespace Prateek.Core.Code {
         public static Vector3 nnw(this Vector4 v, float n_0 = 0, float n_1 = 0) { return new Vector3(n_0, n_1, v.w); }
         #endregion Swizzle Vector4 to Vector3
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Swizzle Vector4 to Vector4
         public static Vector4 xxxx(this Vector4 v) { return new Vector4(v.x, v.x, v.x, v.x); }
         public static Vector4 xxxy(this Vector4 v) { return new Vector4(v.x, v.x, v.x, v.y); }
@@ -1295,19 +1295,19 @@ namespace Prateek.Core.Code {
         
     }
 
-    //-----------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
+    ///-----------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static  partial class CSharp
     {
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Ctor Vector2
         public static Vector2 vec2(float n_0, float n_1) { return new Vector2(n_0, n_1); }
         public static Vector2 vec2(Vector2 v_0) { return new Vector2(v_0.x, v_0.y); }
         public static Vector2 vec2(float n_0) { return new Vector2(n_0, n_0); }
         #endregion Mixed Ctor Vector2
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Ctor Vector3
         public static Vector3 vec3(float n_0, float n_1, float n_2) { return new Vector3(n_0, n_1, n_2); }
         public static Vector3 vec3(float n_0, Vector2 v_0) { return new Vector3(n_0, v_0.x, v_0.y); }
@@ -1316,7 +1316,7 @@ namespace Prateek.Core.Code {
         public static Vector3 vec3(float n_0) { return new Vector3(n_0, n_0, n_0); }
         #endregion Mixed Ctor Vector3
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Ctor Vector4
         public static Vector4 vec4(float n_0, float n_1, float n_2, float n_3) { return new Vector4(n_0, n_1, n_2, n_3); }
         public static Vector4 vec4(float n_0, float n_1, Vector2 v_0) { return new Vector4(n_0, n_1, v_0.x, v_0.y); }
@@ -1331,12 +1331,12 @@ namespace Prateek.Core.Code {
         
     }
 
-    //-----------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
+    ///-----------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static  partial class CSharp
     {
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Func float
         public static float clamp(float n_0, float n_1, float n_2) { return Mathf.Clamp(n_0, n_1, n_2); }
         public static float saturate(float n_0) { return Mathf.Clamp01(n_0); }
@@ -1362,7 +1362,7 @@ namespace Prateek.Core.Code {
         public static float sqrt(float n_0) { return Mathf.Sqrt(n_0); }
         #endregion Mixed Func float
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Func Vector2
         public static Vector2 clamp(Vector2 v_0, Vector2 v_1, Vector2 v_2) { return new Vector2(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y)); }
         public static Vector2 clamp(Vector2 v_0, float n_1, float n_2) { return new Vector2(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2)); }
@@ -1396,7 +1396,7 @@ namespace Prateek.Core.Code {
         public static Vector2 sqrt(Vector2 v_0) { return new Vector2(Mathf.Sqrt(v_0.x), Mathf.Sqrt(v_0.y)); }
         #endregion Mixed Func Vector2
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Func Vector3
         public static Vector3 clamp(Vector3 v_0, Vector3 v_1, Vector3 v_2) { return new Vector3(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y), Mathf.Clamp(v_0.z, v_1.z, v_2.z)); }
         public static Vector3 clamp(Vector3 v_0, float n_1, float n_2) { return new Vector3(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2), Mathf.Clamp(v_0.z, n_1, n_2)); }
@@ -1430,7 +1430,7 @@ namespace Prateek.Core.Code {
         public static Vector3 sqrt(Vector3 v_0) { return new Vector3(Mathf.Sqrt(v_0.x), Mathf.Sqrt(v_0.y), Mathf.Sqrt(v_0.z)); }
         #endregion Mixed Func Vector3
         
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Mixed Func Vector4
         public static Vector4 clamp(Vector4 v_0, Vector4 v_1, Vector4 v_2) { return new Vector4(Mathf.Clamp(v_0.x, v_1.x, v_2.x), Mathf.Clamp(v_0.y, v_1.y, v_2.y), Mathf.Clamp(v_0.z, v_1.z, v_2.z), Mathf.Clamp(v_0.w, v_1.w, v_2.w)); }
         public static Vector4 clamp(Vector4 v_0, float n_1, float n_2) { return new Vector4(Mathf.Clamp(v_0.x, n_1, n_2), Mathf.Clamp(v_0.y, n_1, n_2), Mathf.Clamp(v_0.z, n_1, n_2), Mathf.Clamp(v_0.w, n_1, n_2)); }

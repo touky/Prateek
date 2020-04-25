@@ -36,7 +36,7 @@ namespace Prateek.Core.Code.Helpers
     using System;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public struct MaskFlag
     {
         private int flag;
@@ -48,19 +48,19 @@ namespace Prateek.Core.Code.Helpers
         public int Offset { get { return offset; } }
         public static MaskFlag zero { get { return new MaskFlag(); } }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static implicit operator MaskFlag(int flagIndex)
         {
             return new MaskFlag(flagIndex);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static implicit operator MaskFlag(ulong mask)
         {
             return new MaskFlag(mask);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private MaskFlag(int flagIndex)
         {
             flag = flagIndex < 0 ? 0 : flagIndex;
@@ -68,7 +68,7 @@ namespace Prateek.Core.Code.Helpers
             mask = (ulong)1 << (flag % 64);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private MaskFlag(ulong mask)
         {
             this.offset = 0;
@@ -85,16 +85,16 @@ namespace Prateek.Core.Code.Helpers
         }
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial struct Mask128
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Override this for bigger Mask
         public const int MAX_SIZE = 2;
         private ulong m_mask_0f;
         private ulong m_mask_f0;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private ulong this[long index]
         {
             get
@@ -116,7 +116,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private Mask128(bool none)
         {
             m_mask_0f = 0;
@@ -125,10 +125,10 @@ namespace Prateek.Core.Code.Helpers
         #endregion Override this for bigger Mask
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial struct Mask256
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Override this for bigger Mask
         public const int MAX_SIZE = 4;
         private ulong m_mask_000f;
@@ -136,7 +136,7 @@ namespace Prateek.Core.Code.Helpers
         private ulong m_mask_0f00;
         private ulong m_mask_f000;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private ulong this[long index]
         {
             get
@@ -162,7 +162,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private Mask256(bool none)
         {
             m_mask_000f = 0;
@@ -171,7 +171,7 @@ namespace Prateek.Core.Code.Helpers
             m_mask_f000 = 0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void Set(int offset, Mask128 mask)
         {
             for (int i = offset; i < offset + Mask128.MAX_SIZE; i++)
@@ -180,14 +180,14 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask256(Mask128 mask_0f)
             : this(false)
         {
             Set(0, mask_0f);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask256(Mask128 mask_0f, Mask128 mask_f0)
             : this(mask_0f)
         {
@@ -196,10 +196,10 @@ namespace Prateek.Core.Code.Helpers
         #endregion Override this for bigger Mask
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial struct Mask512
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Override this for bigger Mask
         public const int MAX_SIZE = 8;
         private ulong m_mask_0000000f;
@@ -211,7 +211,7 @@ namespace Prateek.Core.Code.Helpers
         private ulong m_mask_0f000000;
         private ulong m_mask_f0000000;
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private ulong this[long index]
         {
             get
@@ -245,7 +245,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private Mask512(bool none)
         {
             m_mask_0000000f = 0;
@@ -258,7 +258,7 @@ namespace Prateek.Core.Code.Helpers
             m_mask_f0000000 = 0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void Set(int offset, Mask128 mask)
         {
             for (int i = offset; i < offset + Mask128.MAX_SIZE; i++)
@@ -267,35 +267,35 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask128 mask_000f)
             : this(false)
         {
             Set(0, mask_000f);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask128 mask_000f, Mask128 mask_00f0)
             : this(mask_000f)
         {
             Set(Mask128.MAX_SIZE, mask_00f0);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask128 mask_000f, Mask128 mask_00f0, Mask128 mask_0f00)
             : this(mask_000f, mask_00f0)
         {
             Set(Mask128.MAX_SIZE * 2, mask_0f00);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask128 mask_000f, Mask128 mask_00f0, Mask128 mask_0f00, Mask128 mask_f000)
             : this(mask_000f, mask_00f0, mask_0f00)
         {
             Set(Mask128.MAX_SIZE * 3, mask_f000);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         private void Set(int offset, Mask256 mask)
         {
             for (int i = offset; i < offset + Mask256.MAX_SIZE; i++)
@@ -304,28 +304,28 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask256 mask_0f)
             : this(false)
         {
             Set(0, mask_0f);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask256 mask_0f, Mask256 mask_f0)
             : this(mask_0f)
         {
             Set(Mask256.MAX_SIZE, mask_f0);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask256 mask_00ff, Mask128 mask_0f00)
             : this(mask_00ff)
         {
             Set(Mask128.MAX_SIZE * 2, mask_0f00);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask256 mask_00ff, Mask128 mask_0f00, Mask128 mask_f000)
             : this(mask_00ff)
         {
@@ -333,14 +333,14 @@ namespace Prateek.Core.Code.Helpers
             Set(Mask128.MAX_SIZE * 3, mask_f000);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask128 mask_000f, Mask256 mask_0ff0)
             : this(mask_000f)
         {
             Set(Mask128.MAX_SIZE, mask_0ff0);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask128 mask_000f, Mask256 mask_0ff0, Mask128 mask_f000)
             : this(mask_000f)
         {
@@ -348,7 +348,7 @@ namespace Prateek.Core.Code.Helpers
             Set(Mask128.MAX_SIZE + Mask256.MAX_SIZE, mask_f000);
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask128 mask_000f, Mask128 mask_00f0, Mask256 mask_ff00)
             : this(mask_000f, mask_00f0)
         {
@@ -357,10 +357,10 @@ namespace Prateek.Core.Code.Helpers
         #endregion Override this for bigger Mask
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial struct Mask128
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Size management
         public void Reset()
         {
@@ -371,7 +371,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Size management
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Add/Remove/Invert
         public static Mask128 operator +(Mask128 mask, MaskFlag flag)
         {
@@ -379,14 +379,14 @@ namespace Prateek.Core.Code.Helpers
             return mask;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask128 operator -(Mask128 mask, MaskFlag flag)
         {
             mask[flag.Offset] &= ~flag.Mask;
             return mask;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask128 operator ~(Mask128 mask)
         {
             for (int i = 0; i < MAX_SIZE; i++)
@@ -397,7 +397,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Add/Remove/Invert
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unary
         public static Mask128 operator &(Mask128 mask0, Mask128 mask1)
         {
@@ -408,7 +408,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask128 operator &(Mask128 mask0, MaskFlag mask1)
         {
             if (mask1.Offset < MAX_SIZE)
@@ -418,7 +418,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask128 operator |(Mask128 mask0, Mask128 mask1)
         {
             for (int i = 0; i < MAX_SIZE; i++)
@@ -428,7 +428,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask128 operator |(Mask128 mask0, MaskFlag mask1)
         {
             if (mask1.Offset < MAX_SIZE)
@@ -438,7 +438,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask128 operator ^(Mask128 mask0, Mask128 mask1)
         {
             for (int i = 0; i < MAX_SIZE; i++)
@@ -447,7 +447,7 @@ namespace Prateek.Core.Code.Helpers
             }
             return mask0;
         }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask128 operator ^(Mask128 mask0, MaskFlag mask1)
         {
             if (mask1.Offset < MAX_SIZE)
@@ -459,7 +459,7 @@ namespace Prateek.Core.Code.Helpers
 
         #endregion Unary
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Shift
         private void Shift(int shift)
         {
@@ -487,7 +487,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask128 operator <<(Mask128 mask, int shift)
         {
             shift = Mathf.Abs(shift);
@@ -504,7 +504,7 @@ namespace Prateek.Core.Code.Helpers
             return mask;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask128 operator >>(Mask128 mask, int shift)
         {
             shift = Mathf.Abs(shift);
@@ -522,7 +522,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Shift
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Bool/Equalities
         public static bool operator !=(Mask128 mask0, Mask128 mask1) { return !(mask0 == mask1); }
         public static bool operator ==(Mask128 mask0, Mask128 mask1)
@@ -543,7 +543,7 @@ namespace Prateek.Core.Code.Helpers
             return true;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool operator !=(Mask128 mask, MaskFlag flag) { return !(mask == flag); }
         public static bool operator ==(Mask128 mask, MaskFlag flag)
         {
@@ -552,7 +552,7 @@ namespace Prateek.Core.Code.Helpers
             return (mask[flag.Offset] & flag.Mask) != 0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool operator !(Mask128 mask) { return !(bool)mask; }
         public static bool operator true(Mask128 mask) { return (bool)mask == true; }
         public static bool operator false(Mask128 mask) { return (bool)mask == false; }
@@ -566,7 +566,7 @@ namespace Prateek.Core.Code.Helpers
             return false;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public override bool Equals(object obj) { return (obj is Mask128) ? this == ((Mask128)obj) : false; }
         public override int GetHashCode()
         {
@@ -579,7 +579,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Bool/Equalities
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Ctor
         public Mask128(params MaskFlag[] flags)
             : this(false)
@@ -590,7 +590,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask128(Mask128 other)
             : this(false)
         {
@@ -600,19 +600,19 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Set(int index, ulong value)
         {
             this[index] = value;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public ulong Get(int index)
         {
             return this[index];
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public override string ToString()
         {
             string result = "";
@@ -628,12 +628,12 @@ namespace Prateek.Core.Code.Helpers
         #endregion Ctor
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     // ALL CODE AFTER THAT IS COPIED FROM Mask128
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial struct Mask256
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Size management
         public void Reset()
         {
@@ -644,7 +644,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Size management
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Add/Remove/Invert
         public static Mask256 operator +(Mask256 mask, MaskFlag flag)
         {
@@ -652,14 +652,14 @@ namespace Prateek.Core.Code.Helpers
             return mask;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256 operator -(Mask256 mask, MaskFlag flag)
         {
             mask[flag.Offset] &= ~flag.Mask;
             return mask;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256 operator ~(Mask256 mask)
         {
             for (int i = 0; i < MAX_SIZE; i++)
@@ -670,7 +670,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Add/Remove/Invert
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unary
         public static Mask256 operator &(Mask256 mask0, Mask256 mask1)
         {
@@ -681,7 +681,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256 operator &(Mask256 mask0, MaskFlag mask1)
         {
             if (mask1.Offset < MAX_SIZE)
@@ -691,7 +691,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256 operator |(Mask256 mask0, Mask256 mask1)
         {
             for (int i = 0; i < MAX_SIZE; i++)
@@ -701,7 +701,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256 operator |(Mask256 mask0, MaskFlag mask1)
         {
             if (mask1.Offset < MAX_SIZE)
@@ -711,7 +711,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256 operator ^(Mask256 mask0, Mask256 mask1)
         {
             for (int i = 0; i < MAX_SIZE; i++)
@@ -720,7 +720,7 @@ namespace Prateek.Core.Code.Helpers
             }
             return mask0;
         }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256 operator ^(Mask256 mask0, MaskFlag mask1)
         {
             if (mask1.Offset < MAX_SIZE)
@@ -732,7 +732,7 @@ namespace Prateek.Core.Code.Helpers
 
         #endregion Unary
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Shift
         private void Shift(int shift)
         {
@@ -760,7 +760,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256 operator <<(Mask256 mask, int shift)
         {
             shift = Mathf.Abs(shift);
@@ -777,7 +777,7 @@ namespace Prateek.Core.Code.Helpers
             return mask;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask256 operator >>(Mask256 mask, int shift)
         {
             shift = Mathf.Abs(shift);
@@ -795,7 +795,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Shift
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Bool/Equalities
         public static bool operator !=(Mask256 mask0, Mask256 mask1) { return !(mask0 == mask1); }
         public static bool operator ==(Mask256 mask0, Mask256 mask1)
@@ -816,7 +816,7 @@ namespace Prateek.Core.Code.Helpers
             return true;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool operator !=(Mask256 mask, MaskFlag flag) { return !(mask == flag); }
         public static bool operator ==(Mask256 mask, MaskFlag flag)
         {
@@ -825,7 +825,7 @@ namespace Prateek.Core.Code.Helpers
             return (mask[flag.Offset] & flag.Mask) != 0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool operator !(Mask256 mask) { return !(bool)mask; }
         public static bool operator true(Mask256 mask) { return (bool)mask == true; }
         public static bool operator false(Mask256 mask) { return (bool)mask == false; }
@@ -839,7 +839,7 @@ namespace Prateek.Core.Code.Helpers
             return false;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public override bool Equals(object obj) { return (obj is Mask256) ? this == ((Mask256)obj) : false; }
         public override int GetHashCode()
         {
@@ -852,7 +852,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Bool/Equalities
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Ctor
         public Mask256(params MaskFlag[] flags)
             : this(false)
@@ -863,7 +863,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask256(Mask256 other)
             : this(false)
         {
@@ -873,19 +873,19 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Set(int index, ulong value)
         {
             this[index] = value;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public ulong Get(int index)
         {
             return this[index];
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public override string ToString()
         {
             string result = "";
@@ -901,10 +901,10 @@ namespace Prateek.Core.Code.Helpers
         #endregion Ctor
     }
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public partial struct Mask512
     {
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Size management
         public void Reset()
         {
@@ -915,7 +915,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Size management
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Add/Remove/Invert
         public static Mask512 operator +(Mask512 mask, MaskFlag flag)
         {
@@ -923,14 +923,14 @@ namespace Prateek.Core.Code.Helpers
             return mask;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512 operator -(Mask512 mask, MaskFlag flag)
         {
             mask[flag.Offset] &= ~flag.Mask;
             return mask;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512 operator ~(Mask512 mask)
         {
             for (int i = 0; i < MAX_SIZE; i++)
@@ -941,7 +941,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Add/Remove/Invert
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Unary
         public static Mask512 operator &(Mask512 mask0, Mask512 mask1)
         {
@@ -952,7 +952,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512 operator &(Mask512 mask0, MaskFlag mask1)
         {
             if (mask1.Offset < MAX_SIZE)
@@ -962,7 +962,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512 operator |(Mask512 mask0, Mask512 mask1)
         {
             for (int i = 0; i < MAX_SIZE; i++)
@@ -972,7 +972,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512 operator |(Mask512 mask0, MaskFlag mask1)
         {
             if (mask1.Offset < MAX_SIZE)
@@ -982,7 +982,7 @@ namespace Prateek.Core.Code.Helpers
             return mask0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512 operator ^(Mask512 mask0, Mask512 mask1)
         {
             for (int i = 0; i < MAX_SIZE; i++)
@@ -991,7 +991,7 @@ namespace Prateek.Core.Code.Helpers
             }
             return mask0;
         }
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512 operator ^(Mask512 mask0, MaskFlag mask1)
         {
             if (mask1.Offset < MAX_SIZE)
@@ -1003,7 +1003,7 @@ namespace Prateek.Core.Code.Helpers
 
         #endregion Unary
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Shift
         private void Shift(int shift)
         {
@@ -1031,7 +1031,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512 operator <<(Mask512 mask, int shift)
         {
             shift = Mathf.Abs(shift);
@@ -1048,7 +1048,7 @@ namespace Prateek.Core.Code.Helpers
             return mask;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static Mask512 operator >>(Mask512 mask, int shift)
         {
             shift = Mathf.Abs(shift);
@@ -1066,7 +1066,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Shift
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Bool/Equalities
         public static bool operator !=(Mask512 mask0, Mask512 mask1) { return !(mask0 == mask1); }
         public static bool operator ==(Mask512 mask0, Mask512 mask1)
@@ -1087,7 +1087,7 @@ namespace Prateek.Core.Code.Helpers
             return true;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool operator !=(Mask512 mask, MaskFlag flag) { return !(mask == flag); }
         public static bool operator ==(Mask512 mask, MaskFlag flag)
         {
@@ -1096,7 +1096,7 @@ namespace Prateek.Core.Code.Helpers
             return (mask[flag.Offset] & flag.Mask) != 0;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public static bool operator !(Mask512 mask) { return !(bool)mask; }
         public static bool operator true(Mask512 mask) { return (bool)mask == true; }
         public static bool operator false(Mask512 mask) { return (bool)mask == false; }
@@ -1110,7 +1110,7 @@ namespace Prateek.Core.Code.Helpers
             return false;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public override bool Equals(object obj) { return (obj is Mask512) ? this == ((Mask512)obj) : false; }
         public override int GetHashCode()
         {
@@ -1123,7 +1123,7 @@ namespace Prateek.Core.Code.Helpers
         }
         #endregion Bool/Equalities
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         #region Ctor
         public Mask512(params MaskFlag[] flags)
             : this(false)
@@ -1134,7 +1134,7 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public Mask512(Mask512 other)
             : this(false)
         {
@@ -1144,19 +1144,19 @@ namespace Prateek.Core.Code.Helpers
             }
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public void Set(int index, ulong value)
         {
             this[index] = value;
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public ulong Get(int index)
         {
             return this[index];
         }
 
-        //---------------------------------------------------------------------
+        ///---------------------------------------------------------------------
         public override string ToString()
         {
             string result = "";

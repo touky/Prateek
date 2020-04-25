@@ -37,7 +37,7 @@ namespace Prateek.Core.Editor.Helpers
     using System.Collections.Generic;
     using UnityEngine;
 
-    //-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
     public static class MenuCommand
     {
         [UnityEditor.MenuItem("CONTEXT/Component/Sort components")]

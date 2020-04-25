@@ -4,31 +4,31 @@ namespace Mayfair.CoreContent.Code.Tags
 
     public abstract partial class Tags
     {
-        public abstract class VFX : MasterTag { }
+        public abstract class VFX : MasterKeyword { }
 
-        public abstract class SizeTag : MasterTag { }
+        public abstract class SizeKeyword : MasterKeyword { }
 
         //Width tag in cell units
-        public abstract class Width1 : SizeTag { }
-        public abstract class Width2 : SizeTag { }
-        public abstract class Width3 : SizeTag { }
-        public abstract class Width4 : SizeTag { }
-        public abstract class Width5 : SizeTag { }
-        public abstract class Width6 : SizeTag { }
-        public abstract class Width7 : SizeTag { }
-        public abstract class Width8 : SizeTag { }
-        public abstract class Width9 : SizeTag { }
+        public abstract class Width1 : SizeKeyword { }
+        public abstract class Width2 : SizeKeyword { }
+        public abstract class Width3 : SizeKeyword { }
+        public abstract class Width4 : SizeKeyword { }
+        public abstract class Width5 : SizeKeyword { }
+        public abstract class Width6 : SizeKeyword { }
+        public abstract class Width7 : SizeKeyword { }
+        public abstract class Width8 : SizeKeyword { }
+        public abstract class Width9 : SizeKeyword { }
 
         //Length tag in cell units
-        public abstract class Length1 : SizeTag { }
-        public abstract class Length2 : SizeTag { }
-        public abstract class Length3 : SizeTag { }
-        public abstract class Length4 : SizeTag { }
-        public abstract class Length5 : SizeTag { }
-        public abstract class Length6 : SizeTag { }
-        public abstract class Length7 : SizeTag { }
-        public abstract class Length8 : SizeTag { }
-        public abstract class Length9 : SizeTag { }
+        public abstract class Length1 : SizeKeyword { }
+        public abstract class Length2 : SizeKeyword { }
+        public abstract class Length3 : SizeKeyword { }
+        public abstract class Length4 : SizeKeyword { }
+        public abstract class Length5 : SizeKeyword { }
+        public abstract class Length6 : SizeKeyword { }
+        public abstract class Length7 : SizeKeyword { }
+        public abstract class Length8 : SizeKeyword { }
+        public abstract class Length9 : SizeKeyword { }
 
         //Width tag in cell units
         public abstract class W1 : Width1 { private const bool USE_PARENT_TYPE = true; }
