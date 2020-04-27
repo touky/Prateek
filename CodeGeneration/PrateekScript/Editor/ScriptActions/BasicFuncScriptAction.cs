@@ -19,9 +19,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             get { return "FUNC_BASIC"; }
         }
 
-        public override GenerationMode GenMode
+        public override GenerationRule GenerationMode
         {
-            get { return GenerationMode.ForeachSrc; }
+            get { return GenerationRule.ForeachSrc; }
         }
 
         public override bool GenerateDefault
@@ -54,21 +54,27 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             }
             else
             {
-                var variant = new FunctionVariant(string.Empty, data.functionContents.Count - 1);
+                var variant = new FunctionVariant(data.functionContents.Count);
                 for (var d = 0; d < data.functionContents.Count; d++)
                 {
-                    var funcInfo  = data.functionContents[d];
-                    var varsCount = Vars.GetCount(funcInfo.data);
+                    var functionContent = data.functionContents[d];
                     for (var v = 0; v < contentSrc.variables.Count; v++)
                     {
-                        var funcData = funcInfo.data;
-                        for (var n = 0; n < CSharp.min(varsCount, Vars.Count); n++)
+                        var functionData = functionContent.data;
+                        if (Variables.DefaultSymbol.CanSwap(functionContent.data))
                         {
-                            var vars = Vars[n] + contentSrc.variables[v];
-                            funcData = vars.Apply(funcData);
+                            var swap = Variables.DefaultSymbol + contentSrc.variables[v];
+                            functionData = swap.Apply(functionData);
                         }
 
-                        variant[d] = funcData;
+                        var currentVariable = Variables[v];
+                        if (currentVariable.CanSwap(functionContent.data))
+                        {
+                            var swap = currentVariable + contentSrc.variables[v];
+                            functionData = swap.Apply(functionData);
+                        }
+
+                        variant[d] = functionData;
                     }
                 }
 

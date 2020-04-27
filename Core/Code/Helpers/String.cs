@@ -85,7 +85,8 @@ namespace Prateek.Core.Code.Helpers
         }
 
         ///---------------------------------------------------------------------
-        public static readonly string Comment = "//--";
+        public const int CommentSplitLength = 80;
+        public static readonly string CommentSplitRoot = "///--";
 
         ///---------------------------------------------------------------------
         private static readonly char[] space = { ' ' };

@@ -10,33 +10,33 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
         PRATEEK_CODE_MAIN
         {
 		@
-        @//---------------------------------------------------------------------
+        @//--
         @#region #SRC_CLASS#
         @public static #NAMES_0# Get(string name, #SRC_CLASS# defaultValue)
         @{
         @    return new #NAMES_0#(name, defaultValue);
         @}
         @
-        @//---------------------------------------------------------------------
+        @//--
         @public class #NAMES_0# : TypedStorage<#SRC_CLASS#>
         @{
-        @    ///-----------------------------------------------------------------
+        @    ///--
         @    public #NAMES_0#(string name, #SRC_CLASS# defaultValue) : base(name, defaultValue) { }
         @
-        @    ///-----------------------------------------------------------------
+        @    ///--
         @    public override bool ShouldSetNewValue(#SRC_CLASS# newValue)
         @    {
         @        return this.value != newValue;
         @    }
 		@	 
-        @    ///-----------------------------------------------------------------
+        @    ///--
         @    #if UNITY_EDITOR
         @    protected override void GetFromPrefs()
         @    {
         @        value = UnityEditor.EditorPrefs.#NAMES_1#(name, defaultValue);
         @    }
         @
-        @    ///-----------------------------------------------------------------
+        @    ///--
         @    protected override void SetToPrefs()
         @    {
         @        UnityEditor.EditorPrefs.#NAMES_2#(name, value);
@@ -87,37 +87,37 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 
 		PRATEEK_FUNC
 		{
-		@	protected #NAMES_1# #VARS_0#;
+		@	protected #NAMES_1# #VARS_N#;
 		}
-		PRATEEK_FUNC { @#VARS_0#.Value$ }
+		PRATEEK_FUNC { @#VARS_N#.Value$ }
 		PRATEEK_FUNC
 		{
-		@			#VARS_0#.Value = value.#VARS_0#;
+		@			#VARS_N#.Value = value.#VARS_N#;
 		}
 		PRATEEK_FUNC
 		{
-		@		#VARS_0# = new #NAMES_1#(name + ".#VARS_0#", defaultValue.#VARS_0#);
+		@		#VARS_N# = new #NAMES_1#(name + ".#VARS_N#", defaultValue.#VARS_N#);
 		}
 
 		PRATEEK_CODE_MAIN
 		{
 		@
-		@//---------------------------------------------------------------------
+		@//--
 		@#region #SRC_CLASS#
 		@public static #NAMES_0# Get(string name, #SRC_CLASS# defaultValue)
 		@{
 		@	return new #NAMES_0#(name, defaultValue);
 		@}
 		@
-		@//---------------------------------------------------------------------
+		@//--
 		@public class #NAMES_0# : ValueStorage
 		@{
-		@	//-----------------------------------------------------------------
+		@	//--
 		@	#region Fields
 		@#FUNC_RESULT_0#
 		@	#endregion Fields
 		@
-		@	//-----------------------------------------------------------------
+		@	//--
 		@	#region Properties
 		@	public #SRC_CLASS# Value
 		@	{
@@ -132,14 +132,14 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@	}
 		@	#endregion Properties
 		@
-		@	//-----------------------------------------------------------------
+		@	//--
 		@	#region Behaviour
 		@	public #NAMES_0#(string name, #SRC_CLASS# defaultValue) : base(name)
 		@	{
 		@#FUNC_RESULT_3#
 		@	}
 		@
-		@	//-----------------------------------------------------------------
+		@	//--
 		@	protected override void GetFromPrefs() { }
 		@	protected override void SetToPrefs() { }
 		@	#endregion Behaviour
@@ -166,24 +166,24 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		PRATEEK_CODE_MAIN
 		{
 		@
-		@//---------------------------------------------------------------------
+		@//--
 		@#region List<#SRC_CLASS#>
 		@public static List#NAMES_0# Get(string name, List<#SRC_CLASS#> default_value)
 		@{
 		@    return new List#NAMES_0#(name, default_value);
 		@}
 		@
-		@//---------------------------------------------------------------------
+		@//--
 		@public class List#NAMES_0# : ValueStorage
 		@{
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    #region Fields
 		@    protected Ints count;
 		@    protected List<#NAMES_0#> prefValues = new List<#NAMES_0#>();
 		@    protected List<#SRC_CLASS#> realValues = new List<#SRC_CLASS#>();
 		@    #endregion Fields
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
         @    public int Count
         @    {
         @        get { return count.Value; }
@@ -195,7 +195,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
         @        }
         @    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    public #SRC_CLASS# this[int index]
 		@    {
 		@        get { return prefValues[index].Value; }
@@ -207,7 +207,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@        }
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    public List<#SRC_CLASS#> Values
 		@    {
 		@        get { return new List<#SRC_CLASS#>(realValues); }
@@ -229,7 +229,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@        }
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    public List#NAMES_0#(string name, List<#SRC_CLASS#> defaultValue) : base(name)
 		@    {
 		@        var valueCount = defaultValue == null ? 0 : defaultValue.Count;
@@ -242,13 +242,13 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@        }
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    private string GetName(int index)
 		@    {
 		@        return string.Format("{0}[{1}]", name, index);
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    public void Add(#SRC_CLASS# value)
 		@    {
 		@        prefValues.Add(new #NAMES_0#(GetName(prefValues.Count), value));
@@ -256,7 +256,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@        count.Value = realValues.Count;
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    public void AddRange(List<#SRC_CLASS#> value)
 		@    {
 		@        for (int i = 0; i < value.Count; i++)
@@ -265,7 +265,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@        }
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    public void RemoveAt(int index)
 		@    {
 		@        realValues.RemoveAt(index);
@@ -278,13 +278,13 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@        prefValues.RemoveLast();
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    public void RemoveLast()
 		@    {
 		@        RemoveAt(count.Value - 1);
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    public void RemoveRange(int index, int length = 1)
 		@    {
 		@        for (int i = 0; i < length; i++)
@@ -293,7 +293,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@        }
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    public void Clear()
 		@    {
 		@        realValues.Clear();
@@ -305,7 +305,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		@        prefValues.Clear();
 		@    }
 		@
-		@    ///-----------------------------------------------------------------
+		@    ///--
 		@    protected override void GetFromPrefs() { }
 		@    protected override void SetToPrefs() { }
 		@}

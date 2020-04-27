@@ -18,9 +18,14 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             get { return "SWIZZLE"; }
         }
 
-        public override GenerationMode GenMode
+        public override GenerationRule GenerationMode
         {
-            get { return GenerationMode.ForeachSrcXDest; }
+            get { return GenerationRule.ForeachSrcCrossDest; }
+        }
+
+        public override bool UseOneClassPerSource
+        {
+            get { return true; }
         }
         #endregion
 
@@ -83,7 +88,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                     }
 
                     var sn      = 0;
-                    var variant = new FunctionVariant(string.Empty, 2);
+                    var variant = new FunctionVariant(3);
                     variant[1] += Glossary.Code.argsV;
                     for (var v = 0; v < slots.Length; v++)
                     {

@@ -34,12 +34,14 @@
 namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
+    using Assets.Prateek.CodeGenerator.Code.CodeBuilder;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils;
     using Assets.Prateek.CodeGenerator.Code.Utils;
     using global::Prateek.CodeGenerator;
     using global::Prateek.CodeGenerator.ScriptTemplates;
+    using global::Prateek.Core.Code.Extensions;
     using global::Prateek.Core.Code.Helpers;
 
     ///-------------------------------------------------------------------------
@@ -52,10 +54,10 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         ///-----------------------------------------------------------------
 
         ///-----------------------------------------------------------------
-        public enum GenerationMode
+        public enum GenerationRule
         {
             ForeachSrc,
-            ForeachSrcXDest,
+            ForeachSrcCrossDest,
 
             MAX
         }
@@ -71,7 +73,12 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         #region Properties
         ///-----------------------------------------------------------------
         public abstract string ScopeTag { get; }
-        public abstract GenerationMode GenMode { get; }
+        public abstract GenerationRule GenerationMode { get; }
+
+        public virtual bool UseOneClassPerSource
+        {
+            get { return false; }
+        }
 
         public virtual bool GenerateDefault
         {
@@ -95,19 +102,19 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             get { return Glossary.Macro.srcClass; }
         }
 
-        public NumberedVars Names
+        public NumberedSymbol Names
         {
             get { return Glossary.Macro.Names; }
         }
 
-        public NumberedVars Funcs
+        public NumberedSymbol Functions
         {
-            get { return Glossary.Macro.Funcs; }
+            get { return Glossary.Macro.Functions; }
         }
 
-        public NumberedVars Vars
+        public NumberedSymbol Variables
         {
-            get { return Glossary.Macro.Vars; }
+            get { return Glossary.Macro.Variables; }
         }
         #endregion
 
@@ -301,7 +308,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         {
             code = stringSwapSrc.Apply(code);
             code = stringSwapDst.Apply(code);
-            data.codeGenerated += code;
+            var generatedCode = data.codeGenerated.Last();
+            generatedCode.code += code;
+            data.codeGenerated.Last(generatedCode);
         }
         #endregion Utils
 
@@ -316,7 +325,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             var maxSrc = data.classInfos.Count + (GenerateDefault ? 1 : 0);
 
             //Only loop through the dst classes if required
-            var maxDst  = GenMode == GenerationMode.ForeachSrcXDest ? data.classInfos.Count : 1;
+            var maxDst  = GenerationMode == GenerationRule.ForeachSrcCrossDest ? data.classInfos.Count : 1;
             var infoSrc = new ClassContent();
             var infoDst = new ClassContent();
             var infoDef = new ClassContent();
@@ -324,9 +333,6 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             {
                 infoDef.className = data.classDefaultType;
             }
-
-            //Find the amount of FUNC_RESULT & NAMES that are requested by the main code
-            var funcCount = Funcs.GetCount(data.codeMain);
 
             //Loop throught the source classes
             for (var iSrc = 0; iSrc < maxSrc; iSrc++)
@@ -336,10 +342,19 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                     ? infoDef
                     : data.classInfos[iSrc + (GenerateDefault ? -1 : 0)];
 
+                if (UseOneClassPerSource)
+                {
+                    data.codeGenerated.Add(new ScriptContent.GeneratedCode() { className = infoSrc.className, code = string.Empty });
+                }
+                else if (data.codeGenerated.Count == 0)
+                {
+                    data.codeGenerated.Add(new ScriptContent.GeneratedCode() { className = string.Empty, code = string.Empty });
+                }
+
                 //one pass or as many as the dst classes
                 for (var iSDst = 0; iSDst < maxDst; iSDst++)
                 {
-                    if (GenMode == GenerationMode.ForeachSrcXDest)
+                    if (GenerationMode == GenerationRule.ForeachSrcCrossDest)
                     {
                         infoDst = data.classInfos[iSDst];
                     }
@@ -351,7 +366,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                     var swapDst = ClassDst;
 
                     //Add the prefix from the code file
-                    if (GenMode == GenerationMode.ForeachSrcXDest)
+                    if (GenerationMode == GenerationRule.ForeachSrcCrossDest)
                     {
                         swapDst = swapDst + infoDst.className;
                         AddCode(data.codePrefix, data, swapSrc, swapDst);
@@ -368,31 +383,18 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                         var code    = data.codeMain;
 
                         //Error out if the requested funcs result are not available
-                        if (funcCount > variant.Count)
+                        if (!SwapCodeContent(ref code, Functions, variant.Count, variant.Variants))
                         {
                             return (global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult) global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.className;
                         }
 
-                        //Apply variants
-                        for (var r = 0; r < variant.Count; r++)
-                        {
-                            code = (Funcs[r] + variant[r]).Apply(code);
-                        }
-
                         //Error out if the requested Names are not available
-                        var nameCount = Names.GetCount(code);
-                        if (nameCount > infoSrc.NameCount)
+                        if (!SwapCodeContent(ref code, Names, infoSrc.NameCount, infoSrc.names))
                         {
                             return (global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult) global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
                         }
 
-                        //Apply names
-                        for (var r = 0; r < global::Prateek.Core.Code.CSharp.min(nameCount, infoSrc.NameCount); r++)
-                        {
-                            code = (Names[r] + infoSrc.names[r]).Apply(code);
-                        }
-
-                        if (GenMode == GenerationMode.ForeachSrcXDest)
+                        if (GenerationMode == GenerationRule.ForeachSrcCrossDest)
                         {
                             AddCode(code, data, swapSrc, swapDst);
                         }
@@ -403,7 +405,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                     }
 
                     //Add the Postfix from the code file
-                    if (GenMode == GenerationMode.ForeachSrcXDest)
+                    if (GenerationMode == GenerationRule.ForeachSrcCrossDest)
                     {
                         AddCode(data.codePostfix, data, swapSrc, swapDst);
                     }
@@ -414,9 +416,30 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                 }
             }
 
-            data.codeGenerated = data.codeGenerated.Replace(string.Empty.NewLine(), string.Empty.NewLine() + Glossary.Macro.codeGenTabs.Keyword());
+            for (int c = 0; c < data.codeGenerated.Count; c++)
+            {
+                var codeGenerated = data.codeGenerated[c];
+                codeGenerated.code = codeGenerated.code.Replace(string.Empty.NewLine(), string.Empty.NewLine() + Glossary.Macro.codeGenTabs.Keyword());
+                data.codeGenerated[c] = codeGenerated;
+            }
 
             return global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.Success;
+        }
+
+        ///-----------------------------------------------------------------
+        private static bool SwapCodeContent(ref string code, NumberedSymbol symbol, int replacementCount, List<string> replacement)
+        {
+            for (var r = 0; r < replacementCount; r++)
+            {
+                if (!symbol[r].CanSwap(code))
+                {
+                    continue;
+                }
+
+                code = (symbol[r] + replacement[r]).Apply(code);
+            }
+
+            return !symbol.HasAny(code);
         }
 
         ///-----------------------------------------------------------------

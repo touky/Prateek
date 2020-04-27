@@ -18,9 +18,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             get { return "CTOR_MIXED"; }
         }
 
-        public override GenerationMode GenMode
+        public override GenerationRule GenerationMode
         {
-            get { return GenerationMode.ForeachSrc; }
+            get { return GenerationRule.ForeachSrc; }
         }
         #endregion
 

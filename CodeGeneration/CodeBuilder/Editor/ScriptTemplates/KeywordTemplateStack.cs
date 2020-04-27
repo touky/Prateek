@@ -1,7 +1,9 @@
 namespace Prateek.CodeGenerator.ScriptTemplates {
     using System;
     using System.Collections.Generic;
+    using System.Text;
     using Prateek.Core.Code.Helpers;
+    using UnityEngine.Profiling;
 
     public struct KeywordTemplateStack
     {
@@ -54,16 +56,42 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         {
             stack.Sort((a, b) => { return a.start - b.start; });
 
+            var texts = new List<string>();
             var result = content;
+            var lastEnd = result.Length;
+            Profiler.BeginSample($"KeywordTemplateStack.Apply()");
             for (int s = stack.Count - 1; s >= 0; s--)
             {
                 var data = stack[s];
-                result = result.Substring(0, data.start)
-                       + (data.operation != null
+                texts.Add(result.Substring(data.end, lastEnd - data.end));
+                texts.Add(data.operation != null
                              ? data.operation.Content.CleanText()
-                             : data.data)
-                       + result.Substring(data.end);
+                             : data.data);
+
+                if (s > 0)
+                {
+                    lastEnd = data.start;
+                }
+                else
+                {
+                    texts.Add(result.Substring(0, data.start));
+                }
+
+                //result = result.Substring(0, data.start)
+                //       + (data.operation != null
+                //             ? data.operation.Content.CleanText()
+                //             : data.data)
+                //       + result.Substring(data.end);
             }
+
+            var builder = new StringBuilder();
+            for (int t = texts.Count - 1; t >= 0; t--)
+            {
+                builder.Append(texts[t]);
+            }
+
+            result = builder.ToString();
+            Profiler.EndSample();
             return result;
         }
     }

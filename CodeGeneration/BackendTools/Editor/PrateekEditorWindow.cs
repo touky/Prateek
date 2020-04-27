@@ -112,8 +112,15 @@ namespace Prateek.CodeGenerator.Editor
         private void OnSelectionChange() { }
 
         ///---------------------------------------------------------------------
+
         // Called at 10 frames per second
-        private void OnInspectorUpdate() { }
+        private void OnInspectorUpdate()
+        {
+            if (prateekScriptGenerator != null && prateekScriptGenerator.IsWorking)
+            {
+                prateekScriptGenerator.Update();
+            }
+        }
 
         ///---------------------------------------------------------------------
         private void Update() { }
@@ -158,42 +165,46 @@ namespace Prateek.CodeGenerator.Editor
                 InitDatas();
             }
 
-            prateekRunInTestMode.Value = EditorGUILayout.ToggleLeft("Run in test mode", prateekRunInTestMode.Value);
-
-            if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute generator"))
+            using (new EditorGUI.DisabledScope(prateekScriptGenerator != null && prateekScriptGenerator.IsWorking))
             {
-                prateekScriptGenerator.RunInTestMode = prateekRunInTestMode.Value;
-                prateekScriptGenerator.StartWork();
-            }
+                prateekRunInTestMode.Value = EditorGUILayout.ToggleLeft("Run in test mode", prateekRunInTestMode.Value);
 
-            prateekExportDir.Value = EditorGUILayout.TextField("Export dir", prateekExportDir.Value);
-            prateekSourceDir.Value = EditorGUILayout.TextField("Source dir", prateekSourceDir.Value);
-            
-            {
-                if (GUI.Button(EditorGUILayout.GetControlRect(), "Add folder"))
+                if (GUI.Button(EditorGUILayout.GetControlRect(), "Execute generator"))
                 {
-                    prateekSourceDir0.Add(string.Empty);
+                    prateekScriptGenerator.RunInTestMode = prateekRunInTestMode.Value;
+                    prateekScriptGenerator.StartWork();
                 }
 
-                if (GUI.Button(EditorGUILayout.GetControlRect(), "Remove Folder"))
+                prateekExportDir.Value = EditorGUILayout.TextField("Export dir", prateekExportDir.Value);
+                prateekSourceDir.Value = EditorGUILayout.TextField("Source dir", prateekSourceDir.Value);
+
                 {
-                    prateekSourceDir0.RemoveLast();
+                    if (GUI.Button(EditorGUILayout.GetControlRect(), "Add folder"))
+                    {
+                        prateekSourceDir0.Add(string.Empty);
+                    }
+
+                    if (GUI.Button(EditorGUILayout.GetControlRect(), "Remove Folder"))
+                    {
+                        prateekSourceDir0.RemoveLast();
+                    }
+
+                    for (int v = 0; v < prateekSourceDir0.Count; v++)
+                    {
+                        prateekSourceDir0[v] = EditorGUILayout.TextField(prateekSourceDir0[v]);
+                    }
                 }
 
-                for (int v = 0; v < prateekSourceDir0.Count; v++)
+                EditorGUILayout.LabelField("File count: " + prateekScriptGenerator.WorkFileCount);
+                using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition2, GUILayout.MaxHeight(350)))
                 {
-                    prateekSourceDir0[v] = EditorGUILayout.TextField(prateekSourceDir0[v]);
+                    for (int w = 0; w < prateekScriptGenerator.WorkFileCount; w++)
+                    {
+                        EditorGUILayout.LabelField(" - " + prateekScriptGenerator[w].source.name.Extension(prateekScriptGenerator[w].source.extension));
+                    }
+
+                    scrollPosition2 = scrollScope.scrollPosition;
                 }
-            }
-            
-            EditorGUILayout.LabelField("File count: " + prateekScriptGenerator.WorkFileCount);
-            using (var scrollScope = new EditorGUILayout.ScrollViewScope(scrollPosition2, GUILayout.MaxHeight(350)))
-            {
-                for (int w = 0; w < prateekScriptGenerator.WorkFileCount; w++)
-                {
-                    EditorGUILayout.LabelField(" - " + prateekScriptGenerator[w].source.name.Extension(prateekScriptGenerator[w].source.extension));
-                }
-                scrollPosition2 = scrollScope.scrollPosition;
             }
 #endif //PRATEEK_ALLOW_INTERNAL_TOOLS
         }

@@ -20,6 +20,11 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
             get { return results == null ? 0 : results.Count; }
         }
 
+        public List<string> Variants
+        {
+            get { return results; }
+        }
+
         public string this[int i]
         {
             get
@@ -47,10 +52,14 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
         ///-------------------------------------------------------------
         public FunctionVariant(string value) : this(value, 0) { }
 
-        public FunctionVariant(string value, int emptySlot)
+        public FunctionVariant(string value, int emptySlot) : this(emptySlot)
+        {
+            results.Insert(0, value);
+        }
+
+        public FunctionVariant(int emptySlot)
         {
             results = new List<string>();
-            results.Add(value);
             while (emptySlot-- > 0)
             {
                 results.Add(string.Empty);

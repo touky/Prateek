@@ -1,10 +1,10 @@
 /*
     Color swizzle
 */
-PRATEEK_FILE_INFO(Colors, cs)
+PRATEEK_FILE_INFO(Extensions, cs)
 {
     // Color swizzle
-    PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, ColorExt, static)
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, ColorExtensions, static)
     {
         PRATEEK_CLASS_INFO(Color) { PRATEEK_VARS(r, g, b, a) }
 
@@ -13,7 +13,7 @@ PRATEEK_FILE_INFO(Colors, cs)
         PRATEEK_CODE_PREFIX
         {
 		@
-        @//---------------------------------------------------------------------
+        @//--
 		@#region Swizzle #SRC_CLASS#
         }
         

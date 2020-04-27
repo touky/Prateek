@@ -1,7 +1,9 @@
 namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
 
+    [DebuggerDisplay("{className}: {names} / {variables}")]
     public struct ClassContent
     {
         ///-------------------------------------------------------------

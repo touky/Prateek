@@ -34,15 +34,19 @@
 namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
 {
     using System.Collections.Generic;
+    using System.IO;
     using Assets.Prateek.CodeGenerator.Code.CodeBuilder;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils;
+    using Assets.Prateek.CodeGenerator.Code.Utils;
     using global::Prateek.CodeGenerator;
+    using global::Prateek.CodeGenerator.ScriptTemplates;
     using global::Prateek.Core.Code.Helpers;
     using global::Prateek.Core.Code.Helpers.Files;
+    using UnityEngine.Profiling;
 
     ///-------------------------------------------------------------------------
     public class PrateekScriptBuilder : CodeBuilder
@@ -65,8 +69,11 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
         ///---------------------------------------------------------------------
         protected override BuildResult DoApplyValidTemplate(ref FileData fileData)
         {
+            Profiler.BeginSample($"DoApplyValidTemplate()");
+            
             if (fileData.source.extension != Glossary.importExtension)
             {
+                Profiler.EndSample();
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             }
 
@@ -85,18 +92,24 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
                 var rootScope = analyzer.ContentRootScope;
                 foreach (var codeCommand in rootScope.commands)
                 {
+                    Profiler.BeginSample($"foreach (var codeCommand in rootScope.commands)");
+
                     if (!(codeCommand is CodeKeyword codeKeyword))
                     {
+                        Profiler.EndSample();
                         continue;
                     }
 
                     var codeFile = RetrieveCodeFile(codeKeyword, codeFiles);
                     if (codeFile == null)
                     {
+                        Profiler.EndSample();
                         continue;
                     }
 
                     FeedCodeFile(ref fileData, codeFile, codeKeyword, string.Empty);
+
+                    Profiler.EndSample();
                 }
 
                 //return BuildResult.ValueType.LoadingFailed;
@@ -106,6 +119,8 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
             for (var f = 0; f < codeFiles.Count; f++)
             {
                 var codeFile = codeFiles[f];
+
+                Profiler.BeginSample($"for (var f = 0; f < codeFiles.Count; f++)");
 
                 //{ // Log shit
                 //    var log = String.Format("FOUND: {0}.{1}\n", codeFile.fileName, codeFile.fileExtension);
@@ -140,6 +155,8 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
                 var applyResult = base.DoApplyValidTemplate(ref newData);
                 if (applyResult.Is(BuildResult.ValueType.NoMatchingTemplate))
                 {
+                    Profiler.EndSample();
+                    Profiler.EndSample();
                     return Error(applyResult, ref newData);
                 }
 
@@ -147,6 +164,8 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
                 var startIndex = newData.destination.content.IndexOf(genStart);
                 if (startIndex < 0)
                 {
+                    Profiler.EndSample();
+                    Profiler.EndSample();
                     return Error(BuildResult.ValueType.PrateekScriptSourceStartTagInvalid, ref newData);
                 }
 
@@ -157,11 +176,28 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
                 var result = codeFile.Generate(genHeader, genCode);
                 if (!result)
                 {
+                    Profiler.EndSample();
+                    Profiler.EndSample();
                     return Error(result, ref newData);
                 }
 
-                newData.destination.content = codeFile.CodeGenerated;
-                AddWorkFile(newData);
+                foreach (var codeGenerated in codeFile.CodeGenerated)
+                {
+                    Profiler.BeginSample($"foreach (var codeGenerated in codeFile.CodeGenerated)");
+
+                    var workData = newData;
+                    if (!string.IsNullOrEmpty(codeGenerated.className))
+                    {
+                        workData.destination.name = codeGenerated.className + workData.destination.name;
+                    }
+
+                    workData.destination.content = codeGenerated.code;
+                    workData.destination.SetupFileInfo();
+
+                    AddWorkFile(workData);
+
+                    Profiler.EndSample();
+                }
 
                 //{ // Log shit
                 //    for (int i = 0; i < codeFile.DataCount; i++)
@@ -172,7 +208,11 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
 
                 //    UnityEngine.Debug.Log(codeFile.CodeGenerated);
                 //}
+
+                Profiler.EndSample();
             }
+
+            Profiler.EndSample();
 
             return BuildResult.ValueType.Ignored;
         }

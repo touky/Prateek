@@ -7,6 +7,13 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
 
     public class ScriptContent
     {
+        ///-----------------------------------------------------------------
+        public struct GeneratedCode
+        {
+            public string className;
+            public string code;
+        }
+
         #region Fields
         public ScriptAction scriptAction;
         public string blockNamespace;
@@ -23,7 +30,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
         public string codeMain;
         public string codePostfix;
 
-        public string codeGenerated;
+        public List<GeneratedCode> codeGenerated = new List<GeneratedCode>();
         #endregion
 
         #region Class Methods

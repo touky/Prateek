@@ -32,6 +32,12 @@ namespace Assets.Prateek.CodeGenerator.Code.Utils {
         }
 
         ///-------------------------------------------------------------
+        public bool CanSwap(string text)
+        {
+            return text.Contains(original);
+        }
+
+        ///-------------------------------------------------------------
         public string Apply(string text)
         {
             if (text == null || original == null || replacement == null)

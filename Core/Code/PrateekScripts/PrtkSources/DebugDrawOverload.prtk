@@ -22,7 +22,7 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         PRATEEK_CODE_PREFIX
         {
         @
-        @//--------------------------------------------------------------------
+        @///-------------------------------------------------------------------------------------------------------
         @#region DrawSetup overload
         @public partial struct #SRC_CLASS#
         @{
@@ -31,17 +31,17 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         PRATEEK_CODE_MAIN
         {
         @
-        @//--------------------------------------------------------------------
-        @public #SRC_CLASS#(#FUNC_RESULT_0#) : this(InitMode.Reset)
-        @{
-        @#FUNC_RESULT_1#
-        @}
+        @    ///--
+        @    public #SRC_CLASS#(#FUNC_RESULT_0#) : this(InitMode.Reset)
+        @    {
+        @    #FUNC_RESULT_1#
+        @    }
         @
-        @//--------------------------------------------------------------------
-        @public #SRC_CLASS#(InitMode mode, #FUNC_RESULT_0#) : this(mode)
-        @{
-        @#FUNC_RESULT_1#
-        @}
+        @    ///--
+        @    public #SRC_CLASS#(InitMode mode, #FUNC_RESULT_0#) : this(mode)
+        @    {
+        @    #FUNC_RESULT_1#
+        @    }
         }
 
         PRATEEK_CODE_SUFFIX
@@ -70,11 +70,11 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         PRATEEK_CODE_PREFIX
         {
         @
-        @//--------------------------------------------------------------------
-        @#region DrawSetup overload
+        @///--
+        @#region DrawSetup QuickCTor
         @public partial struct #SRC_CLASS#
         @{
-        @    ///----------------------------------------------------------------
+        @    ///--
         @    public static class QuickCTor
         @    {
         }
@@ -82,11 +82,11 @@ PRATEEK_FILE_INFO(DebugDraw, cs)
         PRATEEK_CODE_MAIN
         {
         @
-        @        ///--------------------------------------------------------------------
+        @        ///--
         @        public static #SRC_CLASS# #SRC_CLASS#(#FUNC_RESULT_0#) 
 		@        { return new #SRC_CLASS#(InitMode.UseLast, #FUNC_RESULT_1#); }
         @
-        @        ///--------------------------------------------------------------------
+        @        ///--
         @        public static #SRC_CLASS# #SRC_CLASS#(InitMode mode, #FUNC_RESULT_0#)
         @        { return new #SRC_CLASS#(mode, #FUNC_RESULT_1#); }
         }

@@ -18,9 +18,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             get { return "FUNC_OVERLOAD"; }
         }
 
-        public override GenerationMode GenMode
+        public override GenerationRule GenerationMode
         {
-            get { return GenerationMode.ForeachSrc; }
+            get { return GenerationRule.ForeachSrc; }
         }
 
         public override bool GenerateDefault
@@ -64,7 +64,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             }
             else
             {
-                var variant = new FunctionVariant(string.Empty, 1);
+                var variant = new FunctionVariant(2);
                 for (var sv = 0; sv < slots.Length; sv++)
                 {
                     if (slots[sv] == 0)

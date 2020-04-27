@@ -20,9 +20,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             get { return "FUNC_MIXED"; }
         }
 
-        public override GenerationMode GenMode
+        public override GenerationRule GenerationMode
         {
-            get { return GenerationMode.ForeachSrc; }
+            get { return GenerationRule.ForeachSrc; }
         }
 
         public override bool GenerateDefault
@@ -89,7 +89,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                     var funcInfo = data.functionContents[d];
                     var variant  = new FunctionVariant(funcInfo.funcName, 2);
 
-                    var varsCount = Vars.GetCount(funcInfo.data);
+                    var varsCount = Variables.FindCount(funcInfo.data);
                     if (p == 1 && varsCount == 1)
                     {
                         continue;
@@ -101,7 +101,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                         if (isDefault)
                         {
                             variant[1] = string.Format(Glossary.Code.argsN, data.classDefaultType, a);
-                            vars = (Vars[a] + string.Format(Glossary.Code.varsN, a)).Apply(vars);
+                            vars = (Variables[a] + string.Format(Glossary.Code.varsN, a)).Apply(vars);
                         }
                         else
                         {
@@ -123,8 +123,8 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                             for (var a = 0; a < varsCount; a++)
                             {
                                 varsA = p == 1 && a != 0
-                                    ? (Vars[a] + string.Format(Glossary.Code.varsN, a)).Apply(varsA)
-                                    : (Vars[a] + string.Format(Glossary.Code.varsV_, a, contentSrc.variables[v])).Apply(varsA);
+                                    ? (Variables[a] + string.Format(Glossary.Code.varsN, a)).Apply(varsA)
+                                    : (Variables[a] + string.Format(Glossary.Code.varsV_, a, contentSrc.variables[v])).Apply(varsA);
                             }
 
                             variant[2] = varsA;

@@ -1,0 +1,74 @@
+PRATEEK_FILE_INFO(Extensions, cs)
+{
+	PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, RectExtensions, static)
+    {
+        PRATEEK_CLASS_INFO(Rect) { PRATEEK_NAMES(x, y, w, h) PRATEEK_VARS(x, y, width, height) }
+
+        PRATEEK_DEFAULT(float, 0)
+
+        PRATEEK_CODE_PREFIX
+        {
+		@
+        @//--
+        @#region Swizzle #SRC_CLASS#
+        }
+
+        PRATEEK_CODE_MAIN
+        {
+        @public static #DST_CLASS# #FUNC_RESULT_0#(this #SRC_CLASS# #FUNC_RESULT_1#) { return new #DST_CLASS#(#FUNC_RESULT_2#); }
+        }
+        
+        PRATEEK_CODE_SUFFIX
+        {
+        @#endregion Swizzle #SRC_CLASS#
+        }
+    }
+
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, RectExtensions, static)
+    {
+        PRATEEK_CLASS_INFO(Rect) { PRATEEK_VARS(x, y) }
+
+        PRATEEK_DEFAULT(float, 0)
+
+        PRATEEK_CODE_PREFIX
+        {
+		@
+        @//--
+        @#region Swizzle #SRC_CLASS#
+        }
+
+        PRATEEK_CODE_MAIN
+        {
+        @public static #DST_CLASS# #FUNC_RESULT_0#(this #SRC_CLASS# #FUNC_RESULT_1#) { return new #DST_CLASS#(vec2(#FUNC_RESULT_2#), v.size); }
+        }
+        
+        PRATEEK_CODE_SUFFIX
+        {
+        @#endregion Swizzle #SRC_CLASS#
+        }
+    }
+
+	PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, RectExtensions, static)
+    {
+        PRATEEK_CLASS_INFO(Rect) { PRATEEK_NAMES(w, h) PRATEEK_VARS(width, height) }
+
+        PRATEEK_DEFAULT(float, 0)
+
+        PRATEEK_CODE_PREFIX
+        {
+		@
+        @//--
+        @#region Swizzle #SRC_CLASS#
+        }
+
+        PRATEEK_CODE_MAIN
+        {
+        @public static #DST_CLASS# #FUNC_RESULT_0#(this #SRC_CLASS# #FUNC_RESULT_1#) { return new #DST_CLASS#(v.position, vec2(#FUNC_RESULT_2#)); }
+        }
+        
+        PRATEEK_CODE_SUFFIX
+        {
+        @#endregion Swizzle #SRC_CLASS#
+        }
+    }
+}

@@ -1,0 +1,10 @@
+/*
+PRATEEK_FILE_INFO(CachedArrayMultiple, cs)
+{
+
+    PRATEEK_BLOCK_FUNC_BASIC(Prateek.Code.Helpers, CachedArrays)
+    {
+        PRATEEK_CLASS_INFO(CachedArray2) {PRATEEK_NAMES(Strings)}
+    }
+}
+*/

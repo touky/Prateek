@@ -91,9 +91,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
             public static string codeData = "CODE";
 
             ///-------------------------------------------------------------
-            private static NumberedVars names;
-            private static NumberedVars vars;
-            private static NumberedVars funcs;
+            private static NumberedSymbol names;
+            private static NumberedSymbol variables;
+            private static NumberedSymbol functions;
 
             ///-------------------------------------------------------------
             public static string srcClass = "#SRC_CLASS#";
@@ -151,19 +151,19 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
             }
 
             ///-------------------------------------------------------------
-            public static NumberedVars Names
+            public static NumberedSymbol Names
             {
                 get { return names; }
             }
 
-            public static NumberedVars Funcs
+            public static NumberedSymbol Functions
             {
-                get { return funcs; }
+                get { return functions; }
             }
 
-            public static NumberedVars Vars
+            public static NumberedSymbol Variables
             {
-                get { return vars; }
+                get { return variables; }
             }
             #endregion
 
@@ -200,9 +200,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
                 srcClass = ClassName.SRC_CLASS.ToString().Keyword();
                 dstClass = ClassName.DST_CLASS.ToString().Keyword();
 
-                names = new NumberedVars(VarName.NAMES);
-                vars = new NumberedVars(VarName.VARS);
-                funcs = new NumberedVars(VarName.FUNC_RESULT);
+                names = new NumberedSymbol(VarName.NAMES);
+                variables = new NumberedSymbol(VarName.VARS);
+                functions = new NumberedSymbol(VarName.FUNC_RESULT);
             }
 
             ///-------------------------------------------------------------
@@ -226,7 +226,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
 
                 for (var p = 0; p < 3; p++)
                 {
-                    var list = default(NumberedVars);
+                    var list = default(NumberedSymbol);
                     switch (p)
                     {
                         case 0:
@@ -236,12 +236,12 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
                         }
                         case 1:
                         {
-                            list = vars;
+                            list = variables;
                             break;
                         }
                         case 2:
                         {
-                            list = funcs;
+                            list = functions;
                             break;
                         }
                     }

@@ -24,9 +24,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             get { return "SYNTAX_NPP_COLOR"; }
         }
 
-        public override GenerationMode GenMode
+        public override GenerationRule GenerationMode
         {
-            get { return GenerationMode.ForeachSrc; }
+            get { return GenerationRule.ForeachSrc; }
         }
 
         public override bool GenerateDefault
@@ -65,7 +65,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             for (var k = 0; k < keywords.Count; k++)
             {
                 result += data.functionContents[0].data;
-                result = (Vars[0] + keywords[k]).Apply(result);
+                result = (Variables[0] + keywords[k]).Apply(result);
             }
 
             var variant = new FunctionVariant(result, 1);
@@ -73,7 +73,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             for (var i = 0; i < identifiers.Count; i++)
             {
                 result += data.functionContents[0].data;
-                result = (Vars[0] + identifiers[i]).Apply(result);
+                result = (Variables[0] + identifiers[i]).Apply(result);
             }
 
             variant[1] = result;

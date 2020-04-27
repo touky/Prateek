@@ -3,11 +3,11 @@
 #PRATEEK_CSHARP_IFDEF#
 
 #PRATEEK_SCRIPT_STARTS_HERE#
-//-----------------------------------------------------------------------------
+///--
 namespace #PRATEEK_EXTENSION_NAMESPACE#
 {
-    //-------------------------------------------------------------------------
-    public #PRATEEK_EXTENSION_PREFIX# partial class #PRATEEK_EXTENSION_CLASS#
+    ///--
+    public #PRATEEK_EXTENSION_PREFIX#partial class #PRATEEK_EXTENSION_CLASS#
     {
         #PRATEEK_CODEGEN_DATA#
     }

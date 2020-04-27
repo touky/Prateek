@@ -3,18 +3,14 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
     using System.Collections.Generic;
     using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions;
     using Assets.Prateek.CodeGenerator.Code.Utils;
+    using global::Prateek;
     using global::Prateek.CodeGenerator;
+    using global::Prateek.Core.Code.Extensions;
     using global::Prateek.Core.Code.Helpers;
 
     public class CodeFile
     {
         #region Fields
-        ///-----------------------------------------------------------------
-
-        ///-----------------------------------------------------------------
-
-        ///-----------------------------------------------------------------
-
         ///-----------------------------------------------------------------
         public string fileName;
         public string fileExtension;
@@ -22,13 +18,13 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
 
         ///-----------------------------------------------------------------
         private ScriptContent scriptContent;
-        private string codeGenerated;
+        private List<ScriptContent.GeneratedCode> codeGenerated = new List<ScriptContent.GeneratedCode>();
         private List<ScriptContent> datas = new List<ScriptContent>();
         #endregion
 
         #region Properties
         ///-----------------------------------------------------------------
-        public string CodeGenerated
+        public List<ScriptContent.GeneratedCode> CodeGenerated
         {
             get { return codeGenerated; }
         }
@@ -113,7 +109,6 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
                 genTabs = genTabs + genCode.Substring(r + 1, i - (r + 1));
             }
 
-            codeGenerated = genHeader;
             for (var d = 0; d < datas.Count; d++)
             {
                 var data = datas[d];
@@ -124,17 +119,46 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
                     return result;
                 }
 
-                var code = genTabs.Apply(data.codeGenerated);
-                genNSpc += data.blockNamespace;
-                genExtn += data.blockClassName;
-                var prefix = string.Empty;
-                for (var p = 0; p < data.blockClassPrefix.Count; p++)
+                data.codeGenerated.Sort((a, b) =>
                 {
-                    genPrfx += data.blockClassPrefix[p] + Strings.Separator.Space.S();
-                }
+                    return string.Compare(a.className, b.className);
+                });
 
-                genData += code;
-                codeGenerated += genPrfx.Apply(genExtn.Apply(genData.Apply(genNSpc.Apply(genCode))));
+                for (int c = 0; c < data.codeGenerated.Count; c++)
+                {
+                    var codeData = data.codeGenerated[c];
+
+                    var newCode = new ScriptContent.GeneratedCode() {className = codeData.className, code = string.Empty};
+                    var code = codeData.code;
+
+                    genNSpc += data.blockNamespace;
+                    genExtn += data.blockClassName;
+                    
+                    for (var p = 0; p < data.blockClassPrefix.Count; p++)
+                    {
+                        genPrfx += data.blockClassPrefix[p] + Strings.Separator.Space.S();
+                    }
+
+                    genData += genTabs.Apply(code);
+                    genCode = genNSpc.Apply(genCode);
+                    genCode = genData.Apply(genCode);
+                    genCode = genExtn.Apply(genCode);
+                    genCode = genPrfx.Apply(genCode);
+                    newCode.code = genCode;
+
+                    var index = codeGenerated.FindIndex((x) => { return x.className == newCode.className; });
+                    if (index != Const.INDEX_NONE)
+                    {
+                        var oldCode = codeGenerated[index];
+                        oldCode.code += newCode.code;
+                        codeGenerated[index] = oldCode;
+                    }
+                    else
+                    {
+                        newCode.code = genHeader + newCode.code;
+                        codeGenerated.Add(newCode);
+                    }
+                }
             }
 
             return global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.Success;

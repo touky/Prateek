@@ -23,9 +23,9 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             get { return "SYNTAX_NPP_AUTO_COMPLETE"; }
         }
 
-        public override GenerationMode GenMode
+        public override GenerationRule GenerationMode
         {
-            get { return GenerationMode.ForeachSrc; }
+            get { return GenerationRule.ForeachSrc; }
         }
 
         public override bool GenerateDefault
@@ -64,7 +64,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             for (var k = 0; k < infos.Count; k++)
             {
                 result += data.functionContents[0].data;
-                result = (Vars[0] + infos[k].name).Apply(result);
+                result = (Variables[0] + infos[k].name).Apply(result);
             }
 
             variant[0] = result;

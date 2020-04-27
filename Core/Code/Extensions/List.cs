@@ -50,6 +50,15 @@ namespace Prateek.Core.Code.Extensions
         }
 
         ///---------------------------------------------------------------------
+        public static void Last<T>(this List<T> list, T value)
+        {
+            if (list.Count > 0)
+            {
+                list[list.Count - 1] = value;
+            }
+        }
+
+        ///---------------------------------------------------------------------
         public static void RemoveLast<T>(this List<T> list)
         {
             if (list.Count > 0)

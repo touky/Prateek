@@ -41,6 +41,7 @@ namespace Prateek.CodeGenerator
     using Prateek.Core.Code.Helpers.Files;
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.Profiling;
 
     ///-------------------------------------------------------------------------
     public partial class CodeBuilder
@@ -67,6 +68,7 @@ namespace Prateek.CodeGenerator
         #endregion
 
         #region Fields
+        ///---------------------------------------------------------------------
         private OperationApplied operations = OperationApplied.ALL;
         private List<string> dataDirectories = new List<string>();
         private List<FileSources> dataFiles = new List<FileSources>();
@@ -75,6 +77,16 @@ namespace Prateek.CodeGenerator
         private List<FileData> workFiles = new List<FileData>();
 
         private bool isAutorun = false;
+        private bool isWorking = false;
+        private int currentWorkFile = -1;
+        private BuildResult buildRresult = BuildResult.ValueType.Success;
+
+        private List<string> commentSplits = new List<string>();
+
+        public bool IsWorking
+        {
+            get { return isWorking; }
+        }
         #endregion
 
         #region Properties
@@ -121,15 +133,8 @@ namespace Prateek.CodeGenerator
         }
         #endregion
 
-        ///---------------------------------------------------------------------
-
-        ///---------------------------------------------------------------------
-
-        ///---------------------------------------------------------------------
-
-        ///---------------------------------------------------------------------
-
         #region Behaviour
+        ///---------------------------------------------------------------------
         public void AddDirectory(string path)
         {
             if (destinationDirectory == string.Empty)
@@ -231,13 +236,25 @@ namespace Prateek.CodeGenerator
         }
 
         ///---------------------------------------------------------------------
-        public BuildResult StartWork(bool isAutorun = false)
+        public void StartWork(bool isAutorun = false)
         {
             this.isAutorun = isAutorun;
+            this.isWorking = true;
+            currentWorkFile = 0;
 
-            for (var f = 0; f < workFiles.Count; f++)
+            AssetDatabase.DisallowAutoRefresh();
+        }
+
+
+        ///---------------------------------------------------------------------
+        public void Update()
+        {
+            var f      = currentWorkFile;
+            var file   = workFiles[f];
+            Profiler.BeginSample($"CodeBuilder.Update()");
+            Profiler.BeginSample($"CodeBuilder.Update({file.source.name})");
+            try
             {
-                var file   = workFiles[f];
                 var result = (BuildResult) BuildResult.ValueType.Success;
 
                 result = LoadData(ref file);
@@ -277,6 +294,7 @@ namespace Prateek.CodeGenerator
                             {
                                 p = -100;
                                 result = BuildResult.ValueType.Success;
+                                nextFile = true;
                                 break;
                             }
                         }
@@ -293,17 +311,58 @@ namespace Prateek.CodeGenerator
                         }
                     }
 
-                    if (nextFile) { }
+                    if (!nextFile)
+                    {
+                        currentWorkFile = -1;
+                        isWorking = false;
+                        buildRresult = result;
+
+                        AssetDatabase.AllowAutoRefresh();
+                        AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+                    }
+                    else
+                    {
+                        currentWorkFile++;
+                    }
                 }
                 else if (!result.Is(BuildResult.ValueType.Ignored))
                 {
                     result.Log();
+
+                    currentWorkFile = -1;
+                    isWorking = false;
+                    buildRresult = result;
+
+                    AssetDatabase.AllowAutoRefresh();
+                    AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                 }
+                else
+                {
+                    currentWorkFile++;
+                }
+
+                if (currentWorkFile >= workFiles.Count)
+                {
+                    currentWorkFile = -1;
+                    isWorking = false;
+
+                    AssetDatabase.AllowAutoRefresh();
+                    AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+                }
+
+                buildRresult = BuildResult.ValueType.Success;
+            }
+            catch
+            {
+                currentWorkFile = -1;
+                isWorking = false;
+
+                AssetDatabase.AllowAutoRefresh();
+                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             }
 
-            AssetDatabase.Refresh();
-
-            return BuildResult.ValueType.Success;
+            Profiler.EndSample();
+            Profiler.EndSample();
         }
 
         ///---------------------------------------------------------------------
@@ -322,56 +381,86 @@ namespace Prateek.CodeGenerator
         ///---------------------------------------------------------------------
         private BuildResult ApplyValidTemplate(ref FileData fileData)
         {
+            Profiler.BeginSample($"ApplyValidTemplate()");
+            
             if ((operations & OperationApplied.ApplyScriptTemplate) == 0)
             {
+                Profiler.EndSample();
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             }
 
-            return DoApplyValidTemplate(ref fileData);
+            var result = DoApplyValidTemplate(ref fileData);
+
+            Profiler.EndSample();
+            return result;
         }
 
         ///---------------------------------------------------------------------
         private BuildResult ApplyZonedScript(ref FileData fileData)
         {
+            Profiler.BeginSample($"ApplyZonedScript()");
+            
             if ((operations & OperationApplied.ApplyZonedScript) == 0)
             {
+                Profiler.EndSample();
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             }
 
-            return DoApplyZonedScript(ref fileData);
+            var result = DoApplyZonedScript(ref fileData);
+
+            Profiler.EndSample();
+            return result;
         }
 
         ///---------------------------------------------------------------------
         private BuildResult ApplyKeyword(ref FileData fileData)
         {
+            Profiler.BeginSample($"ApplyKeyword()");
+            
             if ((operations & OperationApplied.ApplyKeyword) == 0)
             {
+                Profiler.EndSample();
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             }
 
-            return DoApplyKeyword(ref fileData);
+            var result = DoApplyKeyword(ref fileData);
+
+            Profiler.EndSample();
+            return result;
         }
 
         ///---------------------------------------------------------------------
         private BuildResult ApplyFixups(ref FileData fileData)
         {
+            Profiler.BeginSample($"ApplyFixups()");
+            
             if ((operations & OperationApplied.ApplyFixUp) == 0)
             {
+                Profiler.EndSample();
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             }
 
-            return DoApplyFixUps(ref fileData);
+            var result = DoApplyFixUps(ref fileData);
+
+            Profiler.EndSample();
+            return result;
         }
 
         ///---------------------------------------------------------------------
         private BuildResult WriteData(ref FileData fileData)
         {
+            Profiler.BeginSample($"WriteData()");
+            
             if ((operations & OperationApplied.WriteData) == 0)
             {
+                Profiler.EndSample();
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             }
 
-            return DoWriteData(ref fileData);
+            var result = DoWriteData(ref fileData);
+
+            Profiler.EndSample();
+            return result;
         }
 
         ///---------------------------------------------------------------------
@@ -394,6 +483,8 @@ namespace Prateek.CodeGenerator
             var content   = string.Empty;
             var extension = string.Empty;
 
+            Profiler.BeginSample($"DoApplyValidTemplate()");
+            
             //Look for the correct script remplacement
             var scripts = TemplateRegistry.Scripts;
             for (var r = 0; r < scripts.Count; r++)
@@ -419,6 +510,7 @@ namespace Prateek.CodeGenerator
 
             if (content == string.Empty)
             {
+                Profiler.EndSample();
                 return BuildResult.ValueType.Success | BuildResult.ValueType.NoMatchingTemplate;
             }
 
@@ -429,6 +521,7 @@ namespace Prateek.CodeGenerator
 
             fileData.destination.content = content;
 
+            Profiler.EndSample();
             return BuildResult.ValueType.Success;
         }
 
@@ -496,52 +589,60 @@ namespace Prateek.CodeGenerator
         ///---------------------------------------------------------------------
         protected virtual BuildResult DoApplyFixUps(ref FileData fileData)
         {
-            var comment  = Strings.Comment;
+            Profiler.BeginSample($"DoApplyFixUps()");
+
+            InitCommentSplits();
+
+            var commentSplitRoot  = Strings.CommentSplitRoot;
+            var commentSplitLength = Strings.CommentSplitLength - 1;
             var ignorers = TemplateHelpers.GatherValidIgnorables(fileData.destination.content, fileData.destination.extension);
             var stack    = new KeywordTemplateStack(KeywordTemplateMode.UsedAsScope, fileData.destination.content);
 
             var position = 0;
-            while ((position = fileData.destination.content.IndexOf(comment, position)) >= 0)
+            while ((position = fileData.destination.content.IndexOf(commentSplitRoot, position)) >= 0)
             {
+                Profiler.BeginSample($"while(position)");
+
                 var safety = ignorers.AdvanceToSafety(position, IgnorableStyle.Text);
                 if (safety != position)
                 {
                     position = safety;
+                    
+                    Profiler.EndSample();
                     continue;
                 }
 
-                var start = fileData.destination.content.LastIndexOf(Strings.Separator.LineFeed.C(), position);
-                var end   = fileData.destination.content.IndexOf(Strings.Separator.LineFeed.C(), position);
+                var lineStart = fileData.destination.content.LastIndexOf(Strings.Separator.LineFeed.C(), position);
+                var lineEnd   = fileData.destination.content.IndexOf(Strings.Separator.LineFeed.C(), position);
 
-                if (start < 0 || end < 0)
+                if (lineStart < 0 || lineEnd < 0)
                 {
                     position++;
+
+                    Profiler.EndSample();
                     continue;
                 }
 
-                start++;
-                var line = fileData.destination.content.Substring(start, end - start);
-                if (line.Length != 79)
+                lineStart++;
+                var line = fileData.destination.content.Substring(lineStart, lineEnd - lineStart);
+                if (line.Length != commentSplitLength)
                 {
-                    while (line.Length > 79)
+                    var diff = commentSplitLength - line.Length;
+                    if (diff < 0)
                     {
-                        if (line[line.Length - 1] != Strings.Separator.OpMinus.C())
-                        {
-                            break;
-                        }
-
-                        line = line.Remove(line.Length - 1);
+                        line = line.Substring(0, commentSplitLength);
+                    }
+                    else
+                    {
+                        line += commentSplits[diff];
                     }
 
-                    while (line.Length < 79)
-                    {
-                        line += Strings.Separator.OpMinus.C();
-                    }
-
-                    stack.Add(line, start, end);
+                    stack.Add(line, lineStart, lineEnd);
                 }
 
-                position = end;
+                position = lineEnd;
+
+                Profiler.EndSample();
             }
 
             if (stack.CanApply)
@@ -549,7 +650,29 @@ namespace Prateek.CodeGenerator
                 fileData.destination.content = stack.Apply();
             }
 
+            Profiler.EndSample();
+
             return BuildResult.ValueType.Success;
+        }
+
+        ///---------------------------------------------------------------------
+        private void InitCommentSplits()
+        {
+            if (commentSplits.Count != 0)
+            {
+                return;
+            }
+
+            Profiler.BeginSample($"Init()");
+            {
+                var commentSplit = string.Empty;
+                for (int c = 0; c < Strings.CommentSplitLength; c++)
+                {
+                    commentSplits.Add(commentSplit);
+                    commentSplit += Strings.Separator.OpMinus.S();
+                }
+            }
+            Profiler.EndSample();
         }
 
         ///---------------------------------------------------------------------
