@@ -6,6 +6,8 @@
 ///--
 namespace #PRATEEK_EXTENSION_NAMESPACE#
 {
+    #PRATEEK_USING_NAMESPACE#
+
     ///--
     public #PRATEEK_EXTENSION_PREFIX#partial class #PRATEEK_EXTENSION_CLASS#
     {

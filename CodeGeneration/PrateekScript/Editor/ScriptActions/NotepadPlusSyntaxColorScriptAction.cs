@@ -53,7 +53,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         {
             keywords.Clear();
             identifiers.Clear();
-            Glossary.Macro.GetTags(this);
+            Glossary.Macros.GetTags(this);
 
             variants.Clear();
             if (data.functionContents.Count == 0)

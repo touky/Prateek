@@ -13,7 +13,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
                 return;
             }
 
-            Glossary.Macro.Init();
+            Glossary.Macros.Init();
         }
         #endregion
     }

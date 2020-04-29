@@ -219,6 +219,18 @@ namespace Prateek.Core.Code.Helpers
         }
 
         ///---------------------------------------------------------------------
+        public static string GetTabulation(this string left, int textStart)
+        {
+            var i = left.LastIndexOf(Strings.Separator.LineFeed.C(), textStart);
+            if (i > Const.INDEX_NONE)
+            {
+                return left.Substring(i + 1, textStart - (i + 1));
+            }
+
+            return string.Empty;
+        }
+
+        ///---------------------------------------------------------------------
         public static string CleanText(this string left)
         {
             return left.TabToSpaces().SimplifyNewLines();

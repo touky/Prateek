@@ -19,7 +19,8 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
         ///-----------------------------------------------------------------
         private ScriptContent scriptContent;
         private List<ScriptContent.GeneratedCode> codeGenerated = new List<ScriptContent.GeneratedCode>();
-        private List<ScriptContent> datas = new List<ScriptContent>();
+        private List<ScriptContent> scriptContents = new List<ScriptContent>();
+        private List<string> usingNamespaces = new List<string>();
         #endregion
 
         #region Properties
@@ -36,12 +37,12 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
 
         public int DataCount
         {
-            get { return datas.Count; }
+            get { return scriptContents.Count; }
         }
 
         public ScriptContent this[int index]
         {
-            get { return datas[index]; }
+            get { return scriptContents[index]; }
         }
         #endregion
 
@@ -75,12 +76,18 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
         }
 
         ///-----------------------------------------------------------------
+        public void AddNamespace(string usingNamespace)
+        {
+            usingNamespaces.Add(usingNamespace);
+        }
+
+        ///-----------------------------------------------------------------
         public bool Commit()
         {
             var hasSubmitted = scriptContent != null;
             if (scriptContent != null)
             {
-                datas.Add(scriptContent);
+                scriptContents.Add(scriptContent);
             }
 
             scriptContent = null;
@@ -89,74 +96,93 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
         }
 
         ///-----------------------------------------------------------------
-        public global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult Generate(string genHeader, string genCode)
+        public global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult Generate(string sourceHeader, string sourceCode)
         {
-            var genNSpc = (StringSwap) Glossary.Macro.codeGenNSpc.Keyword();
-            var genExtn = (StringSwap) Glossary.Macro.codeGenExtn.Keyword();
-            var genPrfx = (StringSwap) Glossary.Macro.codeGenPrfx.Keyword();
-            var genData = (StringSwap) Glossary.Macro.codeGenData.Keyword();
-            var genTabs = (StringSwap) Glossary.Macro.codeGenTabs.Keyword();
+            var swapNamespace = (StringSwap) Glossary.Macros.namepaceTag;
+            var swapClass = (StringSwap) Glossary.Macros.extensionClassTag;
+            var swapPrefix = (StringSwap) Glossary.Macros.extensionPrefixTag;
+            var swapUsing = (StringSwap) Glossary.Macros.codeUsingTag;
+            var swapCode = (StringSwap) Glossary.Macros.codeDataTag;
+            var swapCodeTabs = (StringSwap) Glossary.Macros.codeDataTabsTag;
+            var swapTabs = ((StringSwap) Glossary.Macros.codeTabsTag) + Glossary.Macros.codeTabs;
 
-            var i = genCode.IndexOf(genData.Original);
-            if (i < 0)
+            var usingIndex = sourceCode.IndexOf(swapUsing.Original);
+            var codeIndex = sourceCode.IndexOf(swapCode.Original);
+            if (codeIndex < Const.INDEX_NONE || usingIndex <= Const.INDEX_NONE)
             {
                 return global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;
             }
 
-            var r = genCode.LastIndexOf(Strings.Separator.LineFeed.C(), i);
-            if (r >= 0)
-            {
-                genTabs = genTabs + genCode.Substring(r + 1, i - (r + 1));
-            }
+            //Retrieve tab offset
+            var usingTabs = sourceCode.GetTabulation(usingIndex);
+            swapCodeTabs = swapCodeTabs + sourceCode.GetTabulation(codeIndex);
 
-            for (var d = 0; d < datas.Count; d++)
+            for (var d = 0; d < scriptContents.Count; d++)
             {
-                var data = datas[d];
+                var scriptContent = scriptContents[d];
 
-                var result = data.scriptAction.Generate(data);
+                var result = scriptContent.scriptAction.Generate(scriptContent);
                 if (!result)
                 {
                     return result;
                 }
 
-                data.codeGenerated.Sort((a, b) =>
+                scriptContent.codeGenerated.Sort((a, b) =>
                 {
                     return string.Compare(a.className, b.className);
                 });
 
-                for (int c = 0; c < data.codeGenerated.Count; c++)
+                var namespaces = string.Empty;
+                foreach (var usingNamespace in usingNamespaces)
                 {
-                    var codeData = data.codeGenerated[c];
-
-                    var newCode = new ScriptContent.GeneratedCode() {className = codeData.className, code = string.Empty};
-                    var code = codeData.code;
-
-                    genNSpc += data.blockNamespace;
-                    genExtn += data.blockClassName;
-                    
-                    for (var p = 0; p < data.blockClassPrefix.Count; p++)
+                    if (!string.IsNullOrEmpty(namespaces))
                     {
-                        genPrfx += data.blockClassPrefix[p] + Strings.Separator.Space.S();
+                        namespaces += $"{usingTabs}using {usingNamespace};".NewLine();
+                    }
+                    else
+                    {
+                        namespaces += $"using {usingNamespace};".NewLine();
+                    }
+                }
+
+                swapUsing += namespaces;
+
+                for (int c = 0; c < scriptContent.codeGenerated.Count; c++)
+                {
+                    var codeData = scriptContent.codeGenerated[c];
+                    var destinationCode = sourceCode;
+
+                    var exportCode = new ScriptContent.GeneratedCode() {className = codeData.className, code = string.Empty};
+                    var generatedContent = codeData.code;
+
+                    swapNamespace += scriptContent.blockNamespace;
+                    swapClass += scriptContent.blockClassName;
+                    
+                    for (var p = 0; p < scriptContent.blockClassPrefix.Count; p++)
+                    {
+                        swapPrefix += scriptContent.blockClassPrefix[p] + Strings.Separator.Space.S();
                     }
 
-                    genData += genTabs.Apply(code);
-                    genCode = genNSpc.Apply(genCode);
-                    genCode = genData.Apply(genCode);
-                    genCode = genExtn.Apply(genCode);
-                    genCode = genPrfx.Apply(genCode);
-                    newCode.code = genCode;
+                    swapCode += swapCodeTabs.Apply(generatedContent);
+                    destinationCode = swapNamespace.Apply(destinationCode);
+                    destinationCode = swapCode.Apply(destinationCode);
+                    destinationCode = swapClass.Apply(destinationCode);
+                    destinationCode = swapPrefix.Apply(destinationCode);
+                    destinationCode = swapTabs.Apply(destinationCode);
+                    destinationCode = swapUsing.Apply(destinationCode);
+                    exportCode.code = destinationCode;
 
-                    var index = codeGenerated.FindIndex((x) => { return x.className == newCode.className; });
+                    var index = codeGenerated.FindIndex((x) => { return x.className == exportCode.className; });
                     if (index != Const.INDEX_NONE)
                     {
                         var oldCode = codeGenerated[index];
-                        oldCode.code += newCode.code;
+                        oldCode.code += exportCode.code;
                         codeGenerated[index] = oldCode;
                     }
                     else
                     {
-                        newCode.code = genHeader + newCode.code;
-                        codeGenerated.Add(newCode);
+                        exportCode.code = sourceHeader + exportCode.code;
+                        codeGenerated.Add(exportCode);
                     }
                 }
             }

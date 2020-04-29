@@ -51,15 +51,15 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 
             var rule = keywordUsages.Find(x =>
             {
-                return x.keyword == Glossary.Macro.Func && x.scope == CodeBlock;
+                return x.keyword == Glossary.Macros[Glossary.FuncName.FUNC] && x.scope == CodeBlock;
             });
 
             if (rule.keywordUsageType != KeywordUsageType.Ignore)
             {
-                keywordUsages.Add(new KeywordUsage(Glossary.Macro.Func, CodeBlock)
+                keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.FUNC], CodeBlock)
                 {
                     arguments = 1, needOpenScope = true, needScopeData = true,
-                    onFeedCodeFile = (codeInfos, arguments, data) =>
+                    onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                     {
                         codeInfos.functionContents.Add(new FunctionContent {funcName = arguments[0].Content, data = data});
                         return true;
@@ -69,9 +69,8 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         }
         #endregion CodeRule override
 
-        ///-----------------------------------------------------------------
-
         #region Rule internal
+        ///-----------------------------------------------------------------
         protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
         {
             variants.Clear();

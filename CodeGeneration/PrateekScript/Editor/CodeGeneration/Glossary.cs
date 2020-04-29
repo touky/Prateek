@@ -36,7 +36,8 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
         ///-----------------------------------------------------------------
 
         ///-----------------------------------------------------------------
-        public static class Macro
+        public static Macro Macros = new Macro();
+        public class Macro
         {
             #region ClassName enum
             ///-------------------------------------------------------------
@@ -50,118 +51,80 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
             #endregion
 
             #region FuncName enum
-            ///-------------------------------------------------------------
-            public enum FuncName
-            {
-                FILE_INFO, //PRATEEK_CODEGEN_FILE_INFO(MyFile, Extension)
-                BLOCK, //PRATEEK_CODEGEN_BLOCK_[OPERATION](StaticClass)
-                PREFIX, //PRATEEK_CODEGEN_CODE_PREFIX
-                MAIN, //PRATEEK_CODEGEN_CODE_MAIN
-                SUFFIX, //PRATEEK_CODEGEN_CODE_SUFFIX
-                CLASS_INFO, //PRATEEK_CODEGEN_CLASS_INFO(*****)
-                DEFAULT, //PRATEEK_CODEGEN_DEFAULT(*****)
-                FUNC, //PRATEEK_CODEGEN_FUNC(*****) { }
-
-                MAX
-            }
             #endregion
 
             #region VarName enum
-            ///-------------------------------------------------------------
-            public enum VarName
-            {
-                NAMES, //NAMES_[n]
-                VARS, //VARS_[n]
-                FUNC_RESULT, //FUNC_RESULT_[n]
-
-                MAX
-            }
             #endregion
 
             #region Static and Constants
             ///-------------------------------------------------------------
-            public static string codeGenStart = "PRATEEK_SCRIPT_STARTS_HERE";
-            public static string codeGenNSpc = "PRATEEK_EXTENSION_NAMESPACE";
-            public static string codeGenExtn = "PRATEEK_EXTENSION_CLASS";
-            public static string codeGenPrfx = "PRATEEK_EXTENSION_PREFIX";
-            public static string codeGenData = "PRATEEK_CODEGEN_DATA";
-            public static string codeGenTabs = "PRATEEK_CODEGEN_TABS";
+            public string scriptStartTag;
+            public string namepaceTag;
+            public string extensionClassTag;
+            public string extensionPrefixTag;
+            public string codeUsingTag;
+            public string codeDataTag;
+            public string codeDataTabsTag;
+            public string codeTabsTag;
+            public string codeTabs;
 
-            public static string prefix = "PRATEEK";
-            public static string codeData = "CODE";
-
-            ///-------------------------------------------------------------
-            private static NumberedSymbol names;
-            private static NumberedSymbol variables;
-            private static NumberedSymbol functions;
+            public string prefix = "PRATEEK";
+            public string codeData = "CODE";
 
             ///-------------------------------------------------------------
-            public static string srcClass = "#SRC_CLASS#";
-            public static string dstClass = "#DST_CLASS#";
+            private NumberedSymbol names;
+            private NumberedSymbol variables;
+            private NumberedSymbol functions;
 
             ///-------------------------------------------------------------
-            private static List<string> data = new List<string>();
+            public static string srcClass;
+            public static string dstClass;
+
+            ///-------------------------------------------------------------
+            private Dictionary<string, string> datas = new Dictionary<string, string>();
             #endregion
 
             #region Properties
             ///-------------------------------------------------------------
-            public static string FileInfo
+            public string this[FuncName funcName]
             {
-                get { return data[0]; }
-            }
+                get
+                {
+                    if (datas.TryGetValue(funcName.ToString(), out string result))
+                    {
+                        return result;
+                    }
 
-            public static string CodePartPrefix
-            {
-                get { return data[1]; }
-            }
-
-            public static string CodePartMain
-            {
-                get { return data[2]; }
-            }
-
-            public static string CodePartSuffix
-            {
-                get { return data[3]; }
-            }
-
-            public static string ClassInfo
-            {
-                get { return data[4]; }
-            }
-
-            public static string DefaultInfo
-            {
-                get { return data[5]; }
-            }
-
-            public static string Func
-            {
-                get { return data[6]; }
-            }
-
-            public static string ClassNames
-            {
-                get { return data[7]; }
-            }
-
-            public static string ClassVars
-            {
-                get { return data[8]; }
+                    return string.Empty;
+                }
             }
 
             ///-------------------------------------------------------------
-            public static NumberedSymbol Names
+            public string this[VarName funcName]
+            {
+                get
+                {
+                    if (datas.TryGetValue(funcName.ToString(), out string result))
+                    {
+                        return result;
+                    }
+
+                    return string.Empty;
+                }
+            }
+
+            ///-------------------------------------------------------------
+            public NumberedSymbol Names
             {
                 get { return names; }
             }
 
-            public static NumberedSymbol Functions
+            public NumberedSymbol Functions
             {
                 get { return functions; }
             }
 
-            public static NumberedSymbol Variables
+            public NumberedSymbol Variables
             {
                 get { return variables; }
             }
@@ -169,33 +132,34 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
 
             #region Class Methods
             ///-------------------------------------------------------------
-            public static string To(FuncName value)
+            public void Init()
             {
-                return Enum.GetNames(typeof(FuncName))[(int) value];
-            }
-
-            public static string To(VarName value)
-            {
-                return Enum.GetNames(typeof(VarName))[(int) value];
-            }
-
-            ///-------------------------------------------------------------
-            public static void Init()
-            {
-                if (data.Count != 0)
+                if (datas.Count != 0)
                 {
                     return;
                 }
 
-                data.Add(string.Format("{0}_{1}", prefix, To(FuncName.FILE_INFO)));
-                data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.PREFIX)));
-                data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.MAIN)));
-                data.Add(string.Format("{0}_{1}_{2}", prefix, codeData, To(FuncName.SUFFIX)));
-                data.Add(string.Format("{0}_{1}", prefix, To(FuncName.CLASS_INFO)));
-                data.Add(string.Format("{0}_{1}", prefix, To(FuncName.DEFAULT)));
-                data.Add(string.Format("{0}_{1}", prefix, To(FuncName.FUNC)));
-                data.Add(string.Format("{0}_{1}", prefix, To(VarName.NAMES)));
-                data.Add(string.Format("{0}_{1}", prefix, To(VarName.VARS)));
+                codeTabsTag         = "TABS";
+                codeTabs            = "    ";
+                scriptStartTag      = $"{prefix}_SCRIPT_STARTS_HERE".Keyword();
+                namepaceTag         = $"{prefix}_EXTENSION_NAMESPACE".Keyword();
+                extensionClassTag   = $"{prefix}_EXTENSION_CLASS".Keyword();
+                extensionPrefixTag  = $"{prefix}_EXTENSION_PREFIX".Keyword();
+                codeUsingTag        = $"{prefix}_USING_NAMESPACE".Keyword();
+                codeDataTag         = $"{prefix}_CODEGEN_DATA".Keyword();
+                codeDataTabsTag     = $"{prefix}_CODEGEN_{codeTabsTag}".Keyword();
+                codeTabsTag         = codeTabsTag.Keyword();
+
+                AddData(FuncName.FILE_INFO);
+                AddData(FuncName.USING);
+                AddData(FuncName.PREFIX, codeData);
+                AddData(FuncName.MAIN, codeData);
+                AddData(FuncName.SUFFIX,  codeData);
+                AddData(FuncName.CLASS_INFO);
+                AddData(FuncName.DEFAULT);
+                AddData(FuncName.FUNC);
+                AddData(VarName.NAMES);
+                AddData(VarName.VARS);
 
                 srcClass = ClassName.SRC_CLASS.ToString().Keyword();
                 dstClass = ClassName.DST_CLASS.ToString().Keyword();
@@ -206,12 +170,33 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
             }
 
             ///-------------------------------------------------------------
-            public static void GetTags(SyntaxScriptAction syntaxer)
+            private void AddData(VarName varName)
             {
-                syntaxer.AddKeyword(FileInfo);
-                for (var d = 1; d < data.Count; d++)
+                datas.Add(varName.ToString(), $"{prefix}_{varName.To()}");
+            }
+
+            ///-------------------------------------------------------------
+            private void AddData(FuncName funcName)
+            {
+                datas.Add(funcName.ToString(), $"{prefix}_{funcName.To()}");
+            }
+
+            ///-------------------------------------------------------------
+            private void AddData(FuncName funcName, string additionalText)
+            {
+                datas.Add(funcName.ToString(), $"{prefix}_{additionalText}_{funcName.To()}");
+            }
+
+            ///-------------------------------------------------------------
+            public void GetTags(SyntaxScriptAction syntaxer)
+            {
+                foreach (var name in Enum.GetNames(typeof(FuncName)))
                 {
-                    syntaxer.AddIdentifier(data[d]);
+                    if (name == FuncName.FILE_INFO.ToString())
+                    {
+                        syntaxer.AddKeyword(this[FuncName.FILE_INFO]);
+                    }
+                    syntaxer.AddIdentifier(datas[name]);
                 }
 
                 syntaxer.AddIdentifier(srcClass.Keyword(false));
@@ -255,5 +240,48 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
             #endregion
         }
         #endregion
+
+        ///-------------------------------------------------------------
+        public enum FuncName
+        {
+            FILE_INFO,
+            USING,
+            BLOCK,
+            PREFIX,
+            MAIN,
+            SUFFIX,
+            CLASS_INFO,
+            DEFAULT,
+            FUNC,
+
+            MAX
+        }
+
+        ///-------------------------------------------------------------
+        public enum VarName
+        {
+            NAMES, //NAMES_[n]
+            VARS, //VARS_[n]
+            FUNC_RESULT, //FUNC_RESULT_[n]
+
+            MAX
+        }
+    }
+
+    public static class FuncNameExtensions
+    {
+        public static string To(this Glossary.FuncName value)
+        {
+            return Enum.GetNames(typeof(Glossary.FuncName))[(int) value];
+        }
+    }
+
+    public static class VarNameExtensions
+    {
+        public static string To(this Glossary.VarName value)
+        {
+            return Enum.GetNames(typeof(Glossary.VarName))[(int) value];
+        }
     }
 }
+

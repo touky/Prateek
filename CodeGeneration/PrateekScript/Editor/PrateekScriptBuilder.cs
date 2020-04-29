@@ -160,7 +160,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
                     return Error(applyResult, ref newData);
                 }
 
-                var genStart   = Glossary.Macro.codeGenStart.Keyword();
+                var genStart   = Glossary.Macros.scriptStartTag;
                 var startIndex = newData.destination.content.IndexOf(genStart);
                 if (startIndex < 0)
                 {
@@ -278,7 +278,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
         ///---------------------------------------------------------------------
         private CodeFile RetrieveCodeFile(CodeKeyword codeKeyword, List<CodeFile> codeFiles)
         {
-            var fileInfoRule = new KeywordUsage(Glossary.Macro.FileInfo, string.Empty) {arguments = 2, needOpenScope = true};
+            var fileInfoRule = new KeywordUsage(Glossary.Macros[Glossary.FuncName.FILE_INFO], string.Empty) {arguments = 2, needOpenScope = true};
             if (!fileInfoRule.ValidateRule(codeKeyword, string.Empty))
             {
                 return null;

@@ -51,7 +51,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
         {
             infos.Clear();
-            Glossary.Macro.GetTags(this);
+            Glossary.Macros.GetTags(this);
 
             variants.Clear();
             if (data.functionContents.Count == 0)

@@ -18,7 +18,8 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils
         public ArgumentRange arguments;
         public bool needOpenScope;
         public bool needScopeData;
-        public Func<ScriptContent, List<Keyword>, string, bool> onFeedCodeFile;
+        public bool createNewScriptContent;
+        public Func<CodeFile, ScriptContent, List<Keyword>, string, bool> onFeedCodeFile;
         public Func<CodeFile, string, bool> onCloseScope;
 
         ///-------------------------------------------------------------
@@ -30,6 +31,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils
             arguments = 0;
             needOpenScope = false;
             needScopeData = false;
+            createNewScriptContent = false;
             onFeedCodeFile = null;
             onCloseScope = null;
         }

@@ -104,17 +104,17 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 
         public NumberedSymbol Names
         {
-            get { return Glossary.Macro.Names; }
+            get { return Glossary.Macros.Names; }
         }
 
         public NumberedSymbol Functions
         {
-            get { return Glossary.Macro.Functions; }
+            get { return Glossary.Macros.Functions; }
         }
 
         public NumberedSymbol Variables
         {
-            get { return Glossary.Macro.Variables; }
+            get { return Glossary.Macros.Variables; }
         }
         #endregion
 
@@ -136,14 +136,24 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         ///-----------------------------------------------------------------
         protected virtual void Init()
         {
-            Glossary.Macro.Init();
+            Glossary.Macros.Init();
 
-            codeBlock = string.Format("{0}_{1}_{2}", Glossary.Macro.prefix, Glossary.Macro.To(Glossary.Macro.FuncName.BLOCK), ScopeTag);
-
-            keywordUsages.Add(new KeywordUsage(codeBlock, Glossary.Macro.FileInfo)
+            codeBlock = string.Format("{0}_{1}_{2}", Glossary.Macros.prefix, Glossary.FuncName.BLOCK.To(), ScopeTag);
+            
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.USING], Glossary.Macros[Glossary.FuncName.FILE_INFO])
             {
-                arguments = ArgumentRange.AtLeast(2), needOpenScope = true,
-                onFeedCodeFile = (codeInfos, arguments, data) =>
+                arguments = 1,
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
+                {
+                    codeFile.AddNamespace(arguments[0].Content);
+                    return true;
+                }
+            });
+
+            keywordUsages.Add(new KeywordUsage(codeBlock, Glossary.Macros[Glossary.FuncName.FILE_INFO])
+            {
+                arguments = ArgumentRange.AtLeast(2), needOpenScope = true, createNewScriptContent = true,
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
                     codeInfos.blockNamespace = arguments[0].Content;
                     codeInfos.blockClassName = arguments[1].Content;
@@ -165,39 +175,39 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macro.ClassInfo, codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.CLASS_INFO], codeBlock)
             {
                 arguments = 1,
                 needOpenScope = true,
-                onFeedCodeFile = (codeInfos, arguments, data) =>
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
                     codeInfos.classInfos.Add(new ClassContent {className = arguments[0].Content});
                     return true;
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macro.ClassNames, Glossary.Macro.ClassInfo)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.VarName.NAMES], Glossary.Macros[Glossary.FuncName.CLASS_INFO])
             {
                 arguments = ArgumentRange.AtLeast(1),
-                onFeedCodeFile = (codeInfos, arguments, data) =>
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
                     return codeInfos.SetClassNames(arguments);
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macro.ClassVars, Glossary.Macro.ClassInfo)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.VarName.VARS], Glossary.Macros[Glossary.FuncName.CLASS_INFO])
             {
                 arguments = ArgumentRange.AtLeast(1),
-                onFeedCodeFile = (codeInfos, arguments, data) =>
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
                     return codeInfos.SetClassVars(arguments);
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macro.DefaultInfo, codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.DEFAULT], codeBlock)
             {
                 arguments = ArgumentRange.Between(2, 3),
-                onFeedCodeFile = (codeInfos, arguments, data) =>
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
                     codeInfos.classDefaultType = arguments[0].Content;
                     codeInfos.classDefaultValue = arguments[1].Content;
@@ -206,11 +216,11 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macro.Func, codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.FUNC], codeBlock)
             {
                 needOpenScope = true,
                 needScopeData = true,
-                onFeedCodeFile = (codeInfos, arguments, data) =>
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
                     codeInfos.functionContents.Add(new FunctionContent());
                     codeInfos.SetFuncData(data);
@@ -219,10 +229,10 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macro.CodePartPrefix, codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.PREFIX], codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
-                onFeedCodeFile = (codeInfos, arguments, data) =>
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
                     codeInfos.codePrefix = data;
                     return true;
@@ -230,10 +240,10 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macro.CodePartMain, codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.MAIN], codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
-                onFeedCodeFile = (codeInfos, arguments, data) =>
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
                     codeInfos.codeMain = data;
                     return true;
@@ -241,10 +251,10 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macro.CodePartSuffix, codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.SUFFIX], codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
-                onFeedCodeFile = (codeInfos, arguments, data) =>
+                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
                     codeInfos.codePostfix = data;
                     return true;
@@ -257,15 +267,18 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
 
         public bool FeedCodeFile(CodeFile codeFile, KeywordUsage keywordUsage, CodeKeyword rootKeyword)
         {
-            var codeInfos = codeFile.ScriptContent;
-            if (codeInfos == null)
+            var scriptContent = codeFile.ScriptContent;
+            if (keywordUsage.createNewScriptContent)
             {
-                codeInfos = codeFile.NewData(this);
-            }
+                if (scriptContent == null)
+                {
+                    scriptContent = codeFile.NewData(this);
+                }
 
-            if (codeInfos.scriptAction == null || codeInfos.scriptAction != this)
-            {
-                return false;
+                if (scriptContent.scriptAction == null || scriptContent.scriptAction != this)
+                {
+                    return false;
+                }
             }
 
             var data = string.Empty;
@@ -285,7 +298,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                 }
             }
 
-            return keywordUsage.onFeedCodeFile.Invoke(codeInfos, rootKeyword.arguments, data);
+            return keywordUsage.onFeedCodeFile.Invoke(codeFile, scriptContent, rootKeyword.arguments, data);
         }
 
         ///-----------------------------------------------------------------
@@ -419,7 +432,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             for (int c = 0; c < data.codeGenerated.Count; c++)
             {
                 var codeGenerated = data.codeGenerated[c];
-                codeGenerated.code = codeGenerated.code.Replace(string.Empty.NewLine(), string.Empty.NewLine() + Glossary.Macro.codeGenTabs.Keyword());
+                codeGenerated.code = codeGenerated.code.Replace(string.Empty.NewLine(), string.Empty.NewLine() + Glossary.Macros.codeDataTabsTag);
                 data.codeGenerated[c] = codeGenerated;
             }
 
@@ -456,25 +469,6 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
             }
 
             return default;
-        }
-
-        ///-----------------------------------------------------------------
-        public virtual bool CloseScope(CodeFile codeFile, string scope)
-        {
-            if (scope == CodeBlock)
-            {
-                codeFile.Commit();
-                return true;
-            }
-            else if (scope == Glossary.Macro.Func
-                  || scope == Glossary.Macro.CodePartMain
-                  || scope == Glossary.Macro.CodePartPrefix
-                  || scope == Glossary.Macro.CodePartSuffix)
-            {
-                return true;
-            }
-
-            return false;
         }
         #endregion CodeRule override
     }

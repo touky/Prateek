@@ -48,7 +48,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
         }
 
         ///-------------------------------------------------------------
-        public NumberedSymbol(Glossary.Macro.VarName root)
+        public NumberedSymbol(Glossary.VarName root)
         {
             numberedSymbols = new List<string>();
             defaultSymbol = string.Format(symbolFormat, root, defaultNumber).Keyword();
