@@ -1,6 +1,6 @@
 PRATEEK_FILE_INFO(Extensions, cs)
 {
-    PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, VectorExtensions, static)
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, VectorExtensions, static partial)
     {
         PRATEEK_CLASS_INFO(Vector2) { PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3) { PRATEEK_VARS(x, y, z) }

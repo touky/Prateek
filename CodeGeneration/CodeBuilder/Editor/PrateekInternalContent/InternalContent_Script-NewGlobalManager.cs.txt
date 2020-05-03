@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------------
 namespace #NAMESPACE#
 {
-    #PRATEEK_CSHARP_NAMESPACE#
+    #PRATEEK_CSHARP_NAMESPACE_CODE#
 
     //-------------------------------------------------------------------------
     #region Null#SCRIPTNAME#

@@ -35,12 +35,13 @@ namespace Prateek.Core.Editor.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using UnityEditor;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------
-    public static class MenuCommand
+    public static class MenuCommandExtensions
     {
-        [UnityEditor.MenuItem("CONTEXT/Component/Sort components")]
+        [MenuItem("CONTEXT/Component/Sort components")]
         public static void SortComponents(UnityEditor.MenuCommand command)
         {
             var behaviour = (Component)command.context;

@@ -138,7 +138,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         {
             Glossary.Macros.Init();
 
-            codeBlock = string.Format("{0}_{1}_{2}", Glossary.Macros.prefix, Glossary.FuncName.BLOCK.To(), ScopeTag);
+            codeBlock = $"{Glossary.Macros.codeBlockFormat}{ScopeTag}";
             
             keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.USING], Glossary.Macros[Glossary.FuncName.FILE_INFO])
             {

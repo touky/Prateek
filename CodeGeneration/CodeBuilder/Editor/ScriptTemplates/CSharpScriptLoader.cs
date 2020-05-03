@@ -62,8 +62,13 @@ namespace Prateek.CodeGenerator.ScriptTemplates
                               .Commit();
 
             KeywordTemplate.Create("cs")
-                           .SetTag("PRATEEK_CSHARP_NAMESPACE", KeywordTemplateMode.UsedAsScope)
-                           .Load("InternalContent_PRATEEK_CSHARP_NAMESPACE.cs")
+                           .SetTag("PRATEEK_CSHARP_NAMESPACE_CODE", KeywordTemplateMode.UsedAsScope)
+                           .Load("InternalContent_PRATEEK_CSHARP_NAMESPACE_CODE.cs")
+                           .Commit();
+
+            KeywordTemplate.Create("cs")
+                           .SetTag("PRATEEK_CSHARP_NAMESPACE_EDITOR", KeywordTemplateMode.UsedAsScope)
+                           .Load("InternalContent_PRATEEK_CSHARP_NAMESPACE_EDITOR.cs")
                            .Commit();
 
             KeywordTemplate.Create("cs")

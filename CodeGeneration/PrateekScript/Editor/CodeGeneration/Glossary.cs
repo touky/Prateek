@@ -67,6 +67,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
             public string codeDataTabsTag;
             public string codeTabsTag;
             public string codeTabs;
+            public string codeBlockFormat;
 
             public string prefix = "PRATEEK";
             public string codeData = "CODE";
@@ -149,12 +150,13 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
                 codeDataTag         = $"{prefix}_CODEGEN_DATA".Keyword();
                 codeDataTabsTag     = $"{prefix}_CODEGEN_{codeTabsTag}".Keyword();
                 codeTabsTag         = codeTabsTag.Keyword();
+                codeBlockFormat     = $"{Glossary.Macros.prefix}_{Glossary.FuncName.BLOCK.To()}_";
 
                 AddData(FuncName.FILE_INFO);
                 AddData(FuncName.USING);
                 AddData(FuncName.PREFIX, codeData);
                 AddData(FuncName.MAIN, codeData);
-                AddData(FuncName.SUFFIX,  codeData);
+                AddData(FuncName.SUFFIX, codeData);
                 AddData(FuncName.CLASS_INFO);
                 AddData(FuncName.DEFAULT);
                 AddData(FuncName.FUNC);

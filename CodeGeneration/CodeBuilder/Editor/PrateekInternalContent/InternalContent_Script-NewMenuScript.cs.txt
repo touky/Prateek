@@ -1,0 +1,24 @@
+#PRATEEK_COPYRIGHT#
+
+#PRATEEK_CSHARP_IFDEF#
+
+///--
+namespace #NAMESPACE#
+{
+    #PRATEEK_CSHARP_NAMESPACE_CODE#
+    #PRATEEK_CSHARP_NAMESPACE_EDITOR#
+
+    ///--
+    public static class #SCRIPTNAME#
+    {
+        ///--
+        #region Menu items
+        [MenuItem(ConstMenu.CREATE_ASSET + "new Asset")]
+        public static Object CreateNewAsset()
+        {
+            return AssetMenuExtensions.CreateAsset("...");
+        }
+        #endregion
+
+    }
+}
