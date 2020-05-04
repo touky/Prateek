@@ -1,4 +1,4 @@
-namespace Assets.Prateek.EditorJobSystem
+namespace Prateek.EditorJobSystem.Code
 {
     public abstract class ThreadedJob
     {

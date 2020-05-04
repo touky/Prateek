@@ -1,7 +1,7 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.IntermediateCode
+namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode
 {
     using System.Collections.Generic;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
 
     public class CodeLiteral : CodeCommand
     {

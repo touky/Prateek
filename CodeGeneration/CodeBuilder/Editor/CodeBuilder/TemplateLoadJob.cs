@@ -1,7 +1,7 @@
-namespace Prateek.CodeGenerator
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
 {
-    using Assets.Prateek.EditorJobSystem;
-    using Prateek.CodeGenerator.ScriptTemplates;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
+    using Prateek.EditorJobSystem.Code;
 
     public class TemplateLoadJob : ThreadedJob
     {

@@ -34,6 +34,7 @@
 namespace Prateek.Core.Code.Helpers
 {
     using System;
+    using Prateek.Core.Code.CachedArray;
 
     ///-------------------------------------------------------------------------
     public struct StringBlurp
@@ -90,17 +91,17 @@ namespace Prateek.Core.Code.Helpers
         }
 
         private string m_text;
-        private Helpers.CachedArray<StaticText.Id> m_ids;
-        private Helpers.CachedArray<string> m_tagsStr;
-        private Helpers.CachedArray<StaticText.Id> m_tagsId;
+        private CachedArray<StaticText.Id> m_ids;
+        private CachedArray<string> m_tagsStr;
+        private CachedArray<StaticText.Id> m_tagsId;
 
         ///---------------------------------------------------------------------
         public StringBlurp(bool dummy = false)
         {
             m_text = null;
-            m_ids = new Helpers.CachedArray<StaticText.Id>(StaticText.Id.Empty);
-            m_tagsStr = new Helpers.CachedArray<string>(null);
-            m_tagsId = new Helpers.CachedArray<StaticText.Id>(StaticText.Id.Empty);
+            m_ids = new CachedArray<StaticText.Id>(StaticText.Id.Empty);
+            m_tagsStr = new CachedArray<string>(null);
+            m_tagsId = new CachedArray<StaticText.Id>(StaticText.Id.Empty);
         }
 
         ///---------------------------------------------------------------------

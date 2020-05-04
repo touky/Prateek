@@ -1,4 +1,4 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols
+namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols
 {
     public abstract class Symbol<TSymbol> : Symbol
         where TSymbol : Symbol<TSymbol>, new()

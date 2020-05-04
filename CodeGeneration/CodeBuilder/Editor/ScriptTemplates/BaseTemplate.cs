@@ -1,26 +1,28 @@
-namespace Prateek.CodeGenerator.ScriptTemplates {
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates
+{
     using System;
-    using System.Collections.Generic;
     using System.IO;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
     using Prateek.Core.Code.Helpers.Files;
-    using UnityEngine;
 
     public abstract class BaseTemplate : FileHelpers.IExtensionMatcher
     {
         ///-----------------------------------------------------------------
         protected string extension;
+
         private string contentPath = String.Empty;
         private string content = String.Empty;
         protected long lastWriteTime = 0;
 
         ///-----------------------------------------------------------------
-        public string Extension { get { return extension; } }
+        public string Extension
+        {
+            get { return extension; }
+        }
+
         public string Content
         {
-            get
-            {
-                return content;
-            }
+            get { return content; }
             protected set { content = value; }
         }
 

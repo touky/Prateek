@@ -35,6 +35,7 @@ namespace Prateek.Core.Code.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using Prateek.Core.Code.Consts;
 
     ///-------------------------------------------------------------------------
     public static class TextMessage

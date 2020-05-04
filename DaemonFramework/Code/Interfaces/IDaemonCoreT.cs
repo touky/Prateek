@@ -1,7 +1,5 @@
-namespace Prateek.DaemonCore.Code.Interfaces
+namespace Prateek.DaemonFramework.Code.Interfaces
 {
-    using UnityEngine.XR.WSA.Persistence;
-
     public interface IDaemonCore<TDaemonBranch> : IDaemonCore
         where TDaemonBranch : IDaemonBranch
     {

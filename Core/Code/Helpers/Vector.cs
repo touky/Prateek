@@ -33,6 +33,8 @@
 //Auto activate some of the prateek defines
 namespace Prateek.Core.Code.Helpers
 {
+    using Prateek.Core.Code.Extensions;
+    using Prateek.Core.Code.PrateekScripts.PrtkSources;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------
@@ -60,10 +62,10 @@ namespace Prateek.Core.Code.Helpers
         public static Vector4 mix(Vector4 v0, Vector4 v1, float alpha) { return Vector4.Lerp(v0, v1, alpha); }
         public static Color mix(Color v0, Color v1, float alpha) { return Color.Lerp(v0, v1, alpha); }
         public static Vector3 cross(Vector3 v0, Vector3 v1) { return Vector3.Cross(v0, v1); }
-        public static Vector2Int Int(this Vector2 v) { return Code.CSharp.vec2i((int)v.x, (int)v.y); }
-        public static Vector3Int Int(this Vector3 v) { return Code.CSharp.vec3i((int)v.x, (int)v.y, (int)v.z); }
-        public static Vector2 Float(this Vector2Int v) { return Code.CSharp.vec2(v.x, v.y); }
-        public static Vector3 Float(this Vector3Int v) { return Code.CSharp.vec3(v.x, v.y, v.z); }
+        public static Vector2Int Int(this Vector2 v) { return Extensions.CSharp.vec2i((int)v.x, (int)v.y); }
+        public static Vector3Int Int(this Vector3 v) { return Extensions.CSharp.vec3i((int)v.x, (int)v.y, (int)v.z); }
+        public static Vector2 Float(this Vector2Int v) { return Extensions.CSharp.vec2(v.x, v.y); }
+        public static Vector3 Float(this Vector3Int v) { return Extensions.CSharp.vec3(v.x, v.y, v.z); }
     }
 
     ///-----------------------------------------------------------------------------

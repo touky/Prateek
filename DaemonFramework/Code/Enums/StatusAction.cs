@@ -1,4 +1,4 @@
-namespace Prateek.DaemonCore.Code.Enums
+namespace Prateek.DaemonFramework.Code.Enums
 {
     internal enum StatusAction
     {

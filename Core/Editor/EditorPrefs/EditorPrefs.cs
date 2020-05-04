@@ -26,16 +26,17 @@
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-    #endregion Prateek Ifdefs
-    // -END_PRATEEK_CSHARP_IFDEF-
+#endregion Prateek Ifdefs
+// -END_PRATEEK_CSHARP_IFDEF-
 
 //Auto activate some of the prateek defines
 namespace Prateek.Core.Editor.EditorPrefs
 {
     using System.Collections.Generic;
-    using Prateek.Core.Code;
-    using Prateek.Core.Code.Extensions;
     using UnityEngine;
+    using Prateek.Core.Code.Extensions;
+    using static Prateek.Core.Code.Extensions.CSharp;
+
 
     ///-----------------------------------------------------------------------------
     ///-------------------------------------------------------------------------
@@ -1032,7 +1033,7 @@ namespace Prateek.Core.Editor.EditorPrefs
                 set
                 {
                     var valueCount = value == null ? 0 : value.Count;
-                    var length     = CSharp.min(Count, valueCount);
+                    var length     = min(Count, valueCount);
                     for (int l = 0; l < length; l++)
                     {
                         prefValues[l].Value = value[l];

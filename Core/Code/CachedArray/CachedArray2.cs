@@ -1,9 +1,9 @@
-namespace Prateek.Core.Code.Helpers
+namespace Prateek.Core.Code.CachedArray
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using Prateek.Core.Code.CachedArray;
+    using Prateek.Core.Code.Consts;
     using UnityEngine;
 
     ///------------------------------------------------------------------------

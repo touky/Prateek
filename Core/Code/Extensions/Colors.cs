@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Core.Code
+namespace Prateek.Core.Code.Extensions
 {
     using UnityEngine;
 

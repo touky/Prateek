@@ -34,6 +34,8 @@
 namespace Prateek.Core.Code.Helpers
 {
     using System.Collections.Generic;
+    using Prateek.Core.Code.Extensions;
+    using Prateek.Core.Code.PrateekScripts.PrtkSources;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------
@@ -143,7 +145,7 @@ namespace Prateek.Core.Code.Helpers
                     if (d < fallout)
                     {
                         if (fallout > 0)
-                            return Color.Lerp(color, color.rgbn(0), Code.CSharp.saturate(d / fallout));
+                            return Color.Lerp(color, color.rgbn(0), Extensions.CSharp.saturate(d / fallout));
                         return color;
                     }
                     return Color.clear;
@@ -152,7 +154,7 @@ namespace Prateek.Core.Code.Helpers
                 ///-------------------------------------------------------------
                 protected Vector3 Elongate(Vector3 point)
                 {
-                    return point - Code.CSharp.clamp(point, -elongate, elongate);
+                    return point - Extensions.CSharp.clamp(point, -elongate, elongate);
                 }
 
                 ///-------------------------------------------------------------
@@ -174,7 +176,7 @@ namespace Prateek.Core.Code.Helpers
 
                     if (skin > 0)
                     {
-                        d = Code.CSharp.abs(d) - skin;
+                        d = Extensions.CSharp.abs(d) - skin;
                     }
 
                     return d;
@@ -225,9 +227,9 @@ namespace Prateek.Core.Code.Helpers
                 ///-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
-                    var d = Code.CSharp.abs(point) - size;
-                    return CSharp.length(Code.CSharp.max(d, 0))
-                           + Code.CSharp.min(Code.CSharp.max(d.x, Code.CSharp.max(d.y, d.z)), 0); // remove this line for an only partially signed sdf 
+                    var d = Extensions.CSharp.abs(point) - size;
+                    return CSharp.length(Extensions.CSharp.max(d, 0))
+                           + Extensions.CSharp.min(Extensions.CSharp.max(d.x, Extensions.CSharp.max(d.y, d.z)), 0); // remove this line for an only partially signed sdf 
                 }
             }
 
@@ -248,7 +250,7 @@ namespace Prateek.Core.Code.Helpers
                 ///-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
-                    var q = Code.CSharp.vec2(CSharp.length(point.xz()) - size.x, point.y);
+                    var q = Extensions.CSharp.vec2(CSharp.length(point.xz()) - size.x, point.y);
                     return CSharp.length(q) - size.y;
                 }
             }
@@ -270,14 +272,14 @@ namespace Prateek.Core.Code.Helpers
                 ///-------------------------------------------------------------
                 public override float Distance(Vector3 point)
                 {
-                    var k = Code.CSharp.vec3(-0.8660254f, 0.5f, 0.57735f);
+                    var k = Extensions.CSharp.vec3(-0.8660254f, 0.5f, 0.57735f);
                     point = point.xzy();
-                    point = Code.CSharp.abs(point);
-                    point = Code.CSharp.vec3(point.xy() - 2.0f * Code.CSharp.min(CSharp.dot(VectorExt.xy((Vector3) k), point.xy()), 0.0f) * VectorExt.xy((Vector3) k), point.z);
-                    var d = Code.CSharp.vec2(
-                       CSharp.length(point.xy() - Code.CSharp.vec2(Code.CSharp.clamp(point.x, -k.z * size.x, k.z * size.x), size.x)) * Code.CSharp.sign(point.y - size.x),
+                    point = Extensions.CSharp.abs(point);
+                    point = Extensions.CSharp.vec3(point.xy() - 2.0f * Extensions.CSharp.min(CSharp.dot(VectorExt.xy((Vector3) k), point.xy()), 0.0f) * VectorExt.xy((Vector3) k), point.z);
+                    var d = Extensions.CSharp.vec2(
+                       CSharp.length(point.xy() - Extensions.CSharp.vec2(Extensions.CSharp.clamp(point.x, -k.z * size.x, k.z * size.x), size.x)) * Extensions.CSharp.sign(point.y - size.x),
                        point.z - size.y);
-                    return Code.CSharp.min(Code.CSharp.max(d.x, d.y), 0.0f) + CSharp.length(Code.CSharp.max(d, 0.0f));
+                    return Extensions.CSharp.min(Extensions.CSharp.max(d.x, d.y), 0.0f) + CSharp.length(Extensions.CSharp.max(d, 0.0f));
                 }
             }
 
@@ -308,15 +310,15 @@ namespace Prateek.Core.Code.Helpers
                     var ac = a - c; var pc = point - c;
                     var nor = CSharp.cross(ba, ac);
 
-                    return Code.CSharp.sqrt(
-                    (Code.CSharp.sign(CSharp.dot(CSharp.cross(ba, nor), pa)) +
-                     Code.CSharp.sign(CSharp.dot(CSharp.cross(cb, nor), pb)) +
-                     Code.CSharp.sign(CSharp.dot(CSharp.cross(ac, nor), pc)) < 2.0)
+                    return Extensions.CSharp.sqrt(
+                    (Extensions.CSharp.sign(CSharp.dot(CSharp.cross(ba, nor), pa)) +
+                     Extensions.CSharp.sign(CSharp.dot(CSharp.cross(cb, nor), pb)) +
+                     Extensions.CSharp.sign(CSharp.dot(CSharp.cross(ac, nor), pc)) < 2.0)
                      ?
-                     Code.CSharp.min(Code.CSharp.min(
-                     dot2(ba * Code.CSharp.clamp(CSharp.dot(ba, pa) / dot2(ba), 0.0f, 1.0f) - pa),
-                     dot2(cb * Code.CSharp.clamp(CSharp.dot(cb, pb) / dot2(cb), 0.0f, 1.0f) - pb)),
-                     dot2(ac * Code.CSharp.clamp(CSharp.dot(ac, pc) / dot2(ac), 0.0f, 1.0f) - pc))
+                     Extensions.CSharp.min(Extensions.CSharp.min(
+                     dot2(ba * Extensions.CSharp.clamp(CSharp.dot(ba, pa) / dot2(ba), 0.0f, 1.0f) - pa),
+                     dot2(cb * Extensions.CSharp.clamp(CSharp.dot(cb, pb) / dot2(cb), 0.0f, 1.0f) - pb)),
+                     dot2(ac * Extensions.CSharp.clamp(CSharp.dot(ac, pc) / dot2(ac), 0.0f, 1.0f) - pc))
                      :
                      CSharp.dot(nor, pa) * CSharp.dot(nor, pa) / dot2(nor)) - 0.001f;
                 }
@@ -355,21 +357,21 @@ namespace Prateek.Core.Code.Helpers
             public class Union : DualBase
             {
                 public Union(Base a, Base b) : base(a, b) { }
-                protected override float Apply(float d1, float d2) { return Code.CSharp.min(d1, d2); }
+                protected override float Apply(float d1, float d2) { return Extensions.CSharp.min(d1, d2); }
             }
 
             ///-----------------------------------------------------------------
             public class Substraction : DualBase
             {
                 public Substraction(Base a, Base b) : base(a, b) { }
-                protected override float Apply(float d1, float d2) { return Code.CSharp.max(d1, -d2); }
+                protected override float Apply(float d1, float d2) { return Extensions.CSharp.max(d1, -d2); }
             }
 
             ///-----------------------------------------------------------------
             public class Intersection : DualBase
             {
                 public Intersection(Base a, Base b) : base(a, b) { }
-                protected override float Apply(float d1, float d2) { return Code.CSharp.max(d1, d2); }
+                protected override float Apply(float d1, float d2) { return Extensions.CSharp.max(d1, d2); }
             }
 
             ///-----------------------------------------------------------------
@@ -379,7 +381,7 @@ namespace Prateek.Core.Code.Helpers
                 public SmoothUnion(Base a, Base b, float smooth) : base(a, b) { this.smooth = smooth; }
                 protected override float Apply(float d1, float d2)
                 {
-                    float h = Code.CSharp.clamp(0.5f + 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
+                    float h = Extensions.CSharp.clamp(0.5f + 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
                     return CSharp.mix(d2, d1, h) - smooth * h * (1.0f - h);
                 }
             }
@@ -391,7 +393,7 @@ namespace Prateek.Core.Code.Helpers
                 public SmoothSubstraction(Base a, Base b, float smooth) : base(a, b) { this.smooth = smooth; }
                 protected override float Apply(float d1, float d2)
                 {
-                    float h = Code.CSharp.clamp(0.5f - 0.5f * (d2 + d1) / smooth, 0.0f, 1.0f);
+                    float h = Extensions.CSharp.clamp(0.5f - 0.5f * (d2 + d1) / smooth, 0.0f, 1.0f);
                     return CSharp.mix(d2, -d1, h) + smooth * h * (1.0f - h);
                 }
             }
@@ -403,7 +405,7 @@ namespace Prateek.Core.Code.Helpers
                 public SmoothIntersection(Base a, Base b, float smooth) : base(a, b) { this.smooth = smooth; }
                 protected override float Apply(float d1, float d2)
                 {
-                    float h = Code.CSharp.clamp(0.5f - 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
+                    float h = Extensions.CSharp.clamp(0.5f - 0.5f * (d2 - d1) / smooth, 0.0f, 1.0f);
                     return CSharp.mix(d2, d1, h) + smooth * h * (1.0f - h);
                 }
             }
@@ -453,13 +455,13 @@ namespace Prateek.Core.Code.Helpers
                 
                 for (int c = 0; c < colors.Length; c++)
                 {
-                    var point = rect.position + Code.CSharp.mul(rect.size, Code.CSharp.div(CSharp.Float((Vector2Int) Code.CSharp.vec2i(c % texture.width, c / texture.height)), Code.CSharp.vec2(texture.width, texture.height)));
+                    var point = rect.position + Extensions.CSharp.mul(rect.size, Extensions.CSharp.div(CSharp.Float((Vector2Int) Extensions.CSharp.vec2i(c % texture.width, c / texture.height)), Extensions.CSharp.vec2(texture.width, texture.height)));
                     var result = background;
                     for (int o = 0; o < operations.Count; o++)
                     {
                         var operation = operations[o];
                         var color = operation.GetColor(point.xny());
-                        var a = Code.CSharp.max(result.a, color.a);
+                        var a = Extensions.CSharp.max(result.a, color.a);
                         result = Color.Lerp(result.rgbn(a), color.rgbn(a), color.a);
                     }
                     colors[c] = result;

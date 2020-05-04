@@ -1,8 +1,9 @@
-namespace Assets.Prateek.CodeGenerator.Code.CodeBuilder {
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
+{
     using System;
     using System.IO;
-    using global::Prateek.Core.Code.Helpers;
-    using global::Prateek.Core.Code.Helpers.Files;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.Core.Code.Helpers.Files;
 
     public struct FileData
     {
@@ -27,13 +28,18 @@ namespace Assets.Prateek.CodeGenerator.Code.CodeBuilder {
 
         ///-----------------------------------------------------------------
         public Infos source;
+
         public Infos destination;
 
         ///-----------------------------------------------------------------
-        public bool IsLoaded { get { return source.content != null && source.content != String.Empty; } }
+        public bool IsLoaded
+        {
+            get { return source.content != null && source.content != String.Empty; }
+        }
 
         ///-----------------------------------------------------------------
         public FileData(string file, string sourceDir) : this(file, sourceDir, null) { }
+
         public FileData(string file, string sourceDir, string content)
         {
             file = FileHelpers.GetValidFile(file);
@@ -51,7 +57,7 @@ namespace Assets.Prateek.CodeGenerator.Code.CodeBuilder {
             source.extension = PathPlus.GetExtension(file);
 
             source.content = content;
-                
+
             source.SetupFileInfo();
 
             destination = source;
@@ -68,13 +74,14 @@ namespace Assets.Prateek.CodeGenerator.Code.CodeBuilder {
             }
 
             source.content = String.Empty;
-            var path = source.fileInfo.Exists ? source.fileInfo.FullName : String.Empty;//FileHelpers.GetValidFile(source.absPath);
+            var path = source.fileInfo.Exists ? source.fileInfo.FullName : String.Empty; //FileHelpers.GetValidFile(source.absPath);
             if (path != String.Empty)
             {
                 source.content = FileHelpers.ReadAllTextCleaned(path);
                 destination.content = source.content;
                 return true;
             }
+
             return false;
         }
     }

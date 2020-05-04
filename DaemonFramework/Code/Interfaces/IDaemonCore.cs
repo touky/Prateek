@@ -1,4 +1,4 @@
-namespace Prateek.DaemonCore.Code.Interfaces
+namespace Prateek.DaemonFramework.Code.Interfaces
 {
     public interface IDaemonCore { }
 }

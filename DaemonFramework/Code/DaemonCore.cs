@@ -1,13 +1,11 @@
-﻿namespace Prateek.DaemonCore.Code
+﻿namespace Prateek.DaemonFramework.Code
 {
     using System;
     using System.Collections.Generic;
-    using Mayfair.Core.Code.Utils.Types.Priority;
-    using Prateek.DaemonCore.Code.Enumerators;
-    using Prateek.DaemonCore.Code.Enums;
-    using Prateek.DaemonCore.Code.Interfaces;
-    using Prateek.TickableFramework.Code.Enums;
-    using Prateek.TickableFramework.Code.Interfaces;
+    using Prateek.Core.Code.Singleton;
+    using Prateek.DaemonFramework.Code.Enumerators;
+    using Prateek.DaemonFramework.Code.Enums;
+    using Prateek.DaemonFramework.Code.Interfaces;
 
     public abstract class DaemonCore<TDaemonCore, TDaemonBranch>
         : SingletonBehaviour<TDaemonCore>, IDaemonCore<TDaemonBranch>, ITickable

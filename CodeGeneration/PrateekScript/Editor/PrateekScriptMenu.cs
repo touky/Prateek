@@ -1,18 +1,17 @@
-﻿namespace Prateek.Core.Editor.AssetLibrary
+﻿namespace Prateek.CodeGeneration.PrateekScript.Editor
 {
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Prateek.Core.Editor.Helpers;
+    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
     using UnityEditor;
     using UnityEngine;
 
     public static class PrateekScriptMenu
     {
         #region Menu items
-        [MenuItem(ConstMenu.CREATE_ASSET + "Prateek Script")]
-        public static Object CreatePrateekScript()
-        {
-            return AssetMenuExtensions.CreateAsset(defaultContent, "prtk");
-        }
+        //[MenuItem(ConstMenu.CREATE_ASSET + "Prateek Script")]
+        //public static Object CreatePrateekScript()
+        //{
+        //    //    return AssetMenuExtensions.CreateAsset(defaultContent, "prtk");
+        //}
 
         private static string defaultContent =
             $@"///---

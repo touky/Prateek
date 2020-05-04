@@ -1,4 +1,4 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.IntermediateCode
+namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode
 {
     using System.Collections.Generic;
 

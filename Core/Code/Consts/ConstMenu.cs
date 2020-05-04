@@ -1,4 +1,4 @@
-﻿namespace Prateek
+﻿namespace Prateek.Core.Code.Consts
 {
     public static class ConstMenu
     {

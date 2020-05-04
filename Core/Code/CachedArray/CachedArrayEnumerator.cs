@@ -2,6 +2,7 @@ namespace Prateek.Core.Code.CachedArray {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using Prateek.Core.Code.Consts;
 
     ///------------------------------------------------------------------------
     internal struct CachedArrayEnumerator<T> : IEnumerator, IEnumerator<T>

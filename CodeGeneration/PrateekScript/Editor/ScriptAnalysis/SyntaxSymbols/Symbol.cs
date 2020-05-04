@@ -1,4 +1,4 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols
+namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols
 {
     using System.Diagnostics;
     using System.Text.RegularExpressions;

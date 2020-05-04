@@ -1,9 +1,5 @@
-﻿namespace Prateek
+﻿namespace Prateek.Core.Code.Consts
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-
     public static class Const
     {
         public const int INDEX_NONE = -1;

@@ -2,5 +2,5 @@
 ///--
 #region Prateek Editor Namespaces
 using UnityEditor;
-using Prateek.Helpers;
+using Prateek.Core.Editor.Helpers;
 #endregion Prateek useful namspaces

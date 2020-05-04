@@ -1,4 +1,6 @@
-namespace Prateek.CodeGenerator.ScriptTemplates {
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
+
     public abstract class IgnorableTemplate : BaseTemplate
     {
         ///-----------------------------------------------------------------
@@ -7,7 +9,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         ///-----------------------------------------------------------------
         public override void Commit()
         {
-            CodeGenerator.TemplateRegistry.Add(this);
+            TemplateRegistry.Add(this);
         }
 
         ///-----------------------------------------------------------------

@@ -32,12 +32,12 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGenerator.Editor
+namespace Prateek.CodeGeneration.BackendTools.Editor
 {
-    using System.Collections.Generic;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Editor.EditorPrefs;
-    using Prateek.Helpers;
+    using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
 
@@ -58,7 +58,7 @@ namespace Prateek.CodeGenerator.Editor
         private Vector2 scrollPosition2 = Vector2.zero;
         private Prefs.Bools prateekRunInTestMode;
         private Prefs.Strings prateekUpdaterDir;
-        private Prateek.CodeGenerator.CodeBuilder scriptTemplateUpdater = null;
+        private CodeBuilder scriptTemplateUpdater = null;
 
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
         private CodeBuilder prateekScriptGenerator = null;

@@ -31,18 +31,18 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
+namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
-    using Assets.Prateek.CodeGenerator.Code.CodeBuilder;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils;
-    using Assets.Prateek.CodeGenerator.Code.Utils;
-    using global::Prateek.CodeGenerator;
-    using global::Prateek.CodeGenerator.ScriptTemplates;
-    using global::Prateek.Core.Code.Extensions;
-    using global::Prateek.Core.Code.Helpers;
+    using System.Linq;
+    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.Core.Code.Extensions;
 
     ///-------------------------------------------------------------------------
 #if UNITY_EDITOR
@@ -330,7 +330,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
         ///-----------------------------------------------------------------
 
         #region CodeRule overridable
-        public global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult Generate(ScriptContent data)
+        public BuildResult Generate(ScriptContent data)
         {
             var variants = new List<FunctionVariant>();
 
@@ -398,13 +398,13 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                         //Error out if the requested funcs result are not available
                         if (!SwapCodeContent(ref code, Functions, variant.Count, variant.Variants))
                         {
-                            return (global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult) global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.className;
+                            return (Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult) Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.className;
                         }
 
                         //Error out if the requested Names are not available
                         if (!SwapCodeContent(ref code, Names, infoSrc.NameCount, infoSrc.names))
                         {
-                            return (global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult) global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
+                            return (Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult) Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
                         }
 
                         if (GenerationMode == GenerationRule.ForeachSrcCrossDest)
@@ -436,7 +436,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
                 data.codeGenerated[c] = codeGenerated;
             }
 
-            return global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.Success;
+            return Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.Success;
         }
 
         ///-----------------------------------------------------------------

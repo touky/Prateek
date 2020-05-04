@@ -1,8 +1,7 @@
-namespace Prateek.DaemonCore.Code.Interfaces
+namespace Prateek.DaemonFramework.Code.Interfaces
 {
+    using Prateek.Core.Code.Interfaces.IPriority;
     using System;
-    using Mayfair.Core.Code.Utils.Types.Priority;
-    using Prateek.TickableFramework.Code.Interfaces;
 
     public interface IDaemonBranch
         : IPriority

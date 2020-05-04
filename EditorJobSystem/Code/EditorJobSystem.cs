@@ -1,4 +1,4 @@
-namespace Assets.Prateek.EditorJobSystem
+namespace Prateek.EditorJobSystem.Code
 {
     using System.Collections.Generic;
     using System.Threading;

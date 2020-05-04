@@ -1,7 +1,7 @@
-namespace Prateek.DaemonCore.Code.Branches
+namespace Prateek.DaemonFramework.Code.Branches
 {
-    using Prateek.DaemonCore.Code.Enums;
-    using Prateek.DaemonCore.Code.Interfaces;
+    using Prateek.DaemonFramework.Code.Enums;
+    using Prateek.DaemonFramework.Code.Interfaces;
 
     public abstract class DaemonBranch<TDaemonCore, TDaemonBranch>
         : IDaemonBranch

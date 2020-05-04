@@ -1,9 +1,9 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
+namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 {
     using System.Collections.Generic;
-    using Assets.Prateek.CodeGenerator.Code.Utils;
-    using global::Prateek;
-    using global::Prateek.Core.Code.Helpers;
+    using Prateek.Core.Code.Consts;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
 
     public struct NumberedSymbol
     {

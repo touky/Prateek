@@ -31,22 +31,19 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript
+namespace Prateek.CodeGeneration.Code.PrateekScript
 {
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
     using System.Collections.Generic;
-    using System.IO;
-    using Assets.Prateek.CodeGenerator.Code.CodeBuilder;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils;
-    using Assets.Prateek.CodeGenerator.Code.Utils;
-    using global::Prateek.CodeGenerator;
-    using global::Prateek.CodeGenerator.ScriptTemplates;
-    using global::Prateek.Core.Code.Helpers;
-    using global::Prateek.Core.Code.Helpers.Files;
+    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptActions;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
     using UnityEngine.Profiling;
+    using Prateek.Core.Code.Helpers.Files;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.Core.Code.Consts;
 
     ///-------------------------------------------------------------------------
     public class PrateekScriptBuilder : CodeBuilder

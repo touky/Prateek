@@ -32,15 +32,14 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGenerator.Editor
+namespace Prateek.CodeGeneration.BackendTools.Editor
 {
+    using Prateek.CodeGeneration.Code.PrateekScript;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
+    using Prateek.Core.Code.Helpers;
     using System.Collections.Generic;
     using System.IO;
     using System.Text.RegularExpressions;
-    using Assets.Prateek.CodeGenerator.Code.CodeBuilder;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript;
-    using Prateek.Core.Code.Helpers;
-    using Prateek.Helpers;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------
@@ -57,7 +56,7 @@ namespace Prateek.CodeGenerator.Editor
                 if (index < 0)
                     return;
 
-                var builder = new Prateek.CodeGenerator.CodeBuilder();
+                var builder = new CodeBuilder();
                 if (!Regex.Match(path, builder.SearchPattern).Success)
                     return;
 
@@ -69,13 +68,13 @@ namespace Prateek.CodeGenerator.Editor
         }
 
         ///---------------------------------------------------------------------
-        public static Prateek.CodeGenerator.CodeBuilder GetScriptTemplateUpdater(string sourceDir = "/Scripts")
+        public static CodeBuilder GetScriptTemplateUpdater(string sourceDir = "/Scripts")
         {
             var path = Application.dataPath + sourceDir;
             if (!Directory.Exists(path))
                 return null;
 
-            var builder = new Prateek.CodeGenerator.CodeBuilder();
+            var builder = new CodeBuilder();
 
             builder.AddDirectory(path);
 
@@ -86,7 +85,7 @@ namespace Prateek.CodeGenerator.Editor
 
         ///---------------------------------------------------------------------
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
-        public static CodeGenerator.CodeBuilder GetPrateekScriptGenerator(string destinationDirectory, List<string> sourceDirectories)
+        public static CodeBuilder GetPrateekScriptGenerator(string destinationDirectory, List<string> sourceDirectories)
         {
             var builder = new PrateekScriptBuilder();
 

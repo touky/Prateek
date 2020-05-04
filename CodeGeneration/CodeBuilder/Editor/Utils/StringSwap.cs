@@ -1,16 +1,25 @@
-namespace Assets.Prateek.CodeGenerator.Code.Utils {
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils
+{
     using System;
-    using global::Prateek.Core.Code.Helpers;
+    using Prateek.Core.Code.Helpers;
 
     public struct StringSwap
     {
         ///-------------------------------------------------------------
         private string original;
+
         private string replacement;
 
         ///-------------------------------------------------------------
-        public string Original { get { return original; } }
-        public string Replacement { get { return replacement; } }
+        public string Original
+        {
+            get { return original; }
+        }
+
+        public string Replacement
+        {
+            get { return replacement; }
+        }
 
         ///-------------------------------------------------------------
         public StringSwap(string original)
@@ -28,7 +37,7 @@ namespace Assets.Prateek.CodeGenerator.Code.Utils {
         ///-------------------------------------------------------------
         public static StringSwap operator +(StringSwap info, string other)
         {
-            return new StringSwap() { original = info.original, replacement = other };
+            return new StringSwap() {original = info.original, replacement = other};
         }
 
         ///-------------------------------------------------------------

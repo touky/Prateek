@@ -1,4 +1,4 @@
-namespace Prateek.CodeGenerator.ScriptTemplates {
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
     using System;
 
     internal struct CsharpIgnorableMatch

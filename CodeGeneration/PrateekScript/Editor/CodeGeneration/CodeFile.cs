@@ -1,12 +1,11 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
+namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 {
     using System.Collections.Generic;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions;
-    using Assets.Prateek.CodeGenerator.Code.Utils;
-    using global::Prateek;
-    using global::Prateek.CodeGenerator;
-    using global::Prateek.Core.Code.Extensions;
-    using global::Prateek.Core.Code.Helpers;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptActions;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.Core.Code.Consts;
 
     public class CodeFile
     {
@@ -96,7 +95,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
         }
 
         ///-----------------------------------------------------------------
-        public global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult Generate(string sourceHeader, string sourceCode)
+        public BuildResult Generate(string sourceHeader, string sourceCode)
         {
             var swapNamespace = (StringSwap) Glossary.Macros.namepaceTag;
             var swapClass = (StringSwap) Glossary.Macros.extensionClassTag;
@@ -110,7 +109,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
             var codeIndex = sourceCode.IndexOf(swapCode.Original);
             if (codeIndex < Const.INDEX_NONE || usingIndex <= Const.INDEX_NONE)
             {
-                return global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;
+                return Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;
             }
 
             //Retrieve tab offset
@@ -187,7 +186,7 @@ namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
                 }
             }
 
-            return global::Assets.Prateek.CodeGenerator.Code.CodeBuilder.BuildResult.ValueType.Success;
+            return Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.Success;
         }
         #endregion
     }

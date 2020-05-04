@@ -4,12 +4,12 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions
+namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils;
-    using global::Prateek.Core.Code.Helpers;
+    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
+    using Prateek.Core.Code.Helpers;
 
     public partial class MixedFuncScriptAction : ScriptAction
     {

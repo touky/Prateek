@@ -3,6 +3,7 @@ namespace Prateek.Core.Editor.Helpers
     using System.IO;
     using UnityEditor;
     using UnityEngine;
+    using Prateek.Core.Code.Consts;
 
     public static class AssetMenuExtensions
     {
@@ -86,6 +87,7 @@ namespace Prateek.Core.Editor.Helpers
         private static void SelectAsset<T>(T asset, bool doSelect)
             where T : Object
         {
+
             if (doSelect)
             {
                 Selection.activeObject = asset;

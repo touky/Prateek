@@ -1,7 +1,7 @@
 {
     "name": "Prateek.TickableFramework.Code",
     "references": [
-        "GUID:4b4491f2f353c0b44a038afb3e9dbb85"
+        "Prateek.Core.Code"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

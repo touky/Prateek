@@ -34,9 +34,9 @@
 namespace Prateek.Core.Editor.Attributes
 {
     using System;
-    using Prateek.Core.Code.Attributes;
     using UnityEditor;
     using UnityEngine;
+    using Prateek.Core.Code.Attributes;
 
     ///-------------------------------------------------------------------------
     [CustomPropertyDrawer(typeof(MathAttribute), true)]

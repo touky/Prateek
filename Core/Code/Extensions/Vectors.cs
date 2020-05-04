@@ -30,7 +30,7 @@
     // -END_PRATEEK_CSHARP_IFDEF-
 
 //Auto activate some of the prateek defines
-namespace Prateek.Core.Code {
+namespace Prateek.Core.Code.Extensions {
     using UnityEngine;
 
     ///-----------------------------------------------------------------------------

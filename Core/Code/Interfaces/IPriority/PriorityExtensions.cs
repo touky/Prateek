@@ -1,4 +1,4 @@
-namespace Mayfair.Core.Code.Utils.Types.Priority
+namespace Prateek.Core.Code.Interfaces.IPriority
 {
     using System.Collections.Generic;
 

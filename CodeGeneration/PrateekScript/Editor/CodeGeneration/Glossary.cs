@@ -1,9 +1,9 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
+namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 {
     using System;
     using System.Collections.Generic;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions;
-    using global::Prateek.Core.Code.Helpers;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptActions;
+    using Prateek.Core.Code.Helpers;
 
     public static class Glossary
     {

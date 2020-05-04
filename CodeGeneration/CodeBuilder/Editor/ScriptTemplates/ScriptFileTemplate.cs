@@ -1,5 +1,6 @@
-namespace Prateek.CodeGenerator.ScriptTemplates {
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
     using System;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
 
     public class ScriptFileTemplate : BaseTemplate
     {
@@ -49,7 +50,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         ///-----------------------------------------------------------------
         public override void Commit()
         {
-            CodeGenerator.TemplateRegistry.Add(this);
+            TemplateRegistry.Add(this);
         }
 
         ///-----------------------------------------------------------------
@@ -63,7 +64,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
                 return false;
 
             if (templateFile != String.Empty)
-                return CodeGenerator.TemplateRegistry.MatchTemplate(templateFile, extension, content);
+                return TemplateRegistry.MatchTemplate(templateFile, extension, content);
             return true;
 #else //!UNITY_EDITOR
                 return false;

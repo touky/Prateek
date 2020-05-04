@@ -1,4 +1,4 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
+namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 {
     using System.Diagnostics;
 

@@ -1,12 +1,8 @@
-namespace Prateek.CodeGenerator
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
 {
-    using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.Threading;
-    using Assets.Prateek.EditorJobSystem;
-    using Prateek.CodeGenerator.ScriptTemplates;
-    using UnityEngine;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
+    using Prateek.EditorJobSystem.Code;
 
     public static class TemplateRegistry
     {

@@ -32,7 +32,7 @@
 
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
-namespace Prateek.Debug.Code
+namespace Prateek.Core.Code.PrateekScripts.PrtkSources
 {
     using System;
     using UnityEngine;

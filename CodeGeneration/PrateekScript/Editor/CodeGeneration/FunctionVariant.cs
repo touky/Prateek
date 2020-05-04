@@ -1,7 +1,7 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
+namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 {
     using System.Collections.Generic;
-    using global::Prateek.Core.Code.Helpers;
+    using Prateek.Core.Code.Helpers;
 
     public struct FunctionVariant
     {

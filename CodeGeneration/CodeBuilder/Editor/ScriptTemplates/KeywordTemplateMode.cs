@@ -1,4 +1,4 @@
-namespace Prateek.CodeGenerator.ScriptTemplates {
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
     public enum KeywordTemplateMode
     {
         UsedAsSwap,

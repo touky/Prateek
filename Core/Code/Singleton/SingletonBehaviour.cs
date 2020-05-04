@@ -1,4 +1,4 @@
-namespace Prateek.DaemonCore.Code
+namespace Prateek.Core.Code.Singleton
 {
     using UnityEngine;
 

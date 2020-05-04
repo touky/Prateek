@@ -1,6 +1,6 @@
-namespace Prateek.DaemonCore.Code.Interfaces
+namespace Prateek.DaemonFramework.Code.Interfaces
 {
-    using Prateek.DaemonCore.Code.Enums;
+    using Prateek.DaemonFramework.Code.Enums;
 
     internal static class DeamonUtils
     {

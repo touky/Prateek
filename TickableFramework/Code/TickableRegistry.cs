@@ -35,8 +35,8 @@ namespace Prateek.TickableFramework.Code
 {
     using System;
     using System.Collections.Generic;
-    using Mayfair.Core.Code.Utils.Types.Priority;
-    using Prateek.DaemonCore.Code;
+    using Prateek.Core.Code.Singleton;
+    using Prateek.Core.Code.Interfaces.IPriority;
     using Prateek.TickableFramework.Code.Enums;
     using Prateek.TickableFramework.Code.Interfaces;
     using Prateek.TickableFramework.Code.Internal;

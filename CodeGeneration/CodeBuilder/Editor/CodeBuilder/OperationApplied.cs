@@ -1,4 +1,4 @@
-namespace Assets.Prateek.CodeGenerator.Code.CodeBuilder {
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder {
     using System;
 
     [Flags]

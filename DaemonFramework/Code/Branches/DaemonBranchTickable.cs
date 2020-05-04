@@ -1,6 +1,6 @@
-namespace Prateek.DaemonCore.Code.Branches
+namespace Prateek.DaemonFramework.Code.Branches
 {
-    using Prateek.DaemonCore.Code.Interfaces;
+    using Prateek.DaemonFramework.Code.Interfaces;
     using Prateek.TickableFramework.Code.Enums;
     using Prateek.TickableFramework.Code.Interfaces;
 

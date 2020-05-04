@@ -1,4 +1,4 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.Utils
+namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils
 {
     public enum KeywordUsageType
     {

@@ -31,17 +31,16 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGenerator
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
 {
     using System.Collections.Generic;
     using System.IO;
-    using Assets.Prateek.CodeGenerator.Code.CodeBuilder;
-    using Prateek.CodeGenerator.ScriptTemplates;
-    using Prateek.Core.Code.Helpers;
-    using Prateek.Core.Code.Helpers.Files;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.Profiling;
+    using Prateek.Core.Code.Helpers.Files;
+    using Prateek.Core.Code.Helpers;
 
     ///-------------------------------------------------------------------------
     public partial class CodeBuilder

@@ -1,9 +1,9 @@
-namespace Assets.Prateek.CodeGenerator.Code.PrateekScript.CodeGeneration
+namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptActions;
-    using Assets.Prateek.CodeGenerator.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptActions;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
 
     public class ScriptContent
     {

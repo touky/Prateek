@@ -1,10 +1,9 @@
-namespace Prateek.DaemonCore.Code.Enumerators
+namespace Prateek.DaemonFramework.Code.Enumerators
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using Prateek;
-    using Prateek.DaemonCore.Code.Interfaces;
+    using Prateek.DaemonFramework.Code.Interfaces;
 
     internal struct DaemonBranchEnumerator<TDaemonBranch> : IEnumerator, IEnumerator<TDaemonBranch>
         where TDaemonBranch : IDaemonBranch

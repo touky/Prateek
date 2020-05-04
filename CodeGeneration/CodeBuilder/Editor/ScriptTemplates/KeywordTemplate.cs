@@ -1,5 +1,6 @@
-namespace Prateek.CodeGenerator.ScriptTemplates {
+namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
     using System;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
     using Prateek.Core.Code.Helpers;
 
     public class KeywordTemplate : BaseTemplate
@@ -49,7 +50,7 @@ namespace Prateek.CodeGenerator.ScriptTemplates {
         ///-----------------------------------------------------------------
         public override void Commit()
         {
-            CodeGenerator.TemplateRegistry.Add(this);
+            TemplateRegistry.Add(this);
         }
     }
 }

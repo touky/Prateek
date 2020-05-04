@@ -1,6 +1,6 @@
 namespace Prateek.TickableFramework.Code.Interfaces
 {
-    using Mayfair.Core.Code.Utils.Types.Priority;
+    using Prateek.Core.Code.Interfaces.IPriority;
     using Prateek.TickableFramework.Code.Enums;
 
     public interface ITickable : IPriority
