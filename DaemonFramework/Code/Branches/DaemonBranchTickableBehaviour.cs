@@ -1,6 +1,8 @@
 namespace Prateek.DaemonFramework.Code.Branches
 {
     using Prateek.DaemonFramework.Code.Interfaces;
+    using Prateek.TickableFramework.Code;
+    using Prateek.TickableFramework.Code.Enums;
     using Prateek.TickableFramework.Code.Interfaces;
 
     public abstract class DaemonBranchTickableBehaviour<TDaemonCore, TDaemonBranch>

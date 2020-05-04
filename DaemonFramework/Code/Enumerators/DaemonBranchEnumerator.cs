@@ -3,6 +3,7 @@ namespace Prateek.DaemonFramework.Code.Enumerators
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using Prateek.Core.Code.Consts;
     using Prateek.DaemonFramework.Code.Interfaces;
 
     internal struct DaemonBranchEnumerator<TDaemonBranch> : IEnumerator, IEnumerator<TDaemonBranch>

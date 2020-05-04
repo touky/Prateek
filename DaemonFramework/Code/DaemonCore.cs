@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using Prateek.Core.Code.Interfaces.IPriority;
     using Prateek.Core.Code.Singleton;
     using Prateek.DaemonFramework.Code.Enumerators;
     using Prateek.DaemonFramework.Code.Enums;
     using Prateek.DaemonFramework.Code.Interfaces;
+    using Prateek.TickableFramework.Code.Enums;
+    using Prateek.TickableFramework.Code.Interfaces;
 
     public abstract class DaemonCore<TDaemonCore, TDaemonBranch>
         : SingletonBehaviour<TDaemonCore>, IDaemonCore<TDaemonBranch>, ITickable
