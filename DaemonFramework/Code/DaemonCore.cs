@@ -9,6 +9,7 @@
     using Prateek.DaemonFramework.Code.Interfaces;
     using Prateek.TickableFramework.Code.Enums;
     using Prateek.TickableFramework.Code.Interfaces;
+    using UnityEngine;
 
     public abstract class DaemonCore<TDaemonCore, TDaemonBranch>
         : SingletonBehaviour<TDaemonCore>, IDaemonCore<TDaemonBranch>, ITickable
