@@ -1,14 +1,12 @@
 {
-    "name": "Prateek.CodeGeneration.BackendTools.Editor",
+    "name": "Mayfair.Tags.Code",
     "references": [
-        "Prateek.Core.Code",
-        "Prateek.Core.Editor",
-        "Prateek.CodeBuilder.Code",
-        "Prateek.Code.PrateekScript"
+        "Mayfair.Core.Code",
+        "Prateek.Consts",
+        "Prateek.Keywords",
+        "Prateek.DaemonFramework.Code"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

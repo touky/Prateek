@@ -1,14 +1,12 @@
 {
-    "name": "Prateek.CodeGeneration.BackendTools.Editor",
+    "name": "Prateek.Debug.Code",
     "references": [
         "Prateek.Core.Code",
-        "Prateek.Core.Editor",
-        "Prateek.CodeBuilder.Code",
-        "Prateek.Code.PrateekScript"
+        "Prateek.DaemonFramework.Code",
+        "Prateek.TickableFramework.Code",
+        "Prateek.FrameRecorder.Code"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

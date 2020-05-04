@@ -1,14 +1,9 @@
 {
-    "name": "Prateek.CodeGeneration.BackendTools.Editor",
+    "name": "Prateek.StaticArray",
     "references": [
-        "Prateek.Core.Code",
-        "Prateek.Core.Editor",
-        "Prateek.CodeBuilder.Code",
-        "Prateek.Code.PrateekScript"
+        "Prateek.Consts"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

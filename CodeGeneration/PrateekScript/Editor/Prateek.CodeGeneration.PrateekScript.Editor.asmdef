@@ -6,7 +6,9 @@
         "Prateek.CodeBuilder.Code",
         "Prateek.Code.EditorJobSystem"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

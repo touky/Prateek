@@ -1,14 +1,15 @@
 {
-    "name": "Prateek.CodeGeneration.BackendTools.Editor",
+    "name": "TODO.Prateek.AppContent.UnityIntegration",
     "references": [
         "Prateek.Core.Code",
-        "Prateek.Core.Editor",
-        "Prateek.CodeBuilder.Code",
-        "Prateek.Code.PrateekScript"
+        "Prateek.DaemonFramework.Code",
+        "Prateek.NoticeFramework.Code",
+        "TODO.Prateek.StateMachine",
+        "TODO.Prateek.Resources",
+        "Unity.Addressables",
+        "Unity.ResourceManager"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

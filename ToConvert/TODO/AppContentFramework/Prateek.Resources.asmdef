@@ -1,14 +1,13 @@
 {
-    "name": "Prateek.CodeGeneration.BackendTools.Editor",
+    "name": "TODO.Prateek.Resources",
     "references": [
         "Prateek.Core.Code",
-        "Prateek.Core.Editor",
-        "Prateek.CodeBuilder.Code",
-        "Prateek.Code.PrateekScript"
+        "Prateek.DaemonFramework.Code",
+        "Prateek.NoticeFramework.Code",
+        "TODO.Prateek.StateMachine",
+        "Prateek.TickableFramework.Code"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
