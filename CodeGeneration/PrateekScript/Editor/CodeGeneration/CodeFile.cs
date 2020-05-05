@@ -107,13 +107,13 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 
             var usingIndex = sourceCode.IndexOf(swapUsing.Original);
             var codeIndex = sourceCode.IndexOf(swapCode.Original);
-            if (codeIndex < Const.INDEX_NONE || usingIndex <= Const.INDEX_NONE)
+            if (codeIndex < Const.INDEX_NONE)
             {
                 return Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.PrateekScriptSourceDataTagInvalid;
             }
 
             //Retrieve tab offset
-            var usingTabs = sourceCode.GetTabulation(usingIndex);
+            var usingTabs = usingIndex > Const.INDEX_NONE ? sourceCode.GetTabulation(usingIndex) : string.Empty;
             swapCodeTabs = swapCodeTabs + sourceCode.GetTabulation(codeIndex);
 
             for (var d = 0; d < scriptContents.Count; d++)
@@ -144,7 +144,10 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                     }
                 }
 
-                swapUsing += namespaces;
+                if (usingIndex > Const.INDEX_NONE)
+                {
+                    swapUsing += namespaces;
+                }
 
                 for (int c = 0; c < scriptContent.codeGenerated.Count; c++)
                 {
@@ -168,7 +171,10 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                     destinationCode = swapClass.Apply(destinationCode);
                     destinationCode = swapPrefix.Apply(destinationCode);
                     destinationCode = swapTabs.Apply(destinationCode);
-                    destinationCode = swapUsing.Apply(destinationCode);
+                    if (usingIndex > Const.INDEX_NONE)
+                    {
+                        destinationCode = swapUsing.Apply(destinationCode);
+                    }
                     exportCode.code = destinationCode;
 
                     var index = codeGenerated.FindIndex((x) => { return x.className == exportCode.className; });

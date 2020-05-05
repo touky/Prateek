@@ -1,37 +1,39 @@
 ﻿namespace Prateek.CodeGeneration.PrateekScript.Editor
 {
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
     using UnityEditor;
     using UnityEngine;
+    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
+    using Prateek.Core.Code.Consts;
+    using Prateek.Core.Editor.Helpers;
 
     public static class PrateekScriptMenu
     {
         #region Menu items
-        //[MenuItem(ConstMenu.CREATE_ASSET + "Prateek Script")]
-        //public static Object CreatePrateekScript()
-        //{
-        //    //    return AssetMenuExtensions.CreateAsset(defaultContent, "prtk");
-        //}
+        [MenuItem(ConstMenu.CREATE_ASSET + "Prateek Script")]
+        public static Object CreatePrateekScript()
+        {
+            return AssetMenuExtensions.CreateAsset(defaultContent, "prtk");
+        }
 
         private static string defaultContent =
             $@"///---
-{Glossary.Macros[Glossary.FuncName.FILE_INFO]}(MyExportFile, cs)
+{Glossary.Macros[FunctionKeyword.FILE_INFO]}(MyExportFile, cs)
 {{
     //{Glossary.Macros.codeBlockFormat}CHOSE_A_FUNC(Prateek.MyNamespace, ContainerClass) //, Additional class option
     //{{
-    //    //{Glossary.Macros[Glossary.FuncName.CLASS_INFO]}(MyClassInfo) {{ {Glossary.Macros[Glossary.VarName.VARS]}(var0, var1, ....) }}
+    //    //{Glossary.Macros[FunctionKeyword.CLASS_INFO]}(MyClassInfo) {{ {Glossary.Macros[VariableKeyword.VARS]}(var0, var1, ....) }}
     //
-    //    {Glossary.Macros[Glossary.FuncName.PREFIX]}
+    //    {Glossary.Macros[FunctionKeyword.PREFIX]}
     //    {{
     //        @//Prefix code
     //    }}
     //
-    //    {Glossary.Macros[Glossary.FuncName.MAIN]}
+    //    {Glossary.Macros[FunctionKeyword.MAIN]}
     //    {{
     //        @//Main code, repeated by function
     //    }}
     //    
-    //    {Glossary.Macros[Glossary.FuncName.SUFFIX]}
+    //    {Glossary.Macros[FunctionKeyword.SUFFIX]}
     //    {{
     //        @//Suffix code
     //    }}

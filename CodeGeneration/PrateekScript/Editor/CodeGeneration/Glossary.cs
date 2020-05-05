@@ -39,23 +39,6 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         public static Macro Macros = new Macro();
         public class Macro
         {
-            #region ClassName enum
-            ///-------------------------------------------------------------
-            public enum ClassName
-            {
-                SRC_CLASS,
-                DST_CLASS,
-
-                MAX
-            }
-            #endregion
-
-            #region FuncName enum
-            #endregion
-
-            #region VarName enum
-            #endregion
-
             #region Static and Constants
             ///-------------------------------------------------------------
             public string scriptStartTag;
@@ -87,11 +70,11 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 
             #region Properties
             ///-------------------------------------------------------------
-            public string this[FuncName funcName]
+            public string this[FunctionKeyword functionKeyword]
             {
                 get
                 {
-                    if (datas.TryGetValue(funcName.ToString(), out string result))
+                    if (datas.TryGetValue(functionKeyword.ToString(), out string result))
                     {
                         return result;
                     }
@@ -101,7 +84,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
             }
 
             ///-------------------------------------------------------------
-            public string this[VarName funcName]
+            public string this[VariableKeyword funcName]
             {
                 get
                 {
@@ -150,53 +133,53 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                 codeDataTag         = $"{prefix}_CODEGEN_DATA".Keyword();
                 codeDataTabsTag     = $"{prefix}_CODEGEN_{codeTabsTag}".Keyword();
                 codeTabsTag         = codeTabsTag.Keyword();
-                codeBlockFormat     = $"{Glossary.Macros.prefix}_{Glossary.FuncName.BLOCK.To()}_";
+                codeBlockFormat     = $"{Glossary.Macros.prefix}_{FunctionKeyword.BLOCK.S()}_";
 
-                AddData(FuncName.FILE_INFO);
-                AddData(FuncName.USING);
-                AddData(FuncName.PREFIX, codeData);
-                AddData(FuncName.MAIN, codeData);
-                AddData(FuncName.SUFFIX, codeData);
-                AddData(FuncName.CLASS_INFO);
-                AddData(FuncName.DEFAULT);
-                AddData(FuncName.FUNC);
-                AddData(VarName.NAMES);
-                AddData(VarName.VARS);
+                AddData(FunctionKeyword.FILE_INFO);
+                AddData(FunctionKeyword.USING);
+                AddData(FunctionKeyword.PREFIX, codeData);
+                AddData(FunctionKeyword.MAIN, codeData);
+                AddData(FunctionKeyword.SUFFIX, codeData);
+                AddData(FunctionKeyword.CLASS_INFO);
+                AddData(FunctionKeyword.DEFAULT);
+                AddData(FunctionKeyword.FUNC);
+                AddData(VariableKeyword.NAMES);
+                AddData(VariableKeyword.VARS);
 
-                srcClass = ClassName.SRC_CLASS.ToString().Keyword();
-                dstClass = ClassName.DST_CLASS.ToString().Keyword();
+                srcClass = ClassKeyword.SRC_CLASS.ToString().Keyword();
+                dstClass = ClassKeyword.DST_CLASS.ToString().Keyword();
 
-                names = new NumberedSymbol(VarName.NAMES);
-                variables = new NumberedSymbol(VarName.VARS);
-                functions = new NumberedSymbol(VarName.FUNC_RESULT);
+                names = new NumberedSymbol(VariableKeyword.NAMES);
+                variables = new NumberedSymbol(VariableKeyword.VARS);
+                functions = new NumberedSymbol(VariableKeyword.FUNC_RESULT);
             }
 
             ///-------------------------------------------------------------
-            private void AddData(VarName varName)
+            private void AddData(VariableKeyword variableKeyword)
             {
-                datas.Add(varName.ToString(), $"{prefix}_{varName.To()}");
+                datas.Add(variableKeyword.ToString(), $"{prefix}_{variableKeyword.S()}");
             }
 
             ///-------------------------------------------------------------
-            private void AddData(FuncName funcName)
+            private void AddData(FunctionKeyword functionKeyword)
             {
-                datas.Add(funcName.ToString(), $"{prefix}_{funcName.To()}");
+                datas.Add(functionKeyword.ToString(), $"{prefix}_{functionKeyword.S()}");
             }
 
             ///-------------------------------------------------------------
-            private void AddData(FuncName funcName, string additionalText)
+            private void AddData(FunctionKeyword functionKeyword, string additionalText)
             {
-                datas.Add(funcName.ToString(), $"{prefix}_{additionalText}_{funcName.To()}");
+                datas.Add(functionKeyword.ToString(), $"{prefix}_{additionalText}_{functionKeyword.S()}");
             }
 
             ///-------------------------------------------------------------
             public void GetTags(SyntaxScriptAction syntaxer)
             {
-                foreach (var name in Enum.GetNames(typeof(FuncName)))
+                foreach (var name in Enum.GetNames(typeof(FunctionKeyword)))
                 {
-                    if (name == FuncName.FILE_INFO.ToString())
+                    if (name == FunctionKeyword.FILE_INFO.ToString())
                     {
-                        syntaxer.AddKeyword(this[FuncName.FILE_INFO]);
+                        syntaxer.AddKeyword(this[FunctionKeyword.FILE_INFO]);
                     }
                     syntaxer.AddIdentifier(datas[name]);
                 }
@@ -242,48 +225,6 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
             #endregion
         }
         #endregion
-
-        ///-------------------------------------------------------------
-        public enum FuncName
-        {
-            FILE_INFO,
-            USING,
-            BLOCK,
-            PREFIX,
-            MAIN,
-            SUFFIX,
-            CLASS_INFO,
-            DEFAULT,
-            FUNC,
-
-            MAX
-        }
-
-        ///-------------------------------------------------------------
-        public enum VarName
-        {
-            NAMES, //NAMES_[n]
-            VARS, //VARS_[n]
-            FUNC_RESULT, //FUNC_RESULT_[n]
-
-            MAX
-        }
-    }
-
-    public static class FuncNameExtensions
-    {
-        public static string To(this Glossary.FuncName value)
-        {
-            return Enum.GetNames(typeof(Glossary.FuncName))[(int) value];
-        }
-    }
-
-    public static class VarNameExtensions
-    {
-        public static string To(this Glossary.VarName value)
-        {
-            return Enum.GetNames(typeof(Glossary.VarName))[(int) value];
-        }
     }
 }
 

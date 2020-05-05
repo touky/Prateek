@@ -40,18 +40,11 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.UIElements;
 
     ///-------------------------------------------------------------------------
     public partial class PrateekEditorWindow : EditorWindow
     {
-        ///---------------------------------------------------------------------
-        #region Declarations
-        #endregion Declarations
-
-        ///---------------------------------------------------------------------
-        #region Settings
-        #endregion Settings
-
         ///---------------------------------------------------------------------
         #region Fields
         private Vector2 scrollPosition = Vector2.zero;
@@ -59,6 +52,8 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
         private Prefs.Bools prateekRunInTestMode;
         private Prefs.Strings prateekUpdaterDir;
         private CodeBuilder scriptTemplateUpdater = null;
+
+        private List<CodeBuilder> activeCodeBuilders = new List<CodeBuilder>();
 
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
         private CodeBuilder prateekScriptGenerator = null;
@@ -69,23 +64,69 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
         #endregion Fields
 
         ///---------------------------------------------------------------------
-        #region Properties
-        #endregion Properties
-
-        ///---------------------------------------------------------------------
         #region Unity Defaults
-        [MenuItem("Prateek/Window/Prateek Tools Window")]
-        static void CreateWindow()
-        {
-            var window = (PrateekEditorWindow)EditorWindow.GetWindow(typeof(PrateekEditorWindow));
-            window.Show();
-        }
+        //[MenuItem("Prateek/Window/Prateek Tools Window")]
+        //private static PrateekEditorWindow CreateWindow()
+        //{
+        //    var window = (PrateekEditorWindow)EditorWindow.GetWindow(typeof(PrateekEditorWindow));
+        //    window.Show();
+        //    return window;
+        //}
+
+        /////---------------------------------------------------------------------
+        //public static void AddBuilder(CodeBuilder builder)
+        //{
+        //    var window = CreateWindow();
+        //    builder.StartWork();
+        //    window.activeCodeBuilders.Add(builder);
+        //}
 
         ///---------------------------------------------------------------------
         private void Awake()
         {
             InitDatas();
         }
+
+        ///---------------------------------------------------------------------
+        private void OnEnable()
+        {
+            // Reference to the root of the window.
+            var root = rootVisualElement;
+
+            var foldout = new Foldout() {text = "machin", viewDataKey = "foldout"};
+            //var files = new Button() { text = "" };
+            //foldout.Add(new Button() { text = "My Button" });
+            //foldout.Add(new Button() { text = "My Button" });
+            //foldout.Add(new Button() { text = "My Button" });
+
+            // Creates our button and sets its Text property.
+            var reloadPrateekScript = new Button() { text = "Reload" };
+            reloadPrateekScript.clicked += () =>
+            {
+                prateekScriptGenerator = null;
+                InitDatas();
+
+                foldout.Clear();
+                for (int w = 0; w < prateekScriptGenerator.WorkFileCount; w++)
+                {
+                    var label = new Label();
+                    label.text = " - " + prateekScriptGenerator[w].source.name.Extension(prateekScriptGenerator[w].source.extension);
+                    foldout.Add(label);
+                }
+            };
+
+            //// Gives it some style.
+            //myButton.style.width = 160;
+            //myButton.style.height = 30;
+
+            // Adds it to the root.
+            root.Add(reloadPrateekScript);
+            root.Add(foldout);
+            root.Add(new Button() { text = "other" });
+            root.Add(new TextField() { viewDataKey = "testTextField"});
+        }
+
+
 
         ///---------------------------------------------------------------------
         private void OnDestroy() { }
@@ -112,14 +153,28 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
         private void OnSelectionChange() { }
 
         ///---------------------------------------------------------------------
-
-        // Called at 10 frames per second
+        /// Called at 10 frames per second
         private void OnInspectorUpdate()
         {
-            if (prateekScriptGenerator != null && prateekScriptGenerator.IsWorking)
+            rootVisualElement.SetEnabled(true);
+            if (activeCodeBuilders.Count > 0)
             {
-                prateekScriptGenerator.Update();
+                activeCodeBuilders.RemoveAll((x) => { return x == null; });
+                for (int b = 0; b < activeCodeBuilders.Count; b++)
+                {
+                    var builder = activeCodeBuilders[b];
+                    if (!builder.IsWorking)
+                    {
+                        rootVisualElement.SetEnabled(false);
+                        builder.Update();
+                    }
+                }
             }
+
+            //if (prateekScriptGenerator != null && prateekScriptGenerator.IsWorking)
+            //{
+            //    prateekScriptGenerator.Update();
+            //}
         }
 
         ///---------------------------------------------------------------------
@@ -130,7 +185,10 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
 #endif //PRATEEK_ALLOW_INTERNAL_TOOLS
         private void OnGUI()
         {
+            return;
+
             InitDatas();
+
 
             prateekUpdaterDir.Value = EditorGUILayout.TextField("Updater dir", prateekUpdaterDir.Value);
             if (scriptTemplateUpdater == null)
@@ -156,6 +214,7 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
                 }
             }
 
+            return;
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
             EditorGUILayout.Space();
             
@@ -239,7 +298,7 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
 
             if (prateekScriptGenerator == null)
             {
-                prateekScriptGenerator = Tools.GetPrateekScriptGenerator(prateekExportDir.Value, new List<string>(new string[] { prateekSourceDir.Value }));
+                prateekScriptGenerator = Tools.GetPrateekScriptGenerator();
                 prateekScriptGenerator.Init();
             }
 #endif //PRATEEK_ALLOW_INTERNAL_TOOLS

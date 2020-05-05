@@ -1,5 +1,5 @@
 {
-    "name": "TODO.Prateek.Resources",
+    "name": "TODO.Prateek.AppContentFramework.Code",
     "references": [
         "Prateek.Core.Code",
         "Prateek.DaemonFramework.Code",

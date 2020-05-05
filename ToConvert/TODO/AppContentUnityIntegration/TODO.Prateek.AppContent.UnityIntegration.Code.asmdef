@@ -1,11 +1,11 @@
 {
-    "name": "TODO.Prateek.AppContent.UnityIntegration",
+    "name": "TODO.Prateek.AppContent.UnityIntegration.Code",
     "references": [
         "Prateek.Core.Code",
         "Prateek.DaemonFramework.Code",
         "Prateek.NoticeFramework.Code",
         "TODO.Prateek.StateMachine",
-        "TODO.Prateek.Resources",
+        "TODO.Prateek.AppContentFramework.Code",
         "Unity.Addressables",
         "Unity.ResourceManager"
     ],

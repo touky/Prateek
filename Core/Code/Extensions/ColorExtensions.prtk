@@ -4,7 +4,7 @@
 PRATEEK_FILE_INFO(Extensions, cs)
 {
     // Color swizzle
-    PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, ColorExtensions, static)
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Core.Code.Extensions, ColorExtensions, static)
     {
         PRATEEK_CLASS_INFO(Color) { PRATEEK_VARS(r, g, b, a) }
 

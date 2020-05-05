@@ -32,9 +32,15 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
         public Infos destination;
 
         ///-----------------------------------------------------------------
+        public bool IsValid
+        {
+            get { return !string.IsNullOrEmpty(source.name); }
+        }
+
+        ///-----------------------------------------------------------------
         public bool IsLoaded
         {
-            get { return source.content != null && source.content != String.Empty; }
+            get { return !string.IsNullOrEmpty(source.content); }
         }
 
         ///-----------------------------------------------------------------
@@ -42,8 +48,8 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
 
         public FileData(string file, string sourceDir, string content)
         {
-            file = FileHelpers.GetValidFile(file);
-            if ((content == null || content == String.Empty) && file == String.Empty)
+            file = FileHelpers.GetValidFile(Path.Combine(sourceDir, file));
+            if (string.IsNullOrEmpty(content) && string.IsNullOrEmpty(file))
             {
                 source = default(Infos);
                 destination = default(Infos);

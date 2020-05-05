@@ -140,7 +140,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
 
             codeBlock = $"{Glossary.Macros.codeBlockFormat}{ScopeTag}";
             
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.USING], Glossary.Macros[Glossary.FuncName.FILE_INFO])
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.USING], Glossary.Macros[FunctionKeyword.FILE_INFO])
             {
                 arguments = 1,
                 onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
@@ -150,7 +150,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(codeBlock, Glossary.Macros[Glossary.FuncName.FILE_INFO])
+            keywordUsages.Add(new KeywordUsage(codeBlock, Glossary.Macros[FunctionKeyword.FILE_INFO])
             {
                 arguments = ArgumentRange.AtLeast(2), needOpenScope = true, createNewScriptContent = true,
                 onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
@@ -175,7 +175,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.CLASS_INFO], codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.CLASS_INFO], codeBlock)
             {
                 arguments = 1,
                 needOpenScope = true,
@@ -186,7 +186,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.VarName.NAMES], Glossary.Macros[Glossary.FuncName.CLASS_INFO])
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[VariableKeyword.NAMES], Glossary.Macros[FunctionKeyword.CLASS_INFO])
             {
                 arguments = ArgumentRange.AtLeast(1),
                 onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
@@ -195,7 +195,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.VarName.VARS], Glossary.Macros[Glossary.FuncName.CLASS_INFO])
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[VariableKeyword.VARS], Glossary.Macros[FunctionKeyword.CLASS_INFO])
             {
                 arguments = ArgumentRange.AtLeast(1),
                 onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
@@ -204,7 +204,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.DEFAULT], codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.DEFAULT], codeBlock)
             {
                 arguments = ArgumentRange.Between(2, 3),
                 onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
@@ -216,7 +216,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.FUNC], codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.FUNC], codeBlock)
             {
                 needOpenScope = true,
                 needScopeData = true,
@@ -229,7 +229,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.PREFIX], codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.PREFIX], codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
                 onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
@@ -240,7 +240,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.MAIN], codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.MAIN], codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
                 onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
@@ -251,7 +251,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 onCloseScope = (codeFile, scope) => { return true; }
             });
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.SUFFIX], codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.SUFFIX], codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
                 onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>

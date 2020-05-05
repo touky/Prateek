@@ -85,12 +85,12 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
 
         ///---------------------------------------------------------------------
 #if PRATEEK_ALLOW_INTERNAL_TOOLS
-        public static CodeBuilder GetPrateekScriptGenerator(string destinationDirectory, List<string> sourceDirectories)
+        public static CodeBuilder GetPrateekScriptGenerator()
         {
             var builder = new PrateekScriptBuilder();
-
-            builder.AddDirectories(sourceDirectories);
-            builder.DestinationDirectory = destinationDirectory;
+            //builder.AddFile();
+            //builder.AddDirectories(sourceDirectories);
+            //builder.DestinationDirectory = destinationDirectory;
 
             return builder;
         }

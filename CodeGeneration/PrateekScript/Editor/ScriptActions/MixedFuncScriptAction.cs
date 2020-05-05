@@ -51,12 +51,12 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
 
             var rule = keywordUsages.Find(x =>
             {
-                return x.keyword == Glossary.Macros[Glossary.FuncName.FUNC] && x.scope == CodeBlock;
+                return x.keyword == Glossary.Macros[FunctionKeyword.FUNC] && x.scope == CodeBlock;
             });
 
             if (rule.keywordUsageType != KeywordUsageType.Ignore)
             {
-                keywordUsages.Add(new KeywordUsage(Glossary.Macros[Glossary.FuncName.FUNC], CodeBlock)
+                keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.FUNC], CodeBlock)
                 {
                     arguments = 1, needOpenScope = true, needScopeData = true,
                     onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>

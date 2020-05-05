@@ -50,6 +50,20 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
     {
         #region Properties
         ///---------------------------------------------------------------------
+        private static PrateekScriptBuilder editorInstance = null;
+
+        ///---------------------------------------------------------------------
+        public static PrateekScriptBuilder GetInstance()
+        {
+            if (editorInstance == null)
+            {
+                editorInstance = new PrateekScriptBuilder();
+            }
+
+            return editorInstance;
+        }
+
+        ///---------------------------------------------------------------------
         public override string SearchPattern
         {
             get { return FileHelpers.BuildExtensionMatch(Glossary.importExtension); }
@@ -166,6 +180,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
                     return Error(BuildResult.ValueType.PrateekScriptSourceStartTagInvalid, ref newData);
                 }
 
+
                 var genHeader = newData.destination.content.Substring(0, startIndex);
                 var genCode   = newData.destination.content.Substring(startIndex + genStart.Length);
 
@@ -275,7 +290,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
         ///---------------------------------------------------------------------
         private CodeFile RetrieveCodeFile(CodeKeyword codeKeyword, List<CodeFile> codeFiles)
         {
-            var fileInfoRule = new KeywordUsage(Glossary.Macros[Glossary.FuncName.FILE_INFO], string.Empty) {arguments = 2, needOpenScope = true};
+            var fileInfoRule = new KeywordUsage(Glossary.Macros[FunctionKeyword.FILE_INFO], string.Empty) {arguments = 2, needOpenScope = true};
             if (!fileInfoRule.ValidateRule(codeKeyword, string.Empty))
             {
                 return null;

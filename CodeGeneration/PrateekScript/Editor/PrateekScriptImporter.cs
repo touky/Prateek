@@ -1,5 +1,7 @@
-﻿namespace Prateek.Core.Editor.AssetLibrary
+﻿namespace Prateek.CodeGeneration.PrateekScript.Editor
 {
+    using Prateek.CodeGeneration.BackendTools.Editor;
+    using Prateek.CodeGeneration.Code.PrateekScript;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
     using UnityEditor.Experimental.AssetImporters;
 
@@ -9,8 +11,11 @@
         #region Class Methods
         public override void OnImportAsset(AssetImportContext ctx)
         {
-            //BaseProcessEditorWindow.DoOpenWithAutoExecute<ProtocolBuildEditorWindow>(ctx.assetPath);
+            var builder = PrateekScriptBuilder.GetInstance();
+            builder.AddFile(ctx.assetPath);
+            CodeBuilderEditorWindow.AddBuilder(builder);
         }
         #endregion
     }
 }
+

@@ -33,6 +33,7 @@
 //-----------------------------------------------------------------------------
 namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
@@ -55,9 +56,6 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
         [Header("Directories")]
         [SerializeField]
         private List<string> sourceDirectories = new List<string>();
-
-        [SerializeField]
-        private string destinationDirectory = string.Empty;
 
         [SerializeField]
         private List<string> sourceFiles = new List<string>();
@@ -89,12 +87,6 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
         #endregion
 
         #region Properties
-        public string DestinationDirectory
-        {
-            get { return destinationDirectory; }
-            set { destinationDirectory = value; }
-        }
-
         public OperationApplied Operations
         {
             get { return operations; }
@@ -136,11 +128,6 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
         ///---------------------------------------------------------------------
         public void AddDirectory(string path)
         {
-            if (destinationDirectory == string.Empty)
-            {
-                destinationDirectory = path;
-            }
-
             dataDirectories.Add(path);
         }
 
@@ -155,6 +142,11 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
         }
 
         ///---------------------------------------------------------------------
+        public void AddFile(string filePath)
+        {
+            AddFiles(Path.GetDirectoryName(filePath), new List<string>(){Path.GetFileName(filePath)});
+        }
+
         public void AddFiles(string sourceDir, params string[] files)
         {
             AddFiles(sourceDir, new List<string>(files));
@@ -173,6 +165,11 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
         ///---------------------------------------------------------------------
         protected void AddWorkFile(FileData fileData)
         {
+            if (!fileData.IsValid)
+            {
+                return;
+            }
+
             workFiles.Add(fileData);
         }
 
@@ -240,10 +237,7 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
             this.isAutorun = isAutorun;
             this.isWorking = true;
             currentWorkFile = 0;
-
-            AssetDatabase.DisallowAutoRefresh();
         }
-
 
         ///---------------------------------------------------------------------
         public void Update()
@@ -315,9 +309,6 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
                         currentWorkFile = -1;
                         isWorking = false;
                         buildRresult = result;
-
-                        AssetDatabase.AllowAutoRefresh();
-                        AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                     }
                     else
                     {
@@ -331,9 +322,6 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
                     currentWorkFile = -1;
                     isWorking = false;
                     buildRresult = result;
-
-                    AssetDatabase.AllowAutoRefresh();
-                    AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                 }
                 else
                 {
@@ -344,20 +332,15 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
                 {
                     currentWorkFile = -1;
                     isWorking = false;
-
-                    AssetDatabase.AllowAutoRefresh();
-                    AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                 }
 
                 buildRresult = BuildResult.ValueType.Success;
             }
-            catch
+            catch (Exception e)
             {
                 currentWorkFile = -1;
                 isWorking = false;
-
-                AssetDatabase.AllowAutoRefresh();
-                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+                Debug.LogError(e.Message);
             }
 
             Profiler.EndSample();
