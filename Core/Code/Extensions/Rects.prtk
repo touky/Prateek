@@ -1,6 +1,7 @@
+
 PRATEEK_FILE_INFO(Extensions, cs)
 {
-	PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, RectExtensions, static)
+	PRATEEK_BLOCK_SWIZZLE(Prateek.Core.Code.Extensions, Extensions, static, partial)
     {
         PRATEEK_CLASS_INFO(Rect) { PRATEEK_NAMES(x, y, w, h) PRATEEK_VARS(x, y, width, height) }
 
@@ -24,7 +25,7 @@ PRATEEK_FILE_INFO(Extensions, cs)
         }
     }
 
-    PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, RectExtensions, static)
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Core.Code.Extensions, Extensions, static, partial)
     {
         PRATEEK_CLASS_INFO(Rect) { PRATEEK_VARS(x, y) }
 
@@ -48,7 +49,7 @@ PRATEEK_FILE_INFO(Extensions, cs)
         }
     }
 
-	PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, RectExtensions, static)
+	PRATEEK_BLOCK_SWIZZLE(Prateek.Core.Code.Extensions, Extensions, static, partial)
     {
         PRATEEK_CLASS_INFO(Rect) { PRATEEK_NAMES(w, h) PRATEEK_VARS(width, height) }
 

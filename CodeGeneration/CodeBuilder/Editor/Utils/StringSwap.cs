@@ -1,8 +1,10 @@
 namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils
 {
     using System;
+    using System.Diagnostics;
     using Prateek.Core.Code.Helpers;
 
+    [DebuggerDisplay("{original} -> {replacement}")]
     public struct StringSwap
     {
         ///-------------------------------------------------------------
@@ -35,9 +37,23 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils
         }
 
         ///-------------------------------------------------------------
+        public static StringSwap operator -(StringSwap info, string other)
+        {
+            return new StringSwap()
+            {
+                original = info.original,
+                replacement = other
+            };
+        }
+
+        ///-------------------------------------------------------------
         public static StringSwap operator +(StringSwap info, string other)
         {
-            return new StringSwap() {original = info.original, replacement = other};
+            return new StringSwap()
+            {
+                original = info.original,
+                replacement = (string.IsNullOrEmpty(info.replacement) ? string.Empty : info.replacement) + other
+            };
         }
 
         ///-------------------------------------------------------------

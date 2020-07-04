@@ -146,7 +146,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 
                 if (usingIndex > Const.INDEX_NONE)
                 {
-                    swapUsing += namespaces;
+                    swapUsing -= namespaces;
                 }
 
                 for (int c = 0; c < scriptContent.codeGenerated.Count; c++)
@@ -157,15 +157,16 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                     var exportCode = new ScriptContent.GeneratedCode() {className = codeData.className, code = string.Empty};
                     var generatedContent = codeData.code;
 
-                    swapNamespace += scriptContent.blockNamespace;
-                    swapClass += scriptContent.blockClassName;
-                    
+                    swapNamespace -= scriptContent.blockNamespace;
+                    swapClass -= codeData.className + scriptContent.blockClassName;
+
+                    swapPrefix = swapPrefix.Original;
                     for (var p = 0; p < scriptContent.blockClassPrefix.Count; p++)
                     {
                         swapPrefix += scriptContent.blockClassPrefix[p] + Strings.Separator.Space.S();
                     }
 
-                    swapCode += swapCodeTabs.Apply(generatedContent);
+                    swapCode -= swapCodeTabs.Apply(generatedContent);
                     destinationCode = swapNamespace.Apply(destinationCode);
                     destinationCode = swapCode.Apply(destinationCode);
                     destinationCode = swapClass.Apply(destinationCode);

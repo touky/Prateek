@@ -33,10 +33,11 @@
 //-----------------------------------------------------------------------------
 namespace Prateek.Core.Code.Extensions
 {
+    using static Prateek.Core.Code.ShaderTo.CSharp;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------
-    public static partial class RectExt
+    public static partial class RectExtensions
     {
         ///---------------------------------------------------------------------
         #region Declarations
@@ -48,8 +49,8 @@ namespace Prateek.Core.Code.Extensions
         ///---------------------------------------------------------------------
         public static Rect Inflate(this Rect rect, Vector2 value)
         {
-            rect.position -= value * CSharp.sign(rect.size);
-            rect.size += value * CSharp.sign(rect.size) * 2;
+            rect.position -= value * sign(rect.size);
+            rect.size += value * sign(rect.size) * 2;
             return rect;
         }
 
@@ -60,7 +61,7 @@ namespace Prateek.Core.Code.Extensions
             {
                 rect.x += size;
             }
-            rect.width -= CSharp.abs(size);
+            rect.width -= abs(size);
             return rect;
         }
 
@@ -71,7 +72,7 @@ namespace Prateek.Core.Code.Extensions
             {
                 rect.y += size;
             }
-            rect.height -= CSharp.abs(size);
+            rect.height -= abs(size);
             return rect;
         }
 

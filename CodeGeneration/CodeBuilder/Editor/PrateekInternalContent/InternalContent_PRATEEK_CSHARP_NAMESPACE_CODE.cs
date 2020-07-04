@@ -8,5 +8,5 @@
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Core.Code.Helpers.CSharp;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
     #endregion Prateek Code Namespaces

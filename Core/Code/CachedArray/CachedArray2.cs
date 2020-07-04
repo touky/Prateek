@@ -9,16 +9,31 @@ namespace Prateek.Core.Code.CachedArray
     ///------------------------------------------------------------------------
     public struct CachedArray2<T> : ICachedArray<T>, ICollection<T>, IEnumerable<T>, IEnumerable, IList<T>, IReadOnlyList<T>, ICollection, IList
     {
-        #region Static and Constants
+        //#region Static and Constants
         public const int ARRAY_SIZE = 2;
-        #endregion
+        //#endregion
 
         #region Fields
         private int count;
         private T defaultValue;
-        private T value0;
-        private T value1;
+        //private T value0;
+        //private T value1;
         #endregion
+
+        ///--------------------------------------------------------------------
+        private T GetSetCached(bool get, int index, T value = default)
+        {
+            Debug.Assert(index >= 0 && index < count);
+
+            switch (index)
+            {
+                //case 0: { return get ? value0 : value0 = value; }
+                //case 1: { return get ? value1 : value1 = value; }
+                default: { return default; }
+            }
+
+            return default;
+        }
 
         #region Properties
         ///--------------------------------------------------------------------
@@ -30,19 +45,6 @@ namespace Prateek.Core.Code.CachedArray
 
         #region Class Methods
         ///--------------------------------------------------------------------
-        private T GetSetCached(bool get, int index, T value = default)
-        {
-            Debug.Assert(index >= 0 && index < count);
-
-            switch (index)
-            {
-                case 0: { return get ? value0 : value0 = value; }
-                case 1: { return get ? value1 : value1 = value; }
-            }
-
-            return default;
-        }
-
         private int CachedAdd(T value)
         {
             Debug.Assert(count < Size);
@@ -79,7 +81,7 @@ namespace Prateek.Core.Code.CachedArray
         private void CachedInsert(int index, T value)
         {
             Debug.Assert(index >= 0 && index < count);
-            Debug.Assert(count < ARRAY_SIZE);
+            Debug.Assert(count < Size);
 
             count++;
             for (var i = count - 1; i > index; i--)
@@ -93,7 +95,7 @@ namespace Prateek.Core.Code.CachedArray
         private void CachedClear()
         {
             count = 0;
-            for (var i = 0; i < ARRAY_SIZE; i++)
+            for (var i = 0; i < Size; i++)
             {
                 GetSetCached(false, i);
             }

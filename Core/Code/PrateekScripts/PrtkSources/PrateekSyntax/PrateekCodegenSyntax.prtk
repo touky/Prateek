@@ -1,52 +1,52 @@
 PRATEEK_FILE_INFO(PrateekCodegen_NPP_SyntaxColor, xml)
 {
     PRATEEK_BLOCK_SYNTAX_NPP_COLOR(PrateekCodegen, UDL)
-	{
-		//Empty class info just to activate the codeBuilder
-		PRATEEK_CLASS_INFO(Empty) { }
+    {
+        //Empty class info just to activate the codeBuilder
+        PRATEEK_CLASS_INFO(Empty) { }
 
-		PRATEEK_FUNC { @#VARS_0#&#x000D;&#x000A;$ }
-		
-		PRATEEK_CODE_MAIN
+        PRATEEK_FUNC { @#VARS_0#&#x000D;&#x000A;$ }
+        
+        PRATEEK_CODE_MAIN
         {
-		@<Keywords name="Keywords1">#FUNC_RESULT_0#</Keywords>
-		@<Keywords name="Keywords2">#FUNC_RESULT_1#</Keywords>
+        @<Keywords name="Keywords1">#FUNC_RESULT_0#</Keywords>
+        @<Keywords name="Keywords2">#FUNC_RESULT_1#</Keywords>
         }
 
-	}
+    }
 }
 
 PRATEEK_FILE_INFO(PrateekCodegen_NPP_SyntaxAutoComplete, xml)
 {
     PRATEEK_BLOCK_SYNTAX_NPP_AUTO_COMPLETE(PrateekCodegen, UDL)
-	{
-		//Empty class info just to activate the codeBuilder
-		PRATEEK_CLASS_INFO(Empty) { }
+    {
+        //Empty class info just to activate the codeBuilder
+        PRATEEK_CLASS_INFO(Empty) { }
 
-		PRATEEK_FUNC
-		{
-		@<KeyWord name="#VARS_0#" />
-		}
-		
-		PRATEEK_FUNC
-		{
-		@<KeyWord name="#VARS_0#" func="yes">
-		@	<Overload retVal="void" descr="#VARS_1#">
-		@#VARS_2#
-		@	</Overload>
-		@</KeyWord>
-		}
-		
-		PRATEEK_FUNC
-		{
-		@		<Param name="#VARS_0#" descr="#VARS_1#" />
-		}
-		
-		PRATEEK_CODE_MAIN
+        PRATEEK_FUNC
         {
-		@#FUNC_RESULT_0#
+        @<KeyWord name="#VARS_0#" />
+        }
+        
+        PRATEEK_FUNC
+        {
+        @<KeyWord name="#VARS_0#" func="yes">
+        @    <Overload retVal="void" descr="#VARS_1#">
+        @#VARS_2#
+        @    </Overload>
+        @</KeyWord>
+        }
+        
+        PRATEEK_FUNC
+        {
+        @        <Param name="#VARS_0#" descr="#VARS_1#" />
+        }
+        
+        PRATEEK_CODE_MAIN
+        {
+        @#FUNC_RESULT_0#
         }
 
-	}
+    }
 }
 

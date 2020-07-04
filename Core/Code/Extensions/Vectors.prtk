@@ -1,6 +1,6 @@
 PRATEEK_FILE_INFO(Extensions, cs)
 {
-    PRATEEK_BLOCK_SWIZZLE(Prateek.Extensions, VectorExtensions, static partial)
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Core.Code.Extensions, Extensions, static)
     {
         PRATEEK_CLASS_INFO(Vector2) { PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3) { PRATEEK_VARS(x, y, z) }
@@ -29,7 +29,7 @@ PRATEEK_FILE_INFO(Extensions, cs)
 
 PRATEEK_FILE_INFO(VectorShaderTo, cs)
 {
-    PRATEEK_BLOCK_CTOR_MIXED(Prateek.ShaderTo, CSharp, static)
+    PRATEEK_BLOCK_CTOR_MIXED(Prateek.Core.Code.ShaderTo, CSharp, static, partial)
     {
         PRATEEK_CLASS_INFO(Vector2) { PRATEEK_NAMES(vec2) PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3) { PRATEEK_NAMES(vec3) PRATEEK_VARS(x, y, z) }
@@ -55,7 +55,7 @@ PRATEEK_FILE_INFO(VectorShaderTo, cs)
         }
     }
 
-    PRATEEK_BLOCK_FUNC_MIXED(Prateek.ShaderTo, CSharp, static)
+    PRATEEK_BLOCK_FUNC_MIXED(Prateek.Core.Code.ShaderTo, CSharp, static, partial)
     {
         PRATEEK_CLASS_INFO(Vector2) { PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3) { PRATEEK_VARS(x, y, z) }

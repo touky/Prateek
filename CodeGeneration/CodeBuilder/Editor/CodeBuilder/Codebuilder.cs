@@ -154,7 +154,28 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
 
         public void AddFiles(string sourceDir, List<string> files)
         {
-            dataFiles.Add(new FileSources {sourceDir = sourceDir, files = files});
+            var existingIndex = dataFiles.FindIndex((x) =>
+            {
+                return x.sourceDir == sourceDir;
+            });
+
+            if (existingIndex > -1)
+            {
+                var fileSources = dataFiles[existingIndex];
+                foreach (var file in files)
+                {
+                    if (fileSources.files.Contains(file))
+                    {
+                        continue;
+                    }
+
+                    fileSources.files.Add(file);
+                }
+            }
+            else
+            {
+                dataFiles.Add(new FileSources {sourceDir = sourceDir, files = files});
+            }
         }
 
         public void AddFile(FileData fileData)

@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 28/04/2020
+//  Header last update date: 03/07/2020
 //
 //  Copyright � 2017-2020 "Touky" <touky at prateek dot top>
 //
@@ -32,9 +32,21 @@
 
 
 ///----------------------------------------------------------------------------
-namespace Prateek.ShaderTo
+namespace Prateek.Core.Code.ShaderTo
 {
+// -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
+    ///------------------------------------------------------------------------
+    #region Prateek Code Namespaces
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
     
+    using UnityEngine;
+    
+    using Prateek;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
+    #endregion Prateek Code Namespaces
+// -END_PRATEEK_CSHARP_NAMESPACE_CODE-
 
     ///------------------------------------------------------------------------
     public static partial class CSharp
@@ -60,9 +72,21 @@ namespace Prateek.ShaderTo
 }
 
 ///----------------------------------------------------------------------------
-namespace Prateek.ShaderTo
+namespace Prateek.Core.Code.ShaderTo
 {
+// -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
+    ///------------------------------------------------------------------------
+    #region Prateek Code Namespaces
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
     
+    using UnityEngine;
+    
+    using Prateek;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
+    #endregion Prateek Code Namespaces
+// -END_PRATEEK_CSHARP_NAMESPACE_CODE-
 
     ///------------------------------------------------------------------------
     public static partial class CSharp

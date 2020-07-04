@@ -1,9 +1,9 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 22/03/2020
+//  Header last update date: 03/07/2020
 //
-//  Copyright � 2017-2020 "Touky" <touky@prateek.top>
+//  Copyright � 2017-2020 "Touky" <touky at prateek dot top>
 //
 //  Prateek is free software. It comes without any warranty, to
 //  the extent permitted by applicable law. You can redistribute it
@@ -16,6 +16,8 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
 #region Prateek Ifdefs
+
+//Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
 //Auto activate debug
@@ -29,16 +31,28 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 
-//Auto activate some of the prateek defines
-namespace Prateek.Core.Code.Extensions {
+///----------------------------------------------------------------------------
+namespace Prateek.Core.Code.Extensions
+{
+// -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
+    ///------------------------------------------------------------------------
+    #region Prateek Code Namespaces
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    
     using UnityEngine;
+    
+    using Prateek;
+    using static Prateek.Core.Code.Extensions.Vector2Extensions;
+    #endregion Prateek Code Namespaces
+// -END_PRATEEK_CSHARP_NAMESPACE_CODE-
 
-    ///-----------------------------------------------------------------------------
-    ///-------------------------------------------------------------------------
-    public static  partial class RectExt
+    ///------------------------------------------------------------------------
+    public static partial class RectExtensions
     {
         
-        ///---------------------------------------------------------------------
+        //--
         #region Swizzle Rect
         public static Rect xxxx(this Rect v) { return new Rect(v.x, v.x, v.x, v.x); }
         public static Rect xxxy(this Rect v) { return new Rect(v.x, v.x, v.x, v.y); }
@@ -667,41 +681,74 @@ namespace Prateek.Core.Code.Extensions {
         #endregion Swizzle Rect
         
     }
+}
 
-    ///-----------------------------------------------------------------------------
-    ///-------------------------------------------------------------------------
-    public static  partial class RectExt
+///----------------------------------------------------------------------------
+namespace Prateek.Core.Code.Extensions
+{
+// -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
+    ///------------------------------------------------------------------------
+    #region Prateek Code Namespaces
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    
+    using UnityEngine;
+    
+    using Prateek;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
+    #endregion Prateek Code Namespaces
+// -END_PRATEEK_CSHARP_NAMESPACE_CODE-
+
+    ///------------------------------------------------------------------------
+    public static partial class RectExtensions
     {
         
-        ///---------------------------------------------------------------------
+        //--
         #region Swizzle Rect
-        public static Rect xx(this Rect v) { return new Rect(CSharp.vec2(v.x, v.x), v.size); }
-        public static Rect xy(this Rect v) { return new Rect(CSharp.vec2(v.x, v.y), v.size); }
-        public static Rect xn(this Rect v, float n_0 = 0) { return new Rect(CSharp.vec2(v.x, n_0), v.size); }
-        public static Rect yx(this Rect v) { return new Rect(CSharp.vec2(v.y, v.x), v.size); }
-        public static Rect yy(this Rect v) { return new Rect(CSharp.vec2(v.y, v.y), v.size); }
-        public static Rect yn(this Rect v, float n_0 = 0) { return new Rect(CSharp.vec2(v.y, n_0), v.size); }
-        public static Rect nx(this Rect v, float n_0 = 0) { return new Rect(CSharp.vec2(n_0, v.x), v.size); }
-        public static Rect ny(this Rect v, float n_0 = 0) { return new Rect(CSharp.vec2(n_0, v.y), v.size); }
+        public static Rect xx(this Rect v) { return new Rect(vec2(v.x, v.x), v.size); }
+        public static Rect xy(this Rect v) { return new Rect(vec2(v.x, v.y), v.size); }
+        public static Rect xn(this Rect v, float n_0 = 0) { return new Rect(vec2(v.x, n_0), v.size); }
+        public static Rect yx(this Rect v) { return new Rect(vec2(v.y, v.x), v.size); }
+        public static Rect yy(this Rect v) { return new Rect(vec2(v.y, v.y), v.size); }
+        public static Rect yn(this Rect v, float n_0 = 0) { return new Rect(vec2(v.y, n_0), v.size); }
+        public static Rect nx(this Rect v, float n_0 = 0) { return new Rect(vec2(n_0, v.x), v.size); }
+        public static Rect ny(this Rect v, float n_0 = 0) { return new Rect(vec2(n_0, v.y), v.size); }
         #endregion Swizzle Rect
         
     }
+}
 
-    ///-----------------------------------------------------------------------------
-    ///-------------------------------------------------------------------------
-    public static  partial class RectExt
+///----------------------------------------------------------------------------
+namespace Prateek.Core.Code.Extensions
+{
+// -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
+    ///------------------------------------------------------------------------
+    #region Prateek Code Namespaces
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    
+    using UnityEngine;
+    
+    using Prateek;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
+    #endregion Prateek Code Namespaces
+// -END_PRATEEK_CSHARP_NAMESPACE_CODE-
+
+    ///------------------------------------------------------------------------
+    public static partial class RectExtensions
     {
-        
-        ///---------------------------------------------------------------------
+        //--
         #region Swizzle Rect
-        public static Rect ww(this Rect v) { return new Rect(v.position, CSharp.vec2(v.width, v.width)); }
-        public static Rect wh(this Rect v) { return new Rect(v.position, CSharp.vec2(v.width, v.height)); }
-        public static Rect wn(this Rect v, float n_0 = 0) { return new Rect(v.position, CSharp.vec2(v.width, n_0)); }
-        public static Rect hw(this Rect v) { return new Rect(v.position, CSharp.vec2(v.height, v.width)); }
-        public static Rect hh(this Rect v) { return new Rect(v.position, CSharp.vec2(v.height, v.height)); }
-        public static Rect hn(this Rect v, float n_0 = 0) { return new Rect(v.position, CSharp.vec2(v.height, n_0)); }
-        public static Rect nw(this Rect v, float n_0 = 0) { return new Rect(v.position, CSharp.vec2(n_0, v.width)); }
-        public static Rect nh(this Rect v, float n_0 = 0) { return new Rect(v.position, CSharp.vec2(n_0, v.height)); }
+        public static Rect ww(this Rect v) { return new Rect(v.position, vec2(v.width, v.width)); }
+        public static Rect wh(this Rect v) { return new Rect(v.position, vec2(v.width, v.height)); }
+        public static Rect wn(this Rect v, float n_0 = 0) { return new Rect(v.position, vec2(v.width, n_0)); }
+        public static Rect hw(this Rect v) { return new Rect(v.position, vec2(v.height, v.width)); }
+        public static Rect hh(this Rect v) { return new Rect(v.position, vec2(v.height, v.height)); }
+        public static Rect hn(this Rect v, float n_0 = 0) { return new Rect(v.position, vec2(v.height, n_0)); }
+        public static Rect nw(this Rect v, float n_0 = 0) { return new Rect(v.position, vec2(n_0, v.width)); }
+        public static Rect nh(this Rect v, float n_0 = 0) { return new Rect(v.position, vec2(n_0, v.height)); }
         #endregion Swizzle Rect
         
     }

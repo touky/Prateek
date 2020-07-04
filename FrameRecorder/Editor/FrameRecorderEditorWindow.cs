@@ -40,6 +40,7 @@ namespace Prateek.FrameRecorder.Editor
     using Prateek.FrameRecorder.Code;
     using UnityEditor;
     using UnityEngine;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
 
     ///-------------------------------------------------------------------------
     public partial class FrameRecorderEditorWindow : EditorWindow
@@ -168,7 +169,7 @@ namespace Prateek.FrameRecorder.Editor
                     using (new GUIStatusScope(frameCount > 0 && isPlayback))
                     {
                         var zone = EditorGUILayout.GetControlRect();
-                        var width = CSharp.max(0, zone.width - 55);
+                        var width = max(0, zone.width - 55);
                         {
                             zone.width = width;
                             using (new GUIStatusScope(Color.black))
@@ -190,7 +191,7 @@ namespace Prateek.FrameRecorder.Editor
                         using (new EditorGUILayout.HorizontalScope())
                         {
                             var oldX = rX;
-                            rX = CSharp.min(recordLimit - (size + 1), EditorGUILayout.IntSlider((int)rX, 0, recordLimit - 1));
+                            rX = min(recordLimit - (size + 1), EditorGUILayout.IntSlider((int)rX, 0, recordLimit - 1));
                             rY += rX - oldX;
                         }
 
@@ -210,7 +211,7 @@ namespace Prateek.FrameRecorder.Editor
                             GUILayout.Label("Range: ", GUILayout.MaxWidth(40));
                             size = rY - rX;
                             size -= GUILayout.Button("|<", GUILayout.MaxWidth(40)) ? 1 : 0;
-                            size = CSharp.max(0, EditorGUILayout.IntField((int)size, GUILayout.MaxWidth(40)));
+                            size = max(0, EditorGUILayout.IntField((int)size, GUILayout.MaxWidth(40)));
                             size += GUILayout.Button(">|", GUILayout.MaxWidth(40)) ? 1 : 0;
                             rY = rX + size;
 
