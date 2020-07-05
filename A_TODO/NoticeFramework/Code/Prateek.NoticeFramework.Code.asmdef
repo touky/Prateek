@@ -1,8 +1,11 @@
 {
-    "name": "Prateek.Keywords",
+    "name": "Prateek.NoticeFramework.Code",
     "references": [
-        "Prateek.StaticArray",
-        "Prateek.Consts"
+        "Prateek.Core.Code",
+        "Prateek.DaemonFramework.Code",
+        "Prateek.TickableFramework.Code",
+        "Prateek.Code.Core.KeynameFramework",
+        "Prateek.DebugMenu"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

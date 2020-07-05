@@ -3,7 +3,7 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.Resources.Loader;
 
     public abstract class VisualGameObjectInstance<TResourceReference>
-        : VisualIdentifiableInstance, IAssignableVisualResource<TResourceReference>
+        : VisualKeynameUserInstance, IAssignableVisualResource<TResourceReference>
         where TResourceReference : class, IContentHandle
     {
         #region IAssignableVisualResource<TResourceReference> Members

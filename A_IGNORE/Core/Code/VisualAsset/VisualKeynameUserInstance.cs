@@ -5,7 +5,7 @@ namespace Mayfair.Core.Code.VisualAsset
     using UnityEngine;
     using UnityEngine.Serialization;
 
-    public abstract class VisualIdentifiableInstance : MonoBehaviour, IIdentifiable
+    public abstract class VisualKeynameUserInstance : MonoBehaviour, IKeynameUser
     {
         #region Settings
         [SerializeField]
@@ -38,7 +38,7 @@ namespace Mayfair.Core.Code.VisualAsset
             get { return keyname; }
         }
 
-        public bool Equals(IIdentifiable other)
+        public bool Equals(IKeynameUser other)
         {
             return Keyname == other.Keyname;
         }

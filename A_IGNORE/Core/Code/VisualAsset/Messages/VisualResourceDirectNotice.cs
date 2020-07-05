@@ -28,7 +28,7 @@ namespace Mayfair.Core.Code.VisualAsset.Messages
         //todo benjaminh: this is not pratical, we can't have multiple uniqueids for one assignable
         //todo benjaminh: This should be re-evaluated at some point. Maybe split the two, or require the assignable to return the needed IIdentifiable
         public void Init<T>(T instance)
-            where T : IAssignableVisualResource, IIdentifiable
+            where T : IAssignableVisualResource, IKeynameUser
         {
             this.instance = instance;
         }

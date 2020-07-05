@@ -1,10 +1,8 @@
 {
-    "name": "Mayfair.Tags.Code",
+    "name": "Prateek.Code.Core.KeynameFramework",
     "references": [
-        "Mayfair.Core.Code",
-        "Prateek.Consts",
-        "Prateek.Keywords",
-        "Prateek.DaemonFramework.Code"
+        "Prateek.StaticArray",
+        "Prateek.Consts"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -58,16 +58,16 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             for (int i = 0; i < container.pendingInit.Count; i++)
             {
                 IAssignableVisualResource assignable = container.pendingInit[i];
-                IIdentifiable identifiable = assignable as IIdentifiable;
-                if (identifiable == null)
+                IKeynameUser keynameUser = assignable as IKeynameUser;
+                if (keynameUser == null)
                 {
                     throw new Exception($"MAJOR ERROR ! {assignable} is not an IIdentifiable");
                 }
 
                 IContentHandle iRreference;
-                if (!references.TryGetValue(identifiable.Keyname, out iRreference))
+                if (!references.TryGetValue(keynameUser.Keyname, out iRreference))
                 {
-                    string logText = $"{GetType().Name}: Visual resource for {identifiable.Keyname.RawValue} could not be found, FIX IT !";
+                    string logText = $"{GetType().Name}: Visual resource for {keynameUser.Keyname.RawValue} could not be found, FIX IT !";
                     if (!references.TryGetValue(container.DefaultResource, out iRreference))
                     {
                         //Upgrade to error

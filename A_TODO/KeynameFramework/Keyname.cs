@@ -316,9 +316,9 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
         #endregion
 
         #region operators
-        public static implicit operator Keyname(string uniqueId)
+        public static implicit operator Keyname(string keyname)
         {
-            return Create(uniqueId);
+            return Create(keyname);
         }
 
         public static implicit operator string(Keyname keyname)

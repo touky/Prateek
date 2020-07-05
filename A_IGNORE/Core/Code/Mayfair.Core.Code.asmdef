@@ -3,7 +3,7 @@
     "references": [
         "Prateek.Core.Code",
         "Prateek.DaemonFramework.Code",
-        "Prateek.Keywords",
+        "Prateek.Code.Core.KeynameFramework",
         "Prateek.StaticArray",
         "Prateek.Consts",
         "Prateek.NoticeFramework.Code",

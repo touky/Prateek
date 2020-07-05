@@ -1,11 +1,10 @@
 {
-    "name": "Prateek.NoticeFramework.Code",
+    "name": "Mayfair.Tags.Code",
     "references": [
-        "Prateek.Core.Code",
-        "Prateek.DaemonFramework.Code",
-        "Prateek.TickableFramework.Code",
-        "Prateek.Keywords",
-        "Prateek.DebugMenu"
+        "Mayfair.Core.Code",
+        "Prateek.Consts",
+        "Prateek.Code.Core.KeynameFramework",
+        "Prateek.DaemonFramework.Code"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
