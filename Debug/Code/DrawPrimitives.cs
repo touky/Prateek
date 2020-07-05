@@ -36,6 +36,7 @@ namespace Prateek.Debug.Code
 {
     using Prateek.Core.Code;
     using Prateek.Core.Code.Extensions;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------
@@ -49,7 +50,7 @@ namespace Prateek.Debug.Code
             var prim = new PrimitiveSetup(PrimitiveType.Line, setup);
             prim.pos = start;
             prim.rot = Quaternion.LookRotation(dir.normalized);
-            prim.extents = CSharp.vec3(0, 0, dir.magnitude);
+            prim.extents = vec3(0, 0, dir.magnitude);
             Add(prim);
         }
 
@@ -169,7 +170,7 @@ namespace Prateek.Debug.Code
             var prim = new PrimitiveSetup(PrimitiveType.Arrow, setup);
             prim.pos = place.Start;
             prim.rot = place.Rotation;
-            prim.extents = CSharp.vec3(place.Extents.x, place.Extents.y, place.Size.z);
+            prim.extents = vec3(place.Extents.x, place.Extents.y, place.Size.z);
             Add(prim);
         }
         #endregion Complex Primitives
@@ -210,7 +211,7 @@ namespace Prateek.Debug.Code
             else if (light.type == LightType.Spot)
             {
                 var t = Mathf.Tan(light.spotAngle) * light.range;
-                Cone(DebugPlace.AToB(tr.position, tr.rotation * CSharp.vec3(0, 0, light.range), CSharp.vec3(t, t, 0), tr.rotation * Vector3.up), setup);
+                Cone(DebugPlace.AToB(tr.position, tr.rotation * vec3(0, 0, light.range), vec3(t, t, 0), tr.rotation * Vector3.up), setup);
             }
         }
 
@@ -240,7 +241,7 @@ namespace Prateek.Debug.Code
             var prim = new PrimitiveSetup(PrimitiveType.LineCast, setup);
             prim.pos = place.Position;
             prim.rot = place.Rotation;
-            prim.extents = CSharp.vec3(radius, radius, place.Extents.z);
+            prim.extents = vec3(radius, radius, place.Extents.z);
             Add(prim);
         }
 
@@ -316,7 +317,7 @@ namespace Prateek.Debug.Code
                 var prim = new PrimitiveSetup(PrimitiveType.Point, setup);
                 prim.pos = hit.point;
                 prim.rot = Quaternion.LookRotation(hit.normal);
-                prim.extents = CSharp.vec3(radius * 2);
+                prim.extents = vec3(radius * 2);
                 Add(prim);
             }
 
@@ -325,7 +326,7 @@ namespace Prateek.Debug.Code
                 var prim = new PrimitiveSetup(PrimitiveType.LineCast, setup);
                 prim.pos = place0.Position;
                 prim.rot = place0.Rotation;
-                prim.extents = CSharp.vec3(radius, radius, place0.Extents.z);
+                prim.extents = vec3(radius, radius, place0.Extents.z);
                 Add(prim);
             }
 
@@ -335,7 +336,7 @@ namespace Prateek.Debug.Code
                 var prim = new PrimitiveSetup(PrimitiveType.LineCast, setup);
                 prim.pos = place1.Position;
                 prim.rot = place1.Rotation;
-                prim.extents = CSharp.vec3(radius * 0.9f, radius * 0.9f, place1.Extents.z);
+                prim.extents = vec3(radius * 0.9f, radius * 0.9f, place1.Extents.z);
                 Add(prim);
             }
         }
@@ -348,7 +349,7 @@ namespace Prateek.Debug.Code
             var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
             prim.pos = place.Position;
             prim.rot = place.Rotation;
-            prim.extents = CSharp.vec3(radius, radius, place.Extents.z);
+            prim.extents = vec3(radius, radius, place.Extents.z);
             Add(prim);
         }
 
@@ -360,7 +361,7 @@ namespace Prateek.Debug.Code
                 var prim = new PrimitiveSetup(PrimitiveType.Point, setup);
                 prim.pos = hit.point;
                 prim.rot = Quaternion.LookRotation(hit.normal);
-                prim.extents = CSharp.vec3(radius * 0.4f);
+                prim.extents = vec3(radius * 0.4f);
                 Add(prim);
             }
 
@@ -369,7 +370,7 @@ namespace Prateek.Debug.Code
                 var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
                 prim.pos = place0.Position;
                 prim.rot = place0.Rotation;
-                prim.extents = CSharp.vec3(radius, radius, place0.Extents.z);
+                prim.extents = vec3(radius, radius, place0.Extents.z);
                 Add(prim);
             }
 
@@ -379,7 +380,7 @@ namespace Prateek.Debug.Code
                 var prim = new PrimitiveSetup(PrimitiveType.SphereCast, setup);
                 prim.pos = place1.Position;
                 prim.rot = place1.Rotation;
-                prim.extents = CSharp.vec3(radius * 0.9f, radius * 0.9f, place1.Extents.z);
+                prim.extents = vec3(radius * 0.9f, radius * 0.9f, place1.Extents.z);
                 Add(prim);
             }
         }

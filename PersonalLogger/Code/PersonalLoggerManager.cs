@@ -37,12 +37,13 @@ namespace Prateek.Helpers {
     using Prateek.Core.Code.Extensions;
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Code.PrateekScripts.PrtkSources;
+    using Prateek.Core.Code.ShaderTo;
     using Prateek.Debug;
     using Prateek.Debug.Code;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine;
-    using CSharp = Core.Code.Extensions.CSharp;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
 
     ///-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
@@ -325,14 +326,14 @@ namespace Prateek.Helpers {
             style.WindowRect.size = new Vector2(windowDefaultRect.width, windowDefaultRect.height);
 
             //Resize to fit the screen
-            style.WindowRect.size = (CSharp.min(style.WindowRect.position + style.WindowRect.size, new Vector2(Screen.width, Screen.height)) - style.WindowRect.position);
-            style.WindowRect.size = CSharp.min(style.WindowRect.size, style.WindowRect.size - (CSharp.max(style.WindowRect.position, 0) - style.WindowRect.position));
-            style.WindowRect.position = CSharp.max(style.WindowRect.position, 0);
+            style.WindowRect.size = (min(style.WindowRect.position + style.WindowRect.size, new Vector2(Screen.width, Screen.height)) - style.WindowRect.position);
+            style.WindowRect.size = min(style.WindowRect.size, style.WindowRect.size - (max(style.WindowRect.position, 0) - style.WindowRect.position));
+            style.WindowRect.position = max(style.WindowRect.position, 0);
 
             //Build rects
-            var buttonsRect    = new Rect(style.WindowRect.position + CSharp.max(Vector2.right * (style.WindowRect.width - buttonsSize.x), 0), buttonsSize);
-            var headerRect     = new Rect(style.WindowRect.position, CSharp.max(CSharp.vec2(style.WindowRect.width - (buttonsRect.width + 10), headerSize.y), 0));
-            var scrollViewRect = new Rect(style.WindowRect.position + Vector2.up * headerRect.height, CSharp.max(style.WindowRect.size - Vector2.up * headerSize.y, 0));
+            var buttonsRect    = new Rect(style.WindowRect.position + max(Vector2.right * (style.WindowRect.width - buttonsSize.x), 0), buttonsSize);
+            var headerRect     = new Rect(style.WindowRect.position, max(vec2(style.WindowRect.width - (buttonsRect.width + 10), headerSize.y), 0));
+            var scrollViewRect = new Rect(style.WindowRect.position + Vector2.up * headerRect.height, max(style.WindowRect.size - Vector2.up * headerSize.y, 0));
 
             GUI.Box(style.WindowRect, GUIContent.none, style.BGBoxStyle);
 
@@ -352,7 +353,7 @@ namespace Prateek.Helpers {
                             //Draw selection Tabs
                             content.text = m_loggers[i].logger.name;
                             content.tooltip = m_loggers[i].logger.name;
-                            var nameSize   = CSharp.min(CSharp.max(style.ToolbarActive.CalcSize(content), minNameSize), headerRect.width).x;
+                            var nameSize   = min(max(style.ToolbarActive.CalcSize(content), minNameSize), headerRect.width).x;
                             var toggleRect = new Rect(cursorRect.position, new Vector2(nameSize, cursorRect.height));
 
                             if (GUI.Toggle(toggleRect, isToggled, content, isToggled ? style.ToolbarActive : style.ToolbarInactive) != isToggled)
@@ -360,7 +361,7 @@ namespace Prateek.Helpers {
                                 newActiveBox = i;
                             }
 
-                            var offset = CSharp.min(Vector2.right * toggleRect.width, headerRect.width);
+                            var offset = min(Vector2.right * toggleRect.width, headerRect.width);
                             cursorRect.position += offset;
                             headerRect.size -= offset;
                             headerRect.position += offset;
@@ -428,7 +429,7 @@ namespace Prateek.Helpers {
                 }
             }
 
-            windowPosition = CSharp.max(CSharp.min(windowPosition, new Vector2(Screen.width, Screen.height) - Vector2.one * headerRect.height * 4f), -(windowDefaultRect.size - Vector2.one * headerRect.height * 2f));
+            windowPosition = max(min(windowPosition, new Vector2(Screen.width, Screen.height) - Vector2.one * headerRect.height * 4f), -(windowDefaultRect.size - Vector2.one * headerRect.height * 2f));
             style.ActiveBox = newActiveBox;
 
             //Set position after moving the mouse

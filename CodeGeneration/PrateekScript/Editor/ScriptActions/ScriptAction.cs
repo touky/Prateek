@@ -37,6 +37,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
     using System.Linq;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
     using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
     using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
@@ -142,10 +143,21 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
             
             keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.USING], Glossary.Macros[FunctionKeyword.FILE_INFO])
             {
-                arguments = 1,
+                arguments = ArgumentRange.AtLeast(1),
                 onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
                 {
-                    codeFile.AddNamespace(arguments[0].Content);
+                    var content = string.Empty;
+                    foreach (var argument in arguments)
+                    {
+                        if (string.IsNullOrEmpty(content))
+                        {
+                            content += " ";
+                        }
+
+                        content += argument;
+                    }
+
+                    codeFile.AddNamespace(content);
                     return true;
                 }
             });

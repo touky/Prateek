@@ -35,6 +35,7 @@ namespace Prateek.FrameRecorder.Code
 {
     using System.Collections.Generic;
     using Prateek.Core.Code.Extensions;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------
@@ -109,7 +110,7 @@ namespace Prateek.FrameRecorder.Code
         public Vector2Int CurrentFrameRange
         {
             get { return frameRange; }
-            set { frameRange = CSharp.clamp(value, 0, frameCapacity - 1); }
+            set { frameRange = clamp(value, 0, frameCapacity - 1); }
         }
         #endregion Properties
 
@@ -250,8 +251,8 @@ namespace Prateek.FrameRecorder.Code
         ///---------------------------------------------------------------------
         private void DoPlayback()
         {
-            frameRange = CSharp.clamp(frameRange, 0, frameCapacity - 1);
-            for (int h = frameRange.x; h < CSharp.min(frameRange.y + 1, history.Count); h++)
+            frameRange = clamp(frameRange, 0, frameCapacity - 1);
+            for (int h = frameRange.x; h < min(frameRange.y + 1, history.Count); h++)
             {
                 var frame = history[history.Count - (1 + h)];
                 if (frame == null)
