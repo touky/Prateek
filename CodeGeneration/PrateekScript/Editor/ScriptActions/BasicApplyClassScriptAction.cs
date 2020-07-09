@@ -9,13 +9,16 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
     using System.Collections.Generic;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
 
-    public partial class BasicFuncScriptAction : ScriptAction
+    /// <summary>
+    /// Lists all the class-infos and create a new block of code by simply applying the names and vars to said code.
+    /// </summary>
+    public class BasicApplyClassScriptAction : ScriptAction
     {
         #region Properties
         ///-----------------------------------------------------------------
         public override string ScopeTag
         {
-            get { return "FUNC_BASIC"; }
+            get { return "APPLY_CLASS_INFOS"; }
         }
 
         public override GenerationRule GenerationMode
@@ -31,14 +34,14 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
 
         #region Constructors
         ///-----------------------------------------------------------------
-        public BasicFuncScriptAction(string extension) : base(extension) { }
+        public BasicApplyClassScriptAction(string extension) : base(extension) { }
         #endregion
 
         #region Class Methods
         ///---------------------------------------------------------------------
-        internal static BasicFuncScriptAction Create(string extension)
+        internal static BasicApplyClassScriptAction Create(string extension)
         {
-            return new BasicFuncScriptAction(extension);
+            return new BasicApplyClassScriptAction(extension);
         }
 
         ///-----------------------------------------------------------------

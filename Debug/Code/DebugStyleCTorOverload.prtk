@@ -1,12 +1,9 @@
-
-
-
 PRATEEK_FILE_INFO(DebugStyleCTorOverload, cs)
 {
     PRATEEK_USING(UnityEngine)
     PRATEEK_USING(Prateek.Core.Code.Helpers)
 
-    PRATEEK_BLOCK_FUNC_OVERLOAD(Prateek.Debug.Code, partial DebugDraw)
+    PRATEEK_BLOCK_METHOD_OVERLOAD(Prateek.Debug.Code, partial DebugDraw)
     {
         PRATEEK_CLASS_INFO(DebugStyle)
 		{
@@ -57,4 +54,3 @@ PRATEEK_FILE_INFO(DebugStyleCTorOverload, cs)
         }
     }
 }
-

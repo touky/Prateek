@@ -6,6 +6,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
     public enum FunctionKeyword
     {
         FILE_INFO,
+        DEFINE,
         USING,
         BLOCK,
         PREFIX,

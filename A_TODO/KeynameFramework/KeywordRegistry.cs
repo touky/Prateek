@@ -7,7 +7,7 @@ namespace Mayfair.Core.Code.TagSystem
     using Mayfair.Core.Code.Utils.Helpers.Regexp;
     using Mayfair.Core.Code.Utils.Types;
 
-    internal static class KeywordBank
+    internal static class KeywordRegistry
     {
         #region Static and Constants
         private const string UNDERSCORE = "_";

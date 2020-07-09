@@ -20,6 +20,8 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         public string blockClassName;
         public List<string> blockClassPrefix = new List<string>();
 
+        public List<string> usingNamespaces = new List<string>();
+        
         public List<ClassContent> classInfos = new List<ClassContent>();
         public List<FunctionContent> functionContents = new List<FunctionContent>();
         public string classDefaultType;
@@ -93,6 +95,12 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
             infos.data = data;
             functionContents[functionContents.Count - 1] = infos;
             return true;
+        }
+
+        ///-----------------------------------------------------------------
+        public void AddNamespace(string usingNamespace)
+        {
+            usingNamespaces.Add(usingNamespace);
         }
         #endregion
     }

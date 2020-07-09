@@ -45,6 +45,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
             public string namepaceTag;
             public string extensionClassTag;
             public string extensionPrefixTag;
+            public string codeDefineTag;
             public string codeUsingTag;
             public string codeDataTag;
             public string codeDataTabsTag;
@@ -129,6 +130,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                 namepaceTag         = $"{prefix}_EXTENSION_NAMESPACE".Keyword();
                 extensionClassTag   = $"{prefix}_EXTENSION_CLASS".Keyword();
                 extensionPrefixTag  = $"{prefix}_EXTENSION_PREFIX".Keyword();
+                codeDefineTag       = $"{prefix}_DEFINE_SECTION".Keyword();
                 codeUsingTag        = $"{prefix}_USING_NAMESPACE".Keyword();
                 codeDataTag         = $"{prefix}_CODEGEN_DATA".Keyword();
                 codeDataTabsTag     = $"{prefix}_CODEGEN_{codeTabsTag}".Keyword();
@@ -136,6 +138,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                 codeBlockFormat     = $"{Glossary.Macros.prefix}_{FunctionKeyword.BLOCK.S()}_";
 
                 AddData(FunctionKeyword.FILE_INFO);
+                AddData(FunctionKeyword.DEFINE);
                 AddData(FunctionKeyword.USING);
                 AddData(FunctionKeyword.PREFIX, codeData);
                 AddData(FunctionKeyword.MAIN, codeData);

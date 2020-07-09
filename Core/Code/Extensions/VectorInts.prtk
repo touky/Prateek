@@ -28,7 +28,7 @@ PRATEEK_FILE_INFO(Extensions, cs)
 
 PRATEEK_FILE_INFO(VectorIntShaderTo, cs)
 {
-    PRATEEK_BLOCK_CTOR_MIXED(Prateek.Core.Code.ShaderTo, CSharp, static, partial)
+    PRATEEK_BLOCK_MIXED_CONSTRUCTOR(Prateek.Core.Code.ShaderTo, CSharp, static, partial)
     {
         PRATEEK_CLASS_INFO(Vector2Int) { PRATEEK_NAMES(vec2i) PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3Int) { PRATEEK_NAMES(vec3i) PRATEEK_VARS(x, y, z) }
@@ -53,7 +53,7 @@ PRATEEK_FILE_INFO(VectorIntShaderTo, cs)
         }
     }
 
-    PRATEEK_BLOCK_FUNC_MIXED(Prateek.Core.Code.ShaderTo, CSharp, static, partial)
+    PRATEEK_BLOCK_MIXED_OVERLOAD(Prateek.Core.Code.ShaderTo, CSharp, static, partial)
     {
         PRATEEK_CLASS_INFO(Vector2Int) { PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3Int) { PRATEEK_VARS(x, y, z) }

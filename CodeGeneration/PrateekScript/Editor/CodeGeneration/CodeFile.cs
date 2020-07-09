@@ -19,6 +19,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         private ScriptContent scriptContent;
         private List<ScriptContent.GeneratedCode> codeGenerated = new List<ScriptContent.GeneratedCode>();
         private List<ScriptContent> scriptContents = new List<ScriptContent>();
+        private List<string> defines = new List<string>();
         private List<string> usingNamespaces = new List<string>();
         #endregion
 
@@ -75,6 +76,12 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         }
 
         ///-----------------------------------------------------------------
+        public void AddDefine(string define)
+        {
+            defines.Add(define);
+        }
+
+        ///-----------------------------------------------------------------
         public void AddNamespace(string usingNamespace)
         {
             usingNamespaces.Add(usingNamespace);
@@ -100,6 +107,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
             var swapNamespace = (StringSwap) Glossary.Macros.namepaceTag;
             var swapClass = (StringSwap) Glossary.Macros.extensionClassTag;
             var swapPrefix = (StringSwap) Glossary.Macros.extensionPrefixTag;
+            var swapDefines = (StringSwap) Glossary.Macros.codeDefineTag;
             var swapUsing = (StringSwap) Glossary.Macros.codeUsingTag;
             var swapCode = (StringSwap) Glossary.Macros.codeDataTag;
             var swapCodeTabs = (StringSwap) Glossary.Macros.codeDataTabsTag;
@@ -130,24 +138,12 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                 {
                     return string.Compare(a.className, b.className);
                 });
-
-                var namespaces = string.Empty;
-                foreach (var usingNamespace in usingNamespaces)
-                {
-                    if (!string.IsNullOrEmpty(namespaces))
-                    {
-                        namespaces += $"{usingTabs}using {usingNamespace};".NewLine();
-                    }
-                    else
-                    {
-                        namespaces += $"using {usingNamespace};".NewLine();
-                    }
-                }
-
-                if (usingIndex > Const.INDEX_NONE)
-                {
-                    swapUsing -= namespaces;
-                }
+                
+                var defineSection = BuildDefineDirective(defines);
+                swapDefines -= defineSection;
+                
+                var namespaceCode = BuildUsingDirective(usingTabs, usingNamespaces, scriptContent.usingNamespaces);
+                swapUsing -= namespaceCode;
 
                 for (int c = 0; c < scriptContent.codeGenerated.Count; c++)
                 {
@@ -172,10 +168,8 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                     destinationCode = swapClass.Apply(destinationCode);
                     destinationCode = swapPrefix.Apply(destinationCode);
                     destinationCode = swapTabs.Apply(destinationCode);
-                    if (usingIndex > Const.INDEX_NONE)
-                    {
-                        destinationCode = swapUsing.Apply(destinationCode);
-                    }
+                    destinationCode = swapDefines.Apply(destinationCode);
+                    destinationCode = swapUsing.Apply(destinationCode);
                     exportCode.code = destinationCode;
 
                     var index = codeGenerated.FindIndex((x) => { return x.className == exportCode.className; });
@@ -193,7 +187,44 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                 }
             }
 
-            return Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.Success;
+            return BuildResult.ValueType.Success;
+        }
+
+        ///-----------------------------------------------------------------
+        public string BuildDefineDirective(params List<string>[] definesList)
+        {
+            var resultCode = string.Empty;
+            foreach (var defines in definesList)
+            {
+                foreach (var define in defines)
+                {
+                    resultCode += $"#define {define}".NewLine();
+                }
+            }
+
+            return resultCode;
+        }
+
+        ///-----------------------------------------------------------------
+        public string BuildUsingDirective(string currentTabs, params List<string>[] namespacesList)
+        {
+            var resultCode = string.Empty;
+            foreach (var namespaces in namespacesList)
+            {
+                foreach (var namespaceName in namespaces)
+                {
+                    if (!string.IsNullOrEmpty(resultCode))
+                    {
+                        resultCode += $"{currentTabs}using {namespaceName};".NewLine();
+                    }
+                    else
+                    {
+                        resultCode += $"using {namespaceName};".NewLine();
+                    }
+                }
+            }
+
+            return resultCode;
         }
         #endregion
     }

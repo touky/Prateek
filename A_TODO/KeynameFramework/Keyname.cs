@@ -8,11 +8,19 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
     [DebuggerDisplay("Keyname:{keyname}/{GetHexHashCode()}")]
     public struct Keyname : IEquatable<Keyname>
     {
+        //Add / Remove / Insert
+        //SetNumber ?
+        //SetName
+        //Match / Filter
+        //Create<T>
+        //Create(Type)
+        //[] Create<Interface>()
+
         #region Fields
         private string keyname;
 
         private string name;
-        private KeywordHolder keywordHolder;
+        private KeywordArray keywordArray;
         #endregion
 
         #region Properties
@@ -31,13 +39,13 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
                     return KeynameState.Fullname;
                 }
 
-                return keywordHolder.Keywords.Count > 0 ? KeynameState.Keywords : KeynameState.None;
+                return keywordArray.Keywords.Count > 0 ? KeynameState.Keywords : KeynameState.None;
             }
         }
 
-        internal KeywordHolder KeywordHolder
+        internal KeywordArray KeywordArray
         {
-            get { return keywordHolder; }
+            get { return keywordArray; }
         }
         #endregion
 
@@ -46,7 +54,7 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
         {
             keyname = string.Empty;
             name = string.Empty;
-            keywordHolder = new KeywordHolder();
+            keywordArray = new KeywordArray();
         }
         #endregion
 
@@ -57,9 +65,9 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
 
             var id   = new Keyname(true);
             var name = string.Empty;
-            id.keywordHolder = new KeywordHolder(stringId, out id.name);
+            id.keywordArray = new KeywordArray(stringId, out id.name);
             id.name = name;
-            id.keyname = KeywordBank.ToString(id.keywordHolder.Keywords, name);
+            id.keyname = KeywordRegistry.ToString(id.keywordArray.Keywords, name);
             return id;
         }
 
@@ -112,18 +120,18 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
         {
             var id = new Keyname(true);
             id.SetName(name);
-            id.keywordHolder = new KeywordHolder(false);
-            id.keywordHolder.Add(type0);
-            id.keywordHolder.Add(type1);
-            id.keywordHolder.Add(type2);
-            id.keywordHolder.Add(type3);
-            id.keywordHolder.Add(type4);
-            id.keywordHolder.Add(type5);
-            id.keywordHolder.Add(type6);
-            id.keywordHolder.Add(type7);
-            id.keywordHolder.Add(type8);
-            id.keywordHolder.Add(type9);
-            id.keyname = KeywordBank.ToString(id.keywordHolder.Keywords, name);
+            id.keywordArray = new KeywordArray(false);
+            id.keywordArray.Add(type0);
+            id.keywordArray.Add(type1);
+            id.keywordArray.Add(type2);
+            id.keywordArray.Add(type3);
+            id.keywordArray.Add(type4);
+            id.keywordArray.Add(type5);
+            id.keywordArray.Add(type6);
+            id.keywordArray.Add(type7);
+            id.keywordArray.Add(type8);
+            id.keywordArray.Add(type9);
+            id.keyname = KeywordRegistry.ToString(id.keywordArray.Keywords, name);
             return id;
         }
 
@@ -234,6 +242,7 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
         #endregion Static Constructors
 
         #region Class Methods
+
         /// <summary>
         ///     Matches this UniqueId with the given other one
         /// </summary>
@@ -247,7 +256,7 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
         /// </returns>
         public KeywordMatchResult Match(Keyname other)
         {
-            var tagResult = keywordHolder.Match(other.keywordHolder);
+            var tagResult = keywordArray.Match(other.keywordArray);
             switch ((KeywordMatchResultType) tagResult)
             {
                 case KeywordMatchResultType.Equal:
@@ -286,7 +295,7 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
             Assert.IsTrue(Type == KeynameState.Keywords);
 
             var result = new Keyname(false);
-            result.AddTag(keywordHolder.Filter(other.KeywordHolder));
+            result.AddTag(keywordArray.Filter(other.KeywordArray));
             return result;
         }
 
@@ -295,18 +304,18 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
             name = string.IsNullOrEmpty(name) ? string.Empty : name;
         }
 
-        private void AddTag(KeywordHolder container)
+        private void AddTag(KeywordArray container)
         {
-            keywordHolder.Add(container.Keywords);
-            keyname = KeywordBank.ToString(keywordHolder.Keywords);
+            keywordArray.Add(container.Keywords);
+            keyname = KeywordRegistry.ToString(keywordArray.Keywords);
         }
 
         public void AddTag(Type type)
         {
-            if (KeywordBank.TagMatches(KeywordBank.RootTagType, type))
+            if (KeywordRegistry.TagMatches(KeywordRegistry.RootTagType, type))
             {
-                keywordHolder.Add(new StaticArray10<Type> {type});
-                keyname = KeywordBank.ToString(keywordHolder.Keywords);
+                keywordArray.Add(new StaticArray10<Type> {type});
+                keyname = KeywordRegistry.ToString(keywordArray.Keywords);
             }
             else
             {

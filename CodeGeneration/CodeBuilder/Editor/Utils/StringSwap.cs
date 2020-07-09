@@ -67,7 +67,9 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils
         {
             if (text == null || original == null || replacement == null)
                 return text;
-            return text.Replace(original, !replacement.EndsWith(Strings.Separator.LineFeed.S()) ? replacement : replacement.Substring(0, replacement.Length - 1));
+            return text.Replace(original, !replacement.EndsWith(Strings.Separator.LineFeed.S())
+                ? replacement
+                : replacement.Substring(0, replacement.Length - 1));
         }
     }
 }

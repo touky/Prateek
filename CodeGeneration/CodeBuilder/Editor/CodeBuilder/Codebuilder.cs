@@ -277,6 +277,7 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder
                     var nextFile = false;
                     for (var p = 0; p >= 0; p++)
                     {
+                        Debug.Log($"{file.destination.fileInfo.Name}: Step: {p}");
                         switch (p)
                         {
                             case 0:

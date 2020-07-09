@@ -118,9 +118,13 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
                         continue;
                     }
 
-                    FeedCodeFile(ref fileData, codeFile, codeKeyword, string.Empty);
+                    var result = FeedCodeFile(ref fileData, codeFile, codeKeyword, string.Empty);
 
                     Profiler.EndSample();
+                    if (!result)
+                    {
+                        return Error(result, ref fileData);
+                    }
                 }
 
                 //return BuildResult.ValueType.LoadingFailed;
@@ -232,6 +236,22 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
         private BuildResult FeedCodeFile(ref FileData fileData, CodeFile codeFile, CodeKeyword rootKeyword, string rootScope)
         {
             var scriptActions = ScriptActionRegistry.Actions;
+            bool foundOne = false;
+            for (var s = 0; s < scriptActions.Count; s++)
+            {
+                var action = scriptActions[s];
+                if (action.ExistInVocabulary(rootKeyword))
+                {
+                    foundOne = true;
+                    break;
+                }
+            }
+
+            if (!foundOne)
+            {
+                return Error((BuildResult) BuildResult.ValueType.PrateekScriptInvalidKeyword + rootKeyword.keyword.Content, ref fileData);
+            }
+
             var scopeRule     = (KeywordUsage) default;
             for (var s = 0; s < scriptActions.Count; s++)
             {
@@ -241,7 +261,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
                     continue;
                 }
 
-                var keywordRule = action.GetKeywordRule(rootKeyword, rootScope);
+                var keywordRule = action.GetKeywordUsage(rootKeyword, rootScope);
                 if (keywordRule.keywordUsageType == KeywordUsageType.None
                  || keywordRule.keywordUsageType == KeywordUsageType.Ignore)
                 {
@@ -268,7 +288,11 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
                         continue;
                     }
 
-                    FeedCodeFile(ref fileData, codeFile, innerKeyword, rootKeyword.keyword.Content);
+                    var buildResult = FeedCodeFile(ref fileData, codeFile, innerKeyword, rootKeyword.keyword.Content);
+                    if (buildResult.Value != BuildResult.ValueType.Success)
+                    {
+                        return buildResult;
+                    }
                 }
 
                 if (scope.scopeContent.Count == 0)
@@ -290,7 +314,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
         ///---------------------------------------------------------------------
         private CodeFile RetrieveCodeFile(CodeKeyword codeKeyword, List<CodeFile> codeFiles)
         {
-            var fileInfoRule = new KeywordUsage(Glossary.Macros[FunctionKeyword.FILE_INFO], string.Empty) {arguments = 2, needOpenScope = true};
+            var fileInfoRule = KeywordCreator.GetFileInfos();
             if (!fileInfoRule.ValidateRule(codeKeyword, string.Empty))
             {
                 return null;

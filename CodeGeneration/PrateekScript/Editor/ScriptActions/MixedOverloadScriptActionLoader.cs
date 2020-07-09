@@ -10,19 +10,18 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
     using UnityEditor;
 
     [InitializeOnLoad]
-    internal class BasicFuncScriptActionLoader : PrateekScriptBuilder
+    internal class MixedOverloadScriptActionLoader : PrateekScriptBuilder
     {
         #region Constructors
-        static BasicFuncScriptActionLoader()
+        static MixedOverloadScriptActionLoader()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 return;
             }
 
-            BasicFuncScriptAction.Create(Glossary.importExtension).Commit();
+            MixedOverloadScriptAction.Create(Glossary.importExtension).Commit();
         }
         #endregion
     }
 }
-

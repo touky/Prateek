@@ -9,13 +9,16 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
     using System.Collections.Generic;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
 
-    public class OverloadFuncScriptAction : ScriptAction
+    /// <summary>
+    /// Generates all the overloads for the given CLASS_INFOS() with the NAMES(varName, varType) given
+    /// </summary>
+    public class MethodOverloadScriptAction : ScriptAction
     {
         #region Properties
         ///-----------------------------------------------------------------
         public override string ScopeTag
         {
-            get { return "FUNC_OVERLOAD"; }
+            get { return "METHOD_OVERLOAD"; }
         }
 
         public override GenerationRule GenerationMode
@@ -31,13 +34,13 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
 
         #region Constructors
         ///-----------------------------------------------------------------
-        public OverloadFuncScriptAction(string extension) : base(extension) { }
+        public MethodOverloadScriptAction(string extension) : base(extension) { }
         #endregion
 
         #region Class Methods
-        public static OverloadFuncScriptAction Create(string extension)
+        public static MethodOverloadScriptAction Create(string extension)
         {
-            return new OverloadFuncScriptAction(extension);
+            return new MethodOverloadScriptAction(extension);
         }
         #endregion
 

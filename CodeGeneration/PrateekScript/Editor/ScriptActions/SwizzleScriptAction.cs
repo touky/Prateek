@@ -9,6 +9,10 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
     using System.Collections.Generic;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
 
+    /// <summary>
+    /// Generates all the swizzle variant for each given CLASS_INFOS()
+    /// Also generates the swizzle conversion to the other given CLASS_INFOS()
+    /// </summary>
     public partial class SwizzleScriptAction : ScriptAction
     {
         #region Properties

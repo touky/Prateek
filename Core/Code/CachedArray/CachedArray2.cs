@@ -7,21 +7,28 @@ namespace Prateek.Core.Code.CachedArray
     using UnityEngine;
 
     ///------------------------------------------------------------------------
-    public struct CachedArray2<T> : ICachedArray<T>, ICollection<T>, IEnumerable<T>, IEnumerable, IList<T>, IReadOnlyList<T>, ICollection, IList
+    public struct CachedArray2<T>
+        : ICachedArray<T>
+        , IInternalCachedArray<T>
+        , ICollection<T>
+        , IEnumerable<T>
+        , IEnumerable
+        , IList<T>
+        , IReadOnlyList<T>
+        , ICollection
+        , IList
     {
-        //#region Static and Constants
-        public const int ARRAY_SIZE = 2;
-        //#endregion
-
         #region Fields
-        private int count;
-        private T defaultValue;
+        internal int count;
+
+        internal T defaultValue;
+
         //private T value0;
         //private T value1;
         #endregion
 
         ///--------------------------------------------------------------------
-        private T GetSetCached(bool get, int index, T value = default)
+        T IInternalCachedArray<T>.GetSetCached(bool get, int index, T value = default)
         {
             Debug.Assert(index >= 0 && index < count);
 
@@ -39,106 +46,31 @@ namespace Prateek.Core.Code.CachedArray
         ///--------------------------------------------------------------------
         public int Size
         {
-            get { return ARRAY_SIZE; }
-        }
-        #endregion
-
-        #region Class Methods
-        ///--------------------------------------------------------------------
-        private int CachedAdd(T value)
-        {
-            Debug.Assert(count < Size);
-
-            SetCached(count++, value);
-            return count - 1;
-        }
-
-        private bool CachedRemove(T value)
-        {
-            var index = CachedIndexOf(value);
-            if (index == Const.INDEX_NONE)
+            get
             {
-                return false;
-            }
-
-            CachedRemoveAt(index);
-            return true;
-        }
-
-        private void CachedRemoveAt(int index)
-        {
-            Debug.Assert(index >= 0 && index < count);
-            Debug.Assert(count > 0);
-
-            for (var i = index; i < count; i++)
-            {
-                SetCached(i, GetCached(i + 1));
-            }
-
-            count--;
-        }
-
-        private void CachedInsert(int index, T value)
-        {
-            Debug.Assert(index >= 0 && index < count);
-            Debug.Assert(count < Size);
-
-            count++;
-            for (var i = count - 1; i > index; i--)
-            {
-                SetCached(i, GetCached(i - 1));
-            }
-
-            SetCached(index, value);
-        }
-
-        private void CachedClear()
-        {
-            count = 0;
-            for (var i = 0; i < Size; i++)
-            {
-                GetSetCached(false, i);
+#if SIZE_VALID
+                //return 10;
+#else
+                return 0;
+#endif
             }
         }
+#endregion
 
-        public int CachedIndexOf(T value)
-        {
-            Debug.Assert(value is T);
-
-            for (var i = 0; i < count; i++)
-            {
-                if (value.Equals(GetSetCached(true, i)))
-                {
-                    return i;
-                }
-            }
-
-            return Const.INDEX_NONE;
-        }
-
-        private T GetCached(int index)
-        {
-            Debug.Assert(index >= 0 && index < count);
-
-            return GetSetCached(true, index);
-        }
-
-        private T SetCached(int index, T value)
-        {
-            Debug.Assert(index >= 0 && index < count);
-
-            return GetSetCached(false, index, value);
-        }
-        #endregion
-
-        #region ICachedArray<T> Members
+#region ICachedArray<T> Members
         public int Count
         {
             get { return count; }
         }
-        #endregion
 
-        #region IList
+        int IInternalCachedArray<T>.Count
+        {
+            get { return count; }
+            set { count = value; }
+        }
+#endregion
+
+#region IList
         public bool IsFixedSize
         {
             get { return false; }
@@ -161,73 +93,73 @@ namespace Prateek.Core.Code.CachedArray
 
         object IList.this[int index]
         {
-            get { return GetCached(index); }
+            get { return this.GetCached(index, default(T)); }
             set
             {
                 Debug.Assert(value is T);
 
-                SetCached(index, (T) value);
+                this.SetCached(index, (T) value);
             }
         }
 
         public T this[int index]
         {
-            get { return GetCached(index); }
-            set { SetCached(index, value); }
+            get { return this.GetCached(index, default(T)); }
+            set { this.SetCached(index, value); }
         }
 
         public int Add(object value)
         {
             Debug.Assert(value is T);
 
-            return CachedAdd((T) value);
+            return this.CachedAdd((T) value);
         }
 
         public void Clear()
         {
-            CachedClear();
+            this.CachedClear(default(T));
         }
 
         public bool Contains(object value)
         {
             Debug.Assert(value is T);
 
-            return CachedIndexOf((T) value) != Const.INDEX_NONE;
+            return this.CachedIndexOf((T) value) != Const.INDEX_NONE;
         }
 
         public int IndexOf(object value)
         {
             Debug.Assert(value is T);
 
-            return CachedIndexOf((T) value);
+            return this.CachedIndexOf((T) value);
         }
 
         public void Insert(int index, object value)
         {
             Debug.Assert(value is T);
 
-            CachedInsert(index, (T) value);
+            this.CachedInsert(index, (T) value);
         }
 
         public void Remove(object value)
         {
             Debug.Assert(value is T);
 
-            CachedRemove((T) value);
+            this.CachedRemove((T) value);
         }
 
         public void RemoveAt(int index)
         {
-            CachedRemoveAt(index);
+            this.CachedRemoveAt(index, default(T));
         }
 
         public void CopyTo(Array array, int index)
         {
             Debug.Assert(array.Length - index < count);
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                array.SetValue(GetCached(i), index + i);
+                array.SetValue(this.GetCached(i, default(T)), index + i);
             }
         }
 
@@ -235,58 +167,58 @@ namespace Prateek.Core.Code.CachedArray
         {
             return new CachedArrayEnumerator<T>(this);
         }
-        #endregion
+#endregion
 
-        #region IList<T>
+#region IList<T>
         public int IndexOf(T item)
         {
-            return CachedIndexOf(item);
+            return this.CachedIndexOf(item);
         }
 
         public void Insert(int index, T item)
         {
-            CachedInsert(index, item);
+            this.CachedInsert(index, item);
         }
 
         public void Add(T item)
         {
-            CachedAdd(item);
+            this.CachedAdd(item);
         }
 
         public void AddRange(T[] items)
         {
             Debug.Assert(items != null);
 
-            foreach (var item in items)
+            foreach (T item in items)
             {
-                CachedAdd(item);
+                this.CachedAdd(item);
             }
         }
 
         public bool Contains(T item)
         {
-            return CachedIndexOf(item) != Const.INDEX_NONE;
+            return this.CachedIndexOf(item) != Const.INDEX_NONE;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
             Debug.Assert(array.Length - arrayIndex < count);
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                array[arrayIndex + i] = GetCached(i);
+                array[arrayIndex + i] = this.GetCached(i, default(T));
             }
         }
 
         public bool Remove(T item)
         {
-            return CachedRemove(item);
+            return this.CachedRemove(item);
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             return new CachedArrayEnumerator<T>(this);
         }
-        #endregion
+#endregion
     }
 }

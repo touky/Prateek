@@ -7,7 +7,7 @@ namespace Mayfair.Core.Code.TagSystem
     using UnityEngine;
     using UnityEngine.Assertions;
 
-    internal struct KeywordHolder
+    internal struct KeywordArray
     {
         #region Fields
         private StaticArray10<Type> keywords;
@@ -21,48 +21,48 @@ namespace Mayfair.Core.Code.TagSystem
         #endregion
 
         #region Constructors
-        internal KeywordHolder(bool empty)
+        internal KeywordArray(bool empty)
         {
             keywords = new StaticArray10<Type>();
         }
 
-        internal KeywordHolder(string source, out string name)
+        internal KeywordArray(string source, out string name)
         {
-            name = KeywordBank.Convert(source, out keywords);
+            name = KeywordRegistry.Convert(source, out keywords);
         }
         #endregion
 
         #region Class Methods
+        //Add / Remove / Insert
+        //SetNumber ?
+        //SetName
+        //Match / Filter
+        //Create<T>
+        //Create(Type)
+        //[] Create<Interface>()
+
         internal void Add<T>() where T : MasterKeyword
         {
-            Type type = typeof(T);
-            if (keywords.Contains(type))
-            {
-                return;
-            }
-
-            Assert.IsTrue(KeywordBank.TagMatches(KeywordBank.RootTagType, type));
-
-            keywords.Add(KeywordBank.Get(type));
+            Add(typeof(T));
         }
         
         internal void Add(Type type)
         {
-            if (type == null)
+            if (type == null || keywords.Contains(type))
             {
                 return;
             }
 
-            Assert.IsTrue(KeywordBank.TagMatches(KeywordBank.RootTagType, type));
+            Assert.IsTrue(KeywordRegistry.TagMatches(KeywordRegistry.RootTagType, type));
 
-            keywords.Add(KeywordBank.Get(type));
+            keywords.Add(KeywordRegistry.Get(type));
         }
 
         internal void Add(StaticArray10<Type> tagsToAdd)
         {
             Add((IReadOnlyList<Type>)tagsToAdd);
         }
-
+        
         internal void Add(IReadOnlyList<Type> tagsToAdd)
         {
             int remaining = StaticArray10<Type>.SIZE - (keywords.Count + tagsToAdd.Count);
@@ -74,13 +74,33 @@ namespace Mayfair.Core.Code.TagSystem
             int count = Mathf.Min(StaticArray10<Type>.SIZE - keywords.Count, tagsToAdd.Count);
             for (int i = 0; i < count; i++)
             {
-                Assert.IsTrue(KeywordBank.TagMatches(KeywordBank.RootTagType, tagsToAdd[i]));
+                Assert.IsTrue(KeywordRegistry.TagMatches(KeywordRegistry.RootTagType, tagsToAdd[i]));
 
                 keywords.Add(tagsToAdd[i]);
             }
         }
 
-        internal KeywordMatchResult Match(KeywordHolder other)
+        internal void Remove<T>() where T : MasterKeyword
+        {
+            Remove(typeof(T));
+        }
+
+        internal void Remove(Type type)
+        {
+            Assert.IsTrue(KeywordRegistry.TagMatches(KeywordRegistry.RootTagType, type));
+            for (int k = 0; k < keywords.Count; k++)
+            {
+                var keyword = keywords[k];
+                if (!KeywordRegistry.TagMatches(type, keyword))
+                {
+                    continue;
+                }
+
+                keywords.RemoveAt(k--);
+            }
+        }
+
+        internal KeywordMatchResult Match(KeywordArray other)
         {
             bool atLeastOneMatch = false;
             KeywordMatchResultType resultType = keywords.Count == other.keywords.Count ? KeywordMatchResultType.Equal : KeywordMatchResultType.MatchFull;
@@ -89,7 +109,7 @@ namespace Mayfair.Core.Code.TagSystem
                 bool hasFound = false;
                 foreach (Type otherTag in other.keywords)
                 {
-                    if (KeywordBank.TagMatches(source, otherTag))
+                    if (KeywordRegistry.TagMatches(source, otherTag))
                     {
                         hasFound = true;
                         atLeastOneMatch = true;
@@ -111,14 +131,14 @@ namespace Mayfair.Core.Code.TagSystem
             return resultType;
         }
 
-        internal KeywordHolder Filter(KeywordHolder other)
+        internal KeywordArray Filter(KeywordArray other)
         {
-            KeywordHolder result = new KeywordHolder(false);
+            KeywordArray result = new KeywordArray(false);
             foreach (Type otherTag in other.Keywords)
             {
                 foreach (Type filterTag in keywords)
                 {
-                    if (!KeywordBank.TagMatches(filterTag, otherTag))
+                    if (!KeywordRegistry.TagMatches(filterTag, otherTag))
                     {
                         continue;
                     }

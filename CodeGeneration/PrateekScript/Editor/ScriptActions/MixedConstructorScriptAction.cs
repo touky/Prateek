@@ -9,13 +9,18 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
     using System.Collections.Generic;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
 
-    public class MixedCTorScriptAction : ScriptAction
+    /// <summary>
+    /// Generates methods using NAMES() that mixes the CLASS_INFOS() to create overloads mixing all types
+    /// Considers the mixing as creating auto-converting Constructor
+    /// Uses VARS() count to determine the hierarchy of conversion (Ex: Vec2 -> Vec3: ok, Vec3 -> Vec2: no)
+    /// </summary>
+    public class MixedConstructorScriptAction : ScriptAction
     {
         #region Properties
         ///-----------------------------------------------------------------
         public override string ScopeTag
         {
-            get { return "CTOR_MIXED"; }
+            get { return "MIXED_CONSTRUCTOR"; }
         }
 
         public override GenerationRule GenerationMode
@@ -26,13 +31,13 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
 
         #region Constructors
         ///-----------------------------------------------------------------
-        public MixedCTorScriptAction(string extension) : base(extension) { }
+        public MixedConstructorScriptAction(string extension) : base(extension) { }
         #endregion
 
         #region Class Methods
-        internal static MixedCTorScriptAction Create(string extension)
+        internal static MixedConstructorScriptAction Create(string extension)
         {
-            return new MixedCTorScriptAction(extension);
+            return new MixedConstructorScriptAction(extension);
         }
         #endregion
 

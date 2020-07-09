@@ -11,13 +11,16 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
     using Prateek.Core.Code.Helpers;
 
-    public partial class MixedFuncScriptAction : ScriptAction
+    /// <summary>
+    /// Generates methods using NAMES() for each of the  CLASS_INFOS() to create overloads mixing the main type and the DEFAULT() given type
+    /// </summary>
+    public class MixedOverloadScriptAction : ScriptAction
     {
         #region Properties
         ///----------------------------------------------------------------
         public override string ScopeTag
         {
-            get { return "FUNC_MIXED"; }
+            get { return "MIXED_OVERLOAD"; }
         }
 
         public override GenerationRule GenerationMode
@@ -33,13 +36,13 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
 
         #region Constructors
         ///-----------------------------------------------------------------
-        public MixedFuncScriptAction(string extension) : base(extension) { }
+        public MixedOverloadScriptAction(string extension) : base(extension) { }
         #endregion
 
         #region Class Methods
-        public static MixedFuncScriptAction Create(string extension)
+        public static MixedOverloadScriptAction Create(string extension)
         {
-            return new MixedFuncScriptAction(extension);
+            return new MixedOverloadScriptAction(extension);
         }
 
         ///-----------------------------------------------------------------

@@ -1,6 +1,7 @@
 {
     "name": "Prateek.Code.Core.KeynameFramework",
     "references": [
+        "Prateek.Core.Code",
         "Prateek.StaticArray",
         "Prateek.Consts"
     ],

@@ -45,10 +45,6 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Code.Extensions;
 
-    ///-------------------------------------------------------------------------
-#if UNITY_EDITOR
-#endif //UNITY_EDITOR
-
     public abstract class ScriptAction : BaseTemplate
     {
         #region GenerationMode enum
@@ -141,140 +137,24 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
 
             codeBlock = $"{Glossary.Macros.codeBlockFormat}{ScopeTag}";
             
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.USING], Glossary.Macros[FunctionKeyword.FILE_INFO])
-            {
-                arguments = ArgumentRange.AtLeast(1),
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    var content = string.Empty;
-                    foreach (var argument in arguments)
-                    {
-                        if (string.IsNullOrEmpty(content))
-                        {
-                            content += " ";
-                        }
+            keywordUsages.Add(KeywordCreator.GetFileInfos());
 
-                        content += argument;
-                    }
+            KeywordCreator.AddDefine(keywordUsages);
+            KeywordCreator.AddUsing(keywordUsages, codeBlock);
+            KeywordCreator.AddCodeBlock(keywordUsages, codeBlock);
+            KeywordCreator.AddClassInfo(keywordUsages, codeBlock);
 
-                    codeFile.AddNamespace(content);
-                    return true;
-                }
-            });
+            KeywordCreator.AddNames(keywordUsages);
+            KeywordCreator.AddVars(keywordUsages);
 
-            keywordUsages.Add(new KeywordUsage(codeBlock, Glossary.Macros[FunctionKeyword.FILE_INFO])
-            {
-                arguments = ArgumentRange.AtLeast(2), needOpenScope = true, createNewScriptContent = true,
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    codeInfos.blockNamespace = arguments[0].Content;
-                    codeInfos.blockClassName = arguments[1].Content;
-                    if (arguments.Count > 2)
-                    {
-                        var additionalArguments = arguments.GetRange(2, arguments.Count - 2);
-                        foreach (var argument in additionalArguments)
-                        {
-                            codeInfos.blockClassPrefix.Add(argument.Content);
-                        }
-                    }
+            KeywordCreator.AddDefault(keywordUsages, codeBlock);
+            KeywordCreator.AddFunc(keywordUsages, codeBlock);
 
-                    return true;
-                },
-                onCloseScope = (codeFile, scope) =>
-                {
-                    codeFile.Commit();
-                    return scope == codeBlock;
-                }
-            });
+            KeywordCreator.AddCodePrefix(keywordUsages, codeBlock);
+            KeywordCreator.AddCodeMain(keywordUsages, codeBlock);
+            KeywordCreator.AddCodeSuffix(keywordUsages, codeBlock);
 
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.CLASS_INFO], codeBlock)
-            {
-                arguments = 1,
-                needOpenScope = true,
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    codeInfos.classInfos.Add(new ClassContent {className = arguments[0].Content});
-                    return true;
-                }
-            });
-
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[VariableKeyword.NAMES], Glossary.Macros[FunctionKeyword.CLASS_INFO])
-            {
-                arguments = ArgumentRange.AtLeast(1),
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    return codeInfos.SetClassNames(arguments);
-                }
-            });
-
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[VariableKeyword.VARS], Glossary.Macros[FunctionKeyword.CLASS_INFO])
-            {
-                arguments = ArgumentRange.AtLeast(1),
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    return codeInfos.SetClassVars(arguments);
-                }
-            });
-
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.DEFAULT], codeBlock)
-            {
-                arguments = ArgumentRange.Between(2, 3),
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    codeInfos.classDefaultType = arguments[0].Content;
-                    codeInfos.classDefaultValue = arguments[1].Content;
-                    codeInfos.classDefaultExportOnly = arguments.Count == 2 || arguments[2].Content == "false" ? false : true;
-                    return true;
-                }
-            });
-
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.FUNC], codeBlock)
-            {
-                needOpenScope = true,
-                needScopeData = true,
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    codeInfos.functionContents.Add(new FunctionContent());
-                    codeInfos.SetFuncData(data);
-                    return true;
-                },
-                onCloseScope = (codeFile, scope) => { return true; }
-            });
-
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.PREFIX], codeBlock)
-            {
-                arguments = 0, needOpenScope = true, needScopeData = true,
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    codeInfos.codePrefix = data;
-                    return true;
-                },
-                onCloseScope = (codeFile, scope) => { return true; }
-            });
-
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.MAIN], codeBlock)
-            {
-                arguments = 0, needOpenScope = true, needScopeData = true,
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    codeInfos.codeMain = data;
-                    return true;
-                },
-                onCloseScope = (codeFile, scope) => { return true; }
-            });
-
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.SUFFIX], codeBlock)
-            {
-                arguments = 0, needOpenScope = true, needScopeData = true,
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    codeInfos.codePostfix = data;
-                    return true;
-                },
-                onCloseScope = (codeFile, scope) => { return true; }
-            });
-
-            keywordUsages.Add(new KeywordUsage {keywordUsageType = KeywordUsageType.Ignore});
+            keywordUsages.Add(new KeywordUsage {keywordUsageType = KeywordUsageType.Forbidden});
         }
 
         public bool FeedCodeFile(CodeFile codeFile, KeywordUsage keywordUsage, CodeKeyword rootKeyword)
@@ -468,7 +348,21 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
         }
 
         ///-----------------------------------------------------------------
-        public KeywordUsage GetKeywordRule(CodeKeyword keyword, string activeScope)
+        public bool ExistInVocabulary(CodeKeyword rootKeyword)
+        {
+            foreach (var keywordRule in keywordUsages)
+            {
+                if (keywordRule.keyword == rootKeyword.keyword.Content)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        ///-----------------------------------------------------------------
+        public KeywordUsage GetKeywordUsage(CodeKeyword keyword, string activeScope)
         {
             foreach (var keywordRule in keywordUsages)
             {

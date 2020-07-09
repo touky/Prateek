@@ -20,7 +20,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
                 return;
             }
 
-            MixedCTorScriptAction.Create(Glossary.importExtension).Commit();
+            MixedConstructorScriptAction.Create(Glossary.importExtension).Commit();
         }
         #endregion
     }

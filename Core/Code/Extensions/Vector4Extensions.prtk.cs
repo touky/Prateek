@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 03/07/2020
+//  Header last update date: 08/07/2020
 //
 //  Copyright � 2017-2020 "Touky" <touky at prateek dot top>
 //
@@ -31,10 +31,12 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 
+
+
 ///----------------------------------------------------------------------------
 namespace Prateek.Core.Code.Extensions
 {
-// -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
+    // -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
     ///------------------------------------------------------------------------
     #region Prateek Code Namespaces
     using System;
@@ -47,6 +49,7 @@ namespace Prateek.Core.Code.Extensions
     using static Prateek.Core.Code.ShaderTo.CSharp;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
+    
 
     ///------------------------------------------------------------------------
     public static class Vector4Extensions
