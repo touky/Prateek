@@ -7,7 +7,7 @@ namespace Prateek.Core.Code.CachedArray
     using UnityEngine;
 
     ///------------------------------------------------------------------------
-    public struct CachedArray2<T>
+    /*#PRTK:public #*/ struct CachedArray_/*#PRTK:#DEF_1##*/<T>
         : ICachedArray<T>
         , IInternalCachedArray<T>
         , ICollection<T>
@@ -23,8 +23,7 @@ namespace Prateek.Core.Code.CachedArray
 
         internal T defaultValue;
 
-        //private T value0;
-        //private T value1;
+        //#PRTK:#FUNC_RESULT_0#;
         #endregion
 
         ///--------------------------------------------------------------------
@@ -34,8 +33,7 @@ namespace Prateek.Core.Code.CachedArray
 
             switch (index)
             {
-                //case 0: { return get ? value0 : value0 = value; }
-                //case 1: { return get ? value1 : value1 = value; }
+                //#PRTK:#FUNC_RESULT_1#
                 default: { return default; }
             }
 
@@ -49,7 +47,7 @@ namespace Prateek.Core.Code.CachedArray
             get
             {
 #if SIZE_VALID
-                //return 10;
+                //#PRTK:return#FUNC_RESULT_2#
 #else
                 return 0;
 #endif

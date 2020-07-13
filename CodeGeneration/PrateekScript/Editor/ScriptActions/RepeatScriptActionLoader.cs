@@ -11,17 +11,17 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
     using UnityEditor;
 
     [InitializeOnLoad]
-    internal class BasicApplyClassScriptActionLoader : PrateekScriptBuilder
+    internal class RepeatScriptActionLoader : PrateekScriptBuilder
     {
         #region Constructors
-        static BasicApplyClassScriptActionLoader()
+        static RepeatScriptActionLoader()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 return;
             }
 
-            BasicApplyClassScriptAction.Create(Glossary.importExtension).Commit();
+            RepeatScriptAction.Create(Glossary.importExtension).Commit();
         }
         #endregion
     }

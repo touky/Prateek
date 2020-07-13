@@ -1,9 +1,9 @@
-namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
+namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
 {
-    using UnityEditor;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
     using Prateek.Core.Code.Helpers;
+    using UnityEditor;
 
     [InitializeOnLoad]
     internal class ScriptActionSyntaxLoader

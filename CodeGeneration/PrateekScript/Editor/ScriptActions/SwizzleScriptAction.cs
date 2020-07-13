@@ -4,7 +4,7 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
+namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
 {
     using System.Collections.Generic;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
@@ -12,6 +12,10 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
     /// <summary>
     /// Generates all the swizzle variant for each given CLASS_INFOS()
     /// Also generates the swizzle conversion to the other given CLASS_INFOS()
+    /// Has 3 FUNC_RESULT embedded:
+    /// - FUNC_RESULT_0: Method Name
+    /// - FUNC_RESULT_1: Method parameters
+    /// - FUNC_RESULT_2: Call passed-in parameters
     /// </summary>
     public partial class SwizzleScriptAction : ScriptAction
     {

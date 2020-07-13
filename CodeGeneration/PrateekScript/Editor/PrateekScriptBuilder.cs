@@ -36,10 +36,10 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
     using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
     using System.Collections.Generic;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptActions;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
+    using Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions;
     using UnityEngine.Profiling;
     using Prateek.Core.Code.Helpers.Files;
     using Prateek.Core.Code.Helpers;

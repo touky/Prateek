@@ -2,7 +2,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 {
     using System;
     using System.Collections.Generic;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptActions;
+    using Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions;
     using Prateek.Core.Code.Helpers;
 
     public static class Glossary
@@ -57,6 +57,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
             public string codeData = "CODE";
 
             ///-------------------------------------------------------------
+            private NumberedSymbol defaults;
             private NumberedSymbol names;
             private NumberedSymbol variables;
             private NumberedSymbol functions;
@@ -99,6 +100,11 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
             }
 
             ///-------------------------------------------------------------
+            public NumberedSymbol Defaults
+            {
+                get { return defaults; }
+            }
+
             public NumberedSymbol Names
             {
                 get { return names; }
@@ -152,6 +158,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                 srcClass = ClassKeyword.SRC_CLASS.ToString().Keyword();
                 dstClass = ClassKeyword.DST_CLASS.ToString().Keyword();
 
+                defaults = new NumberedSymbol(VariableKeyword.DEF);
                 names = new NumberedSymbol(VariableKeyword.NAMES);
                 variables = new NumberedSymbol(VariableKeyword.VARS);
                 functions = new NumberedSymbol(VariableKeyword.FUNC_RESULT);
@@ -204,15 +211,20 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                     {
                         case 0:
                         {
-                            list = names;
+                            list = defaults;
                             break;
                         }
                         case 1:
                         {
-                            list = variables;
+                            list = names;
                             break;
                         }
                         case 2:
+                        {
+                            list = variables;
+                            break;
+                        }
+                        case 3:
                         {
                             list = functions;
                             break;

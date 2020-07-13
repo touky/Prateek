@@ -1,9 +1,9 @@
 namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 {
     using System.Collections.Generic;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptActions;
     using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
     using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
+    using Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions;
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Code.Consts;
 
@@ -19,8 +19,8 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         private ScriptContent scriptContent;
         private List<ScriptContent.GeneratedCode> codeGenerated = new List<ScriptContent.GeneratedCode>();
         private List<ScriptContent> scriptContents = new List<ScriptContent>();
-        private List<string> defines = new List<string>();
-        private List<string> usingNamespaces = new List<string>();
+        private List<string> defineDirectives = new List<string>();
+        private List<string> usingDirectives = new List<string>();
         #endregion
 
         #region Properties
@@ -78,13 +78,13 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         ///-----------------------------------------------------------------
         public void AddDefine(string define)
         {
-            defines.Add(define);
+            defineDirectives.Add(define);
         }
 
         ///-----------------------------------------------------------------
         public void AddNamespace(string usingNamespace)
         {
-            usingNamespaces.Add(usingNamespace);
+            usingDirectives.Add(usingNamespace);
         }
 
         ///-----------------------------------------------------------------
@@ -139,11 +139,11 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                     return string.Compare(a.className, b.className);
                 });
                 
-                var defineSection = BuildDefineDirective(defines);
+                var defineSection = BuildDefineDirective(defineDirectives, scriptContent.defineDirectives);
                 swapDefines -= defineSection;
                 
-                var namespaceCode = BuildUsingDirective(usingTabs, usingNamespaces, scriptContent.usingNamespaces);
-                swapUsing -= namespaceCode;
+                var usingSection = BuildUsingDirective(usingTabs, usingDirectives, scriptContent.usingDirectives);
+                swapUsing -= usingSection;
 
                 for (int c = 0; c < scriptContent.codeGenerated.Count; c++)
                 {

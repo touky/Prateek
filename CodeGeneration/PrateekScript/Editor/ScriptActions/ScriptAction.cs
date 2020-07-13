@@ -31,19 +31,17 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
+namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
     using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
-    using Prateek.Core.Code.Helpers;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
     using Prateek.Core.Code.Extensions;
+    using Prateek.Core.Code.Helpers;
 
     public abstract class ScriptAction : BaseTemplate
     {
@@ -86,6 +84,11 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
         public string CodeBlock
         {
             get { return codeBlock; }
+        }
+
+        public IReadOnlyList<KeywordUsage> KeywordUsages
+        {
+            get { return keywordUsages; }
         }
 
         ///-----------------------------------------------------------------
@@ -139,7 +142,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
             
             keywordUsages.Add(KeywordCreator.GetFileInfos());
 
-            KeywordCreator.AddDefine(keywordUsages);
+            KeywordCreator.AddDefine(keywordUsages, codeBlock);
             KeywordCreator.AddUsing(keywordUsages, codeBlock);
             KeywordCreator.AddCodeBlock(keywordUsages, codeBlock);
             KeywordCreator.AddClassInfo(keywordUsages, codeBlock);

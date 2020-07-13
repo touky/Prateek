@@ -48,10 +48,10 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
     {
         ///---------------------------------------------------------------------
         #region Fields
-        private List<CodeBuilder> activeCodeBuilders = new List<CodeBuilder>();
+        protected List<CodeBuilder> activeCodeBuilders = new List<CodeBuilder>();
 
         private double startDuration = 0.65f;
-        private double startMarkUp = -1;
+        protected double startMarkUp = -1;
         private bool isWorking = false;
 
         private Toggle runInTestMode;
@@ -75,7 +75,7 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
         }
 
         ///---------------------------------------------------------------------
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             // Reference to the root of the window.
             var root = rootVisualElement;
@@ -85,38 +85,45 @@ namespace Prateek.CodeGeneration.BackendTools.Editor
 
             settingsFoldout.Add(runInTestMode);
 
-            var foldout = new Foldout() {text = "machin", viewDataKey = "foldout"};
-            //var files = new Button() { text = "" };
-            //foldout.Add(new Button() { text = "My Button" });
-            //foldout.Add(new Button() { text = "My Button" });
-            //foldout.Add(new Button() { text = "My Button" });
-
-            // Creates our button and sets its Text property.
-            var reloadPrateekScript = new Button() { text = "Reload" };
-            reloadPrateekScript.clicked += () =>
-            {
-                //prateekScriptGenerator = null;
-                //InitDatas();
-
-                //foldout.Clear();
-                //for (int w = 0; w < prateekScriptGenerator.WorkFileCount; w++)
-                //{
-                //    var label = new Label();
-                //    label.text = " - " + prateekScriptGenerator[w].source.name.Extension(prateekScriptGenerator[w].source.extension);
-                //    foldout.Add(label);
-                //}
-            };
-
-            //// Gives it some style.
-            //myButton.style.width = 160;
-            //myButton.style.height = 30;
-
-            // Adds it to the root.
             root.Add(settingsFoldout);
-            root.Add(reloadPrateekScript);
-            root.Add(foldout);
-            root.Add(new Button() { text = "other" });
-            root.Add(new TextField() { viewDataKey = "testTextField"});
+
+            //var scriptActionsFoldout = new Foldout() {text = "Active script blocks", viewDataKey = "scriptActionsFoldout"};
+            ////foreach (var VARIABLE in ScriptActionRegistry)
+            ////{
+
+            ////}
+
+            //var foldout = new Foldout() {text = "machin", viewDataKey = "foldout"};
+            ////var files = new Button() { text = "" };
+            ////foldout.Add(new Button() { text = "My Button" });
+            ////foldout.Add(new Button() { text = "My Button" });
+            ////foldout.Add(new Button() { text = "My Button" });
+
+            //// Creates our button and sets its Text property.
+            //var reloadPrateekScript = new Button() { text = "Reload" };
+            //reloadPrateekScript.clicked += () =>
+            //{
+            //    //prateekScriptGenerator = null;
+            //    //InitDatas();
+
+            //    //foldout.Clear();
+            //    //for (int w = 0; w < prateekScriptGenerator.WorkFileCount; w++)
+            //    //{
+            //    //    var label = new Label();
+            //    //    label.text = " - " + prateekScriptGenerator[w].source.name.Extension(prateekScriptGenerator[w].source.extension);
+            //    //    foldout.Add(label);
+            //    //}
+            //};
+
+            ////// Gives it some style.
+            ////myButton.style.width = 160;
+            ////myButton.style.height = 30;
+
+            //// Adds it to the root.
+            //root.Add(reloadPrateekScript);
+            //root.Add(foldout);
+            //root.Add(new Button() { text = "other" });
+            //root.Add(new TextField() { viewDataKey = "testTextField"});
         }
 
 

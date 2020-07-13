@@ -1,6 +1,7 @@
 ﻿namespace Prateek.CodeGeneration.PrateekScript.Editor
 {
-    using Prateek.CodeGeneration.BackendTools.Editor;
+    using System;
+    using System.Collections.Generic;
     using Prateek.CodeGeneration.Code.PrateekScript;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
     using UnityEditor.Experimental.AssetImporters;
@@ -13,7 +14,7 @@
         {
             var builder = PrateekScriptBuilder.GetInstance();
             builder.AddFile(ctx.assetPath);
-            CodeBuilderEditorWindow.AddBuilder(builder);
+            PrateekScriptBuilderEditorWindow.AddBuilder(builder);
         }
         #endregion
     }

@@ -1,7 +1,9 @@
-namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
+namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
 {
+    using System;
     using System.Collections.Generic;
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
+    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
     using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
 
@@ -16,61 +18,56 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
             };
         }
 
-        public static void AddDefine(List<KeywordUsage> keywordUsages)
+        public static void AddDefine(List<KeywordUsage> keywordUsages, string codeBlock)
         {
+            Func<CodeFile, ScriptContent, List<Keyword>, String, bool> feedMethod = (codeFile, codeInfos, arguments, data) =>
+            {
+                codeFile.AddDefine(arguments[0].Content);
+                return true;
+            };
+
             keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.DEFINE], Glossary.Macros[FunctionKeyword.FILE_INFO])
             {
                 arguments = 1,
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    codeFile.AddDefine(arguments[0].Content);
-                    return true;
-                }
+                onFeedCodeFile = feedMethod
+            });
+
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.DEFINE], codeBlock)
+            {
+                arguments = 1,
+                onFeedCodeFile = feedMethod
             });
         }
 
         public static void AddUsing(List<KeywordUsage> keywordUsages, string codeBlock)
         {
+            Func<CodeFile, ScriptContent, List<Keyword>, String, bool> feedMethod = (codeFile, codeInfos, arguments, data) =>
+            {
+                var content = string.Empty;
+                foreach (var argument in arguments)
+                {
+                    if (string.IsNullOrEmpty(content))
+                    {
+                        content += " ";
+                    }
+
+                    content += argument.Content;
+                }
+
+                codeFile.AddNamespace(content);
+                return true;
+            };
+
             keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.USING], Glossary.Macros[FunctionKeyword.FILE_INFO])
             {
                 arguments = ArgumentRange.AtLeast(1),
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    var content = string.Empty;
-                    foreach (var argument in arguments)
-                    {
-                        if (string.IsNullOrEmpty(content))
-                        {
-                            content += " ";
-                        }
-
-                        content += argument.Content;
-                    }
-
-                    codeFile.AddNamespace(content);
-                    return true;
-                }
+                onFeedCodeFile = feedMethod
             });
 
             keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.USING], codeBlock)
             {
                 arguments = ArgumentRange.AtLeast(1),
-                onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
-                {
-                    var content = string.Empty;
-                    foreach (var argument in arguments)
-                    {
-                        if (string.IsNullOrEmpty(content))
-                        {
-                            content += " ";
-                        }
-
-                        content += argument.Content;
-                    }
-
-                    codeInfos.AddNamespace(content);
-                    return true;
-                }
+                onFeedCodeFile = feedMethod
             });
         }
 

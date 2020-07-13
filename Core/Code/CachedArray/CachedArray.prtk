@@ -1,26 +1,30 @@
-/*
-PRATEEK_FILE_INFO(CachedArrayMultiple, cs)
+PRATEEK_FILE_INFO(CachedArray, cs)
 {
-    PRATEEK_BLOCK_FUNC_REPEAT(Prateek.Code.Helpers, CachedArrays)
+    PRATEEK_BLOCK_REPEAT(UNUSED, UNUSED)
     {
+        PRATEEK_DEFINE(SIZE_VALID)
+
         PRATEEK_DEFAULT(T, 10)
 
         PRATEEK_CLASS_INFO(CachedArray) { PRATEEK_NAMES(value) }
 
 		PRATEEK_FUNC
 		{
-		@	#VARS_0#;
-		}
-
-		PRATEEK_FUNC
-		{
-		@	protected T #NAMES_N#;
+		@	protected #DEF_0# #NAMES_N#;
 		}
 
 		PRATEEK_FUNC
 		{
         @   case #VARS_N#: { return get ? #NAMES_N# : #NAMES_N# = value; }
 		}
+
+		PRATEEK_FUNC
+		{
+		@	#DEF_1#;
+		}
+
+        PRATEEK_CODE_IMPORT(CachedArrayCode.cs)
     }
 }
-*/
+
+

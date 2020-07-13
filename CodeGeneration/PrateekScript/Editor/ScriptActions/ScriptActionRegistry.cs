@@ -1,10 +1,7 @@
-namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptActions
+namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
 {
-    using System;
     using System.Collections.Generic;
-    using Prateek.CodeGeneration;
     using Prateek.EditorJobSystem.Code;
-    using UnityEngine;
 
     public class ScriptActionRegistry
     {

@@ -2,8 +2,8 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptActions;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
+    using Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions;
 
     public class ScriptContent
     {
@@ -20,7 +20,8 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         public string blockClassName;
         public List<string> blockClassPrefix = new List<string>();
 
-        public List<string> usingNamespaces = new List<string>();
+        public List<string> defineDirectives = new List<string>();
+        public List<string> usingDirectives = new List<string>();
         
         public List<ClassContent> classInfos = new List<ClassContent>();
         public List<FunctionContent> functionContents = new List<FunctionContent>();
@@ -98,9 +99,15 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         }
 
         ///-----------------------------------------------------------------
+        public void AddDefine(string defineDirective)
+        {
+            defineDirectives.Add(defineDirective);
+        }
+
+        ///-----------------------------------------------------------------
         public void AddNamespace(string usingNamespace)
         {
-            usingNamespaces.Add(usingNamespace);
+            usingDirectives.Add(usingNamespace);
         }
         #endregion
     }
