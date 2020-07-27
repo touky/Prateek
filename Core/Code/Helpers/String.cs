@@ -222,6 +222,11 @@ namespace Prateek.Core.Code.Helpers
         ///---------------------------------------------------------------------
         public static string GetTabulation(this string left, int textStart)
         {
+            if (textStart <= Const.INDEX_NONE)
+            {
+                return string.Empty;
+            }
+
             var i = left.LastIndexOf(Strings.Separator.LineFeed.C(), textStart);
             if (i > Const.INDEX_NONE)
             {

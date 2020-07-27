@@ -53,6 +53,10 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
             public string codeTabs;
             public string codeBlockFormat;
 
+            public string csharpCommentLine;
+            public string csharpCommentOpen;
+            public string csharpCommentClose;
+
             public string prefix = "PRATEEK";
             public string codeData = "CODE";
 
@@ -143,9 +147,14 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
                 codeTabsTag         = codeTabsTag.Keyword();
                 codeBlockFormat     = $"{Glossary.Macros.prefix}_{FunctionKeyword.BLOCK.S()}_";
 
+                csharpCommentLine = $"//#{prefix}:";
+                csharpCommentOpen = $"/*#{prefix}:";
+                csharpCommentClose = $":{prefix}#*/";
+
                 AddData(FunctionKeyword.FILE_INFO);
                 AddData(FunctionKeyword.DEFINE);
                 AddData(FunctionKeyword.USING);
+                AddData(FunctionKeyword.CODE_IMPORT);
                 AddData(FunctionKeyword.PREFIX, codeData);
                 AddData(FunctionKeyword.MAIN, codeData);
                 AddData(FunctionKeyword.SUFFIX, codeData);

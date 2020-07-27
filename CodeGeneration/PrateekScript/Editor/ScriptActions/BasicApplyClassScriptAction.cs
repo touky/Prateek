@@ -47,30 +47,30 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
         ///-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent scriptContent, ClassContent contentSrc, ClassContent contentDst)
         {
             variants.Clear();
-            if (data.functionContents.Count == 0)
+            if (scriptContent.functionContents.Count == 0)
             {
                 variants.Add(new FunctionVariant());
             }
             else
             {
-                var variant = new FunctionVariant(data.functionContents.Count);
-                for (var d = 0; d < data.functionContents.Count; d++)
+                var variant = new FunctionVariant(scriptContent.functionContents.Count);
+                for (var d = 0; d < scriptContent.functionContents.Count; d++)
                 {
-                    var functionContent = data.functionContents[d];
+                    var functionContent = scriptContent.functionContents[d];
                     for (var v = 0; v < contentSrc.variables.Count; v++)
                     {
-                        var functionData = functionContent.data;
-                        if (Variables.DefaultSymbol.CanSwap(functionContent.data))
+                        var functionData = functionContent.body;
+                        if (Variables.DefaultSymbol.CanSwap(functionContent.body))
                         {
                             var swap = Variables.DefaultSymbol + contentSrc.variables[v];
                             functionData = swap.Apply(functionData);
                         }
 
                         var currentVariable = Variables[v];
-                        if (currentVariable.CanSwap(functionContent.data))
+                        if (currentVariable.CanSwap(functionContent.body))
                         {
                             var swap = currentVariable + contentSrc.variables[v];
                             functionData = swap.Apply(functionData);

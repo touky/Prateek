@@ -268,7 +268,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript
                     continue;
                 }
 
-                if (!action.FeedCodeFile(codeFile, keywordRule, rootKeyword))
+                if (!action.FeedCodeFile(fileData, codeFile, keywordRule, rootKeyword))
                 {
                     return Error((BuildResult) BuildResult.ValueType.PrateekScriptDataNotTreated + rootKeyword.keyword.Content, ref fileData);
                 }

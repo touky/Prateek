@@ -29,9 +29,10 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         public string classDefaultValue;
         public bool classDefaultExportOnly;
 
-        public string codePrefix;
-        public string codeMain;
-        public string codePostfix;
+        public string fileBody;
+        public string codeHeader;
+        public string codeBody;
+        public string codeFooter;
 
         public List<GeneratedCode> codeGenerated = new List<GeneratedCode>();
         #endregion
@@ -85,17 +86,23 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         }
 
         ///-------------------------------------------------------------
-        public bool SetFuncData(string data)
+        public bool SetFuncBody(string body)
         {
             if (functionContents.Count == 0)
             {
                 return false;
             }
 
-            var infos = functionContents.Last();
-            infos.data = data;
-            functionContents[functionContents.Count - 1] = infos;
+            var functionContent = functionContents.Last();
+            functionContent.body = body;
+            functionContents[functionContents.Count - 1] = functionContent;
             return true;
+        }
+
+        ///-----------------------------------------------------------------
+        public void SetFileBody(string fileBody)
+        {
+            this.fileBody = fileBody;
         }
 
         ///-----------------------------------------------------------------

@@ -21,6 +21,7 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils
         public string Replacement
         {
             get { return replacement; }
+            set{ replacement = value; }
         }
 
         ///-------------------------------------------------------------
@@ -37,16 +38,6 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils
         }
 
         ///-------------------------------------------------------------
-        public static StringSwap operator -(StringSwap info, string other)
-        {
-            return new StringSwap()
-            {
-                original = info.original,
-                replacement = other
-            };
-        }
-
-        ///-------------------------------------------------------------
         public static StringSwap operator +(StringSwap info, string other)
         {
             return new StringSwap()
@@ -54,6 +45,12 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils
                 original = info.original,
                 replacement = (string.IsNullOrEmpty(info.replacement) ? string.Empty : info.replacement) + other
             };
+        }
+
+        ///-------------------------------------------------------------
+        public int IndexOf(string text)
+        {
+            return text.IndexOf(original, StringComparison.InvariantCulture);
         }
 
         ///-------------------------------------------------------------
@@ -66,7 +63,10 @@ namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils
         public string Apply(string text)
         {
             if (text == null || original == null || replacement == null)
+            {
                 return text;
+            }
+
             return text.Replace(original, !replacement.EndsWith(Strings.Separator.LineFeed.S())
                 ? replacement
                 : replacement.Substring(0, replacement.Length - 1));

@@ -45,9 +45,8 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
 
     public abstract class ScriptAction : BaseTemplate
     {
-        #region GenerationMode enum
+        #region GenerationRule enum
         ///-----------------------------------------------------------------
-
         ///-----------------------------------------------------------------
         public enum GenerationRule
         {
@@ -68,6 +67,7 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
         #region Properties
         ///-----------------------------------------------------------------
         public abstract string ScopeTag { get; }
+
         public abstract GenerationRule GenerationMode { get; }
 
         public virtual bool UseOneClassPerSource
@@ -100,6 +100,11 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
         public StringSwap ClassSrc
         {
             get { return Glossary.Macro.srcClass; }
+        }
+
+        public NumberedSymbol Defaults
+        {
+            get { return Glossary.Macros.Defaults; }
         }
 
         public NumberedSymbol Names
@@ -139,7 +144,7 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
             Glossary.Macros.Init();
 
             codeBlock = $"{Glossary.Macros.codeBlockFormat}{ScopeTag}";
-            
+
             keywordUsages.Add(KeywordCreator.GetFileInfos());
 
             KeywordCreator.AddDefine(keywordUsages, codeBlock);
@@ -147,20 +152,22 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
             KeywordCreator.AddCodeBlock(keywordUsages, codeBlock);
             KeywordCreator.AddClassInfo(keywordUsages, codeBlock);
 
+            KeywordCreator.AddCodeImport(keywordUsages, codeBlock);
+
             KeywordCreator.AddNames(keywordUsages);
             KeywordCreator.AddVars(keywordUsages);
 
             KeywordCreator.AddDefault(keywordUsages, codeBlock);
             KeywordCreator.AddFunc(keywordUsages, codeBlock);
 
-            KeywordCreator.AddCodePrefix(keywordUsages, codeBlock);
-            KeywordCreator.AddCodeMain(keywordUsages, codeBlock);
-            KeywordCreator.AddCodeSuffix(keywordUsages, codeBlock);
+            KeywordCreator.AddCodeHeader(keywordUsages, codeBlock);
+            KeywordCreator.AddCodeBody(keywordUsages, codeBlock);
+            KeywordCreator.AddCodeFooter(keywordUsages, codeBlock);
 
             keywordUsages.Add(new KeywordUsage {keywordUsageType = KeywordUsageType.Forbidden});
         }
 
-        public bool FeedCodeFile(CodeFile codeFile, KeywordUsage keywordUsage, CodeKeyword rootKeyword)
+        public bool FeedCodeFile(FileData fileData, CodeFile codeFile, KeywordUsage keywordUsage, CodeKeyword rootKeyword)
         {
             var scriptContent = codeFile.ScriptContent;
             if (keywordUsage.createNewScriptContent)
@@ -193,29 +200,30 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
                 }
             }
 
-            return keywordUsage.onFeedCodeFile.Invoke(codeFile, scriptContent, rootKeyword.arguments, data);
+            return keywordUsage.onFeedCodeFile.Invoke(fileData, codeFile, scriptContent, rootKeyword.arguments, data);
         }
 
         ///-----------------------------------------------------------------
 
         #region CodeRule abstract
-        protected abstract void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst);
+        protected abstract void GatherVariants(List<FunctionVariant> variants, ScriptContent scriptContent, ClassContent contentSrc, ClassContent contentDst);
         #endregion CodeRule abstract
         #endregion
 
         ///-----------------------------------------------------------------
 
         #region Utils
-        protected void AddCode(string code, ScriptContent data, StringSwap stringSwapSrc)
+        protected void AddCodeTo(ScriptContent data, string code, StringSwap stringSwapSrc)
         {
-            AddCode(code, data, stringSwapSrc, new StringSwap());
+            AddCodeTo(data, code, stringSwapSrc, new StringSwap());
         }
 
         ///-----------------------------------------------------------------
-        protected void AddCode(string code, ScriptContent data, StringSwap stringSwapSrc, StringSwap stringSwapDst)
+        protected void AddCodeTo(ScriptContent data, string code, StringSwap stringSwapSrc, StringSwap stringSwapDst)
         {
             code = stringSwapSrc.Apply(code);
             code = stringSwapDst.Apply(code);
+
             var generatedCode = data.codeGenerated.Last();
             generatedCode.code += code;
             data.codeGenerated.Last(generatedCode);
@@ -225,7 +233,7 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
         ///-----------------------------------------------------------------
 
         #region CodeRule overridable
-        public BuildResult Generate(ScriptContent data)
+        public virtual BuildResult Generate(ScriptContent data)
         {
             var variants = new List<FunctionVariant>();
 
@@ -252,11 +260,11 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
 
                 if (UseOneClassPerSource)
                 {
-                    data.codeGenerated.Add(new ScriptContent.GeneratedCode() { className = infoSrc.className, code = string.Empty });
+                    data.codeGenerated.Add(new ScriptContent.GeneratedCode {className = infoSrc.className, code = string.Empty});
                 }
                 else if (data.codeGenerated.Count == 0)
                 {
-                    data.codeGenerated.Add(new ScriptContent.GeneratedCode() { className = string.Empty, code = string.Empty });
+                    data.codeGenerated.Add(new ScriptContent.GeneratedCode {className = string.Empty, code = string.Empty});
                 }
 
                 //one pass or as many as the dst classes
@@ -273,65 +281,65 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
                     var swapSrc = ClassSrc + infoSrc.className;
                     var swapDst = ClassDst;
 
-                    //Add the prefix from the code file
+                    //Add the Header from the code file
                     if (GenerationMode == GenerationRule.ForeachSrcCrossDest)
                     {
                         swapDst = swapDst + infoDst.className;
-                        AddCode(data.codePrefix, data, swapSrc, swapDst);
+                        AddCodeTo(data, data.codeHeader, swapSrc, swapDst);
                     }
                     else
                     {
-                        AddCode(data.codePrefix, data, swapSrc);
+                        AddCodeTo(data, data.codeHeader, swapSrc);
                     }
 
                     //Go through all variants and apply them to the code
                     for (var v = 0; v < variants.Count; v++)
                     {
                         var variant = variants[v];
-                        var code    = data.codeMain;
+                        var codeBody    = data.codeBody;
 
                         //Error out if the requested funcs result are not available
-                        if (!SwapCodeContent(ref code, Functions, variant.Count, variant.Variants))
+                        if (!SwapCodeContent(ref codeBody, Functions, variant.Count, variant.Variants))
                         {
-                            return (Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult) Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.className;
+                            return (BuildResult) BuildResult.ValueType.PrateekScriptInsufficientNames + GetType().Name + infoSrc.className;
                         }
 
                         //Error out if the requested Names are not available
-                        if (!SwapCodeContent(ref code, Names, infoSrc.NameCount, infoSrc.names))
+                        if (!SwapCodeContent(ref codeBody, Names, infoSrc.NameCount, infoSrc.names))
                         {
-                            return (Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult) Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
+                            return (BuildResult) BuildResult.ValueType.PrateekScriptInsufficientNames + infoSrc.className;
                         }
 
                         if (GenerationMode == GenerationRule.ForeachSrcCrossDest)
                         {
-                            AddCode(code, data, swapSrc, swapDst);
+                            AddCodeTo(data, codeBody, swapSrc, swapDst);
                         }
                         else
                         {
-                            AddCode(code, data, swapSrc);
+                            AddCodeTo(data, codeBody, swapSrc);
                         }
                     }
 
-                    //Add the Postfix from the code file
+                    //Add the Footer from the code file
                     if (GenerationMode == GenerationRule.ForeachSrcCrossDest)
                     {
-                        AddCode(data.codePostfix, data, swapSrc, swapDst);
+                        AddCodeTo(data, data.codeFooter, swapSrc, swapDst);
                     }
                     else
                     {
-                        AddCode(data.codePostfix, data, swapSrc);
+                        AddCodeTo(data, data.codeFooter, swapSrc);
                     }
                 }
             }
 
-            for (int c = 0; c < data.codeGenerated.Count; c++)
+            for (var c = 0; c < data.codeGenerated.Count; c++)
             {
                 var codeGenerated = data.codeGenerated[c];
                 codeGenerated.code = codeGenerated.code.Replace(string.Empty.NewLine(), string.Empty.NewLine() + Glossary.Macros.codeDataTabsTag);
                 data.codeGenerated[c] = codeGenerated;
             }
 
-            return Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder.BuildResult.ValueType.Success;
+            return BuildResult.ValueType.Success;
         }
 
         ///-----------------------------------------------------------------

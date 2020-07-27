@@ -6,6 +6,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils
     using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
     using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
+    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
     using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
 
     [DebuggerDisplay("{scope}/{keyword}")]
@@ -19,7 +20,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils
         public bool needOpenScope;
         public bool needScopeData;
         public bool createNewScriptContent;
-        public Func<CodeFile, ScriptContent, List<Keyword>, string, bool> onFeedCodeFile;
+        public Func<FileData, CodeFile, ScriptContent, List<Keyword>, string, bool> onFeedCodeFile;
         public Func<CodeFile, string, bool> onCloseScope;
 
         ///-------------------------------------------------------------

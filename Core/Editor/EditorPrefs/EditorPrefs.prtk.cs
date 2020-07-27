@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 08/07/2020
+//  Header last update date: 14/07/2020
 //
 //  Copyright � 2017-2020 "Touky" <touky at prateek dot top>
 //
@@ -33,6 +33,7 @@
 
 
 
+
 ///----------------------------------------------------------------------------
 namespace Prateek.Core.Editor.EditorPrefs
 {
@@ -49,6 +50,7 @@ namespace Prateek.Core.Editor.EditorPrefs
     using static Prateek.Core.Code.ShaderTo.CSharp;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
+    
     
 
     ///------------------------------------------------------------------------
@@ -200,6 +202,7 @@ namespace Prateek.Core.Editor.EditorPrefs
 
 
 
+
 ///----------------------------------------------------------------------------
 namespace Prateek.Core.Editor.EditorPrefs
 {
@@ -216,6 +219,7 @@ namespace Prateek.Core.Editor.EditorPrefs
     using static Prateek.Core.Code.ShaderTo.CSharp;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
+    
     
 
     ///------------------------------------------------------------------------
@@ -580,6 +584,7 @@ namespace Prateek.Core.Editor.EditorPrefs
 
 
 
+
 ///----------------------------------------------------------------------------
 namespace Prateek.Core.Editor.EditorPrefs
 {
@@ -596,6 +601,7 @@ namespace Prateek.Core.Editor.EditorPrefs
     using static Prateek.Core.Code.ShaderTo.CSharp;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
+    
     using  Prateek.Core.Code.Extensions;
 
     ///------------------------------------------------------------------------

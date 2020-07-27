@@ -62,9 +62,9 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
                 keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.FUNC], CodeBlock)
                 {
                     arguments = 1, needOpenScope = true, needScopeData = true,
-                    onFeedCodeFile = (codeFile, codeInfos, arguments, data) =>
+                    onFeedCodeFile = (FileData, codeFile, codeInfos, arguments, data) =>
                     {
-                        codeInfos.functionContents.Add(new FunctionContent {funcName = arguments[0].Content, data = data});
+                        codeInfos.functionContents.Add(new FunctionContent {funcName = arguments[0].Content, body = data});
                         return true;
                     }
                 });
@@ -74,41 +74,41 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
 
         #region Rule internal
         ///-----------------------------------------------------------------
-        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent scriptContent, ClassContent contentSrc, ClassContent contentDst)
         {
             variants.Clear();
 
             var isDefault = contentSrc.VarCount == 0;
-            for (var d = 0; d < data.functionContents.Count; d++)
+            for (var d = 0; d < scriptContent.functionContents.Count; d++)
             {
                 for (var p = 0; p < (isDefault ? 1 : 2); p++)
                 {
-                    if (data.classDefaultExportOnly && (isDefault || p == 0))
+                    if (scriptContent.classDefaultExportOnly && (isDefault || p == 0))
                     {
                         continue;
                     }
 
-                    var funcInfo = data.functionContents[d];
+                    var funcInfo = scriptContent.functionContents[d];
                     var variant  = new FunctionVariant(funcInfo.funcName, 2);
 
-                    var varsCount = Variables.FindCount(funcInfo.data);
+                    var varsCount = Variables.FindCount(funcInfo.body);
                     if (p == 1 && varsCount == 1)
                     {
                         continue;
                     }
 
-                    var vars = funcInfo.data;
+                    var vars = funcInfo.body;
                     for (var a = 0; a < varsCount; a++)
                     {
                         if (isDefault)
                         {
-                            variant[1] = string.Format(Glossary.Code.argsN, data.classDefaultType, a);
+                            variant[1] = string.Format(Glossary.Code.argsN, scriptContent.classDefaultType, a);
                             vars = (Variables[a] + string.Format(Glossary.Code.varsN, a)).Apply(vars);
                         }
                         else
                         {
                             variant[1] = p == 1 && a != 0
-                                ? string.Format(Glossary.Code.argsN, data.classDefaultType, a)
+                                ? string.Format(Glossary.Code.argsN, scriptContent.classDefaultType, a)
                                 : string.Format(Glossary.Code.argsV_, contentSrc.className, a);
                         }
                     }

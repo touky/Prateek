@@ -1,4 +1,4 @@
-PRATEEK_FILE_INFO(CachedArray, cs)
+PRATEEK_FILE_INFO(Slot, cs)
 {
     PRATEEK_BLOCK_REPEAT(UNUSED, UNUSED)
     {
@@ -6,25 +6,23 @@ PRATEEK_FILE_INFO(CachedArray, cs)
 
         PRATEEK_DEFAULT(T, 10)
 
-        PRATEEK_CLASS_INFO(CachedArray) { PRATEEK_NAMES(value) }
+        PRATEEK_CLASS_INFO(CachedList) { PRATEEK_NAMES(value) }
 
 		PRATEEK_FUNC
 		{
-		@	protected #DEF_0# #NAMES_N#;
+		@private #DEF_0# #NAMES_N#;
 		}
 
 		PRATEEK_FUNC
 		{
-        @   case #VARS_N#: { return get ? #NAMES_N# : #NAMES_N# = value; }
+        @case #VARS_N#: { return get ? #NAMES_N# : #NAMES_N# = value; }
 		}
 
 		PRATEEK_FUNC
 		{
-		@	#DEF_1#;
+		@ #DEF_1#;
 		}
 
         PRATEEK_CODE_IMPORT(CachedArrayCode.cs)
     }
 }
-
-

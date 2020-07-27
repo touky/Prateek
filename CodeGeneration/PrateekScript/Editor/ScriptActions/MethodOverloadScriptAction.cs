@@ -47,11 +47,11 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
         ///-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent scriptContent, ClassContent contentSrc, ClassContent contentDst)
         {
             variants.Clear();
             var slots = new int[contentSrc.NameCount / 2];
-            GatherVariants(0, slots, variants, data, contentSrc, contentDst);
+            GatherVariants(0, slots, variants, scriptContent, contentSrc, contentDst);
         }
 
         ///-----------------------------------------------------------------
@@ -74,7 +74,7 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
                     {
                         for (var i = 0; i < data.functionContents.Count; i++)
                         {
-                            var info = data.functionContents[i].data;
+                            var info = data.functionContents[i].body;
                             info = (Names[0] + contentSrc.names[sv * 2 + 0]).Apply(info);
                             info = (Names[1] + contentSrc.names[sv * 2 + 1]).Apply(info);
                             variant[i] = info;

@@ -8,6 +8,7 @@ namespace Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration
         FILE_INFO,
         DEFINE,
         USING,
+        CODE_IMPORT,
         BLOCK,
         PREFIX,
         MAIN,

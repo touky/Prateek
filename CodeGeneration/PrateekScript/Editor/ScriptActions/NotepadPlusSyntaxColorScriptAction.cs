@@ -49,14 +49,14 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
         ///-----------------------------------------------------------------
 
         #region Rule internal
-        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent data, ClassContent contentSrc, ClassContent contentDst)
+        protected override void GatherVariants(List<FunctionVariant> variants, ScriptContent scriptContent, ClassContent contentSrc, ClassContent contentDst)
         {
             keywords.Clear();
             identifiers.Clear();
             Glossary.Macros.GetTags(this);
 
             variants.Clear();
-            if (data.functionContents.Count == 0)
+            if (scriptContent.functionContents.Count == 0)
             {
                 return;
             }
@@ -64,7 +64,7 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
             var result = string.Empty;
             for (var k = 0; k < keywords.Count; k++)
             {
-                result += data.functionContents[0].data;
+                result += scriptContent.functionContents[0].body;
                 result = (Variables[0] + keywords[k]).Apply(result);
             }
 
@@ -72,7 +72,7 @@ namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
             result = string.Empty;
             for (var i = 0; i < identifiers.Count; i++)
             {
-                result += data.functionContents[0].data;
+                result += scriptContent.functionContents[0].body;
                 result = (Variables[0] + identifiers[i]).Apply(result);
             }
 

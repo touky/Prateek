@@ -1,13 +1,65 @@
+// -BEGIN_PRATEEK_COPYRIGHT-
+//
+//  Prateek, a library that is "bien pratique"
+//  Header last update date: 26/07/2020
+//
+//  Copyright � 2017-2020 "Touky" <touky at prateek dot top>
+//
+//  Prateek is free software. It comes without any warranty, to
+//  the extent permitted by applicable law. You can redistribute it
+//  and/or modify it under the terms of the Do What the Fuck You Want
+//  to Public License, Version 2, as published by the WTFPL Task Force.
+//  See http://www.wtfpl.net/ for more details.
+//
+// -END_PRATEEK_COPYRIGHT-
+
+// -BEGIN_PRATEEK_CSHARP_IFDEF-
+//-----------------------------------------------------------------------------
+#region Prateek Ifdefs
+
+//Auto activate some of the prateek defines
+#if UNITY_EDITOR
+
+//Auto activate debug
+#if !PRATEEK_DEBUG
+#define PRATEEK_DEBUG
+#endif //!PRATEEK_DEBUG
+
+#endif //UNITY_EDITOR && !PRATEEK_DEBUG
+
+#endregion Prateek Ifdefs
+// -END_PRATEEK_CSHARP_IFDEF-
+
+#define SIZE_VALID
+
 namespace Prateek.Core.Code.CachedArray
 {
+    // -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
+    ///------------------------------------------------------------------------
+    #region Prateek Code Namespaces
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using Prateek.Core.Code.Consts;
+    
     using UnityEngine;
+    
+    using Prateek;
+    using static Prateek.Core.Code.ShaderTo.CSharp;
+    #endregion Prateek Code Namespaces
+// -END_PRATEEK_CSHARP_NAMESPACE_CODE-
+
+    
+
+#if !SIZE_VALID
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+#endif
+    using Prateek.Core.Code.Consts;
 
     ///------------------------------------------------------------------------
-    /*#PRTK:public #*/ struct CachedArray_/*#PRTK:#DEF_1##*/<T>
+    public struct CachedList8<T>
         : ICachedArray<T>
         , IInternalCachedArray<T>
         , ICollection<T>
@@ -23,22 +75,15 @@ namespace Prateek.Core.Code.CachedArray
 
         internal T defaultValue;
 
-        //#PRTK:#FUNC_RESULT_0#;
+        private T value0;
+        private T value1;
+        private T value2;
+        private T value3;
+        private T value4;
+        private T value5;
+        private T value6;
+        private T value7;
         #endregion
-
-        ///--------------------------------------------------------------------
-        T IInternalCachedArray<T>.GetSetCached(bool get, int index, T value = default)
-        {
-            Debug.Assert(index >= 0 && index < count);
-
-            switch (index)
-            {
-                //#PRTK:#FUNC_RESULT_1#
-                default: { return default; }
-            }
-
-            return default;
-        }
 
         #region Properties
         ///--------------------------------------------------------------------
@@ -47,15 +92,36 @@ namespace Prateek.Core.Code.CachedArray
             get
             {
 #if SIZE_VALID
-                //#PRTK:return#FUNC_RESULT_2#
+                return 8;
 #else
                 return 0;
 #endif
             }
         }
-#endregion
+        #endregion
 
-#region ICachedArray<T> Members
+        ///--------------------------------------------------------------------
+        #region Get/Set
+        T IInternalCachedArray<T>.GetSetCached(bool get, int index, T value = default)
+        {
+            Debug.Assert(index >= 0 && index < count);
+
+            switch (index)
+            {
+                case 0: { return get ? value0 : value0 = value; }
+                case 1: { return get ? value1 : value1 = value; }
+                case 2: { return get ? value2 : value2 = value; }
+                case 3: { return get ? value3 : value3 = value; }
+                case 4: { return get ? value4 : value4 = value; }
+                case 5: { return get ? value5 : value5 = value; }
+                case 6: { return get ? value6 : value6 = value; }
+                case 7: { return get ? value7 : value7 = value; }
+                default: { return default; }
+            }
+        }
+        #endregion
+
+        #region ICachedArray<T> Members
         public int Count
         {
             get { return count; }
@@ -66,9 +132,9 @@ namespace Prateek.Core.Code.CachedArray
             get { return count; }
             set { count = value; }
         }
-#endregion
+        #endregion
 
-#region IList
+        #region IList
         public bool IsFixedSize
         {
             get { return false; }
@@ -165,9 +231,9 @@ namespace Prateek.Core.Code.CachedArray
         {
             return new CachedArrayEnumerator<T>(this);
         }
-#endregion
+        #endregion
 
-#region IList<T>
+        #region IList<T>
         public int IndexOf(T item)
         {
             return this.CachedIndexOf(item);
@@ -217,6 +283,6 @@ namespace Prateek.Core.Code.CachedArray
         {
             return new CachedArrayEnumerator<T>(this);
         }
-#endregion
+        #endregion
     }
 }
