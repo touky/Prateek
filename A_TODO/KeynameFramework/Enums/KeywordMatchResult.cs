@@ -4,7 +4,7 @@ namespace Mayfair.Core.Code.TagSystem
     using System.Diagnostics;
 
     [DebuggerDisplay("Type:{resultType}")]
-    public struct KeywordMatchResult : IEquatable<KeywordMatchResult>
+    public readonly struct KeywordMatchResult : IEquatable<KeywordMatchResult>
     {
         #region Fields
         private readonly KeywordMatchResultType resultType;

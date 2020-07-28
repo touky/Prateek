@@ -1,15 +1,14 @@
 namespace Mayfair.Core.Code.TagSystem
 {
     using System.Text.RegularExpressions;
+    using Mayfair.Core.Code.FrameworkSettings;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = nameof(KeynameSettings), menuName = FrameworkSettings.DEFAULT_PATH + "Create " + nameof(KeynameSettings))]
-    public class KeynameSettingsData : ScriptableObject
+    /// <summary>
+    /// Defines actual content of the keyname settings
+    /// </summary>
+    public class KeynameSettingsData : FrameworkSettingsData
     {
-        #region Static and Constants
-        public static readonly string DEFAULT_PATH = $"{FrameworkSettings.DEFAULT_PATH}{nameof(KeynameSettings)}";
-        #endregion
-
         #region Settings
         [SerializeField]
         private string separator = string.Empty;

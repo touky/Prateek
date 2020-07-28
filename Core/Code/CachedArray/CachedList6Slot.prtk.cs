@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 26/07/2020
+//  Header last update date: 27/07/2020
 //
 //  Copyright � 2017-2020 "Touky" <touky at prateek dot top>
 //
@@ -71,6 +71,13 @@ namespace Prateek.Core.Code.CachedArray
         , IList
     {
         #region Fields
+        public const int SIZE = 
+#if SIZE_VALID
+        6;
+#else
+        0;
+#endif
+
         internal int count;
 
         internal T defaultValue;
@@ -87,14 +94,7 @@ namespace Prateek.Core.Code.CachedArray
         ///--------------------------------------------------------------------
         public int Size
         {
-            get
-            {
-#if SIZE_VALID
-                return 6;
-#else
-                return 0;
-#endif
-            }
+            get { return SIZE; }
         }
         #endregion
 

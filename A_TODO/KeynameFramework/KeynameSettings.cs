@@ -1,23 +1,13 @@
 namespace Mayfair.Core.Code.TagSystem
 {
-    public class KeynameSettings : FrameworkSettings<KeynameSettings>
+    using System;
+    using Mayfair.Core.Code.FrameworkSettings;
+
+    public class KeynameSettings : FrameworkSettings<KeynameSettings, KeynameSettingsData, KeynameSettingsResource>
     {
-        #region Fields
-        private KeynameSettingsData settingsData = null;
-        #endregion
-
-        #region Properties
-        public override bool IsAvailable
+        protected override string DataPath
         {
-            get { return settingsData != null; }
+            get { return KeynameSettingsResource.DEFAULT_PATH; }
         }
-        #endregion
-
-        #region Class Methods
-        protected override void Init()
-        {
-            settingsData = LoadResource<KeynameSettingsData>(KeynameSettingsData.DEFAULT_PATH);
-        }
-        #endregion
     }
 }

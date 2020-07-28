@@ -27,6 +27,13 @@ namespace Prateek.Core.Code.CachedArray
         , IList
     {
         #region Fields
+        public const int SIZE = 
+#if SIZE_VALID
+        //#PRATEEK:#FUNC_RESULT_2#
+#else
+        0;
+#endif
+
         internal int count;
 
         internal T defaultValue;
@@ -38,14 +45,7 @@ namespace Prateek.Core.Code.CachedArray
         ///--------------------------------------------------------------------
         public int Size
         {
-            get
-            {
-#if SIZE_VALID
-                //#PRATEEK:return#FUNC_RESULT_2#
-#else
-                return 0;
-#endif
-            }
+            get { return SIZE; }
         }
         #endregion
 

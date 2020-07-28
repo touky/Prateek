@@ -20,7 +20,7 @@ PRATEEK_FILE_INFO(Slot, cs)
 
 		PRATEEK_FUNC
 		{
-		@ #DEF_1#;
+		@#DEF_1#;
 		}
 
         PRATEEK_CODE_IMPORT(CachedArrayCode.cs)
