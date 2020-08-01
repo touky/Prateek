@@ -1,7 +1,9 @@
 {
-    "name": "Prateek.Code.EditorJobSystem",
+    "name": "Prateek.Editor.EditorJobSystem",
     "references": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

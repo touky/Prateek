@@ -4,7 +4,7 @@
         "Prateek.Core.Code",
         "Prateek.Core.Editor",
         "Prateek.CodeBuilder.Code",
-        "Prateek.Code.EditorJobSystem"
+        "Prateek.Editor.EditorJobSystem"
     ],
     "includePlatforms": [
         "Editor"
