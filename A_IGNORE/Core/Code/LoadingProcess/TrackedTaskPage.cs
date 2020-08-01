@@ -10,18 +10,18 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.Utils.Helpers;
     using UnityEngine;
 
-    internal class TrackedTaskPage : DebugMenuPage<LoadingProcessDaemonCore>
+    internal class TrackedTaskPage : DebugMenuPage<LoadingProcessDaemon>
     {
         #region Fields
         private ReflectedField<List<LoadingTaskTracker>> trackers = "trackers";
         #endregion
 
         #region Constructors
-        public TrackedTaskPage(LoadingProcessDaemonCore owner, string title) : base(owner, title) { }
+        public TrackedTaskPage(LoadingProcessDaemon owner, string title) : base(owner, title) { }
         #endregion
 
         #region Class Methods
-        protected override void Draw(LoadingProcessDaemonCore owner, DebugMenuContext context)
+        protected override void Draw(LoadingProcessDaemon owner, DebugMenuContext context)
         {
             foreach (LoadingTaskTracker tracker in trackers.Value)
             {
@@ -43,7 +43,7 @@ namespace Mayfair.Core.Code.LoadingProcess
             #region Class Methods
             public void Draw(DebugMenuContext context, LoadingTaskTracker tracker)
             {
-                if (tracker.Type.IsSubclassOf(typeof(GameLoadingNotice)))
+                if (tracker.Type.IsSubclassOf(typeof(GameLoadingCommand)))
                 {
                     unloadedColor = ColorHelper.blue.pastel;
                     loadingColor = ColorHelper.blue.pastel;

@@ -2,12 +2,12 @@ namespace Mayfair.Core.Code.Resources
 {
     using System;
     using Mayfair.Core.Code.Resources.Messages;
-    using Prateek.NoticeFramework.Tools;
+    using Prateek.CommandFramework.Tools;
 
-    public abstract class ContentAccessDaemonCore<TDaemonCore, TDaemonBranch>
-        : NoticeReceiverDaemonCore<TDaemonCore, TDaemonBranch>
-        where TDaemonCore : NoticeReceiverDaemonCore<TDaemonCore, TDaemonBranch>
-        where TDaemonBranch : ContentAccessDaemonBranch<TDaemonCore, TDaemonBranch>
+    public abstract class ContentAccessDaemon<TDaemon, TServant>
+        : CommandReceiverDaemon<TDaemon, TServant>
+        where TDaemon : CommandReceiverDaemon<TDaemon, TServant>
+        where TServant : ContentAccessServant<TDaemon, TServant>
     {
         #region ServiceProviderUsageRuleType enum
         protected enum ServiceProviderUsageRuleType
@@ -32,46 +32,46 @@ namespace Mayfair.Core.Code.Resources
         }
 
         #region Messaging
-        protected override void SetupNoticeReceiverCallback()
+        protected override void SetupCommandReceiverCallback()
         {
-            NoticeReceiver.AddCallback<ResourcesHaveChangedResponse>(OnResourceUpdateCallback);
+            CommandReceiver.AddCallback<ResourcesHaveChangedResponse>(OnResourceUpdateCallback);
         }
         #endregion
 
         private void RegisterToResourceService()
         {
             PerformProviderAction(ServiceProviderUsageRule,
-                                  branch =>
+                                  servant =>
                                   {
-                                      NoticeReceiver.Send(branch.GetResourceChangeRequest(NoticeReceiver));
+                                      CommandReceiver.Send(servant.GetResourceChangeRequest(CommandReceiver));
                                   });
         }
 
         private void OnResourceUpdateCallback(ResourcesHaveChangedResponse notice)
         {
             PerformProviderAction(ServiceProviderUsageRule,
-                                  branch =>
+                                  servant =>
                                   {
-                                      branch.OnResourceChanged(Instance, notice);
+                                      servant.OnResourceChanged(Instance, notice);
                                   });
         }
 
-        protected void PerformProviderAction(ServiceProviderUsageRuleType rule, Action<TDaemonBranch> action)
+        protected void PerformProviderAction(ServiceProviderUsageRuleType rule, Action<TServant> action)
         {
             if (rule == ServiceProviderUsageRuleType.UseAllValid)
             {
-                var providers = GetValidBranches();
-                foreach (var branch in providers)
+                var providers = GetValidServants();
+                foreach (var servant in providers)
                 {
-                    action(branch);
+                    action(servant);
                 }
             }
             else
             {
-                var branch = GetFirstAliveBranch();
-                if (branch != null)
+                var servant = GetFirstAliveBranch();
+                if (servant != null)
                 {
-                    action(branch);
+                    action(servant);
                 }
             }
         }

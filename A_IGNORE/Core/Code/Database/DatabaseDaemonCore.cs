@@ -14,11 +14,11 @@
     using Mayfair.Core.Code.Utils.Debug;
     using Prateek.KeynameFramework;
     using Prateek.KeynameFramework.Enums;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
     using Prateek.TickableFramework.Code.Enums;
     using DatabaseContentByFilterRequest = Mayfair.Core.Code.Database.Messages.DatabaseContentMatchingWithFilterRequest<Messages.DatabaseContentMatchingWithFilterResponse>;
 
-    public sealed class DatabaseDaemonCore : ContentAccessDaemonCore<DatabaseDaemonCore, DatabaseDaemonBranch>, IDebugMenuNotebookOwner
+    public sealed class DatabaseDaemon : ContentAccessDaemon<DatabaseDaemon, DatabaseServant>, IDebugMenuNotebookOwner
     {
         #region DatabaseRebuildStatus enum
         private enum DatabaseRebuildStatus
@@ -167,7 +167,7 @@
                 }
             }
 
-            NoticeReceiver.Send(response);
+            CommandReceiver.Send(response);
         }
 
         private void SendRequestForIdentifiers()
@@ -176,9 +176,9 @@
             {
                 identifierStatus = IdentifierRequestStatus.WaitingForIdentifiers;
                 var notice =
-                    Notice.Create<DatabaseIdentifierRequest<DatabaseIdentifierResponse>>();
+                    Command.Create<DatabaseIdentifierRequest<DatabaseIdentifierResponse>>();
 
-                NoticeReceiver.Send(notice);
+                CommandReceiver.Send(notice);
             }
         }
 
@@ -210,7 +210,7 @@
 
             DebugTools.Log(this, "OnDatabaseContentMatchingFilter request received and handled. Sending result now");
 
-            NoticeReceiver.Send(response);
+            CommandReceiver.Send(response);
         }
 
         private void PatternContainsAll(List<string> filters, List<ICompositeContent> results)
@@ -259,13 +259,13 @@
 
         private void RefreshPendingResources()
         {
-            var branch = GetFirstAliveBranch();
-            if (branch == null)
+            var servant = GetFirstAliveBranch();
+            if (servant == null)
             {
                 return;
             }
 
-            branch.RefreshPendingResources(this);
+            servant.RefreshPendingResources(this);
         }
 
         public static ICompositeIdentifier CreateNewIdentifier<T>() where T : IDatabaseEntry
@@ -966,18 +966,18 @@
         #endregion
 
         #region Messaging
-        public override void NoticeReceived()
+        public override void CommandReceived()
         {
             //Empty
         }
 
-        protected override void SetupNoticeReceiverCallback()
+        protected override void SetupCommandReceiverCallback()
         {
-            base.SetupNoticeReceiverCallback();
+            base.SetupCommandReceiverCallback();
 
-            NoticeReceiver.AddCallback<DatabaseIdentifierResponse>(OnIdentifiersReceived);
-            NoticeReceiver.AddCallback<DatabaseContentByIdRequest>(OnRequestContentById);
-            NoticeReceiver.AddCallback<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
+            CommandReceiver.AddCallback<DatabaseIdentifierResponse>(OnIdentifiersReceived);
+            CommandReceiver.AddCallback<DatabaseContentByIdRequest>(OnRequestContentById);
+            CommandReceiver.AddCallback<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
         }
         #endregion
     }

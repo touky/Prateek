@@ -18,14 +18,14 @@ namespace Mayfair.Core.Code.DebugMenu
 
 #endif
 
-    public sealed class DebugMenuDaemonCore : DaemonCore<DebugMenuDaemonCore, DebugMenuDaemonBranch>
+    public sealed class DebugMenuDaemon : Daemon<DebugMenuDaemon, DebugMenuServant>
     {
         #region Static and Constants
         private static readonly float[] MAGIC_CONTENT_SIZE = {.5f, 0.5f};
-        private static readonly string PREFS_MENU_TOGGLE = $"{typeof(DebugMenuDaemonCore).Name}.MenuStatus";
-        private static readonly string PREFS_SHORT_NAMES = $"{typeof(DebugMenuDaemonCore).Name}.shortNamesStatus";
-        private static readonly string PREFS_SCREEN_RATIO = $"{typeof(DebugMenuDaemonCore).Name}.ScreenRatio";
-        private static readonly string PREFS_SCREEN_SIDE = $"{typeof(DebugMenuDaemonCore).Name}.ScreenSide";
+        private static readonly string PREFS_MENU_TOGGLE = $"{typeof(DebugMenuDaemon).Name}.MenuStatus";
+        private static readonly string PREFS_SHORT_NAMES = $"{typeof(DebugMenuDaemon).Name}.shortNamesStatus";
+        private static readonly string PREFS_SCREEN_RATIO = $"{typeof(DebugMenuDaemon).Name}.ScreenRatio";
+        private static readonly string PREFS_SCREEN_SIDE = $"{typeof(DebugMenuDaemon).Name}.ScreenSide";
 
         private static readonly UiSettings EditorSettings = new UiSettings
         {
@@ -127,17 +127,17 @@ namespace Mayfair.Core.Code.DebugMenu
         }
         #endregion
 
-        protected override void OnBranchRegistered(DebugMenuDaemonBranch branch)
+        protected override void OnServantRegistered(DebugMenuServant servant)
         {
-            base.OnBranchRegistered(branch);
+            base.OnServantRegistered(servant);
 
-            branch.AddDebugContent(localNotebook, rootPage);
+            servant.AddDebugContent(localNotebook, rootPage);
         }
 
         #region Service
         protected override void OnAwake()
         {
-            //todo InputDaemonCore.RegisterLayer<DebugInputLayer>(() =>
+            //todo InputDaemon.RegisterLayer<DebugInputLayer>(() =>
             //todo {
             //todo     return new DebugInputLayer(this);
             //todo });
@@ -456,7 +456,7 @@ namespace Mayfair.Core.Code.DebugMenu
             #region Class Methods
             public void Unregister()
             {
-                DebugMenuDaemonCore instance = Instance;
+                DebugMenuDaemon instance = Instance;
                 if (instance == null)
                 {
                     return;
@@ -477,7 +477,7 @@ namespace Mayfair.Core.Code.DebugMenu
         //todo private class DebugInputLayer : InputLayer
         //todo {
         //todo     #region Fields
-        //todo     private DebugMenuDaemonCore daemonCore;
+        //todo     private DebugMenuDaemon daemonCore;
         //todo     #endregion
         //todo 
         //todo     #region Properties
@@ -508,7 +508,7 @@ namespace Mayfair.Core.Code.DebugMenu
         //todo     #endregion
         //todo 
         //todo     #region Constructors
-        //todo     public DebugInputLayer(DebugMenuDaemonCore daemonCore)
+        //todo     public DebugInputLayer(DebugMenuDaemon daemonCore)
         //todo     {
         //todo         this.daemonCore = daemonCore;
         //todo     }

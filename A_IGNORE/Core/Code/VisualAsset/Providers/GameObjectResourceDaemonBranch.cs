@@ -4,9 +4,9 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.VisualAsset.Messages;
-    using Prateek.NoticeFramework.TransmitterReceiver;
+    using Prateek.CommandFramework.TransmitterReceiver;
 
-    public abstract class GameObjectResourceDaemonBranch : VisualResourceDaemonBranch<GameObjectContentHandle>
+    public abstract class GameObjectResourceServant : VisualResourceServant<GameObjectContentHandle>
     {
         #region Unity Methods
         public override void Startup()
@@ -18,7 +18,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         #endregion
         
         #region Class Methods
-        public override void OnResourceChanged(VisualResourceDaemonCore daemonCore, ResourcesHaveChangedResponse notice)
+        public override void OnResourceChanged(VisualResourceDaemon daemonCore, ResourcesHaveChangedResponse notice)
         {
             if (notice is GameObjectResourcesHaveChanged typedMessage)
             {
@@ -29,15 +29,15 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
 
-        public override void OnVisualResourceMessage(VisualResourceDirectNotice notice)
+        public override void OnVisualResourceMessage(VisualResourceDirectCommand command)
         {
-            if (notice.Instance != null)
+            if (command.Instance != null)
             {
-                AddPendingInit(notice.Instance.AssignmentIndex, notice.Instance);
+                AddPendingInit(command.Instance.AssignmentIndex, command.Instance);
             }
             else
             {
-                DebugTools.LogError($"notice.Instance is null in OnVisualResourceMessage for {name}: Message: {notice.GetType().Name}");
+                DebugTools.LogError($"notice.Instance is null in OnVisualResourceMessage for {name}: Message: {command.GetType().Name}");
             }
         }
 
@@ -53,7 +53,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
 
-        public override RequestAccessToContent GetResourceChangeRequest(INoticeTransmitter transmitter)
+        public override RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter)
         {
             RequestAccessToContent request = CreateResourceChangeRequest();
             request.Init(ResourceKeywords);

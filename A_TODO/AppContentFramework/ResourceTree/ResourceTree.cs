@@ -8,26 +8,26 @@
         #region Fields
         private Regex tagRegex;
         private string branchTag;
-        private Dictionary<string, ResourceTree<T>> branches;
+        private Dictionary<string, ResourceTree<T>> servants;
         private HashSet<Leaf> leaves;
         #endregion
 
         #region Properties
-        private bool HasBranches
+        private bool HasServants
         {
-            get { return branches != null && branches.Count > 0; }
+            get { return servants != null && servants.Count > 0; }
         }
 
-        private Dictionary<string, ResourceTree<T>> Branches
+        private Dictionary<string, ResourceTree<T>> Servants
         {
             get
             {
-                if (branches == null)
+                if (servants == null)
                 {
-                    branches = new Dictionary<string, ResourceTree<T>>();
+                    servants = new Dictionary<string, ResourceTree<T>>();
                 }
 
-                return branches;
+                return servants;
             }
         }
 
@@ -66,14 +66,14 @@
             foreach (Match match in collection)
             {
                 string tag = match.Groups[match.Groups.Count - 1].Value;
-                if (activeBranch.Branches.TryGetValue(tag, out nextBranch))
+                if (activeBranch.Servants.TryGetValue(tag, out nextBranch))
                 {
                     activeBranch = nextBranch;
                 }
                 else
                 {
                     nextBranch = new ResourceTree<T>(tagRegex) {branchTag = tag};
-                    activeBranch.Branches.Add(tag, nextBranch);
+                    activeBranch.Servants.Add(tag, nextBranch);
                     activeBranch = nextBranch;
                 }
             }
@@ -96,8 +96,8 @@
                     continue;
                 }
 
-                if (activeBranch.branches == null
-                 || !activeBranch.branches.ContainsKey(tags[0])) //todo Consts.FIRST_ITEM
+                if (activeBranch.servants == null
+                 || !activeBranch.servants.ContainsKey(tags[0])) //todo Consts.FIRST_ITEM
                 {
                     continue;
                 }
@@ -105,7 +105,7 @@
                 for (int t = 0; t < tags.Length; t++)
                 {
                     string tag = tags[t];
-                    if (activeBranch.Branches.TryGetValue(tag, out nextBranch))
+                    if (activeBranch.Servants.TryGetValue(tag, out nextBranch))
                     {
                         activeBranch = nextBranch;
                     }
@@ -139,9 +139,9 @@
                 }
             }
 
-            if (tree.HasBranches)
+            if (tree.HasServants)
             {
-                foreach (ResourceTree<T> nextBranch in tree.branches.Values)
+                foreach (ResourceTree<T> nextBranch in tree.servants.Values)
                 {
                     RetrieveResources(identification, nextBranch, identificationResult);
                 }

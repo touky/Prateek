@@ -19,7 +19,7 @@ namespace Mayfair.Core.Code.Input
     using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
-    public class InputDaemonCore : DaemonCore<InputDaemonCore, InputDaemonBranch>, IDebugMenuNotebookOwner
+    public class InputDaemon : Daemon<InputDaemon, InputServant>, IDebugMenuNotebookOwner
     {
         #region Static and Constants
         public const float HOLD_THRESHOLD = 10f;
@@ -208,15 +208,15 @@ namespace Mayfair.Core.Code.Input
 
         private bool GatherInput()
         {
-            InputDaemonBranch branch = GetFirstAliveBranch();
-            if (branch == null)
+            InputServant servant = GetFirstAliveBranch();
+            if (servant == null)
             {
                 return false;
             }
 
             //unity will automatically update touches, we just need to update mouse input
             touches.Clear();
-            branch.GatherInput(touches);
+            servant.GatherInput(touches);
 
             if (touches.Count == 0)
             {

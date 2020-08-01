@@ -3,15 +3,15 @@ namespace Mayfair.Core.Code.StateMachines.FSM.Common
     using Mayfair.Core.Code.Service;
     using Prateek.DaemonFramework.Code.Interfaces;
 
-    public abstract class ServiceState<TTrigger, TDaemonCore> : EmptyState<TTrigger>
-        where TDaemonCore : IDaemonCore
+    public abstract class ServiceState<TTrigger, TDaemon> : EmptyState<TTrigger>
+        where TDaemon : IDaemon
     {
         #region Fields
-        protected TDaemonCore daemonCore;
+        protected TDaemon daemonCore;
         #endregion
 
         #region Constructors
-        protected ServiceState(TDaemonCore daemonCore)
+        protected ServiceState(TDaemon daemonCore)
         {
             this.daemonCore = daemonCore;
         }

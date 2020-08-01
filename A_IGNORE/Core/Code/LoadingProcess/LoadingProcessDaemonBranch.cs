@@ -7,9 +7,9 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.LoadingProcess.Messages;
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.StateMachines.FSM.Common;
-    using Prateek.DaemonFramework.Code.Branches;
+    using Prateek.DaemonFramework.Code.Servants;
 
-    public abstract class LoadingProcessDaemonBranch : DaemonBranchTickableBehaviour<LoadingProcessDaemonCore, LoadingProcessDaemonBranch>
+    public abstract class LoadingProcessServant : ServantTickableBehaviour<LoadingProcessDaemon, LoadingProcessServant>
     {
         #region Fields
         private LoadingProcessStatus processStatus;
@@ -31,7 +31,7 @@ namespace Mayfair.Core.Code.LoadingProcess
         #region Class Methods
         public abstract void UpdateProcess(List<LoadingTaskTracker> trackers);
 
-        public void Init(LoadingProcessDaemonCore daemonCore)
+        public void Init(LoadingProcessDaemon daemonCore)
         {
             if (this.processStatus != LoadingProcessStatus.None)
             {
@@ -43,7 +43,7 @@ namespace Mayfair.Core.Code.LoadingProcess
             this.processStatus = LoadingProcessStatus.Idle;
         }
 
-        protected abstract void InternalInit(LoadingProcessDaemonCore daemonCore);
+        protected abstract void InternalInit(LoadingProcessDaemon daemonCore);
         public abstract void GameLoadingRestart(GameLoadingNeedRestart notice);
         #endregion
 
@@ -52,14 +52,14 @@ namespace Mayfair.Core.Code.LoadingProcess
         protected class LoadingStatusState<TTrigger> : EmptyState<TTrigger>
         {
             #region Fields
-            protected LoadingProcessDaemonBranch branch;
+            protected LoadingProcessServant servant;
             private bool shouldEnd;
             #endregion
 
             #region Constructors
-            public LoadingStatusState(LoadingProcessDaemonBranch branch, bool shouldEnd)
+            public LoadingStatusState(LoadingProcessServant servant, bool shouldEnd)
             {
-                this.branch = branch;
+                this.servant = servant;
                 this.shouldEnd = shouldEnd;
             }
             #endregion
@@ -69,7 +69,7 @@ namespace Mayfair.Core.Code.LoadingProcess
             {
                 base.Execute();
 
-                this.branch.LoadingHasEnded = this.shouldEnd;
+                this.servant.LoadingHasEnded = this.shouldEnd;
             }
             #endregion
         }

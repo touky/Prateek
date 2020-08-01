@@ -1,9 +1,9 @@
 namespace Mayfair.Core.Code.UpdateService.Messages
 {
     using Interfaces;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
-    public class RegisterForUpdate : DirectNotice
+    public class RegisterForUpdate : DirectCommand
     {
         public IUpdatable UpdatableObject { get; private set; }
         public UpdateFrequency UpdateFrequency { get; private set; }

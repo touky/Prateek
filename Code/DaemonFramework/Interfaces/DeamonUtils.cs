@@ -5,11 +5,11 @@ namespace Prateek.DaemonFramework.Code.Interfaces
     internal static class DeamonUtils
     {
         #region Class Methods
-        internal static void ChangeStatus<TDaemonCore, TDaemonBranch>(StatusAction action, TDaemonBranch branch)
-            where TDaemonCore : DaemonCore<TDaemonCore, TDaemonBranch>
-            where TDaemonBranch : class, IDaemonBranch
+        internal static void ChangeStatus<TDaemon, TServant>(StatusAction action, TServant servant)
+            where TDaemon : Daemon<TDaemon, TServant>
+            where TServant : class, IServant
         {
-            DaemonCore<TDaemonCore, TDaemonBranch>.ChangeStatus(action, branch);
+            Daemon<TDaemon, TServant>.ChangeStatus(action, servant);
         }
         #endregion
     }

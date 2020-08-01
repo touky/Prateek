@@ -1,9 +1,9 @@
 namespace Mayfair.Core.Code.TimeService.Messages
 {
     using System;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
-    public class ReferenceTimeChanged : BroadcastNotice
+    public class ReferenceTimeChanged : BroadcastCommand
     {
         public DateTime OldTime { get; private set; }
         public DateTime NewTime { get; private set; }

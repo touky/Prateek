@@ -101,7 +101,7 @@ namespace Mayfair.Core.Code.DebugMenu
         //                Settings = MobileTextSettings;
         //            }
 
-        //            string key = $"{typeof(DebugMenuDaemonCore).Name}.{typeof(DebugMenuContext).Name}";
+        //            string key = $"{typeof(DebugMenuDaemon).Name}.{typeof(DebugMenuContext).Name}";
         //            font =
         //#if UNITY_EDITOR
         //                Font.CreateDynamicFontFromOSFont("Consolas", Settings.fontSize);

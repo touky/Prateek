@@ -5,10 +5,10 @@ namespace Mayfair.Core.Code.Localization
     using System.Text.RegularExpressions;
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
-    using Prateek.DaemonFramework.Code.Branches;
+    using Prateek.DaemonFramework.Code.Servants;
     using UnityEngine;
 
-    public class LocalizationDaemonBranch : DaemonBranchBehaviour<LocalizationDaemonCore, LocalizationDaemonBranch>
+    public class LocalizationServant : ServantBehaviour<LocalizationDaemon, LocalizationServant>
     {
         #region Settings
         [SerializeField]

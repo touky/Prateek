@@ -3,7 +3,7 @@ namespace Mayfair.Core.Code.Input
     using System;
     using Mayfair.Core.Code.Input.InputLayers;
 
-    public abstract class InputReceiver<T> : InputDaemonCore.InputReceiver
+    public abstract class InputReceiver<T> : InputDaemon.InputReceiver
         where T : InputLayer, new()
     {
         #region Properties

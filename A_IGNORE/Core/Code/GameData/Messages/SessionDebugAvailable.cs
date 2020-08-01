@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.GameData.Messages
 {
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
-    public class SessionDebugAvailable : DirectNotice
+    public class SessionDebugAvailable : DirectCommand
     {
         #region Fields
         private string sessionContext;

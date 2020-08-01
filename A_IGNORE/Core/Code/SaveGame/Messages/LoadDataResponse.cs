@@ -1,10 +1,10 @@
 namespace Mayfair.Core.Code.SaveGame.Messages
 {
     using System.Diagnostics;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
-    [DebuggerDisplay("{GetType().Name}, Sender: {transmitter.Owner.Name}, Recipient: {recipient.Owner.Name}")]
-    public class LoadDataResponse : ResponseNotice
+    [DebuggerDisplay("{GetType().Name}, Sender: {emitter.Owner.Name}, Recipient: {recipient.Owner.Name}")]
+    public class LoadDataResponse : ResponseCommand
     {
         #region Fields
         private LoadDataRequest request;
@@ -18,7 +18,7 @@ namespace Mayfair.Core.Code.SaveGame.Messages
         #endregion
 
         #region Constructors
-        public override void Init(RequestNotice request)
+        public override void Init(RequestCommand request)
         {
             base.Init(request);
 

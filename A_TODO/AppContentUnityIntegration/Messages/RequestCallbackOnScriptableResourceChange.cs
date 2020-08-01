@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.Resources.Messages
 {
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
     using UnityEngine;
 
     /// <summary>
@@ -14,7 +14,7 @@ namespace Mayfair.Core.Code.Resources.Messages
         where TResourceType : ScriptableObject
     {
         #region Class Methods
-        protected override ResponseNotice CreateNewResponse()
+        protected override ResponseCommand CreateNewResponse()
         {
             return Create<TChangeMessage>();
         }

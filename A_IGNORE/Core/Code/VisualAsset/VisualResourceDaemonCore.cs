@@ -9,7 +9,7 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.VisualAsset.Providers;
     using Prateek.TickableFramework.Code.Enums;
 
-    public sealed class VisualResourceDaemonCore : ContentAccessDaemonCore<VisualResourceDaemonCore, VisualResourceDaemonBranch>
+    public sealed class VisualResourceDaemon : ContentAccessDaemon<VisualResourceDaemon, VisualResourceServant>
     {
         #region Fields
         private DebugMenuNotebook debugNotebook;
@@ -33,9 +33,9 @@ namespace Mayfair.Core.Code.VisualAsset
             base.Tick(tickableFrame, seconds, unscaledSeconds);
 
             PerformProviderAction(ServiceProviderUsageRule,
-                                  branch =>
+                                  servant =>
                                   {
-                                      branch.RefreshPending();
+                                      servant.RefreshPending();
                                   });
         }
 
@@ -47,35 +47,35 @@ namespace Mayfair.Core.Code.VisualAsset
         #endregion
 
         #region Messaging
-        public override void NoticeReceived() { }
+        public override void CommandReceived() { }
 
-        protected override void SetupNoticeReceiverCallback()
+        protected override void SetupCommandReceiverCallback()
         {
-            base.SetupNoticeReceiverCallback();
+            base.SetupCommandReceiverCallback();
 
-            NoticeReceiver.AddCallback<VisualResourceDirectNotice>(OnVisualResourceMessage);
+            CommandReceiver.AddCallback<VisualResourceDirectCommand>(OnVisualResourceMessage);
         }
         #endregion
 
         #region Class Methods
-        protected override void OnBranchRegistered(VisualResourceDaemonBranch branch)
+        protected override void OnServantRegistered(VisualResourceServant servant)
         {
-            base.OnBranchRegistered(branch);
+            base.OnServantRegistered(servant);
 
-            branch.SetupDebugContent(debugNotebook, debugMainPage);
+            servant.SetupDebugContent(debugNotebook, debugMainPage);
         }
 
-        private void OnVisualResourceMessage(VisualResourceDirectNotice notice)
+        private void OnVisualResourceMessage(VisualResourceDirectCommand command)
         {
-            IEnumerable<VisualResourceDaemonBranch> providers = GetValidBranches();
-            foreach (VisualResourceDaemonBranch branch in providers)
+            IEnumerable<VisualResourceServant> providers = GetValidServants();
+            foreach (VisualResourceServant servant in providers)
             {
-                if (!notice.AllowTransfer(branch))
+                if (!command.AllowTransfer(servant))
                 {
                     continue;
                 }
 
-                branch.OnVisualResourceMessage(notice);
+                servant.OnVisualResourceMessage(command);
             }
         }
 

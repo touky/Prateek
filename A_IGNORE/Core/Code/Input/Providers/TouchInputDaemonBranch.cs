@@ -4,7 +4,7 @@ namespace Mayfair.Core.Code.Input.Providers
     using Mayfair.Core.Code.Utils;
     using UnityEngine;
 
-    public class TouchInputDaemonBranch : InputDaemonBranch
+    public class TouchInputServant : InputServant
     {
         #region Properties
         public override bool IsAlive

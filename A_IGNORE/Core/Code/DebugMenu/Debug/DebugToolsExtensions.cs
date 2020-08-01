@@ -8,7 +8,7 @@ namespace Mayfair.Core.Code.Utils.Debug
     {
         #region Class Methods
         [Conditional("NVIZZIO_DEV")]
-        public static void Log(IDaemonCore daemonCore, string notice, LogLevel logPriority = LogLevel.Normal)
+        public static void Log(IDaemon daemonCore, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
             builder.AddLogHeader(daemonCore, notice);
@@ -16,15 +16,15 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void Log(IDaemonBranch branch, string notice, LogLevel logPriority = LogLevel.Normal)
+        public static void Log(IServant servant, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(branch, notice);
-            Log(builder.ToString(), branch, logPriority);
+            builder.AddLogHeader(servant, notice);
+            Log(builder.ToString(), servant, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogWarning(IDaemonCore daemonCore, string notice, LogLevel logPriority = LogLevel.Normal)
+        public static void LogWarning(IDaemon daemonCore, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
             builder.AddLogHeader(daemonCore, notice);
@@ -32,15 +32,15 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogWarning(IDaemonBranch branch, string notice, LogLevel logPriority = LogLevel.Normal)
+        public static void LogWarning(IServant servant, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(branch, notice);
-            LogWarning(builder.ToString(), branch, logPriority);
+            builder.AddLogHeader(servant, notice);
+            LogWarning(builder.ToString(), servant, logPriority);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogError(IDaemonCore daemonCore, string notice, LogLevel logPriority = LogLevel.Normal)
+        public static void LogError(IDaemon daemonCore, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
             builder.AddLogHeader(daemonCore, notice);
@@ -48,19 +48,19 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void LogError(IDaemonBranch branch, string notice, LogLevel logPriority = LogLevel.Normal)
+        public static void LogError(IServant servant, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AddLogHeader(branch, notice);
-            LogWarning(builder.ToString(), branch, logPriority);
+            builder.AddLogHeader(servant, notice);
+            LogWarning(builder.ToString(), servant, logPriority);
         }
 
         //todo [Conditional("NVIZZIO_DEV")]
-        //todo public static void Log<TResourceType, TResourceRef>(IDaemonBranch branch, ResourcesHaveChangedResponse<TResourceRef, TResourceType> notice)
+        //todo public static void Log<TResourceType, TResourceRef>(IServant servant, ResourcesHaveChangedResponse<TResourceRef, TResourceType> notice)
         //todo     where TResourceRef : AbstractResourceReference<TResourceType, TResourceRef>
         //todo {
         //todo     StringBuilder builder = new StringBuilder();
-        //todo     builder.AddLogHeader(branch, ", data to load are:");
+        //todo     builder.AddLogHeader(servant, ", data to load are:");
         //todo 
         //todo     ReflectedField<List<TResourceRef>> references = "references";
         //todo     references.Init(notice);

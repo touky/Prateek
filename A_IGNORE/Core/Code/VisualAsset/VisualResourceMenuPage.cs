@@ -8,18 +8,18 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.VisualAsset.Providers;
     using Prateek.KeynameFramework;
 
-    internal class VisualResourceMenuPage : DebugMenuPage<VisualResourceDaemonBranch>
+    internal class VisualResourceMenuPage : DebugMenuPage<VisualResourceServant>
     {
         #region Fields
         protected ReflectedField<Dictionary<string, Dictionary<Keyname, IContentHandle>>> resources = "resources";
         #endregion
 
         #region Constructors
-        public VisualResourceMenuPage(VisualResourceDaemonBranch owner, string title) : base(owner, title) { }
+        public VisualResourceMenuPage(VisualResourceServant owner, string title) : base(owner, title) { }
         #endregion
 
         #region Class Methods
-        protected override void Draw(VisualResourceDaemonBranch owner, DebugMenuContext context)
+        protected override void Draw(VisualResourceServant owner, DebugMenuContext context)
         {
             if (NewCategory.Draw(context, "Available resources", true))
             {

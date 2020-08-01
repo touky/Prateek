@@ -1,9 +1,9 @@
 namespace Mayfair.Core.Code.SaveGame.Messages
 {
     using System.Collections.Generic;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
-    public class LoadDataRequest : RequestNotice<LoadDataResponse>
+    public class LoadDataRequest : RequestCommand<LoadDataResponse>
     {
         #region Fields
         private List<SaveDataIdentification> identifications = new List<SaveDataIdentification>();

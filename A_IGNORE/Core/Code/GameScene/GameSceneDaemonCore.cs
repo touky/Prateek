@@ -14,11 +14,11 @@ namespace Mayfair.Core.Code.GameScene
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Helpers.Regexp;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
     using Prateek.TickableFramework.Code.Enums;
     using UnityEngine.SceneManagement;
 
-    public sealed class GameSceneDaemonCore : ContentAccessDaemonCore<GameSceneDaemonCore, GameSceneDaemonBranch>
+    public sealed class GameSceneDaemon : ContentAccessDaemon<GameSceneDaemon, GameSceneServant>
     {
         #region LightingSceneType enum
         public enum LightingSceneType
@@ -46,7 +46,7 @@ namespace Mayfair.Core.Code.GameScene
 
         #region Fields
         private ServiceState serviceState = ServiceState.Idle;
-        private TaskLoadingNotice taskNotice;
+        private TaskLoadingCommand taskCommand;
         private GameSessionOpen activeSession;
         private AvailableScenes activeContainer;
         private int completedActions = Consts.INDEX_NONE;
@@ -123,31 +123,31 @@ namespace Mayfair.Core.Code.GameScene
 
                 availableScenes[context] = container;
 
-                var notice = Notice.Create<SessionDebugAvailable>();
+                var notice = Command.Create<SessionDebugAvailable>();
                 notice.Init(context);
-                NoticeReceiver.Send(notice);
+                CommandReceiver.Send(notice);
             }
         }
 
         private void SendStatusMessage(LoadingTrackingStatus status, float progress = 1)
         {
-            if (taskNotice == null)
+            if (taskCommand == null)
             {
-                taskNotice = Notice.Create<TaskLoadingNotice>();
+                taskCommand = Command.Create<TaskLoadingCommand>();
             }
 
-            taskNotice.trackerState = new LoadingTaskTracker(GetType(), status)
+            taskCommand.trackerState = new LoadingTaskTracker(GetType(), status)
             {
                 StepProgress = progress
             };
 
-            NoticeReceiver.Send(taskNotice);
+            CommandReceiver.Send(taskCommand);
         }
 
         private void UpdateLoadingTask()
         {
             if (serviceState == ServiceState.Idle
-             || taskNotice == null
+             || taskCommand == null
              || activeContainer.scenes == null)
             {
                 return;
@@ -184,7 +184,7 @@ namespace Mayfair.Core.Code.GameScene
             else if (isDone && completedActions == activeContainer.scenes.Count)
             {
                 SendStatusMessage(LoadingTrackingStatus.Finished);
-                taskNotice = null;
+                taskCommand = null;
                 serviceState = ServiceState.Idle;
 
                 HandlePostponedRequests();
@@ -216,7 +216,7 @@ namespace Mayfair.Core.Code.GameScene
             StartUnloadSceneProcess();
         }
 
-        private void OnGameLoadingGameplay(GameLoadingGameplayNotice notice)
+        private void OnGameLoadingGameplay(GameLoadingGameplayCommand command)
         {
             completedActions = Consts.RESET;
 
@@ -241,7 +241,7 @@ namespace Mayfair.Core.Code.GameScene
             StartLoadSceneProcess();
         }
 
-        private void OnGameLoadingRestart(GameLoadingRestartNotice notice)
+        private void OnGameLoadingRestart(GameLoadingRestartCommand command)
         {
             SendStatusMessage(LoadingTrackingStatus.StartedLoading);
         }
@@ -356,7 +356,7 @@ namespace Mayfair.Core.Code.GameScene
             DebugTools.Log($"Game scene request to load '{request.Scene}' received", DebugTools.LogLevel.LowPriority);
             if (!availableScenes.TryGetValue(request.Scene, out var containerRequested))
             {
-                NoticeReceiver.Send(request.GetResponse());
+                CommandReceiver.Send(request.GetResponse());
 
                 Debug.Assert(false, $"Requested scene {request.Scene} does not exist or does not have an address.");
                 return;
@@ -386,7 +386,7 @@ namespace Mayfair.Core.Code.GameScene
             RefreshLoadingStatus();
             var response = request.GetResponse();
             response.SceneReference = sceneReference;
-            NoticeReceiver.Send(response);
+            CommandReceiver.Send(response);
         }
 
         private void OnUnloadSceneRequestReceived(UnloadSceneRequest<UnloadSceneResponse> request)
@@ -421,7 +421,7 @@ namespace Mayfair.Core.Code.GameScene
         {
             RefreshLoadingStatus();
             var response = request.GetResponse();
-            NoticeReceiver.Send(response);
+            CommandReceiver.Send(response);
         }
         #endregion
 
@@ -449,19 +449,19 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Messaging
-        public override void NoticeReceived() { }
+        public override void CommandReceived() { }
 
-        protected override void SetupNoticeReceiverCallback()
+        protected override void SetupCommandReceiverCallback()
         {
-            base.SetupNoticeReceiverCallback();
+            base.SetupCommandReceiverCallback();
 
-            NoticeReceiver.AddCallback<GameSessionOpen>(OnGameSessionOpen);
-            NoticeReceiver.AddCallback<GameSessionClose>(OnGameSessionClose);
-            NoticeReceiver.AddCallback<GameLoadingGameplayNotice>(OnGameLoadingGameplay);
-            NoticeReceiver.AddCallback<GameLoadingRestartNotice>(OnGameLoadingRestart);
+            CommandReceiver.AddCallback<GameSessionOpen>(OnGameSessionOpen);
+            CommandReceiver.AddCallback<GameSessionClose>(OnGameSessionClose);
+            CommandReceiver.AddCallback<GameLoadingGameplayCommand>(OnGameLoadingGameplay);
+            CommandReceiver.AddCallback<GameLoadingRestartCommand>(OnGameLoadingRestart);
 
-            NoticeReceiver.AddCallback<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
-            NoticeReceiver.AddCallback<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
+            CommandReceiver.AddCallback<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
+            CommandReceiver.AddCallback<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
         }
         #endregion
     }

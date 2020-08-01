@@ -8,7 +8,7 @@ namespace Mayfair.Core.Code.Localization
     using Prateek.DaemonFramework.Code;
     using UnityEngine;
 
-    public class LocalizationDaemonCore : DaemonCore<LocalizationDaemonCore, LocalizationDaemonBranch>
+    public class LocalizationDaemon : Daemon<LocalizationDaemon, LocalizationServant>
     {
         #region Methods
 

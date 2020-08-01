@@ -2,7 +2,7 @@ namespace Mayfair.Core.Code.TimeService.ServiceProviders
 {
     using System;
 
-    public class LocalTimeDaemonBranch : BaseTimeDaemonBranch
+    public class LocalTimeServant : BaseTimeServant
     {
         public override string Name
         {

@@ -5,10 +5,10 @@ namespace Mayfair.Core.Code.Animation
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Utils.Helpers;
     using Mayfair.Core.Code.VisualAsset.Providers;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
-    public class AnimationLibraryResourceDaemonBranch
-        : ScriptableObjectResourceDaemonBranch<AnimationLibrary>, IDebugMenuNotebookOwner
+    public class AnimationLibraryResourceServant
+        : ScriptableObjectResourceServant<AnimationLibrary>, IDebugMenuNotebookOwner
     {
         #region Static and Constants
         private const string COMMON_LIBRARY_KEYWORD = "AnimationLibrary/";
@@ -32,7 +32,7 @@ namespace Mayfair.Core.Code.Animation
 
         protected override RequestAccessToContent CreateResourceChangeRequest()
         {
-            return Notice.Create<RequestCallbackOnScriptableResourceChange<AnimationLibraryResourceHasChanged, AnimationLibrary>>();
+            return Command.Create<RequestCallbackOnScriptableResourceChange<AnimationLibraryResourceHasChanged, AnimationLibrary>>();
         }
 
         protected override bool IsResponseAccepted(ScriptableResourcesHaveChanged<AnimationLibrary> response)

@@ -4,11 +4,11 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.VisualAsset.Messages;
-    using Prateek.NoticeFramework.TransmitterReceiver;
+    using Prateek.CommandFramework.TransmitterReceiver;
     using UnityEngine;
 
-    public abstract class ScriptableObjectResourceDaemonBranch<TScriptableResourceType>
-        : VisualResourceDaemonBranch<ScriptableObjectContentHandle<TScriptableResourceType>>
+    public abstract class ScriptableObjectResourceServant<TScriptableResourceType>
+        : VisualResourceServant<ScriptableObjectContentHandle<TScriptableResourceType>>
         where TScriptableResourceType : ScriptableObject
     {
         #region Unity Methods
@@ -21,7 +21,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         #endregion
 
         #region Class Methods
-        public override void OnResourceChanged(VisualResourceDaemonCore daemonCore, ResourcesHaveChangedResponse notice)
+        public override void OnResourceChanged(VisualResourceDaemon daemonCore, ResourcesHaveChangedResponse notice)
         {
             if (notice is ScriptableResourcesHaveChanged<TScriptableResourceType> typedMessage)
             {
@@ -32,9 +32,9 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
 
-        public override void OnVisualResourceMessage(VisualResourceDirectNotice notice)
+        public override void OnVisualResourceMessage(VisualResourceDirectCommand command)
         {
-            AddPendingInit(notice.Instance.AssignmentIndex, notice.Instance);
+            AddPendingInit(command.Instance.AssignmentIndex, command.Instance);
         }
 
         protected void OnResourceChanged(ScriptableResourcesHaveChanged<TScriptableResourceType> notice)
@@ -49,7 +49,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
         
-        public override RequestAccessToContent GetResourceChangeRequest(INoticeTransmitter transmitter)
+        public override RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter)
         {
             RequestAccessToContent request = CreateResourceChangeRequest();
             request.Init(ResourceKeywords);

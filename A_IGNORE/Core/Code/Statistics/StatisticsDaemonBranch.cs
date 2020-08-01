@@ -6,10 +6,10 @@ namespace Mayfair.Core.Code.Statistics
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
-    using Prateek.DaemonFramework.Code.Branches;
+    using Prateek.DaemonFramework.Code.Servants;
     using Prateek.KeynameFramework.Interfaces;
 
-    public abstract class StatisticsDaemonBranch : DaemonBranchBehaviour<StatisticsDaemonCore, StatisticsDaemonBranch>
+    public abstract class StatisticsServant : ServantBehaviour<StatisticsDaemon, StatisticsServant>
     {
         #region StatisticFlushType enum
         [Flags]
@@ -43,7 +43,7 @@ namespace Mayfair.Core.Code.Statistics
         #endregion
 
         #region Class Methods
-        public abstract void ProcessMessage(GameActionNotice notice);
+        public abstract void ProcessMessage(GameActionCommand command);
 
         public void AddRelevantTag<T>()
             where T : MasterKeyword

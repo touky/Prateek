@@ -2,9 +2,9 @@ namespace Mayfair.Core.Code.DebugMenu
 {
     using Mayfair.Core.Code.DebugMenu.Content;
     using Mayfair.Core.Code.DebugMenu.Pages;
-    using Prateek.DaemonFramework.Code.Branches;
+    using Prateek.DaemonFramework.Code.Servants;
 
-    public abstract class DebugMenuDaemonBranch : DaemonBranchTickableBehaviour<DebugMenuDaemonCore, DebugMenuDaemonBranch>
+    public abstract class DebugMenuServant : ServantTickableBehaviour<DebugMenuDaemon, DebugMenuServant>
     {
         #region Properties
         public override int Priority

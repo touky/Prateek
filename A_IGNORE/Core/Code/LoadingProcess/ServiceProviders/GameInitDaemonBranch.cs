@@ -10,7 +10,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
     using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
-    public class GameInitDaemonBranch : LoadingProcessDaemonBranch
+    public class GameInitServant : LoadingProcessServant
     {
         #region Settings
         [SerializeField]
@@ -47,9 +47,9 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
             }
         }
 
-        protected override void InternalInit(LoadingProcessDaemonCore daemonCore)
+        protected override void InternalInit(LoadingProcessDaemon daemonCore)
         {
-            if (!LocalizationDaemonCore.SetLanguage(SystemLanguage.English, true))
+            if (!LocalizationDaemon.SetLanguage(SystemLanguage.English, true))
             {
                 throw new MissingMinimalLocalizationException(SystemLanguage.English);
             }

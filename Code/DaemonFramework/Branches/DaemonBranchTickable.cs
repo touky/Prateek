@@ -1,13 +1,13 @@
-namespace Prateek.DaemonFramework.Code.Branches
+namespace Prateek.DaemonFramework.Code.Servants
 {
     using Prateek.DaemonFramework.Code.Interfaces;
     using Prateek.TickableFramework.Code.Enums;
     using Prateek.TickableFramework.Code.Interfaces;
 
-    public abstract class DaemonBranchTickable<TDaemonCore, TDaemonBranch>
-        : DaemonBranch<TDaemonCore, TDaemonBranch>, ITickable
-        where TDaemonCore : DaemonCore<TDaemonCore, TDaemonBranch>
-        where TDaemonBranch : class, IDaemonBranch
+    public abstract class ServantTickable<TDaemon, TServant>
+        : Servant<TDaemon, TServant>, ITickable
+        where TDaemon : Daemon<TDaemon, TServant>
+        where TServant : class, IServant
     {
         #region ITickable Members
         public virtual TickableSetup TickableSetup

@@ -12,8 +12,8 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Prateek.KeynameFramework.Interfaces;
     using UnityEngine.Assertions;
 
-    public abstract class VisualResourceDaemonBranch<TResourceReference>
-        : VisualResourceDaemonBranch
+    public abstract class VisualResourceServant<TResourceReference>
+        : VisualResourceServant
         where TResourceReference : class, IContentHandle
     {
         #region Fields

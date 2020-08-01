@@ -7,11 +7,11 @@
     using Mayfair.Core.Code.Resources.ResourceTree;
     using Mayfair.Core.Code.StateMachines;
     using Mayfair.Core.Code.StateMachines.Interfaces;
-    using Prateek.NoticeFramework.Tools;
+    using Prateek.CommandFramework.Tools;
     using Prateek.TickableFramework.Code.Enums;
 
-    public sealed class ContentRegistryDaemonCore
-        : NoticeReceiverDaemonCore<ContentRegistryDaemonCore, ContentRegistryDaemonBranch>
+    public sealed class ContentRegistryDaemon
+        : CommandReceiverDaemon<ContentRegistryDaemon, ContentRegistryServant>
         , ISimpleStepMachineOwner<ServiceState>
     {
         #region Fields
@@ -66,7 +66,7 @@
 
                         resourceTree.RetrieveResources(callback, message);
 
-                        NoticeReceiver.Send(message);
+                        CommandReceiver.Send(message);
                     }
 
                     pendingCallbacks.Clear();
@@ -76,13 +76,13 @@
                 }
                 default:
                 {
-                    ContentRegistryDaemonBranch branch = GetFirstAliveBranch();
-                    if (branch == null)
+                    ContentRegistryServant servant = GetFirstAliveBranch();
+                    if (servant == null)
                     {
                         break;
                     }
 
-                    branch.ExecuteState(this, state);
+                    servant.ExecuteState(this, state);
                     break;
                 }
             }
@@ -102,9 +102,9 @@
             return trigger0 == trigger1;
         }
 
-        protected override void SetupNoticeReceiverCallback()
+        protected override void SetupCommandReceiverCallback()
         {
-            NoticeReceiver.AddCallback<RequestAccessToContent>(OnResourceUpdateCallback);
+            CommandReceiver.AddCallback<RequestAccessToContent>(OnResourceUpdateCallback);
         }
 
         private void OnResourceUpdateCallback(RequestAccessToContent notice)

@@ -15,14 +15,14 @@ namespace Mayfair.Core.Code.BaseBehaviour
 
         protected virtual void OnDestroy()
         {
-            AutoDisableDaemonCore.Remove(this);
+            AutoDisableDaemon.Remove(this);
         }
         #endregion
 
         #region Class Methods
         protected void WakeUp()
         {
-            AutoDisableDaemonCore.WakeUp(this);
+            AutoDisableDaemon.WakeUp(this);
         }
         #endregion
     }

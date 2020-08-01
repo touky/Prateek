@@ -6,5 +6,5 @@ namespace Mayfair.Core.Code.TimeService.Bootstrap
     /// <summary>
     /// Linked to an object in the InitServices scene
     /// </summary>
-    public class LocalTimeDaemonBranchBootstrap : DaemonBranchBootstrap<LocalTimeDaemonBranch> {  }
+    public class LocalTimeServantBootstrap : ServantBootstrap<LocalTimeServant> {  }
 }

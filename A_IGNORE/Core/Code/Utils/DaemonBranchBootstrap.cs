@@ -5,12 +5,12 @@ namespace Mayfair.Core.Code.Utils.Helpers
     using Service;
     using UnityEngine;
 
-    public class DaemonBranchBootstrap<TDaemonBranch> : MonoBehaviour
-        where TDaemonBranch : class, IDaemonBranch
+    public class ServantBootstrap<TServant> : MonoBehaviour
+        where TServant : class, IServant
     {
         private void Awake()
         {
-            TDaemonBranch instance = Activator.CreateInstance<TDaemonBranch>();
+            TServant instance = Activator.CreateInstance<TServant>();
             instance.Startup();
         }
     }

@@ -1,13 +1,13 @@
-namespace Prateek.DaemonFramework.Code.Branches
+namespace Prateek.DaemonFramework.Code.Servants
 {
     using Prateek.DaemonFramework.Code.Enums;
     using Prateek.DaemonFramework.Code.Interfaces;
     using UnityEngine;
 
-    public abstract class DaemonBranchBehaviour<TDaemonCore, TDaemonBranch>
-        : MonoBehaviour, IDaemonBranch
-        where TDaemonCore : DaemonCore<TDaemonCore, TDaemonBranch>
-        where TDaemonBranch : class, IDaemonBranch
+    public abstract class ServantBehaviour<TDaemon, TServant>
+        : MonoBehaviour, IServant
+        where TDaemon : Daemon<TDaemon, TServant>
+        where TServant : class, IServant
     {
         #region Unity Methods
         private void Awake()
@@ -21,7 +21,7 @@ namespace Prateek.DaemonFramework.Code.Branches
         }
         #endregion
 
-        #region IDaemonBranch Members
+        #region IServant Members
         public virtual string Name
         {
             get { return name; }
@@ -39,12 +39,12 @@ namespace Prateek.DaemonFramework.Code.Branches
 
         public virtual void Startup()
         {
-            DeamonUtils.ChangeStatus<TDaemonCore, TDaemonBranch>(StatusAction.Register, this as TDaemonBranch);
+            DeamonUtils.ChangeStatus<TDaemon, TServant>(StatusAction.Register, this as TServant);
         }
 
         public virtual void Shutdown()
         {
-            DeamonUtils.ChangeStatus<TDaemonCore, TDaemonBranch>(StatusAction.Unregister, this as TDaemonBranch);
+            DeamonUtils.ChangeStatus<TDaemon, TServant>(StatusAction.Unregister, this as TServant);
         }
         #endregion
     }

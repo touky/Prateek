@@ -5,7 +5,7 @@ namespace Mayfair.Core.Code.UpdateService
     using Interfaces;
     using Mayfair.Core.Code.LoadingProcess;
     using Messages;
-    using Prateek.NoticeFramework.Tools;
+    using Prateek.CommandFramework.Tools;
     using Service;
     using UnityEngine;
     using Utils.Debug;
@@ -14,19 +14,19 @@ namespace Mayfair.Core.Code.UpdateService
     /// This should not be used as an example of Service/Provider/Messaging interaction
     /// as it violates the asynchronicity goals of our systems.
     /// </summary>
-    public class UpdateDaemonCore : NoticeReceiverDaemonCore<UpdateDaemonCore, UpdateProvider>
+    public class UpdateDaemon : CommandReceiverDaemon<UpdateDaemon, UpdateProvider>
     {
         private Dictionary<UpdateFrequency, List<HashSet<IUpdatable>>> registeredUpdatables;
         private Dictionary<UpdateFrequency, int> updateFrequencyIndex;
         private Dictionary<IUpdatable, UpdateFrequency> registeredUpdatablesToFrequency;
 
-        public override void NoticeReceived() { }
+        public override void CommandReceived() { }
 
-        protected override void OnBranchRegistered(UpdateProvider branch)
+        protected override void OnServantRegistered(UpdateProvider servant)
         {
-            base.OnBranchRegistered(branch);
+            base.OnServantRegistered(servant);
 
-            IEnumerable<UpdateProvider> providers = GetValidBranches(true);
+            IEnumerable<UpdateProvider> providers = GetValidServants(true);
             foreach (UpdateProvider updateProvider in providers)
             {
                 updateProvider.updateAction = null;
@@ -56,10 +56,10 @@ namespace Mayfair.Core.Code.UpdateService
             registeredUpdatablesToFrequency = new Dictionary<IUpdatable, UpdateFrequency>();
         }
 
-        protected override void SetupNoticeReceiverCallback()
+        protected override void SetupCommandReceiverCallback()
         {
-            NoticeReceiver.AddCallback<RegisterForUpdate>(OnRegisterForUpdate);
-            NoticeReceiver.AddCallback<UnregisterForUpdate>(OnUnregisterForUpdate);
+            CommandReceiver.AddCallback<RegisterForUpdate>(OnRegisterForUpdate);
+            CommandReceiver.AddCallback<UnregisterForUpdate>(OnUnregisterForUpdate);
         }
 
         private void AddUpdatablesList(UpdateFrequency updateFrequency)

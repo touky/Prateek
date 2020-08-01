@@ -2,35 +2,35 @@ namespace Mayfair.Core.Code.GameAction
 {
     using Prateek.KeynameFramework;
     using Prateek.KeynameFramework.Interfaces;
-    using Prateek.NoticeFramework;
-    using Prateek.NoticeFramework.TransmitterReceiver;
+    using Prateek.CommandFramework;
+    using Prateek.CommandFramework.TransmitterReceiver;
 
-    public class GameActionNotice<T> : GameActionNotice
+    public class GameActionCommand<T> : GameActionCommand
         where T : MasterKeyword
     {
         #region Constructors
-        public GameActionNotice()
+        public GameActionCommand()
         {
             //tags.Add(Keyname.Create<T>());
         }
         #endregion
 
         #region Class Methods
-        public static void Broadcast(INoticeTransmitter transmitter, Keyname id0, float targetValue = 1)
+        public static void Broadcast(ICommandEmitter transmitter, Keyname id0, float targetValue = 1)
         {
-            GameActionNotice<T> notice = Create<GameActionNotice<T>>();
-            notice.targetValue = targetValue;
-            notice.Add(id0);
-            NoticeDaemonCore.DefaultNoticeTransmitter.Broadcast(notice);
+            GameActionCommand<T> command = Create<GameActionCommand<T>>();
+            command.targetValue = targetValue;
+            command.Add(id0);
+            CommandDaemon.DefaultCommandEmitter.Broadcast(command);
         }
 
-        public static void Broadcast(INoticeTransmitter transmitter, Keyname id0, Keyname id1, float targetValue = 1)
+        public static void Broadcast(ICommandEmitter transmitter, Keyname id0, Keyname id1, float targetValue = 1)
         {
-            GameActionNotice<T> notice = Create<GameActionNotice<T>>();
-            notice.targetValue = targetValue;
-            notice.Add(id0);
-            notice.Add(id1);
-            NoticeDaemonCore.DefaultNoticeTransmitter.Broadcast(notice);
+            GameActionCommand<T> command = Create<GameActionCommand<T>>();
+            command.targetValue = targetValue;
+            command.Add(id0);
+            command.Add(id1);
+            CommandDaemon.DefaultCommandEmitter.Broadcast(command);
         }
         #endregion
     }

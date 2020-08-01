@@ -1,14 +1,14 @@
-namespace Prateek.DaemonFramework.Code.Branches
+namespace Prateek.DaemonFramework.Code.Servants
 {
     using Prateek.DaemonFramework.Code.Interfaces;
     using Prateek.TickableFramework.Code;
     using Prateek.TickableFramework.Code.Enums;
     using Prateek.TickableFramework.Code.Interfaces;
 
-    public abstract class DaemonBranchTickableBehaviour<TDaemonCore, TDaemonBranch>
-        : DaemonBranchBehaviour<TDaemonCore, TDaemonBranch>, ITickable
-        where TDaemonCore : DaemonCore<TDaemonCore, TDaemonBranch>
-        where TDaemonBranch : class, IDaemonBranch
+    public abstract class ServantTickableBehaviour<TDaemon, TServant>
+        : ServantBehaviour<TDaemon, TServant>, ITickable
+        where TDaemon : Daemon<TDaemon, TServant>
+        where TServant : class, IServant
     {
         #region Class Methods
         public override void Startup()

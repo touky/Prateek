@@ -6,10 +6,10 @@ namespace Mayfair.Core.Code.Statistics
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.Utils.Debug;
     using Prateek.KeynameFramework;
-    using Prateek.NoticeFramework.Tools;
+    using Prateek.CommandFramework.Tools;
     using Prateek.TickableFramework.Code.Enums;
 
-    public sealed class StatisticsDaemonCore : NoticeReceiverDaemonCore<StatisticsDaemonCore, StatisticsDaemonBranch>, IDebugMenuNotebookOwner
+    public sealed class StatisticsDaemon : CommandReceiverDaemon<StatisticsDaemon, StatisticsServant>, IDebugMenuNotebookOwner
     {
         #region Fields
         //private Dictionary<KeywordHolder, HashSet<StatisticsServiceProvider>> trackedProviderTags = new Dictionary<KeywordHolder, HashSet<StatisticsServiceProvider>>();
@@ -24,16 +24,16 @@ namespace Mayfair.Core.Code.Statistics
         {
             base.Tick(tickableFrame, seconds, unscaledSeconds);
 
-            IEnumerable<StatisticsDaemonBranch> providers = GetValidBranches();
-            foreach (StatisticsDaemonBranch branch in providers)
+            IEnumerable<StatisticsServant> providers = GetValidServants();
+            foreach (StatisticsServant servant in providers)
             {
-                if (!branch.RelevantTagsAreDirty)
+                if (!servant.RelevantTagsAreDirty)
                 {
                     continue;
                 }
 
-                //branch.RelevantTagsAreDirty = false;
-                //foreach (KeywordHolder relevantTag in branch.RelevantTags)
+                //servant.RelevantTagsAreDirty = false;
+                //foreach (KeywordHolder relevantTag in servant.RelevantTags)
                 //{
                 //    HashSet<StatisticsServiceProvider> hash;
                 //    if (!trackedProviderTags.TryGetValue(relevantTag, out hash))
@@ -42,12 +42,12 @@ namespace Mayfair.Core.Code.Statistics
                 //        trackedProviderTags.Add(relevantTag, hash);
                 //    }
 
-                //    if (hash.Contains(branch))
+                //    if (hash.Contains(servant))
                 //    {
                 //        continue;
                 //    }
 
-                //    hash.Add(branch);
+                //    hash.Add(servant);
                 //}
             }
         }
@@ -57,34 +57,34 @@ namespace Mayfair.Core.Code.Statistics
         #endregion
 
         #region Messaging
-        public override void NoticeReceived() { }
+        public override void CommandReceived() { }
 
-        protected override void SetupNoticeReceiverCallback()
+        protected override void SetupCommandReceiverCallback()
         {
-            NoticeReceiver.AddCallback<GameActionNotice>(OnStatisticsMessage);
+            CommandReceiver.AddCallback<GameActionCommand>(OnStatisticsMessage);
         }
         #endregion
 
         #region Class Methods
-        private void OnStatisticsMessage(GameActionNotice notice)
+        private void OnStatisticsMessage(GameActionCommand command)
         {
-            foreach (Keyname uniqueId in notice.Tags)
+            foreach (Keyname uniqueId in command.Tags)
             {
                 //if (!trackedProviderTags.TryGetValue(uniqueId.KeywordHolder, out HashSet<StatisticsServiceProvider> providers))
                 //{
                 //    return;
                 //}
 
-                DebugTools.Log($"Received {notice.ToString()}");
+                DebugTools.Log($"Received {command.ToString()}");
 
-                //foreach (StatisticsServiceProvider branch in providers)
+                //foreach (StatisticsServiceProvider servant in providers)
                 //{
-                //    if (!branch.IsValid)
+                //    if (!servant.IsValid)
                 //    {
                 //        continue;
                 //    }
 
-                //    branch.ProcessMessage(notice);
+                //    servant.ProcessMessage(notice);
                 //}
             }
         }

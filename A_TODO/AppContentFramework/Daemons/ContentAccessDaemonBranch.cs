@@ -1,22 +1,22 @@
 namespace Mayfair.Core.Code.Resources
 {
     using Mayfair.Core.Code.Resources.Messages;
-    using Prateek.DaemonFramework.Code.Branches;
-    using Prateek.NoticeFramework.Tools;
-    using Prateek.NoticeFramework.TransmitterReceiver;
+    using Prateek.DaemonFramework.Code.Servants;
+    using Prateek.CommandFramework.Tools;
+    using Prateek.CommandFramework.TransmitterReceiver;
 
-    public abstract class ContentAccessDaemonBranch<TDaemonCore, TDaemonBranch>
-        : DaemonBranchTickableBehaviour<TDaemonCore, TDaemonBranch>
-        where TDaemonCore : NoticeReceiverDaemonCore<TDaemonCore, TDaemonBranch>
-        where TDaemonBranch : ContentAccessDaemonBranch<TDaemonCore, TDaemonBranch>
+    public abstract class ContentAccessServant<TDaemon, TServant>
+        : ServantTickableBehaviour<TDaemon, TServant>
+        where TDaemon : CommandReceiverDaemon<TDaemon, TServant>
+        where TServant : ContentAccessServant<TDaemon, TServant>
     {
         #region Properties
         public abstract string[] ResourceKeywords { get; }
         #endregion
 
         #region Class Methods
-        public abstract RequestAccessToContent GetResourceChangeRequest(INoticeTransmitter transmitter);
-        public abstract void OnResourceChanged(TDaemonCore service, ResourcesHaveChangedResponse notice);
+        public abstract RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter);
+        public abstract void OnResourceChanged(TDaemon service, ResourcesHaveChangedResponse notice);
         #endregion
     }
 }

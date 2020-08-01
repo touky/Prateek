@@ -7,11 +7,11 @@ namespace Mayfair.Core.Code.SaveGame
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.Utils;
-    using Prateek.NoticeFramework.Notices.Core;
-    using Prateek.NoticeFramework.Tools;
+    using Commands.Core;
+    using Prateek.CommandFramework.Tools;
     using Prateek.TickableFramework.Code.Enums;
 
-    public class SaveDaemonCore : NoticeReceiverDaemonCore<SaveDaemonCore, SaveDaemonBranch>
+    public class SaveDaemon : CommandReceiverDaemon<SaveDaemon, SaveServant>
     {
         #region Fields
         private FiniteStateMachine<SaveState> stateMachine;
@@ -54,13 +54,13 @@ namespace Mayfair.Core.Code.SaveGame
         protected bool TryLoadingPendingRequest()
         {
             bool loadedAll = true;
-            IEnumerable<SaveDaemonBranch> providers = GetValidBranches();
-            foreach (SaveDaemonBranch branch in providers)
+            IEnumerable<SaveServant> providers = GetValidServants();
+            foreach (SaveServant servant in providers)
             {
                 for (int r = 0; r < this.loadingRequests.Count; r++)
                 {
                     LoadDataRequest request = this.loadingRequests[r];
-                    loadedAll = branch.TryLoad(request.Identifications) && loadedAll;
+                    loadedAll = servant.TryLoad(request.Identifications) && loadedAll;
                 }
             }
 
@@ -87,19 +87,19 @@ namespace Mayfair.Core.Code.SaveGame
             for (int r = 0; r < this.loadingRequests.Count; r++)
             {
                 LoadDataRequest request = this.loadingRequests[r];
-                ResponseNotice response = request.GetResponse();
+                ResponseCommand response = request.GetResponse();
                 response.Init(request);
-                NoticeReceiver.Send(response);
+                CommandReceiver.Send(response);
             }
 
             this.loadingRequests.Clear();
         }
 
-        public override void NoticeReceived() { }
+        public override void CommandReceived() { }
 
-        protected override void SetupNoticeReceiverCallback()
+        protected override void SetupCommandReceiverCallback()
         {
-            NoticeReceiver.AddCallback<LoadDataRequest>(OnLoadingRequest);
+            CommandReceiver.AddCallback<LoadDataRequest>(OnLoadingRequest);
         }
 
         private void OnLoadingRequest(LoadDataRequest request)
@@ -114,7 +114,7 @@ namespace Mayfair.Core.Code.SaveGame
         private class LoadPendingRequestState : TimeOutState
         {
             #region Constructors
-            public LoadPendingRequestState(SaveDaemonCore daemonCore, int timeOut = -1) : base(daemonCore, timeOut) { }
+            public LoadPendingRequestState(SaveDaemon daemonCore, int timeOut = -1) : base(daemonCore, timeOut) { }
             #endregion
 
             #region Class Methods
@@ -140,7 +140,7 @@ namespace Mayfair.Core.Code.SaveGame
         private class SendLoadedResponseState : ServiceState
         {
             #region Constructors
-            public SendLoadedResponseState(SaveDaemonCore daemonCore) : base(daemonCore) { }
+            public SendLoadedResponseState(SaveDaemon daemonCore) : base(daemonCore) { }
             #endregion
 
             #region Class Methods

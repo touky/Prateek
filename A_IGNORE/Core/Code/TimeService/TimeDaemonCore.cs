@@ -8,25 +8,25 @@ namespace Mayfair.Core.Code.TimeService
     using JetBrains.Annotations;
     using Messages;
     using Prateek.DaemonFramework.Code;
-    using Prateek.NoticeFramework;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Prateek.CommandFramework;
+    using Commands.Core;
     using Service;
     using ServiceProviders;
     using UnityEngine;
 
-    public class TimeDaemonCore : DaemonCore<TimeDaemonCore, BaseTimeDaemonBranch>, IDebugMenuNotebookOwner
+    public class TimeDaemon : Daemon<TimeDaemon, BaseTimeServant>, IDebugMenuNotebookOwner
     {
         public const float DEFAULT_RATE = 1f;
 
         private GameTime gameTime;
         private List<WeakReference<ITimeTracker<ICountdownTimer>>> activeTimers;
 
-        protected override void OnBranchRegistered(BaseTimeDaemonBranch branch)
+        protected override void OnServantRegistered(BaseTimeServant servant)
         {
-            base.OnBranchRegistered(branch);
+            base.OnServantRegistered(servant);
 
             //todo fix ?
-            //DateTime newReferenceTime = Branches[Branches.Count - 1].GetCurrentTime();
+            //DateTime newReferenceTime = Servants[Servants.Count - 1].GetCurrentTime();
             //PreserveScheduledTimers(newReferenceTime);
             //ChangeTimeReference(newReferenceTime);
         }
@@ -44,12 +44,12 @@ namespace Mayfair.Core.Code.TimeService
 
         private void ChangeTimeReference(DateTime newReferenceTime)
         {
-            ReferenceTimeChanged notice = Notice.Create<ReferenceTimeChanged>();
+            ReferenceTimeChanged notice = Command.Create<ReferenceTimeChanged>();
             notice.Init(gameTime.CurrentTime, newReferenceTime);
 
             gameTime.CacheTimeReference(newReferenceTime);
 
-            NoticeDaemonCore.DefaultNoticeTransmitter.Broadcast(notice);
+            CommandDaemon.DefaultCommandEmitter.Broadcast(notice);
         }
 
         private void PreserveScheduledTimers(DateTime newReferenceTime)

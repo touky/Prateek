@@ -6,18 +6,18 @@ namespace Prateek.DaemonFramework.Code.Enumerators
     using Prateek.Core.Code.Consts;
     using Prateek.DaemonFramework.Code.Interfaces;
 
-    internal struct DaemonBranchEnumerator<TDaemonBranch> : IEnumerator, IEnumerator<TDaemonBranch>
-        where TDaemonBranch : IDaemonBranch
+    internal struct ServantEnumerator<TServant> : IEnumerator, IEnumerator<TServant>
+        where TServant : IServant
     {
         #region Fields
         private int cursor;
 
-        private IReadOnlyList<TDaemonBranch> providerList;
+        private IReadOnlyList<TServant> providerList;
         private bool allowInvalid;
         #endregion
 
         #region Constructors
-        public DaemonBranchEnumerator(IReadOnlyList<TDaemonBranch> providerList, bool allowInvalid)
+        public ServantEnumerator(IReadOnlyList<TServant> providerList, bool allowInvalid)
         {
             cursor = Const.CURSOR_RESET;
             this.providerList = providerList;
@@ -55,7 +55,7 @@ namespace Prateek.DaemonFramework.Code.Enumerators
         #region IEnumerator<T> Members
         public void Dispose() { }
 
-        public TDaemonBranch Current
+        public TServant Current
         {
             get
             {

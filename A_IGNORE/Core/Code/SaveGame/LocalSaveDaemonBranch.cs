@@ -6,7 +6,7 @@ namespace Mayfair.Core.Code.SaveGame
     using Mayfair.Core.Code.Utils.Debug;
     using UnityEngine;
 
-    public class LocalSaveDaemonBranch : SaveDaemonBranch
+    public class LocalSaveServant : SaveServant
     {
         #region Static and Constants
         private static readonly string SAVE_FOLDER_PATH = "SavedGame";

@@ -4,7 +4,7 @@
     using Mayfair.Core.Code.Utils;
     using UnityEngine;
 
-    public class MouseInputDaemonBranch : InputDaemonBranch
+    public class MouseInputServant : InputServant
     {
         #region Static and Constants
         private static Vector2 lastMousePosition = Vector3.zero;

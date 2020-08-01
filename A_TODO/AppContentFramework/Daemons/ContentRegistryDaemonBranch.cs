@@ -1,13 +1,13 @@
 namespace Mayfair.Core.Code.Resources
 {
     using Mayfair.Core.Code.Resources.Enums;
-    using Prateek.DaemonFramework.Code.Branches;
+    using Prateek.DaemonFramework.Code.Servants;
 
-    public abstract class ContentRegistryDaemonBranch
-        : DaemonBranchBehaviour<ContentRegistryDaemonCore, ContentRegistryDaemonBranch>
+    public abstract class ContentRegistryServant
+        : ServantBehaviour<ContentRegistryDaemon, ContentRegistryServant>
     {
         #region Class Methods
-        public abstract void ExecuteState(ContentRegistryDaemonCore daemonCore, ServiceState state);
+        public abstract void ExecuteState(ContentRegistryDaemon daemonCore, ServiceState state);
         #endregion
     }
 }

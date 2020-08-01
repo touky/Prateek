@@ -1,9 +1,9 @@
 namespace Mayfair.Core.Code.UpdateService.Messages
 {
     using Interfaces;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
-    public class UnregisterForUpdate : DirectNotice
+    public class UnregisterForUpdate : DirectCommand
     {
         public IUpdatable UpdatableObject { get; private set; }
 

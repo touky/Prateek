@@ -8,10 +8,10 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.LoadingProcess.Messages;
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.Utils;
-    using Prateek.NoticeFramework.Tools;
+    using Prateek.CommandFramework.Tools;
     using Prateek.TickableFramework.Code.Enums;
 
-    public sealed class LoadingProcessDaemonCore : NoticeReceiverDaemonCore<LoadingProcessDaemonCore, LoadingProcessDaemonBranch>, IDebugMenuNotebookOwner
+    public sealed class LoadingProcessDaemon : CommandReceiverDaemon<LoadingProcessDaemon, LoadingProcessServant>, IDebugMenuNotebookOwner
     {
         #region Fields
         private LoadingProcessStatus loadingStatus = LoadingProcessStatus.Idle;
@@ -49,17 +49,17 @@ namespace Mayfair.Core.Code.LoadingProcess
         #endregion
 
         #region Messaging
-        public override void NoticeReceived() { }
+        public override void CommandReceived() { }
 
-        protected override void SetupNoticeReceiverCallback()
+        protected override void SetupCommandReceiverCallback()
         {
-            NoticeReceiver.AddCallback<TaskLoadingNotice>(OnLoadTaskMessage);
-            NoticeReceiver.AddCallback<GameLoadingNeedRestart>(OnGameLoadingNeedRestart);
+            CommandReceiver.AddCallback<TaskLoadingCommand>(OnLoadTaskMessage);
+            CommandReceiver.AddCallback<GameLoadingNeedRestart>(OnGameLoadingNeedRestart);
 
-            NoticeReceiver.AddCallback<GameLoadingPrerequisiteNotice>(OnGameLoading);
-            NoticeReceiver.AddCallback<GameLoadingGameplayNotice>(OnGameLoading);
-            NoticeReceiver.AddCallback<GameLoadingFinalizeNotice>(OnGameLoading);
-            NoticeReceiver.AddCallback<GameLoadingRestartNotice>(OnGameLoading);
+            CommandReceiver.AddCallback<GameLoadingPrerequisiteCommand>(OnGameLoading);
+            CommandReceiver.AddCallback<GameLoadingGameplayCommand>(OnGameLoading);
+            CommandReceiver.AddCallback<GameLoadingFinalizeCommand>(OnGameLoading);
+            CommandReceiver.AddCallback<GameLoadingRestartCommand>(OnGameLoading);
         }
         #endregion
 
@@ -93,14 +93,14 @@ namespace Mayfair.Core.Code.LoadingProcess
 
         private bool TryUpdatingProvider()
         {
-            LoadingProcessDaemonBranch branch = GetFirstAliveBranch();
-            if (branch == null)
+            LoadingProcessServant servant = GetFirstAliveBranch();
+            if (servant == null)
             {
                 return false;
             }
 
-            branch.Init(this);
-            branch.UpdateProcess(trackers);
+            servant.Init(this);
+            servant.UpdateProcess(trackers);
 
             ChangeStatus(LoadingProcessStatus.Loading);
 
@@ -127,22 +127,22 @@ namespace Mayfair.Core.Code.LoadingProcess
             this.loadingStatus = loadingStatus;
         }
 
-        private void OnLoadTaskMessage(TaskLoadingNotice notice)
+        private void OnLoadTaskMessage(TaskLoadingCommand command)
         {
-            AddTrackedTask(notice.trackerState);
+            AddTrackedTask(command.trackerState);
         }
 
         private void OnGameLoadingNeedRestart(GameLoadingNeedRestart notice)
         {
-            IEnumerable<LoadingProcessDaemonBranch> providers = GetValidBranches(true);
-            foreach (LoadingProcessDaemonBranch branch in providers)
+            IEnumerable<LoadingProcessServant> providers = GetValidServants(true);
+            foreach (LoadingProcessServant servant in providers)
             {
-                branch.GameLoadingRestart(notice);
+                servant.GameLoadingRestart(notice);
             }
         }
 
         //Grab those steps to mark the debug step in the debugMenu
-        private void OnGameLoading<T>(T notice) where T : GameLoadingNotice
+        private void OnGameLoading<T>(T notice) where T : GameLoadingCommand
         {
             AddTrackedTask(new LoadingTaskTracker(notice.GetType(), LoadingTrackingStatus.Finished));
         }

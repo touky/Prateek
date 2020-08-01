@@ -4,7 +4,7 @@ namespace Mayfair.Core.Code.Resources.Messages
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
     using Mayfair.Core.Code.Resources.ResourceTree;
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
     internal static class RegexContent
     {
@@ -20,7 +20,7 @@ namespace Mayfair.Core.Code.Resources.Messages
     }
 
     public abstract class RequestAccessToContent
-        : RequestNotice
+        : RequestCommand
         , ITreeIdentification
     {
         #region Fields
@@ -28,7 +28,7 @@ namespace Mayfair.Core.Code.Resources.Messages
         #endregion
 
         #region Properties
-        public override long NoticeID
+        public override long CommandID
         {
             get { return ConvertToId(typeof(RequestAccessToContent)); }
         }

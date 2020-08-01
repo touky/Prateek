@@ -6,7 +6,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.Resources;
     using Mayfair.Core.Code.VisualAsset.Messages;
 
-    public abstract class VisualResourceDaemonBranch : ContentAccessDaemonBranch<VisualResourceDaemonCore, VisualResourceDaemonBranch>, IDebugMenuNotebookOwner
+    public abstract class VisualResourceServant : ContentAccessServant<VisualResourceDaemon, VisualResourceServant>, IDebugMenuNotebookOwner
     {
         public abstract void RefreshPending();
 
@@ -17,7 +17,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             debugNotebook.AddPagesWithParent(parent, new VisualResourceMenuPage(this, name));
         }
 
-        public abstract void OnVisualResourceMessage(VisualResourceDirectNotice notice);
+        public abstract void OnVisualResourceMessage(VisualResourceDirectCommand command);
         #endregion
     }
 }

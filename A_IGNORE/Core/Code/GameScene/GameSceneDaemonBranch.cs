@@ -5,11 +5,11 @@ namespace Mayfair.Core.Code.GameScene
     using Mayfair.Core.Code.Resources.Messages;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Helpers;
-    using Prateek.NoticeFramework.Notices.Core;
-    using Prateek.NoticeFramework.TransmitterReceiver;
+    using Commands.Core;
+    using Prateek.CommandFramework.TransmitterReceiver;
     using UnityEngine;
 
-    public sealed class GameSceneDaemonBranch : ContentAccessDaemonBranch<GameSceneDaemonCore, GameSceneDaemonBranch>
+    public sealed class GameSceneServant : ContentAccessServant<GameSceneDaemon, GameSceneServant>
     {
         #region Static and Constants
         public static readonly string[] KEYWORDS = {"Scenes/"};
@@ -23,14 +23,14 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Class Methods
-        public override RequestAccessToContent GetResourceChangeRequest(INoticeTransmitter transmitter)
+        public override RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter)
         {
-            RequestCallbackOnSceneChange<SceneResourceHasChanged> request = Notice.Create<RequestCallbackOnSceneChange<SceneResourceHasChanged>>();
+            RequestCallbackOnSceneChange<SceneResourceHasChanged> request = Command.Create<RequestCallbackOnSceneChange<SceneResourceHasChanged>>();
             request.Init(ResourceKeywords);
             return request;
         }
 
-        public override void OnResourceChanged(GameSceneDaemonCore daemonCore, ResourcesHaveChangedResponse notice)
+        public override void OnResourceChanged(GameSceneDaemon daemonCore, ResourcesHaveChangedResponse notice)
         {
             if (notice is SceneResourceHasChanged)
             {
@@ -38,7 +38,7 @@ namespace Mayfair.Core.Code.GameScene
             }
         }
 
-        private void OnSceneResourceChanged(GameSceneDaemonCore daemonCore, SceneResourceHasChanged notice)
+        private void OnSceneResourceChanged(GameSceneDaemon daemonCore, SceneResourceHasChanged notice)
         {
             //todo DebugTools.Log(this, notice);
 

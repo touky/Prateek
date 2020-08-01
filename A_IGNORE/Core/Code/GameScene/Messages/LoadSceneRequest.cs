@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.GameScene.Messages
 {
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
-    public class LoadSceneRequest<TResponseType> : RequestNotice<TResponseType>
+    public class LoadSceneRequest<TResponseType> : RequestCommand<TResponseType>
         where TResponseType : LoadSceneResponse, new()
     {
         public string Scene { get; set; } = string.Empty;

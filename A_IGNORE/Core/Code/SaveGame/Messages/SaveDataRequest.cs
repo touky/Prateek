@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.SaveGame.Messages
 {
-    using Prateek.NoticeFramework.Notices.Core;
+    using Commands.Core;
 
-    public class SaveDataRequest : DirectNotice
+    public class SaveDataRequest : DirectCommand
     {
         #region StatusType enum
         public enum StatusType

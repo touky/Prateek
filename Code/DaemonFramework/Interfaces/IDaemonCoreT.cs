@@ -1,11 +1,11 @@
 namespace Prateek.DaemonFramework.Code.Interfaces
 {
-    public interface IDaemonCore<TDaemonBranch> : IDaemonCore
-        where TDaemonBranch : IDaemonBranch
+    public interface IDaemon<TServant> : IDaemon
+        where TServant : IServant
     {
         #region Registering
-        void Register(TDaemonBranch branch);
-        void Unregister(TDaemonBranch branch);
+        void Register(TServant servant);
+        void Unregister(TServant servant);
         #endregion
     }
 }

@@ -11,19 +11,19 @@
     using Prateek.TickableFramework.Code.Interfaces;
     using UnityEngine;
 
-    public abstract class DaemonCore<TDaemonCore, TDaemonBranch>
-        : SingletonBehaviour<TDaemonCore>, IDaemonCore<TDaemonBranch>, ITickable
-        where TDaemonCore : DaemonCore<TDaemonCore, TDaemonBranch>
-        where TDaemonBranch : class, IDaemonBranch
+    public abstract class Daemon<TDaemon, TServant>
+        : SingletonBehaviour<TDaemon>, IDaemon<TServant>, ITickable
+        where TDaemon : Daemon<TDaemon, TServant>
+        where TServant : class, IServant
     {
         #region Fields
-        private List<TDaemonBranch> branches = new List<TDaemonBranch>();
+        private List<TServant> servants = new List<TServant>();
         #endregion
 
         #region Class Methods
-        internal static void ChangeStatus(StatusAction action, TDaemonBranch branch)
+        internal static void ChangeStatus(StatusAction action, TServant servant)
         {
-            IDaemonCore<TDaemonBranch> instance = Instance;
+            IDaemon<TServant> instance = Instance;
 
             //This will only happen when OnApplicationQuit has been called
             if (instance == null)
@@ -35,68 +35,68 @@
             {
                 case StatusAction.Register:
                 {
-                    instance.Register(branch);
+                    instance.Register(servant);
                     break;
                 }
                 case StatusAction.Unregister:
                 {
-                    instance.Unregister(branch);
+                    instance.Unregister(servant);
                     break;
                 }
                 default:
                 {
-                    throw new Exception($"{branch.GetType().Name} sent idenfication without the action setup.");
+                    throw new Exception($"{servant.GetType().Name} sent idenfication without the action setup.");
                 }
             }
         }
 
-        protected TDaemonBranch GetFirstAliveBranch()
+        protected TServant GetFirstAliveBranch()
         {
-            foreach (var branch in branches)
+            foreach (var servant in servants)
             {
-                if (branch.IsAlive)
+                if (servant.IsAlive)
                 {
-                    return branch;
+                    return servant;
                 }
             }
 
             return default;
         }
 
-        protected IEnumerable<TDaemonBranch> GetValidBranches(bool includeInvalid = false)
+        protected IEnumerable<TServant> GetValidServants(bool includeInvalid = false)
         {
-            return new DaemonBranchEnumerable<TDaemonBranch>(branches, includeInvalid);
+            return new ServantEnumerable<TServant>(servants, includeInvalid);
         }
 
-        protected virtual void OnBranchRegistered(TDaemonBranch branch) { }
-        protected virtual void OnBranchUnregistered(TDaemonBranch branch) { }
+        protected virtual void OnServantRegistered(TServant servant) { }
+        protected virtual void OnServantUnregistered(TServant servant) { }
         #endregion
 
-        #region IDaemonCore<TDaemonBranch> Members
-        void IDaemonCore<TDaemonBranch>.Register(TDaemonBranch branch)
+        #region IDaemon<TServant> Members
+        void IDaemon<TServant>.Register(TServant servant)
         {
-            if (branches.Contains(branch))
+            if (servants.Contains(servant))
             {
                 return;
             }
 
-            branches.Add(branch);
-            branches.SortWithPriorities();
+            servants.Add(servant);
+            servants.SortWithPriorities();
 
-            OnBranchRegistered(branch);
+            OnServantRegistered(servant);
         }
 
-        void IDaemonCore<TDaemonBranch>.Unregister(TDaemonBranch branch)
+        void IDaemon<TServant>.Unregister(TServant servant)
         {
-            if (!branches.Contains(branch))
+            if (!servants.Contains(servant))
             {
                 return;
             }
 
-            branches.Remove(branch);
-            branches.SortWithPriorities();
+            servants.Remove(servant);
+            servants.SortWithPriorities();
 
-            OnBranchUnregistered(branch);
+            OnServantUnregistered(servant);
         }
         #endregion
 

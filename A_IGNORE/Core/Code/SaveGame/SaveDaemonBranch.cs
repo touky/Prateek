@@ -2,9 +2,9 @@ namespace Mayfair.Core.Code.SaveGame
 {
     using System.Collections.Generic;
     using Mayfair.Core.Code.Service;
-    using Prateek.DaemonFramework.Code.Branches;
+    using Prateek.DaemonFramework.Code.Servants;
 
-    public abstract class SaveDaemonBranch : DaemonBranchBehaviour<SaveDaemonCore, SaveDaemonBranch>
+    public abstract class SaveServant : ServantBehaviour<SaveDaemon, SaveServant>
     {
         #region Class Methods
         public abstract bool TrySave(IReadOnlyList<SaveDataIdentification> identifications);

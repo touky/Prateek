@@ -1,14 +1,14 @@
 namespace Mayfair.Core.Code.LoadingProcess.StateMachine
 {
     using Mayfair.Core.Code.StateMachines.FSM.Common;
-    using Prateek.NoticeFramework.Notices.Core;
-    using Prateek.NoticeFramework.TransmitterReceiver;
+    using Commands.Core;
+    using Prateek.CommandFramework.TransmitterReceiver;
 
     internal class NoticeState<TNotice> : NoticeState<LoadingProcessTrigger, TNotice>
-        where TNotice : BroadcastNotice, new()
+        where TNotice : BroadcastCommand, new()
     {
         #region Constructors
-        public NoticeState(INoticeReceiver noticeReceiver, int timeOut = -1) : base(noticeReceiver, timeOut) { }
+        public NoticeState(ICommandReceiver commandReceiver, int timeOut = -1) : base(commandReceiver, timeOut) { }
         #endregion
 
         #region Class Methods

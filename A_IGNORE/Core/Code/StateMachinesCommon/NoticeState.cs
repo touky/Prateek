@@ -1,12 +1,12 @@
 namespace Mayfair.Core.Code.StateMachines.FSM.Common
 {
     using Mayfair.Core.Code.Utils.Tools;
-    using Prateek.NoticeFramework.Notices.Core;
-    using Prateek.NoticeFramework.Tools;
-    using Prateek.NoticeFramework.TransmitterReceiver;
+    using Commands.Core;
+    using Prateek.CommandFramework.Tools;
+    using Prateek.CommandFramework.TransmitterReceiver;
 
     public abstract class NoticeState<TTrigger, TNotice> : EmptyState<TTrigger>
-        where TNotice : BroadcastNotice, new()
+        where TNotice : BroadcastCommand, new()
     {
         #region Fields
         private TimeOutTicker timeOutTicker;
@@ -14,10 +14,10 @@ namespace Mayfair.Core.Code.StateMachines.FSM.Common
         #endregion
 
         #region Constructors
-        public NoticeState(INoticeReceiver noticeReceiver, int timeOutTicker = -1) : base()
+        public NoticeState(ICommandReceiver commandReceiver, int timeOutTicker = -1) : base()
         {
             this.timeOutTicker = timeOutTicker;
-            this.noticeBroadcaster = new NoticeBroadcaster<TNotice>(noticeReceiver);
+            this.noticeBroadcaster = new NoticeBroadcaster<TNotice>(commandReceiver);
         }
         #endregion
 

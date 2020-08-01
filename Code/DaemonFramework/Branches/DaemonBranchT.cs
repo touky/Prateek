@@ -1,14 +1,14 @@
-namespace Prateek.DaemonFramework.Code.Branches
+namespace Prateek.DaemonFramework.Code.Servants
 {
     using Prateek.DaemonFramework.Code.Enums;
     using Prateek.DaemonFramework.Code.Interfaces;
 
-    public abstract class DaemonBranch<TDaemonCore, TDaemonBranch>
-        : IDaemonBranch
-        where TDaemonCore : DaemonCore<TDaemonCore, TDaemonBranch>
-        where TDaemonBranch : class, IDaemonBranch
+    public abstract class Servant<TDaemon, TServant>
+        : IServant
+        where TDaemon : Daemon<TDaemon, TServant>
+        where TServant : class, IServant
     {
-        #region IDaemonBranch Members
+        #region IServant Members
         public virtual string Name
         {
             get { return "NOT_IMPLEMENTED"; }
@@ -26,12 +26,12 @@ namespace Prateek.DaemonFramework.Code.Branches
 
         public virtual void Startup()
         {
-            DeamonUtils.ChangeStatus<TDaemonCore, TDaemonBranch>(StatusAction.Register, this as TDaemonBranch);
+            DeamonUtils.ChangeStatus<TDaemon, TServant>(StatusAction.Register, this as TServant);
         }
 
         public virtual void Shutdown()
         {
-            DeamonUtils.ChangeStatus<TDaemonCore, TDaemonBranch>(StatusAction.Unregister, this as TDaemonBranch);
+            DeamonUtils.ChangeStatus<TDaemon, TServant>(StatusAction.Unregister, this as TServant);
         }
         #endregion
     }

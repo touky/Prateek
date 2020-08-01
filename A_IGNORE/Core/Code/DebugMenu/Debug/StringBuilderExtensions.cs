@@ -20,7 +20,7 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void AddLogHeader(this StringBuilder builder, IDaemonCore daemonCore, string notice)
+        public static void AddLogHeader(this StringBuilder builder, IDaemon daemonCore, string notice)
         {
             if (builder == null)
             {
@@ -33,20 +33,20 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void AddLogHeader(this StringBuilder builder, IDaemonBranch branch, string notice)
+        public static void AddLogHeader(this StringBuilder builder, IServant servant, string notice)
         {
             if (builder == null)
             {
-                throw new Exception($"Builder is null for {branch.GetType().Name}");
+                throw new Exception($"Builder is null for {servant.GetType().Name}");
             }
 
-            builder.Append($"SERVICE<{branch.Name} ({branch.GetType().Name})>");
-            //todo builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(branch.GetType(), colorOffset)));
+            builder.Append($"SERVICE<{servant.Name} ({servant.GetType().Name})>");
+            //todo builder.ColorCodeMessage(DoColor(ColorHelper.TypeToHue(servant.GetType(), colorOffset)));
             builder.AppendLine(notice);
         }
 
         [Conditional("NVIZZIO_DEV")]
-        public static void AddReceivedMessage(this StringBuilder builder, IDaemonCore daemonCore, Message notice)
+        public static void AddReceivedMessage(this StringBuilder builder, IDaemon daemonCore, Message notice)
         {
             if (builder == null)
             {
@@ -58,7 +58,7 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         //todo [Conditional("NVIZZIO_DEV")]
-        //todo public static void AddCommunicator(this StringBuilder builder, IDaemonCore daemonCore, ILightMessageCommunicator noticeReceiver)
+        //todo public static void AddCommunicator(this StringBuilder builder, IDaemon daemonCore, ILightMessageCommunicator noticeReceiver)
         //todo {
         //todo     if (builder == null)
         //todo     {

@@ -3,7 +3,7 @@ namespace Mayfair.Core.Code.TimeService.ServiceProviders
     using System;
     using UnityEngine;
 
-    public class PlayFabTimeDaemonBranch : BaseTimeDaemonBranch
+    public class PlayFabTimeServant : BaseTimeServant
     {
         public override int Priority
         {
@@ -13,7 +13,7 @@ namespace Mayfair.Core.Code.TimeService.ServiceProviders
         private DateTime serverTime;
         private float timeWhenServerTimeSet;
 
-        public PlayFabTimeDaemonBranch(DateTime serverTime)
+        public PlayFabTimeServant(DateTime serverTime)
         {
             this.serverTime = serverTime;
             timeWhenServerTimeSet = Time.time;

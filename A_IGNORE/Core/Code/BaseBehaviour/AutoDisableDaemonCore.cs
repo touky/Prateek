@@ -5,7 +5,7 @@ namespace Mayfair.Core.Code.BaseBehaviour
     using Prateek.TickableFramework.Code.Enums;
     using UnityEngine;
 
-    public sealed class AutoDisableDaemonCore : DaemonCore<AutoDisableDaemonCore, AutoDisableDaemonBranch>
+    public sealed class AutoDisableDaemon : Daemon<AutoDisableDaemon, AutoDisableServant>
     {
         #region Static and Constants
         //10 frames alives

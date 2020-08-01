@@ -6,8 +6,8 @@ namespace Mayfair.Core.Code.Resources.ServiceProvider
     using UnityEngine.AddressableAssets.ResourceLocators;
     using UnityEngine.ResourceManagement.AsyncOperations;
 
-    public class AddressableRegistryDaemonBranch
-        : ContentRegistryDaemonBranch
+    public class AddressableRegistryServant
+        : ContentRegistryServant
     {
         #region Fields
         private bool addressSystemInitialized = false;
@@ -22,7 +22,7 @@ namespace Mayfair.Core.Code.Resources.ServiceProvider
         #endregion
 
         #region Class Methods
-        public override void ExecuteState(ContentRegistryDaemonCore daemonCore, ServiceState state)
+        public override void ExecuteState(ContentRegistryDaemon daemonCore, ServiceState state)
         {
             switch (state)
             {
