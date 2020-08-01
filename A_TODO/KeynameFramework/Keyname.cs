@@ -1,205 +1,56 @@
-namespace Mayfair.Core.Code.Utils.Types.UniqueId
+namespace Prateek.KeynameFramework
 {
     using System;
     using System.Diagnostics;
-    using Mayfair.Core.Code.TagSystem;
-    using Prateek.Core.Code.CachedArray;
+    using System.Text;
+    using Prateek.Core.Code.CachedList;
+    using Prateek.KeynameFramework.Enums;
+    using Prateek.KeynameFramework.Interfaces;
     using UnityEngine.Assertions;
 
-    [DebuggerDisplay("Keyname:{keyname}/{GetHexHashCode()}")]
+    [DebuggerDisplay("Keyname: {DebugString()}/{IntExtensions.ToHex(hash)}")]
     public struct Keyname : IEquatable<Keyname>
     {
-        //Add / Remove / Insert / +-
-        //SetNumber ?
-        //SetName
-        //Match / Filter / Replace
-        //Create<T>
-        //Create(Type)
-        //[] Create<Interface>()
-
         #region Fields
-        internal CachedList10<Type> keywords;
-
-        internal string keyname;
-        internal string name;
-        internal KeywordArray keywordArray;
+        internal KeynameSettingsData settings;
+        internal CachedList10<Keyword> keywords;
+        internal KeynameState state;
+        internal int hash;
+        internal string builtKeyname;
         #endregion
 
         #region Properties
-        //Todo: benjaminh: remvoe this
-        public string RawValue
-        {
-            get { return keyname; }
-        }
-
-        public KeynameState Type
+        public KeynameState State
         {
             get
             {
-                if (!string.IsNullOrEmpty(name))
+                if (state == KeynameState.None)
                 {
-                    return KeynameState.Fullname;
+                    this.RebuildState();
                 }
 
-                return keywordArray.Keywords.Count > 0 ? KeynameState.Keywords : KeynameState.None;
+                return state;
             }
-        }
-
-        internal KeywordArray KeywordArray
-        {
-            get { return keywordArray; }
         }
         #endregion
 
         #region Constructors
         internal Keyname(bool noCheck)
         {
-            keywords = new CachedList10<Type>();
-
-            keyname = string.Empty;
-            name = string.Empty;
-            keywordArray = new KeywordArray();
+            settings = null;
+            keywords = new CachedList10<Keyword>();
+            state = KeynameState.None;
+            hash = 0;
+            builtKeyname = null;
         }
         #endregion
 
-        #region Static Constructors
-        public static Keyname Create(string stringId)
+        #region Class Methods
+        public static Keyname Create(string stringId, KeynameSettingsData settings = null)
         {
             Assert.IsNotNull(stringId);
 
-            var id   = new Keyname(true);
-            var name = string.Empty;
-            id.keywordArray = new KeywordArray(stringId, out id.name);
-            id.name = name;
-            id.keyname = KeywordRegistry.ToString(id.keywordArray.Keywords, name);
-            return id;
-        }
-
-        //public static Keyname Create<T0>(string name = null)
-        //    where T0 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), name);
-        //}
-
-        //public static Keyname Create<T0, T1>(string name = null)
-        //    where T0 : MasterKeyword
-        //    where T1 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), typeof(T1), name);
-        //}
-
-        //public static Keyname Create<T0, T1, T2>(string name = null)
-        //    where T0 : MasterKeyword
-        //    where T1 : MasterKeyword
-        //    where T2 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), typeof(T1), typeof(T2), name);
-        //}
-
-        //public static Keyname Create<T0, T1, T2, T3>(string name = null)
-        //    where T0 : MasterKeyword
-        //    where T1 : MasterKeyword
-        //    where T2 : MasterKeyword
-        //    where T3 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), typeof(T1), typeof(T2), typeof(T3), name);
-        //}
-
-        //public static Keyname Create<T0, T1, T2, T3, T4>(string name = null)
-        //    where T0 : MasterKeyword
-        //    where T1 : MasterKeyword
-        //    where T2 : MasterKeyword
-        //    where T3 : MasterKeyword
-        //    where T4 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), typeof(T1), typeof(T2), typeof(T3), typeof(T4), name);
-        //}
-
-        //public static Keyname Create<T0, T1, T2, T3, T4, T5>(string name = null)
-        //    where T0 : MasterKeyword
-        //    where T1 : MasterKeyword
-        //    where T2 : MasterKeyword
-        //    where T3 : MasterKeyword
-        //    where T4 : MasterKeyword
-        //    where T5 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), name);
-        //}
-
-        //public static Keyname Create<T0, T1, T2, T3, T4, T5, T6>(string name = null)
-        //    where T0 : MasterKeyword
-        //    where T1 : MasterKeyword
-        //    where T2 : MasterKeyword
-        //    where T3 : MasterKeyword
-        //    where T4 : MasterKeyword
-        //    where T5 : MasterKeyword
-        //    where T6 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), name);
-        //}
-
-        //public static Keyname Create<T0, T1, T2, T3, T4, T5, T6, T7>(string name = null)
-        //    where T0 : MasterKeyword
-        //    where T1 : MasterKeyword
-        //    where T2 : MasterKeyword
-        //    where T3 : MasterKeyword
-        //    where T4 : MasterKeyword
-        //    where T5 : MasterKeyword
-        //    where T6 : MasterKeyword
-        //    where T7 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7), name);
-        //}
-
-        //public static Keyname Create<T0, T1, T2, T3, T4, T5, T6, T7, T8>(string name = null)
-        //    where T0 : MasterKeyword
-        //    where T1 : MasterKeyword
-        //    where T2 : MasterKeyword
-        //    where T3 : MasterKeyword
-        //    where T4 : MasterKeyword
-        //    where T5 : MasterKeyword
-        //    where T6 : MasterKeyword
-        //    where T7 : MasterKeyword
-        //    where T8 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T8), name);
-        //}
-
-        //public static Keyname Create<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(string name = null)
-        //    where T0 : MasterKeyword
-        //    where T1 : MasterKeyword
-        //    where T2 : MasterKeyword
-        //    where T3 : MasterKeyword
-        //    where T4 : MasterKeyword
-        //    where T5 : MasterKeyword
-        //    where T6 : MasterKeyword
-        //    where T7 : MasterKeyword
-        //    where T8 : MasterKeyword
-        //    where T9 : MasterKeyword
-        //{
-        //    return Create(typeof(T0), typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T8), typeof(T9), name);
-        //}
-        #endregion Static Constructors
-
-        #region operators
-        public static implicit operator Keyname(string keyname)
-        {
-            return Create(keyname);
-        }
-
-        public static implicit operator string(Keyname keyname)
-        {
-            return keyname.keyname;
-        }
-
-        public static bool operator ==(Keyname a, Keyname b)
-        {
-            return a.keyname == b.keyname;
-        }
-
-        public static bool operator !=(Keyname a, Keyname b)
-        {
-            return a.keyname != b.keyname;
+            return KeywordRegistry.Convert(stringId, settings);
         }
 
         public override bool Equals(object other)
@@ -214,30 +65,278 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
 
         public override int GetHashCode()
         {
-            var hash = 1;
-            if (keyname.Length != 0)
+            if (hash == 0)
             {
-                hash ^= keyname.GetHashCode();
+                this.GenerateHash();
             }
 
             return hash;
         }
 
-        private string GetHexHashCode()
-        {
-            return string.Format("{0:X}", GetHashCode());
-        }
-
         public override string ToString()
         {
-            return RawValue;
+            if (builtKeyname == null)
+            {
+                this.BuildKeyname();
+            }
+
+            return builtKeyname;
+        }
+
+        public string DebugString()
+        {
+            var builder = new StringBuilder();
+            foreach (var keyword in keywords)
+            {
+                builder.Append(keyword.DebugString());
+            }
+
+            return builder.ToString();
         }
         #endregion
 
-        #region IEquatable<UniqueId> Members
+        #region IEquatable<Keyname> Members
         public bool Equals(Keyname other)
         {
-            return other == this;
+            return this.Match(other) == KeynameMatchType.Equal;
+        }
+        #endregion
+
+        #region Keyword Create
+        public static Keyname Create(Keyword k0)
+        {
+            var keyname = new Keyname(false);
+            keyname.Add(k0);
+            return keyname;
+        }
+
+        public static Keyname Create(Keyword k0, Keyword k1)
+        {
+            return Create(k0) + k1;
+        }
+
+        public static Keyname Create(Keyword k0, Keyword k1, Keyword k2)
+        {
+            return Create(k0, k1) + k2;
+        }
+
+        public static Keyname Create(Keyword k0, Keyword k1, Keyword k2, Keyword k3)
+        {
+            return Create(k0, k1, k2) + k3;
+        }
+
+        public static Keyname Create(Keyword k0, Keyword k1, Keyword k2, Keyword k3, Keyword k4)
+        {
+            return Create(k0, k1, k2, k3) + k4;
+        }
+
+        public static Keyname Create(Keyword k0, Keyword k1, Keyword k2, Keyword k3, Keyword k4, Keyword k5)
+        {
+            return Create(k0, k1, k2, k3, k4) + k5;
+        }
+
+        public static Keyname Create(Keyword k0, Keyword k1, Keyword k2, Keyword k3, Keyword k4, Keyword k5, Keyword k6)
+        {
+            return Create(k0, k1, k2, k3, k4, k5) + k6;
+        }
+
+        public static Keyname Create(Keyword k0, Keyword k1, Keyword k2, Keyword k3, Keyword k4, Keyword k5, Keyword k6, Keyword k7)
+        {
+            return Create(k0, k1, k2, k3, k4, k5, k6) + k7;
+        }
+
+        public static Keyname Create(Keyword k0, Keyword k1, Keyword k2, Keyword k3, Keyword k4, Keyword k5, Keyword k6, Keyword k7, Keyword k8)
+        {
+            return Create(k0, k1, k2, k3, k4, k5, k6, k7) + k8;
+        }
+
+        public static Keyname Create(Keyword k0, Keyword k1, Keyword k2, Keyword k3, Keyword k4, Keyword k5, Keyword k6, Keyword k7, Keyword k8, Keyword k9)
+        {
+            return Create(k0, k1, k2, k3, k4, k5, k6, k7, k8) + k9;
+        }
+        #endregion
+
+        #region Typed Create
+        public static Keyname Create<T0>(string name = null)
+            where T0 : MasterKeyword
+        {
+            var keyname = new Keyname(false);
+            keyname.Add<T0>();
+            if (name != null)
+            {
+                keyname.Add(name);
+            }
+
+            return keyname;
+        }
+
+        public static Keyname Create<T0, T1>(string name = null)
+            where T0 : MasterKeyword
+            where T1 : MasterKeyword
+        {
+            var keyname = Create<T0>(name);
+            keyname.Add<T1>();
+            return keyname;
+        }
+
+        public static Keyname Create<T0, T1, T2>(string name = null)
+            where T0 : MasterKeyword
+            where T1 : MasterKeyword
+            where T2 : MasterKeyword
+        {
+            var keyname = Create<T0, T1>(name);
+            keyname.Add<T2>();
+            return keyname;
+        }
+
+        public static Keyname Create<T0, T1, T2, T3>(string name = null)
+            where T0 : MasterKeyword
+            where T1 : MasterKeyword
+            where T2 : MasterKeyword
+            where T3 : MasterKeyword
+        {
+            var keyname = Create<T0, T1, T2>(name);
+            keyname.Add<T3>();
+            return keyname;
+        }
+
+        public static Keyname Create<T0, T1, T2, T3, T4>(string name = null)
+            where T0 : MasterKeyword
+            where T1 : MasterKeyword
+            where T2 : MasterKeyword
+            where T3 : MasterKeyword
+            where T4 : MasterKeyword
+        {
+            var keyname = Create<T0, T1, T2, T3>(name);
+            keyname.Add<T4>();
+            return keyname;
+        }
+
+        public static Keyname Create<T0, T1, T2, T3, T4, T5>(string name = null)
+            where T0 : MasterKeyword
+            where T1 : MasterKeyword
+            where T2 : MasterKeyword
+            where T3 : MasterKeyword
+            where T4 : MasterKeyword
+            where T5 : MasterKeyword
+        {
+            var keyname = Create<T0, T1, T2, T3, T4>(name);
+            keyname.Add<T5>();
+            return keyname;
+        }
+
+        public static Keyname Create<T0, T1, T2, T3, T4, T5, T6>(string name = null)
+            where T0 : MasterKeyword
+            where T1 : MasterKeyword
+            where T2 : MasterKeyword
+            where T3 : MasterKeyword
+            where T4 : MasterKeyword
+            where T5 : MasterKeyword
+            where T6 : MasterKeyword
+        {
+            var keyname = Create<T0, T1, T2, T3, T4, T5>(name);
+            keyname.Add<T6>();
+            return keyname;
+        }
+
+        public static Keyname Create<T0, T1, T2, T3, T4, T5, T6, T7>(string name = null)
+            where T0 : MasterKeyword
+            where T1 : MasterKeyword
+            where T2 : MasterKeyword
+            where T3 : MasterKeyword
+            where T4 : MasterKeyword
+            where T5 : MasterKeyword
+            where T6 : MasterKeyword
+            where T7 : MasterKeyword
+        {
+            var keyname = Create<T0, T1, T2, T3, T4, T5, T6>(name);
+            keyname.Add<T7>();
+            return keyname;
+        }
+
+        public static Keyname Create<T0, T1, T2, T3, T4, T5, T6, T7, T8>(string name = null)
+            where T0 : MasterKeyword
+            where T1 : MasterKeyword
+            where T2 : MasterKeyword
+            where T3 : MasterKeyword
+            where T4 : MasterKeyword
+            where T5 : MasterKeyword
+            where T6 : MasterKeyword
+            where T7 : MasterKeyword
+            where T8 : MasterKeyword
+        {
+            var keyname = Create<T0, T1, T2, T3, T4, T5, T6, T7>(name);
+            keyname.Add<T8>();
+            return keyname;
+        }
+
+        public static Keyname Create<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+            where T0 : MasterKeyword
+            where T1 : MasterKeyword
+            where T2 : MasterKeyword
+            where T3 : MasterKeyword
+            where T4 : MasterKeyword
+            where T5 : MasterKeyword
+            where T6 : MasterKeyword
+            where T7 : MasterKeyword
+            where T8 : MasterKeyword
+            where T9 : MasterKeyword
+        {
+            var keyname = Create<T0, T1, T2, T3, T4, T5, T6, T7, T8>();
+            keyname.Add<T9>();
+            return keyname;
+        }
+        #endregion
+
+        #region operators
+        public static implicit operator Keyname(string keyname)
+        {
+            return Create(keyname);
+        }
+
+        public static Keyname operator +(Keyname a, Keyname b)
+        {
+            var c = a;
+            foreach (var keyword in b.keywords)
+            {
+                c.Add(keyword);
+            }
+
+            return c;
+        }
+
+        public static Keyname operator +(Keyname a, Keyword b)
+        {
+            var c = a;
+            c.Add(b);
+            return c;
+        }
+
+        public static Keyname operator -(Keyname a, Keyword b)
+        {
+            var c = a;
+            c.Remove(b);
+            return c;
+        }
+
+        public static Keyname operator %(Keyname a, Keyword b)
+        {
+            return a.Filter(b);
+        }
+
+        public static Keyname operator %(Keyname a, Keyname b)
+        {
+            return b.Filter(a);
+        }
+
+        public static bool operator ==(Keyname a, Keyname b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Keyname a, Keyname b)
+        {
+            return !a.Equals(b);
         }
         #endregion
     }

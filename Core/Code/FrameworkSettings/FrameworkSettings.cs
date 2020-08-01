@@ -1,4 +1,4 @@
-﻿namespace Mayfair.Core.Code.FrameworkSettings
+﻿namespace Prateek.Core.Code.FrameworkSettings
 {
     /// <summary>
     ///     Base class for framework settings.

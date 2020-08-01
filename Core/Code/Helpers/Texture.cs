@@ -35,8 +35,7 @@ namespace Prateek.Core.Code.Helpers
 {
     using System.Collections.Generic;
     using Prateek.Core.Code.Extensions;
-    using Prateek.Core.Code.ShaderTo;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
+    using static Prateek.Core.Code.Extensions.CSharp;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------

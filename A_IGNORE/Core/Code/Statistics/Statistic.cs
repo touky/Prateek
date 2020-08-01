@@ -1,6 +1,5 @@
 namespace Mayfair.Core.Code.Statistics
 {
-    using Mayfair.Core.Code.TagSystem;
     using UnityEngine;
 
     public struct Statistic

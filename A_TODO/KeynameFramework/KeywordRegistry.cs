@@ -1,28 +1,79 @@
-namespace Mayfair.Core.Code.TagSystem
+namespace Prateek.KeynameFramework
 {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using Mayfair.Core.Code.Utils;
-    using Mayfair.Core.Code.Utils.Helpers.Regexp;
-    using Mayfair.Core.Code.Utils.Types;
+    using Prateek.Core.Code.Helpers;
+    using Prateek.KeynameFramework.Enums;
+    using Prateek.KeynameFramework.Interfaces;
+
+    public class AssemblyLookupWorker
+    {
+        private List<Type> searchedTypes = new List<Type>();
+        private List<Type> foundTypes = new List<Type>();
+
+        public List<Type> FoundTypes
+        {
+            get { return foundTypes; }
+        }
+
+        public AssemblyLookupWorker(params Type[] types)
+        {
+            AssemblyForager.workers.Add(this);
+
+            searchedTypes.AddRange(types);
+        }
+
+        internal void TryStore(Type assemblyType)
+        {
+            foreach (var searchedType in searchedTypes)
+            {
+                if (assemblyType == searchedType
+                    || assemblyType.IsSubclassOf(searchedType)
+                    || searchedType.IsAssignableFrom(searchedType))
+                {
+                    foundTypes.Add(assemblyType);
+                    break;
+                }
+            }
+        }
+    }
+
+    public static class AssemblyForager
+    {
+        internal static List<AssemblyLookupWorker> workers = new List<AssemblyLookupWorker>();
+
+        public static void Execute()
+        {
+            foreach (Assembly domainAssembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type[] assemblyTypes = domainAssembly.GetTypes();
+                foreach (Type assemblyType in assemblyTypes)
+                {
+                    foreach (var worker in workers)
+                    {
+                        worker.TryStore(assemblyType);
+                    }
+                }
+            }
+
+            workers.Clear();
+        }
+    }
 
     internal static class KeywordRegistry
     {
         #region Static and Constants
-        private const string UNDERSCORE = "_";
         private static Dictionary<string, Type> stringToKeywords = new Dictionary<string, Type>();
         private static Dictionary<Type, Type> keywordToParent = new Dictionary<Type, Type>();
-        private static List<string> matchesCache = new List<string>(10);
         #endregion
 
-        internal static Type RootTagType
+        internal static Type MasterKeyword
         {
             get { return typeof(MasterKeyword); }
         }
 
         #region Class Methods
-        //TODO: benjaminh: This is *HIGHLY* temporary
         private static void Init()
         {
             if (stringToKeywords.Count != 0)
@@ -30,38 +81,32 @@ namespace Mayfair.Core.Code.TagSystem
                 return;
             }
 
-            Type masterType = typeof(MasterKeyword);
-            foreach (Assembly domain_assembly in AppDomain.CurrentDomain.GetAssemblies())
+            //todo move that elsewhere
+            var worker = new AssemblyLookupWorker(MasterKeyword);
+            AssemblyForager.Execute();
+
+            foreach (Type type in worker.FoundTypes)
             {
-                Type[] types = domain_assembly.GetTypes();
-                foreach (Type type in types)
+                if (typeof(IReplaceWithParentKeyword).IsAssignableFrom(type))
                 {
-                    if (!type.IsSubclassOf(masterType))
+                    var baseType = type;
+                    while (typeof(IReplaceWithParentKeyword).IsAssignableFrom(baseType))
                     {
-                        continue;
+                        baseType = baseType.BaseType;
                     }
 
-                    //todo Temporary solution for type spoofing, need to change when doing the 2nd pass
-                    if (type.GetField(MasterKeyword.TYPE_USE_PARENT_SPOOF, BindingFlags.NonPublic | BindingFlags.Static) != null)
-                    {
-                        Add(type.Name, type.BaseType);
-                        keywordToParent.Add(type, type.BaseType);
-                    }
-                    else
-                    {
-                        Add(type);
-                    }
+                    Register(type.Name, baseType);
+                    keywordToParent.Add(type, baseType);
+                }
+                else
+                {
+                    Register(type);
                 }
             }
         }
-        
 
-        internal static bool TagMatches(Type parent, Type child)
-        {
-            return child == parent || child.IsSubclassOf(parent) || parent.IsAssignableFrom(child);
-        }
 
-        private static void Add(string name, Type type)
+        private static void Register(string name, Type type)
         {
 #if DEBUG_DEV
             if (tagStorage.ContainsKey(name))
@@ -73,7 +118,7 @@ namespace Mayfair.Core.Code.TagSystem
             stringToKeywords.Add(name, type);
         }
 
-        private static void Add(Type type)
+        private static void Register(Type type)
         {
 #if DEBUG_DEV
             if (tagStorage.ContainsKey(type.Name))
@@ -85,7 +130,7 @@ namespace Mayfair.Core.Code.TagSystem
             stringToKeywords.Add(type.Name, type);
         }
         
-        internal static Type Get(Type type)
+        internal static Type GetKeywordType(Type type)
         {
             if (keywordToParent.ContainsKey(type))
             {
@@ -95,7 +140,7 @@ namespace Mayfair.Core.Code.TagSystem
             return type;
         }
 
-        public static Type Get(string source)
+        public static Type GetKeywordType(string source)
         {
             Init();
 
@@ -108,63 +153,90 @@ namespace Mayfair.Core.Code.TagSystem
             return null;
         }
 
-        public static string ToString(IReadOnlyList<Type> tags, string name = null)
+        internal static Keyname Convert(string source, KeynameSettingsData settings = null)
         {
-            if (tags.Count == 0)
-            {
-                return name;
-            }
-
-            string result = tags[0].Name;
-
-            for (int i = 1, n = tags.Count; i < n; i++)
-            {
-                result += $"{UNDERSCORE}{tags[i].Name}";
-            }
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                result += $"{UNDERSCORE}{name}";
-            }
-
-            return result;
-        }
-
-        public static string Convert(string source, out StaticArray10<Type> tags)
-        {
-            string name = string.Empty;
-            tags = new StaticArray10<Type>();
-            if (string.IsNullOrEmpty(source))
-            {   
-                return name;
-            }
-
             Init();
 
-            if (!RegexHelper.TryFetchingMatches(source, RegexHelper.UniqueIdTag, matchesCache))
-            {
-                return name;
+            settings = settings == null ? KeynameSettings.Instance.Data : settings;
+
+            var keyname = new Keyname(false);
+            keyname.settings = settings;
+            if (string.IsNullOrEmpty(source))
+            {   
+                return keyname;
             }
 
-            foreach (string match in matchesCache)
+            var keywordMatch = settings.keywordRegex.Match(source);
+            if (!keywordMatch.Success)
             {
-                Type tag = Get(match);
-                if (tag == null)
+                return keyname;
+            }
+
+            var firstLoop = true;
+            var keyword = new Keyword();
+            var numberMatch = settings.numberRegex.Match(source);
+            while (true)
+            {
+                var keywordIndex = keywordMatch.Success ? keywordMatch.LastGroup().Index : int.MaxValue;
+                var numberIndex  = numberMatch.Success ? numberMatch.LastGroup().Index : int.MaxValue;
+
+                if (numberIndex < keywordIndex)
                 {
-                    if (!string.IsNullOrEmpty(name))
+                    if (firstLoop)
                     {
-                        name += Consts.UNDERSCORE_SINGLE;
+                        throw new ArithmeticException($"Keyname cannot start with a numerical value");
                     }
-                    name += match;
-                    continue;
+
+                    keyname.Add(new Keyword(keyword, int.Parse(numberMatch.LastGroup().Value)));
+                    keyword = new Keyword();
+                    numberMatch = numberMatch.NextMatch();
+                }
+                else
+                {
+                    Type keywordType = GetKeywordType(keywordMatch.LastGroup().Value);
+                    if (keywordType != null)
+                    {
+                        if (keyword.Status != KeywordStatus.None)
+                        {
+                            keyname.Add(keyword);
+                        }
+
+                        keyword = keywordType;
+                    }
+                    else
+                    {
+                        if (keyword.Status == KeywordStatus.Name)
+                        {
+                            keyword = keyword.Name + keywordMatch.LastGroup().Value;
+                        }
+                        else
+                        {
+                            if (keyword.Status == KeywordStatus.Type)
+                            {
+                                keyname.Add(keyword);
+                            }
+
+                            keyword = keywordMatch.LastGroup().Value;
+                        }
+                    }
+
+                    keywordMatch = keywordMatch.NextMatch();
                 }
 
-                tags.Add(tag);
+                firstLoop = false;
+
+                if (!keywordMatch.Success && !numberMatch.Success)
+                {
+                    break;
+                }
             }
 
-            matchesCache.Clear();
+            if (keyword.Status != KeywordStatus.None)
+            {
+                keyname.Add(keyword);
+            }
 
-            return name;
+            return keyname;
         }
         #endregion
     }

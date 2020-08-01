@@ -1,7 +1,7 @@
 namespace Mayfair.Core.Code.GameAction
 {
-    using Mayfair.Core.Code.TagSystem;
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.KeynameFramework;
+    using Prateek.KeynameFramework.Interfaces;
     using Prateek.NoticeFramework;
     using Prateek.NoticeFramework.TransmitterReceiver;
 
@@ -11,7 +11,7 @@ namespace Mayfair.Core.Code.GameAction
         #region Constructors
         public GameActionNotice()
         {
-            tags.Add(Keyname.Create<T>());
+            //tags.Add(Keyname.Create<T>());
         }
         #endregion
 

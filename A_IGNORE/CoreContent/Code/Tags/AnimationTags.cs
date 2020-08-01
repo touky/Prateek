@@ -1,6 +1,6 @@
 namespace Mayfair.CoreContent.Code.Tags
 {
-    using Mayfair.Core.Code.TagSystem;
+    using Prateek.KeynameFramework.Interfaces;
 
     public abstract partial class Tags
     {

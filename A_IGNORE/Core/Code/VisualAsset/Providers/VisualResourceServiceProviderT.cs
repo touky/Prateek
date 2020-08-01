@@ -8,7 +8,8 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Extensions;
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.KeynameFramework;
+    using Prateek.KeynameFramework.Interfaces;
     using UnityEngine.Assertions;
 
     public abstract class VisualResourceDaemonBranch<TResourceReference>
@@ -67,7 +68,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
                 IContentHandle iRreference;
                 if (!references.TryGetValue(keynameUser.Keyname, out iRreference))
                 {
-                    string logText = $"{GetType().Name}: Visual resource for {keynameUser.Keyname.RawValue} could not be found, FIX IT !";
+                    string logText = "//TODO: FEEDBACK"; //todo: $"{GetType().Name}: Visual resource for {keynameUser.Keyname.RawValue} could not be found, FIX IT !";
                     if (!references.TryGetValue(container.DefaultResource, out iRreference))
                     {
                         //Upgrade to error
@@ -194,7 +195,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
 
             public string DefaultResource
             {
-                get { return defaultResource; }
+                get { return defaultResource.ToString(); }
             }
 
             public virtual Type Type

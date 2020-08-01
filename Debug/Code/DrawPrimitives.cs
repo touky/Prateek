@@ -36,7 +36,7 @@ namespace Prateek.Debug.Code
 {
     using Prateek.Core.Code;
     using Prateek.Core.Code.Extensions;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
+    using static Prateek.Core.Code.Extensions.CSharp;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------

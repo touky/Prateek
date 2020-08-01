@@ -17,38 +17,42 @@
 //-----------------------------------------------------------------------------
 #region Prateek Ifdefs
 
-//Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
-//Auto activate debug
+    //Auto activate debug
 #if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
 
-#endregion Prateek Ifdefs
-// -END_PRATEEK_CSHARP_IFDEF-
+    #endregion Prateek Ifdefs
+    // -END_PRATEEK_CSHARP_IFDEF-
 
-
-
-
-///----------------------------------------------------------------------------
-namespace Prateek.Core.Code.ShaderTo
+//Auto activate some of the prateek defines
+namespace Prateek.Core.Code.Extensions
 {
     // -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
-    ///------------------------------------------------------------------------
+
     #region Prateek Code Namespaces
+
+    using System;
     using System;
     using System.Collections;
+    using System.Collections;
     using System.Collections.Generic;
-    
-    using UnityEngine;
-    
+    using System.Collections.Generic;
     using Prateek;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
+    using Prateek;
+    using UnityEngine;
+    using UnityEngine;
+
     #endregion Prateek Code Namespaces
-// -END_PRATEEK_CSHARP_NAMESPACE_CODE-
+    // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
+
+
+
+    ///----------------------------------------------------------------------------
     
 
     ///------------------------------------------------------------------------
@@ -72,26 +76,6 @@ namespace Prateek.Core.Code.ShaderTo
         #endregion Mixed Ctor Vector3Int
         
     }
-}
-
-
-
-///----------------------------------------------------------------------------
-namespace Prateek.Core.Code.ShaderTo
-{
-    // -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
-    ///------------------------------------------------------------------------
-    #region Prateek Code Namespaces
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    
-    using UnityEngine;
-    
-    using Prateek;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
-    #endregion Prateek Code Namespaces
-// -END_PRATEEK_CSHARP_NAMESPACE_CODE-
     
 
     ///------------------------------------------------------------------------

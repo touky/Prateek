@@ -696,7 +696,7 @@ namespace Prateek.Core.Code.Extensions
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
+    using static Prateek.Core.Code.Extensions.CSharp;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
 
@@ -732,7 +732,7 @@ namespace Prateek.Core.Code.Extensions
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
+    using static Prateek.Core.Code.Extensions.CSharp;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
 

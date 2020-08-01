@@ -1,4 +1,4 @@
-namespace Mayfair.Core.Code.Utils.Types.UniqueId
+namespace Prateek.KeynameFramework.Enums
 {
     public enum KeynameState
     {

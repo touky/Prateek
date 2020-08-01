@@ -5,8 +5,8 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.DebugMenu.Pages;
     using Mayfair.Core.Code.Resources.Loader;
     using Mayfair.Core.Code.Utils.Debug.Reflection;
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
     using Mayfair.Core.Code.VisualAsset.Providers;
+    using Prateek.KeynameFramework;
 
     internal class VisualResourceMenuPage : DebugMenuPage<VisualResourceDaemonBranch>
     {
@@ -34,7 +34,7 @@ namespace Mayfair.Core.Code.VisualAsset
                                 Dictionary<Keyname, IContentHandle> storedResources = resources.Value[groupKey];
                                 foreach (Keyname resourceKey in storedResources.Keys)
                                 {
-                                    NewLabel.Draw(context, resourceKey);
+                                    NewLabel.Draw(context, resourceKey.ToString());
                                 }
                             }
                         }

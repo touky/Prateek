@@ -39,7 +39,7 @@ namespace Prateek.Debug.Code
     using Prateek.Core.Code.Extensions;
     using Prateek.Core.Code.Helpers;
     using UnityEngine;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
+    using static Prateek.Core.Code.Extensions.CSharp;
 
     ///-------------------------------------------------------------------------
     public partial class DebugDraw

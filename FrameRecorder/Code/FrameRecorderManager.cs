@@ -35,7 +35,7 @@ namespace Prateek.FrameRecorder.Code
 {
     using System.Collections.Generic;
     using Prateek.Core.Code.Extensions;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
+    using static Prateek.Core.Code.Extensions.CSharp;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------

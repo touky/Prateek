@@ -1,7 +1,10 @@
-namespace Mayfair.Core.Code.TagSystem
+namespace Prateek.KeynameFramework
 {
     using System;
     using System.Diagnostics;
+    using Prateek.KeynameFramework.Enums;
+    using Prateek.KeynameFramework.Interfaces;
+    using UnityEngine.Assertions;
 
     [DebuggerDisplay("Keyword: {ToString()}:{IntExtensions.ToHex(hash)}")]
     public struct Keyword : IEquatable<Keyword>
@@ -16,7 +19,7 @@ namespace Mayfair.Core.Code.TagSystem
         #region Properties
         public KeywordStatus Status
         {
-            get { return type != null ? KeywordStatus.Type : KeywordStatus.String; }
+            get { return type != null ? KeywordStatus.Type : KeywordStatus.Name; }
         }
 
         public Type Type
@@ -24,12 +27,12 @@ namespace Mayfair.Core.Code.TagSystem
             get { return type; }
         }
 
-        private string Name
+        public string Name
         {
             get { return name; }
         }
 
-        private int Number
+        public int Number
         {
             get { return number; }
             set { this = new Keyword(this, value); }
@@ -37,7 +40,7 @@ namespace Mayfair.Core.Code.TagSystem
         #endregion
 
         #region Constructors
-        private Keyword(Keyword other, int number)
+        internal Keyword(Keyword other, int number)
         {
             type = other.type;
             name = other.name;
@@ -51,12 +54,20 @@ namespace Mayfair.Core.Code.TagSystem
 
         public Keyword(Type type, int number)
         {
+            Assert.IsTrue(Match(KeywordRegistry.MasterKeyword, type));
+
             this.type = type;
             this.number = number;
             name = null;
 
             hash = 0;
             hash = BuildHashCode(this);
+        }
+
+        public Keyword Create<TKeyword>(int number)
+            where TKeyword : MasterKeyword
+        {
+            return new Keyword(typeof(TKeyword), number);
         }
 
         public Keyword(string name) : this(name, 0) { }
@@ -75,6 +86,8 @@ namespace Mayfair.Core.Code.TagSystem
         #region Class Methods
         public static implicit operator Keyword(Type type)
         {
+            Assert.IsTrue(Match<MasterKeyword>(type));
+
             return new Keyword(type);
         }
 
@@ -128,6 +141,35 @@ namespace Mayfair.Core.Code.TagSystem
 
             return type != null ? $"{type.Name}{number}" : $"{name}{number}";
         }
+
+        public string DebugString()
+        {
+            return Status == KeywordStatus.Type
+                ? $"<{ToString()}>"
+                : $"\'{ToString()}\'";
+        }
+
+        public bool Match(Keyword other)
+        {
+            if (Status != other.Status)
+            {
+                return false;
+            }
+
+            switch (Status)
+            {
+                case KeywordStatus.Name:
+                {
+                    return name == other.Name;
+                }
+                case KeywordStatus.Type:
+                {
+                    return Match(type, other.type);
+                }
+            }
+
+            return false;
+        }
         #endregion
 
         #region IEquatable<Keyword> Members
@@ -149,6 +191,19 @@ namespace Mayfair.Core.Code.TagSystem
             }
 
             return false;
+        }
+
+        internal static bool Match<TParent>(Type child)
+            where TParent : MasterKeyword
+        {
+            return Match(typeof(TParent), child);
+        }
+
+        internal static bool Match(Type parent, Type child)
+        {
+            return child == parent
+                || child.IsSubclassOf(parent)
+                || parent.IsAssignableFrom(child);
         }
         #endregion
     }

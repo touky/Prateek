@@ -40,7 +40,7 @@ namespace Prateek.FrameRecorder.Editor
     using Prateek.FrameRecorder.Code;
     using UnityEditor;
     using UnityEngine;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
+    using static Prateek.Core.Code.Extensions.CSharp;
 
     ///-------------------------------------------------------------------------
     public partial class FrameRecorderEditorWindow : EditorWindow

@@ -37,13 +37,12 @@ namespace Prateek.Helpers {
     using Prateek.Core.Code.Extensions;
     using Prateek.Core.Code.Helpers;
     using Prateek.Core.Code.PrateekScripts.PrtkSources;
-    using Prateek.Core.Code.ShaderTo;
     using Prateek.Debug;
     using Prateek.Debug.Code;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine;
-    using static Prateek.Core.Code.ShaderTo.CSharp;
+    using static Prateek.Core.Code.Extensions.CSharp;
 
     ///-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG

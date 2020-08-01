@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.Database.Interfaces
 {
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.KeynameFramework;
 
     public interface IDatabaseEntry
     {

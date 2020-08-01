@@ -42,7 +42,7 @@ namespace Prateek.Debug.Editor
     using Prateek.Debug.Code;
     using UnityEditor;
     using UnityEngine;
-    using CSharp = Core.Code.ShaderTo.CSharp;
+    using static Prateek.Core.Code.Extensions.CSharp;
 
     ///-------------------------------------------------------------------------
     public class DebugDisplayEditorWindow : EditorWindow

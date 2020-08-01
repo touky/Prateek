@@ -2,27 +2,27 @@ namespace Prateek.NoticeFramework.Notices
 {
     using System.Collections.Generic;
     using System.Diagnostics;
-    using Mayfair.Core.Code.TagSystem;
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.KeynameFramework;
+    using Prateek.KeynameFramework.Enums;
     using Prateek.NoticeFramework.Notices.Core;
 
     [DebuggerDisplay("{GetType().Name}, Sender: {transmitter.Owner.Name}")]
     public abstract class ContentByIdDirect : DirectNotice, IContentById
     {
         #region Fields
-        private KeywordMatchResult idMatchRequirement = KeywordMatchResultType.Equal;
+        private KeynameMatchResult idMatchRequirement = KeynameMatchType.Equal;
         private List<Keyname> uniqueIds = new List<Keyname>();
         #endregion
 
         #region Class Methods
-        public virtual void Init(KeywordMatchResult idMatchRequirement, Keyname keyname)
+        public virtual void Init(KeynameMatchResult idMatchRequirement, Keyname keyname)
         {
             Init(idMatchRequirement);
 
             UniqueIds.Add(keyname);
         }
 
-        public virtual void Init(KeywordMatchResult idMatchRequirement)
+        public virtual void Init(KeynameMatchResult idMatchRequirement)
         {
             this.idMatchRequirement = idMatchRequirement;
         }
@@ -35,7 +35,7 @@ namespace Prateek.NoticeFramework.Notices
         #endregion
 
         #region IContentById Members
-        public KeywordMatchResult IdMatchRequirement
+        public KeynameMatchResult IdMatchRequirement
         {
             get { return idMatchRequirement; }
         }

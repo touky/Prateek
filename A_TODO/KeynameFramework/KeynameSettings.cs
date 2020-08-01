@@ -1,7 +1,7 @@
-namespace Mayfair.Core.Code.TagSystem
+namespace Prateek.KeynameFramework
 {
-    using System;
-    using Mayfair.Core.Code.FrameworkSettings;
+    using Prateek.Core.Code.FrameworkSettings;
+    using Prateek.KeynameFramework.Serializables;
 
     public class KeynameSettings : FrameworkSettings<KeynameSettings, KeynameSettingsData, KeynameSettingsResource>
     {

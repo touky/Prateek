@@ -34,7 +34,7 @@
 namespace Prateek.Core.Code.Helpers
 {
     using System;
-    using Prateek.Core.Code.CachedArray;
+    using Prateek.Core.Code.CachedList;
 
     ///-------------------------------------------------------------------------
     public struct StringBlurp
@@ -91,17 +91,17 @@ namespace Prateek.Core.Code.Helpers
         }
 
         private string m_text;
-        private CachedArray<StaticText.Id> m_ids;
-        private CachedArray<string> m_tagsStr;
-        private CachedArray<StaticText.Id> m_tagsId;
+        private CachedList10<StaticText.Id> m_ids;
+        private CachedList10<string> m_tagsStr;
+        private CachedList10<StaticText.Id> m_tagsId;
 
         ///---------------------------------------------------------------------
         public StringBlurp(bool dummy = false)
         {
             m_text = null;
-            m_ids = new CachedArray<StaticText.Id>(StaticText.Id.Empty);
-            m_tagsStr = new CachedArray<string>(null);
-            m_tagsId = new CachedArray<StaticText.Id>(StaticText.Id.Empty);
+            m_ids = new CachedList10<StaticText.Id>(StaticText.Id.Empty);
+            m_tagsStr = new CachedList10<string>(null);
+            m_tagsId = new CachedList10<StaticText.Id>(StaticText.Id.Empty);
         }
 
         ///---------------------------------------------------------------------
@@ -146,13 +146,13 @@ namespace Prateek.Core.Code.Helpers
         ///---------------------------------------------------------------------
         public StringBlurp Add(Value value)
         {
-            switch (value.usage)
-            {
-                case Value.UsageType.TextId: m_ids.Push(value.id); break;
-                case Value.UsageType.TagString: m_tagsStr.Push(value.tag_str); break;
-                case Value.UsageType.TagInt: m_tagsStr.Push(string.Format("{0:D}", value.tag_int)); break;
-                case Value.UsageType.TagTextId: m_tagsId.Push(value.tag_id.id); break;
-            }
+            //todo: switch (value.usage)
+            //todo: {
+            //todo:     case Value.UsageType.TextId: m_ids.Push(value.id); break;
+            //todo:     case Value.UsageType.TagString: m_tagsStr.Push(value.tag_str); break;
+            //todo:     case Value.UsageType.TagInt: m_tagsStr.Push(string.Format("{0:D}", value.tag_int)); break;
+            //todo:     case Value.UsageType.TagTextId: m_tagsId.Push(value.tag_id.id); break;
+            //todo: }
             return this;
         }
 
@@ -184,32 +184,32 @@ namespace Prateek.Core.Code.Helpers
         public string Build()
         {
             string result = (m_text != null ? m_text : "");
-            for (int i = 0; i < m_ids.Count; ++i)
-            {
-                result += (i == 0 ? "" : " ") + StaticText.Get(m_ids.Peek(i));
-            }
+            //todo: for (int i = 0; i < m_ids.Count; ++i)
+            //todo: {
+            //todo:     result += (i == 0 ? "" : " ") + StaticText.Get(m_ids.Peek(i));
+            //todo: }
+            //todo: 
+            //todo: var array = new String[m_tagsStr.Count + m_tagsId.Count];
+            //todo: for (int i = 0; i < array.Length; ++i)
+            //todo: {
+            //todo:     //Add the string tags
+            //todo:     if (i < m_tagsStr.Count)
+            //todo:     {
+            //todo:         array[i] = m_tagsStr.Peek(i);
+            //todo:     }
+            //todo:     else if (i - m_tagsStr.Count < m_tagsId.Count)
+            //todo:     {
+            //todo:         array[i] = StaticText.Get(m_tagsId.Peek(i - m_tagsStr.Count));
+            //todo:     }
+            //todo: 
+            //todo:     //Empty null values
+            //todo:     if (array[i] == null)
+            //todo:     {
+            //todo:         array[i] = "";
+            //todo:     }
+            //todo: }
 
-            var array = new String[m_tagsStr.Count + m_tagsId.Count];
-            for (int i = 0; i < array.Length; ++i)
-            {
-                //Add the string tags
-                if (i < m_tagsStr.Count)
-                {
-                    array[i] = m_tagsStr.Peek(i);
-                }
-                else if (i - m_tagsStr.Count < m_tagsId.Count)
-                {
-                    array[i] = StaticText.Get(m_tagsId.Peek(i - m_tagsStr.Count));
-                }
-
-                //Empty null values
-                if (array[i] == null)
-                {
-                    array[i] = "";
-                }
-            }
-
-            return array.Length > 0 ? String.Format(result, array) : String.Format(result, "");
+            return string.Empty; //todo: array.Length > 0 ? String.Format(result, array) : String.Format(result, "");
         }
 
         ///---------------------------------------------------------------------
@@ -227,7 +227,7 @@ namespace Prateek.Core.Code.Helpers
             }
             else
             {
-                return m_ids.Count > 0 && m_ids.Has(x => x == id);
+                return m_ids.Count > 0 && m_ids.Contains(id);
             }
         }
 
@@ -241,20 +241,20 @@ namespace Prateek.Core.Code.Helpers
         ///---------------------------------------------------------------------
         public static StringBlurp operator +(StringBlurp b0, StringBlurp b1)
         {
-            for (int i = 0; i < b1.m_ids.Count; ++i)
-            {
-                b0.m_ids.Push(b1.m_ids.Peek(i));
-            }
-
-            for (int i = 0; i < b1.m_tagsStr.Count; ++i)
-            {
-                b0.m_tagsStr.Push(b1.m_tagsStr.Peek(i));
-            }
-
-            for (int i = 0; i < b1.m_tagsId.Count; ++i)
-            {
-                b0.m_tagsId.Push(b1.m_tagsId.Peek(i));
-            }
+            //todo: for (int i = 0; i < b1.m_ids.Count; ++i)
+            //todo: {
+            //todo:     b0.m_ids.Push(b1.m_ids.Peek(i));
+            //todo: }
+            //todo: 
+            //todo: for (int i = 0; i < b1.m_tagsStr.Count; ++i)
+            //todo: {
+            //todo:     b0.m_tagsStr.Push(b1.m_tagsStr.Peek(i));
+            //todo: }
+            //todo: 
+            //todo: for (int i = 0; i < b1.m_tagsId.Count; ++i)
+            //todo: {
+            //todo:     b0.m_tagsId.Push(b1.m_tagsId.Peek(i));
+            //todo: }
 
             return b0;
         }

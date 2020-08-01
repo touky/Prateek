@@ -1,6 +1,6 @@
 namespace Mayfair.CoreContent.Code.Tags
 {
-    using Mayfair.Core.Code.TagSystem;
+    using Prateek.KeynameFramework.Interfaces;
 
     //Temp class to fool the unit test
     public abstract partial class Tags { }

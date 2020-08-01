@@ -1,7 +1,7 @@
 namespace Mayfair.Core.Code.VisualAsset.Messages
 {
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
     using Mayfair.Core.Code.VisualAsset.Providers;
+    using Prateek.KeynameFramework.Interfaces;
     using Prateek.NoticeFramework.Notices.Core;
 
     public abstract class VisualResourceDirectNotice : DirectNotice

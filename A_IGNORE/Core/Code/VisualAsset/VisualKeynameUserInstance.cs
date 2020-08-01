@@ -1,7 +1,10 @@
 namespace Mayfair.Core.Code.VisualAsset
 {
     using JetBrains.Annotations;
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.KeynameFramework;
+    using Prateek.KeynameFramework.Enums;
+    using Prateek.KeynameFramework.Interfaces;
+    using Prateek.KeynameFramework.Serializables;
     using UnityEngine;
     using UnityEngine.Serialization;
 
@@ -43,7 +46,7 @@ namespace Mayfair.Core.Code.VisualAsset
             return Keyname == other.Keyname;
         }
 
-        public virtual void SetUniqueId(Keyname keyname)
+        public virtual void SetKeyname(Keyname keyname)
         {
             this.keyname = keyname;
 
@@ -52,7 +55,7 @@ namespace Mayfair.Core.Code.VisualAsset
                 return;
             }
 
-            if (this.keyname.Type == KeynameState.Fullname)
+            if (this.keyname.State == KeynameState.Fullname)
             {
                 NotifyNewId();
             }

@@ -1,13 +1,13 @@
 namespace Prateek.NoticeFramework.Notices
 {
     using System.Collections.Generic;
-    using Mayfair.Core.Code.TagSystem;
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.KeynameFramework;
+    using Prateek.KeynameFramework.Enums;
 
     public interface IContentById
     {
         #region Properties
-        KeywordMatchResult IdMatchRequirement { get; }
+        KeynameMatchResult IdMatchRequirement { get; }
         List<Keyname> UniqueIds { get; }
         #endregion
     }

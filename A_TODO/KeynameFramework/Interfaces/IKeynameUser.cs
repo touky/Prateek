@@ -1,4 +1,4 @@
-namespace Mayfair.Core.Code.Utils.Types.UniqueId
+namespace Prateek.KeynameFramework.Interfaces
 {
     using System;
 
@@ -6,7 +6,7 @@ namespace Mayfair.Core.Code.Utils.Types.UniqueId
     {
         #region Properties
         Keyname Keyname { get; }
-        void SetUniqueId(Keyname keyname);
+        void SetKeyname(Keyname keyname);
         #endregion
     }
 }

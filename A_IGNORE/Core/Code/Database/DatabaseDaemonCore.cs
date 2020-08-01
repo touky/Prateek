@@ -12,7 +12,8 @@
     using Mayfair.Core.Code.Resources;
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.KeynameFramework;
+    using Prateek.KeynameFramework.Enums;
     using Prateek.NoticeFramework.Notices.Core;
     using Prateek.TickableFramework.Code.Enums;
     using DatabaseContentByFilterRequest = Mayfair.Core.Code.Database.Messages.DatabaseContentMatchingWithFilterRequest<Messages.DatabaseContentMatchingWithFilterResponse>;
@@ -145,7 +146,7 @@
                 var keyname = request.UniqueIds[i];
 
                 //Name can only match as equal, so directly try-get
-                if (keyname.Type == KeynameState.Fullname)
+                if (keyname.State == KeynameState.Fullname)
                 {
                     if (allCompositeContents.TryGetValue(keyname, out var compositeContentFound))
                     {
@@ -154,7 +155,7 @@
                 }
 
                 //For a filter, use the IdMatchRequirement to ensure it's correctly matched
-                else if (keyname.Type == KeynameState.Keywords)
+                else if (keyname.State == KeynameState.Keywords)
                 {
                     foreach (var content in allCompositeContents)
                     {
@@ -214,46 +215,46 @@
 
         private void PatternContainsAll(List<string> filters, List<ICompositeContent> results)
         {
-            foreach (var pair in allCompositeContents)
-            {
-                var valid            = true;
-                var uniqueIdAsString = pair.Key.RawValue;
-                for (int i = 0, n = filters.Count; i < n; i++)
-                {
-                    if (!uniqueIdAsString.Contains(filters[i]))
-                    {
-                        valid = false;
-                        break;
-                    }
-                }
-
-                if (valid)
-                {
-                    results.Add(pair.Value);
-                }
-            }
+            //todo: foreach (var pair in allCompositeContents)
+            //todo: {
+            //todo:     var valid            = true;
+            //todo:     var uniqueIdAsString = pair.Key.RawValue;
+            //todo:     for (int i = 0, n = filters.Count; i < n; i++)
+            //todo:     {
+            //todo:         if (!uniqueIdAsString.Contains(filters[i]))
+            //todo:         {
+            //todo:             valid = false;
+            //todo:             break;
+            //todo:         }
+            //todo:     }
+            //todo:
+            //todo:     if (valid)
+            //todo:     {
+            //todo:         results.Add(pair.Value);
+            //todo:     }
+            //todo: }
         }
 
         private void PatternContainsAny(List<string> filters, List<ICompositeContent> results)
         {
-            foreach (var pair in allCompositeContents)
-            {
-                var valid            = false;
-                var uniqueIdAsString = pair.Key.RawValue;
-                for (int i = 0, n = filters.Count; i < n; i++)
-                {
-                    if (uniqueIdAsString.Contains(filters[i]))
-                    {
-                        valid = true;
-                        break;
-                    }
-                }
-
-                if (valid)
-                {
-                    results.Add(pair.Value);
-                }
-            }
+            //todo: foreach (var pair in allCompositeContents)
+            //todo: {
+            //todo:     var valid            = false;
+            //todo:     var uniqueIdAsString = pair.Key.RawValue;
+            //todo:     for (int i = 0, n = filters.Count; i < n; i++)
+            //todo:     {
+            //todo:         if (uniqueIdAsString.Contains(filters[i]))
+            //todo:         {
+            //todo:             valid = true;
+            //todo:             break;
+            //todo:         }
+            //todo:     }
+            //todo: 
+            //todo:     if (valid)
+            //todo:     {
+            //todo:         results.Add(pair.Value);
+            //todo:     }
+            //todo: }
         }
 
         private void RefreshPendingResources()

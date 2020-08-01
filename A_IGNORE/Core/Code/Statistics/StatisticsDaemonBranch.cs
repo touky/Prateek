@@ -4,10 +4,10 @@ namespace Mayfair.Core.Code.Statistics
     using System.Collections.Generic;
     using Mayfair.Core.Code.GameAction;
     using Mayfair.Core.Code.Service;
-    using Mayfair.Core.Code.TagSystem;
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
     using Prateek.DaemonFramework.Code.Branches;
+    using Prateek.KeynameFramework.Interfaces;
 
     public abstract class StatisticsDaemonBranch : DaemonBranchBehaviour<StatisticsDaemonCore, StatisticsDaemonBranch>
     {

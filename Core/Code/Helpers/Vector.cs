@@ -16,10 +16,9 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
 #region Prateek Ifdefs
-
 #if UNITY_EDITOR
 
-//Auto activate debug
+    //Auto activate debug
 #if !PRATEEK_DEBUG
 #define PRATEEK_DEBUG
 #endif //!PRATEEK_DEBUG
@@ -29,51 +28,15 @@
 #endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
 
-
-//Auto activate some of the prateek defines
-namespace Prateek.Core.Code.ShaderTo
+namespace Prateek.Core.Code.Helpers
 {
-    using UnityEngine;
-
-    ///-------------------------------------------------------------------------
-    public static partial class CSharp
-    {
-        public static Vector2 normalize(Vector2 v) { return v.normalized; }
-        public static Vector3 normalize(Vector3 v) { return v.normalized; }
-        public static Vector4 normalize(Vector4 v) { return v.normalized; }
-        public static float length(Vector2 v) { return v.magnitude; }
-        public static float length(Vector3 v) { return v.magnitude; }
-        public static float length(Vector4 v) { return v.magnitude; }
-        public static float length(Vector2Int v) { return v.magnitude; }
-        public static float length(Vector3Int v) { return v.magnitude; }
-        public static float dot(Vector2 v0, Vector2 v1) { return Vector2.Dot(v0, v1); }
-        public static float dot(Vector3 v0, Vector3 v1) { return Vector3.Dot(v0, v1); }
-        public static float dot(Vector4 v0, Vector4 v1) { return Vector4.Dot(v0, v1); }
-        public static float lerp(float v0, float v1, float alpha) { return Mathf.Lerp(v0, v1, alpha); }
-        public static Vector2 lerp(Vector2 v0, Vector2 v1, float alpha) { return Vector2.Lerp(v0, v1, alpha); }
-        public static Vector3 lerp(Vector3 v0, Vector3 v1, float alpha) { return Vector3.Lerp(v0, v1, alpha); }
-        public static Vector4 lerp(Vector4 v0, Vector4 v1, float alpha) { return Vector4.Lerp(v0, v1, alpha); }
-        public static Color lerp(Color v0, Color v1, float alpha) { return Color.Lerp(v0, v1, alpha); }
-        public static float mix(float v0, float v1, float alpha) { return Mathf.Lerp(v0, v1, alpha); }
-        public static Vector2 mix(Vector2 v0, Vector2 v1, float alpha) { return Vector2.Lerp(v0, v1, alpha); }
-        public static Vector3 mix(Vector3 v0, Vector3 v1, float alpha) { return Vector3.Lerp(v0, v1, alpha); }
-        public static Vector4 mix(Vector4 v0, Vector4 v1, float alpha) { return Vector4.Lerp(v0, v1, alpha); }
-        public static Color mix(Color v0, Color v1, float alpha) { return Color.Lerp(v0, v1, alpha); }
-        public static Vector3 cross(Vector3 v0, Vector3 v1) { return Vector3.Cross(v0, v1); }
-        public static Vector2Int Int(Vector2 v) { return vec2i((int)v.x, (int)v.y); }
-        public static Vector3Int Int(Vector3 v) { return vec3i((int)v.x, (int)v.y, (int)v.z); }
-        public static Vector2 Float(Vector2Int v) { return vec2(v.x, v.y); }
-        public static Vector3 Float(Vector3Int v) { return vec3(v.x, v.y, v.z); }
-    }
-
-}
-
-//Auto activate some of the prateek defines
-    namespace Prateek.Core.Code.Helpers
-    {
     using Prateek.Core.Code.Extensions;
     using UnityEngine;
 
+
+    //Auto activate some of the prateek defines
+
+    //Auto activate some of the prateek defines
     ///-----------------------------------------------------------------------------
     ///-------------------------------------------------------------------------
     public static class Vectors

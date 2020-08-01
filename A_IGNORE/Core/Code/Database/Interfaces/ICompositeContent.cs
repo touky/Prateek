@@ -2,7 +2,7 @@ namespace Mayfair.Core.Code.Database.Interfaces
 {
     using Mayfair.Core.Code.Utils.Types;
     using System;
-    using Utils.Types.UniqueId;
+    using Prateek.KeynameFramework;
 
     public interface ICompositeContent
     {

@@ -1,8 +1,7 @@
 namespace Mayfair.Core.Code.GameAction
 {
     using System.Collections.Generic;
-    using Mayfair.Core.Code.TagSystem;
-    using Mayfair.Core.Code.Utils.Types.UniqueId;
+    using Prateek.KeynameFramework;
     using Prateek.NoticeFramework.Notices.Core;
 
     /// <summary>

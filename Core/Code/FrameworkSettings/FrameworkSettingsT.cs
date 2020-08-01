@@ -1,4 +1,4 @@
-﻿namespace Mayfair.Core.Code.FrameworkSettings
+﻿namespace Prateek.Core.Code.FrameworkSettings
 {
     using UnityEngine;
 
@@ -20,7 +20,7 @@
         #endregion
 
         #region Properties
-        public TSingleton Instance
+        public static TSingleton Instance
         {
             get
             {
