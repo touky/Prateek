@@ -1,4 +1,4 @@
-namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 {
     public abstract class SyntaxScriptAction : ScriptAction
     {

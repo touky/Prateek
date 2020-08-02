@@ -1,9 +1,9 @@
 namespace Mayfair.Core.Code.Utils.Debug
 {
-    using Prateek.DaemonFramework.Code.Interfaces;
     using System;
     using System.Diagnostics;
     using System.Text;
+    using Prateek.Runtime.DaemonFramework.Interfaces;
     using UnityEditor.VersionControl;
     using UnityEngine;
 

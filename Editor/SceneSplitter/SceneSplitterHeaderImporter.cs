@@ -1,4 +1,4 @@
-﻿namespace Prateek.SceneSplitter.Editor
+﻿namespace Prateek.Editor.SceneSplitter
 {
     using UnityEditor.Experimental.AssetImporters;
 

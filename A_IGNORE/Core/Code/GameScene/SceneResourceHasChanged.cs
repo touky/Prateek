@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.GameScene
 {
-    using Mayfair.Core.Code.Resources.Messages;
+    using Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages;
 
     public class SceneResourceHasChanged : ScenesHaveChanged { }
 }

@@ -1,4 +1,4 @@
-namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbols
 {
     public interface IComment { }
 }

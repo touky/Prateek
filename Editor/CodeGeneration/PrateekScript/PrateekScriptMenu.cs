@@ -1,10 +1,10 @@
-﻿namespace Prateek.CodeGeneration.PrateekScript.Editor
+﻿namespace Prateek.Editor.CodeGeneration.PrateekScript
 {
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
+    using Prateek.Editor.Core.Helpers;
+    using Prateek.Runtime.Core.Consts;
     using UnityEditor;
     using UnityEngine;
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
-    using Prateek.Core.Code.Consts;
-    using Prateek.Core.Editor.Helpers;
 
     public static class PrateekScriptMenu
     {

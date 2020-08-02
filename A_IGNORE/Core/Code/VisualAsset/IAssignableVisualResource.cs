@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.VisualAsset
 {
-    using Mayfair.Core.Code.Resources.Loader;
+    using Prateek.A_TODO.Runtime.AppContentFramework.Loader.Interfaces;
 
     public interface IAssignableVisualResource
     {

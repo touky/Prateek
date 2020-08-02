@@ -1,5 +1,5 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates {
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
 
     public abstract class IgnorableTemplate : BaseTemplate
     {

@@ -1,7 +1,7 @@
 namespace Mayfair.Core.Code.UpdateService
 {
     using System;
-    using Prateek.DaemonFramework.Code.Servants;
+    using Prateek.Runtime.DaemonFramework.Servants;
     using Service;
     using Types.Extensions;
 
@@ -9,7 +9,7 @@ namespace Mayfair.Core.Code.UpdateService
     /// This should not be used as an example of Service/Provider/Messaging interaction
     /// as it violates the asynchronicity goals of our systems.
     /// </summary>
-    public class UpdateProvider : ServantTickableBehaviour<UpdateDaemon, UpdateProvider>
+    public class UpdateProvider : ServantTickable<UpdateDaemon, UpdateProvider>
     {
         public Action updateAction;
 

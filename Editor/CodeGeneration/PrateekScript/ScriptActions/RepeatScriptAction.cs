@@ -1,10 +1,10 @@
-namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
-    using Prateek.Core.Code.Helpers;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.Utils;
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
+    using Prateek.Runtime.Core.Helpers;
 
     /// <summary>
     /// Lists all the class-infos and create a new block of code by simply applying the names and vars to said code.

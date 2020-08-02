@@ -31,17 +31,17 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
-    using Prateek.Core.Code.Extensions;
-    using Prateek.Core.Code.Helpers;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.Utils;
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.IntermediateRuntime;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Utils;
+    using Prateek.Runtime.Core.Extensions;
+    using Prateek.Runtime.Core.Helpers;
 
     public abstract class ScriptAction : BaseTemplate
     {

@@ -1,9 +1,9 @@
-namespace Prateek.Core.Editor.Helpers
+namespace Prateek.Editor.Core.Helpers
 {
     using System.IO;
     using UnityEditor;
     using UnityEngine;
-    using Prateek.Core.Code.Consts;
+    using Prateek.Runtime.Core.Consts;
 
     public static class AssetMenuExtensions
     {

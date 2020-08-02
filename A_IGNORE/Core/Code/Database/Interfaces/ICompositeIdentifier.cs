@@ -1,7 +1,7 @@
 namespace Mayfair.Core.Code.Database.Interfaces
 {
     using System;
-    using Prateek.KeynameFramework;
+    using Prateek.Runtime.KeynameFramework;
 
     /// <summary>
     /// Use this class to define how database entries need to be joined together

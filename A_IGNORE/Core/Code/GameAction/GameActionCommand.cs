@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.GameAction
 {
     using System.Collections.Generic;
-    using Prateek.KeynameFramework;
-    using Commands.Core;
+    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.KeynameFramework;
 
     /// <summary>
     /// GameActionMessage is the standard way of sending a notice to signify that a specific action has happened.

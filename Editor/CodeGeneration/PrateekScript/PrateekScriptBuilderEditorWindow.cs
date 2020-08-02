@@ -1,10 +1,9 @@
-﻿namespace Prateek.CodeGeneration.PrateekScript.Editor
+﻿namespace Prateek.Editor.CodeGeneration.PrateekScript
 {
     using System.Collections.Generic;
-    using Prateek.CodeGeneration.BackendTools.Editor;
-    using Prateek.CodeGeneration.Code.PrateekScript;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
-    using Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions;
+    using Prateek.Editor.CodeGeneration.CodeBuilder;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Utils;
     using UnityEditor;
     using UnityEngine.UIElements;
 

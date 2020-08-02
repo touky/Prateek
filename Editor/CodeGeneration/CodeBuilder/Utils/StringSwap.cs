@@ -1,8 +1,8 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.Utils
 {
     using System;
     using System.Diagnostics;
-    using Prateek.Core.Code.Helpers;
+    using Prateek.Runtime.Core.Helpers;
 
     [DebuggerDisplay("{original} -> {replacement}")]
     public struct StringSwap

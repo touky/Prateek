@@ -1,10 +1,10 @@
 namespace Mayfair.Core.Code.VisualAsset
 {
     using JetBrains.Annotations;
-    using Prateek.KeynameFramework;
-    using Prateek.KeynameFramework.Enums;
-    using Prateek.KeynameFramework.Interfaces;
-    using Prateek.KeynameFramework.Serializables;
+    using Prateek.Runtime.KeynameFramework;
+    using Prateek.Runtime.KeynameFramework.Enums;
+    using Prateek.Runtime.KeynameFramework.Interfaces;
+    using Prateek.Runtime.KeynameFramework.Serializables;
     using UnityEngine;
     using UnityEngine.Serialization;
 

@@ -1,9 +1,10 @@
 namespace Mayfair.Core.Code.StateMachines.FSM.Common
 {
     using Mayfair.Core.Code.Utils.Tools;
-    using Commands.Core;
-    using Prateek.CommandFramework.Tools;
-    using Prateek.CommandFramework.TransmitterReceiver;
+    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.A_TODO.Runtime.CommandFramework.Tools;
+    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine.Common;
 
     public abstract class NoticeState<TTrigger, TNotice> : EmptyState<TTrigger>
         where TNotice : BroadcastCommand, new()

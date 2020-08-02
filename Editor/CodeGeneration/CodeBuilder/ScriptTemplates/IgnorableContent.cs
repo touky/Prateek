@@ -1,4 +1,4 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates {
     using System.Collections.Generic;
     using UnityEngine;
 

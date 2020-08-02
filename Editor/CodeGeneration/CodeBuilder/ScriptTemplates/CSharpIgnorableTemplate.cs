@@ -1,6 +1,6 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates {
     using System;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
     using UnityEngine;
 
     public class CSharpIgnorableTemplate : IgnorableTemplate

@@ -31,19 +31,18 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration.Code.PrateekScript
+namespace Prateek.Editor.CodeGeneration.PrateekScript
 {
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
     using System.Collections.Generic;
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
-    using Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.IntermediateRuntime;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Utils;
+    using Prateek.Runtime.Core.Helpers;
+    using Prateek.Runtime.Core.Helpers.Files;
     using UnityEngine.Profiling;
-    using Prateek.Core.Code.Helpers.Files;
-    using Prateek.Core.Code.Helpers;
-    using Prateek.Core.Code.Consts;
 
     ///-------------------------------------------------------------------------
     public class PrateekScriptBuilder : CodeBuilder

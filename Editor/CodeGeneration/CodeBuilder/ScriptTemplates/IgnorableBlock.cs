@@ -1,4 +1,4 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates {
     public struct IgnorableBlock
     {
         ///-------------------------------------------------------------

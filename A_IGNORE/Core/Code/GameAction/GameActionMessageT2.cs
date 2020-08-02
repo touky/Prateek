@@ -1,9 +1,9 @@
 namespace Mayfair.Core.Code.GameAction
 {
-    using Prateek.KeynameFramework;
-    using Prateek.KeynameFramework.Interfaces;
-    using Prateek.CommandFramework;
-    using Prateek.CommandFramework.TransmitterReceiver;
+    using Prateek.A_TODO.Runtime.CommandFramework;
+    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.KeynameFramework;
+    using Prateek.Runtime.KeynameFramework.Interfaces;
 
     public class GameActionCommand<T0, T1> : GameActionCommand
         where T0 : MasterKeyword

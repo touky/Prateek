@@ -1,7 +1,7 @@
-namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
-    using Prateek.EditorJobSystem.Code;
+    using Prateek.Editor.EditorJobSystem;
 
     public class ScriptActionRegistry
     {

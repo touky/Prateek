@@ -1,4 +1,4 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.Utils {
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.Utils {
     public struct ArgumentRange
     {
         ///---------------------------------------------------------

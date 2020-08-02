@@ -5,7 +5,7 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.EditorTools.Editor
+namespace Prateek.Editor.EditorTools
 {
     using System.Collections.Generic;
     using System.IO;

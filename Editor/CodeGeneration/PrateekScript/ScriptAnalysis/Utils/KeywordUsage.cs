@@ -1,13 +1,13 @@
-namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Utils
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.Utils;
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.IntermediateRuntime;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbols;
 
     [DebuggerDisplay("{scope}/{keyword}")]
     public struct KeywordUsage

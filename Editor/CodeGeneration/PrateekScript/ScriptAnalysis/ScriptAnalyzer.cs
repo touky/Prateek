@@ -1,9 +1,9 @@
-namespace Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
 {
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.IntermediateCode;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.IntermediateRuntime;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbols;
 
     internal class ScriptAnalyzer
     {

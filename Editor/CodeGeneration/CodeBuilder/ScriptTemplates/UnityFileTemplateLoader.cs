@@ -1,6 +1,6 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
-    using Prateek.Core.Code.Helpers.Files;
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates {
     using System.IO;
+    using Prateek.Runtime.Core.Helpers.Files;
     using UnityEditor;
 
     [InitializeOnLoad]

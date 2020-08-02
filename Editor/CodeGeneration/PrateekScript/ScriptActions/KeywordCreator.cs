@@ -1,14 +1,13 @@
-namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.SyntaxSymbols;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.Utils;
-    using Prateek.Core.Code.Helpers;
-    using Prateek.Core.Code.Helpers.Files;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.Utils;
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbols;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Utils;
+    using Prateek.Runtime.Core.Helpers;
 
     ///-------------------------------------------------------------------------
     public static class KeywordCreator

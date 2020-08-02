@@ -1,10 +1,10 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
-    using Prateek.Core.Code.Helpers;
-    using Prateek.Core.Code.Helpers.Files;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
+    using Prateek.Runtime.Core.Helpers;
+    using Prateek.Runtime.Core.Helpers.Files;
 
     public class UnityFileTemplate : BaseTemplate
     {

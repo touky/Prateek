@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.VisualAsset.Messages
 {
     using Mayfair.Core.Code.VisualAsset.Providers;
-    using Prateek.KeynameFramework.Interfaces;
-    using Commands.Core;
+    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.KeynameFramework.Interfaces;
 
     public abstract class VisualResourceDirectCommand : DirectCommand
     {

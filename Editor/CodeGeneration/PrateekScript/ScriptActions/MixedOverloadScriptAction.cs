@@ -4,12 +4,12 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
-    using Prateek.CodeGeneration.Code.PrateekScript.ScriptAnalysis.Utils;
-    using Prateek.Core.Code.Helpers;
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
+    using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Utils;
+    using Prateek.Runtime.Core.Helpers;
 
     /// <summary>
     /// Generates methods using NAMES() for each of the  CLASS_INFOS() to create overloads mixing the main type and the DEFAULT() given type

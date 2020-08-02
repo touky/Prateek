@@ -4,12 +4,12 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using System.Collections.Generic;
     using System.IO;
     using JetBrains.Annotations;
-    using Mayfair.Core.Code.Resources.Loader;
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Extensions;
-    using Prateek.KeynameFramework;
-    using Prateek.KeynameFramework.Interfaces;
+    using Prateek.A_TODO.Runtime.AppContentFramework.Loader.Interfaces;
+    using Prateek.Runtime.KeynameFramework;
+    using Prateek.Runtime.KeynameFramework.Interfaces;
     using UnityEngine.Assertions;
 
     public abstract class VisualResourceServant<TResourceReference>

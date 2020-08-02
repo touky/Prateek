@@ -31,9 +31,9 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Debug.Editor
+namespace Prateek.Editor.Debug
 {
-    using Prateek.Core.Code.Helpers;
+    using Prateek.Runtime.Core.Helpers;
     using UnityEditor;
     using UnityEngine;
 

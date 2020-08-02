@@ -1,9 +1,6 @@
-﻿namespace Prateek.CodeGeneration.PrateekScript.Editor
+﻿namespace Prateek.Editor.CodeGeneration.PrateekScript
 {
-    using System;
-    using System.Collections.Generic;
-    using Prateek.CodeGeneration.Code.PrateekScript;
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
     using UnityEditor.Experimental.AssetImporters;
 
     [ScriptedImporter(1, Glossary.importExtension)]

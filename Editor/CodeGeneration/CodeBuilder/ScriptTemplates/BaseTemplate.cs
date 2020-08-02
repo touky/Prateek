@@ -1,9 +1,9 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates
 {
     using System;
     using System.IO;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
-    using Prateek.Core.Code.Helpers.Files;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
+    using Prateek.Runtime.Core.Helpers.Files;
 
     public abstract class BaseTemplate : FileHelpers.IExtensionMatcher
     {

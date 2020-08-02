@@ -4,10 +4,10 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
 
     /// <summary>
     /// Lists all the class-infos and create a new block of code by simply applying the names and vars to said code.

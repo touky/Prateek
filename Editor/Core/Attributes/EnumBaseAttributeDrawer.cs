@@ -31,10 +31,10 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.Core.Editor.Attributes
+namespace Prateek.Editor.Core.Attributes
 {
-    using Prateek.Core.Code.Attributes;
-    using Prateek.Core.Editor.Helpers;
+    using Prateek.Runtime.Core.Attributes;
+    using Prateek.Editor.Core.Helpers;
     using UnityEditor;
     using UnityEngine;
 

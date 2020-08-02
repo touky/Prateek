@@ -4,11 +4,11 @@
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.CodeGeneration.PrateekScript.Editor.ScriptActions
+namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 {
-    using Prateek.CodeGeneration.Code.PrateekScript.CodeGeneration;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates;
-    using Prateek.Core.Code.Helpers;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates;
+    using Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration;
+    using Prateek.Runtime.Core.Helpers;
     using UnityEditor;
 
     [InitializeOnLoad]

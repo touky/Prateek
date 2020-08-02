@@ -31,7 +31,7 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates
 {
     using UnityEditor;
 

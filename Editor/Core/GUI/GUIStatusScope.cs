@@ -30,7 +30,7 @@
 #endregion Prateek Ifdefs
 // -END_PRATEEK_CSHARP_IFDEF-
 
-namespace Prateek.Core.Editor.GUI
+namespace Prateek.Editor.Core.GUI
 {
     using UnityEngine;
 

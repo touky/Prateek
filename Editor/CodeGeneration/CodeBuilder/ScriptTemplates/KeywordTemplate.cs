@@ -1,7 +1,7 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates {
     using System;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
-    using Prateek.Core.Code.Helpers;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
+    using Prateek.Runtime.Core.Helpers;
 
     public class KeywordTemplate : BaseTemplate
     {

@@ -1,7 +1,7 @@
 namespace Mayfair.Core.Code.VisualAsset.Messages
 {
-    using Mayfair.Core.Code.Resources.Messages;
-    using Commands.Core;
+    using Prateek.A_TODO.Runtime.AppContentFramework.Messages;
+    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using UnityEngine;
 
     public class RequestCallbackOnVisualChange<TChangeMessage> : RequestAccessToContent<GameObject>

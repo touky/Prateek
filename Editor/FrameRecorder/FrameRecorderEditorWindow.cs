@@ -31,16 +31,15 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.FrameRecorder.Editor
+namespace Prateek.Editor.FrameRecorder
 {
     using System;
-    using Prateek.Core.Code.Extensions;
-    using Prateek.Core.Editor.EditorPrefs;
-    using Prateek.Core.Editor.GUI;
-    using Prateek.FrameRecorder.Code;
+    using Prateek.Editor.Core.EditorPrefs;
+    using Prateek.Editor.Core.GUI;
+    using Prateek.Runtime.FrameRecorder;
     using UnityEditor;
     using UnityEngine;
-    using static Prateek.Core.Code.Extensions.CSharp;
+    using static Prateek.Runtime.Core.Extensions.Statics;
 
     ///-------------------------------------------------------------------------
     public partial class FrameRecorderEditorWindow : EditorWindow

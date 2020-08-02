@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.Database.Interfaces
 {
-    using Prateek.KeynameFramework;
+    using Prateek.Runtime.KeynameFramework;
 
     public interface IDatabaseEntry
     {

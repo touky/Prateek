@@ -1,11 +1,6 @@
-
-
-
-
-
 PRATEEK_FILE_INFO(EditorPrefs, cs)
 {
-    PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Core.Editor.EditorPrefs, Prefs, static, partial)
+    PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Editor.Core.EditorPrefs, Prefs, static, partial)
     {
 		PRATEEK_CLASS_INFO(bool)  { PRATEEK_NAMES(Bools, GetBool, SetBool) }
 		PRATEEK_CLASS_INFO(int)   { PRATEEK_NAMES(Ints, GetInt, SetInt) }
@@ -52,7 +47,7 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
         }
     }
 
-	PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Core.Editor.EditorPrefs, Prefs, static, partial)
+	PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Editor.Core.EditorPrefs, Prefs, static, partial)
 	{
 		PRATEEK_CLASS_INFO(Vector2Int)
 		{
@@ -153,9 +148,9 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		}
 	}
 
-	PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Core.Editor.EditorPrefs, Prefs, static, partial)
+	PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Editor.Core.EditorPrefs, Prefs, static, partial)
 	{
-        PRATEEK_USING(Prateek.Core.Code.Extensions)
+        PRATEEK_USING(Prateek.Runtime.Core.Extensions)
 
 		PRATEEK_CLASS_INFO(string) 	  { PRATEEK_NAMES(Strings) }
 		PRATEEK_CLASS_INFO(bool)   	  { PRATEEK_NAMES(Bools) }

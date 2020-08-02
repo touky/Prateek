@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 14/07/2020
+//  Header last update date: 02/08/2020
 //
 //  Copyright � 2017-2020 "Touky" <touky at prateek dot top>
 //
@@ -35,7 +35,7 @@
 
 
 ///----------------------------------------------------------------------------
-namespace Prateek.Core.Editor.EditorPrefs
+namespace Prateek.Editor.Core.EditorPrefs
 {
     // -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
     ///------------------------------------------------------------------------
@@ -47,7 +47,7 @@ namespace Prateek.Core.Editor.EditorPrefs
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Core.Code.Extensions.CSharp;
+    using static Prateek.Runtime.Core.Extensions.Statics;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
     
@@ -204,7 +204,7 @@ namespace Prateek.Core.Editor.EditorPrefs
 
 
 ///----------------------------------------------------------------------------
-namespace Prateek.Core.Editor.EditorPrefs
+namespace Prateek.Editor.Core.EditorPrefs
 {
     // -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
     ///------------------------------------------------------------------------
@@ -216,7 +216,7 @@ namespace Prateek.Core.Editor.EditorPrefs
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Core.Code.Extensions.CSharp;
+    using static Prateek.Runtime.Core.Extensions.Statics;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
     
@@ -586,7 +586,7 @@ namespace Prateek.Core.Editor.EditorPrefs
 
 
 ///----------------------------------------------------------------------------
-namespace Prateek.Core.Editor.EditorPrefs
+namespace Prateek.Editor.Core.EditorPrefs
 {
     // -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
     ///------------------------------------------------------------------------
@@ -598,11 +598,11 @@ namespace Prateek.Core.Editor.EditorPrefs
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Core.Code.Extensions.CSharp;
+    using static Prateek.Runtime.Core.Extensions.Statics;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
     
-    using  Prateek.Core.Code.Extensions;
+    using  Prateek.Runtime.Core.Extensions;
 
     ///------------------------------------------------------------------------
     public static partial class Prefs

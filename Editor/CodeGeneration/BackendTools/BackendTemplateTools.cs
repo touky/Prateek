@@ -32,14 +32,13 @@
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
-namespace Prateek.CodeGeneration.BackendTools.Editor
+namespace Prateek.Editor.CodeGeneration.BackendTools
 {
-    using Prateek.CodeGeneration.Code.PrateekScript;
-    using Prateek.CodeGeneration.CodeBuilder.Editor.CodeBuilder;
-    using Prateek.Core.Code.Helpers;
-    using System.Collections.Generic;
     using System.IO;
     using System.Text.RegularExpressions;
+    using Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder;
+    using Prateek.Editor.CodeGeneration.PrateekScript;
+    using Prateek.Runtime.Core.Helpers;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------

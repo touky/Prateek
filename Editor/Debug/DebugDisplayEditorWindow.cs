@@ -32,17 +32,16 @@
 
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
-namespace Prateek.Debug.Editor
+namespace Prateek.Editor.Debug
 {
     using System;
     using System.Collections.Generic;
-    using Prateek.Core.Code.Extensions;
-    using Prateek.Core.Code.Helpers;
-    using Prateek.Core.Editor.EditorPrefs;
-    using Prateek.Debug.Code;
+    using Prateek.Editor.Core.EditorPrefs;
+    using Prateek.Runtime.Core.Extensions;
+    using Prateek.Runtime.Core.Helpers;
+    using Prateek.Runtime.Debug;
     using UnityEditor;
     using UnityEngine;
-    using static Prateek.Core.Code.Extensions.CSharp;
 
     ///-------------------------------------------------------------------------
     public class DebugDisplayEditorWindow : EditorWindow
@@ -128,7 +127,7 @@ namespace Prateek.Debug.Editor
             public static Rect Square(ref Rect rect, int margin = 0, GUIStyle style = null)
             {
                 var box = rect;
-                box.width = CSharp.min(box.width, box.height);
+                box.width = Statics.min(box.width, box.height);
                 box.width = box.height;
 
                 if (rect.width == box.width)

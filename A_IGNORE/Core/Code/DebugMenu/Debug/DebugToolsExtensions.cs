@@ -2,7 +2,7 @@ namespace Mayfair.Core.Code.Utils.Debug
 {
     using System.Diagnostics;
     using System.Text;
-    using Prateek.DaemonFramework.Code.Interfaces;
+    using Prateek.Runtime.DaemonFramework.Interfaces;
 
     public static partial class DebugTools
     {

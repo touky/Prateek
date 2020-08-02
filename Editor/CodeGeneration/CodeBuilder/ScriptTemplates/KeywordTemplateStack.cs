@@ -1,8 +1,8 @@
-namespace Prateek.CodeGeneration.CodeBuilder.Editor.ScriptTemplates {
-    using Prateek.Core.Code.Helpers;
+namespace Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates {
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Prateek.Runtime.Core.Helpers;
     using UnityEngine.Profiling;
 
     public struct KeywordTemplateStack

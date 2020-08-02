@@ -1,7 +1,7 @@
 namespace Mayfair.Core.Code.TimeService.Messages
 {
     using System;
-    using Commands.Core;
+    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
 
     public class ReferenceTimeChanged : BroadcastCommand
     {

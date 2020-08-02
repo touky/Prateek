@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.Input.InputLayers
 {
-    using Prateek.Core.Code.Interfaces.IPriority;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using UnityEngine;
     using UnityEngine.Assertions;
 
