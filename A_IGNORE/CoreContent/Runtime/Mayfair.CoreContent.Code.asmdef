@@ -1,0 +1,18 @@
+{
+    "name": "Mayfair.Tags.Code",
+    "references": [
+        "Mayfair.Core.Code",
+        "Mayfair.Consts",
+        "Prateek.Runtime.KeynameFramework",
+        "Prateek.Runtime.DaemonFramework"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

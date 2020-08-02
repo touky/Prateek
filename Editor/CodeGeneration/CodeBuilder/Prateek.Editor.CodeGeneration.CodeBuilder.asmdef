@@ -1,0 +1,19 @@
+{
+    "name": "Prateek.Editor.CodeGeneration.CodeBuilder",
+    "references": [
+        "Prateek.Runtime.Core",
+        "Prateek.Editor.Core",
+        "Prateek.Editor.EditorJobSystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

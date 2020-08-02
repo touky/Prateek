@@ -1,0 +1,16 @@
+{
+    "name": "Prateek.Runtime.DaemonFramework",
+    "references": [
+        "Prateek.Runtime.Core",
+        "Prateek.Runtime.TickableFramework"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

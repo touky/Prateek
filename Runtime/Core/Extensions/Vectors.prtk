@@ -1,0 +1,110 @@
+PRATEEK_FILE_INFO(Extensions, cs)
+{
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Runtime.Core.Extensions, Extensions, static)
+    {
+        PRATEEK_CLASS_INFO(Vector2) { PRATEEK_VARS(x, y) }
+        PRATEEK_CLASS_INFO(Vector3) { PRATEEK_VARS(x, y, z) }
+        PRATEEK_CLASS_INFO(Vector4) { PRATEEK_VARS(x, y, z, w) }
+
+        PRATEEK_DEFAULT(float, 0)
+
+        PRATEEK_CODE_PREFIX
+        {
+        @//--
+        @#region Swizzle #SRC_CLASS# to #DST_CLASS#
+        }
+
+        PRATEEK_CODE_MAIN
+        {
+        @public static #DST_CLASS# #FUNC_RESULT_0#(this #SRC_CLASS# #FUNC_RESULT_1#) { return new #DST_CLASS#(#FUNC_RESULT_2#); }
+        }
+        
+        PRATEEK_CODE_SUFFIX
+        {
+        @#endregion Swizzle #SRC_CLASS# to #DST_CLASS#
+        @
+        }
+    }
+}
+
+PRATEEK_FILE_INFO(VectorShaderCTor, cs)
+{
+    PRATEEK_BLOCK_MIXED_CONSTRUCTOR(Prateek.Runtime.Core.Extensions, Statics, static, partial)
+    {
+        PRATEEK_CLASS_INFO(Vector2) { PRATEEK_NAMES(vec2) PRATEEK_VARS(x, y) }
+        PRATEEK_CLASS_INFO(Vector3) { PRATEEK_NAMES(vec3) PRATEEK_VARS(x, y, z) }
+        PRATEEK_CLASS_INFO(Vector4) { PRATEEK_NAMES(vec4) PRATEEK_VARS(x, y, z, w) }
+
+        PRATEEK_DEFAULT(float, 0)
+
+        PRATEEK_CODE_PREFIX
+        {
+		@
+        @//--
+        @#region Mixed Ctor #SRC_CLASS#
+        }
+
+        PRATEEK_CODE_MAIN
+        {
+        @public static #SRC_CLASS# #FUNC_RESULT_0#(#FUNC_RESULT_1#) { return new #SRC_CLASS#(#FUNC_RESULT_2#); }
+        }
+        
+        PRATEEK_CODE_SUFFIX
+        {
+        @#endregion Mixed Ctor #SRC_CLASS#
+        }
+    }
+}
+
+PRATEEK_FILE_INFO(VectorShaderMath, cs)
+{
+    PRATEEK_BLOCK_MIXED_OVERLOAD(Prateek.Runtime.Core.Extensions, Statics, static, partial)
+    {
+        PRATEEK_CLASS_INFO(Vector2) { PRATEEK_VARS(x, y) }
+        PRATEEK_CLASS_INFO(Vector3) { PRATEEK_VARS(x, y, z) }
+        PRATEEK_CLASS_INFO(Vector4) { PRATEEK_VARS(x, y, z, w) }
+
+        PRATEEK_DEFAULT(float, 0)
+
+		PRATEEK_FUNC(clamp)    { @Mathf.Clamp(#VARS_0#, #VARS_1#, #VARS_2#)$ }
+		PRATEEK_FUNC(saturate) { @Mathf.Clamp01(#VARS_0#)$ }
+		PRATEEK_FUNC(random)   { @UnityEngine.Random.Range(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(max)      { @Mathf.Max(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(min)      { @Mathf.Min(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(mul)      { @#VARS_0# * #VARS_1#$ }
+        PRATEEK_FUNC(div)      { @#VARS_0# / #VARS_1#$ }
+        PRATEEK_FUNC(mod)      { @(#VARS_0# + #VARS_1#) % #VARS_1#$ }
+        PRATEEK_FUNC(fract)    { @#VARS_0# - floor(#VARS_0#)$ }
+        PRATEEK_FUNC(abs)      { @Mathf.Abs(#VARS_0#)$ }
+        PRATEEK_FUNC(sign)     { @Mathf.Sign(#VARS_0#)$ }
+        PRATEEK_FUNC(exp)      { @Mathf.Exp(#VARS_0#)$ }
+        PRATEEK_FUNC(cos)      { @Mathf.Cos(#VARS_0#)$ }
+        PRATEEK_FUNC(sin)      { @Mathf.Sin(#VARS_0#)$ }
+        PRATEEK_FUNC(tan)      { @Mathf.Tan(#VARS_0#)$ }
+        PRATEEK_FUNC(acos)     { @Mathf.Acos(#VARS_0#)$ }
+        PRATEEK_FUNC(asin)     { @Mathf.Asin(#VARS_0#)$ }
+        PRATEEK_FUNC(atan)     { @Mathf.Atan(#VARS_0#)$ }
+        PRATEEK_FUNC(atan2)    { @Mathf.Atan2(#VARS_0#, #VARS_1#)$ }
+        PRATEEK_FUNC(ceil)     { @Mathf.Ceil(#VARS_0#)$ }
+        PRATEEK_FUNC(floor)    { @Mathf.Floor(#VARS_0#)$ }
+        PRATEEK_FUNC(sqrt)     { @Mathf.Sqrt(#VARS_0#)$ }
+
+        PRATEEK_CODE_PREFIX
+        {
+		@
+        @//--
+        @#region Mixed Func #SRC_CLASS#
+        }
+
+        PRATEEK_CODE_MAIN
+        {
+        @public static #SRC_CLASS# #FUNC_RESULT_0#(#FUNC_RESULT_1#) { return #FUNC_RESULT_2#; }
+        }
+        
+        PRATEEK_CODE_SUFFIX
+        {
+        @#endregion Mixed Func #SRC_CLASS#
+        }
+    }
+}
+

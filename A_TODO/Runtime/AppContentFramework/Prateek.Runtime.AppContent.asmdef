@@ -1,0 +1,19 @@
+{
+    "name": "Prateek.Runtime.AppContentFramework",
+    "references": [
+        "Prateek.Runtime.Core",
+        "Prateek.Runtime.DaemonFramework",
+        "Prateek.Runtime.CommandFramework",
+        "Prateek.Runtime.StateMachine",
+        "Prateek.Runtime.TickableFramework"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

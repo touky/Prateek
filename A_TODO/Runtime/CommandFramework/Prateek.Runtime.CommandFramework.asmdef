@@ -1,0 +1,19 @@
+{
+    "name": "Prateek.Runtime.CommandFramework",
+    "references": [
+        "Prateek.Runtime.Core",
+        "Prateek.Runtime.DaemonFramework",
+        "Prateek.Runtime.TickableFramework",
+        "Prateek.Runtime.KeynameFramework",
+        "Mayfair.DebugMenu"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

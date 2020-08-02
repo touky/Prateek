@@ -1,0 +1,17 @@
+{
+    "name": "Prateek.Runtime.PersonalLogger",
+    "references": [
+        "Prateek.Runtime.Core",
+        "Prateek.Runtime.DaemonFramework",
+        "Prateek.Runtime.Debug"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

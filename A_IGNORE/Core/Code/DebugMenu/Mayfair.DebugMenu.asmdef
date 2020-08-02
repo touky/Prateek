@@ -1,0 +1,17 @@
+{
+    "name": "Mayfair.DebugMenu",
+    "references": [
+        "Prateek.Runtime.Core",
+        "Prateek.Runtime.DaemonFramework",
+        "Prateek.Runtime.TickableFramework"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

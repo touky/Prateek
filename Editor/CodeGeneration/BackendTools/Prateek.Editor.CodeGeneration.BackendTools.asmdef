@@ -1,0 +1,20 @@
+{
+    "name": "Prateek.Editor.CodeGeneration.BackendTools",
+    "references": [
+        "Prateek.Runtime.Core",
+        "Prateek.Editor.Core",
+        "Prateek.Editor.CodeGeneration.CodeBuilder",
+        "Prateek.Editor.CodeGeneration.PrateekScript"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
