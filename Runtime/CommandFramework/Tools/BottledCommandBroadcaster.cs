@@ -3,17 +3,17 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Tools
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
 
-    public struct NoticeBroadcaster<TNotice>
+    public struct BottledCommandBroadcaster<TNotice>
         where TNotice : BroadcastCommand, new()
     {
         #region Fields
-        private ICommandEmitter transmitter;
+        private ICommandEmitter emitter;
         #endregion
 
         #region Constructors
-        public NoticeBroadcaster(ICommandEmitter transmitter)
+        public BottledCommandBroadcaster(ICommandEmitter emitter)
         {
-            this.transmitter = transmitter;
+            this.emitter = emitter;
         }
         #endregion
 
@@ -22,7 +22,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Tools
         {
             TNotice notice = Command.Create<TNotice>();
 
-            this.transmitter.Send(notice);
+            this.emitter.Send(notice);
         }
         #endregion
     }

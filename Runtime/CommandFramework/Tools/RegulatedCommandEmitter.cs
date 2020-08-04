@@ -4,32 +4,32 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Tools.RegulatedSender
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using UnityEngine;
 
-    public abstract class RegulatedNoticeSender<TNotice, TNoticeReceiver>
-        where TNotice : Command, new()
-        where TNoticeReceiver : ICommandEmitter
+    public abstract class RegulatedCommandEmitter<TCommand, TCommandEmitter>
+        where TCommand : Command, new()
+        where TCommandEmitter : ICommandEmitter
     {
         private const float DEFAULT_COOLDOWN = 0.1f;
 
         #region Fields
         private double cooldown;
-        private double timeMark;
-        protected TNotice nextMessage;
-        protected TNoticeReceiver transmitter;
+        private double realtimeMark;
+        protected TCommand cachedCommand;
+        protected TCommandEmitter emitter;
         #endregion
 
         #region Properties
-        public TNotice NextMessage
+        public TCommand CachedCommand
         {
-            get { return nextMessage; }
+            get { return cachedCommand; }
         }
         #endregion
 
         #region Constructors
-        protected RegulatedNoticeSender(TNoticeReceiver transmitter, double cooldown = DEFAULT_COOLDOWN)
+        protected RegulatedCommandEmitter(TCommandEmitter emitter, double cooldown = DEFAULT_COOLDOWN)
         {
             this.cooldown = cooldown;
-            timeMark = Time.realtimeSinceStartup;
-            this.transmitter = transmitter;
+            realtimeMark = Time.realtimeSinceStartup;
+            this.emitter = emitter;
 
             MarkTime();
         }
@@ -38,27 +38,27 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Tools.RegulatedSender
         #region Class Methods
         public void Create()
         {
-            if (nextMessage == null)
+            if (cachedCommand == null)
             {
-                nextMessage = Command.Create<TNotice>();
+                cachedCommand = Command.Create<TCommand>();
             }
         }
 
         public bool TrySend()
         {
-            if (Time.realtimeSinceStartup - timeMark < cooldown)
+            if (Time.realtimeSinceStartup - realtimeMark < cooldown)
             {
                 return false;
             }
 
-            if (nextMessage == null)
+            if (cachedCommand == null)
             {
-                nextMessage = Command.Create<TNotice>();
+                cachedCommand = Command.Create<TCommand>();
             }
 
             DoSend();
 
-            nextMessage = null;
+            cachedCommand = null;
             MarkTime();
 
             return true;
@@ -66,7 +66,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Tools.RegulatedSender
 
         private void MarkTime()
         {
-            timeMark = Time.realtimeSinceStartup;
+            realtimeMark = Time.realtimeSinceStartup;
         }
 
         protected abstract void DoSend();

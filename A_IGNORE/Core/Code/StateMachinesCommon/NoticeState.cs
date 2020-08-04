@@ -11,14 +11,14 @@ namespace Mayfair.Core.Code.StateMachines.FSM.Common
     {
         #region Fields
         private TimeOutTicker timeOutTicker;
-        private NoticeBroadcaster<TNotice> noticeBroadcaster;
+        private BottledCommandBroadcaster<TNotice> bottledCommandBroadcaster;
         #endregion
 
         #region Constructors
         public NoticeState(ICommandReceiver commandReceiver, int timeOutTicker = -1) : base()
         {
             this.timeOutTicker = timeOutTicker;
-            this.noticeBroadcaster = new NoticeBroadcaster<TNotice>(commandReceiver);
+            this.bottledCommandBroadcaster = new BottledCommandBroadcaster<TNotice>(commandReceiver);
         }
         #endregion
 
@@ -28,7 +28,7 @@ namespace Mayfair.Core.Code.StateMachines.FSM.Common
             base.Begin();
 
             this.timeOutTicker.Begin();
-            this.noticeBroadcaster.Broadcast();
+            this.bottledCommandBroadcaster.Broadcast();
         }
 
         public override void Execute()
