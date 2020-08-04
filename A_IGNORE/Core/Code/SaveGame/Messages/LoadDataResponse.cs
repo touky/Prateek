@@ -18,9 +18,9 @@ namespace Mayfair.Core.Code.SaveGame.Messages
         #endregion
 
         #region Constructors
-        public override void Init(RequestCommand request)
+        public override void Init(IRequestCommand request, bool requestFailed = false)
         {
-            base.Init(request);
+            base.Init(request, requestFailed);
 
             Debug.Assert(request is LoadDataRequest);
 

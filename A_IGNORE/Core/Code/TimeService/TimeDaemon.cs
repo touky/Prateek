@@ -60,7 +60,7 @@ namespace Mayfair.Core.Code.TimeService
 
             gameTime.CacheTimeReference(newReferenceTime);
 
-            CommandDaemon.DefaultCommandEmitter.Broadcast(notice);
+            CommandDaemon.DefaultEmitter.Send(notice);
         }
 
         private void PreserveScheduledTimers(DateTime newReferenceTime)

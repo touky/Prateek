@@ -14,7 +14,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Tools.RegulatedSender
         #region Class Methods
         protected override void DoSend()
         {
-            transmitter.Broadcast(nextMessage);
+            transmitter.Send(nextMessage);
         }
         #endregion
     }

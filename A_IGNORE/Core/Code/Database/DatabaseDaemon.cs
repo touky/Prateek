@@ -45,7 +45,7 @@
 
         private readonly Dictionary<Keyname, ICompositeContent> allCompositeContents = new Dictionary<Keyname, ICompositeContent>();
 
-        private readonly Queue<DatabaseContentByIdRequest> requestsForContentHold = new Queue<DatabaseContentByIdRequest>();
+        private readonly Queue<DatabaseContentByKeynameRequest> requestsForContentHold = new Queue<DatabaseContentByKeynameRequest>();
         private readonly Queue<DatabaseContentByFilterRequest> requestsWithFilterHold = new Queue<DatabaseContentByFilterRequest>();
 
         private IdentifierRequestStatus identifierStatus = IdentifierRequestStatus.NotInitialized;
@@ -124,7 +124,7 @@
             }
         }
 
-        private void OnRequestContentById(DatabaseContentByIdRequest request)
+        private void OnRequestContentById(DatabaseContentByKeynameRequest request)
         {
             if (!identifierStatus.Equals(IdentifierRequestStatus.Received))
             {
@@ -141,9 +141,9 @@
 
             var response = request.GetResponse();
 
-            for (int i = 0, n = request.UniqueIds.Count; i < n; i++)
+            for (int i = 0, n = request.RequestedKeynames.Count; i < n; i++)
             {
-                var keyname = request.UniqueIds[i];
+                var keyname = request.RequestedKeynames[i];
 
                 //Name can only match as equal, so directly try-get
                 if (keyname.State == KeynameState.Fullname)
@@ -159,7 +159,7 @@
                 {
                     foreach (var content in allCompositeContents)
                     {
-                        if (keyname.Match(content.Key) <= request.IdMatchRequirement)
+                        if (keyname.Match(content.Key) <= request.MatchRequirement)
                         {
                             response.Content.Add(content.Value);
                         }
@@ -201,11 +201,11 @@
 
             if (request.Operator == FilterLogicalOperators.AND)
             {
-                PatternContainsAll(request.Filters, response.Content);
+                //todo PatternContainsAll(request.Filters, response.Content);
             }
             else
             {
-                PatternContainsAny(request.Filters, response.Content);
+                //todo PatternContainsAny(request.Filters, response.Content);
             }
 
             DebugTools.Log(this, "OnDatabaseContentMatchingFilter request received and handled. Sending result now");
@@ -307,7 +307,7 @@
         {
             rebuildStatus = DatabaseRebuildStatus.IsRebuilding;
 
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
             using (new ProfilerScope("RefreshContentRebuild()"))
 #endif
             {
@@ -316,7 +316,7 @@
                     //foreach (CompositeIdentifier identifier in identifiers)
                 {
                     var identifier = identifiersToRebuild.Dequeue();
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                     using (new ProfilerScope("foreach(identifiers)"))
 #endif
                     {
@@ -326,13 +326,13 @@
                             continue;
                         }
 
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                         using (new ProfilerScope($"using {identifier.rootType.Name}"))
 #endif
                         {
                             foreach (var dataEntry in dataEntries)
                             {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                                 using (new ProfilerScope("foreach(dataEntries)"))
 #endif
                                 {
@@ -387,7 +387,7 @@
             }
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public void SetupDebugContent()
         {
             var debugNotebook = new DebugMenuNotebook("DTBS", "Database Service");
@@ -645,7 +645,7 @@
             {
                 CompositeContent composite = null;
 
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                 using (new ProfilerScope("BuildCompositeContent()"))
 #endif
                 {
@@ -672,7 +672,7 @@
 
                     foreach (IdentifierStatus status in IDENTIFIER_STATUS)
                     {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                         using (new ProfilerScope("foreach(IDENTIFIER_STATUS)"))
 #endif
                         {
@@ -691,13 +691,13 @@
 
             private bool SearchJoinerTypeInDatabase(List<TypeJoint> joints, Dictionary<Type, List<IDatabaseEntry>> databaseEntries, IdentifierStatus status, CompositeContent composite)
             {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                 using (new ProfilerScope("SearchJoinerTypeInDatabase"))
 #endif
                 {
                     foreach (var typeJoint in joints)
                     {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                         using (new ProfilerScope("foreach(joints)"))
 #endif
                         {
@@ -723,13 +723,13 @@
             {
                 var sourceDataArray = composite.GetAll(typeJoint.source);
 
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                 using (new ProfilerScope("TryJoinDatabaseEntryToCompositeContent"))
 #endif
                 {
                     foreach (var sourceData in sourceDataArray)
                     {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                         using (new ProfilerScope("foreach(sourceDataArray)"))
 #endif
                         {
@@ -746,7 +746,7 @@
 
             private bool TryMatchSourceDataWithJoinerEntries(List<IDatabaseEntry> joinerList, IdentifierStatus status, TypeJoint typeJoint, CompositeContent composite, IDatabaseEntry sourceData)
             {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                 using (new ProfilerScope("TryMatchSourceDataWithJoinerEntries"))
 #endif
                 {
@@ -754,7 +754,7 @@
                     var joinerIndex     = 0;
                     while (true)
                     {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                         using (new ProfilerScope("while (true)"))
 #endif
                         {
@@ -966,18 +966,13 @@
         #endregion
 
         #region Messaging
-        public override void CommandReceived()
+        public override void DefineCommandReceiverActions()
         {
-            //Empty
-        }
+            base.DefineCommandReceiverActions();
 
-        protected override void SetupCommandReceiverCallback()
-        {
-            base.SetupCommandReceiverCallback();
-
-            CommandReceiver.AddCallback<DatabaseIdentifierResponse>(OnIdentifiersReceived);
-            CommandReceiver.AddCallback<DatabaseContentByIdRequest>(OnRequestContentById);
-            CommandReceiver.AddCallback<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
+            CommandReceiver.SetActionFor<DatabaseIdentifierResponse>(OnIdentifiersReceived);
+            CommandReceiver.SetActionFor<DatabaseContentByKeynameRequest>(OnRequestContentById);
+            CommandReceiver.SetActionFor<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
         }
         #endregion
     }

@@ -14,22 +14,26 @@
     using Prateek.Runtime.TickableFramework.Enums;
 
     #region Nested type: MessageService
-    public sealed partial class CommandDaemon : DaemonOverseer<CommandDaemon, CommandServant>, IDebugMenuNotebookOwner
+    public sealed class CommandDaemon
+        : DaemonOverseer<CommandDaemon, CommandServant>
+        , IDebugMenuNotebookOwner
     {
         #region Fields
-        private Dictionary<long, HashSet<CommandReceiver>> liveClients;
-        private DefaultCommandReceiverOwner defaultReceiverOwner;
         private readonly object noticeLock = new object();
-        private List<Command> receivedCommands;
-        private List<Command> processingCommands;
+        private Dictionary<long, HashSet<CommandReceiver>> liveReceivers;
+
+        private DefaultCommandEmitter defaultEmitter;
+        
+        private List<Command> commandReceived;
+        private List<Command> commandCached;
 
         private LiveNoticeReceiversMenuPage debugLivePage = null;
         #endregion
 
         #region Properties
-        public static ICommandEmitter DefaultCommandEmitter
+        public static ICommandEmitter DefaultEmitter
         {
-            get { return Instance.defaultReceiverOwner.CommandReceiver; }
+            get { return Instance.defaultEmitter.CommandReceiver; }
         }
 
         public override TickableSetup TickableSetup
@@ -42,7 +46,7 @@
         public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
         {
             base.Tick(tickableFrame, seconds, unscaledSeconds);
-
+            
             ProcessNotices();
         }
 
@@ -51,74 +55,65 @@
             return new CommandReceiver(owner);
         }
 
-        internal static void ReceiveMessage(Command receivedCommand)
+        internal static void CommandReceived(Command receivedCommand)
         {
-            var servant = Instance.FirstAliveServant;
-            if (servant == null)
+            foreach (var servant in Instance.AllAliveServants)
             {
-                return;
+                servant.CommandReceived(receivedCommand);
             }
-
-            servant.ReceiveNotice(Instance, receivedCommand);
         }
 
-        public void AddMessage(Command receivedCommand)
+        internal void FlushCommand(Command receivedCommand)
         {
-            lock (noticeLock)
-            {
-                receivedCommands.Add(receivedCommand);
-            }
+            commandReceived.Add(receivedCommand);
         }
 
         private void ProcessNotices()
         {
+            lock (noticeLock)
+            {
+                foreach (var servant in Instance.AllAliveServants)
+                {
+                    servant.FlushReceivedCommands();
+                }
+            }
+
             //Emptying the received notices to ensure that no notice received in-between processing interferes with the processing
             lock (noticeLock)
             {
-                if (receivedCommands.Count == 0)
+                if (commandReceived.Count == 0)
                 {
                     return;
                 }
 
-                processingCommands.AddRange(receivedCommands);
-                receivedCommands.Clear();
+                commandCached.AddRange(commandReceived);
+                commandReceived.Clear();
             }
 
-            var builder = (StringBuilder)null;
-            var receivers = (HashSet<CommandReceiver>)null;
-
-            foreach (var notice in processingCommands)
+            //todo var builder = (StringBuilder)null;
+            foreach (var notice in commandCached)
             {
                 //todo builder.AddReceivedMessage(this, notice);
 
                 //Standard notice management, send to concerned receivers
-                var commandId = notice.CommandID;
-                if (liveClients.TryGetValue(commandId, out receivers))
+                var commandId = notice.CommandId;
+                if (liveReceivers.TryGetValue(commandId.Key, out var receivers))
                 {
-                    foreach (var commandReceiver in receivers)
+                    foreach (var receiver in receivers)
                     {
                         //todo builder.AddCommunicator(this, noticeReceiver);
 
-                        commandReceiver.Receive(notice);
-
-                        //if (connectionDrawer == null)
-                        //{
-                        //    connectionDrawer = new GameObject().AddComponent<MessageServiceDrawer>();
-                        //}
-                        //else
-                        //{
-                        //    connectionDrawer.Tag(noticeReceiver, notice);
-                        //}
+                        receiver.Receive(notice);
                     }
                 }
             }
 
             //todo DebugTools.Log(builder, DebugTools.LogLevel.Verbose);
 
-            processingCommands.Clear();
+            commandCached.Clear();
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         private void SetupDebugContent()
         {
             //DebugMenuNotebook debugNotebook = new DebugMenuNotebook("MSGS", "Message Service");
@@ -128,8 +123,8 @@
             //debugNotebook.Register();
         }
 
-        [Conditional("NVIZZIO_DEV")]
-        private void AddType(Type type)
+        [Conditional("PRATEEK_DEBUG")]
+        private void AddTypeToDebug(Type type)
         {
             if (debugLivePage == null)
             {
@@ -143,65 +138,60 @@
         #region Service
         protected override void OnAwake()
         {
-            if (liveClients == null)
+            if (liveReceivers == null)
             {
-                liveClients = new Dictionary<long, HashSet<CommandReceiver>>();
+                liveReceivers = new Dictionary<long, HashSet<CommandReceiver>>();
             }
 
-            processingCommands = new List<Command>();
+            commandCached = new List<Command>();
 
             lock (noticeLock)
             {
-                receivedCommands = new List<Command>();
+                commandReceived = new List<Command>();
             }
 
             SetupDebugContent();
 
-            defaultReceiverOwner = new DefaultCommandReceiverOwner();
+            defaultEmitter = new DefaultCommandEmitter();
         }
 
-        internal void Register(CommandReceiver commandReceiver)
-        {
-            foreach (var register in commandReceiver.CallbackToRegister)
-            {
-                var noticeId = register.GetValidId();
-                if (liveClients.TryGetValue(noticeId, out var receivers))
-                {
-                    if (register.Type.IsSubclassOf(typeof(TargetedCommand)))
-                    {
-                        if (receivers.Count > 0 && !receivers.Contains(commandReceiver))
-                        {
-                            //This should not happen
-                            System.Diagnostics.Debug.Assert(false, $"{noticeId}: Another noticeReceiver is already registered on this notice !!!!");
-
-                            continue;
-                        }
-                    }
-
-                    receivers.Add(commandReceiver);
-                }
-                else
-                {
-                    receivers = new HashSet<CommandReceiver>();
-                    receivers.Add(commandReceiver);
-                    liveClients.Add(register.GetValidId(), receivers);
-
-                    AddType(register.Type);
-                }
-            }
-        }
-
-        internal static void RefreshRegistration(CommandReceiver commandReceiver)
+        internal static void FlushPendingActions(CommandReceiver commandReceiver)
         {
             Instance.Unregister(commandReceiver);
             Instance.Register(commandReceiver);
         }
 
-        internal void Unregister(CommandReceiver commandReceiver)
+        private void Register(CommandReceiver commandReceiver)
         {
-            foreach (var register in commandReceiver.CallbackToUnregister)
+            foreach (var commandId in commandReceiver.ActionsToRegister)
             {
-                if (liveClients.TryGetValue(register.GetValidId(), out var receivers))
+                var keyId = commandId.Key;
+                if (!liveReceivers.TryGetValue(keyId, out var receivers))
+                {
+                    receivers = new HashSet<CommandReceiver>();
+                    liveReceivers.Add(keyId, receivers);
+                }
+                
+                if (commandId.Type.IsSubclassOf(typeof(TargetedCommand)))
+                {
+                    if (receivers.Count > 0 && !receivers.Contains(commandReceiver))
+                    {
+                        //This should not happen
+                        System.Diagnostics.Debug.Assert(false, $"{keyId}: Another noticeReceiver is already registered on this notice !!!!");
+                    }
+                }
+
+                receivers.Add(commandReceiver);
+
+                AddTypeToDebug(commandId.Type);
+            }
+        }
+
+        private void Unregister(CommandReceiver commandReceiver)
+        {
+            foreach (var commandId in commandReceiver.ActionsToUnregister)
+            {
+                if (liveReceivers.TryGetValue(commandId.Key, out var receivers))
                 {
                     receivers.Remove(commandReceiver);
                 }

@@ -22,7 +22,7 @@ namespace Mayfair.Core.Code.GameAction
         {
             GameActionCommand<T0, T1> command = Create<GameActionCommand<T0, T1>>();
             command.targetValue = targetValue;
-            CommandDaemon.DefaultCommandEmitter.Broadcast(command);
+            CommandDaemon.DefaultEmitter.Send(command);
         }
 
         public static void Broadcast(ICommandEmitter transmitter, Keyname id0, float targetValue = 1)
@@ -30,7 +30,7 @@ namespace Mayfair.Core.Code.GameAction
             GameActionCommand<T0, T1> command = Create<GameActionCommand<T0, T1>>();
             command.targetValue = targetValue;
             command.Add(id0);
-            CommandDaemon.DefaultCommandEmitter.Broadcast(command);
+            CommandDaemon.DefaultEmitter.Send(command);
         }
         #endregion
     }

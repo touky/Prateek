@@ -7,7 +7,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Daemons
 
     public abstract class ContentAccessServant<TDaemon, TServant>
         : ServantTickable<TDaemon, TServant>
-        where TDaemon : CommandReceiverDaemon<TDaemon, TServant>
+        where TDaemon : ReceiverDaemonOverseer<TDaemon, TServant>
         where TServant : ContentAccessServant<TDaemon, TServant>
     {
         #region Properties
@@ -15,7 +15,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Daemons
         #endregion
 
         #region Class Methods
-        public abstract RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter);
+        //todo public abstract RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter);
         public abstract void OnResourceChanged(TDaemon service, ResourcesHaveChangedResponse notice);
         #endregion
     }

@@ -10,7 +10,6 @@ namespace Prateek.Runtime.DaemonFramework.Servants
         where TDaemon : DaemonOverseer<TDaemon, TServant>
         where TServant : class, IServant
     {
-        
         public override void Startup()
         {
             base.Startup();

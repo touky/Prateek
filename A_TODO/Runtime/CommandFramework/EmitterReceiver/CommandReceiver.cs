@@ -1,4 +1,5 @@
-﻿namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver {
+﻿namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver
+{
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -16,23 +17,23 @@
         private Action onCommandReceived;
 
         private bool commandReadLock = false;
-        private List<Command> receivedCommands = new List<Command>();
-        private List<Command> processingCommands = new List<Command>();
-        private Dictionary<long, ICommandCallbackProxy> commandCallbacks = new Dictionary<long, ICommandCallbackProxy>();
+        private List<Command> commandReceived = new List<Command>();
+        private List<Command> commandCached = new List<Command>();
+        private Dictionary<long, ICommandActionProxy> commandActions = new Dictionary<long, ICommandActionProxy>();
 
-        private List<CommandId> callbackToRegister = new List<CommandId>();
-        private List<CommandId> callbackToUnregister = new List<CommandId>();
+        private List<CommandId> actionsToRegister = new List<CommandId>();
+        private List<CommandId> actionsToUnregister = new List<CommandId>();
         #endregion
 
         #region Properties
-        public List<CommandId> CallbackToRegister
+        public List<CommandId> ActionsToRegister
         {
-            get { return callbackToRegister; }
+            get { return actionsToRegister; }
         }
 
-        public List<CommandId> CallbackToUnregister
+        public List<CommandId> ActionsToUnregister
         {
-            get { return callbackToUnregister; }
+            get { return actionsToUnregister; }
         }
         #endregion
 
@@ -48,7 +49,7 @@
         {
             //Disallow any noticeReceiver from receiving their notices now
             //MessageReceived() callback is only meant for async purpose
-            if (receivedCommands.Count == 0)
+            if (commandReceived.Count == 0)
             {
                 commandReadLock = true;
                 {
@@ -57,32 +58,68 @@
                 commandReadLock = false;
             }
 
-            receivedCommands.Add(receivedCommand);
+            commandReceived.Add(receivedCommand);
         }
         #endregion
 
-        #region IMessageCommunicator Members
-        public void CleanUp()
+        #region ICommandReceiver Members
+        public void Kill()
         {
             if (SingletonBehaviour<CommandDaemon>.IsApplicationQuitting)
             {
                 return;
             }
 
-            ClearCallbacks();
-            ApplyCallbacks();
+            ClearAllActions();
+            ApplyActionChanges();
         }
 
         public ICommandReceiverOwner Owner
         {
             get { return owner; }
         }
+
+        #region Receiving
+        public void ProcessReceivedCommands()
+        {
+            if (commandReceived.Count == 0)
+            {
+                return;
+            }
+
+            if (commandReadLock)
+            {
+                UnityEngine.Debug.Assert(false, "ProcessReceivedCommands() call is forbidden during Receive() call");
+                return;
+            }
+
+            commandCached.AddRange(commandReceived);
+            commandReceived.Clear();
+
+            foreach (var command in commandCached)
+            {
+                var commandId = command.CommandId;
+                if (commandActions.TryGetValue(commandId.Key, out var action))
+                {
+                    action.Invoke(command);
+                }
+                else
+                {
+                    //This can happen, if no noticeReceiver has been registered to this type of event
+                    //We log a warning for now (18/10/19) since this is not supposed to be a problem in this system logic
+                    //todo DebugTools.LogWarning($"No recipient found for notice {notice.GetType().Name} sent by {notice.Sender.Owner.Name}");
+                }
+            }
+
+            commandCached.Clear();
+        }
+        #endregion
         #endregion
 
         #region Sending
-        public void Broadcast(BroadcastCommand command)
+        public void Send(BroadcastCommand command)
         {
-            Send(command);
+            Send((Command) command);
         }
 
         public void Send(TargetedCommand command)
@@ -109,103 +146,66 @@
 
             command.Emitter = this;
 
-            CommandDaemon.ReceiveMessage(command);
-        }
-        #endregion
-
-        #region Receiving
-        public void ProcessAllCommands()
-        {
-            if (receivedCommands.Count == 0)
-            {
-                return;
-            }
-
-            if (commandReadLock)
-            {
-                UnityEngine.Debug.Assert(false, "ProcessAllMessages() call is forbidden on MessageReceived()");
-                return;
-            }
-
-            processingCommands.AddRange(receivedCommands);
-            receivedCommands.Clear();
-
-            ICommandCallbackProxy callback = null;
-            foreach (Command command in processingCommands)
-            {
-                long commandId = command.CommandID;
-                if (commandCallbacks.TryGetValue(commandId, out callback))
-                {
-                    callback.Invoke(command);
-                }
-                else
-                {
-                    //This can happen, if no noticeReceiver has been registered to this type of event
-                    //We log a warning for now (18/10/19) since this is not supposed to be a problem in this system logic
-                    //todo DebugTools.LogWarning($"No recipient found for notice {notice.GetType().Name} sent by {notice.Sender.Owner.Name}");
-                }
-            }
-
-            processingCommands.Clear();
+            CommandDaemon.CommandReceived(command);
         }
         #endregion
 
         #region Callback management
-        public void SetCommandReceived(Action onCommandReceived)
+        public void SetActionForReception(Action onCommandReceived)
         {
             this.onCommandReceived = onCommandReceived;
         }
 
-        public void AddCallback<T>(CommandCallback<T> callback) where T : Command
+        public void SetActionFor<T>(CommandAction<T> action) where T : Command
         {
-            CommandId register = new CommandId(typeof(T), this);
+            var commandId = new CommandId(typeof(T), this);
 
-            InternalAddCallback(register, new CommandCallbackProxy<T>(callback));
+            AddActionForCommand(commandId, new CommandActionProxy<T>(action));
 
-            SetCallbackAsPending(register, true);
+            AddPendingCommandId(commandId, true);
         }
 
-        public void RemoveCallback<T>() where T : Command
+        public void ClearActionFor<T>() where T : Command
         {
-            CommandId id = new CommandId(typeof(T), this);
+            var commandId = new CommandId(typeof(T), this);
 
-            SetCallbackAsPending(id, false);
+            AddPendingCommandId(commandId, false);
         }
 
-        public void ClearCallbacks()
+        public void ClearAllActions()
         {
-            foreach (long key in commandCallbacks.Keys)
+            foreach (var key in commandActions.Keys)
             {
-                SetCallbackAsPending(key, false);
+                AddPendingCommandId(key, false);
             }
         }
 
-        public void ApplyCallbacks()
+        public void ApplyActionChanges()
         {
-            CommandDaemon.RefreshRegistration(this);
+            CommandDaemon.FlushPendingActions(this);
 
-            CallbackToRegister.Clear();
-            CallbackToUnregister.Clear();
+            ActionsToRegister.Clear();
+            ActionsToUnregister.Clear();
         }
 
-        private void InternalAddCallback(CommandId register, ICommandCallbackProxy callbackProxy)
+        private void AddActionForCommand(CommandId commandId, ICommandActionProxy actionProxy)
         {
-            long id = register.GetValidId();
+            var id = commandId.Key;
 
-            if (!commandCallbacks.ContainsKey(id))
+            if (!commandActions.ContainsKey(id))
             {
-                commandCallbacks.Add(id, callbackProxy);
+                commandActions.Add(id, actionProxy);
             }
             else
             {
-                commandCallbacks[id] = callbackProxy;
+                commandActions[id] = actionProxy;
             }
         }
 
-        private void SetCallbackAsPending(CommandId id, bool doRegister)
+        private void AddPendingCommandId(CommandId id, bool needToRegister)
         {
-            List<CommandId> removeList = doRegister ? callbackToUnregister : callbackToRegister;
-            List<CommandId> addList    = doRegister ? callbackToRegister : callbackToUnregister;
+            var removeList = needToRegister ? actionsToUnregister : actionsToRegister;
+            var addList    = needToRegister ? actionsToRegister : actionsToUnregister;
 
             if (removeList.Contains(id))
             {

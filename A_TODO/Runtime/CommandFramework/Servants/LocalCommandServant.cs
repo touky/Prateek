@@ -5,9 +5,9 @@
     public sealed class LocalCommandServant : CommandServant
     {
         #region Class Methods
-        public override void ReceiveNotice(CommandDaemon daemonCore, Command receivedCommand)
+        public override void CommandReceived(Command command)
         {
-            daemonCore.AddMessage(receivedCommand);
+            commandReceived.Add(command);
         }
         #endregion
     }

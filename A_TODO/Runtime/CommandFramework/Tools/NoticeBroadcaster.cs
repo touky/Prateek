@@ -22,7 +22,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Tools
         {
             TNotice notice = Command.Create<TNotice>();
 
-            this.transmitter.Broadcast(notice);
+            this.transmitter.Send(notice);
         }
         #endregion
     }

@@ -3,16 +3,16 @@
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using UnityEngine;
 
-    internal class DefaultCommandReceiverOwner : ICommandReceiverOwner
+    internal class DefaultCommandEmitter : ICommandReceiverOwner
     {
         #region Fields
         private ICommandReceiver commandReceiver;
         #endregion
 
         #region Constructors
-        public DefaultCommandReceiverOwner()
+        public DefaultCommandEmitter()
         {
-            commandReceiver = CommandDaemon.CreateCommandReceiver(this);
+            this.InitializeReceiver(ref commandReceiver);
         }
         #endregion
 
@@ -27,14 +27,8 @@
             get { return GetType().Name; }
         }
 
-        public Transform Transform
+        public void DefineCommandReceiverActions()
         {
-            get { return null; }
-        }
-
-        public void CommandReceived()
-        {
-            throw new NotImplementedException($"Cannot receiver notices through the {typeof(DefaultCommandReceiverOwner).Name}");
         }
         #endregion
     }

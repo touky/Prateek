@@ -7,7 +7,7 @@ namespace Mayfair.Core.Code.Utils.Debug
     public static partial class DebugTools
     {
         #region Class Methods
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void Log(IDaemon daemonCore, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
@@ -15,7 +15,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             Log(builder.ToString(), daemonCore, logPriority);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void Log(IServant servant, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
@@ -23,7 +23,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             Log(builder.ToString(), servant, logPriority);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void LogWarning(IDaemon daemonCore, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
@@ -31,7 +31,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             LogWarning(builder.ToString(), daemonCore, logPriority);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void LogWarning(IServant servant, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
@@ -39,7 +39,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             LogWarning(builder.ToString(), servant, logPriority);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void LogError(IDaemon daemonCore, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
@@ -47,7 +47,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             LogWarning(builder.ToString(), daemonCore, logPriority);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void LogError(IServant servant, string notice, LogLevel logPriority = LogLevel.Normal)
         {
             StringBuilder builder = new StringBuilder();
@@ -55,7 +55,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             LogWarning(builder.ToString(), servant, logPriority);
         }
 
-        //todo [Conditional("NVIZZIO_DEV")]
+        //todo [Conditional("PRATEEK_DEBUG")]
         //todo public static void Log<TResourceType, TResourceRef>(IServant servant, ResourcesHaveChangedResponse<TResourceRef, TResourceType> notice)
         //todo     where TResourceRef : AbstractResourceReference<TResourceType, TResourceRef>
         //todo {

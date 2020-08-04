@@ -27,7 +27,7 @@ namespace Mayfair.Core.Code.Database.ServiceProvider.DatabaseIdentification
         #endregion
 
         #region Class Methods
-        protected override void SetupCommandReceiverCallback() { }
+        public override void DefineCommandReceiverActions()  { }
 
         public abstract void Create();
         #endregion

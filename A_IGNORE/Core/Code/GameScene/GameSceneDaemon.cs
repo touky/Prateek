@@ -384,10 +384,10 @@ namespace Mayfair.Core.Code.GameScene
 
         private void LoadSceneCompleted(SceneReference sceneReference, LoadSceneRequest<LoadSceneResponse> request)
         {
-            RefreshLoadingStatus();
-            var response = request.GetResponse();
-            response.SceneReference = sceneReference;
-            CommandReceiver.Send(response);
+            //todo RefreshLoadingStatus();
+            //todo var response = request.GetResponse();
+            //todo response.SceneReference = sceneReference;
+            //todo CommandReceiver.Send(response);
         }
 
         private void OnUnloadSceneRequestReceived(UnloadSceneRequest<UnloadSceneResponse> request)
@@ -450,19 +450,17 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Messaging
-        public override void CommandReceived() { }
-
-        protected override void SetupCommandReceiverCallback()
+        public override void DefineCommandReceiverActions()
         {
-            base.SetupCommandReceiverCallback();
+            base.DefineCommandReceiverActions();
 
-            CommandReceiver.AddCallback<GameSessionOpen>(OnGameSessionOpen);
-            CommandReceiver.AddCallback<GameSessionClose>(OnGameSessionClose);
-            CommandReceiver.AddCallback<GameLoadingGameplayCommand>(OnGameLoadingGameplay);
-            CommandReceiver.AddCallback<GameLoadingRestartCommand>(OnGameLoadingRestart);
+            CommandReceiver.SetActionFor<GameSessionOpen>(OnGameSessionOpen);
+            CommandReceiver.SetActionFor<GameSessionClose>(OnGameSessionClose);
+            CommandReceiver.SetActionFor<GameLoadingGameplayCommand>(OnGameLoadingGameplay);
+            CommandReceiver.SetActionFor<GameLoadingRestartCommand>(OnGameLoadingRestart);
 
-            CommandReceiver.AddCallback<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
-            CommandReceiver.AddCallback<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
+            CommandReceiver.SetActionFor<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
+            CommandReceiver.SetActionFor<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
         }
         #endregion
     }

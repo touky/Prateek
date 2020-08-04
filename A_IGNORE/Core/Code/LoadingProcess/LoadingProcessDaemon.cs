@@ -8,10 +8,11 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.LoadingProcess.Messages;
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.Utils;
+    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
     using Prateek.Runtime.TickableFramework.Enums;
 
-    public sealed class LoadingProcessDaemon : CommandReceiverDaemon<LoadingProcessDaemon, LoadingProcessServant>, IDebugMenuNotebookOwner
+    public sealed class LoadingProcessDaemon : ReceiverDaemonOverseer<LoadingProcessDaemon, LoadingProcessServant>, IDebugMenuNotebookOwner
     {
         #region Fields
         private LoadingProcessStatus loadingStatus = LoadingProcessStatus.Idle;
@@ -49,17 +50,15 @@ namespace Mayfair.Core.Code.LoadingProcess
         #endregion
 
         #region Messaging
-        public override void CommandReceived() { }
-
-        protected override void SetupCommandReceiverCallback()
+        public override void DefineCommandReceiverActions()
         {
-            CommandReceiver.AddCallback<TaskLoadingCommand>(OnLoadTaskMessage);
-            CommandReceiver.AddCallback<GameLoadingNeedRestart>(OnGameLoadingNeedRestart);
+            CommandReceiver.SetActionFor<TaskLoadingCommand>(OnLoadTaskMessage);
+            CommandReceiver.SetActionFor<GameLoadingNeedRestart>(OnGameLoadingNeedRestart);
 
-            CommandReceiver.AddCallback<GameLoadingPrerequisiteCommand>(OnGameLoading);
-            CommandReceiver.AddCallback<GameLoadingGameplayCommand>(OnGameLoading);
-            CommandReceiver.AddCallback<GameLoadingFinalizeCommand>(OnGameLoading);
-            CommandReceiver.AddCallback<GameLoadingRestartCommand>(OnGameLoading);
+            CommandReceiver.SetActionFor<GameLoadingPrerequisiteCommand>(OnGameLoading);
+            CommandReceiver.SetActionFor<GameLoadingGameplayCommand>(OnGameLoading);
+            CommandReceiver.SetActionFor<GameLoadingFinalizeCommand>(OnGameLoading);
+            CommandReceiver.SetActionFor<GameLoadingRestartCommand>(OnGameLoading);
         }
         #endregion
 
@@ -147,7 +146,7 @@ namespace Mayfair.Core.Code.LoadingProcess
         }
 
         #region Debug
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         private void SetupDebugContent()
         {
             DebugMenuNotebook debugNotebook = new DebugMenuNotebook("LDNG", "Loading Process");

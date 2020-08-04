@@ -204,7 +204,7 @@ namespace Mayfair.Core.Code.DebugMenu
 
         public void DrawTitles()
         {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
             using (new ProfilerScope("DrawTitles"))
 #endif
             {
@@ -219,13 +219,13 @@ namespace Mayfair.Core.Code.DebugMenu
 
         public void DrawFields()
         {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
             using (new ProfilerScope("DrawFields"))
 #endif
             {
                 for (int r = 0; r < fields.Count; r++)
                 {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                     using (new ProfilerScope("field.OnGUI(this);"))
 #endif
                     {

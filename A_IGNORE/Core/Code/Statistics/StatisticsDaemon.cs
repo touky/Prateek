@@ -9,7 +9,7 @@ namespace Mayfair.Core.Code.Statistics
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.TickableFramework.Enums;
 
-    public sealed class StatisticsDaemon : CommandReceiverDaemon<StatisticsDaemon, StatisticsServant>, IDebugMenuNotebookOwner
+    public sealed class StatisticsDaemon : ReceiverDaemonOverseer<StatisticsDaemon, StatisticsServant>, IDebugMenuNotebookOwner
     {
         #region Fields
         //private Dictionary<KeywordHolder, HashSet<StatisticsServiceProvider>> trackedProviderTags = new Dictionary<KeywordHolder, HashSet<StatisticsServiceProvider>>();
@@ -56,11 +56,9 @@ namespace Mayfair.Core.Code.Statistics
         #endregion
 
         #region Messaging
-        public override void CommandReceived() { }
-
-        protected override void SetupCommandReceiverCallback()
+        public override void DefineCommandReceiverActions()
         {
-            CommandReceiver.AddCallback<GameActionCommand>(OnStatisticsMessage);
+            CommandReceiver.SetActionFor<GameActionCommand>(OnStatisticsMessage);
         }
         #endregion
 

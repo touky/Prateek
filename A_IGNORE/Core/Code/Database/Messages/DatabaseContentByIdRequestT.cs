@@ -2,8 +2,8 @@ namespace Mayfair.Core.Code.Database.Messages
 {
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
 
-    public class DatabaseContentByIdRequest<TResponseType> : DatabaseContentByIdRequest
-        where TResponseType : DatabaseContentByIdResponse, new()
+    public class DatabaseContentByKeynameRequest<TResponseType> : DatabaseContentByKeynameRequest
+        where TResponseType : DatabaseContentByKeynameResponse, new()
     {
         #region Class Methods
         public new TResponseType GetResponse()
@@ -11,10 +11,10 @@ namespace Mayfair.Core.Code.Database.Messages
             return base.GetResponse() as TResponseType;
         }
 
-        protected override ResponseCommand CreateNewResponse()
-        {
-            return Create<TResponseType>();
-        }
+        //todo protected override ResponseCommand CreateNewResponse()
+        //todo {
+        //todo     return Create<TResponseType>();
+        //todo }
         #endregion
     }
 }

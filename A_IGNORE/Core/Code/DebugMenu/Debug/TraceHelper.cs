@@ -7,7 +7,7 @@
     public static class TraceHelper
     {
         #region Class Methods
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void EnsureTrace<T>(string callerName)
         {
             //benjaminh: limiting to the editor until I have time to double check on device

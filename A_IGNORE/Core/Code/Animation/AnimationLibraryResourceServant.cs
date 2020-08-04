@@ -31,10 +31,10 @@ namespace Mayfair.Core.Code.Animation
             AddSupportedAssignable(PathHelper.RemoveLeadingAndTrailingSlashes(COMMON_LIBRARY_KEYWORD), DEFAULT_PREFAB_NAME);
         }
 
-        protected override RequestAccessToContent CreateResourceChangeRequest()
-        {
-            return Command.Create<RequestCallbackOnScriptableResourceChange<AnimationLibraryResourceHasChanged, AnimationLibrary>>();
-        }
+        //todo protected override RequestAccessToContent CreateResourceChangeRequest()
+        //todo {
+        //todo     return Command.Create<RequestCallbackOnScriptableResourceChange<AnimationLibraryResourceHasChanged, AnimationLibrary>>();
+        //todo }
 
         protected override bool IsResponseAccepted(ScriptableResourcesHaveChanged<AnimationLibrary> response)
         {

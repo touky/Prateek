@@ -5,6 +5,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
     using System.Text.RegularExpressions;
     using Prateek.A_TODO.Runtime.AppContentFramework.ResourceTree;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
 
     internal static class RegexContent
     {
@@ -19,20 +20,17 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
         }
     }
 
-    public abstract class RequestAccessToContent
-        : RequestCommand
+    public abstract class RequestAccessToContent<TResponse, TIdentification>
+        : RequestCommand<TResponse, TIdentification>
         , ITreeIdentification
+        where TResponse : ResponseCommand, new()
+        where TIdentification : Command
     {
         #region Fields
         private List<string[]> resourceTags = new List<string[]>();
         #endregion
 
         #region Properties
-        public override long CommandID
-        {
-            get { return ConvertToId(typeof(RequestAccessToContent)); }
-        }
-
         protected abstract Type ResourceType { get; }
         #endregion
 

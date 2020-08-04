@@ -4,11 +4,11 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById.Interface
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.KeynameFramework.Enums;
 
-    public interface IContentById
+    public interface IContentByKeynameRequest
     {
         #region Properties
-        KeynameMatchResult IdMatchRequirement { get; }
-        List<Keyname> UniqueIds { get; }
+        KeynameMatchResult MatchRequirement { get; }
+        List<Keyname> RequestedKeynames { get; }
         #endregion
     }
 }

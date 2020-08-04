@@ -31,7 +31,7 @@ namespace Mayfair.Core.Code.Animation.AnimatorParameters
             Validate(list, controller.ToString());
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         private void Validate(List<AnimatorControllerParameter> parameters, string name)
         {
 #if UNITY_EDITOR

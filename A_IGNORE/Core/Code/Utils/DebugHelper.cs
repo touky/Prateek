@@ -17,20 +17,20 @@ namespace Mayfair.Core.Code.Utils
         #endregion
 
         #region Class Methods
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void DrawDebugRay(Ray ray, RaycastHit hit, Color color, float duration = -1)
         {
             UnityEngine.Debug.DrawLine(ray.origin, hit.point, color, duration);
             UnityEngine.Debug.DrawLine(hit.point, hit.point + ray.direction * 10, Color.grey, duration);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void DrawDebugRay(Ray ray, Color color, float duration = -1)
         {
             UnityEngine.Debug.DrawRay(ray.origin, ray.direction * 100, color, duration);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void DrawCrossAtPosition(Vector3 position, Color color, float yRotation = 0, float yOffset = 0, float duration = -1)
         {
             Quaternion rotation = Quaternion.Euler(0, yRotation, 0);
@@ -42,7 +42,7 @@ namespace Mayfair.Core.Code.Utils
             UnityEngine.Debug.DrawLine(position + Vector3.up * yOffset + left * 0.5f, position + Vector3.up * yOffset + right * 0.5f, color, duration);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void DrawBoxGrounded(Vector3 position, Quaternion rotation, Vector3 extents, Color color, float duration = -1)
         {
             Vector3 size = extents * 2;

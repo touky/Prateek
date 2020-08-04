@@ -9,14 +9,14 @@ namespace Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages
     /// </summary>
     /// <typeparam name="TChangeMessage">The ResourcesHaveChanged type notice to use as callback</typeparam>
     /// <typeparam name="TResourceType">The resource type of your data</typeparam>
-    public class RequestCallbackOnSceneChange<TChangeMessage> : RequestAccessToContent<SceneInstance>
-        where TChangeMessage : ScenesHaveChanged, new()
-    {
-        #region Class Methods
-        protected override ResponseCommand CreateNewResponse()
-        {
-            return Create<TChangeMessage>();
-        }
-        #endregion
-    }
+    //todo public class RequestCallbackOnSceneChange<TChangeMessage> : RequestAccessToContent<SceneInstance>
+    //todo     where TChangeMessage : ScenesHaveChanged, new()
+    //todo {
+    //todo     #region Class Methods
+    //todo     protected override ResponseCommand CreateNewResponse()
+    //todo     {
+    //todo         return Create<TChangeMessage>();
+    //todo     }
+    //todo     #endregion
+    //todo }
 }

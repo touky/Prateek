@@ -8,19 +8,19 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces
         #region Class Methods
         //Sending
         void Send(TargetedCommand command);
-        void CleanUp();
+        void Kill();
         /// <summary>
         /// This needs to be called to flush and process all received commands
         /// </summary>
-        void ProcessAllCommands();
+        void ProcessReceivedCommands();
         #endregion
 
         #region Setup
-        void SetCommandReceived(Action onCommandReceived);
-        void AddCallback<T>(CommandCallback<T> callback) where T : Command;
-        void RemoveCallback<T>() where T : Command;
-        void ClearCallbacks();
-        void ApplyCallbacks();
+        void SetActionForReception(Action onCommandReceived);
+        void SetActionFor<T>(CommandAction<T> action) where T : Command;
+        void ClearActionFor<T>() where T : Command;
+        void ClearAllActions();
+        void ApplyActionChanges();
         #endregion
     }
 }

@@ -13,34 +13,22 @@ namespace Mayfair.Core.Code.BaseBehaviour
         #region Unity Methods
         protected virtual void Awake()
         {
-            InitCommandReceiver();
+            this.InitializeReceiver(ref commandReceiver);
         }
 
         protected virtual void Update()
         {
-            UpdateCommandReceiver();
+            commandReceiver.ProcessReceivedCommands();
         }
 
         protected virtual void OnDestroy()
         {
-            this.commandReceiver.CleanUp();
+            this.commandReceiver.Kill();
         }
         #endregion
 
         #region Class Methods
-        protected void InitCommandReceiver()
-        {
-            this.commandReceiver = CommandDaemon.CreateCommandReceiver(this);
-            SetupCommandReceiverCallback();
-            this.commandReceiver.ApplyCallbacks();
-        }
-
-        protected void UpdateCommandReceiver()
-        {
-            CommandReceiver.ProcessAllCommands();
-        }
-
-        protected abstract void SetupCommandReceiverCallback();
+        public abstract void DefineCommandReceiverActions();
         #endregion
 
         #region IMessageCommunicatorOwner Members

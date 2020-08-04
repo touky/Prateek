@@ -11,14 +11,14 @@
     using Prateek.Runtime.TickableFramework.Enums;
 
     public sealed class ContentRegistryDaemon
-        : CommandReceiverDaemon<ContentRegistryDaemon, ContentRegistryServant>
+        : ReceiverDaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
         , ISimpleStepMachineOwner<ServiceState>
     {
         #region Fields
         private SimpleStepMachine<ServiceState> stateMachine;
         private ResourceTree<ContentLoader> resourceTree = new ResourceTree<ContentLoader>(RegexHelper.FolderSplit);
-        private HashSet<RequestAccessToContent> resourceUpdateCallbacks = new HashSet<RequestAccessToContent>();
-        private HashSet<RequestAccessToContent> pendingCallbacks = new HashSet<RequestAccessToContent>();
+        //todo private HashSet<RequestAccessToContent> resourceUpdateCallbacks = new HashSet<RequestAccessToContent>();
+        //todo private HashSet<RequestAccessToContent> pendingCallbacks = new HashSet<RequestAccessToContent>();
         #endregion
         public override TickableSetup TickableSetup
         {
@@ -60,16 +60,16 @@
             {
                 case ServiceState.SendCallback:
                 {
-                    foreach (RequestAccessToContent callback in pendingCallbacks)
-                    {
-                        ResourcesHaveChangedResponse message = callback.GetResponse() as ResourcesHaveChangedResponse;
-
-                        resourceTree.RetrieveResources(callback, message);
-
-                        CommandReceiver.Send(message);
-                    }
-
-                    pendingCallbacks.Clear();
+                    //todo foreach (RequestAccessToContent callback in pendingCallbacks)
+                    //todo {
+                    //todo     ResourcesHaveChangedResponse message = callback.GetResponse() as ResourcesHaveChangedResponse;
+                    //todo 
+                    //todo     resourceTree.RetrieveResources(callback, message);
+                    //todo 
+                    //todo     CommandReceiver.Send(message);
+                    //todo }
+                    //todo 
+                    //todo pendingCallbacks.Clear();
 
 
                     break;
@@ -102,28 +102,28 @@
             return trigger0 == trigger1;
         }
 
-        protected override void SetupCommandReceiverCallback()
+        public override void DefineCommandReceiverActions()
         {
-            CommandReceiver.AddCallback<RequestAccessToContent>(OnResourceUpdateCallback);
+            //todo CommandReceiver.SetActionFor<RequestAccessToContent>(OnResourceUpdateCallback);
         }
 
-        private void OnResourceUpdateCallback(RequestAccessToContent notice)
-        {
-            if (!resourceUpdateCallbacks.Contains(notice))
-            {
-                resourceUpdateCallbacks.Add(notice);
-            }
-
-            if (!pendingCallbacks.Contains(notice))
-            {
-                if (!stateMachine.IsRunning)
-                {
-                    stateMachine.Trigger(SimpleStepTrigger.ForceNextState, ServiceState.SendCallback);
-                }
-
-                pendingCallbacks.Add(notice);
-            }
-        }
+        //todo private void OnResourceUpdateCallback(RequestAccessToContent notice)
+        //todo {
+        //todo     if (!resourceUpdateCallbacks.Contains(notice))
+        //todo     {
+        //todo         resourceUpdateCallbacks.Add(notice);
+        //todo     }
+        //todo 
+        //todo     if (!pendingCallbacks.Contains(notice))
+        //todo     {
+        //todo         if (!stateMachine.IsRunning)
+        //todo         {
+        //todo             stateMachine.Trigger(SimpleStepTrigger.ForceNextState, ServiceState.SendCallback);
+        //todo         }
+        //todo 
+        //todo         pendingCallbacks.Add(notice);
+        //todo     }
+        //todo }
 
         protected override void OnAwake() { }
     }

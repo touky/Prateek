@@ -42,7 +42,7 @@ namespace Mayfair.Core.Code.TimeService.DebugMenu
             timeRateInput = new InputField(TimeDaemon.DEFAULT_RATE.ToString(TIME_RATE_FORMAT));
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void CreatePage(TimeDaemon owner)
         {
             DebugMenuNotebook debugNotebook = new DebugMenuNotebook("TIMS", "Time Service");

@@ -90,6 +90,11 @@
             servants.Add(servant);
             servants.SortWithPriorities();
 
+            if (servant is IServantInternal servantInternal)
+            {
+                servantInternal.Overseer = this;
+            }
+
             OnServantRegistered(servant);
         }
 
@@ -98,6 +103,11 @@
             if (!servants.Contains(servant))
             {
                 return;
+            }
+            
+            if (servant is IServantInternal servantInternal)
+            {
+                servantInternal.Overseer = null;
             }
 
             servants.Remove(servant);

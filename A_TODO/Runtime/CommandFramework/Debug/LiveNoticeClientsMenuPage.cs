@@ -9,6 +9,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Debug
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver;
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
 
     internal class LiveNoticeReceiversMenuPage : DebugMenuPage<CommandDaemon>
     {
@@ -77,13 +78,13 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Debug
 
         public void AddType(Type type)
         {
-            var validId = Command.ConvertToId(type);
-            if (noticeTypes.ContainsKey(validId))
+            var validId = (CommandId)type;
+            if (noticeTypes.ContainsKey(validId.Key))
             {
                 return;
             }
 
-            noticeTypes.Add(validId, type);
+            noticeTypes.Add(validId.Key, type);
         }
 
         protected override void Draw(CommandDaemon owner, DebugMenuContext context)
@@ -91,7 +92,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Debug
             for (var k = 0; k < KeyCount; k++)
             {
                 var key        = this[k];
-                var noticeName = noticeTypes.ContainsKey(key & Command.ID_TYPE_MASK) ? noticeTypes[key & Command.ID_TYPE_MASK].Name : "#UNDEFINED#"; //todo Consts.UNDEFINED;
+                var noticeName = noticeTypes.ContainsKey(key & CommandId.MASK_TYPE) ? noticeTypes[key & CommandId.MASK_TYPE].Name : "#UNDEFINED#"; //todo Consts.UNDEFINED;
 
                 var categoryField = GetField<CategoryField>();
                 categoryField.Draw(context, string.Format("{1}: {0:X}", key, noticeName));

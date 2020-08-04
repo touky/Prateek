@@ -12,7 +12,7 @@ namespace Mayfair.Core.Code.SaveGame
     using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine;
     using Prateek.Runtime.TickableFramework.Enums;
 
-    public class SaveDaemon : CommandReceiverDaemon<SaveDaemon, SaveServant>
+    public class SaveDaemon : ReceiverDaemonOverseer<SaveDaemon, SaveServant>
     {
         #region Fields
         private FiniteStateMachine<SaveState> stateMachine;
@@ -95,11 +95,9 @@ namespace Mayfair.Core.Code.SaveGame
             this.loadingRequests.Clear();
         }
 
-        public override void CommandReceived() { }
-
-        protected override void SetupCommandReceiverCallback()
+        public override void DefineCommandReceiverActions()
         {
-            CommandReceiver.AddCallback<LoadDataRequest>(OnLoadingRequest);
+            CommandReceiver.SetActionFor<LoadDataRequest>(OnLoadingRequest);
         }
 
         private void OnLoadingRequest(LoadDataRequest request)

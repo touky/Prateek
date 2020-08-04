@@ -2,6 +2,7 @@ namespace Mayfair.Core.Code.GameAction
 {
     using System.Collections.Generic;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
     using Prateek.Runtime.KeynameFramework;
 
     /// <summary>
@@ -16,9 +17,9 @@ namespace Mayfair.Core.Code.GameAction
         #endregion
 
         #region Properties
-        public override long CommandID
+        public override CommandId CommandId
         {
-            get { return ConvertToId(typeof(GameActionCommand)); }
+            get { return typeof(GameActionCommand); }
         }
 
         public Keyname Verb

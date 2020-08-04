@@ -2,6 +2,7 @@ namespace Mayfair.Core.Code.VisualAsset.Messages
 {
     using Mayfair.Core.Code.VisualAsset.Providers;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
     using Prateek.Runtime.KeynameFramework.Interfaces;
 
     public abstract class VisualResourceDirectCommand : DirectCommand
@@ -11,9 +12,9 @@ namespace Mayfair.Core.Code.VisualAsset.Messages
         #endregion
 
         #region Properties
-        public override long CommandID
+        public override CommandId CommandId
         {
-            get { return ConvertToId(typeof(VisualResourceDirectCommand)); }
+            get { return typeof(VisualResourceDirectCommand); }
         }
 
         public IAssignableVisualResource Instance

@@ -15,7 +15,7 @@ namespace Mayfair.Core.Code.UpdateService
     /// This should not be used as an example of Service/Provider/Messaging interaction
     /// as it violates the asynchronicity goals of our systems.
     /// </summary>
-    public class UpdateDaemon : CommandReceiverDaemon<UpdateDaemon, UpdateProvider>
+    public class UpdateDaemon : ReceiverDaemonOverseer<UpdateDaemon, UpdateProvider>
     {
         private Dictionary<UpdateFrequency, List<HashSet<IUpdatable>>> registeredUpdatables;
         private Dictionary<UpdateFrequency, int> updateFrequencyIndex;
@@ -28,8 +28,6 @@ namespace Mayfair.Core.Code.UpdateService
                 return TickableSetup.Nothing;
             }
         }
-
-        public override void CommandReceived() { }
 
         protected override void OnServantRegistered(UpdateProvider servant)
         {
@@ -64,10 +62,10 @@ namespace Mayfair.Core.Code.UpdateService
             registeredUpdatablesToFrequency = new Dictionary<IUpdatable, UpdateFrequency>();
         }
 
-        protected override void SetupCommandReceiverCallback()
+        public override void DefineCommandReceiverActions()
         {
-            CommandReceiver.AddCallback<RegisterForUpdate>(OnRegisterForUpdate);
-            CommandReceiver.AddCallback<UnregisterForUpdate>(OnUnregisterForUpdate);
+            CommandReceiver.SetActionFor<RegisterForUpdate>(OnRegisterForUpdate);
+            CommandReceiver.SetActionFor<UnregisterForUpdate>(OnUnregisterForUpdate);
         }
 
         private void AddUpdatablesList(UpdateFrequency updateFrequency)

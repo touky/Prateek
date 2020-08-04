@@ -4,5 +4,5 @@ namespace Mayfair.Core.Code.Database.Messages
     using Interfaces;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById;
 
-    public class DatabaseContentByIdResponse : ContentByIdResponse<ICompositeContent> { }
+    public class DatabaseContentByKeynameResponse : ContentByKeynameResponse<ICompositeContent> { }
 }

@@ -212,7 +212,7 @@ namespace Mayfair.Core.Code.DebugMenu
             }
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void Toggle()
         {
             if (!Exists())
@@ -277,7 +277,7 @@ namespace Mayfair.Core.Code.DebugMenu
 
             context.CheckProperInit();
 
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
             using (new ProfilerScope("DrawGUI()"))
 #endif
             {
@@ -307,7 +307,7 @@ namespace Mayfair.Core.Code.DebugMenu
 
                 if (context.HasFields)
                 {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                     using (new ProfilerScope("if (context.HasFields)"))
 #endif
                     {
@@ -336,7 +336,7 @@ namespace Mayfair.Core.Code.DebugMenu
                 }
                 else
                 {
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
                     using (new ProfilerScope("DrawCloseButton"))
 #endif
                     {

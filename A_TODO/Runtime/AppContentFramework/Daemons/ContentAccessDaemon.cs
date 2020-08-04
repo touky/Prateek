@@ -5,8 +5,8 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Daemons
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
 
     public abstract class ContentAccessDaemon<TDaemon, TServant>
-        : CommandReceiverDaemon<TDaemon, TServant>
-        where TDaemon : CommandReceiverDaemon<TDaemon, TServant>
+        : ReceiverDaemonOverseer<TDaemon, TServant>
+        where TDaemon : ReceiverDaemonOverseer<TDaemon, TServant>
         where TServant : ContentAccessServant<TDaemon, TServant>
     {
         #region ServiceProviderUsageRuleType enum
@@ -32,19 +32,19 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Daemons
         }
 
         #region Messaging
-        protected override void SetupCommandReceiverCallback()
+        public override void DefineCommandReceiverActions()
         {
-            CommandReceiver.AddCallback<ResourcesHaveChangedResponse>(OnResourceUpdateCallback);
+            CommandReceiver.SetActionFor<ResourcesHaveChangedResponse>(OnResourceUpdateCallback);
         }
         #endregion
 
         private void RegisterToResourceService()
         {
-            PerformProviderAction(ServiceProviderUsageRule,
-                                  servant =>
-                                  {
-                                      CommandReceiver.Send(servant.GetResourceChangeRequest(CommandReceiver));
-                                  });
+            //todo PerformProviderAction(ServiceProviderUsageRule,
+            //todo                       servant =>
+            //todo                       {
+            //todo                           CommandReceiver.Send(servant.GetResourceChangeRequest(CommandReceiver));
+            //todo                       });
         }
 
         private void OnResourceUpdateCallback(ResourcesHaveChangedResponse notice)

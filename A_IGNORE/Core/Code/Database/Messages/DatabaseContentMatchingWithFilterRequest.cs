@@ -4,8 +4,8 @@ namespace Mayfair.Core.Code.Database.Messages
     using Mayfair.Core.Code.Database.Messages.RequestFilters;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
 
-    public class DatabaseContentMatchingWithFilterRequest<TResponseType> : RequestCommand<TResponseType>
-        where TResponseType : DatabaseContentByIdResponse, new()
+    public class DatabaseContentMatchingWithFilterRequest<TResponseType> : RequestCommand<TResponseType, TResponseType>
+        where TResponseType : DatabaseContentByKeynameResponse, new()
     {
         public List<string> Filters { get; set; } = new List<string>();
 

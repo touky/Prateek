@@ -19,9 +19,9 @@ namespace Mayfair.Core.Code.Localization
         #endregion
 
         #region Methods
-        protected override void SetupCommandReceiverCallback()
+        public override void DefineCommandReceiverActions()
         {
-            CommandReceiver.AddCallback<GameLoadingPrerequisiteCommand>(OnGameLoadingPrerequisiteNoticeReceived);
+            CommandReceiver.SetActionFor<GameLoadingPrerequisiteCommand>(OnGameLoadingPrerequisiteNoticeReceived);
         }
 
         private void OnGameLoadingPrerequisiteNoticeReceived(GameLoadingPrerequisiteCommand command)

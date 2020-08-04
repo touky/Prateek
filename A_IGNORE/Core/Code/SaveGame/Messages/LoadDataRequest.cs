@@ -3,7 +3,7 @@ namespace Mayfair.Core.Code.SaveGame.Messages
     using System.Collections.Generic;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
 
-    public class LoadDataRequest : RequestCommand<LoadDataResponse>
+    public class LoadDataRequest : RequestCommand<LoadDataResponse, LoadDataResponse>
     {
         #region Fields
         private List<SaveDataIdentification> identifications = new List<SaveDataIdentification>();

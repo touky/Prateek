@@ -24,12 +24,12 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Class Methods
-        public override RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter)
-        {
-            RequestCallbackOnSceneChange<SceneResourceHasChanged> request = Command.Create<RequestCallbackOnSceneChange<SceneResourceHasChanged>>();
-            request.Init(ResourceKeywords);
-            return request;
-        }
+        //todo public override RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter)
+        //todo {
+        //todo     RequestCallbackOnSceneChange<SceneResourceHasChanged> request = Command.Create<RequestCallbackOnSceneChange<SceneResourceHasChanged>>();
+        //todo     request.Init(ResourceKeywords);
+        //todo     return request;
+        //todo }
 
         public override void OnResourceChanged(GameSceneDaemon daemonCore, ResourcesHaveChangedResponse notice)
         {

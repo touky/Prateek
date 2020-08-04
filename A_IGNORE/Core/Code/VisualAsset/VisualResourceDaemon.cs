@@ -47,13 +47,11 @@ namespace Mayfair.Core.Code.VisualAsset
         #endregion
 
         #region Messaging
-        public override void CommandReceived() { }
-
-        protected override void SetupCommandReceiverCallback()
+        public override void DefineCommandReceiverActions()
         {
-            base.SetupCommandReceiverCallback();
+            base.DefineCommandReceiverActions();
 
-            CommandReceiver.AddCallback<VisualResourceDirectCommand>(OnVisualResourceMessage);
+            CommandReceiver.SetActionFor<VisualResourceDirectCommand>(OnVisualResourceMessage);
         }
         #endregion
 
@@ -79,7 +77,7 @@ namespace Mayfair.Core.Code.VisualAsset
         }
 
         #region Debug
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public void SetupDebugContent()
         {
             debugNotebook = new DebugMenuNotebook("VSLR", "Visual Resources");

@@ -1,5 +1,6 @@
 namespace Prateek.Runtime.DaemonFramework.Servants
 {
+    using System.Security.Cryptography;
     using Prateek.Runtime.DaemonFramework.Enums;
     using Prateek.Runtime.DaemonFramework.Interfaces;
 
@@ -9,13 +10,14 @@ namespace Prateek.Runtime.DaemonFramework.Servants
         where TServant : class, IServant
     {
         #region Fields
+        private TDaemon overseer;
         private string name = null;
         #endregion
 
-        #region IInternalServant Members
-        string IServantInternal.Name
+        #region Properties
+        protected TDaemon Overseer
         {
-            set { name = value; }
+            get { return overseer; }
         }
         #endregion
 
@@ -51,6 +53,18 @@ namespace Prateek.Runtime.DaemonFramework.Servants
         public virtual void Shutdown()
         {
             DaemonOverseer<TDaemon, TServant>.SetServantStatus(this as TServant, StatusAction.Unregister);
+        }
+        #endregion
+
+        #region IServantInternal Members
+        string IServantInternal.Name
+        {
+            set { name = value; }
+        }
+
+        IDaemon IServantInternal.Overseer
+        {
+            set { overseer = value as TDaemon; }
         }
         #endregion
     }

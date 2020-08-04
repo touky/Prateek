@@ -11,7 +11,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         public abstract void RefreshPending();
 
         #region Class Methods
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public virtual void SetupDebugContent(DebugMenuNotebook debugNotebook, DebugMenuPage parent)
         {
             debugNotebook.AddPagesWithParent(parent, new VisualResourceMenuPage(this, Name));

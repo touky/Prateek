@@ -5,15 +5,15 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
     using System.Reflection;
     using System.Text;
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
+    using Prateek.Runtime.Core.Extensions;
 
+    /// <summary>
+    /// Base class for all the commands
+    /// </summary>
     [DebuggerDisplay("{GetType().Name}, Sender: {emitter.Owner.Name}")]
     public abstract class Command
     {
-        #region Static and Constants
-        public const long ID_COMMAND_MASK = 0xFFFFFFFF;
-        public const long ID_TYPE_MASK = ~ID_COMMAND_MASK;
-        #endregion
-
         #region Fields
         private ICommandEmitter emitter;
         #endregion
@@ -25,10 +25,10 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
             set { emitter = value; }
         }
 
-        //We allow notice type spoofing for Children notices
-        public virtual long CommandID
+        //We allow notice type spoofing for Children commands ids
+        public virtual CommandId CommandId
         {
-            get { return ConvertToId(GetType()); }
+            get { return GetType(); }
         }
         #endregion
 
@@ -45,57 +45,9 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
             return new T();
         }
 
-        /// <summary>
-        ///     The ID is generated from the hash code of the type and the noticeReceiver.
-        ///     Since both are int 32, a long 64 is a perfect fit:
-        ///     32 bits for the type, 32 bits for the recipient, 64 bits to bring them all, and in the darkness bind them
-        /// </summary>
-        /// <param name="type">The type of the notice</param>
-        /// <param name="transmitter">Optional: the noticeReceiver used for the notice</param>
-        /// <returns></returns>
-        public static long ConvertToId(Type type, ICommandEmitter transmitter = null)
-        {
-            long id = 0;
-            if (type != null)
-            {
-                id = ((long) type.GetHashCode() << 32) & ID_TYPE_MASK;
-            }
-
-            if (transmitter != null)
-            {
-                id |= transmitter.GetHashCode() & ID_COMMAND_MASK;
-            }
-
-            return id;
-        }
-
         public override string ToString()
         {
-            Type type = GetType();
-
-            bool hasSeveral = false;
-            StringBuilder builder = new StringBuilder();
-            builder.Append(type.Name);
-
-            TypeInfo typeInfo = type.GetTypeInfo();
-            if (typeInfo.GenericTypeArguments.Length > 0)
-            {
-                builder.Append("<");
-                foreach (Type argument in typeInfo.GenericTypeArguments)
-                {
-                    if (hasSeveral)
-                    {
-                        builder.Append("/");
-                    }
-
-                    builder.Append(argument.Name);
-                    hasSeveral = true;
-                }
-
-                builder.Append(">");
-            }
-
-            return builder.ToString();
+            return GetType().ToDebugString();
         }
         #endregion
     }

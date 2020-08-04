@@ -6,5 +6,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces
         ICommandReceiver CommandReceiver { get; }
         string Name { get; }
         #endregion
+
+        void DefineCommandReceiverActions();
     }
 }

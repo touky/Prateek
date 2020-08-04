@@ -4,14 +4,14 @@ namespace Mayfair.Core.Code.VisualAsset.Messages
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using UnityEngine;
 
-    public class RequestCallbackOnVisualChange<TChangeMessage> : RequestAccessToContent<GameObject>
-        where TChangeMessage : VisualResourceHasChanged, new()
-    {
-        #region Class Methods
-        protected override ResponseCommand CreateNewResponse()
-        {
-            return Command.Create<TChangeMessage>();
-        }
-        #endregion
-    }
+    //todo public class RequestCallbackOnVisualChange<TChangeMessage> : RequestAccessToContent<GameObject>
+    //todo     where TChangeMessage : VisualResourceHasChanged, new()
+    //todo {
+    //todo     #region Class Methods
+    //todo     protected override ResponseCommand CreateNewResponse()
+    //todo     {
+    //todo         return Command.Create<TChangeMessage>();
+    //todo     }
+    //todo     #endregion
+    //todo }
 }

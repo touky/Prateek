@@ -157,7 +157,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             LogError("An object named {0} was not linked in the inspector for component type {1}.", objName, callingTypeName);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void AssertAssetsAreLinked(this MonoBehaviour owner)
         {
             if (logLevel == LogLevel.None)

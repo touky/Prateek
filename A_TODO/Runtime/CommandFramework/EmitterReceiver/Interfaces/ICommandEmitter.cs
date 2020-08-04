@@ -10,7 +10,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces
 
         #region Class Methods
         //Sending
-        void Broadcast(BroadcastCommand command);
+        void Send(BroadcastCommand command);
         void Send(DirectCommand command);
         void Send(ResponseCommand command);
         #endregion

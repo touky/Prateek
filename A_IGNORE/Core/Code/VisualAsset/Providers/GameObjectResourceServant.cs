@@ -54,14 +54,14 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
 
-        public override RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter)
-        {
-            RequestAccessToContent request = CreateResourceChangeRequest();
-            request.Init(ResourceKeywords);
-            return request;
-        }
-
-        protected abstract RequestAccessToContent CreateResourceChangeRequest();
+        //todo public override RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter)
+        //todo {
+        //todo     RequestAccessToContent request = CreateResourceChangeRequest();
+        //todo     request.Init(ResourceKeywords);
+        //todo     return request;
+        //todo }
+        //todo 
+        //todo protected abstract RequestAccessToContent CreateResourceChangeRequest();
         protected abstract bool IsResponseAccepted(GameObjectResourcesHaveChanged response);
 
         protected abstract void Init();

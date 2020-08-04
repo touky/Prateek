@@ -538,7 +538,7 @@ namespace Mayfair.Core.Code.Input
         #endregion
 
         #region Debug
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         private void SetupDebugContent()
         {
             DebugMenuNotebook debugNotebook = new InputDebugMenuNotebook(this, "INPT", "Input Service");

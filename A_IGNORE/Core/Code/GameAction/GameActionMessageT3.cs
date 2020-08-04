@@ -24,14 +24,14 @@ namespace Mayfair.Core.Code.GameAction
         {
             GameActionCommand<T0, T1, T2> command = Create<GameActionCommand<T0, T1, T2>>();
             command.targetValue = targetValue;
-            CommandDaemon.DefaultCommandEmitter.Broadcast(command);
+            CommandDaemon.DefaultEmitter.Send(command);
         }
 
         public static void Broadcast(ICommandEmitter transmitter, Keyname uniqueId1, float targetValue = 1)
         {
             GameActionCommand<T0, T1, T2> command = Create<GameActionCommand<T0, T1, T2>>();
             command.targetValue = targetValue;
-            CommandDaemon.DefaultCommandEmitter.Broadcast(command);
+            CommandDaemon.DefaultEmitter.Send(command);
         }
 
         #endregion

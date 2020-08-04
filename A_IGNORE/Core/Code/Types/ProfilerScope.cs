@@ -1,4 +1,4 @@
-#define NVIZZIO_DEV
+#define PRATEEK_DEBUG
 
 namespace Mayfair.Core.Code.Utils.Types
 {
@@ -6,7 +6,7 @@ namespace Mayfair.Core.Code.Utils.Types
     using UnityEngine.Profiling;
 
     //benjaminh: Aggressive ifdef to ensure it's never used in release
-#if NVIZZIO_DEV
+#if PRATEEK_DEBUG
     public class ProfilerScope : GUI.Scope
     {
         #region Constructors
@@ -23,5 +23,5 @@ namespace Mayfair.Core.Code.Utils.Types
         }
         #endregion
     }
-#endif //NVIZZIO_DEV
+#endif //PRATEEK_DEBUG
 }

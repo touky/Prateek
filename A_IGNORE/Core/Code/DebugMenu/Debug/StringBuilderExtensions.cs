@@ -19,7 +19,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             return Color.HSVToRGB(hue, 0.5f, 1);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void AddLogHeader(this StringBuilder builder, IDaemon daemonCore, string notice)
         {
             if (builder == null)
@@ -32,7 +32,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             builder.AppendLine(notice);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void AddLogHeader(this StringBuilder builder, IServant servant, string notice)
         {
             if (builder == null)
@@ -45,7 +45,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             builder.AppendLine(notice);
         }
 
-        [Conditional("NVIZZIO_DEV")]
+        [Conditional("PRATEEK_DEBUG")]
         public static void AddReceivedMessage(this StringBuilder builder, IDaemon daemonCore, Message notice)
         {
             if (builder == null)
@@ -57,7 +57,7 @@ namespace Mayfair.Core.Code.Utils.Debug
             //todo builder.AppendLine($"> Message {notice.ToString()} from {notice.Sender.Owner.Name} was received by:");
         }
 
-        //todo [Conditional("NVIZZIO_DEV")]
+        //todo [Conditional("PRATEEK_DEBUG")]
         //todo public static void AddCommunicator(this StringBuilder builder, IDaemon daemonCore, ILightMessageCommunicator noticeReceiver)
         //todo {
         //todo     if (builder == null)
