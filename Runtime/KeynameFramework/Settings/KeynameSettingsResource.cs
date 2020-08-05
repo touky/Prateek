@@ -1,8 +1,11 @@
-namespace Prateek.Runtime.KeynameFramework.Serializables
+namespace Prateek.Runtime.KeynameFramework.Settings
 {
     using Prateek.Runtime.Core.FrameworkSettings;
     using UnityEngine;
 
+    /// <summary>
+    ///     ScriptableObject holder of the KeynameSettingsData
+    /// </summary>
     [CreateAssetMenu(fileName = nameof(KeynameSettings), menuName = FrameworkSettings.DEFAULT_PATH + "Create " + nameof(KeynameSettings))]
     public class KeynameSettingsResource : FrameworkSettingsResource<KeynameSettingsData>
     {

@@ -103,7 +103,7 @@ namespace Prateek.Runtime.Core.Helpers
 
             for (int i = 0; i < pix.Length; ++i)
             {
-                pix[i] = m_setup.inner_rect.Contains(Vectors.FromIndex(i, size)) ? m_setup.content : m_setup.border;
+                pix[i] = m_setup.inner_rect.Contains(i.FromIndex(size)) ? m_setup.content : m_setup.border;
             }
 
             Texture2D result = new Texture2D((int)size.x, (int)size.y);
@@ -163,7 +163,7 @@ namespace Prateek.Runtime.Core.Helpers
                     var localPoint = point - position;
                     localPoint = Quaternion.Inverse(rotation) * localPoint;
 
-                    if (!Vectors.Test(elongate, Vector3.zero))
+                    if (!Vector4Extensions.Approximately(elongate, Vector3.zero))
                     {
                         point = Elongate(point);
                     }

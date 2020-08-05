@@ -87,7 +87,7 @@ namespace Mayfair.Core.Code.GameScene
         public void Add(SceneReference scene)
         {
             matches.Clear();
-            if (RegexHelper.TryFetchingMatches(scene.Loader.Location, RegexHelper.AddressTag, matches))
+            if (RegexHelper.TryFetchingMatches(scene.Loader.Path, RegexHelper.AddressTag, matches))
             {
                 var             context = matches[CONTEXT_TAG];
                 AvailableScenes container;

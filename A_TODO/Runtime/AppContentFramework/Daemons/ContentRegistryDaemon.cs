@@ -4,10 +4,10 @@
     using Prateek.A_TODO.Runtime.AppContentFramework.Enums;
     using Prateek.A_TODO.Runtime.AppContentFramework.Loader;
     using Prateek.A_TODO.Runtime.AppContentFramework.Messages;
-    using Prateek.A_TODO.Runtime.AppContentFramework.ResourceTree;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
     using Prateek.A_TODO.Runtime.StateMachines.Interfaces;
     using Prateek.A_TODO.Runtime.StateMachines.SimpleStateMachine;
+    using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.TickableFramework.Enums;
 
     public sealed class ContentRegistryDaemon
@@ -16,7 +16,7 @@
     {
         #region Fields
         private SimpleStepMachine<ServiceState> stateMachine;
-        private ResourceTree<ContentLoader> resourceTree = new ResourceTree<ContentLoader>(RegexHelper.FolderSplit);
+        private HierarchicalTree<ContentLoader> hierarchicalTree = new HierarchicalTree<ContentLoader>();
         //todo private HashSet<RequestAccessToContent> resourceUpdateCallbacks = new HashSet<RequestAccessToContent>();
         //todo private HashSet<RequestAccessToContent> pendingCallbacks = new HashSet<RequestAccessToContent>();
         #endregion
@@ -43,7 +43,7 @@
         #region Class Methods
         public void Store(ContentLoader loader)
         {
-            this.resourceTree.Store(loader);
+            this.hierarchicalTree.Store(loader);
         }
 
         public void Trigger(SimpleStepTrigger trigger)

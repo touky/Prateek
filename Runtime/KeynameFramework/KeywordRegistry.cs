@@ -2,111 +2,27 @@ namespace Prateek.Runtime.KeynameFramework
 {
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using Prateek.Runtime.Core.Extensions;
-    using Prateek.Runtime.Core.Helpers;
     using Prateek.Runtime.KeynameFramework.Enums;
     using Prateek.Runtime.KeynameFramework.Interfaces;
-
-    public class AssemblyLookupWorker
-    {
-        private List<Type> searchedTypes = new List<Type>();
-        private List<Type> foundTypes = new List<Type>();
-
-        public List<Type> FoundTypes
-        {
-            get { return foundTypes; }
-        }
-
-        public AssemblyLookupWorker(params Type[] types)
-        {
-            AssemblyForager.workers.Add(this);
-
-            searchedTypes.AddRange(types);
-        }
-
-        internal void TryStore(Type assemblyType)
-        {
-            foreach (var searchedType in searchedTypes)
-            {
-                if (assemblyType == searchedType
-                    || assemblyType.IsSubclassOf(searchedType)
-                    || searchedType.IsAssignableFrom(searchedType))
-                {
-                    foundTypes.Add(assemblyType);
-                    break;
-                }
-            }
-        }
-    }
-
-    public static class AssemblyForager
-    {
-        internal static List<AssemblyLookupWorker> workers = new List<AssemblyLookupWorker>();
-
-        public static void Execute()
-        {
-            foreach (Assembly domainAssembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                Type[] assemblyTypes = domainAssembly.GetTypes();
-                foreach (Type assemblyType in assemblyTypes)
-                {
-                    foreach (var worker in workers)
-                    {
-                        worker.TryStore(assemblyType);
-                    }
-                }
-            }
-
-            workers.Clear();
-        }
-    }
+    using Prateek.Runtime.KeynameFramework.Settings;
 
     internal static class KeywordRegistry
     {
         #region Static and Constants
+        internal static KeywordLookupWorker lookupWorker;
         private static Dictionary<string, Type> stringToKeywords = new Dictionary<string, Type>();
         private static Dictionary<Type, Type> keywordToParent = new Dictionary<Type, Type>();
         #endregion
 
+        #region Properties
         internal static Type MasterKeyword
         {
             get { return typeof(MasterKeyword); }
         }
+        #endregion
 
-        #region Class Methods
-        private static void Init()
-        {
-            if (stringToKeywords.Count != 0)
-            {
-                return;
-            }
-
-            //todo move that elsewhere
-            var worker = new AssemblyLookupWorker(MasterKeyword);
-            AssemblyForager.Execute();
-
-            foreach (Type type in worker.FoundTypes)
-            {
-                if (typeof(IReplaceWithParentKeyword).IsAssignableFrom(type))
-                {
-                    var baseType = type;
-                    while (typeof(IReplaceWithParentKeyword).IsAssignableFrom(baseType))
-                    {
-                        baseType = baseType.BaseType;
-                    }
-
-                    Register(type.Name, baseType);
-                    keywordToParent.Add(type, baseType);
-                }
-                else
-                {
-                    Register(type);
-                }
-            }
-        }
-
-
+        #region Register/Unregister
         private static void Register(string name, Type type)
         {
 #if DEBUG_DEV
@@ -130,7 +46,36 @@ namespace Prateek.Runtime.KeynameFramework
 
             stringToKeywords.Add(type.Name, type);
         }
-        
+        #endregion
+
+        #region Class Methods
+        internal static void Init()
+        {
+            if (stringToKeywords.Count != 0 || lookupWorker == null)
+            {
+                return;
+            }
+
+            foreach (var type in lookupWorker.FoundTypes)
+            {
+                if (typeof(IReplaceWithParentKeyword).IsAssignableFrom(type))
+                {
+                    var baseType = type;
+                    while (typeof(IReplaceWithParentKeyword).IsAssignableFrom(baseType))
+                    {
+                        baseType = baseType.BaseType;
+                    }
+
+                    Register(type.Name, baseType);
+                    keywordToParent.Add(type, baseType);
+                }
+                else
+                {
+                    Register(type);
+                }
+            }
+        }
+
         internal static Type GetKeywordType(Type type)
         {
             if (keywordToParent.ContainsKey(type))
@@ -158,12 +103,12 @@ namespace Prateek.Runtime.KeynameFramework
         {
             Init();
 
-            settings = settings == null ? KeynameSettings.Instance.Data : settings;
+            settings = settings == null ? KeynameSettings.Default.Data : settings;
 
             var keyname = new Keyname(false);
             keyname.settings = settings;
             if (string.IsNullOrEmpty(source))
-            {   
+            {
                 return keyname;
             }
 
@@ -173,8 +118,8 @@ namespace Prateek.Runtime.KeynameFramework
                 return keyname;
             }
 
-            var firstLoop = true;
-            var keyword = new Keyword();
+            var firstLoop   = true;
+            var keyword     = new Keyword();
             var numberMatch = settings.numberRegex.Match(source);
             while (true)
             {
@@ -185,7 +130,7 @@ namespace Prateek.Runtime.KeynameFramework
                 {
                     if (firstLoop)
                     {
-                        throw new ArithmeticException($"Keyname cannot start with a numerical value");
+                        throw new ArithmeticException("Keyname cannot start with a numerical value");
                     }
 
                     keyname.Add(new Keyword(keyword, int.Parse(numberMatch.LastGroup().Value)));
@@ -194,7 +139,7 @@ namespace Prateek.Runtime.KeynameFramework
                 }
                 else
                 {
-                    Type keywordType = GetKeywordType(keywordMatch.LastGroup().Value);
+                    var keywordType = GetKeywordType(keywordMatch.LastGroup().Value);
                     if (keywordType != null)
                     {
                         if (keyword.Status != KeywordStatus.None)

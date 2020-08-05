@@ -1,10 +1,10 @@
 namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
 {
-    using Prateek.A_TODO.Runtime.AppContentFramework.ResourceTree;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.A_TODO.Runtime.CommandFramework.Servants;
+    using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
-    public abstract class ResourcesHaveChangedResponse : ResponseCommand, ITreeIdentificationResult
+    public abstract class ResourcesHaveChangedResponse : ResponseCommand, IHierarchicalTreeSearchResult
     {
         #region Properties
         public override CommandId CommandId
@@ -14,8 +14,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
         #endregion
 
         #region ITreeIdentificationResult Members
-        public abstract bool Match(ITreeLeafLocator leafLocator);
-        public abstract void Add(ITreeLeafLocator leafLocator);
+        public abstract void Add(IHierarchicalTreeLeaf leaf);
         #endregion
     }
 }

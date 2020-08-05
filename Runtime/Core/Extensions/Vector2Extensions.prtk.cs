@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 02/08/2020
+//  Header last update date: 04/08/2020
 //
 //  Copyright � 2017-2020 "Touky" <touky at prateek dot top>
 //
@@ -54,7 +54,7 @@ namespace Prateek.Runtime.Core.Extensions
     
 
     ///------------------------------------------------------------------------
-    public static class Vector2Extensions
+    public static partial class Vector2Extensions
     {
         //--
         #region Swizzle Vector2 to Vector2

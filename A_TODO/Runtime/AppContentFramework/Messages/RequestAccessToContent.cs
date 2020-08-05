@@ -1,33 +1,19 @@
 namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
-    using Prateek.A_TODO.Runtime.AppContentFramework.ResourceTree;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
-
-    internal static class RegexContent
-    {
-        internal static readonly Regex FOLDER_SPLIT_REGEX = new Regex("([^\\/]+)(?:\\/)+");
-    }
-
-    internal static class RegexHelper
-    {
-        public static Regex FolderSplit
-        {
-            get { return RegexContent.FOLDER_SPLIT_REGEX; }
-        }
-    }
+    using Prateek.Runtime.Core.HierarchicalTree;
+    using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
     public abstract class RequestAccessToContent<TResponse, TIdentification>
         : RequestCommand<TResponse, TIdentification>
-        , ITreeIdentification
+        , IHierarchicalTreeSearch
         where TResponse : ResponseCommand, new()
         where TIdentification : Command
     {
         #region Fields
-        private List<string[]> resourceTags = new List<string[]>();
+        private HierarchicalTreeSettingsData settings = null;
+        private string[] contentPaths;
         #endregion
 
         #region Properties
@@ -35,27 +21,27 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
         #endregion
 
         #region Class Methods
-        public void Init(string[] resourceTags)
+        public void Init(string[] contentPaths, HierarchicalTreeSettingsData settings = null)
         {
-            foreach (string resourceTag in resourceTags)
-            {
-                MatchCollection collection = RegexHelper.FolderSplit.Matches(resourceTag);
-                int i = 0;
-                string[] tagArray = new string[collection.Count];
-                foreach (Match match in collection)
-                {
-                    tagArray[i++] = match.Groups[match.Groups.Count - 1].Value;
-                }
-
-                this.resourceTags.Add(tagArray);
-            }
+            this.contentPaths = contentPaths;
+            this.settings = settings;
         }
         #endregion
 
-        #region ITreeIdentification Members
-        public List<string[]> TreeTags
+        #region IHierarchicalTreeSearch Members
+        public string[] SearchPaths
         {
-            get { return resourceTags; }
+            get { return contentPaths; }
+        }
+
+        public HierarchicalTreeSettingsData Settings
+        {
+            get { return null; }
+        }
+
+        public virtual bool AcceptLeaf(IHierarchicalTreeLeaf leaf)
+        {
+            return true;
         }
         #endregion
     }

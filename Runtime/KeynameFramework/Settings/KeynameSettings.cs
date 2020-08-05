@@ -1,13 +1,17 @@
-namespace Prateek.Runtime.KeynameFramework
+namespace Prateek.Runtime.KeynameFramework.Settings
 {
     using Prateek.Runtime.Core.FrameworkSettings;
-    using Prateek.Runtime.KeynameFramework.Serializables;
 
+    /// <summary>
+    ///     Static class to retrieve the default KeynameSettingsData
+    /// </summary>
     public class KeynameSettings : FrameworkSettings<KeynameSettings, KeynameSettingsData, KeynameSettingsResource>
     {
-        protected override string DataPath
+        #region Properties
+        protected override string DefaultPath
         {
             get { return KeynameSettingsResource.DEFAULT_PATH; }
         }
+        #endregion
     }
 }

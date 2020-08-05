@@ -1,17 +1,24 @@
 ﻿namespace Prateek.Runtime.Core.FrameworkSettings
 {
+    using System;
     using UnityEngine;
 
     /// <summary>
     ///     Base class to derive from to create internal settings for you own systems
     /// </summary>
+    [Serializable]
     public abstract class FrameworkSettings<TSingleton, TData, TResource> : FrameworkSettings
         where TSingleton : FrameworkSettings, new()
         where TData : FrameworkSettingsData, new()
         where TResource : FrameworkSettingsResource<TData>
     {
         #region Static and Constants
-        private static TSingleton instance;
+        private static TSingleton defaultInstance;
+        #endregion
+
+        #region Settings
+        [SerializeField]
+        private string settingsPath = string.Empty;
         #endregion
 
         #region Fields
@@ -20,17 +27,17 @@
         #endregion
 
         #region Properties
-        public static TSingleton Instance
+        public static TSingleton Default
         {
             get
             {
-                if (instance == null)
+                if (defaultInstance == null)
                 {
-                    instance = new TSingleton();
-                    instance.InternalInit();
+                    defaultInstance = new TSingleton();
+                    defaultInstance.InternalInit();
                 }
 
-                return instance;
+                return defaultInstance;
             }
         }
 
@@ -44,7 +51,7 @@
             get { return data; }
         }
 
-        protected virtual string DataPath
+        protected virtual string DefaultPath
         {
             get { return string.Empty; }
         }
@@ -53,7 +60,8 @@
         #region Class Methods
         protected override void Init()
         {
-            if (data == null && LoadResource(DataPath))
+            var path = string.IsNullOrEmpty(settingsPath) ? DefaultPath : settingsPath;
+            if (data == null && LoadResource(path))
             {
                 data = resource.Data;
             }

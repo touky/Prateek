@@ -126,7 +126,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
                 HashSet<IAssignableVisualResource> assignables = null;
                 if (!container.pendingLoad.TryGetValue(reference, out assignables))
                 {
-                    throw new Exception($"reference {reference.Loader.Location} couldn't be found, this is a fail-state");
+                    throw new Exception($"reference {reference.Loader.Path} couldn't be found, this is a fail-state");
                 }
 
                 foreach (IAssignableVisualResource assignable in assignables)
@@ -142,7 +142,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
 
         protected void Store(TResourceReference resource)
         {
-            string location = resource.Loader.Location;
+            string location = resource.Loader.Path;
             int index = location.IndexOf(Path.AltDirectorySeparatorChar);
             string root = location.Substring(0, index);
             string name = location.Substring(index + Consts.NEXT_ITEM, location.Length - (index + Consts.NEXT_ITEM));

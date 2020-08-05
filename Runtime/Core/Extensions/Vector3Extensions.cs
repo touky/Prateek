@@ -3,14 +3,40 @@ namespace Prateek.Runtime.Core.Extensions
     using UnityEngine;
 
     ///-------------------------------------------------------------------------
-    public static partial class Statics
+    public static partial class Vector3Extensions
     {
-        public static Vector3 normalize(Vector3 v) { return v.normalized; }
-        public static float length(Vector3 v) { return v.magnitude; }
-        public static float dot(Vector3 v0, Vector3 v1) { return Vector3.Dot(v0, v1); }
-        public static Vector3 lerp(Vector3 v0, Vector3 v1, float alpha) { return Vector3.Lerp(v0, v1, alpha); }
-        public static Vector3 mix(Vector3 v0, Vector3 v1, float alpha) { return Vector3.Lerp(v0, v1, alpha); }
-        public static Vector3Int Int(Vector3 v) { return Extensions.Statics.vec3i((int)v.x, (int)v.y, (int)v.z); }
-        public static Vector3 cross(Vector3 v0, Vector3 v1) { return Vector3.Cross(v0, v1); }
+        #region Class Methods
+        ///---------------------------------------------------------------------
+        public static bool Approximately(this Vector3 v0, Vector3 v1, float epsilon = Vector3.kEpsilon)
+        {
+            var d = v0 - v1;
+            return -epsilon < d.x
+                && d.x < epsilon
+                && -epsilon < d.y
+                && d.y < epsilon
+                && -epsilon < d.z
+                && d.z < epsilon;
+        }
+
+        ///---------------------------------------------------------------------
+        public static float Area(this Vector3 v)
+        {
+            return v.x * v.y * v.z;
+        }
+
+        ///---------------------------------------------------------------------
+        public static int ToIndex(this Vector3 v, Vector3 dimensions)
+        {
+            return (int) v.x + (int) v.y * (int) dimensions.x + (int) v.z * (int) dimensions.xy().Area();
+        }
+
+        ///---------------------------------------------------------------------
+        public static Vector3 FromIndex(this int index3D, Vector3 dimensions)
+        {
+            var area2D  = dimensions.xy().Area();
+            var index2D = index3D % area2D;
+            return new Vector3(index2D % (int) dimensions.x, index2D / (int) dimensions.x, index3D / (int) area2D);
+        }
+        #endregion
     }
 }

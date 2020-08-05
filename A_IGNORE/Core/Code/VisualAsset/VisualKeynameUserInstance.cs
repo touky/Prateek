@@ -4,7 +4,6 @@ namespace Mayfair.Core.Code.VisualAsset
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.KeynameFramework.Enums;
     using Prateek.Runtime.KeynameFramework.Interfaces;
-    using Prateek.Runtime.KeynameFramework.Serializables;
     using UnityEngine;
     using UnityEngine.Serialization;
 
@@ -13,7 +12,7 @@ namespace Mayfair.Core.Code.VisualAsset
         #region Settings
         [SerializeField]
         [FormerlySerializedAs("uniqueId")]
-        private SerializableKeyname savedKeyname = string.Empty;
+        private KeynameSerializable savedKeyname = string.Empty;
         #endregion
 
         #region Fields

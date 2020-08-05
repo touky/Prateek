@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.KeynameFramework
+namespace Prateek.Runtime.KeynameFramework.Settings
 {
     using System.Text.RegularExpressions;
     using Prateek.Runtime.Core.FrameworkSettings;

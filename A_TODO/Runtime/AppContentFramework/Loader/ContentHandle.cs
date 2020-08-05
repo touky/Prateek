@@ -44,7 +44,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Loader
         {
             if (instanceCount > 0)
             {
-                throw new Exception($"Resource reference instance for {loader.Location} were not destroyed properly !");
+                throw new Exception($"Resource reference instance for {loader.Path} were not destroyed properly !");
             }
 
             if (hasMarkedLoadRef)

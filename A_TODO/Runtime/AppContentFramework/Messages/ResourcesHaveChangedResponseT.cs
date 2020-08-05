@@ -2,7 +2,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
 {
     using System.Collections.Generic;
     using Prateek.A_TODO.Runtime.AppContentFramework.Loader;
-    using Prateek.A_TODO.Runtime.AppContentFramework.ResourceTree;
+    using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
     public abstract class ResourcesHaveChangedResponse<TResourceRef, TResourceType> : ResourcesHaveChangedResponse
         where TResourceRef : ContentHandle<TResourceType, TResourceRef>
@@ -19,14 +19,9 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
         #endregion
 
         #region ITreeIdentificationResult
-        public override bool Match(ITreeLeafLocator leafLocator)
+        public override void Add(IHierarchicalTreeLeaf leaf)
         {
-            return true;
-        }
-
-        public override void Add(ITreeLeafLocator leafLocator)
-        {
-            ContentLoader content = leafLocator as ContentLoader;
+            ContentLoader content = leaf as ContentLoader;
             if (content != null)
             {
                 this.references.Add(GetResourceRef(content));

@@ -5,10 +5,10 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Loader
     using Prateek.A_TODO.Runtime.AppContentFramework.Enums;
     using Prateek.A_TODO.Runtime.AppContentFramework.Loader.Enums;
     using Prateek.A_TODO.Runtime.AppContentFramework.Loader.Interfaces;
-    using Prateek.A_TODO.Runtime.AppContentFramework.ResourceTree;
+    using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
     [DebuggerDisplay("{content.ToString()}, Location: {location}, Status: {status}")]
-    public abstract class ContentLoader : IContentLoader, ITreeLeafLocator
+    public abstract class ContentLoader : IContentLoader, IHierarchicalTreeLeaf
     {
         #region Fields
         //benjaminh: I'm not a fan of boxing this, but this is not an operation done too much time, and it's tied to an important system, so ok for just this.
@@ -171,7 +171,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Loader
             }
         }
 
-        public string Location
+        public string Path
         {
             get { return location; }
         }

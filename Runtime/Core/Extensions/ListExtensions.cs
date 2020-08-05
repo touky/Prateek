@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,8 +26,8 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
@@ -37,8 +37,9 @@ namespace Prateek.Runtime.Core.Extensions
     using System.Collections.Generic;
 
     ///-------------------------------------------------------------------------
-    public static class ListExt
+    public static class ListExtensions
     {
+        #region Class Methods
         ///---------------------------------------------------------------------
         public static T Last<T>(this List<T> list)
         {
@@ -46,7 +47,8 @@ namespace Prateek.Runtime.Core.Extensions
             {
                 return list[list.Count - 1];
             }
-            return default(T);
+
+            return default;
         }
 
         ///---------------------------------------------------------------------
@@ -76,7 +78,8 @@ namespace Prateek.Runtime.Core.Extensions
                 list.RemoveLast();
                 return value;
             }
-            return default(T);
+
+            return default;
         }
 
         ///---------------------------------------------------------------------
@@ -88,7 +91,8 @@ namespace Prateek.Runtime.Core.Extensions
                 list.RemoveAt(0);
                 return value;
             }
-            return default(T);
+
+            return default;
         }
 
         ///---------------------------------------------------------------------
@@ -96,25 +100,26 @@ namespace Prateek.Runtime.Core.Extensions
         {
             if (index >= list.Count)
             {
-                for (int i = list.Count; i < index + 1; ++i)
+                for (var i = list.Count; i < index + 1; ++i)
                 {
                     list.Add(new T());
                 }
             }
+
             return list[index];
         }
 
         ///---------------------------------------------------------------------
-        public static int BinarySearchBy<TSource, TKey>(this IList<TSource> list, System.Func<TSource, TKey> projection, TKey key)
+        public static int BinarySearchBy<TSource, TKey>(this IList<TSource> list, Func<TSource, TKey> projection, TKey key)
         {
-            int start = 0;
-            int end = list.Count - 1;
+            var start = 0;
+            var end   = list.Count - 1;
 
             while (start <= end)
             {
-                int mid = (start + end) / 2;
-                TKey mid_key = projection(list[mid]);
-                int diff = Comparer<TKey>.Default.Compare(mid_key, key);
+                var mid     = (start + end) / 2;
+                var mid_key = projection(list[mid]);
+                var diff    = Comparer<TKey>.Default.Compare(mid_key, key);
                 if (diff == 0)
                 {
                     return mid;
@@ -122,11 +127,12 @@ namespace Prateek.Runtime.Core.Extensions
 
                 start = mid + (diff < 0 ? 1 : -1);
             }
+
             return ~start;
         }
 
         ///---------------------------------------------------------------------
-        public static int AddSorted<T>(this List<T> list, T item, System.Func<T, int> projection)
+        public static int AddSorted<T>(this List<T> list, T item, Func<T, int> projection)
         {
             if (list.Count == 0)
             {
@@ -146,7 +152,7 @@ namespace Prateek.Runtime.Core.Extensions
                 return 0;
             }
 
-            int index = list.BinarySearchBy(projection, projection(item));
+            var index = list.BinarySearchBy(projection, projection(item));
             if (index < 0)
             {
                 index = ~index;
@@ -157,7 +163,7 @@ namespace Prateek.Runtime.Core.Extensions
         }
 
         ///---------------------------------------------------------------------
-        public static int AddSorted<T>(this List<T> list, T item, System.Func<T, float> projection)
+        public static int AddSorted<T>(this List<T> list, T item, Func<T, float> projection)
         {
             if (list.Count == 0)
             {
@@ -177,7 +183,7 @@ namespace Prateek.Runtime.Core.Extensions
                 return 0;
             }
 
-            int index = list.BinarySearchBy(projection, projection(item));
+            var index = list.BinarySearchBy(projection, projection(item));
             if (index < 0)
             {
                 index = ~index;
@@ -197,45 +203,10 @@ namespace Prateek.Runtime.Core.Extensions
             }
             else
             {
-                dictionary[key] = (value = new V());
+                dictionary[key] = value = new V();
                 return value;
             }
         }
-
-        ///---------------------------------------------------------------------
-        #region AddUnique
-        public static bool AddUnique<T>(this List<T> list, T item)
-        {
-            if (!list.Contains(item))
-            {
-                list.Add(item);
-                return true;
-            }
-            return false;
-        }
-
-        ///---------------------------------------------------------------------
-        public static bool AddRangeUnique<T>(this List<T> list, List<T> other)
-        {
-            bool one_added = false;
-            for (int i = 0; i < other.Count; ++i)
-            {
-                one_added = (list.AddUnique(other[i]) || one_added);
-            }
-            return one_added;
-        }
-
-        ///---------------------------------------------------------------------
-        public static bool AddRangeUnique<T>(this List<T> list, T[] other)
-        {
-            bool one_added = false;
-            for (int i = 0; i < other.Length; ++i)
-            {
-                one_added = (list.AddUnique(other[i]) || one_added);
-            }
-            return one_added;
-        }
-        #endregion AddUnique
 
         ///---------------------------------------------------------------------
         public static int Compare<T>(this List<T> list, List<T> other, Comparison<T> comparison)
@@ -246,7 +217,7 @@ namespace Prateek.Runtime.Core.Extensions
                 return size;
             }
 
-            for (int i = 0; i < list.Count; ++i)
+            for (var i = 0; i < list.Count; ++i)
             {
                 var result = comparison.Invoke(list[i], other[i]);
                 if (result != 0)
@@ -257,6 +228,79 @@ namespace Prateek.Runtime.Core.Extensions
 
             return 0;
         }
+
+        ///---------------------------------------------------------------------
+        public static bool IsIndexInBounds<T>(this T[] array, int index)
+        {
+            return index >= 0 && index < array.Length;
+        }
+
+        ///---------------------------------------------------------------------
+        public static bool IsIndexInBounds<T>(this List<T> list, int index)
+        {
+            return index >= 0 && index < list.Count;
+        }
+
+        ///---------------------------------------------------------------------
+        public static void Populate<T>(this T[] arr, T value)
+        {
+            for (var i = 0; i < arr.Length; i++)
+            {
+                arr[i] = value;
+            }
+        }
+
+        ///---------------------------------------------------------------------
+        public static void Populate<T>(this T[,] arr, T value)
+        {
+            for (var j = 0; j < arr.GetLength(0); j++)
+            {
+                for (var i = 0; i < arr.GetLength(1); i++)
+                {
+                    arr[j, i] = value;
+                }
+            }
+        }
+        #endregion
+
+        ///---------------------------------------------------------------------
+
+        #region AddUnique
+        public static bool AddUnique<T>(this List<T> list, T item)
+        {
+            if (!list.Contains(item))
+            {
+                list.Add(item);
+                return true;
+            }
+
+            return false;
+        }
+
+        ///---------------------------------------------------------------------
+        public static bool AddRangeUnique<T>(this List<T> list, List<T> other)
+        {
+            var one_added = false;
+            for (var i = 0; i < other.Count; ++i)
+            {
+                one_added = list.AddUnique(other[i]) || one_added;
+            }
+
+            return one_added;
+        }
+
+        ///---------------------------------------------------------------------
+        public static bool AddRangeUnique<T>(this List<T> list, T[] other)
+        {
+            var one_added = false;
+            for (var i = 0; i < other.Length; ++i)
+            {
+                one_added = list.AddUnique(other[i]) || one_added;
+            }
+
+            return one_added;
+        }
+        #endregion AddUnique
 
         ////-------------------------------------------------------------------
         //public static void Resize<T>(this List<T> list, int new_size, T default_value = default(T))
@@ -278,14 +322,15 @@ namespace Prateek.Runtime.Core.Extensions
         //}
 
         ///---------------------------------------------------------------------
+
         #region Select
         public static T SelectMin<T>(this List<T> list, Func<T, float> selector)
         {
-            var min = float.MaxValue;
-            T selected_item = default(T);
-            for (int i = 0; i < list.Count; ++i)
+            var min           = float.MaxValue;
+            var selected_item = default(T);
+            for (var i = 0; i < list.Count; ++i)
             {
-                var item = list[i];
+                var item       = list[i];
                 var item_value = selector(item);
                 if (item_value < min)
                 {
@@ -293,15 +338,16 @@ namespace Prateek.Runtime.Core.Extensions
                     selected_item = item;
                 }
             }
+
             return selected_item;
         }
 
         ///---------------------------------------------------------------------
         public static T SelectMin<T>(this List<T> list, Func<T, float> selector, Func<T, bool> condition)
         {
-            var min = float.MaxValue;
-            T selected_item = default(T);
-            for (int i = 0; i < list.Count; ++i)
+            var min           = float.MaxValue;
+            var selected_item = default(T);
+            for (var i = 0; i < list.Count; ++i)
             {
                 var item = list[i];
                 if (condition == null || condition(item))
@@ -314,17 +360,18 @@ namespace Prateek.Runtime.Core.Extensions
                     }
                 }
             }
+
             return selected_item;
         }
 
         ///---------------------------------------------------------------------
         public static T SelectMax<T>(this List<T> list, Func<T, float> selector)
         {
-            var max = float.MinValue;
-            T selected_item = default(T);
-            for (int i = 0; i < list.Count; ++i)
+            var max           = float.MinValue;
+            var selected_item = default(T);
+            for (var i = 0; i < list.Count; ++i)
             {
-                var item = list[i];
+                var item       = list[i];
                 var item_value = selector(item);
                 if (item_value > max)
                 {
@@ -332,15 +379,16 @@ namespace Prateek.Runtime.Core.Extensions
                     selected_item = item;
                 }
             }
+
             return selected_item;
         }
 
         ///---------------------------------------------------------------------
         public static T SelectMax<T>(this List<T> list, Func<T, float> selector, Func<T, bool> condition)
         {
-            var max = float.MinValue;
-            T selected_item = default(T);
-            for (int i = 0; i < list.Count; ++i)
+            var max           = float.MinValue;
+            var selected_item = default(T);
+            for (var i = 0; i < list.Count; ++i)
             {
                 var item = list[i];
                 if (condition == null || condition(item))
@@ -353,41 +401,9 @@ namespace Prateek.Runtime.Core.Extensions
                     }
                 }
             }
+
             return selected_item;
         }
         #endregion Select
-
-        ///---------------------------------------------------------------------
-        public static bool IsIndexInBounds<T>(this T[] array, int index)
-        {
-            return index >= 0 && index < array.Length;
-        }
-
-        ///---------------------------------------------------------------------
-        public static bool IsIndexInBounds<T>(this List<T> list, int index)
-        {
-            return index >= 0 && index < list.Count;
-        }
-
-        ///---------------------------------------------------------------------
-        public static void Populate<T>(this T[] arr, T value)
-        {
-            for (int i = 0; i < arr.Length; i++)
-            {
-                arr[i] = value;
-            }
-        }
-
-        ///---------------------------------------------------------------------
-        public static void Populate<T>(this T[,] arr, T value)
-        {
-            for (int j = 0; j < arr.GetLength(0); j++)
-            {
-                for (int i = 0; i < arr.GetLength(1); i++)
-                {
-                    arr[j, i] = value;
-                }
-            }
-        }
     }
 }

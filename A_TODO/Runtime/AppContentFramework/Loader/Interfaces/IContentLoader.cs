@@ -5,7 +5,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Loader.Interfaces
     public interface IContentLoader
     {
         #region Properties
-        string Location { get; }
+        string Path { get; }
         bool IsDone { get; }
         AsyncStatus Status { get; }
         float PercentComplete { get; }

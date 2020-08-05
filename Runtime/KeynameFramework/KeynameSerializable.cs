@@ -1,16 +1,16 @@
-namespace Prateek.Runtime.KeynameFramework.Serializables
+namespace Prateek.Runtime.KeynameFramework
 {
     using System;
     using System.Diagnostics;
     using UnityEngine;
 
-    [DebuggerDisplay("Keyname: {ToString()}/{IntExtensions.ToHex(keyname.GetHashCode())}")]
+    [DebuggerDisplay("Keyname: {ToString()}/{IntExtensions.ToHex(savedKeyname.GetHashCode())}")]
     [Serializable]
-    public struct SerializableKeyname
+    public struct KeynameSerializable
     {
         #region Settings
         [SerializeField]
-        private string keyname;
+        private string savedKeyname;
         #endregion
 
         #region Fields
@@ -19,21 +19,21 @@ namespace Prateek.Runtime.KeynameFramework.Serializables
         #endregion
 
         #region Constructors
-        public SerializableKeyname(string keyname)
+        public KeynameSerializable(string savedKeyname)
         {
             initDone = false;
-            this.keyname = keyname;
+            this.savedKeyname = savedKeyname;
             internalKeyname = string.Empty;
         }
         #endregion
 
         #region Class Methods
-        public static implicit operator SerializableKeyname(string keyname)
+        public static implicit operator KeynameSerializable(string keyname)
         {
-            return new SerializableKeyname(keyname);
+            return new KeynameSerializable(keyname);
         }
 
-        public static implicit operator Keyname(SerializableKeyname keyname)
+        public static implicit operator Keyname(KeynameSerializable keyname)
         {
             keyname.CheckInit();
             return keyname.internalKeyname;
@@ -47,12 +47,12 @@ namespace Prateek.Runtime.KeynameFramework.Serializables
             }
 
             initDone = true;
-            internalKeyname = keyname;
+            internalKeyname = savedKeyname;
         }
 
         public override string ToString()
         {
-            return keyname;
+            return savedKeyname;
         }
         #endregion
     }

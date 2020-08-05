@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,8 +26,8 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
@@ -36,16 +36,30 @@ namespace Prateek.Runtime.Core.Extensions
     using UnityEngine;
 
     ///-------------------------------------------------------------------------
-    public static class Cameras
+    public static class CameraExtensions
     {
+        #region Class Methods
         ///---------------------------------------------------------------------
-        public static float ComputeHorizontalFOV(float verticalFOV)
+        public static float ComputeHorizontalFov(float verticalFOV)
         {
-            float vFOVInRads = verticalFOV * Mathf.Deg2Rad;
-            float hFOVInRads = 2 * Mathf.Atan(Mathf.Tan(vFOVInRads / 2) * UnityEngine.Camera.main.aspect);
-            float hFOV = hFOVInRads * Mathf.Rad2Deg;
+            var vFOVInRads = verticalFOV * Mathf.Deg2Rad;
+            var hFOVInRads = 2 * Mathf.Atan(Mathf.Tan(vFOVInRads / 2) * Camera.main.aspect);
+            var hFOV       = hFOVInRads * Mathf.Rad2Deg;
 
             return hFOV;
         }
+
+        ///---------------------------------------------------------------------
+        public static Matrix4x4 LocalToCameraMatrix(this Camera camera)
+        {
+            return camera.worldToCameraMatrix * camera.transform.localToWorldMatrix;
+        }
+
+        ///---------------------------------------------------------------------
+        public static Matrix4x4 CameraToLocalMatrix(this Camera camera)
+        {
+            return camera.LocalToCameraMatrix().inverse;
+        }
+        #endregion
     }
 }

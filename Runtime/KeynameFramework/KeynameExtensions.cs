@@ -5,6 +5,7 @@ namespace Prateek.Runtime.KeynameFramework
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.KeynameFramework.Enums;
     using Prateek.Runtime.KeynameFramework.Interfaces;
+    using Prateek.Runtime.KeynameFramework.Settings;
     using UnityEngine;
 
     public static class KeynameExtensions
@@ -346,7 +347,7 @@ namespace Prateek.Runtime.KeynameFramework
         internal static void BuildKeyname(this Keyname keyname)
         {
             var builder = new StringBuilder();
-            var settings = keyname.settings == null ? KeynameSettings.Instance.Data : keyname.settings;
+            var settings = keyname.settings == null ? KeynameSettings.Default.Data : keyname.settings;
             if (string.IsNullOrEmpty(settings.separator))
             {
                 settings = null;
