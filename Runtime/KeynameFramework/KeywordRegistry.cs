@@ -10,7 +10,7 @@ namespace Prateek.Runtime.KeynameFramework
     internal static class KeywordRegistry
     {
         #region Static and Constants
-        internal static KeywordLookupWorker lookupWorker;
+        internal static KeywordForagerWorker foragerWorker;
         private static Dictionary<string, Type> stringToKeywords = new Dictionary<string, Type>();
         private static Dictionary<Type, Type> keywordToParent = new Dictionary<Type, Type>();
         #endregion
@@ -51,12 +51,12 @@ namespace Prateek.Runtime.KeynameFramework
         #region Class Methods
         internal static void Init()
         {
-            if (stringToKeywords.Count != 0 || lookupWorker == null)
+            if (stringToKeywords.Count != 0 || foragerWorker == null)
             {
                 return;
             }
 
-            foreach (var type in lookupWorker.FoundTypes)
+            foreach (var type in foragerWorker.FoundTypes)
             {
                 if (typeof(IReplaceWithParentKeyword).IsAssignableFrom(type))
                 {

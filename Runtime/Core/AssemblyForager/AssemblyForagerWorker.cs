@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Prateek.Runtime.Core.AssemblyForager
 {
-    public abstract class AssemblyLookupWorker
+    public abstract class AssemblyForagerWorker
     {
         #region Fields
         private List<Type> searchedTypes = new List<Type>();

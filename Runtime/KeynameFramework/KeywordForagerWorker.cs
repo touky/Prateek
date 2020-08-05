@@ -2,14 +2,14 @@ namespace Prateek.Runtime.KeynameFramework
 {
     using Prateek.Runtime.Core.AssemblyForager;
 
-    public class KeywordLookupWorker : AssemblyLookupWorker
+    public class KeywordForagerWorker : AssemblyForagerWorker
     {
         #region Class Methods
         public override void Init()
         {
             Search(KeywordRegistry.MasterKeyword);
 
-            KeywordRegistry.lookupWorker = this;
+            KeywordRegistry.foragerWorker = this;
         }
 
         public override void WorkDone()

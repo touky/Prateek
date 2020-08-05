@@ -8,7 +8,7 @@ namespace Prateek.Runtime.Core.AssemblyForager
     internal static class AssemblyForager
     {
         #region Static and Constants
-        internal static List<AssemblyLookupWorker> workers = new List<AssemblyLookupWorker>();
+        internal static List<AssemblyForagerWorker> workers = new List<AssemblyForagerWorker>();
         #endregion
 
         #region Class Methods
@@ -24,9 +24,9 @@ namespace Prateek.Runtime.Core.AssemblyForager
                 {
                     types.Add(assemblyType);
 
-                    if (assemblyType.IsSubclassOf(typeof(AssemblyLookupWorker)))
+                    if (assemblyType.IsSubclassOf(typeof(AssemblyForagerWorker)))
                     {
-                        var worker = Activator.CreateInstance(assemblyType) as AssemblyLookupWorker;
+                        var worker = Activator.CreateInstance(assemblyType) as AssemblyForagerWorker;
                         worker.Init();
                         workers.Add(worker);
                         LogWorker(ref builder, worker);
@@ -53,7 +53,7 @@ namespace Prateek.Runtime.Core.AssemblyForager
             workers.Clear();
         }
 
-        private static void LogWorker(ref StringBuilder builder, AssemblyLookupWorker worker)
+        private static void LogWorker(ref StringBuilder builder, AssemblyForagerWorker worker)
         {
             if (builder == null)
             {
