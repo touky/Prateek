@@ -4,9 +4,9 @@ namespace Mayfair.Core.Code.StateMachines.FSM.Common
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine.Common;
+    using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
-    public abstract class NoticeState<TTrigger, TNotice> : EmptyState<TTrigger>
+    public abstract class NoticeState<TTrigger, TNotice> : IdleState<TTrigger>
         where TNotice : BroadcastCommand, new()
     {
         #region Fields
@@ -23,17 +23,17 @@ namespace Mayfair.Core.Code.StateMachines.FSM.Common
         #endregion
 
         #region Class Methods
-        protected override void Begin()
+        protected override void BeginState()
         {
-            base.Begin();
+            base.BeginState();
 
             this.timeOutTicker.Begin();
             this.bottledCommandBroadcaster.Broadcast();
         }
 
-        public override void Execute()
+        protected override void ExecuteState()
         {
-            base.Execute();
+            base.ExecuteState();
 
             if (this.timeOutTicker.CanTrigger())
             {

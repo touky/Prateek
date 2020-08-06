@@ -6,7 +6,7 @@
     public class ProfilerScope : GUI.Scope
     {
         #region Constructors
-        private ProfilerScope(string sample)
+        protected ProfilerScope(string sample)
         {
 #if ENABLE_PROFILER
             Profiler.BeginSample(sample);

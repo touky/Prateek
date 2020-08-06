@@ -2,9 +2,9 @@ namespace Mayfair.Core.Code.SaveGame.StateMachine
 {
     using Mayfair.Core.Code.SaveGame.Enums;
     using Mayfair.Core.Code.StateMachines.FSM;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine;
+    using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
-    public class SaveTransition : FiniteTransition<SaveState>
+    public class SaveTransition : StandardTransition<SaveState>
     {
         #region Fields
         private SaveState triggerState;
@@ -18,7 +18,7 @@ namespace Mayfair.Core.Code.SaveGame.StateMachine
         #endregion
 
         #region Class Methods
-        public override void TryTriggering(SaveState trigger)
+        protected override void ValidateTrigger(SaveState trigger)
         {
             if (this.triggerState == trigger)
             {

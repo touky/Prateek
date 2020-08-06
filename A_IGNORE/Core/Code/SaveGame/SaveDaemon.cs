@@ -9,13 +9,13 @@ namespace Mayfair.Core.Code.SaveGame
     using Mayfair.Core.Code.Utils;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine;
+    using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
     using Prateek.Runtime.TickableFramework.Enums;
 
     public class SaveDaemon : ReceiverDaemonOverseer<SaveDaemon, SaveServant>
     {
         #region Fields
-        private FiniteStateMachine<SaveState> stateMachine;
+        private StandardStateMachine<SaveState> stateMachine;
 
         private List<LoadDataRequest> loadingRequests = new List<LoadDataRequest>();
         #endregion
@@ -30,7 +30,7 @@ namespace Mayfair.Core.Code.SaveGame
         {
             base.Tick(tickableFrame, seconds, unscaledSeconds);
 
-            this.stateMachine.Advance();
+            this.stateMachine.Step();
         }
 
         #region Class Methods
@@ -48,8 +48,8 @@ namespace Mayfair.Core.Code.SaveGame
                 new SaveTransition().From(sendLoadedResponses).To(idle);
             }
 
-            this.stateMachine = new FiniteStateMachine<SaveState>(idle);
-            this.stateMachine.Advance();
+            this.stateMachine = new StandardStateMachine<SaveState>(idle);
+            this.stateMachine.Step();
         }
 
         protected bool TryLoadingPendingRequest()
@@ -116,9 +116,9 @@ namespace Mayfair.Core.Code.SaveGame
             #endregion
 
             #region Class Methods
-            public override void Execute()
+            protected override void ExecuteState()
             {
-                base.Execute();
+                base.ExecuteState();
 
                 if (!this.daemonCore.TryLoadingPendingRequest())
                 {
@@ -142,7 +142,7 @@ namespace Mayfair.Core.Code.SaveGame
             #endregion
 
             #region Class Methods
-            public override void Execute()
+            protected override void ExecuteState()
             {
                 this.daemonCore.SendLoadingResponse();
 

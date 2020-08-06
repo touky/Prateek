@@ -16,12 +16,12 @@ namespace Mayfair.Core.Code.SaveGame.StateMachine
         #endregion
 
         #region Class Methods
-        protected override void Begin()
+        protected override void BeginState()
         {
             this.timeOutTicker.Begin();
         }
 
-        public override void Execute()
+        protected override void ExecuteState()
         {
             if (this.timeOutTicker.CanTrigger())
             {

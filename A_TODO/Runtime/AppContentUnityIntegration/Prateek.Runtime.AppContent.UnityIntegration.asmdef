@@ -4,7 +4,7 @@
         "Prateek.Runtime.Core",
         "Prateek.Runtime.DaemonFramework",
         "Prateek.Runtime.CommandFramework",
-        "Prateek.Runtime.StateMachine",
+        "Prateek.Runtime.StateMachineFramework",
         "Prateek.Runtime.AppContentFramework",
         "Unity.Addressables",
         "Unity.ResourceManager"

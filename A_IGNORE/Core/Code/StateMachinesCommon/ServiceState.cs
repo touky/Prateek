@@ -1,10 +1,10 @@
 namespace Mayfair.Core.Code.StateMachines.FSM.Common
 {
     using Mayfair.Core.Code.Service;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine.Common;
     using Prateek.Runtime.DaemonFramework.Interfaces;
+    using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
-    public abstract class ServiceState<TTrigger, TDaemon> : EmptyState<TTrigger>
+    public abstract class ServiceState<TTrigger, TDaemon> : IdleState<TTrigger>
         where TDaemon : IDaemon
     {
         #region Fields

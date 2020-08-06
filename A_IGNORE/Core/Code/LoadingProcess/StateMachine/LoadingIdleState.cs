@@ -1,7 +1,7 @@
 namespace Mayfair.Core.Code.LoadingProcess.StateMachine
 {
     using Mayfair.Core.Code.StateMachines.FSM.Common;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine.Common;
+    using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
-    internal class LoadingIdleState : EmptyState<LoadingProcessTrigger> { }
+    internal class LoadingIdleState : IdleState<LoadingProcessTrigger> { }
 }

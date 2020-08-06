@@ -10,10 +10,11 @@
         #region Fields
         private HierarchicalTreeSettingsData settings = null;
         private string branchName;
+        private HierarchicalTree<TLeaf> parent;
         private Dictionary<string, HierarchicalTree<TLeaf>> branches;
         private HashSet<TreeLeaf<TLeaf>> leaves;
         #endregion
-
+        
         #region Properties
         private bool HasBranches
         {
@@ -74,13 +75,13 @@
                 if (m == matches.Count - 1)
                 {
                     var leaf = new TreeLeaf<TLeaf>(value, leadData);
-                    if (!parentBranch.leaves.Contains(leaf))
+                    if (!parentBranch.Leaves.Contains(leaf))
                     {
                         //Remove the old one because the leaf hashCode is Path dependant
-                        parentBranch.leaves.Remove(leaf);
+                        parentBranch.Leaves.Remove(leaf);
                     }
 
-                    parentBranch.leaves.Add(leaf);
+                    parentBranch.Leaves.Add(leaf);
                     break;
                 }
 
@@ -90,40 +91,55 @@
                 }
                 else
                 {
-                    childBranch = new HierarchicalTree<TLeaf>(customSettings) {branchName = value};
+                    childBranch = new HierarchicalTree<TLeaf>(customSettings)
+                    {
+                        parent = parentBranch,
+                        branchName = value
+                    };
+
                     parentBranch.Branches.Add(value, childBranch);
                     parentBranch = childBranch;
                 }
             }
         }
 
-        public void SearchTree(IHierarchicalTreeSearch search, IHierarchicalTreeSearchResult searchResult)
+        public void Remove(TLeaf leadData, HierarchicalTreeSettingsData customSettings = null)
         {
-            var customSettings = search.Settings == null ? settings : search.Settings;
+            var activeBranch = SearchForBranch(leadData.Path, true, customSettings);
+            if (activeBranch == null)
+            {
+                return;
+            }
 
+            var leaf = new TreeLeaf<TLeaf>(string.Empty, leadData);
+            activeBranch.Leaves.Remove(leaf);
+        }
+
+        public void Remove(IHierarchicalTreeSearch search)
+        {
             foreach (var searchPath in search.SearchPaths)
             {
-                var activeBranch = this;
-                var matches = customSettings.folderRegex.Matches(searchPath);
-                for (int m = 0; m < matches.Count; m++)
+                var activeBranch = SearchForBranch(searchPath, false, search.Settings);
+                if (activeBranch == null)
                 {
-                    var match = matches[m];
-                    if (!match.Success || activeBranch.branches == null)
-                    {
-                        activeBranch = null;
-                        break;
-                    }
-
-                    var folder = match.LastGroup().Value;
-                    if (!activeBranch.branches.TryGetValue(folder, out var nextBranch))
-                    {
-                        activeBranch = null;
-                        break;
-                    }
-
-                    activeBranch = nextBranch;
+                    continue;
                 }
 
+                activeBranch.Branches.Clear();
+                activeBranch.Leaves.Clear();
+
+                if (activeBranch.parent != null)
+                {
+                    activeBranch.parent.Branches.Remove(activeBranch.branchName);
+                }
+            }
+        }
+
+        public void SearchTree(IHierarchicalTreeSearch search, IHierarchicalTreeSearchResult searchResult)
+        {
+            foreach (var searchPath in search.SearchPaths)
+            {
+                var activeBranch = SearchForBranch(searchPath, false, search.Settings);
                 if (activeBranch == null)
                 {
                     continue;
@@ -131,6 +147,39 @@
 
                 RetrieveLeafContent(activeBranch, search, searchResult);
             }
+        }
+
+        private HierarchicalTree<TLeaf> SearchForBranch(string searchPath, bool searchPathIsLeaf, HierarchicalTreeSettingsData customSettings)
+        {
+            customSettings = customSettings == null ? settings : customSettings;
+
+            var activeBranch = this;
+            var matches = customSettings.folderRegex.Matches(searchPath);
+            for (int m = 0; m < matches.Count; m++)
+            {
+                if (searchPathIsLeaf && m == matches.Count - 1)
+                {
+                    break;
+                }
+
+                var match = matches[m];
+                if (!match.Success || activeBranch.branches == null)
+                {
+                    activeBranch = null;
+                    break;
+                }
+
+                var folder = match.LastGroup().Value;
+                if (!activeBranch.branches.TryGetValue(folder, out var nextBranch))
+                {
+                    activeBranch = null;
+                    break;
+                }
+
+                activeBranch = nextBranch;
+            }
+
+            return activeBranch;
         }
 
         private void RetrieveLeafContent(HierarchicalTree<TLeaf> branch, IHierarchicalTreeSearch search, IHierarchicalTreeSearchResult searchResult)

@@ -7,8 +7,8 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.LoadingProcess.Messages;
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.StateMachines.FSM.Common;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine.Common;
     using Prateek.Runtime.DaemonFramework.Servants;
+    using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
     public abstract class LoadingProcessServant : ServantTickable<LoadingProcessDaemon, LoadingProcessServant>
     {
@@ -50,7 +50,7 @@ namespace Mayfair.Core.Code.LoadingProcess
 
         #region Nested type: LoadingEndState
         //Protected to be accessible by the children since LoadingHasEnded is protected
-        protected class LoadingStatusState<TTrigger> : EmptyState<TTrigger>
+        protected class LoadingStatusState<TTrigger> : IdleState<TTrigger>
         {
             #region Fields
             protected LoadingProcessServant servant;
@@ -66,9 +66,9 @@ namespace Mayfair.Core.Code.LoadingProcess
             #endregion
 
             #region Class Methods
-            public override void Execute()
+            protected override void ExecuteState()
             {
-                base.Execute();
+                base.ExecuteState();
 
                 this.servant.LoadingHasEnded = this.shouldEnd;
             }

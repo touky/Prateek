@@ -2,7 +2,7 @@ namespace Prateek.A_TODO.Runtime.AppContentUnityIntegration.Addressables
 {
     using Prateek.A_TODO.Runtime.AppContentFramework.Daemons;
     using Prateek.A_TODO.Runtime.AppContentFramework.Enums;
-    using Prateek.A_TODO.Runtime.StateMachines.SimpleStateMachine;
+    using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using UnityEngine.AddressableAssets;
     using UnityEngine.AddressableAssets.ResourceLocators;
     using UnityEngine.ResourceManagement.AsyncOperations;
@@ -36,7 +36,7 @@ namespace Prateek.A_TODO.Runtime.AppContentUnityIntegration.Addressables
                 {
                     if (!addressSystemInitialized)
                     {
-                        daemonCore.Trigger(SimpleStepTrigger.PreventStateChange);
+                        daemonCore.Trigger(EnumStepTrigger.IgnoreStateChange);
                     }
 
                     break;

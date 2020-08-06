@@ -6,14 +6,14 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
     using Mayfair.Core.Code.LoadingProcess.StateMachine;
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.Utils;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine;
+    using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
     using Prateek.Runtime.TickableFramework.Enums;
     using UnityEngine;
 
     public class GameLoadingServant : LoadingProcessServant
     {
         #region Fields
-        private FiniteStateMachine<LoadingProcessTrigger> stateMachine;
+        private StandardStateMachine<LoadingProcessTrigger> stateMachine;
         #endregion
 
         #region Properties
@@ -35,7 +35,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
 
             if (IsAlive && stateMachine != null)
             {
-                stateMachine.Advance();
+                stateMachine.Step();
             }
         }
 
@@ -56,7 +56,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
         public override void GameLoadingRestart(GameLoadingNeedRestart notice)
         {
             stateMachine.Trigger(notice);
-            stateMachine.Advance();
+            stateMachine.Step();
         }
 
         protected override void InternalInit(LoadingProcessDaemon daemonCore)
@@ -109,8 +109,8 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
             new LoadingBoolTransition().From(restartNotice).To(restartIdle);
             new LoadingStatusTransition(LoadingTrackingStatus.Finished).From(restartIdle).To(taskClear);
 
-            stateMachine = new FiniteStateMachine<LoadingProcessTrigger>(idle);
-            stateMachine.Advance();
+            stateMachine = new StandardStateMachine<LoadingProcessTrigger>(idle);
+            stateMachine.Step();
             stateMachine.Trigger(true);
         }
         #endregion

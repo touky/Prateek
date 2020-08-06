@@ -7,7 +7,7 @@ namespace Mayfair.Core.Code.LoadingProcess.StateMachine
         #endregion
 
         #region Class Methods
-        public override void TryTriggering(LoadingProcessTrigger trigger)
+        protected override void ValidateTrigger(LoadingProcessTrigger trigger)
         {
             if (this.triggerNextTime)
             {

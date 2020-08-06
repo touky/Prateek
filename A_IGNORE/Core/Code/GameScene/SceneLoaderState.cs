@@ -1,11 +1,11 @@
 namespace Mayfair.Core.Code.GameScene
 {
     using Mayfair.Core.Code.StateMachines.FSM;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine;
+    using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
     using UnityEngine;
     using UnityEngine.SceneManagement;
 
-    internal class SceneLoaderState : FiniteState<bool>
+    internal class SceneLoaderState : StandardState<bool>
     {
         #region Fields
         private string scene;
@@ -21,15 +21,15 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Class Methods
-        protected override void Begin()
+        protected override void BeginState()
         {
             AsyncOperation operation = SceneManager.LoadSceneAsync(this.scene, LoadSceneMode.Additive);
             operation.completed += OnSceneLoaded;
         }
 
-        public override void Execute() { }
+        protected override void ExecuteState() { }
 
-        protected override void End()
+        protected override void EndState()
         {
             if (this.setActive)
             {

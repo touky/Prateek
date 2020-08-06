@@ -10,7 +10,7 @@ namespace Mayfair.Core.Code.LoadingProcess.Messages
         #endregion
 
         #region Class Methods
-        protected override void Begin()
+        protected override void BeginState()
         {
             this.daemonCore.ClearTaskTracking();
         }

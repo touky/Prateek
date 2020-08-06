@@ -6,8 +6,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
     using Mayfair.Core.Code.Localization;
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.Utils;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine;
-    using Prateek.A_TODO.Runtime.StateMachines.FiniteStateMachine.BoolTrigger;
+    using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
     using Prateek.Runtime.TickableFramework.Enums;
     using UnityEngine;
 
@@ -22,7 +21,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
         #endregion
 
         #region Fields
-        private FiniteStateMachine<bool> stateMachine;
+        private StandardStateMachine<bool> stateMachine;
         #endregion
 
         #region Properties
@@ -44,7 +43,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
 
             if (IsAlive && stateMachine != null)
             {
-                stateMachine.Advance();
+                stateMachine.Step();
             }
         }
 
@@ -55,19 +54,19 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
                 throw new MissingMinimalLocalizationException(SystemLanguage.English);
             }
 
-            var idle          = new IdleBoolState();
+            var idle          = new ToggleIdleState();
             var loaderService = new SceneLoaderState(servicesScene);
             var activator     = new GameInitActivatorState();
             var loaderGame    = new SceneLoaderState(gameScene);
             var loadingStatus = new LoadingStatusState<bool>(this, true);
 
-            new BoolTriggerTransition().From(idle).To(loaderService);
-            new BoolTriggerTransition().From(loaderService).To(activator);
-            new BoolTriggerTransition().From(activator).To(loaderGame);
-            new BoolTriggerTransition().From(loaderGame).To(loadingStatus);
+            new ToggleTransition().From(idle).To(loaderService);
+            new ToggleTransition().From(loaderService).To(activator);
+            new ToggleTransition().From(activator).To(loaderGame);
+            new ToggleTransition().From(loaderGame).To(loadingStatus);
 
-            stateMachine = new FiniteStateMachine<bool>(idle);
-            stateMachine.Advance();
+            stateMachine = new StandardStateMachine<bool>(idle);
+            stateMachine.Step();
             stateMachine.Trigger(true);
         }
 

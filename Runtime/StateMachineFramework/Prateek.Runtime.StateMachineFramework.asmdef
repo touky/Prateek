@@ -1,6 +1,8 @@
 {
-    "name": "Prateek.Runtime.StateMachine",
-    "references": [],
+    "name": "Prateek.Runtime.StateMachineFramework",
+    "references": [
+        "Prateek.Runtime.Core"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

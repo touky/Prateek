@@ -5,17 +5,16 @@
     using Prateek.A_TODO.Runtime.AppContentFramework.Loader;
     using Prateek.A_TODO.Runtime.AppContentFramework.Messages;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
-    using Prateek.A_TODO.Runtime.StateMachines.Interfaces;
-    using Prateek.A_TODO.Runtime.StateMachines.SimpleStateMachine;
     using Prateek.Runtime.Core.HierarchicalTree;
+    using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using Prateek.Runtime.TickableFramework.Enums;
 
     public sealed class ContentRegistryDaemon
         : ReceiverDaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
-        , ISimpleStepMachineOwner<ServiceState>
+        , IEnumStepMachineOwner<ServiceState>
     {
         #region Fields
-        private SimpleStepMachine<ServiceState> stateMachine;
+        private EnumStepMachine<ServiceState, ServiceStateComparer> stateMachine;
         private HierarchicalTree<ContentLoader> hierarchicalTree = new HierarchicalTree<ContentLoader>();
         //todo private HashSet<RequestAccessToContent> resourceUpdateCallbacks = new HashSet<RequestAccessToContent>();
         //todo private HashSet<RequestAccessToContent> pendingCallbacks = new HashSet<RequestAccessToContent>();
@@ -30,14 +29,14 @@
         {
             base.Awake();
 
-            this.stateMachine = new SimpleStepMachine<ServiceState>(this);
+            this.stateMachine = new EnumStepMachine<ServiceState, ServiceStateComparer>(this);
         }
 
         public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
         {
             base.Tick(tickableFrame, seconds, unscaledSeconds);
 
-            this.stateMachine.Advance();
+            this.stateMachine.Step();
         }
 
         #region Class Methods
@@ -46,15 +45,15 @@
             this.hierarchicalTree.Store(loader);
         }
 
-        public void Trigger(SimpleStepTrigger trigger)
+        public void Trigger(EnumStepTrigger trigger)
         {
-            this.stateMachine.Trigger(SimpleStepTrigger.PreventStateChange);
+            this.stateMachine.Trigger(EnumStepTrigger.IgnoreStateChange);
         }
         #endregion
 
-        public void OnStateChange(ServiceState previousState, ServiceState nextState) { }
+        public void ChangingState(ServiceState endingState, ServiceState beginningState) { }
 
-        public void OnStateExecute(ServiceState state)
+        public void ExecutingState(ServiceState state)
         {
             switch (state)
             {
@@ -88,7 +87,7 @@
             }
         }
 
-        public void OnTrigger(SimpleStepTrigger trigger, bool hasTriggered)
+        public void OnTrigger(EnumStepTrigger trigger, bool hasTriggered)
         {
         }
 
@@ -97,7 +96,7 @@
             return state0 == state1;
         }
 
-        public bool Compare(SimpleStepTrigger trigger0, SimpleStepTrigger trigger1)
+        public bool Compare(EnumStepTrigger trigger0, EnumStepTrigger trigger1)
         {
             return trigger0 == trigger1;
         }
