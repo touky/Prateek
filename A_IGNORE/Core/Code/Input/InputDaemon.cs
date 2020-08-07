@@ -9,17 +9,18 @@ namespace Mayfair.Core.Code.Input
     using Mayfair.Core.Code.Input.InputLayers;
     using Mayfair.Core.Code.Input.Providers;
     using Mayfair.Core.Code.Input.Reports;
-    using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.Temporary;
     using Mayfair.Core.Code.Utils;
-    using Mayfair.Core.Code.Utils.Debug.Reflection;
     using Mayfair.Core.Code.Utils.Extensions;
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework;
-    using Prateek.Runtime.TickableFramework.Enums;
+    using Prateek.Runtime.TickableFramework.Interfaces;
     using UnityEngine;
 
-    public class InputDaemon : DaemonOverseer<InputDaemon, InputServant>, IDebugMenuNotebookOwner
+    public class InputDaemon
+        : DaemonOverseer<InputDaemon, InputServant>
+        , IDebugMenuNotebookOwner
+        , IPreUpdateTickable
     {
         #region Static and Constants
         public const float HOLD_THRESHOLD = 10f;
@@ -73,76 +74,14 @@ namespace Mayfair.Core.Code.Input
 
         public static InputRaycastHits InputRaycastHits
         {
-            get
-            {
-                return Instance.inputRaycastHits;
-            }
-        }
-        #endregion
-        
-        public override TickableSetup TickableSetup
-        {
-            get { return TickableSetup.UpdateBegin; }
-        }
-
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
-        {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
-            ProcessInput();
-        }
-        
-        #region Service
-        protected override void OnAwake()
-        {
-            layers = new List<InputLayer> { new UIInputLayer() };
-            layers.SortWithPriorities();
-
-            SetupRaycasts();
-
-            SetupDebugContent();
-        }
-
-        public static void RegisterLayer<T>(Func<InputLayer> createFunc)
-            where T : InputLayer
-        {
-            Instance.RegisterLayer(typeof(InputLayer), createFunc);
-        }
-
-        private void RegisterLayer(Type layerType, Func<InputLayer> createFunc)
-        {
-            if (layers.FindIndex((x) => { return x.GetType() == layerType; }) == Consts.INDEX_NONE)
-            {
-                layers.Add(createFunc());
-                layers.SortWithPriorities();
-            }
-        }
-
-        protected void Register(InputReceiver receiver)
-        {
-            Type layerType = receiver.LayerType;
-            RegisterLayer(layerType, receiver.GetNewLayerInstance);
-
-            List<InputReceiver> receivers = null;
-            if (!receiverLayers.TryGetValue(layerType, out receivers))
-            {
-                receivers = new List<InputReceiver>();
-                receiverLayers.Add(layerType, receivers);
-            }
-
-            if (receivers.Contains(receiver))
-            {
-                throw new Exception("Receiver already registerd");
-            }
-
-            receivers.Add(receiver);
+            get { return Instance.inputRaycastHits; }
         }
         #endregion
 
         #region Class Methods
         public void ProcessInput()
         {
-            bool inputGathered = GatherInput();
+            var inputGathered = GatherInput();
 
             inputRaycastHits.Reset();
             RefreshRaycast(InputRaycast.ScreenCenter);
@@ -208,7 +147,7 @@ namespace Mayfair.Core.Code.Input
 
         private bool GatherInput()
         {
-            InputServant servant = FirstAliveServant;
+            var servant = FirstAliveServant;
             if (servant == null)
             {
                 return false;
@@ -231,7 +170,7 @@ namespace Mayfair.Core.Code.Input
 
         private static bool IsTouchEnding(Touch[] cursors)
         {
-            foreach (Touch cursor in cursors)
+            foreach (var cursor in cursors)
             {
                 if (cursor.phase == TouchPhase.Ended || cursor.phase == TouchPhase.Canceled)
                 {
@@ -254,7 +193,7 @@ namespace Mayfair.Core.Code.Input
         protected void Unregister(InputReceiver receiver)
         {
             List<InputReceiver> receivers = null;
-            Type layerType = receiver.LayerType;
+            var                 layerType = receiver.LayerType;
             if (!receiverLayers.TryGetValue(layerType, out receivers))
             {
                 receivers = new List<InputReceiver>();
@@ -269,7 +208,7 @@ namespace Mayfair.Core.Code.Input
             List<InputReceiver> receivers = null;
             if (layer != null && receiverLayers.TryGetValue(layer.GetType(), out receivers))
             {
-                foreach (InputReceiver receiver in receivers)
+                foreach (var receiver in receivers)
                 {
                     receiver.ProcessInput(inputReport);
                 }
@@ -278,13 +217,14 @@ namespace Mayfair.Core.Code.Input
 
         public void SetupRaycasts()
         {
-            inputRaycasts = (InputRaycast[]) System.Enum.GetValues(typeof(InputRaycast));
+            inputRaycasts = (InputRaycast[]) Enum.GetValues(typeof(InputRaycast));
 
             layersNames.Clear();
+
             //First add all of them
-            for (int m = 0; m < 32; m++)
+            for (var m = 0; m < 32; m++)
             {
-                string layerName = LayerMask.LayerToName(m);
+                var layerName = LayerMask.LayerToName(m);
                 layersNames.Add(layerName);
             }
 
@@ -299,7 +239,7 @@ namespace Mayfair.Core.Code.Input
             }
 
             //Only keep the mask that are named
-            for (int m = 0; m < layersNames.Count; m++)
+            for (var m = 0; m < layersNames.Count; m++)
             {
                 if (layersNames[m] == string.Empty)
                 {
@@ -359,44 +299,45 @@ namespace Mayfair.Core.Code.Input
 
         public void RefreshRaycast()
         {
-            for (int r = 0; r < inputRaycasts.Length; r++)
+            for (var r = 0; r < inputRaycasts.Length; r++)
             {
-                InputRaycast inputRaycast = inputRaycasts[r];
+                var inputRaycast = inputRaycasts[r];
                 RefreshRaycast(inputRaycast);
             }
         }
 
         public void RefreshRaycast(InputRaycast inputRaycast)
         {
-            Camera camera = CameraUtilities.GetCamera();
+            var camera = CameraUtilities.GetCamera();
             if (camera == null)
             {
                 return;
             }
 
-            Vector2 screenPoint = Vector2.zero;
+            var screenPoint = Vector2.zero;
             if (!TryRaycastPosition(inputRaycast, out screenPoint))
             {
                 return;
             }
 
-            RaycastInfo raycastInput = inputRaycastHits[inputRaycast];
+            var raycastInput = inputRaycastHits[inputRaycast];
 
             //TODO: Camera
             raycastInput.Ray = camera.ScreenPointToRay(screenPoint);
-            int hitCount = Physics.RaycastNonAlloc(raycastInput.Ray, raycastHits, Mathf.Infinity, availableLayers);
+            var hitCount = Physics.RaycastNonAlloc(raycastInput.Ray, raycastHits, Mathf.Infinity, availableLayers);
             if (hitCount > 0)
             {
-                for (int h = 0; h < hitCount; h++)
+                for (var h = 0; h < hitCount; h++)
                 {
-                    RaycastHit newHit = raycastHits[h];
-                    int layer = newHit.collider.gameObject.layer;
+                    var newHit = raycastHits[h];
+                    var layer  = newHit.collider.gameObject.layer;
 
-                    RaycastHit oldHit = raycastInput[layer];
+                    var oldHit = raycastInput[layer];
                     if (oldHit.collider == null || newHit.distance < oldHit.distance)
                     {
                         oldHit = newHit;
                     }
+
                     raycastInput[layer] = oldHit;
                 }
             }
@@ -427,7 +368,7 @@ namespace Mayfair.Core.Code.Input
 
         private void SelectInputLayer(Enums.TouchType touchType)
         {
-            foreach (InputLayer layer in layers)
+            foreach (var layer in layers)
             {
                 if (!layer.IsActive)
                 {
@@ -438,9 +379,9 @@ namespace Mayfair.Core.Code.Input
             }
 
             activeLayer = null;
-            for (int l = layers.Count - 1; l >= 0; l--)
+            for (var l = layers.Count - 1; l >= 0; l--)
             {
-                InputLayer layer = layers[l];
+                var layer = layers[l];
                 if (layer.IsLocked && (!layer.NeedActiveReceiverToLock || CheckIfLayerHasActiveReceiver(layer)))
                 {
                     activeLayer = layer;
@@ -454,7 +395,7 @@ namespace Mayfair.Core.Code.Input
             List<InputReceiver> receivers = null;
             if (receiverLayers.TryGetValue(layer.GetType(), out receivers))
             {
-                foreach (InputReceiver receiver in receivers)
+                foreach (var receiver in receivers)
                 {
                     if (receiver.IsActive)
                     {
@@ -468,13 +409,30 @@ namespace Mayfair.Core.Code.Input
 
         private void SelectedActiveLayerBelow()
         {
-            int layerIndex = layers.FindIndex((x) => x == activeLayer) - 1;
+            var layerIndex = layers.FindIndex(x => x == activeLayer) - 1;
             if (layerIndex <= Consts.INDEX_NONE)
             {
                 return;
             }
 
             activeLayer = layers[layerIndex];
+        }
+
+        [Conditional("PRATEEK_DEBUG")]
+        private void SetupDebugContent()
+        {
+            DebugMenuNotebook debugNotebook = new InputDebugMenuNotebook(this, "INPT", "Input Service");
+
+            var main = new EmptyMenuPage("MAIN");
+            debugNotebook.AddPagesWithParent(main, new InputServiceMenuPage(this, "Input debug"));
+            debugNotebook.Register();
+        }
+        #endregion
+
+        #region IPreUpdateTickable Members
+        public void PreUpdate()
+        {
+            ProcessInput();
         }
         #endregion
 
@@ -537,16 +495,51 @@ namespace Mayfair.Core.Code.Input
         }
         #endregion
 
-        #region Debug
-        [Conditional("PRATEEK_DEBUG")]
-        private void SetupDebugContent()
+        #region Service
+        protected override void OnAwake()
         {
-            DebugMenuNotebook debugNotebook = new InputDebugMenuNotebook(this, "INPT", "Input Service");
+            layers = new List<InputLayer> {new UIInputLayer()};
+            layers.SortWithPriorities();
 
-            EmptyMenuPage main = new EmptyMenuPage("MAIN");
-            debugNotebook.AddPagesWithParent(main, new InputServiceMenuPage(this, "Input debug"));
-            debugNotebook.Register();
+            SetupRaycasts();
+
+            SetupDebugContent();
         }
-        #endregion Debug
+
+        public static void RegisterLayer<T>(Func<InputLayer> createFunc)
+            where T : InputLayer
+        {
+            Instance.RegisterLayer(typeof(InputLayer), createFunc);
+        }
+
+        private void RegisterLayer(Type layerType, Func<InputLayer> createFunc)
+        {
+            if (layers.FindIndex(x => { return x.GetType() == layerType; }) == Consts.INDEX_NONE)
+            {
+                layers.Add(createFunc());
+                layers.SortWithPriorities();
+            }
+        }
+
+        protected void Register(InputReceiver receiver)
+        {
+            var layerType = receiver.LayerType;
+            RegisterLayer(layerType, receiver.GetNewLayerInstance);
+
+            List<InputReceiver> receivers = null;
+            if (!receiverLayers.TryGetValue(layerType, out receivers))
+            {
+                receivers = new List<InputReceiver>();
+                receiverLayers.Add(layerType, receivers);
+            }
+
+            if (receivers.Contains(receiver))
+            {
+                throw new Exception("Receiver already registerd");
+            }
+
+            receivers.Add(receiver);
+        }
+        #endregion
     }
 }

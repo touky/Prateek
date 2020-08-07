@@ -7,9 +7,12 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.VisualAsset.Messages;
     using Mayfair.Core.Code.VisualAsset.Providers;
     using Prateek.A_TODO.Runtime.AppContentFramework.Daemons;
-    using Prateek.Runtime.TickableFramework.Enums;
 
-    public sealed class VisualResourceDaemon : ContentAccessDaemon<VisualResourceDaemon, VisualResourceServant>
+    using Prateek.Runtime.TickableFramework.Interfaces;
+
+    public sealed class VisualResourceDaemon
+        : ContentAccessDaemon<VisualResourceDaemon, VisualResourceServant>
+        , IPreUpdateTickable
     {
         #region Fields
         private DebugMenuNotebook debugNotebook;
@@ -22,16 +25,9 @@ namespace Mayfair.Core.Code.VisualAsset
             get { return ServiceProviderUsageRuleType.UseAllValid; }
         }
         #endregion
-        
-        public override TickableSetup TickableSetup
-        {
-            get { return TickableSetup.UpdateBegin; }
-        }
 
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        public void PreUpdate()
         {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
             PerformProviderAction(ServiceProviderUsageRule,
                                   servant =>
                                   {

@@ -7,10 +7,13 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.Utils;
     using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
-    using Prateek.Runtime.TickableFramework.Enums;
+
+    using Prateek.Runtime.TickableFramework.Interfaces;
     using UnityEngine;
 
-    public class GameInitServant : LoadingProcessServant
+    public class GameInitServant
+        : LoadingProcessServant
+        , IPreUpdateTickable
     {
         #region Settings
         [SerializeField]
@@ -29,18 +32,11 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
         {
             get { return Consts.FIRST_ITEM; }
         }
-
-        public override TickableSetup TickableSetup
-        {
-            get { return TickableSetup.UpdateBegin; }
-        }
         #endregion
 
         #region Class Methods
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        public void PreUpdate()
         {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
             if (IsAlive && stateMachine != null)
             {
                 stateMachine.Step();

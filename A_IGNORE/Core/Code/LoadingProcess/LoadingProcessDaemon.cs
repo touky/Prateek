@@ -10,9 +10,13 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.Utils;
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
-    using Prateek.Runtime.TickableFramework.Enums;
 
-    public sealed class LoadingProcessDaemon : ReceiverDaemonOverseer<LoadingProcessDaemon, LoadingProcessServant>, IDebugMenuNotebookOwner
+    using Prateek.Runtime.TickableFramework.Interfaces;
+
+    public sealed class LoadingProcessDaemon
+        : ReceiverDaemonOverseer<LoadingProcessDaemon, LoadingProcessServant>
+        , IDebugMenuNotebookOwner
+        , IPreUpdateTickable
     {
         #region Fields
         private LoadingProcessStatus loadingStatus = LoadingProcessStatus.Idle;
@@ -21,33 +25,18 @@ namespace Mayfair.Core.Code.LoadingProcess
         private List<LoadingTaskTracker> trackers = new List<LoadingTaskTracker>();
         #endregion
 
-        public override TickableSetup TickableSetup
+        protected override void OnAwake()
         {
-            get { return TickableSetup.UpdateBegin; }
-        }
-
-        public override void InitializeTickable()
-        {
-            base.InitializeTickable();
-
             SetupDebugContent();
         }
 
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        public void PreUpdate()
         {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
             if (!TryUpdatingProvider())
             {
                 ChangeStatus(LoadingProcessStatus.Idle);
             }
         }
-        
-        #region Service
-        #region Init
-        protected override void OnAwake() { }
-        #endregion
-        #endregion
 
         #region Messaging
         public override void DefineCommandReceiverActions()

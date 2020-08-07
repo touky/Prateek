@@ -10,9 +10,12 @@ namespace Mayfair.Core.Code.SaveGame
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
     using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
-    using Prateek.Runtime.TickableFramework.Enums;
 
-    public class SaveDaemon : ReceiverDaemonOverseer<SaveDaemon, SaveServant>
+    using Prateek.Runtime.TickableFramework.Interfaces;
+
+    public class SaveDaemon
+        : ReceiverDaemonOverseer<SaveDaemon, SaveServant>
+        , IPreUpdateTickable
     {
         #region Fields
         private StandardStateMachine<SaveState> stateMachine;
@@ -20,16 +23,8 @@ namespace Mayfair.Core.Code.SaveGame
         private List<LoadDataRequest> loadingRequests = new List<LoadDataRequest>();
         #endregion
 
-        
-        public override TickableSetup TickableSetup
+        public void PreUpdate()
         {
-            get { return TickableSetup.UpdateBegin; }
-        }
-
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
-        {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
             this.stateMachine.Step();
         }
 

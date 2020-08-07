@@ -4,7 +4,7 @@ namespace Mayfair.Core.Code.DebugMenu
     using Mayfair.Core.Code.DebugMenu.Pages;
     using Prateek.Runtime.DaemonFramework.Servants;
 
-    public abstract class DebugMenuServant : ServantTickable<DebugMenuDaemon, DebugMenuServant>
+    public abstract class DebugMenuServant : Servant<DebugMenuDaemon, DebugMenuServant>
     {
         #region Properties
         public override int Priority

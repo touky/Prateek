@@ -4,7 +4,7 @@ namespace Mayfair.Core.Code.BaseBehaviour
     using Prateek.Runtime.DaemonFramework.Servants;
 
     public sealed class AutoDisableServant
-        : ServantTickable<AutoDisableDaemon, AutoDisableServant>
+        : Servant<AutoDisableDaemon, AutoDisableServant>
     {
         #region Properties
         public override int Priority

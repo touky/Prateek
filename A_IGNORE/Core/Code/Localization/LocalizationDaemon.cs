@@ -6,20 +6,12 @@ namespace Mayfair.Core.Code.Localization
     using System.Collections;
     using System.Collections.Generic;
     using Prateek.Runtime.DaemonFramework;
-    using Prateek.Runtime.TickableFramework.Enums;
+
     using UnityEngine;
 
     public class LocalizationDaemon : DaemonOverseer<LocalizationDaemon, LocalizationServant>
     {
         #region Methods
-        
-        public override TickableSetup TickableSetup
-        {
-            get
-            {
-                return TickableSetup.Nothing;
-            }
-        }
 
         public static bool SetLanguage(SystemLanguage language, bool useMinimalSet)
         {

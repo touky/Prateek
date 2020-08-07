@@ -8,7 +8,7 @@ namespace Mayfair.Core.Code.Localization
     using Prateek.Runtime.DaemonFramework.Servants;
     using UnityEngine;
 
-    public class LocalizationServant : ServantTickable<LocalizationDaemon, LocalizationServant>
+    public class LocalizationServant : Servant<LocalizationDaemon, LocalizationServant>
     {
         #region Settings
         [SerializeField]

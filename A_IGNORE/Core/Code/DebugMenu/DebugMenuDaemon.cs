@@ -6,7 +6,7 @@ namespace Mayfair.Core.Code.DebugMenu
     using Mayfair.Core.Code.DebugMenu.Content;
     using Mayfair.Core.Code.DebugMenu.Pages;
     using Prateek.Runtime.DaemonFramework;
-    using Prateek.Runtime.TickableFramework.Enums;
+    using Prateek.Runtime.TickableFramework.Interfaces;
 
     //todo using Mayfair.Core.Code.Input;
     //todo using Mayfair.Core.Code.Input.InputLayers;
@@ -18,7 +18,7 @@ namespace Mayfair.Core.Code.DebugMenu
 
 #endif
 
-    public sealed class DebugMenuDaemon : DaemonOverseer<DebugMenuDaemon, DebugMenuServant>
+    public sealed class DebugMenuDaemon : DaemonOverseer<DebugMenuDaemon, DebugMenuServant>, IPostLateUpdateTickable
     {
         #region Static and Constants
         private static readonly float[] MAGIC_CONTENT_SIZE = {.5f, 0.5f};
@@ -91,16 +91,9 @@ namespace Mayfair.Core.Code.DebugMenu
             set { Set(ref rightSideMenu, PREFS_SCREEN_SIDE, RightSideMenu, value); }
         }
         #endregion
-        
-        public override TickableSetup TickableSetup
-        {
-            get { return TickableSetup.UpdateBegin; }
-        }
 
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        public void PostLateUpdate()
         {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
             eventsThisFrame.Clear();
             eventCount = 0;
 

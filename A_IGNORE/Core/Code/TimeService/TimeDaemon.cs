@@ -10,7 +10,7 @@ namespace Mayfair.Core.Code.TimeService
     using Prateek.A_TODO.Runtime.CommandFramework;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.DaemonFramework;
-    using Prateek.Runtime.TickableFramework.Enums;
+
     using Service;
     using ServiceProviders;
     using UnityEngine;
@@ -23,14 +23,6 @@ namespace Mayfair.Core.Code.TimeService
 
         private GameTime gameTime;
         private List<WeakReference<ITimeTracker<ICountdownTimer>>> activeTimers;
-
-        public override TickableSetup TickableSetup
-        {
-            get
-            {
-                return TickableSetup.Nothing;
-            }
-        }
 
         protected override void OnServantRegistered(BaseTimeServant servant)
         {

@@ -10,7 +10,7 @@ namespace Mayfair.Core.Code.Input.Providers
     /// TODO: Fill the Touch servant with logic
     /// TODO: Make service providers for Mouse (Mouse-to-touch feature should a servant
     /// </summary>
-    public abstract class InputServant : ServantTickable<InputDaemon, InputServant>
+    public abstract class InputServant : Servant<InputDaemon, InputServant>
     {
         public abstract void GatherInput(List<Touch> touches);
     }

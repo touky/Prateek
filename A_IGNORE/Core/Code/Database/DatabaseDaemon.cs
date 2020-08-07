@@ -15,10 +15,13 @@
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.KeynameFramework.Enums;
-    using Prateek.Runtime.TickableFramework.Enums;
+    using Prateek.Runtime.TickableFramework.Interfaces;
     using DatabaseContentByFilterRequest = Mayfair.Core.Code.Database.Messages.DatabaseContentMatchingWithFilterRequest<Messages.DatabaseContentMatchingWithFilterResponse>;
 
-    public sealed class DatabaseDaemon : ContentAccessDaemon<DatabaseDaemon, DatabaseServant>, IDebugMenuNotebookOwner
+    public sealed class DatabaseDaemon
+        : ContentAccessDaemon<DatabaseDaemon, DatabaseServant>
+        , IDebugMenuNotebookOwner
+        , IPreUpdateTickable
     {
         #region DatabaseRebuildStatus enum
         private enum DatabaseRebuildStatus
@@ -59,39 +62,16 @@
         {
             get { return ServiceProviderUsageRuleType.UseFirstValid; }
         }
-
-        public override TickableSetup TickableSetup
-        {
-            get { return TickableSetup.UpdateBegin; }
-        }
         #endregion
 
         #region Register/Unregister
-        #region Service
-        protected override void OnAwake() { }
-        #endregion
+        protected override void OnAwake()
+        {
+            SetupDebugContent();
+        }
         #endregion
 
         #region Class Methods
-        public override void InitializeTickable()
-        {
-            base.InitializeTickable();
-
-            SetupDebugContent();
-        }
-
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
-        {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
-            RefreshPendingResources();
-
-            if (rebuildStatus > DatabaseRebuildStatus.Ready)
-            {
-                RefreshContentRebuild();
-            }
-        }
-
         private void OnIdentifiersReceived(DatabaseIdentifierResponse response)
         {
             foreach (var identifier in response.Identifiers)
@@ -395,6 +375,29 @@
             var main = new EmptyMenuPage("MAIN");
             debugNotebook.AddPagesWithParent(main, new DatabaseEntryMenuPage(this, "Database entries"));
             debugNotebook.Register();
+        }
+
+        #region Messaging
+        public override void DefineCommandReceiverActions()
+        {
+            base.DefineCommandReceiverActions();
+
+            CommandReceiver.SetActionFor<DatabaseIdentifierResponse>(OnIdentifiersReceived);
+            CommandReceiver.SetActionFor<DatabaseContentByKeynameRequest>(OnRequestContentById);
+            CommandReceiver.SetActionFor<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
+        }
+        #endregion
+        #endregion
+
+        #region IPreUpdateTickable Members
+        public void PreUpdate()
+        {
+            RefreshPendingResources();
+
+            if (rebuildStatus > DatabaseRebuildStatus.Ready)
+            {
+                RefreshContentRebuild();
+            }
         }
         #endregion
 
@@ -962,17 +965,6 @@
                 }
             }
             #endregion
-        }
-        #endregion
-
-        #region Messaging
-        public override void DefineCommandReceiverActions()
-        {
-            base.DefineCommandReceiverActions();
-
-            CommandReceiver.SetActionFor<DatabaseIdentifierResponse>(OnIdentifiersReceived);
-            CommandReceiver.SetActionFor<DatabaseContentByKeynameRequest>(OnRequestContentById);
-            CommandReceiver.SetActionFor<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
         }
         #endregion
     }

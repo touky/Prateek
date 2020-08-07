@@ -24,9 +24,9 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Daemons
         #endregion
 
         #region Class Methods
-        public override void InitializeTickable()
+        protected override void OnAwake()
         {
-            base.InitializeTickable();
+            base.OnAwake();
 
             RegisterToResourceService();
         }

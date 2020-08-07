@@ -2,10 +2,13 @@ namespace Mayfair.Core.Code.BaseBehaviour
 {
     using System.Collections.Generic;
     using Prateek.Runtime.DaemonFramework;
-    using Prateek.Runtime.TickableFramework.Enums;
+
+    using Prateek.Runtime.TickableFramework.Interfaces;
     using UnityEngine;
 
-    public sealed class AutoDisableDaemon : DaemonOverseer<AutoDisableDaemon, AutoDisableServant>
+    public sealed class AutoDisableDaemon
+        : DaemonOverseer<AutoDisableDaemon, AutoDisableServant>
+        , IPostLateUpdateTickable
     {
         #region Static and Constants
         //10 frames alives
@@ -16,22 +19,13 @@ namespace Mayfair.Core.Code.BaseBehaviour
         private List<DisablerContainer> disablerContainers = new List<DisablerContainer>();
         #endregion
 
-        #region Properties
-        public override TickableSetup TickableSetup
-        {
-            get { return TickableSetup.UpdateEndLate; }
-        }
-        #endregion
-
         #region Register/Unregister
         protected override void OnAwake() { }
         #endregion
 
         #region Class Methods
-        public override void TickLate(TickableFrame tickableFrame, float seconds)
+        public void PostLateUpdate()
         {
-            base.TickLate(tickableFrame, seconds);
-
             RefreshAwaken();
         }
 

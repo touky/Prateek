@@ -9,7 +9,7 @@ namespace Mayfair.Core.Code.Statistics
     using Prateek.Runtime.DaemonFramework.Servants;
     using Prateek.Runtime.KeynameFramework.Interfaces;
 
-    public abstract class StatisticsServant : ServantTickable<StatisticsDaemon, StatisticsServant>
+    public abstract class StatisticsServant : Servant<StatisticsDaemon, StatisticsServant>
     {
         #region StatisticFlushType enum
         [Flags]

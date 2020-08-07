@@ -1,11 +1,11 @@
 namespace Prateek.Runtime.DaemonFramework.Servants
 {
-    using System.Security.Cryptography;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework.Enums;
     using Prateek.Runtime.DaemonFramework.Interfaces;
 
     public abstract class Servant<TDaemon, TServant>
-        : IServant, IServantInternal
+        : IServant, IServantInternal, IPriority
         where TDaemon : DaemonOverseer<TDaemon, TServant>
         where TServant : class, IServant
     {
@@ -42,7 +42,7 @@ namespace Prateek.Runtime.DaemonFramework.Servants
 
         public virtual int Priority
         {
-            get { return 0; }
+            get { return Overseer.Priority + 1; }
         }
 
         public virtual void Startup()

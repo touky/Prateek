@@ -1,36 +1,30 @@
 ﻿namespace Prateek.Runtime.DaemonFramework
 {
+    using System;
     using Prateek.Runtime.Core.Singleton;
-    using Prateek.Runtime.TickableFramework.Enums;
+    using Prateek.Runtime.TickableFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
     public abstract class Daemon<TDaemon>
-        : SingletonBehaviour<TDaemon>, ITickable
+        : SingletonBehaviour<TDaemon>
+        , ITickable
         where TDaemon : Daemon<TDaemon>
     {
-        #region ITickable Members
+        #region Properties
         public virtual int Priority
         {
             get { return 0; }
         }
-
-        public abstract TickableSetup TickableSetup { get; }
-
-        public virtual void InitializeTickable() { }
-
-        public virtual void TickFixed(TickableFrame tickableFrame, float seconds) { }
-
-        public virtual void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds) { }
-
-        public virtual void TickLate(TickableFrame tickableFrame, float seconds) { }
-
-        public virtual void ApplicationIsQuitting() { }
-
-        public virtual void ApplicationChangeFocus(bool appStatus) { }
-
-        public virtual void ApplicationChangePause(bool appStatus) { }
-
-        public virtual void DrawGUI() { }
         #endregion
+
+        protected override void OnAwake()
+        {
+            this.RegisterTickable();
+        }
+
+        protected void OnDestroy()
+        {
+            this.UnregisterTickable();
+        }
     }
 }

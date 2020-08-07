@@ -7,11 +7,13 @@
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
-    using Prateek.Runtime.TickableFramework.Enums;
+
+    using Prateek.Runtime.TickableFramework.Interfaces;
 
     public sealed class ContentRegistryDaemon
         : ReceiverDaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
         , IEnumStepMachineOwner<ServiceState>
+        , IPreUpdateTickable
     {
         #region Fields
         private EnumStepMachine<ServiceState, ServiceStateComparer> stateMachine;
@@ -19,11 +21,6 @@
         //todo private HashSet<RequestAccessToContent> resourceUpdateCallbacks = new HashSet<RequestAccessToContent>();
         //todo private HashSet<RequestAccessToContent> pendingCallbacks = new HashSet<RequestAccessToContent>();
         #endregion
-        public override TickableSetup TickableSetup
-        {
-            get { return TickableSetup.UpdateBegin; }
-        }
-
 
         protected override void Awake()
         {
@@ -32,10 +29,8 @@
             this.stateMachine = new EnumStepMachine<ServiceState, ServiceStateComparer>(this);
         }
 
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        public void PreUpdate()
         {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
             this.stateMachine.Step();
         }
 
@@ -124,6 +119,9 @@
         //todo     }
         //todo }
 
-        protected override void OnAwake() { }
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+        }
     }
 }

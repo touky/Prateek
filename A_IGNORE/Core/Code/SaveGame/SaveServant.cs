@@ -4,7 +4,7 @@ namespace Mayfair.Core.Code.SaveGame
     using Mayfair.Core.Code.Service;
     using Prateek.Runtime.DaemonFramework.Servants;
 
-    public abstract class SaveServant : ServantTickable<SaveDaemon, SaveServant>
+    public abstract class SaveServant : Servant<SaveDaemon, SaveServant>
     {
         #region Class Methods
         public abstract bool TrySave(IReadOnlyList<SaveDataIdentification> identifications);

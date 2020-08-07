@@ -4,7 +4,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Servants
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.DaemonFramework.Servants;
 
-    public abstract class CommandServant : ServantTickable<CommandDaemon, CommandServant>
+    public abstract class CommandServant : Servant<CommandDaemon, CommandServant>
     {
         #region Fields
         protected List<Command> commandReceived = new List<Command>();

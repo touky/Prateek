@@ -6,7 +6,7 @@ namespace Mayfair.Core.Code.UpdateService
     using Mayfair.Core.Code.LoadingProcess;
     using Messages;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
-    using Prateek.Runtime.TickableFramework.Enums;
+
     using Service;
     using UnityEngine;
     using Utils.Debug;
@@ -20,14 +20,6 @@ namespace Mayfair.Core.Code.UpdateService
         private Dictionary<UpdateFrequency, List<HashSet<IUpdatable>>> registeredUpdatables;
         private Dictionary<UpdateFrequency, int> updateFrequencyIndex;
         private Dictionary<IUpdatable, UpdateFrequency> registeredUpdatablesToFrequency;
-        
-        public override TickableSetup TickableSetup
-        {
-            get
-            {
-                return TickableSetup.Nothing;
-            }
-        }
 
         protected override void OnServantRegistered(UpdateProvider servant)
         {

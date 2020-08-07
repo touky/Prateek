@@ -16,10 +16,13 @@ namespace Mayfair.Core.Code.GameScene
     using Prateek.A_TODO.Runtime.AppContentFramework.Loader.Interfaces;
     using Prateek.A_TODO.Runtime.AppContentUnityIntegration;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.Runtime.TickableFramework.Enums;
+
+    using Prateek.Runtime.TickableFramework.Interfaces;
     using UnityEngine.SceneManagement;
 
-    public sealed class GameSceneDaemon : ContentAccessDaemon<GameSceneDaemon, GameSceneServant>
+    public sealed class GameSceneDaemon
+        : ContentAccessDaemon<GameSceneDaemon, GameSceneServant>
+        , IPreUpdateTickable
     {
         #region LightingSceneType enum
         public enum LightingSceneType
@@ -63,11 +66,6 @@ namespace Mayfair.Core.Code.GameScene
         {
             get { return ServiceProviderUsageRuleType.UseFirstValid; }
         }
-
-        public override TickableSetup TickableSetup
-        {
-            get { return TickableSetup.UpdateBegin; }
-        }
         #endregion
 
         #region Register/Unregister
@@ -77,10 +75,8 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Class Methods
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        public void PreUpdate()
         {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
             UpdateLoadingTask();
         }
 

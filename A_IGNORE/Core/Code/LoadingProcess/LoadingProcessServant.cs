@@ -10,7 +10,8 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Prateek.Runtime.DaemonFramework.Servants;
     using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
-    public abstract class LoadingProcessServant : ServantTickable<LoadingProcessDaemon, LoadingProcessServant>
+    public abstract class LoadingProcessServant
+        : TickableServant<LoadingProcessDaemon, LoadingProcessServant>
     {
         #region Fields
         private LoadingProcessStatus processStatus;

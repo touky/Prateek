@@ -6,10 +6,9 @@
     using Prateek.Runtime.DaemonFramework.Enumerators;
     using Prateek.Runtime.DaemonFramework.Enums;
     using Prateek.Runtime.DaemonFramework.Interfaces;
-    using Prateek.Runtime.TickableFramework.Interfaces;
 
     public abstract class DaemonOverseer<TDaemon, TServant>
-        : Daemon<TDaemon>, IDaemonOverseer<TServant>, ITickable
+        : Daemon<TDaemon>, IDaemonOverseer<TServant>
         where TDaemon : DaemonOverseer<TDaemon, TServant>
         where TServant : class, IServant
     {

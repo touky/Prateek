@@ -7,23 +7,21 @@ namespace Mayfair.Core.Code.Statistics
     using Mayfair.Core.Code.Utils.Debug;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
     using Prateek.Runtime.KeynameFramework;
-    using Prateek.Runtime.TickableFramework.Enums;
 
-    public sealed class StatisticsDaemon : ReceiverDaemonOverseer<StatisticsDaemon, StatisticsServant>, IDebugMenuNotebookOwner
+    using Prateek.Runtime.TickableFramework.Interfaces;
+
+    public sealed class StatisticsDaemon
+        : ReceiverDaemonOverseer<StatisticsDaemon, StatisticsServant>
+        , IDebugMenuNotebookOwner
+        , IPreUpdateTickable
     {
         #region Fields
         //private Dictionary<KeywordHolder, HashSet<StatisticsServiceProvider>> trackedProviderTags = new Dictionary<KeywordHolder, HashSet<StatisticsServiceProvider>>();
         #endregion
             
-        public override TickableSetup TickableSetup
-        {
-            get { return TickableSetup.UpdateBegin; }
-        }
 
-        public override void Tick(TickableFrame tickableFrame, float seconds, float unscaledSeconds)
+        public void PreUpdate()
         {
-            base.Tick(tickableFrame, seconds, unscaledSeconds);
-
             foreach (var servant in AllAliveServants)
             {
                 if (!servant.RelevantTagsAreDirty)
