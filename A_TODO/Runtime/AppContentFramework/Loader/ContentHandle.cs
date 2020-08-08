@@ -5,7 +5,9 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Loader
     using Prateek.A_TODO.Runtime.AppContentFramework.Loader.Interfaces;
 
     [DebuggerDisplay("{typeof(TResourceType).Name}, {loader.content.ToString()}, Location: {loader.location}")]
-    public abstract class ContentHandle<TContentType, TContentHandle> : IInstanceRef, IContentHandle
+    public abstract class ContentHandle<TContentType, TContentHandle>
+        : IInstanceRef
+        , IContentHandle
         where TContentHandle : ContentHandle<TContentType, TContentHandle>
     {
         #region Fields

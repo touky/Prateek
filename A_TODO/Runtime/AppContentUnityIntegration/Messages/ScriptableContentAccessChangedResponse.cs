@@ -8,13 +8,13 @@ namespace Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages
     ///     Use this class as base to implement your own callback for the ResourcesHaveChanged notice
     /// </summary>
     /// <typeparam name="TResourceType">The type of the resource</typeparam>
-    public abstract class MonoBehaviourResourcesHaveChanged<TResourceType> : ResourcesHaveChangedResponse<MonoBehaviourContentHandle<TResourceType>, TResourceType>
-        where TResourceType : MonoBehaviour
+    public abstract class ScriptableContentAccessChangedResponse<TResourceType> : ContentAccessChangedResponse<ScriptableObjectContentHandle<TResourceType>, TResourceType>
+        where TResourceType : ScriptableObject
     {
         #region Class Methods
-        protected override MonoBehaviourContentHandle<TResourceType> GetResourceRef(ContentLoader loader)
+        protected override ScriptableObjectContentHandle<TResourceType> GetResourceRef(ContentLoader loader)
         {
-            return new MonoBehaviourContentHandle<TResourceType>(loader);
+            return new ScriptableObjectContentHandle<TResourceType>(loader);
         }
         #endregion
     }

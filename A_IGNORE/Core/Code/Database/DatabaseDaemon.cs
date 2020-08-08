@@ -119,7 +119,7 @@
                 return;
             }
 
-            var response = request.GetResponse();
+            var response = request.GetResponse<DatabaseContentByKeynameResponse>();
 
             for (int i = 0, n = request.RequestedKeynames.Count; i < n; i++)
             {
@@ -156,7 +156,7 @@
             {
                 identifierStatus = IdentifierRequestStatus.WaitingForIdentifiers;
                 var notice =
-                    Command.Create<DatabaseIdentifierRequest<DatabaseIdentifierResponse>>();
+                    CommandHelper.Create<DatabaseIdentifierRequest<DatabaseIdentifierResponse>>();
 
                 CommandReceiver.Send(notice);
             }
@@ -177,7 +177,7 @@
                 return;
             }
 
-            var response = request.GetResponse();
+            var response = request.GetResponse<DatabaseContentByKeynameResponse>();
 
             if (request.Operator == FilterLogicalOperators.AND)
             {

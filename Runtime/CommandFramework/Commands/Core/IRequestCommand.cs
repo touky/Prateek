@@ -5,6 +5,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
     public interface IRequestCommand
     {
         ICommandEmitter Emitter { get; }
-        ResponseCommand GetResponse(bool requestFailed = false);
+        TResponse GetResponse<TResponse>(bool requestFailed = false)
+            where TResponse : ResponseCommand;
     }
 }

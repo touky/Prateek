@@ -47,7 +47,7 @@ namespace Mayfair.Core.Code.TimeService
 
         private void ChangeTimeReference(DateTime newReferenceTime)
         {
-            ReferenceTimeChanged notice = Command.Create<ReferenceTimeChanged>();
+            ReferenceTimeChanged notice = CommandHelper.Create<ReferenceTimeChanged>();
             notice.Init(gameTime.CurrentTime, newReferenceTime);
 
             gameTime.CacheTimeReference(newReferenceTime);

@@ -16,7 +16,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Daemons
 
         #region Class Methods
         //todo public abstract RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter);
-        public abstract void OnResourceChanged(TDaemon service, ResourcesHaveChangedResponse notice);
+        public abstract void OnResourceChanged(TDaemon service, ContentAccessChangedResponse notice);
         #endregion
     }
 }

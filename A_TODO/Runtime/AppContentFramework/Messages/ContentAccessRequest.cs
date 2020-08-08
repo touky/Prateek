@@ -5,15 +5,14 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
-    public abstract class RequestAccessToContent<TResponse, TIdentification>
-        : RequestCommand<TResponse, TIdentification>
+    public abstract class ContentAccessRequest
+        : RequestCommand
         , IHierarchicalTreeSearch
-        where TResponse : ResponseCommand, new()
-        where TIdentification : Command
     {
         #region Fields
         private HierarchicalTreeSettingsData settings = null;
         private string[] contentPaths;
+        internal ContentAccessChangedResponse.Storage storage = null;
         #endregion
 
         #region Properties
@@ -25,6 +24,11 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Messages
         {
             this.contentPaths = contentPaths;
             this.settings = settings;
+        }
+
+        protected override bool ValidateResponse()
+        {
+            return holder.Validate<ContentAccessChangedResponse>();
         }
         #endregion
 

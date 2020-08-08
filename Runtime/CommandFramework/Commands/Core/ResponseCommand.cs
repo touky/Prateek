@@ -34,7 +34,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
         #endregion
 
         #region Class Methods
-        public virtual void Init(IRequestCommand request, bool requestFailed = false)
+        public virtual void Init(IRequestCommand request, bool requestFailed)
         {
             recipient = request.Emitter;
             this.requestFailed = requestFailed;

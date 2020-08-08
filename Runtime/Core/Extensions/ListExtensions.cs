@@ -41,6 +41,33 @@ namespace Prateek.Runtime.Core.Extensions
     {
         #region Class Methods
         ///---------------------------------------------------------------------
+        public static void SafeClear<T>(this List<T> list)
+        {
+            if (list == null)
+            {
+                return;
+            }
+
+            list.Clear();
+        }
+
+        ///---------------------------------------------------------------------
+        public static void SafeAddRange<T>(this List<T> list, ref List<T> other)
+        {
+            if (list == null)
+            {
+                return;
+            }
+
+            if (other == null)
+            {
+                other = new List<T>();
+            }
+
+            other.AddRange(list);
+        }
+
+        ///---------------------------------------------------------------------
         public static T Last<T>(this List<T> list)
         {
             if (list.Count > 0)

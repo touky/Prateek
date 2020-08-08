@@ -34,7 +34,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Daemons
         #region Messaging
         public override void DefineCommandReceiverActions()
         {
-            CommandReceiver.SetActionFor<ResourcesHaveChangedResponse>(OnResourceUpdateCallback);
+            CommandReceiver.SetActionFor<ContentAccessChangedResponse>(OnResourceUpdateCallback);
         }
         #endregion
 
@@ -47,7 +47,7 @@ namespace Prateek.A_TODO.Runtime.AppContentFramework.Daemons
             //todo                       });
         }
 
-        private void OnResourceUpdateCallback(ResourcesHaveChangedResponse notice)
+        private void OnResourceUpdateCallback(ContentAccessChangedResponse notice)
         {
             PerformProviderAction(ServiceProviderUsageRule,
                                   servant =>

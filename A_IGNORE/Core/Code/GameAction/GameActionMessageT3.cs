@@ -1,6 +1,7 @@
 namespace Mayfair.Core.Code.GameAction
 {
     using Prateek.A_TODO.Runtime.CommandFramework;
+    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.KeynameFramework.Interfaces;
@@ -22,14 +23,14 @@ namespace Mayfair.Core.Code.GameAction
         #region Class Methods
         public static void Broadcast(ICommandEmitter transmitter, float targetValue = 1)
         {
-            GameActionCommand<T0, T1, T2> command = Create<GameActionCommand<T0, T1, T2>>();
+            GameActionCommand<T0, T1, T2> command = CommandHelper.Create<GameActionCommand<T0, T1, T2>>();
             command.targetValue = targetValue;
             CommandDaemon.DefaultEmitter.Send(command);
         }
 
         public static void Broadcast(ICommandEmitter transmitter, Keyname uniqueId1, float targetValue = 1)
         {
-            GameActionCommand<T0, T1, T2> command = Create<GameActionCommand<T0, T1, T2>>();
+            GameActionCommand<T0, T1, T2> command = CommandHelper.Create<GameActionCommand<T0, T1, T2>>();
             command.targetValue = targetValue;
             CommandDaemon.DefaultEmitter.Send(command);
         }

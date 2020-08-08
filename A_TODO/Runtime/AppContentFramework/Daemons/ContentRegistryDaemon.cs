@@ -1,127 +1,199 @@
 ﻿namespace Prateek.A_TODO.Runtime.AppContentFramework.Daemons
 {
     using System.Collections.Generic;
-    using Prateek.A_TODO.Runtime.AppContentFramework.Enums;
     using Prateek.A_TODO.Runtime.AppContentFramework.Loader;
     using Prateek.A_TODO.Runtime.AppContentFramework.Messages;
     using Prateek.A_TODO.Runtime.CommandFramework.Tools;
+    using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.HierarchicalTree;
+    using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
     using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
-
+    using Prateek.Runtime.StateMachineFramework.Interfaces;
     using Prateek.Runtime.TickableFramework.Interfaces;
+    using UnityEngine;
 
     public sealed class ContentRegistryDaemon
         : ReceiverDaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
-        , IEnumStepMachineOwner<ServiceState>
+        , IEnumStepMachineOwner<ContentRegistryDaemon.State>
         , IPreUpdateTickable
     {
-        #region Fields
-        private EnumStepMachine<ServiceState, ServiceStateComparer> stateMachine;
-        private HierarchicalTree<ContentLoader> hierarchicalTree = new HierarchicalTree<ContentLoader>();
-        //todo private HashSet<RequestAccessToContent> resourceUpdateCallbacks = new HashSet<RequestAccessToContent>();
-        //todo private HashSet<RequestAccessToContent> pendingCallbacks = new HashSet<RequestAccessToContent>();
+        #region State enum
+        public enum State
+        {
+            Startup,
+            Idle,
+            WaitForTimeout,
+            SendAccessResponses
+        }
         #endregion
 
+        #region Trigger enum
+        private enum Trigger
+        {
+            NextStep
+        }
+        #endregion
+
+        #region Static and Constants
+        private const float TIMEOUT = 1;
+        #endregion
+
+        #region Fields
+        private StateMachine stateMachine;
+        private HierarchicalTree<ContentLoader> hierarchicalTree = new HierarchicalTree<ContentLoader>();
+
+        private HashSet<ContentAccessRequest> contentAccessRequests = new HashSet<ContentAccessRequest>();
+
+        private bool requestReceived = false;
+        private float timeOut = Const.TIMEOUT_RESET;
+        #endregion
+
+        #region Unity Methods
         protected override void Awake()
         {
             base.Awake();
 
-            this.stateMachine = new EnumStepMachine<ServiceState, ServiceStateComparer>(this);
-        }
-
-        public void PreUpdate()
-        {
-            this.stateMachine.Step();
-        }
-
-        #region Class Methods
-        public void Store(ContentLoader loader)
-        {
-            this.hierarchicalTree.Store(loader);
-        }
-
-        public void Trigger(EnumStepTrigger trigger)
-        {
-            this.stateMachine.Trigger(EnumStepTrigger.IgnoreStateChange);
+            InitStateMachine();
         }
         #endregion
 
-        public void ChangingState(ServiceState endingState, ServiceState beginningState) { }
-
-        public void ExecutingState(ServiceState state)
+        #region Register/Unregister
+        protected override void OnAwake()
         {
-            switch (state)
+            base.OnAwake();
+        }
+        #endregion
+
+        #region Class Methods
+        private void InitStateMachine()
+        {
+            stateMachine = new StateMachine(this, State.Startup);
+            stateMachine
+                .Connect(State.Startup, Trigger.NextStep, State.Idle)
+                .Connect(State.Idle, Trigger.NextStep, State.WaitForTimeout)
+                .Connect(State.WaitForTimeout, Trigger.NextStep, State.SendAccessResponses)
+                .Connect(State.SendAccessResponses, Trigger.NextStep, State.Idle);
+        }
+
+        internal void Store(ContentLoader loader)
+        {
+            hierarchicalTree.Store(loader);
+        }
+
+        internal void Remove(string path)
+        {
+            hierarchicalTree.Remove(new RemovalLeaf {Path = path});
+        }
+
+        public override void DefineCommandReceiverActions()
+        {
+            CommandReceiver.SetActionFor<ContentAccessRequest>(OnContentAccessRequest);
+        }
+
+        private void OnContentAccessRequest(ContentAccessRequest request)
+        {
+            requestReceived = true;
+            timeOut = TIMEOUT;
+            contentAccessRequests.Add(request);
+        }
+        #endregion
+
+        #region IEnumStepMachineOwner<State> Members
+        public void ChangingState(State endingState, State beginningState)
+        {
+            switch (beginningState)
             {
-                case ServiceState.SendCallback:
+                case State.WaitForTimeout:
                 {
-                    //todo foreach (RequestAccessToContent callback in pendingCallbacks)
-                    //todo {
-                    //todo     ResourcesHaveChangedResponse message = callback.GetResponse() as ResourcesHaveChangedResponse;
-                    //todo 
-                    //todo     resourceTree.RetrieveResources(callback, message);
-                    //todo 
-                    //todo     CommandReceiver.Send(message);
-                    //todo }
-                    //todo 
-                    //todo pendingCallbacks.Clear();
-
-
-                    break;
-                }
-                default:
-                {
-                    ContentRegistryServant servant = FirstAliveServant;
-                    if (servant == null)
-                    {
-                        break;
-                    }
-
-                    servant.ExecuteState(this, state);
+                    timeOut = TIMEOUT;
                     break;
                 }
             }
         }
 
-        public void OnTrigger(EnumStepTrigger trigger, bool hasTriggered)
+        public void ExecutingState(State state)
         {
-        }
+            switch (state)
+            {
+                case State.Startup:
+                {
+                    stateMachine.Trigger(Trigger.NextStep);
+                    break;
+                }
+                case State.Idle:
+                {
+                    if (requestReceived)
+                    {
+                        requestReceived = false;
+                        stateMachine.Trigger(Trigger.NextStep);
+                    }
 
-        public bool Compare(ServiceState state0, ServiceState state1)
+                    break;
+                }
+                case State.WaitForTimeout:
+                {
+                    timeOut -= Time.unscaledDeltaTime;
+                    if (timeOut < 0)
+                    {
+                        stateMachine.Trigger(Trigger.NextStep);
+                    }
+
+                    break;
+                }
+                case State.SendAccessResponses:
+                {
+                    foreach (var accessRequest in contentAccessRequests)
+                    {
+                        var response = accessRequest.GetResponse<ContentAccessChangedResponse>();
+                        hierarchicalTree.SearchTree(accessRequest, response);
+                        CommandReceiver.Send(response);
+                    }
+
+                    stateMachine.Trigger(Trigger.NextStep);
+                    break;
+                }
+            }
+        }
+        #endregion
+
+        #region IPreUpdateTickable Members
+        public void PreUpdate()
         {
-            return state0 == state1;
+            stateMachine.Step();
         }
+        #endregion
 
-        public bool Compare(EnumStepTrigger trigger0, EnumStepTrigger trigger1)
+        #region Nested type: EnumComparer
+        private class EnumComparer : IEnumComparer<State, Trigger>
         {
-            return trigger0 == trigger1;
-        }
+            #region IEnumComparer<State,Trigger> Members
+            public bool Compare(State state0, State state1)
+            {
+                return state0 == state1;
+            }
 
-        public override void DefineCommandReceiverActions()
+            public bool Compare(Trigger trigger0, Trigger trigger1)
+            {
+                return trigger0 == trigger1;
+            }
+            #endregion
+        }
+        #endregion
+
+        #region Nested type: RemovalLeaf
+        private struct RemovalLeaf : IHierarchicalTreeLeaf
         {
-            //todo CommandReceiver.SetActionFor<RequestAccessToContent>(OnResourceUpdateCallback);
+            public string Path { get; set; }
         }
+        #endregion
 
-        //todo private void OnResourceUpdateCallback(RequestAccessToContent notice)
-        //todo {
-        //todo     if (!resourceUpdateCallbacks.Contains(notice))
-        //todo     {
-        //todo         resourceUpdateCallbacks.Add(notice);
-        //todo     }
-        //todo 
-        //todo     if (!pendingCallbacks.Contains(notice))
-        //todo     {
-        //todo         if (!stateMachine.IsRunning)
-        //todo         {
-        //todo             stateMachine.Trigger(SimpleStepTrigger.ForceNextState, ServiceState.SendCallback);
-        //todo         }
-        //todo 
-        //todo         pendingCallbacks.Add(notice);
-        //todo     }
-        //todo }
-
-        protected override void OnAwake()
+        #region Nested type: StateMachine
+        private class StateMachine : EnumTriggerMachine<State, Trigger, EnumComparer>
         {
-            base.OnAwake();
+            #region Constructors
+            public StateMachine(IEnumStateMachineOwner<State> owner, State startState) : base(owner, startState) { }
+            #endregion
         }
+        #endregion
     }
 }

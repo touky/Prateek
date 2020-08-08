@@ -31,24 +31,24 @@ namespace Mayfair.Core.Code.GameScene
         //todo     return request;
         //todo }
 
-        public override void OnResourceChanged(GameSceneDaemon daemonCore, ResourcesHaveChangedResponse notice)
+        public override void OnResourceChanged(GameSceneDaemon daemonCore, ContentAccessChangedResponse notice)
         {
-            if (notice is SceneResourceHasChanged)
+            if (notice is SceneResourceHasChangedResponse)
             {
-                OnSceneResourceChanged(daemonCore, (SceneResourceHasChanged) notice);
+                OnSceneResourceChanged(daemonCore, (SceneResourceHasChangedResponse) notice);
             }
         }
 
-        private void OnSceneResourceChanged(GameSceneDaemon daemonCore, SceneResourceHasChanged notice)
+        private void OnSceneResourceChanged(GameSceneDaemon daemonCore, SceneResourceHasChangedResponse notice)
         {
             //todo DebugTools.Log(this, notice);
 
-            for (int r = 0; r < notice.References.Count; r++)
-            {
-                SceneReference resource = notice.References[r];
+            //for (int r = 0; r < notice.References.Count; r++)
+            //{
+            //    SceneReference resource = notice.References[r];
 
-                daemonCore.Add(resource);
-            }
+            //    daemonCore.Add(resource);
+            //}
         }
         #endregion
     }

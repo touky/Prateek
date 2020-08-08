@@ -36,9 +36,9 @@ namespace Mayfair.Core.Code.Animation
         //todo     return Command.Create<RequestCallbackOnScriptableResourceChange<AnimationLibraryResourceHasChanged, AnimationLibrary>>();
         //todo }
 
-        protected override bool IsResponseAccepted(ScriptableResourcesHaveChanged<AnimationLibrary> response)
+        protected override bool IsResponseAccepted(ScriptableContentAccessChangedResponse<AnimationLibrary> response)
         {
-            return response is AnimationLibraryResourceHasChanged;
+            return response is AnimationLibraryResourceHasChangedResponse;
         }
         #endregion
     }

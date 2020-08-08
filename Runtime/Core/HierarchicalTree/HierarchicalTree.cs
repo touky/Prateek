@@ -12,7 +12,7 @@
         private string branchName;
         private HierarchicalTree<TLeaf> parent;
         private Dictionary<string, HierarchicalTree<TLeaf>> branches;
-        private HashSet<TreeLeaf<TLeaf>> leaves;
+        private HashSet<TreeLeaf<IHierarchicalTreeLeaf>> leaves;
         #endregion
         
         #region Properties
@@ -39,13 +39,13 @@
             get { return leaves != null && leaves.Count > 0; }
         }
 
-        private HashSet<TreeLeaf<TLeaf>> Leaves
+        private HashSet<TreeLeaf<IHierarchicalTreeLeaf>> Leaves
         {
             get
             {
                 if (leaves == null)
                 {
-                    leaves = new HashSet<TreeLeaf<TLeaf>>();
+                    leaves = new HashSet<TreeLeaf<IHierarchicalTreeLeaf>>();
                 }
 
                 return leaves;
@@ -74,7 +74,7 @@
                 var value = match.LastGroup().Value;
                 if (m == matches.Count - 1)
                 {
-                    var leaf = new TreeLeaf<TLeaf>(value, leadData);
+                    var leaf = new TreeLeaf<IHierarchicalTreeLeaf>(value, leadData);
                     if (!parentBranch.Leaves.Contains(leaf))
                     {
                         //Remove the old one because the leaf hashCode is Path dependant
@@ -103,7 +103,7 @@
             }
         }
 
-        public void Remove(TLeaf leadData, HierarchicalTreeSettingsData customSettings = null)
+        public void Remove(IHierarchicalTreeLeaf leadData, HierarchicalTreeSettingsData customSettings = null)
         {
             var activeBranch = SearchForBranch(leadData.Path, true, customSettings);
             if (activeBranch == null)
@@ -111,7 +111,7 @@
                 return;
             }
 
-            var leaf = new TreeLeaf<TLeaf>(string.Empty, leadData);
+            var leaf = new TreeLeaf<IHierarchicalTreeLeaf>(string.Empty, leadData);
             activeBranch.Leaves.Remove(leaf);
         }
 

@@ -26,7 +26,7 @@ namespace Mayfair.Core.Code.Localization
 
         private void OnGameLoadingPrerequisiteNoticeReceived(GameLoadingPrerequisiteCommand command)
         {
-            TaskLoadingCommand taskLoadingCommand = Command.Create<TaskLoadingCommand>();
+            TaskLoadingCommand taskLoadingCommand = CommandHelper.Create<TaskLoadingCommand>();
 
             if (!LocalizationDaemon.SetLanguage(SystemLanguage.English, false))
             {

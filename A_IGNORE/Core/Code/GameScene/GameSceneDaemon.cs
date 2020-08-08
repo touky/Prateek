@@ -120,7 +120,7 @@ namespace Mayfair.Core.Code.GameScene
 
                 availableScenes[context] = container;
 
-                var notice = Command.Create<SessionDebugAvailable>();
+                var notice = CommandHelper.Create<SessionDebugAvailable>();
                 notice.Init(context);
                 CommandReceiver.Send(notice);
             }
@@ -130,7 +130,7 @@ namespace Mayfair.Core.Code.GameScene
         {
             if (taskCommand == null)
             {
-                taskCommand = Command.Create<TaskLoadingCommand>();
+                taskCommand = CommandHelper.Create<TaskLoadingCommand>();
             }
 
             taskCommand.trackerState = new LoadingTaskTracker(GetType(), status)
@@ -353,7 +353,7 @@ namespace Mayfair.Core.Code.GameScene
             DebugTools.Log($"Game scene request to load '{request.Scene}' received", DebugTools.LogLevel.LowPriority);
             if (!availableScenes.TryGetValue(request.Scene, out var containerRequested))
             {
-                CommandReceiver.Send(request.GetResponse());
+                CommandReceiver.Send(request.GetResponse<LoadSceneResponse>());
 
                 Debug.Assert(false, $"Requested scene {request.Scene} does not exist or does not have an address.");
                 return;
@@ -417,7 +417,7 @@ namespace Mayfair.Core.Code.GameScene
         private void UnloadSceneCompleted(SceneReference sceneReference, UnloadSceneRequest<UnloadSceneResponse> request)
         {
             RefreshLoadingStatus();
-            var response = request.GetResponse();
+            var response = request.GetResponse<UnloadSceneResponse>();
             CommandReceiver.Send(response);
         }
         #endregion

@@ -2,6 +2,7 @@ namespace Prateek.A_TODO.Runtime.AppContentUnityIntegration.Addressables
 {
     using Prateek.A_TODO.Runtime.AppContentFramework.Daemons;
     using Prateek.A_TODO.Runtime.AppContentFramework.Enums;
+    using Prateek.A_TODO.Runtime.AppContentFramework.Loader;
     using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using UnityEngine.AddressableAssets;
     using UnityEngine.AddressableAssets.ResourceLocators;
@@ -12,62 +13,75 @@ namespace Prateek.A_TODO.Runtime.AppContentUnityIntegration.Addressables
     {
         #region Fields
         private bool addressSystemInitialized = false;
+        private bool workPending = false;
         #endregion
 
         #region Properties
         public override bool IsAlive
         {
-            //TODO: re-inject this.addressSystemInitialized within this logic
-            get { return base.IsAlive; }
+            get { return base.IsAlive && addressSystemInitialized; }
         }
         #endregion
 
         #region Class Methods
-        public override void ExecuteState(ContentRegistryDaemon daemonCore, ServiceState state)
+        public override void ExecutingState(State state)
         {
             switch (state)
             {
-                case ServiceState.Init:
+                case State.Startup:
                 {
                     Addressables.InitializeAsync().Completed += InitCompleted;
                     break;
                 }
-                case ServiceState.InitWait:
+                case State.Idle:
                 {
-                    if (!addressSystemInitialized)
+                    if (workPending)
                     {
-                        daemonCore.Trigger(EnumStepTrigger.IgnoreStateChange);
-                    }
+                        workPending = false;
 
+                        WorkIsReady();
+                    }
                     break;
                 }
-                case ServiceState.ResourceTriage:
+                case State.StartWork:
                 {
-                    //Not very nice ....
+                    InvalidateAllPaths();
+                    break;
+                }
+                case State.Working:
+                {
+                    //Go throught the locators and store them in the overseer
                     foreach (IResourceLocator locator in Addressables.ResourceLocators)
                     {
                         foreach (object key in locator.Keys)
                         {
-                            //Yes this cast should stay like this or an assert may happen if said cast
-                            // is performed within the foreach
+                            //The null check can NullRef if called from the foreach
                             string location = key as string;
                             if (location == null)
                             {
                                 continue;
                             }
 
-                            daemonCore.Store(new AddressableContentLoader(location));
+                            ValidatePath(location);
                         }
                     }
 
                     break;
                 }
             }
+
+            base.ExecutingState(state);
+        }
+
+        protected override ContentLoader GetNewContentLoader(string path)
+        {
+            throw new System.NotImplementedException();
         }
 
         private void InitCompleted(AsyncOperationHandle<IResourceLocator> obj)
         {
             addressSystemInitialized = true;
+            workPending = true;
         }
         #endregion
     }

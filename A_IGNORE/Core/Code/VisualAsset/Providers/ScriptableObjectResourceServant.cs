@@ -22,9 +22,9 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         #endregion
 
         #region Class Methods
-        public override void OnResourceChanged(VisualResourceDaemon daemonCore, ResourcesHaveChangedResponse notice)
+        public override void OnResourceChanged(VisualResourceDaemon daemonCore, ContentAccessChangedResponse notice)
         {
-            if (notice is ScriptableResourcesHaveChanged<TScriptableResourceType> typedMessage)
+            if (notice is ScriptableContentAccessChangedResponse<TScriptableResourceType> typedMessage)
             {
                 if (IsResponseAccepted(typedMessage))
                 {
@@ -38,16 +38,16 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             AddPendingInit(command.Instance.AssignmentIndex, command.Instance);
         }
 
-        protected void OnResourceChanged(ScriptableResourcesHaveChanged<TScriptableResourceType> notice)
+        protected void OnResourceChanged(ScriptableContentAccessChangedResponse<TScriptableResourceType> notice)
         {
             //todo DebugTools.Log(this, notice);
 
-            for (int r = 0; r < notice.References.Count; r++)
-            {
-                ScriptableObjectContentHandle<TScriptableResourceType> resource = notice.References[r];
+            //for (int r = 0; r < notice.References.Count; r++)
+            //{
+            //    ScriptableObjectContentHandle<TScriptableResourceType> resource = notice.References[r];
 
-                Store(resource);
-            }
+            //    Store(resource);
+            //}
         }
         
         //todo public override RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter)
@@ -58,7 +58,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         //todo }
 
         //todo protected abstract RequestAccessToContent CreateResourceChangeRequest();
-        protected abstract bool IsResponseAccepted(ScriptableResourcesHaveChanged<TScriptableResourceType> response);
+        protected abstract bool IsResponseAccepted(ScriptableContentAccessChangedResponse<TScriptableResourceType> response);
 
         protected abstract void Init();
         #endregion

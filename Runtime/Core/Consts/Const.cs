@@ -2,6 +2,7 @@
 {
     public static class Const
     {
+        public const int TIMEOUT_RESET = -1;
         public const int INDEX_NONE = -1;
         public const int CURSOR_RESET = -1;
 

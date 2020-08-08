@@ -7,6 +7,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
     using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.A_TODO.Runtime.CommandFramework.Servants;
     using Prateek.Runtime.Core.Extensions;
+    using UnityEngine.Assertions;
 
     /// <summary>
     /// Base class for all the commands
@@ -39,16 +40,34 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
         }
         #endregion
 
-        #region Class Methods
-        public static T Create<T>() where T : Command, new()
+        internal static T Create<T>() where T : Command, new()
         {
             return new T();
         }
 
+        #region Class Methods
         public override string ToString()
         {
             return GetType().ToDebugString();
         }
         #endregion
+    }
+
+    public static class CommandHelper
+    {
+        public static T Create<T>()
+            where T : Command, new()
+        {
+            Assert.IsFalse(typeof(T).IsSubclassOf(typeof(RequestCommand)));
+
+            return Command.Create<T>();
+        }
+
+        public static TRequest Create<TRequest, TResponse>()
+            where TRequest : RequestCommand, new()
+            where TResponse : ResponseCommand, new()
+        {
+            return RequestCommand.Create<TRequest, TResponse>();
+        }
     }
 }

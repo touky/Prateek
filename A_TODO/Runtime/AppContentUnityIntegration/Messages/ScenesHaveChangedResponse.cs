@@ -8,7 +8,7 @@ namespace Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages
     ///     Use this class as base to implement your own callback for the ResourcesHaveChanged notice
     /// </summary>
     /// <typeparam name="TResourceType">The type of the resource</typeparam>
-    public abstract class ScenesHaveChanged : ResourcesHaveChangedResponse<SceneReference, SceneInstance>
+    public abstract class ScenesHaveChangedResponse : ContentAccessChangedResponse<SceneReference, SceneInstance>
     {
         #region Class Methods
         #region ITreeIdentificationResult

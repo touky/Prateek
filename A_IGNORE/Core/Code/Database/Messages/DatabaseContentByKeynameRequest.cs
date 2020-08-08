@@ -1,13 +1,14 @@
 namespace Mayfair.Core.Code.Database.Messages
 {
-    using Mayfair.Core.Code.Database.Interfaces;
     using Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById;
 
-    public abstract class DatabaseContentByKeynameRequest : ContentByKeynameRequest<DatabaseContentByKeynameResponse,DatabaseContentByKeynameResponse>
+    public abstract class DatabaseContentByKeynameRequest : ContentByKeynameRequest
     {
-        public new DatabaseContentByKeynameResponse GetResponse()
+        #region Class Methods
+        protected override bool ValidateResponse()
         {
-            return base.GetResponse() as DatabaseContentByKeynameResponse;
+            return holder.Validate<DatabaseContentByKeynameResponse>();
         }
+        #endregion
     }
 }

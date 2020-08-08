@@ -4,7 +4,7 @@
     using UnityEngine;
 
     public class DatabaseCallbackOnChange<TResourceType>
-        : RequestCallbackOnScriptableResourceChange<DatabaseHasChanged<TResourceType>, TResourceType>
+        : ContentAccessRequestCallbackOnScriptableResourceChange<DatabaseHasChangedResponse<TResourceType>, TResourceType>
         where TResourceType : ScriptableObject
     {
     }

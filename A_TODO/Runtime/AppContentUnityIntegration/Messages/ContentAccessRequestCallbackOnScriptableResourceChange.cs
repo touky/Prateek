@@ -9,9 +9,9 @@ namespace Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages
     /// </summary>
     /// <typeparam name="TChangeMessage">The ResourcesHaveChanged type notice to use as callback</typeparam>
     /// <typeparam name="TResourceType">The resource type of your data</typeparam>
-    public class RequestCallbackOnScriptableResourceChange<TChangeMessage, TResourceType>
-        : RequestAccessToContent<TResourceType, TChangeMessage, ScriptableResourcesHaveChanged<TResourceType>>
-        where TChangeMessage : ScriptableResourcesHaveChanged<TResourceType>, new()
+    public class ContentAccessRequestCallbackOnScriptableResourceChange<TChangeMessage, TResourceType>
+        : ContentAccessRequest<TResourceType>
+        where TChangeMessage : ScriptableContentAccessChangedResponse<TResourceType>, new()
         where TResourceType : ScriptableObject
     {
     }

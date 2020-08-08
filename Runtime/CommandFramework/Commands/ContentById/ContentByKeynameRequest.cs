@@ -10,14 +10,10 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById
     /// <summary>
     /// Base class for any system that needs to receive request for keyname dependant datas
     /// </summary>
-    /// <typeparam name="TResponse"></typeparam>
-    /// <typeparam name="TIdentification"></typeparam>
     [DebuggerDisplay("{GetType().Name}, Sender: {emitter.Owner.Name}")]
-    public abstract class ContentByKeynameRequest<TResponse, TIdentification>
-        : RequestCommand<TResponse, TIdentification>
+    public abstract class ContentByKeynameRequest
+        : RequestCommand
         , IContentByKeynameRequest
-        where TResponse : ResponseCommand, IContentByKeynameResponse, new()
-        where TIdentification : Command
     {
         #region Fields
         private KeynameMatchResult matchRequirement = KeynameMatchType.Equal;
@@ -35,6 +31,11 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById
         public virtual void Init(KeynameMatchResult matchRequirement)
         {
             this.matchRequirement = matchRequirement;
+        }
+        
+        protected override bool ValidateResponse()
+        {
+            return holder.Validate<IContentByKeynameResponse>();
         }
 
         public void CopyFrom(IContentByKeynameRequest other)

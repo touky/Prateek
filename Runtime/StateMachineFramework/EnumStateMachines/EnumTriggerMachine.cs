@@ -2,13 +2,14 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 {
     using System;
     using System.Collections.Generic;
+    using JetBrains.Annotations;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
 
     /// <summary>
     ///     EnumTriggerMachine is a state machine with enum states and triggers
     /// </summary>
     [Serializable]
-    public class EnumTriggerMachine<TState, TTrigger, TEnumComparer>
+    public abstract class EnumTriggerMachine<TState, TTrigger, TEnumComparer>
         : EnumStateMachine<TState, TTrigger, TEnumComparer>
         where TState : struct, IConvertible
         where TTrigger : struct, IConvertible
@@ -32,7 +33,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         /// </summary>
         /// <param name="owner"></param>
         /// <param name="startState"></param>
-        public EnumTriggerMachine(IEnumStateMachineOwner<TState> owner, TState startState)
+        protected EnumTriggerMachine(IEnumStateMachineOwner<TState> owner, TState startState)
             : base(owner)
         {
             this.startState = IndexOf(startState);
@@ -40,7 +41,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         #endregion
 
         #region Class Methods
-        public void Connect(TState source, TTrigger trigger, TState destination)
+        public EnumTriggerMachine<TState, TTrigger, TEnumComparer> Connect(TState source, TTrigger trigger, TState destination)
         {
             if (!connections.TryGetValue(source, out var transitions))
             {
@@ -49,6 +50,8 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
             }
 
             transitions[trigger] = destination;
+
+            return this;
         }
 
         public override void Reboot()

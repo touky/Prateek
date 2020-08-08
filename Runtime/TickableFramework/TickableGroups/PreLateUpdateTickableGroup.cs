@@ -7,7 +7,7 @@ namespace Prateek.Runtime.TickableFramework.TickableGroups
         #region Properties
         public override bool InjectAtTheEnd
         {
-            get { return true; }
+            get { return false; }
         }
         #endregion
 

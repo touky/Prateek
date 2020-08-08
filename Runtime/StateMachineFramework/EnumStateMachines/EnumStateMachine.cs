@@ -22,7 +22,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         #region Constructors
         protected EnumStateMachine() { }
 
-        protected EnumStateMachine(IEnumStateMachineOwner<TState> owner)
+        protected EnumStateMachine(IEnumStateMachineOwner<TState> owner) : this()
         {
             if (states != null)
             {
@@ -50,6 +50,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 
             this.owner = owner;
             states = initStates;
+            comparer = new TEnumComparer();
 
             Reboot();
         }

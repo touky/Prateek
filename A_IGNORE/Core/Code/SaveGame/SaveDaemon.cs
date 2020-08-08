@@ -82,7 +82,7 @@ namespace Mayfair.Core.Code.SaveGame
             for (int r = 0; r < this.loadingRequests.Count; r++)
             {
                 LoadDataRequest request = this.loadingRequests[r];
-                ResponseCommand response = request.GetResponse();
+                LoadDataResponse response = request.GetResponse<LoadDataResponse>();
                 response.Init(request);
                 CommandReceiver.Send(response);
             }

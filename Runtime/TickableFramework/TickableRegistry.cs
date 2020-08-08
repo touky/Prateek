@@ -46,6 +46,8 @@ namespace Prateek.Runtime.TickableFramework
     {
         #region Fields
         ///---------------------------------------------------------------------
+        private bool isQuitting = false;
+
         private List<AliveTickable> allTickables = new List<AliveTickable>();
 
         private List<AliveTickable> pendingRegistry = new List<AliveTickable>();
@@ -68,6 +70,8 @@ namespace Prateek.Runtime.TickableFramework
         private void OnDestroy()
         {
             SetPauseFeedback(false);
+
+            CleanPlayerLoop();
         }
         #endregion
 
@@ -76,6 +80,8 @@ namespace Prateek.Runtime.TickableFramework
         protected override void OnApplicationQuit()
         {
             base.OnApplicationQuit();
+
+            isQuitting = true;
 
             applicationGroup.ApplicationQuit();
         }
@@ -146,7 +152,15 @@ namespace Prateek.Runtime.TickableFramework
                     var tickableGroupSystem = new PlayerLoopSystem
                     {
                         type = tickableGroup.GetType(),
-                        updateDelegate = tickableGroup.Tick
+                        updateDelegate = () =>
+                        {
+                            if (isQuitting)
+                            {
+                                return;
+                            }
+
+                            tickableGroup.Tick();
+                        }
                     };
 
                     //Inject the new tickable group in the subsystem list
@@ -169,6 +183,31 @@ namespace Prateek.Runtime.TickableFramework
 
             //Set the modified playerLoop back into unity
             PlayerLoop.SetPlayerLoop(playerLoop);
+        }
+
+        ///---------------------------------------------------------------------
+        private void CleanPlayerLoop()
+        {
+            //Get the default loop
+            var playerLoop = PlayerLoop.GetDefaultPlayerLoop();
+            for (var s = 0; s < playerLoop.subSystemList.Length; s++)
+            {
+                var system = playerLoop.subSystemList[s];
+                var subSystemList = new List<PlayerLoopSystem>(system.subSystemList);
+                for (int l = 0; l < subSystemList.Count; l++)
+                {
+                    if (!subSystemList[l].type.IsSubclassOf(typeof(TickableGroup)))
+                    {
+                        continue;
+                    }
+
+                    subSystemList.RemoveAt(l--);
+                }
+
+                //Restore the system where it was before
+                system.subSystemList = subSystemList.ToArray();
+                playerLoop.subSystemList[s] = system;
+            }
         }
 
         ///---------------------------------------------------------------------

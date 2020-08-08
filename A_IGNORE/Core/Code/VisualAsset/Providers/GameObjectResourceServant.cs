@@ -19,9 +19,9 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         #endregion
         
         #region Class Methods
-        public override void OnResourceChanged(VisualResourceDaemon daemonCore, ResourcesHaveChangedResponse notice)
+        public override void OnResourceChanged(VisualResourceDaemon daemonCore, ContentAccessChangedResponse notice)
         {
-            if (notice is GameObjectResourcesHaveChanged typedMessage)
+            if (notice is GameObjectContentAccessChangedResponse typedMessage)
             {
                 if (IsResponseAccepted(typedMessage))
                 {
@@ -42,16 +42,16 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
 
-        protected void OnResourceChanged(GameObjectResourcesHaveChanged notice)
+        protected void OnResourceChanged(GameObjectContentAccessChangedResponse notice)
         {
             //todo DebugTools.Log(this, notice);
 
-            for (int r = 0; r < notice.References.Count; r++)
-            {
-                GameObjectContentHandle resource = notice.References[r];
+            //for (int r = 0; r < notice.References.Count; r++)
+            //{
+            //    GameObjectContentHandle resource = notice.References[r];
 
-                Store(resource);
-            }
+            //    Store(resource);
+            //}
         }
 
         //todo public override RequestAccessToContent GetResourceChangeRequest(ICommandEmitter transmitter)
@@ -62,7 +62,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         //todo }
         //todo 
         //todo protected abstract RequestAccessToContent CreateResourceChangeRequest();
-        protected abstract bool IsResponseAccepted(GameObjectResourcesHaveChanged response);
+        protected abstract bool IsResponseAccepted(GameObjectContentAccessChangedResponse response);
 
         protected abstract void Init();
         #endregion

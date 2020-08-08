@@ -6,9 +6,9 @@ namespace Mayfair.Core.Code.Database.Messages
         where TResponseType : DatabaseContentByKeynameResponse, new()
     {
         #region Class Methods
-        public new TResponseType GetResponse()
+        public TResponseType GetResponse(bool requestFailed = false)
         {
-            return base.GetResponse() as TResponseType;
+            return GetResponse<TResponseType>(requestFailed);
         }
 
         //todo protected override ResponseCommand CreateNewResponse()

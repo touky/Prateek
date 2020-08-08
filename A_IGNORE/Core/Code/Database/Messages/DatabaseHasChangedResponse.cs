@@ -3,6 +3,6 @@
     using Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages;
     using UnityEngine;
 
-    public class DatabaseHasChanged<TResourceType> : ScriptableResourcesHaveChanged<TResourceType>
+    public class DatabaseHasChangedResponse<TResourceType> : ScriptableContentAccessChangedResponse<TResourceType>
         where TResourceType : ScriptableObject { }
 }

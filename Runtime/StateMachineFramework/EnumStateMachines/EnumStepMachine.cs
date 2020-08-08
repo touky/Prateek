@@ -19,7 +19,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     /// </summary>
     /// <typeparam name="TState">The enum type used for the state machine</typeparam>
     [Serializable]
-    public class EnumStepMachine<TState, TEnumComparer>
+    public abstract class EnumStepMachine<TState, TEnumComparer>
         : EnumStateMachine<TState, EnumStepTrigger, TEnumComparer>
         where TState : struct, IConvertible
         where TEnumComparer : EnumStepTriggerComparer<TState>, new()
@@ -40,7 +40,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         ///     This constructor will use all states in the enum from the first to the last as default
         /// </summary>
         /// <param name="owner">The state machine owner</param>
-        public EnumStepMachine(IEnumStateMachineOwner<TState> owner)
+        protected EnumStepMachine(IEnumStateMachineOwner<TState> owner)
             : base(owner) { }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         /// </summary>
         /// <param name="owner">The state machine owner</param>
         /// <param name="stepSequence">List of the sequence of states</param>
-        public EnumStepMachine(IEnumStateMachineOwner<TState> owner, params TState[] stepSequence)
+        protected EnumStepMachine(IEnumStateMachineOwner<TState> owner, params TState[] stepSequence)
         {
             Init(owner, new List<TState>(stepSequence));
         }
