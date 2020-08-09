@@ -22,7 +22,7 @@
             this.RegisterTickable();
         }
 
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
             this.UnregisterTickable();
         }

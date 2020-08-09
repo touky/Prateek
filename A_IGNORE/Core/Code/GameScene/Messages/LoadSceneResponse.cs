@@ -1,10 +1,10 @@
 namespace Mayfair.Core.Code.GameScene.Messages
 {
-    using Prateek.A_TODO.Runtime.AppContentUnityIntegration;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.AppContentFramework.Unity.Handles;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
 
     public class LoadSceneResponse : ResponseCommand
     {
-        public SceneReference SceneReference { get; set; }
+        public SceneHandle SceneHandle { get; set; }
     }
 }

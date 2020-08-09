@@ -1,7 +1,6 @@
-﻿namespace Prateek.A_TODO.Runtime.CommandFramework.Servants {
-    using System;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
-    using UnityEngine;
+﻿namespace Prateek.Runtime.CommandFramework.EmitterReceiver
+{
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
 
     internal class DefaultCommandEmitter : ICommandReceiverOwner
     {
@@ -16,20 +15,12 @@
         }
         #endregion
 
-        #region IMessageCommunicatorOwner Members
-        public ICommandReceiver CommandReceiver
-        {
-            get { return commandReceiver; }
-        }
+        #region ICommandReceiverOwner Members
+        public ICommandReceiver CommandReceiver { get { return commandReceiver; } }
 
-        public string Name
-        {
-            get { return GetType().Name; }
-        }
+        public string Name { get { return GetType().Name; } }
 
-        public void DefineCommandReceiverActions()
-        {
-        }
+        public void DefineCommandReceiverActions() { }
         #endregion
     }
 }

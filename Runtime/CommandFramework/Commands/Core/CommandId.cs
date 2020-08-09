@@ -1,7 +1,6 @@
-﻿namespace Prateek.A_TODO.Runtime.CommandFramework.Servants
+﻿namespace Prateek.Runtime.CommandFramework.Commands.Core
 {
     using System;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
 
     public struct CommandId
     {
@@ -17,11 +16,8 @@
         #endregion
 
         #region Properties
-        public Type Type
-        {
-            get { return type; }
-        }
-        
+        public Type Type { get { return type; } }
+
         public long Key
         {
             get

@@ -1,7 +1,7 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.Servants
+namespace Prateek.Runtime.CommandFramework.Servants
 {
     using System.Collections.Generic;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.DaemonFramework.Servants;
 
     public abstract class CommandServant : Servant<CommandDaemon, CommandServant>

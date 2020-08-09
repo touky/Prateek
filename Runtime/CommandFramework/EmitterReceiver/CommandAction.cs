@@ -1,6 +1,6 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver
+namespace Prateek.Runtime.CommandFramework.EmitterReceiver
 {
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
 
     public delegate void CommandAction<T>(T notice)
         where T : Command;

@@ -2,15 +2,11 @@ namespace Mayfair.Core.Code.GameScene
 {
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Helpers;
-    using Prateek.A_TODO.Runtime.AppContentFramework.Daemons;
-    using Prateek.A_TODO.Runtime.AppContentFramework.Messages;
-    using Prateek.A_TODO.Runtime.AppContentUnityIntegration;
-    using Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.AppContentFramework.Daemons;
+    using Prateek.Runtime.AppContentFramework.Messages;
     using UnityEngine;
 
-    public sealed class GameSceneServant : ContentAccessServant<GameSceneDaemon, GameSceneServant>
+    public sealed class GameSceneServant : ContentAccessServant<GameSceneDaemonOverseer, GameSceneServant>
     {
         #region Static and Constants
         public static readonly string[] KEYWORDS = {"Scenes/"};
@@ -31,15 +27,25 @@ namespace Mayfair.Core.Code.GameScene
         //todo     return request;
         //todo }
 
-        public override void OnResourceChanged(GameSceneDaemon daemonCore, ContentAccessChangedResponse notice)
+        public void OnResourceChanged(GameSceneDaemonOverseer daemonOverseerCore, ContentAccessChangedResponse notice)
         {
             if (notice is SceneResourceHasChangedResponse)
             {
-                OnSceneResourceChanged(daemonCore, (SceneResourceHasChangedResponse) notice);
+                OnSceneResourceChanged(daemonOverseerCore, (SceneResourceHasChangedResponse) notice);
             }
         }
 
-        private void OnSceneResourceChanged(GameSceneDaemon daemonCore, SceneResourceHasChangedResponse notice)
+        protected override ContentAccessRequest CreateContentAccessRequest()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void OnContentAccessChangedResponse(ContentAccessChangedResponse response)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void OnSceneResourceChanged(GameSceneDaemonOverseer daemonOverseerCore, SceneResourceHasChangedResponse notice)
         {
             //todo DebugTools.Log(this, notice);
 

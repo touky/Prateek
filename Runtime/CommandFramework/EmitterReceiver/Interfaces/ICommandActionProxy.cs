@@ -1,6 +1,6 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces
+namespace Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces
 {
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
 
     public interface ICommandActionProxy
     {

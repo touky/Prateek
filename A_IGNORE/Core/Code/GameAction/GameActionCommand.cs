@@ -1,8 +1,7 @@
 namespace Mayfair.Core.Code.GameAction
 {
     using System.Collections.Generic;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.KeynameFramework;
 
     /// <summary>

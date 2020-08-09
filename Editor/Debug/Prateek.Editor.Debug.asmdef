@@ -3,7 +3,7 @@
     "references": [
         "Prateek.Runtime.Core",
         "Prateek.Runtime.DaemonFramework",
-        "Prateek.Runtime.Debug",
+        "Prateek.Runtime.DebugFramework",
         "Prateek.Runtime.FrameRecorder",
         "Prateek.Editor.Core"
     ],

@@ -56,8 +56,8 @@ namespace Mayfair.Core.Code.Utils.Debug
         }
 
         //todo [Conditional("PRATEEK_DEBUG")]
-        //todo public static void Log<TResourceType, TResourceRef>(IServant servant, ResourcesHaveChangedResponse<TResourceRef, TResourceType> notice)
-        //todo     where TResourceRef : AbstractResourceReference<TResourceType, TResourceRef>
+        //todo public static void Log<TContentType, TResourceRef>(IServant servant, ResourcesHaveChangedResponse<TResourceRef, TContentType> notice)
+        //todo     where TResourceRef : AbstractResourceReference<TContentType, TResourceRef>
         //todo {
         //todo     StringBuilder builder = new StringBuilder();
         //todo     builder.AddLogHeader(servant, ", data to load are:");

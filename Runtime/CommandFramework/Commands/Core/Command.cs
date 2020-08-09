@@ -1,16 +1,12 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
+namespace Prateek.Runtime.CommandFramework.Commands.Core
 {
-    using System;
     using System.Diagnostics;
-    using System.Reflection;
-    using System.Text;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
-    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.Extensions;
     using UnityEngine.Assertions;
 
     /// <summary>
-    /// Base class for all the commands
+    ///     Base class for all the commands
     /// </summary>
     [DebuggerDisplay("{GetType().Name}, Sender: {emitter.Owner.Name}")]
     public abstract class Command
@@ -20,32 +16,21 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
         #endregion
 
         #region Properties
-        public ICommandEmitter Emitter
-        {
-            get { return emitter; }
-            set { emitter = value; }
-        }
+        public ICommandEmitter Emitter { get { return emitter; } set { emitter = value; } }
 
         //We allow notice type spoofing for Children commands ids
-        public virtual CommandId CommandId
-        {
-            get { return GetType(); }
-        }
+        public virtual CommandId CommandId { get { return GetType(); } }
         #endregion
 
         #region Constructors
-        protected Command()
-        {
-            //todo: TraceHelper.EnsureTrace<Notice>("Create");
-        }
         #endregion
 
+        #region Class Methods
         internal static T Create<T>() where T : Command, new()
         {
             return new T();
         }
 
-        #region Class Methods
         public override string ToString()
         {
             return GetType().ToDebugString();
@@ -55,6 +40,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
 
     public static class CommandHelper
     {
+        #region Class Methods
         public static T Create<T>()
             where T : Command, new()
         {
@@ -69,5 +55,6 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
         {
             return RequestCommand.Create<TRequest, TResponse>();
         }
+        #endregion
     }
 }

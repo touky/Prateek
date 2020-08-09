@@ -1,14 +1,16 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.Tools.RegulatedSender
+namespace Prateek.Runtime.CommandFramework.Tools
 {
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using UnityEngine;
 
     public abstract class RegulatedCommandEmitter<TCommand, TCommandEmitter>
         where TCommand : Command, new()
         where TCommandEmitter : ICommandEmitter
     {
+        #region Static and Constants
         private const float DEFAULT_COOLDOWN = 0.1f;
+        #endregion
 
         #region Fields
         private double cooldown;
@@ -18,10 +20,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Tools.RegulatedSender
         #endregion
 
         #region Properties
-        public TCommand CachedCommand
-        {
-            get { return cachedCommand; }
-        }
+        public TCommand CachedCommand { get { return cachedCommand; } }
         #endregion
 
         #region Constructors

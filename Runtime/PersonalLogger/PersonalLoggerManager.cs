@@ -36,7 +36,7 @@ namespace Prateek.Runtime.PersonalLogger {
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Helpers;
     using Prateek.Runtime.Core.PrateekScripts.PrtkSources;
-    using Prateek.Runtime.Debug;
+    using Prateek.Runtime.DebugFramework;
     using UnityEditor;
     using UnityEngine;
     using static Prateek.Runtime.Core.Extensions.Statics;

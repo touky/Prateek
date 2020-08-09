@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.Database
 {
-    using Prateek.A_TODO.Runtime.AppContentFramework.Daemons;
+    using Prateek.Runtime.AppContentFramework.Daemons;
 
-    public abstract class DatabaseServant : ContentAccessServant<DatabaseDaemon, DatabaseServant>
+    public abstract class DatabaseServant : ContentAccessServant<DatabaseDaemonOverseer, DatabaseServant>
     {
         #region Static and Constants
         public static readonly string[] KEYWORDS = { "Database/" };
@@ -16,7 +16,7 @@ namespace Mayfair.Core.Code.Database
         #endregion
 
         #region Class Methods
-        public abstract void RefreshPendingResources(DatabaseDaemon daemonCore);
+        public abstract void RefreshPendingResources(DatabaseDaemonOverseer daemonOverseerCore);
         #endregion
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace Prateek.A_TODO.Runtime.CommandFramework.Servants
+﻿namespace Prateek.Runtime.CommandFramework.Servants
 {
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
 
     public sealed class LocalCommandServant : CommandServant
     {

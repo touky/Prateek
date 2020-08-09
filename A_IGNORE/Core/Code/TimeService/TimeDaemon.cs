@@ -7,8 +7,8 @@ namespace Mayfair.Core.Code.TimeService
     using Interfaces;
     using JetBrains.Annotations;
     using Messages;
-    using Prateek.A_TODO.Runtime.CommandFramework;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.DaemonFramework;
 
     using Service;

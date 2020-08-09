@@ -101,7 +101,7 @@ namespace Mayfair.Core.Code.DebugMenu
         }
 
         #region Unity Methods
-        private void OnDestroy()
+        protected void OnDestroy()
         {
             List<AbstractDebugNotebook> tempNotebooks = new List<AbstractDebugNotebook>(notebooks);
             foreach (AbstractDebugNotebook notebook in tempNotebooks)

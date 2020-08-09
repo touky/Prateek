@@ -5,7 +5,7 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.DebugMenu.Pages;
     using Mayfair.Core.Code.Utils.Debug.Reflection;
     using Mayfair.Core.Code.VisualAsset.Providers;
-    using Prateek.A_TODO.Runtime.AppContentFramework.Loader.Interfaces;
+    using Prateek.Runtime.AppContentFramework.Loader.Interfaces;
     using Prateek.Runtime.KeynameFramework;
 
     internal class VisualResourceMenuPage : DebugMenuPage<VisualResourceServant>

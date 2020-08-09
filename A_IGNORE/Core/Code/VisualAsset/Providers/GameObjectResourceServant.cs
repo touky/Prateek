@@ -2,12 +2,11 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
 {
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.VisualAsset.Messages;
-    using Prateek.A_TODO.Runtime.AppContentFramework.Messages;
-    using Prateek.A_TODO.Runtime.AppContentUnityIntegration;
-    using Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.AppContentFramework.Messages;
+    using Prateek.Runtime.AppContentFramework.Unity.Commands;
+    using Prateek.Runtime.AppContentFramework.Unity.Handles;
 
-    public abstract class GameObjectResourceServant : VisualResourceServant<GameObjectContentHandle>
+    public abstract class GameObjectResourceServant : VisualResourceServant<GameObjectHandle>
     {
         #region Unity Methods
         public override void Startup()
@@ -19,9 +18,9 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         #endregion
         
         #region Class Methods
-        public override void OnResourceChanged(VisualResourceDaemon daemonCore, ContentAccessChangedResponse notice)
+        public void OnResourceChanged(VisualResourceDaemonOverseer daemonOverseerCore, ContentAccessChangedResponse notice)
         {
-            if (notice is GameObjectContentAccessChangedResponse typedMessage)
+            if (notice is GameObjectContentAccessResponse typedMessage)
             {
                 if (IsResponseAccepted(typedMessage))
                 {
@@ -42,7 +41,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
             }
         }
 
-        protected void OnResourceChanged(GameObjectContentAccessChangedResponse notice)
+        protected void OnResourceChanged(GameObjectContentAccessResponse notice)
         {
             //todo DebugTools.Log(this, notice);
 
@@ -62,7 +61,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
         //todo }
         //todo 
         //todo protected abstract RequestAccessToContent CreateResourceChangeRequest();
-        protected abstract bool IsResponseAccepted(GameObjectContentAccessChangedResponse response);
+        protected abstract bool IsResponseAccepted(GameObjectContentAccessResponse response);
 
         protected abstract void Init();
         #endregion

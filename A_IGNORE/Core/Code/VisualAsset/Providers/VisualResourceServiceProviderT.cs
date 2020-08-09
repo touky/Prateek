@@ -7,7 +7,7 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.Utils;
     using Mayfair.Core.Code.Utils.Debug;
     using Mayfair.Core.Code.Utils.Extensions;
-    using Prateek.A_TODO.Runtime.AppContentFramework.Loader.Interfaces;
+    using Prateek.Runtime.AppContentFramework.Loader.Interfaces;
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.KeynameFramework.Interfaces;
     using UnityEngine.Assertions;
@@ -89,10 +89,10 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
                 //Remove from init here, because it either is good, or to be handled in LoadCompleted()
                 container.pendingInit.RemoveAt(i--);
 
-                if (!reference.Loader.IsDone)
+                if (!reference.Loader.HasFinishedLoading)
                 {
                     reference.LoadCompleted = ResourceLoadCompleted;
-                    reference.LoadAsync();
+                    reference.Load();
 
                     AddToLoad(container, reference, assignable);
                     continue;

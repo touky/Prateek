@@ -39,7 +39,7 @@ namespace Prateek.Editor.Debug
     using Prateek.Editor.Core.EditorPrefs;
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Helpers;
-    using Prateek.Runtime.Debug;
+    using Prateek.Runtime.DebugFramework;
     using UnityEditor;
     using UnityEngine;
 

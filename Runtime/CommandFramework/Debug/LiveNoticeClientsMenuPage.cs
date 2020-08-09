@@ -1,4 +1,4 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.Debug
+namespace Prateek.Runtime.CommandFramework.Debug
 {
     using System;
     using System.Collections.Generic;
@@ -6,10 +6,9 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Debug
     using Mayfair.Core.Code.DebugMenu.Fields;
     using Mayfair.Core.Code.DebugMenu.Pages;
     using Mayfair.Core.Code.Utils.Debug.Reflection;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
-    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
 
     internal class LiveNoticeReceiversMenuPage : DebugMenuPage<CommandDaemon>
     {
@@ -19,10 +18,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Debug
         #endregion
 
         #region Properties
-        protected int KeyCount
-        {
-            get { return liveClients.Value.Keys.Count; }
-        }
+        protected int KeyCount { get { return liveClients.Value.Keys.Count; } }
 
         protected long this[int index]
         {
@@ -78,7 +74,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Debug
 
         public void AddType(Type type)
         {
-            var validId = (CommandId)type;
+            var validId = (CommandId) type;
             if (noticeTypes.ContainsKey(validId.Key))
             {
                 return;
@@ -98,7 +94,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Debug
                 categoryField.Draw(context, string.Format("{1}: {0:X}", key, noticeName));
                 if (categoryField.ShowContent)
                 {
-                    using (new ContextIndentScope(context, 1))
+                    using (new ContextIndentScope(context))
                     {
                         var count = GetNoticeReceiverCount(key);
                         if (count > 0)

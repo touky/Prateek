@@ -1,11 +1,16 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
+namespace Prateek.Runtime.CommandFramework.Commands.Core
 {
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
 
     public interface IRequestCommand
     {
+        #region Properties
         ICommandEmitter Emitter { get; }
+        #endregion
+
+        #region Class Methods
         TResponse GetResponse<TResponse>(bool requestFailed = false)
             where TResponse : ResponseCommand;
+        #endregion
     }
 }

@@ -4,9 +4,9 @@ namespace Mayfair.Core.Code.VisualAsset.Providers
     using Mayfair.Core.Code.DebugMenu.Content;
     using Mayfair.Core.Code.DebugMenu.Pages;
     using Mayfair.Core.Code.VisualAsset.Messages;
-    using Prateek.A_TODO.Runtime.AppContentFramework.Daemons;
+    using Prateek.Runtime.AppContentFramework.Daemons;
 
-    public abstract class VisualResourceServant : ContentAccessServant<VisualResourceDaemon, VisualResourceServant>, IDebugMenuNotebookOwner
+    public abstract class VisualResourceServant : ContentAccessServant<VisualResourceDaemonOverseer, VisualResourceServant>, IDebugMenuNotebookOwner
     {
         public abstract void RefreshPending();
 

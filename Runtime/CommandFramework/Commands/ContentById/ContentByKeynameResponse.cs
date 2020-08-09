@@ -1,12 +1,12 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById
+namespace Prateek.Runtime.CommandFramework.Commands.ContentById
 {
     using System.Collections;
     using System.Collections.Generic;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById.Interfaces;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.ContentById.Interfaces;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
 
     /// <summary>
-    /// Base response for any system that implement ContentByKeynameRequest
+    ///     Base response for any system that implement ContentByKeynameRequest
     /// </summary>
     /// <typeparam name="TContent"></typeparam>
     public abstract class ContentByKeynameResponse<TContent>
@@ -17,17 +17,11 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById
         #endregion
 
         #region Properties
-        public List<TContent> Content
-        {
-            get { return content; }
-        }
+        public List<TContent> Content { get { return content; } }
         #endregion
 
-        #region IContentByIdResponse Members
-        IList IContentByKeynameResponse.Content
-        {
-            get { return content; }
-        }
+        #region IContentByKeynameResponse Members
+        IList IContentByKeynameResponse.Content { get { return content; } }
         #endregion
     }
 }

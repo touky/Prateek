@@ -1,9 +1,9 @@
 namespace Mayfair.Core.Code.StateMachines.FSM.Common
 {
     using Mayfair.Core.Code.Utils.Tools;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
-    using Prateek.A_TODO.Runtime.CommandFramework.Tools;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Tools;
     using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
     public abstract class NoticeState<TTrigger, TNotice> : IdleState<TTrigger>

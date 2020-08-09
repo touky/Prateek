@@ -1,10 +1,13 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.Tools
+namespace Prateek.Runtime.CommandFramework
 {
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.DaemonFramework;
+    using Prateek.Runtime.TickableFramework.Interfaces;
 
     public abstract class ReceiverDaemon<TDaemon>
-        : Daemon<TDaemon>, ICommandReceiverOwner
+        : Daemon<TDaemon>
+        , ICommandReceiverOwner
+        , IEarlyUpdateTickable
         where TDaemon : ReceiverDaemon<TDaemon>
     {
         #region Fields
@@ -19,29 +22,27 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Tools
             base.Awake();
         }
 
-        protected virtual void Update()
+        protected override void OnDestroy()
         {
-            commandReceiver.ProcessReceivedCommands();
-        }
+            base.OnDestroy();
 
-        protected virtual void OnDestroy()
-        {
             commandReceiver.Kill();
         }
         #endregion
 
         #region ICommandReceiverOwner Members
-        public ICommandReceiver CommandReceiver
-        {
-            get { return commandReceiver; }
-        }
+        public ICommandReceiver CommandReceiver { get { return commandReceiver; } }
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name { get { return name; } }
 
         public abstract void DefineCommandReceiverActions();
+        #endregion
+
+        #region IEarlyUpdateTickable Members
+        public virtual void EarlyUpdate()
+        {
+            commandReceiver.ProcessReceivedCommands();
+        }
         #endregion
     }
 }

@@ -1,11 +1,10 @@
-﻿namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver
+﻿namespace Prateek.Runtime.CommandFramework.EmitterReceiver
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
-    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Singleton;
 
@@ -26,15 +25,9 @@
         #endregion
 
         #region Properties
-        public List<CommandId> ActionsToRegister
-        {
-            get { return actionsToRegister; }
-        }
+        public List<CommandId> ActionsToRegister { get { return actionsToRegister; } }
 
-        public List<CommandId> ActionsToUnregister
-        {
-            get { return actionsToUnregister; }
-        }
+        public List<CommandId> ActionsToUnregister { get { return actionsToUnregister; } }
         #endregion
 
         #region Constructors
@@ -74,10 +67,7 @@
             ApplyActionChanges();
         }
 
-        public ICommandReceiverOwner Owner
-        {
-            get { return owner; }
-        }
+        public ICommandReceiverOwner Owner { get { return owner; } }
 
         #region Receiving
         public void ProcessReceivedCommands()

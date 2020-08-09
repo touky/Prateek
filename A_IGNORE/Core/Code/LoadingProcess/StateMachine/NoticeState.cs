@@ -1,8 +1,8 @@
 namespace Mayfair.Core.Code.LoadingProcess.StateMachine
 {
     using Mayfair.Core.Code.StateMachines.FSM.Common;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
 
     internal class NoticeState<TNotice> : NoticeState<LoadingProcessTrigger, TNotice>
         where TNotice : BroadcastCommand, new()

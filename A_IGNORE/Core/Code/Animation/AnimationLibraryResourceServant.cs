@@ -4,12 +4,12 @@ namespace Mayfair.Core.Code.Animation
     using Mayfair.Core.Code.DebugMenu.Content;
     using Mayfair.Core.Code.Utils.Helpers;
     using Mayfair.Core.Code.VisualAsset.Providers;
-    using Prateek.A_TODO.Runtime.AppContentFramework.Messages;
-    using Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.AppContentFramework.Messages;
+    using Prateek.Runtime.AppContentFramework.Unity.Commands;
 
     public class AnimationLibraryResourceServant
-        : ScriptableObjectResourceServant<AnimationLibrary>, IDebugMenuNotebookOwner
+        : ScriptableObjectResourceServant<AnimationLibrary>
+        , IDebugMenuNotebookOwner
     {
         #region Static and Constants
         private const string COMMON_LIBRARY_KEYWORD = "AnimationLibrary/";
@@ -22,6 +22,11 @@ namespace Mayfair.Core.Code.Animation
         public override string[] ResourceKeywords
         {
             get { return KEYWORDS; }
+        }
+
+        protected override ContentAccessRequest CreateContentAccessRequest()
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
 
@@ -39,6 +44,11 @@ namespace Mayfair.Core.Code.Animation
         protected override bool IsResponseAccepted(ScriptableContentAccessChangedResponse<AnimationLibrary> response)
         {
             return response is AnimationLibraryResourceHasChangedResponse;
+        }
+
+        protected override void OnContentAccessChangedResponse(ContentAccessChangedResponse response)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
     }

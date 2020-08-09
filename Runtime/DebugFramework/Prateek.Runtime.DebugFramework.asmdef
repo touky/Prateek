@@ -1,0 +1,20 @@
+{
+    "name": "Prateek.Runtime.DebugFramework",
+    "references": [
+        "RG.ImGui",
+        "RG.ImGui.Unity",
+        "Prateek.Runtime.Core",
+        "Prateek.Runtime.DaemonFramework",
+        "Prateek.Runtime.TickableFramework",
+        "Prateek.Runtime.FrameRecorder"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

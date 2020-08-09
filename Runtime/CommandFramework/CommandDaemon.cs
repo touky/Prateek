@@ -1,14 +1,14 @@
-﻿namespace Prateek.A_TODO.Runtime.CommandFramework
+﻿namespace Prateek.Runtime.CommandFramework
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using Mayfair.Core.Code.DebugMenu.Content;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
-    using Prateek.A_TODO.Runtime.CommandFramework.Debug;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
-    using Prateek.A_TODO.Runtime.CommandFramework.Servants;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Debug;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Servants;
     using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
@@ -31,10 +31,7 @@
         #endregion
 
         #region Properties
-        public static ICommandEmitter DefaultEmitter
-        {
-            get { return Instance.defaultEmitter.CommandReceiver; }
-        }
+        public static ICommandEmitter DefaultEmitter { get { return Instance.defaultEmitter.CommandReceiver; } }
         #endregion
 
         #region Class Methods

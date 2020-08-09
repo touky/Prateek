@@ -1,7 +1,6 @@
 namespace Mayfair.Core.Code.BaseBehaviour
 {
-    using Prateek.A_TODO.Runtime.CommandFramework;
-    using Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using UnityEngine;
 
     public abstract class CommandReceiverOwner : MonoBehaviour, ICommandReceiverOwner

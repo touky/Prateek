@@ -1,4 +1,4 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.Core
+namespace Prateek.Runtime.CommandFramework.Commands.Core
 {
     using System.Diagnostics;
     using UnityEngine.Assertions;

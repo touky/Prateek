@@ -1,12 +1,16 @@
 ﻿namespace Mayfair.Core.Code.Database.Messages
 {
-    using Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages;
+    using Prateek.Runtime.AppContentFramework.Unity.Commands;
     using UnityEngine;
 
-    public class DatabaseCallbackOnChange<TResourceType>
-        : ContentAccessRequestCallbackOnScriptableResourceChange<DatabaseHasChangedResponse<TResourceType>, TResourceType>
-        where TResourceType : ScriptableObject
+    public class DatabaseCallbackOnChange<TContentType>
+        : ScriptableContentAccessRequest<TContentType>
+        where TContentType : ScriptableObject
     {
+        protected override bool ValidateResponse()
+        {
+            return holder.Validate<DatabaseHasChangedResponse<TContentType>>();
+        }
     }
 }
 

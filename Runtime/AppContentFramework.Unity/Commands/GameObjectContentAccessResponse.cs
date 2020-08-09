@@ -1,0 +1,18 @@
+namespace Prateek.Runtime.AppContentFramework.Unity.Commands
+{
+    using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.AppContentFramework.Messages;
+    using Prateek.Runtime.AppContentFramework.Unity.Handles;
+    using UnityEngine;
+
+    public abstract class GameObjectContentAccessResponse
+        : ContentAccessChangedResponse<GameObjectHandle, GameObject>
+    {
+        #region Class Methods
+        protected override GameObjectHandle GetHandle(ContentLoader loader)
+        {
+            return new GameObjectHandle(loader);
+        }
+        #endregion
+    }
+}

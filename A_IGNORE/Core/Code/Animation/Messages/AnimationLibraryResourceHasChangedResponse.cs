@@ -1,6 +1,6 @@
 namespace Mayfair.Core.Code.Animation.Messages
 {
-    using Prateek.A_TODO.Runtime.AppContentUnityIntegration.Messages;
+    using Prateek.Runtime.AppContentFramework.Unity.Commands;
 
     public class AnimationLibraryResourceHasChangedResponse : ScriptableContentAccessChangedResponse<AnimationLibrary> { }
 }

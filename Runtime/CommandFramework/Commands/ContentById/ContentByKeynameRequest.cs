@@ -1,14 +1,14 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById
+namespace Prateek.Runtime.CommandFramework.Commands.ContentById
 {
     using System.Collections.Generic;
     using System.Diagnostics;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById.Interfaces;
-    using Prateek.A_TODO.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.ContentById.Interfaces;
+    using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.KeynameFramework.Enums;
 
     /// <summary>
-    /// Base class for any system that needs to receive request for keyname dependant datas
+    ///     Base class for any system that needs to receive request for keyname dependant datas
     /// </summary>
     [DebuggerDisplay("{GetType().Name}, Sender: {emitter.Owner.Name}")]
     public abstract class ContentByKeynameRequest
@@ -32,7 +32,7 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById
         {
             this.matchRequirement = matchRequirement;
         }
-        
+
         protected override bool ValidateResponse()
         {
             return holder.Validate<IContentByKeynameResponse>();
@@ -45,16 +45,10 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.Commands.ContentById
         }
         #endregion
 
-        #region IContentById Members
-        public KeynameMatchResult MatchRequirement
-        {
-            get { return matchRequirement; }
-        }
+        #region IContentByKeynameRequest Members
+        public KeynameMatchResult MatchRequirement { get { return matchRequirement; } }
 
-        public List<Keyname> RequestedKeynames
-        {
-            get { return requestedKeynames; }
-        }
+        public List<Keyname> RequestedKeynames { get { return requestedKeynames; } }
         #endregion
     }
 }

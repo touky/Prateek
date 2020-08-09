@@ -236,6 +236,11 @@ namespace Prateek.Runtime.TickableFramework
         ///---------------------------------------------------------------------
         internal static void Unregister(ITickable tickable)
         {
+            if (Instance == null)
+            {
+                return;
+            }
+
             var aliveTickable = Instance.allTickables.Find(x =>
             {
                 return x.Equals(tickable);

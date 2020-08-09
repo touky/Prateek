@@ -1,4 +1,4 @@
-namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces
+namespace Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces
 {
     public interface ICommandReceiverOwner
     {
@@ -7,6 +7,8 @@ namespace Prateek.A_TODO.Runtime.CommandFramework.EmitterReceiver.Interfaces
         string Name { get; }
         #endregion
 
+        #region Class Methods
         void DefineCommandReceiverActions();
+        #endregion
     }
 }
