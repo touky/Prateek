@@ -6,6 +6,8 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
     using Mayfair.Core.Code.LoadingProcess.StateMachine;
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.Utils;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
     using Prateek.Runtime.TickableFramework.Interfaces;
@@ -62,19 +64,19 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
             var taskClear = new TaskTrackingClearState(daemonCore);
 
             //Send notice
-            var prereqNotice = new NoticeState<GameLoadingPrerequisiteCommand>(daemonCore.CommandReceiver, Consts.WAIT_5_FRAMES);
+            var prereqNotice = new NoticeState<GameLoadingPrerequisiteCommand>(daemonCore.Get<ICommandReceiver>(), Consts.WAIT_5_FRAMES);
             var prereqIdle   = new LoadingIdleState();
 
             //Send notice
-            var gameplayNotice = new NoticeState<GameLoadingGameplayCommand>(daemonCore.CommandReceiver, Consts.WAIT_5_FRAMES);
+            var gameplayNotice = new NoticeState<GameLoadingGameplayCommand>(daemonCore.Get<ICommandReceiver>(), Consts.WAIT_5_FRAMES);
             var gameplayIdle   = new LoadingIdleState();
 
             //Send notice
-            var finalizeNotice = new NoticeState<GameLoadingFinalizeCommand>(daemonCore.CommandReceiver, Consts.WAIT_5_FRAMES);
+            var finalizeNotice = new NoticeState<GameLoadingFinalizeCommand>(daemonCore.Get<ICommandReceiver>(), Consts.WAIT_5_FRAMES);
             var finalizeIdle   = new LoadingIdleState();
 
             //Send notice
-            var finishedNotice = new NoticeState<GameLoadingFinishedCommand>(daemonCore.CommandReceiver);
+            var finishedNotice = new NoticeState<GameLoadingFinishedCommand>(daemonCore.Get<ICommandReceiver>());
 
             //Loading end
             var endLoading = new LoadingStatusState<LoadingProcessTrigger>(this, true);
@@ -82,7 +84,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
             //Send notice
             var restartLoading = new LoadingStatusState<LoadingProcessTrigger>(this, false);
             var restartClear   = new TaskTrackingClearState(daemonCore);
-            var restartNotice  = new NoticeState<GameLoadingRestartCommand>(daemonCore.CommandReceiver, Consts.WAIT_5_FRAMES);
+            var restartNotice  = new NoticeState<GameLoadingRestartCommand>(daemonCore.Get<ICommandReceiver>(), Consts.WAIT_5_FRAMES);
             var restartIdle    = new LoadingIdleState();
 
             new LoadingBoolTransition().From(idle).To(taskClear);

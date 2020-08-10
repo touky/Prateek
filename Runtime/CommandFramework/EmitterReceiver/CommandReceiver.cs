@@ -7,9 +7,12 @@
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Singleton;
+    using Prateek.Runtime.GadgetFramework.Interfaces;
 
     [DebuggerDisplay("Owner: {owner.Name}")]
-    internal sealed class CommandReceiver : ICommandReceiver
+    internal sealed class CommandReceiver
+        : IGadget
+        , ICommandReceiver
     {
         #region Fields
         private ICommandReceiverOwner owner;
@@ -25,20 +28,20 @@
         #endregion
 
         #region Properties
-        public List<CommandId> ActionsToRegister { get { return actionsToRegister; } }
+        internal List<CommandId> ActionsToRegister { get { return actionsToRegister; } }
 
-        public List<CommandId> ActionsToUnregister { get { return actionsToUnregister; } }
+        internal List<CommandId> ActionsToUnregister { get { return actionsToUnregister; } }
         #endregion
 
         #region Constructors
-        public CommandReceiver(ICommandReceiverOwner owner)
+        internal CommandReceiver(ICommandReceiverOwner owner)
         {
             this.owner = owner;
         }
         #endregion
 
         #region Class Methods
-        public void Receive(Command receivedCommand)
+        internal void Receive(Command receivedCommand)
         {
             //Disallow any noticeReceiver from receiving their notices now
             //MessageReceived() callback is only meant for async purpose
@@ -56,17 +59,6 @@
         #endregion
 
         #region ICommandReceiver Members
-        public void Kill()
-        {
-            if (SingletonBehaviour<CommandDaemon>.IsApplicationQuitting)
-            {
-                return;
-            }
-
-            ClearAllActions();
-            ApplyActionChanges();
-        }
-
         public ICommandReceiverOwner Owner { get { return owner; } }
 
         #region Receiving
@@ -104,6 +96,19 @@
             commandCached.Clear();
         }
         #endregion
+        #endregion
+
+        #region IGadget Members
+        public void Kill()
+        {
+            if (SingletonBehaviour<CommandDaemon>.IsApplicationQuitting)
+            {
+                return;
+            }
+
+            ClearAllActions();
+            ApplyActionChanges();
+        }
         #endregion
 
         #region Sending
@@ -146,18 +151,22 @@
             this.onCommandReceived = onCommandReceived;
         }
 
-        public void SetActionFor<T>(CommandAction<T> action) where T : Command
+        public void SetActionFor<T>(CommandAction<T> action)
+            where T : Command
         {
-            var commandId = new CommandId(typeof(T), this);
+            var target    = typeof(T).IsSubclassOf(typeof(ResponseCommand)) ? this : null;
+            var commandId = new CommandId(typeof(T), target);
 
             AddActionForCommand(commandId, new CommandActionProxy<T>(action));
 
             AddPendingCommandId(commandId, true);
         }
 
-        public void ClearActionFor<T>() where T : Command
+        public void ClearActionFor<T>()
+            where T : Command
         {
-            var commandId = new CommandId(typeof(T), this);
+            var target    = typeof(T).IsSubclassOf(typeof(ResponseCommand)) ? this : null;
+            var commandId = new CommandId(typeof(T), target);
 
             AddPendingCommandId(commandId, false);
         }

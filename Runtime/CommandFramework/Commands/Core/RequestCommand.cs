@@ -7,7 +7,9 @@ namespace Prateek.Runtime.CommandFramework.Commands.Core
     ///     A targeted command that expect the recipient to send a response
     /// </summary>
     [DebuggerDisplay("{GetType().Name}, Sender: {emitter.Owner.Name}")]
-    public abstract class RequestCommand : TargetedCommand, IRequestCommand
+    public abstract class RequestCommand
+        : TargetedCommand
+        , IRequestCommand
     {
         #region Fields
         protected IResponseHolder holder;

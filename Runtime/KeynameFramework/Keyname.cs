@@ -51,7 +51,7 @@ namespace Prateek.Runtime.KeynameFramework
         {
             Assert.IsNotNull(stringId);
 
-            return KeywordRegistry.Convert(stringId, settings);
+            return KeywordRegistry.Singleton.Convert(stringId, settings);
         }
 
         public override bool Equals(object other)

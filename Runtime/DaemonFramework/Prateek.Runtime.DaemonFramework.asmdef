@@ -2,7 +2,8 @@
     "name": "Prateek.Runtime.DaemonFramework",
     "references": [
         "Prateek.Runtime.Core",
-        "Prateek.Runtime.TickableFramework"
+        "Prateek.Runtime.TickableFramework",
+        "Prateek.Runtime.GadgetFramework"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

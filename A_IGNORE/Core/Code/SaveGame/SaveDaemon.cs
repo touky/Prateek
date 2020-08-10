@@ -8,6 +8,8 @@ namespace Mayfair.Core.Code.SaveGame
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.Utils;
     using Prateek.Runtime.CommandFramework;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
     using Prateek.Runtime.TickableFramework.Interfaces;
@@ -83,15 +85,15 @@ namespace Mayfair.Core.Code.SaveGame
                 LoadDataRequest request = this.loadingRequests[r];
                 LoadDataResponse response = request.GetResponse<LoadDataResponse>();
                 response.Init(request);
-                CommandReceiver.Send(response);
+                this.Get<ICommandReceiver>().Send(response);
             }
 
             this.loadingRequests.Clear();
         }
 
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            CommandReceiver.SetActionFor<LoadDataRequest>(OnLoadingRequest);
+            receiver.SetActionFor<LoadDataRequest>(OnLoadingRequest);
         }
 
         private void OnLoadingRequest(LoadDataRequest request)

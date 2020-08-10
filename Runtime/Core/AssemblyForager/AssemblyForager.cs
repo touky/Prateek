@@ -1,22 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
-
-namespace Prateek.Runtime.Core.AssemblyForager
+﻿namespace Prateek.Runtime.Core.AssemblyForager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using UnityEditor;
+    using UnityEngine;
+
     internal static class AssemblyForager
     {
         #region Static and Constants
+        private const int TYPE_COUNT = 30000;
         internal static List<AssemblyForagerWorker> workers = new List<AssemblyForagerWorker>();
         #endregion
 
         #region Class Methods
+        //todo: editor support [InitializeOnLoadMethod]
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Execute()
         {
             var builder = (StringBuilder) null;
-            var types   = new List<Type>(100);
+            var types   = new List<Type>(TYPE_COUNT);
             foreach (var domainAssembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 var assemblyTypes = domainAssembly.GetTypes();
@@ -24,13 +27,20 @@ namespace Prateek.Runtime.Core.AssemblyForager
                 {
                     types.Add(assemblyType);
 
-                    if (assemblyType.IsSubclassOf(typeof(AssemblyForagerWorker)))
+                    if (!assemblyType.IsSubclassOf(typeof(AssemblyForagerWorker)))
                     {
-                        var worker = Activator.CreateInstance(assemblyType) as AssemblyForagerWorker;
-                        worker.Init();
-                        workers.Add(worker);
-                        LogWorker(ref builder, worker);
+                        continue;
                     }
+
+                    if (assemblyType.IsAbstract || assemblyType.IsInterface)
+                    {
+                        continue;
+                    }
+
+                    var worker = Activator.CreateInstance(assemblyType) as AssemblyForagerWorker;
+                    worker.Init();
+                    workers.Add(worker);
+                    LogWorker(ref builder, worker);
                 }
             }
 

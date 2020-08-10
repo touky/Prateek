@@ -1,14 +1,12 @@
 namespace Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces
 {
-    public interface ICommandReceiverOwner
-    {
-        #region Properties
-        ICommandReceiver CommandReceiver { get; }
-        string Name { get; }
-        #endregion
+    using Prateek.Runtime.GadgetFramework.Interfaces;
 
+    public interface ICommandReceiverOwner
+        : IGadgetOwner
+    {
         #region Class Methods
-        void DefineCommandReceiverActions();
+        void DefineReceptionActions(ICommandReceiver receiver);
         #endregion
     }
 }

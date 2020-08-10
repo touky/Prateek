@@ -16,6 +16,8 @@ namespace Mayfair.Core.Code.GameScene
     using Prateek.Runtime.AppContentFramework.Loader.Interfaces;
     using Prateek.Runtime.AppContentFramework.Unity.Handles;
     using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
     using UnityEngine.SceneManagement;
 
@@ -114,7 +116,7 @@ namespace Mayfair.Core.Code.GameScene
 
                 var notice = CommandHelper.Create<SessionDebugAvailable>();
                 notice.Init(context);
-                CommandReceiver.Send(notice);
+                this.Get<ICommandReceiver>().Send(notice);
             }
         }
 
@@ -130,7 +132,7 @@ namespace Mayfair.Core.Code.GameScene
                 StepProgress = progress
             };
 
-            CommandReceiver.Send(taskCommand);
+            this.Get<ICommandReceiver>().Send(taskCommand);
         }
 
         private void UpdateLoadingTask()
@@ -345,7 +347,7 @@ namespace Mayfair.Core.Code.GameScene
             DebugTools.Log($"Game scene request to load '{request.Scene}' received", DebugTools.LogLevel.LowPriority);
             if (!availableScenes.TryGetValue(request.Scene, out var containerRequested))
             {
-                CommandReceiver.Send(request.GetResponse<LoadSceneResponse>());
+                this.Get<ICommandReceiver>().Send(request.GetResponse<LoadSceneResponse>());
 
                 Debug.Assert(false, $"Requested scene {request.Scene} does not exist or does not have an address.");
                 return;
@@ -375,7 +377,7 @@ namespace Mayfair.Core.Code.GameScene
             //todo RefreshLoadingStatus();
             //todo var response = request.GetResponse();
             //todo response.SceneReference = sceneReference;
-            //todo CommandReceiver.Send(response);
+            //todo this.Get<ICommandReceiver>().Send(response);
         }
 
         private void OnUnloadSceneRequestReceived(UnloadSceneRequest<UnloadSceneResponse> request)
@@ -410,7 +412,7 @@ namespace Mayfair.Core.Code.GameScene
         {
             RefreshLoadingStatus();
             var response = request.GetResponse<UnloadSceneResponse>();
-            CommandReceiver.Send(response);
+            this.Get<ICommandReceiver>().Send(response);
         }
         #endregion
 
@@ -438,17 +440,17 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Messaging
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            base.DefineCommandReceiverActions();
+            base.DefineReceptionActions(receiver);
 
-            CommandReceiver.SetActionFor<GameSessionOpen>(OnGameSessionOpen);
-            CommandReceiver.SetActionFor<GameSessionClose>(OnGameSessionClose);
-            CommandReceiver.SetActionFor<GameLoadingGameplayCommand>(OnGameLoadingGameplay);
-            CommandReceiver.SetActionFor<GameLoadingRestartCommand>(OnGameLoadingRestart);
+            receiver.SetActionFor<GameSessionOpen>(OnGameSessionOpen);
+            receiver.SetActionFor<GameSessionClose>(OnGameSessionClose);
+            receiver.SetActionFor<GameLoadingGameplayCommand>(OnGameLoadingGameplay);
+            receiver.SetActionFor<GameLoadingRestartCommand>(OnGameLoadingRestart);
 
-            CommandReceiver.SetActionFor<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
-            CommandReceiver.SetActionFor<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
+            receiver.SetActionFor<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
+            receiver.SetActionFor<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
         }
         #endregion
     }

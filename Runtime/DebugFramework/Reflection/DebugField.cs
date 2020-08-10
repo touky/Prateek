@@ -1,17 +1,38 @@
 namespace Prateek.Runtime.DebugFramework.Reflection
 {
+    using System.Reflection;
     using UnityEngine.Assertions;
 
     public abstract class DebugField
     {
+        #region Properties
+        public abstract string Name { get; }
+        public abstract bool IsValid { get; }
+        #endregion
+
         #region Class Methods
+        public abstract void SetOwner(object owner);
+
         public static void SetOwnerToAllDebugFields(object debugFieldOwner, object contentOwner)
         {
             //Doing this to allow renaming of the interface method but keep the correct one as the first
             var methods = typeof(DebugField).GetMethods();
             Assert.IsTrue(methods.Length >= 1);
 
-            var arguments = methods[0].GetParameters();
+            var methodInfo = (MethodInfo) null;
+            foreach (var method in methods)
+            {
+                if ((method.Attributes & MethodAttributes.Abstract) != 0
+                 && (method.Attributes & MethodAttributes.SpecialName) == 0)
+                {
+                    methodInfo = method;
+                    break;
+                }
+            }
+
+            Assert.IsNotNull(methodInfo, $"{nameof(DebugField)} class has changed, cannot find its abstract SetOwner !");
+
+            var arguments = methodInfo.GetParameters();
             Assert.IsTrue(arguments.Length == 1);
             Assert.IsTrue(arguments[0].ParameterType == typeof(object));
 
@@ -22,11 +43,9 @@ namespace Prateek.Runtime.DebugFramework.Reflection
                 parameters[0] = contentOwner;
 
                 var debugField = fieldInfo.GetValue(debugFieldOwner);
-                methods[0].Invoke(debugField, parameters);
+                methodInfo.Invoke(debugField, parameters);
             }
         }
-
-        public abstract void SetOwner(object owner);
 
         public static void SetOwner<T0, T1>(object owner, DebugField<T0> field0, DebugField<T1> field1)
         {

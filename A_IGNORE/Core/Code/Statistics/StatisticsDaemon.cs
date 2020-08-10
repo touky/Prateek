@@ -6,6 +6,8 @@ namespace Mayfair.Core.Code.Statistics
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.Utils.Debug;
     using Prateek.Runtime.CommandFramework;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.KeynameFramework;
 
     using Prateek.Runtime.TickableFramework.Interfaces;
@@ -54,9 +56,9 @@ namespace Mayfair.Core.Code.Statistics
         #endregion
 
         #region Messaging
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            CommandReceiver.SetActionFor<GameActionCommand>(OnStatisticsMessage);
+            receiver.SetActionFor<GameActionCommand>(OnStatisticsMessage);
         }
         #endregion
 

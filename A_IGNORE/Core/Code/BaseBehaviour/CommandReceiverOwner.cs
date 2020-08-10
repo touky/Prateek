@@ -1,45 +1,38 @@
 namespace Mayfair.Core.Code.BaseBehaviour
 {
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.Core.AutoRegistration;
+    using Prateek.Runtime.GadgetFramework;
     using UnityEngine;
 
-    public abstract class CommandReceiverOwner : MonoBehaviour, ICommandReceiverOwner
+    public abstract class CommandReceiverOwner
+        : MonoBehaviour
+        , ICommandReceiverOwner
     {
         #region Fields
-        private ICommandReceiver commandReceiver;
+        private GadgetPouch gadgetPouch = new GadgetPouch();
+        #endregion
+
+        #region Constructors
+        protected CommandReceiverOwner()
+        {
+            this.AutoRegister();
+        }
         #endregion
 
         #region Unity Methods
-        protected virtual void Awake()
-        {
-            this.InitializeReceiver(ref commandReceiver);
-        }
-
         protected virtual void Update()
         {
-            commandReceiver.ProcessReceivedCommands();
-        }
-
-        protected virtual void OnDestroy()
-        {
-            this.commandReceiver.Kill();
+            this.Get<ICommandReceiver>().ProcessReceivedCommands();
         }
         #endregion
 
-        #region Class Methods
-        public abstract void DefineCommandReceiverActions();
-        #endregion
+        #region ICommandReceiverOwner Members
+        public string Name { get { return GetType().Name; } }
 
-        #region IMessageCommunicatorOwner Members
-        public ICommandReceiver CommandReceiver
-        {
-            get { return this.commandReceiver; }
-        }
+        public GadgetPouch GadgetPouch { get { return gadgetPouch; } }
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public virtual void DefineReceptionActions(ICommandReceiver receiver) { }
         #endregion
     }
 }

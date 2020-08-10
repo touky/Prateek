@@ -3,7 +3,6 @@ namespace Prateek.Runtime.CommandFramework.Commands.Core
     using System.Diagnostics;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.Extensions;
-    using UnityEngine.Assertions;
 
     /// <summary>
     ///     Base class for all the commands
@@ -34,26 +33,6 @@ namespace Prateek.Runtime.CommandFramework.Commands.Core
         public override string ToString()
         {
             return GetType().ToDebugString();
-        }
-        #endregion
-    }
-
-    public static class CommandHelper
-    {
-        #region Class Methods
-        public static T Create<T>()
-            where T : Command, new()
-        {
-            Assert.IsFalse(typeof(T).IsSubclassOf(typeof(RequestCommand)));
-
-            return Command.Create<T>();
-        }
-
-        public static TRequest Create<TRequest, TResponse>()
-            where TRequest : RequestCommand, new()
-            where TResponse : ResponseCommand, new()
-        {
-            return RequestCommand.Create<TRequest, TResponse>();
         }
         #endregion
     }

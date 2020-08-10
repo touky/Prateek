@@ -1,7 +1,9 @@
 ﻿namespace Prateek.Runtime.CommandFramework.Commands.Core
 {
     using System;
+    using System.Diagnostics;
 
+    [DebuggerDisplay("{type.Name}/{target}: {Key}/{IntExtensions.ToHexString(Key)}")]
     public struct CommandId
     {
         #region Static and Constants

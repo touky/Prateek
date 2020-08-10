@@ -11,6 +11,7 @@
         "Prateek.Runtime.AppContentFramework",
         "Prateek.Runtime.StateMachineFramework",
         "Prateek.Runtime.TickableFramework",
+        "Prateek.Runtime.GadgetFramework",
         "Prateek.Runtime.AppContentFramework.Unity",
         "Unity.ResourceManager"
     ],

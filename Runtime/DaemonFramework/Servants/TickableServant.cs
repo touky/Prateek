@@ -1,7 +1,7 @@
 namespace Prateek.Runtime.DaemonFramework.Servants
 {
+    using Prateek.Runtime.Core.AutoRegistration;
     using Prateek.Runtime.DaemonFramework.Interfaces;
-    using Prateek.Runtime.TickableFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
     public abstract class TickableServant<TDaemon, TServant>
@@ -15,12 +15,12 @@ namespace Prateek.Runtime.DaemonFramework.Servants
         {
             base.Startup();
 
-            this.RegisterTickable();
+            this.AutoRegister();
         }
 
         public override void Shutdown()
         {
-            this.UnregisterTickable();
+            this.AutoUnregister();
 
             base.Shutdown();
         }

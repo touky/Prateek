@@ -1,14 +1,21 @@
 namespace Prateek.Runtime.DebugFramework.DebugMenu
 {
+    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
     using Prateek.Runtime.DebugFramework.Reflection;
 
-    public abstract class DebugMenuSection<TFieldSource> : DebugMenuSection
+    public abstract class DebugMenuSection<TOwnerType>
+        : DebugMenuSection
+        where TOwnerType : class, IDebugMenuDocumentOwner
     {
-        #region Constructors
-        protected DebugMenuSection(TFieldSource source, string title) : base(title)
+        #region Properties
+        public TOwnerType Owner
         {
-            DebugField.SetOwnerToAllDebugFields(this, source);
+            get { return GetOwner<TOwnerType>(); }
         }
+        #endregion
+
+        #region Constructors
+        protected DebugMenuSection(string title) : base(title) { }
         #endregion
     }
 }

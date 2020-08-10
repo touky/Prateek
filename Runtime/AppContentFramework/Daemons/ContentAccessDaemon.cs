@@ -2,7 +2,9 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
 {
     using Prateek.Runtime.AppContentFramework.Messages;
     using Prateek.Runtime.CommandFramework;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.HierarchicalTree;
+    using Prateek.Runtime.GadgetFramework;
 
     public abstract class ContentAccessDaemon<TDaemon>
         : ReceiverDaemon<TDaemon>
@@ -19,14 +21,14 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         {
             base.OnAwake();
 
-            CommandReceiver.Send(GetAccessRequest());
+            this.Get<ICommandReceiver>().Send(GetAccessRequest());
         }
         #endregion
 
         #region Class Methods
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            CommandReceiver.SetActionFor<ContentAccessChangedResponse>(OnContentAccessChangedResponse);
+            receiver.SetActionFor<ContentAccessChangedResponse>(OnContentAccessChangedResponse);
         }
 
         private void OnContentAccessChangedResponse(ContentAccessChangedResponse response)

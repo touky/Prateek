@@ -2,6 +2,7 @@ namespace Mayfair.Core.Code.Database.ServiceProvider.DatabaseIdentification
 {
     using Mayfair.Core.Code.BaseBehaviour;
     using Mayfair.Core.Code.Utils;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
 
     public abstract class DatabaseIdentificationIntegrator : CommandReceiverOwner
     {
@@ -27,7 +28,7 @@ namespace Mayfair.Core.Code.Database.ServiceProvider.DatabaseIdentification
         #endregion
 
         #region Class Methods
-        public override void DefineCommandReceiverActions()  { }
+        public override void DefineReceptionActions(ICommandReceiver receiver)  { }
 
         public abstract void Create();
         #endregion

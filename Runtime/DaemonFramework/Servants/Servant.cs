@@ -37,7 +37,7 @@ namespace Prateek.Runtime.DaemonFramework.Servants
 
         public virtual bool IsAlive
         {
-            get { return false; }
+            get { return true; }
         }
 
         public virtual int Priority

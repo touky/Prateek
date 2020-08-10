@@ -1,30 +1,43 @@
 ﻿namespace Prateek.Runtime.DaemonFramework
 {
-    using System;
+    using Prateek.Runtime.Core.AutoRegistration;
     using Prateek.Runtime.Core.Singleton;
-    using Prateek.Runtime.TickableFramework;
+    using Prateek.Runtime.GadgetFramework;
+    using Prateek.Runtime.GadgetFramework.Interfaces;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
     public abstract class Daemon<TDaemon>
         : SingletonBehaviour<TDaemon>
         , ITickable
+        , IGadgetOwner
         where TDaemon : Daemon<TDaemon>
     {
-        #region Properties
-        public virtual int Priority
+        #region Fields
+        private GadgetPouch gadgetPouch = new GadgetPouch();
+        #endregion
+
+        #region Unity Methods
+        protected virtual void OnDestroy()
         {
-            get { return 0; }
+            this.AutoUnregister();
         }
         #endregion
 
+        #region Register/Unregister
         protected override void OnAwake()
         {
-            this.RegisterTickable();
+            this.AutoRegister();
         }
+        #endregion
 
-        protected virtual void OnDestroy()
-        {
-            this.UnregisterTickable();
-        }
+        #region IGadgetOwner Members
+        public GadgetPouch GadgetPouch { get { return gadgetPouch; } }
+
+        public string Name { get { return name; } }
+        #endregion
+
+        #region ITickable Members
+        public virtual int Priority { get { return 0; } }
+        #endregion
     }
 }

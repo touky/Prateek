@@ -2,8 +2,10 @@ namespace Prateek.Runtime.DebugFramework.Reflection
 {
     using System;
     using System.Reflection;
+    using UnityEngine;
 #if UNITY_EDITOR
     using UnityEditor;
+
 #endif
 
     public class DebugField<T> : DebugField
@@ -17,9 +19,9 @@ namespace Prateek.Runtime.DebugFramework.Reflection
         #endregion
 
         #region Properties
-        public string Name { get { return name; } }
+        public override string Name { get { return name; } }
 
-        public bool IsValid { get { return fieldInfo != null; } }
+        public override bool IsValid { get { return fieldInfo != null; } }
 
         public T Value { get { return fieldInfo == null ? default(T) : this; } set { Set(value); } }
 
@@ -52,7 +54,7 @@ namespace Prateek.Runtime.DebugFramework.Reflection
 
         public static implicit operator T(DebugField<T> other)
         {
-            return other.Value;
+            return other.fieldInfo == null ? default(T) : (T) other.fieldInfo.GetValue(other.owner);
         }
 
         private void Set(T value)
@@ -70,6 +72,11 @@ namespace Prateek.Runtime.DebugFramework.Reflection
             this.owner = owner;
             ownerType = this.owner.GetType();
             fieldInfo = ReflectionHelper.SearchFieldInfo(ownerType, name, true);
+
+            if (fieldInfo == null)
+            {
+                Debug.LogError($"{name} could not be found in {ownerType.Name}");
+            }
         }
         #endregion
     }

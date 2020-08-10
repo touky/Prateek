@@ -1,8 +1,9 @@
 namespace Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces
 {
     using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.GadgetFramework.Interfaces;
 
-    public interface ICommandEmitter
+    public interface ICommandEmitter : IGadget
     {
         #region Properties
         ICommandReceiverOwner Owner { get; }

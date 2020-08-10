@@ -1,21 +1,21 @@
 ﻿namespace Prateek.Runtime.CommandFramework
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using Mayfair.Core.Code.DebugMenu.Content;
     using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.CommandFramework.Debug;
     using Prateek.Runtime.CommandFramework.EmitterReceiver;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.CommandFramework.Servants;
     using Prateek.Runtime.DaemonFramework;
+    using Prateek.Runtime.DebugFramework.DebugMenu;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
     #region Nested type: MessageService
     public sealed class CommandDaemon
         : DaemonOverseer<CommandDaemon, CommandServant>
-        , IDebugMenuNotebookOwner
+        , IDebugMenuDocumentOwner
         , IEarlyUpdateTickable
     {
         #region Fields
@@ -27,19 +27,14 @@
         private List<Command> commandReceived;
         private List<Command> commandCached;
 
-        private LiveNoticeReceiversMenuPage debugLivePage = null;
+        private LiveReceiverSection debugLivePage = null;
         #endregion
 
         #region Properties
-        public static ICommandEmitter DefaultEmitter { get { return Instance.defaultEmitter.CommandReceiver; } }
+        public static ICommandEmitter DefaultEmitter { get { return Instance.defaultEmitter.Emitter; } }
         #endregion
 
         #region Class Methods
-        public static ICommandReceiver CreateCommandReceiver(ICommandReceiverOwner owner)
-        {
-            return new CommandReceiver(owner);
-        }
-
         internal static void CommandReceived(Command receivedCommand)
         {
             foreach (var servant in Instance.AllAliveServants)
@@ -53,7 +48,7 @@
             commandReceived.Add(receivedCommand);
         }
 
-        private void ProcessNotices()
+        private void ProcessReceivedCommands()
         {
             lock (noticeLock)
             {
@@ -76,19 +71,19 @@
             }
 
             //todo var builder = (StringBuilder)null;
-            foreach (var notice in commandCached)
+            foreach (var command in commandCached)
             {
                 //todo builder.AddReceivedMessage(this, notice);
 
                 //Standard notice management, send to concerned receivers
-                var commandId = notice.CommandId;
+                var commandId = command.CommandId;
                 if (liveReceivers.TryGetValue(commandId.Key, out var receivers))
                 {
                     foreach (var receiver in receivers)
                     {
                         //todo builder.AddCommunicator(this, noticeReceiver);
 
-                        receiver.Receive(notice);
+                        receiver.Receive(command);
                     }
                 }
             }
@@ -97,33 +92,12 @@
 
             commandCached.Clear();
         }
-
-        [Conditional("PRATEEK_DEBUG")]
-        private void SetupDebugContent()
-        {
-            //DebugMenuNotebook debugNotebook = new DebugMenuNotebook("MSGS", "Message Service");
-            //debugLivePage = new LiveNoticeReceiversMenuPage(this, "Live receivers");
-
-            //debugNotebook.AddPagesWithParent(new EmptyMenuPage("MAIN"), debugLivePage);
-            //debugNotebook.Register();
-        }
-
-        [Conditional("PRATEEK_DEBUG")]
-        private void AddTypeToDebug(Type type)
-        {
-            if (debugLivePage == null)
-            {
-                return;
-            }
-
-            debugLivePage.AddType(type);
-        }
         #endregion
 
         #region IEarlyUpdateTickable Members
         public void EarlyUpdate()
         {
-            ProcessNotices();
+            ProcessReceivedCommands();
         }
         #endregion
 
@@ -143,8 +117,6 @@
             {
                 commandReceived = new List<Command>();
             }
-
-            SetupDebugContent();
 
             defaultEmitter = new DefaultCommandEmitter();
         }
@@ -177,7 +149,7 @@
 
                 receivers.Add(commandReceiver);
 
-                AddTypeToDebug(commandId.Type);
+                this.Get<DebugMenuDocument>().Section<LiveReceiverSection>().AddCommandType(commandId.Type);
             }
         }
 
@@ -190,6 +162,15 @@
                     receivers.Remove(commandReceiver);
                 }
             }
+        }
+
+        public void SetupDebugDocument(DebugMenuDocument document, out string title)
+        {
+            title = "Command daemon";
+
+            debugLivePage = new LiveReceiverSection("Live receivers");
+
+            document.AddSections(debugLivePage);
         }
         #endregion
     }

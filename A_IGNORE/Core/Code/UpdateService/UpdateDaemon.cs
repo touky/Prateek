@@ -6,6 +6,8 @@ namespace Mayfair.Core.Code.UpdateService
     using Mayfair.Core.Code.LoadingProcess;
     using Messages;
     using Prateek.Runtime.CommandFramework;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Service;
     using UnityEngine;
     using Utils.Debug;
@@ -53,10 +55,10 @@ namespace Mayfair.Core.Code.UpdateService
             registeredUpdatablesToFrequency = new Dictionary<IUpdatable, UpdateFrequency>();
         }
 
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            CommandReceiver.SetActionFor<RegisterForUpdate>(OnRegisterForUpdate);
-            CommandReceiver.SetActionFor<UnregisterForUpdate>(OnUnregisterForUpdate);
+            receiver.SetActionFor<RegisterForUpdate>(OnRegisterForUpdate);
+            receiver.SetActionFor<UnregisterForUpdate>(OnUnregisterForUpdate);
         }
 
         private void AddUpdatablesList(UpdateFrequency updateFrequency)

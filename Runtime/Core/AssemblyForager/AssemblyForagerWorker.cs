@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Prateek.Runtime.Core.AssemblyForager
+﻿namespace Prateek.Runtime.Core.AssemblyForager
 {
+    using System;
+    using System.Collections.Generic;
+
     public abstract class AssemblyForagerWorker
     {
         #region Fields
@@ -11,10 +11,7 @@ namespace Prateek.Runtime.Core.AssemblyForager
         #endregion
 
         #region Properties
-        public List<Type> FoundTypes
-        {
-            get { return foundTypes; }
-        }
+        public List<Type> FoundTypes { get { return foundTypes; } }
         #endregion
 
         #region Class Methods
@@ -42,11 +39,7 @@ namespace Prateek.Runtime.Core.AssemblyForager
             }
         }
 
-        public virtual void Init()
-        {
-            throw new NotImplementedException();
-        }
-
+        public abstract void Init();
         public virtual void WorkDone() { }
         #endregion
     }

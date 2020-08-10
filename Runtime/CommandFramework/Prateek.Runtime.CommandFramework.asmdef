@@ -1,11 +1,14 @@
 {
     "name": "Prateek.Runtime.CommandFramework",
     "references": [
+        "RG.ImGui",
+        "RG.ImGui.Unity",
         "Prateek.Runtime.Core",
         "Prateek.Runtime.DaemonFramework",
+        "Prateek.Runtime.GadgetFramework",
         "Prateek.Runtime.TickableFramework",
         "Prateek.Runtime.KeynameFramework",
-        "Mayfair.DebugMenu"
+        "Prateek.Runtime.DebugFramework"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

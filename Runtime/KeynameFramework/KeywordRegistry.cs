@@ -3,53 +3,55 @@ namespace Prateek.Runtime.KeynameFramework
     using System;
     using System.Collections.Generic;
     using Prateek.Runtime.Core.Extensions;
+    using Prateek.Runtime.Core.Singleton;
     using Prateek.Runtime.KeynameFramework.Enums;
     using Prateek.Runtime.KeynameFramework.Interfaces;
     using Prateek.Runtime.KeynameFramework.Settings;
 
-    internal static class KeywordRegistry
+    internal class KeywordRegistry : SingletonBehaviour<KeywordRegistry>
     {
-        #region Static and Constants
-        internal static KeywordForagerWorker foragerWorker;
-        private static Dictionary<string, Type> stringToKeywords = new Dictionary<string, Type>();
-        private static Dictionary<Type, Type> keywordToParent = new Dictionary<Type, Type>();
+        #region Fields
+        internal KeywordForagerWorker foragerWorker;
+        private Dictionary<string, Type> stringToKeywords = new Dictionary<string, Type>();
+        private Dictionary<Type, Type> keywordToParent = new Dictionary<Type, Type>();
         #endregion
 
         #region Properties
-        internal static Type MasterKeyword
-        {
-            get { return typeof(MasterKeyword); }
-        }
+        internal static KeywordRegistry Singleton { get { return Instance; } }
+
+        internal static Type MasterKeyword { get { return typeof(MasterKeyword); } }
         #endregion
 
         #region Register/Unregister
-        private static void Register(string name, Type type)
+        protected override void OnAwake() { }
+
+        private void Register(string keyName, Type keyType)
         {
 #if DEBUG_DEV
-            if (tagStorage.ContainsKey(name))
+            if (stringToKeywords.ContainsKey(keyName))
             {
-                throw new Exception($"ERROR: Tag {name} with {type.Name} already exists");
+                throw new Exception($"ERROR: Tag {name} with {keyType.Name} already exists");
             }
 #endif
 
-            stringToKeywords.Add(name, type);
+            stringToKeywords.Add(keyName, keyType);
         }
 
-        private static void Register(Type type)
+        private void Register(Type keyType)
         {
 #if DEBUG_DEV
-            if (tagStorage.ContainsKey(type.Name))
+            if (stringToKeywords.ContainsKey(keyType.Name))
             {
-                throw new Exception($"ERROR: Tag {type.Name} already exists");
+                throw new Exception($"ERROR: Tag {keyType.Name} already exists");
             }
 #endif
 
-            stringToKeywords.Add(type.Name, type);
+            stringToKeywords.Add(keyType.Name, keyType);
         }
         #endregion
 
         #region Class Methods
-        internal static void Init()
+        internal void BuildRegistry()
         {
             if (stringToKeywords.Count != 0 || foragerWorker == null)
             {
@@ -76,7 +78,7 @@ namespace Prateek.Runtime.KeynameFramework
             }
         }
 
-        internal static Type GetKeywordType(Type type)
+        internal Type GetKeywordType(Type type)
         {
             if (keywordToParent.ContainsKey(type))
             {
@@ -86,10 +88,8 @@ namespace Prateek.Runtime.KeynameFramework
             return type;
         }
 
-        public static Type GetKeywordType(string source)
+        public Type GetKeywordType(string source)
         {
-            Init();
-
             Type result = null;
             if (stringToKeywords.TryGetValue(source, out result))
             {
@@ -99,10 +99,8 @@ namespace Prateek.Runtime.KeynameFramework
             return null;
         }
 
-        internal static Keyname Convert(string source, KeynameSettingsData settings = null)
+        internal Keyname Convert(string source, KeynameSettingsData settings = null)
         {
-            Init();
-
             settings = settings == null ? KeynameSettings.Default.Data : settings;
 
             var keyname = new Keyname(false);

@@ -9,6 +9,8 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.Utils;
     using Prateek.Runtime.CommandFramework;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
     public sealed class LoadingProcessDaemon
@@ -37,15 +39,15 @@ namespace Mayfair.Core.Code.LoadingProcess
         }
 
         #region Messaging
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            CommandReceiver.SetActionFor<TaskLoadingCommand>(OnLoadTaskMessage);
-            CommandReceiver.SetActionFor<GameLoadingNeedRestart>(OnGameLoadingNeedRestart);
+            receiver.SetActionFor<TaskLoadingCommand>(OnLoadTaskMessage);
+            receiver.SetActionFor<GameLoadingNeedRestart>(OnGameLoadingNeedRestart);
 
-            CommandReceiver.SetActionFor<GameLoadingPrerequisiteCommand>(OnGameLoading);
-            CommandReceiver.SetActionFor<GameLoadingGameplayCommand>(OnGameLoading);
-            CommandReceiver.SetActionFor<GameLoadingFinalizeCommand>(OnGameLoading);
-            CommandReceiver.SetActionFor<GameLoadingRestartCommand>(OnGameLoading);
+            receiver.SetActionFor<GameLoadingPrerequisiteCommand>(OnGameLoading);
+            receiver.SetActionFor<GameLoadingGameplayCommand>(OnGameLoading);
+            receiver.SetActionFor<GameLoadingFinalizeCommand>(OnGameLoading);
+            receiver.SetActionFor<GameLoadingRestartCommand>(OnGameLoading);
         }
         #endregion
 

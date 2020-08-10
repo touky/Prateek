@@ -2,10 +2,16 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
 {
     using System.Collections.Generic;
     using ImGuiNET;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using Prateek.Runtime.GadgetFramework.Interfaces;
+    using UnityEngine;
 
-    public class DebugMenuDocument : DebugMenuObject
+    public class DebugMenuDocument
+        : DebugMenuObject
+        , IGadget
     {
         #region Fields
+        private IDebugMenuDocumentOwner owner;
         private bool isDocked = true;
         private List<DebugMenuSection> sections = new List<DebugMenuSection>();
         #endregion
@@ -15,27 +21,21 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         #endregion
 
         #region Constructors
-        public DebugMenuDocument(string title) : base(title) { }
-
-        ~DebugMenuDocument()
+        public DebugMenuDocument(IDebugMenuDocumentOwner owner) : base()
         {
-            Unregister();
+            this.owner = owner;
         }
         #endregion
 
         #region Register/Unregister
-        public void Register()
+        internal void Register(string title)
         {
+            this.title = title;
             DebugMenuDaemon.Register(this);
         }
         #endregion
 
         #region Class Methods
-        public void Unregister()
-        {
-            DebugMenuDaemon.Unregister(this);
-        }
-
         /// <summary>
         ///     Add sections to the Document, does not handle parentage
         /// </summary>
@@ -50,6 +50,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
                     continue;
                 }
 
+                section.SetOwner(owner);
                 sections.Add(section);
             }
         }
@@ -74,5 +75,18 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
             }
         }
         #endregion
+
+        #region IGadget Members
+        public void Kill()
+        {
+            DebugMenuDaemon.Unregister(this);
+        }
+        #endregion
+
+        internal TSection Get<TSection>()
+            where TSection : DebugMenuSection
+        {
+            return sections.Find((x) => { return x is TSection; }) as TSection;
+        }
     }
 }

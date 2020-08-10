@@ -8,6 +8,8 @@ namespace Mayfair.Core.Code.Localization
     using System.Collections;
     using System.Collections.Generic;
     using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using UnityEngine;
 
     public class LocalizationBootstrap : CommandReceiverOwner
@@ -19,9 +21,9 @@ namespace Mayfair.Core.Code.Localization
         #endregion
 
         #region Methods
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            CommandReceiver.SetActionFor<GameLoadingPrerequisiteCommand>(OnGameLoadingPrerequisiteNoticeReceived);
+            receiver.SetActionFor<GameLoadingPrerequisiteCommand>(OnGameLoadingPrerequisiteNoticeReceived);
         }
 
         private void OnGameLoadingPrerequisiteNoticeReceived(GameLoadingPrerequisiteCommand command)
@@ -34,7 +36,7 @@ namespace Mayfair.Core.Code.Localization
             }
 
             taskLoadingCommand.trackerState = new LoadingTaskTracker(GetType(), LoadingTrackingStatus.HasLoadedPrerequisite);
-            CommandReceiver.Send(taskLoadingCommand);
+            this.Get<ICommandReceiver>().Send(taskLoadingCommand);
         }
         #endregion
     }

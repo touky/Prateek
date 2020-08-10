@@ -4,9 +4,11 @@
     using Prateek.Runtime.AppContentFramework.Loader;
     using Prateek.Runtime.AppContentFramework.Messages;
     using Prateek.Runtime.CommandFramework;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
     using Prateek.Runtime.TickableFramework.Interfaces;
@@ -85,9 +87,9 @@
             hierarchicalTree.Remove(new RemovalLeaf {Path = path});
         }
 
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            CommandReceiver.SetActionFor<ContentAccessRequest>(OnContentAccessRequest);
+            receiver.SetActionFor<ContentAccessRequest>(OnContentAccessRequest);
         }
 
         private void OnContentAccessRequest(ContentAccessRequest request)
@@ -146,7 +148,7 @@
                     {
                         var response = accessRequest.GetResponse<ContentAccessChangedResponse>();
                         hierarchicalTree.SearchTree(accessRequest, response);
-                        CommandReceiver.Send(response);
+                        this.Get<ICommandReceiver>().Send(response);
                     }
 
                     stateMachine.Trigger(Trigger.NextStep);

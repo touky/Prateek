@@ -38,7 +38,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration
                     return defaultNumber;
                 }
 
-                if (i < Const.ZERO || i >= numberedSymbols.Count)
+                if (i < Const.INDEX_NONE || i >= numberedSymbols.Count)
                 {
                     return string.Empty;
                 }

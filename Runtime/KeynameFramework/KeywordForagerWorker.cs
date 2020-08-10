@@ -9,14 +9,14 @@ namespace Prateek.Runtime.KeynameFramework
         {
             Search(KeywordRegistry.MasterKeyword);
 
-            KeywordRegistry.foragerWorker = this;
+            KeywordRegistry.Singleton.foragerWorker = this;
         }
 
         public override void WorkDone()
         {
             base.WorkDone();
 
-            KeywordRegistry.Init();
+            KeywordRegistry.Singleton.BuildRegistry();
         }
         #endregion
     }

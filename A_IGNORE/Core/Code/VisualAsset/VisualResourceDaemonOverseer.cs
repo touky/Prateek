@@ -7,6 +7,8 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.VisualAsset.Messages;
     using Mayfair.Core.Code.VisualAsset.Providers;
     using Prateek.Runtime.AppContentFramework.Daemons;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
     public sealed class VisualResourceDaemonOverseer
@@ -36,11 +38,11 @@ namespace Mayfair.Core.Code.VisualAsset
         #endregion
 
         #region Messaging
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            base.DefineCommandReceiverActions();
+            base.DefineReceptionActions(receiver);
 
-            CommandReceiver.SetActionFor<VisualResourceDirectCommand>(OnVisualResourceMessage);
+            receiver.SetActionFor<VisualResourceDirectCommand>(OnVisualResourceMessage);
         }
         #endregion
 

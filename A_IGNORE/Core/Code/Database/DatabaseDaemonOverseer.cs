@@ -13,6 +13,8 @@
     using Mayfair.Core.Code.Utils.Debug;
     using Prateek.Runtime.AppContentFramework.Daemons;
     using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.KeynameFramework.Enums;
     using Prateek.Runtime.TickableFramework.Interfaces;
@@ -140,7 +142,7 @@
                 }
             }
 
-            CommandReceiver.Send(response);
+            this.Get<ICommandReceiver>().Send(response);
         }
 
         private void SendRequestForIdentifiers()
@@ -151,7 +153,7 @@
                 var notice =
                     CommandHelper.Create<DatabaseIdentifierRequest<DatabaseIdentifierResponse>>();
 
-                CommandReceiver.Send(notice);
+                this.Get<ICommandReceiver>().Send(notice);
             }
         }
 
@@ -183,7 +185,7 @@
 
             DebugTools.Log(this, "OnDatabaseContentMatchingFilter request received and handled. Sending result now");
 
-            CommandReceiver.Send(response);
+            this.Get<ICommandReceiver>().Send(response);
         }
 
         private void PatternContainsAll(List<string> filters, List<ICompositeContent> results)
@@ -371,13 +373,13 @@
         }
 
         #region Messaging
-        public override void DefineCommandReceiverActions()
+        public override void DefineReceptionActions(ICommandReceiver receiver)
         {
-            base.DefineCommandReceiverActions();
+            base.DefineReceptionActions(receiver);
 
-            CommandReceiver.SetActionFor<DatabaseIdentifierResponse>(OnIdentifiersReceived);
-            CommandReceiver.SetActionFor<DatabaseContentByKeynameRequest>(OnRequestContentById);
-            CommandReceiver.SetActionFor<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
+            receiver.SetActionFor<DatabaseIdentifierResponse>(OnIdentifiersReceived);
+            receiver.SetActionFor<DatabaseContentByKeynameRequest>(OnRequestContentById);
+            receiver.SetActionFor<DatabaseContentByFilterRequest>(OnDatabaseContentMatchingFilter);
         }
         #endregion
         #endregion
