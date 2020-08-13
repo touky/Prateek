@@ -12,6 +12,7 @@ namespace Prateek.Runtime.AppContentFramework.Messages
         #region Fields
         private HierarchicalTreeSettingsData settings = null;
         private string[] contentPaths;
+        private string[] contentExtensions;
         internal ContentAccessChangedResponse.Storage storage = null;
         #endregion
 
@@ -20,9 +21,10 @@ namespace Prateek.Runtime.AppContentFramework.Messages
         #endregion
 
         #region Class Methods
-        public void Init(string[] contentPaths, HierarchicalTreeSettingsData settings = null)
+        public void Setup(string[] contentPaths, string[] contentExtensions = null, HierarchicalTreeSettingsData settings = null)
         {
             this.contentPaths = contentPaths;
+            this.contentExtensions = contentExtensions;
             this.settings = settings;
         }
 
@@ -36,6 +38,11 @@ namespace Prateek.Runtime.AppContentFramework.Messages
         public string[] SearchPaths
         {
             get { return contentPaths; }
+        }
+
+        public string[] SearchExtensions
+        {
+            get { return contentExtensions; }
         }
 
         public HierarchicalTreeSettingsData Settings

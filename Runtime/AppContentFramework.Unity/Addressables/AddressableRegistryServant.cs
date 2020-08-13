@@ -2,6 +2,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
 {
     using Prateek.Runtime.AppContentFramework.Daemons;
     using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.DebugFramework.DebugMenu;
     using UnityEngine.AddressableAssets;
     using UnityEngine.AddressableAssets.ResourceLocators;
     using UnityEngine.ResourceManagement.AsyncOperations;
@@ -15,7 +16,10 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
         #endregion
 
         #region Properties
-        public override bool IsAlive { get { return base.IsAlive && addressSystemInitialized; } }
+        public override bool IsAlive
+        {
+            get { return base.IsAlive && addressSystemInitialized; }
+        }
         #endregion
 
         #region Class Methods
@@ -78,6 +82,13 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
         {
             addressSystemInitialized = true;
             workPending = true;
+        }
+
+        public override void SetupDebugDocument(DebugMenuDocument document)
+        {
+            var section = new AddressableRegistrySection(this, "Addressable Servant");
+
+            document.AddSections(section);
         }
         #endregion
     }

@@ -8,7 +8,6 @@ namespace Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces
         #region Class Methods
         //Sending
         void Send(TargetedCommand command);
-        void Kill();
 
         /// <summary>
         ///     This needs to be called to flush and process all received commands

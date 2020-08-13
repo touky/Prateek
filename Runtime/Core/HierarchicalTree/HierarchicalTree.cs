@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
+    using UnityEngine.Assertions;
 
     public class HierarchicalTree<TLeaf>
         where TLeaf : IHierarchicalTreeLeaf
@@ -14,7 +15,7 @@
         private Dictionary<string, HierarchicalTree<TLeaf>> branches;
         private HashSet<TreeLeaf<IHierarchicalTreeLeaf>> leaves;
         #endregion
-        
+
         #region Properties
         private bool HasBranches
         {
@@ -54,27 +55,54 @@
         #endregion
 
         #region Constructors
-        public HierarchicalTree(HierarchicalTreeSettingsData settings = null)
+        public HierarchicalTree()
         {
-            this.settings = settings == null ? HierarchicalTreeSettings.Default.Data : settings;
+            branchName = "ROOT";
+        }
+
+        private HierarchicalTree(HierarchicalTreeSettingsData settings)
+            : this()
+        {
+            Setup(settings);
         }
         #endregion
 
         #region Class Methods
+        public void Setup(HierarchicalTreeSettingsData settings = null)
+        {
+            this.settings = settings == null ? HierarchicalTreeSettings.Default.Data : settings;
+        }
+
+        private void GetSettings(ref HierarchicalTreeSettingsData customSettings)
+        {
+            Assert.IsNotNull(settings, "settings is null, don't forget to call Setup() to properly setup the tree");
+
+            customSettings = customSettings == null ? settings : customSettings;
+        }
+
         public void Store(TLeaf leadData, HierarchicalTreeSettingsData customSettings = null)
         {
-            customSettings = customSettings == null ? settings : customSettings;
+            GetSettings(ref customSettings);
 
             var parentBranch = this;
-            var matches = customSettings.folderRegex.Matches(leadData.Path);
+            var folderMatches      = customSettings.folderRegex.Matches(leadData.Path);
 
-            for (int m = 0; m < matches.Count; m++)
+            for (var m = 0; m < folderMatches.Count; m++)
             {
-                var match = matches[m];
-                var value = match.LastGroup().Value;
-                if (m == matches.Count - 1)
+                var folderMatch = folderMatches[m];
+                var value = folderMatch.LastGroup().Value;
+                if (m == folderMatches.Count - 1)
                 {
-                    var leaf = new TreeLeaf<IHierarchicalTreeLeaf>(value, leadData);
+                    var name = value;
+                    var extension = string.Empty;
+                    var nameMatch = customSettings.extensionRegex.Match(value);
+                    if (nameMatch.Success)
+                    {
+                        name = nameMatch.Groups[1].Value;
+                        extension = nameMatch.Groups[2].Value;
+                    }
+
+                    var leaf = new TreeLeaf<IHierarchicalTreeLeaf>(name, extension, leadData);
                     if (!parentBranch.Leaves.Contains(leaf))
                     {
                         //Remove the old one because the leaf hashCode is Path dependant
@@ -105,18 +133,22 @@
 
         public void Remove(IHierarchicalTreeLeaf leadData, HierarchicalTreeSettingsData customSettings = null)
         {
+            GetSettings(ref customSettings);
+
             var activeBranch = SearchForBranch(leadData.Path, true, customSettings);
             if (activeBranch == null)
             {
                 return;
             }
 
-            var leaf = new TreeLeaf<IHierarchicalTreeLeaf>(string.Empty, leadData);
+            var leaf = new TreeLeaf<IHierarchicalTreeLeaf>(string.Empty, string.Empty, leadData);
             activeBranch.Leaves.Remove(leaf);
         }
 
         public void Remove(IHierarchicalTreeSearch search)
         {
+            Assert.IsTrue(search.SearchPaths.Length > 0, $"Search of type {search.GetType().Name} has no paths to search.");
+
             foreach (var searchPath in search.SearchPaths)
             {
                 var activeBranch = SearchForBranch(searchPath, false, search.Settings);
@@ -137,6 +169,8 @@
 
         public void SearchTree(IHierarchicalTreeSearch search, IHierarchicalTreeSearchResult searchResult)
         {
+            Assert.IsTrue(search.SearchPaths.Length > 0, $"Search of type {search.GetType().Name} has no paths to search.");
+
             foreach (var searchPath in search.SearchPaths)
             {
                 var activeBranch = SearchForBranch(searchPath, false, search.Settings);
@@ -151,11 +185,11 @@
 
         private HierarchicalTree<TLeaf> SearchForBranch(string searchPath, bool searchPathIsLeaf, HierarchicalTreeSettingsData customSettings)
         {
-            customSettings = customSettings == null ? settings : customSettings;
+            GetSettings(ref customSettings);
 
             var activeBranch = this;
-            var matches = customSettings.folderRegex.Matches(searchPath);
-            for (int m = 0; m < matches.Count; m++)
+            var matches      = customSettings.folderRegex.Matches(searchPath);
+            for (var m = 0; m < matches.Count; m++)
             {
                 if (searchPathIsLeaf && m == matches.Count - 1)
                 {
@@ -188,6 +222,25 @@
             {
                 foreach (var resource in branch.leaves)
                 {
+                    var extensionIsValid = true;
+                    if (search.SearchExtensions != null && search.SearchExtensions.Length > 0)
+                    {
+                        extensionIsValid = false;
+                        foreach (var extension in search.SearchExtensions)
+                        {
+                            if (resource.Extension == extension)
+                            {
+                                extensionIsValid = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!extensionIsValid)
+                    {
+                        continue;
+                    }
+
                     if (!search.AcceptLeaf(resource.LeafData))
                     {
                         continue;

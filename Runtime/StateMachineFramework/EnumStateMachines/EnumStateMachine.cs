@@ -79,7 +79,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         #region IStateMachine<TState,TTrigger> Members
         public TState ActiveState
         {
-            get { return states[activeState]; }
+            get { return activeState < 0 ? default : states[activeState]; }
         }
 
         public TState IncomingState

@@ -6,7 +6,8 @@
         "Prateek.Runtime.CommandFramework",
         "Prateek.Runtime.StateMachineFramework",
         "Prateek.Runtime.TickableFramework",
-        "Prateek.Runtime.GadgetFramework"
+        "Prateek.Runtime.GadgetFramework",
+        "Prateek.Runtime.DebugFramework"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

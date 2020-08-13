@@ -3,15 +3,19 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
     using Prateek.Runtime.AppContentFramework.Loader;
     using Prateek.Runtime.Core;
     using Prateek.Runtime.DaemonFramework.Servants;
+    using Prateek.Runtime.DebugFramework.DebugMenu;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
     using Prateek.Runtime.TickableFramework.Interfaces;
     using UnityEngine.Assertions;
 
     public abstract class ContentRegistryServant
-        : Servant<ContentRegistryDaemon, ContentRegistryServant>
+        : TickableServant<ContentRegistryDaemon, ContentRegistryServant>
         , IEnumStepMachineOwner<ContentRegistryServant.State>
         , IEarlyUpdateTickable
+        , IDebugMenuDocumentServant
     {
         #region State enum
         public enum State
@@ -43,6 +47,8 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
             base.Startup();
 
             InitStateMachine();
+
+            (this as IDebugMenuDocumentServant).SetupDebugDocument();
         }
 
         private void InitStateMachine()
@@ -54,6 +60,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
                 .Connect(State.StartWork, Trigger.NextStep, State.Working)
                 .Connect(State.Working, Trigger.NextStep, State.ContentTriage)
                 .Connect(State.ContentTriage, Trigger.NextStep, State.Idle);
+            stateMachine.Reboot();
         }
 
         protected abstract ContentLoader GetNewContentLoader(string path);
@@ -104,6 +111,15 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         }
         #endregion
 
+        #region IDebugMenuDocumentServant Members
+        void IDebugMenuDocumentServant.SetupDebugDocument()
+        {
+            SetupDebugDocument(Overseer.Get<DebugMenuDocument>());
+        }
+
+        public virtual void SetupDebugDocument(DebugMenuDocument document) { }
+        #endregion
+
         #region IEarlyUpdateTickable Members
         public void EarlyUpdate()
         {
@@ -143,7 +159,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         }
         #endregion
 
-        #region Nested type: ContentServantStateComparer
+        #region Nested type: EnumComparer
         private class EnumComparer : IEnumComparer<State, Trigger>
         {
             #region IEnumComparer<State,Trigger> Members

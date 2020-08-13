@@ -11,5 +11,7 @@
     {
         [SerializeField]
         internal Regex folderRegex = new Regex("([^\\\\/]+)(?:[\\\\/]*)");
+        [SerializeField]
+        internal Regex extensionRegex = new Regex("([^\\\\/]+)(\\.[^\\\\/]+)$");
     }
 }

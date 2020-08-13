@@ -4,14 +4,19 @@
     {
         #region Properties
         /// <summary>
-        ///     Allows to send in custom settings for a search path identification
+        ///     Allows user to send custom settings if the search path use a different setup that the tree one
         /// </summary>
         HierarchicalTreeSettingsData Settings { get; }
 
         /// <summary>
-        ///     Gives the paths that needs to be searched through to validate the search
+        ///     The paths that are valid for this search
         /// </summary>
         string[] SearchPaths { get; }
+
+        /// <summary>
+        ///     The extensions that are valid for this search, nothing means everything is valid
+        /// </summary>
+        string[] SearchExtensions { get; }
         #endregion
 
         #region Class Methods

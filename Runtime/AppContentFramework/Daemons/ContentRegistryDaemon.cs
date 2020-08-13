@@ -4,10 +4,13 @@
     using Prateek.Runtime.AppContentFramework.Loader;
     using Prateek.Runtime.AppContentFramework.Messages;
     using Prateek.Runtime.CommandFramework;
+    using Prateek.Runtime.CommandFramework.Debug;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
+    using Prateek.Runtime.DebugFramework.DebugMenu;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
@@ -18,6 +21,7 @@
         : ReceiverDaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
         , IEnumStepMachineOwner<ContentRegistryDaemon.State>
         , IPreUpdateTickable
+        , IDebugMenuDocumentOwner
     {
         #region State enum
         public enum State
@@ -54,6 +58,8 @@
         protected override void Awake()
         {
             base.Awake();
+
+            hierarchicalTree.Setup();
 
             InitStateMachine();
         }
@@ -162,6 +168,15 @@
         public void PreUpdate()
         {
             stateMachine.Step();
+        }
+
+        public void SetupDebugDocument(DebugMenuDocument document, out string title)
+        {
+            title = "Content Registry";
+
+            var section = new ContentRegistrySection("Content in registry");
+
+            document.AddSections(section);
         }
         #endregion
 

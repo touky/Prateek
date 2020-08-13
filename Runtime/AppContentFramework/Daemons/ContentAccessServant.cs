@@ -4,6 +4,18 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
     using Prateek.Runtime.CommandFramework;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.DaemonFramework.Servants;
+    using Prateek.Runtime.GadgetFramework.Interfaces;
+
+    public class ContentAccess
+        : IGadget
+    {
+        private ContentAccessRequest accessRequest;
+
+        public void Kill()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 
     public abstract class ContentAccessServant<TDaemon, TServant>
         : Servant<TDaemon, TServant>
@@ -16,6 +28,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
 
         #region Properties
         public abstract string[] ResourceKeywords { get; }
+        public abstract string[] ResourceExtensions { get; }
 
         public virtual HierarchicalTreeSettingsData Settings { get { return null; } }
         #endregion
@@ -24,7 +37,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         internal ContentAccessRequest GetAccessRequest()
         {
             accessRequest = CreateContentAccessRequest();
-            accessRequest.Init(ResourceKeywords, Settings);
+            accessRequest.Setup(ResourceKeywords, ResourceExtensions, Settings);
             return accessRequest;
         }
 

@@ -47,6 +47,12 @@ namespace Prateek.Runtime.DebugFramework.Reflection
         #endregion
 
         #region Class Methods
+        public static DebugField<T> operator +(DebugField<T> other, object owner)
+        {
+            other.SetOwner(owner);
+            return other;
+        }
+
         public static implicit operator DebugField<T>(string fieldName)
         {
             return new DebugField<T> {name = fieldName};

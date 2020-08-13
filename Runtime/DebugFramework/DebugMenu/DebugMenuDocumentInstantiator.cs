@@ -7,16 +7,21 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         : IGadgetInstantiator
     {
         #region IGadgetInstantiator Members
+        public int Priority
+        {
+            get { return typeof(DebugMenuDocumentInstantiator).GetHashCode(); }
+        }
+
         public void Create(IGadgetOwner owner)
         {
-            if (!(owner is IDebugMenuDocumentOwner receiverOwner))
+            if (!(owner is IDebugMenuDocumentOwner documentOwner))
             {
                 return;
             }
 
-            var document = new DebugMenuDocument(receiverOwner);
+            var document = new DebugMenuDocument(documentOwner);
             owner.GadgetPouch.Add(document);
-            receiverOwner.SetupDebugDocument(document, out var title);
+            documentOwner.SetupDebugDocument(document, out var title);
             document.Register(title);
         }
         #endregion

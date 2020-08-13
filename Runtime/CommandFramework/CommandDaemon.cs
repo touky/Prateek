@@ -26,8 +26,6 @@
 
         private List<Command> commandReceived;
         private List<Command> commandCached;
-
-        private LiveReceiverSection debugLivePage = null;
         #endregion
 
         #region Properties
@@ -168,9 +166,9 @@
         {
             title = "Command daemon";
 
-            debugLivePage = new LiveReceiverSection("Live receivers");
+            var section = new LiveReceiverSection("Live receivers");
 
-            document.AddSections(debugLivePage);
+            document.AddSections(section);
         }
         #endregion
     }

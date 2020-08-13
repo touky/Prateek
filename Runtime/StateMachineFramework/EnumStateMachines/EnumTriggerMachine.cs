@@ -23,7 +23,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         #region Properties
         public override bool IsActive
         {
-            get { return startState >= 0 && activeState >= 0; }
+            get { return startState >= 0 && (incomingState >= 0 || activeState >= 0); }
         }
         #endregion
 
@@ -56,7 +56,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 
         public override void Reboot()
         {
-            activeState = startState;
+            activeState = -1;
             incomingState = startState;
         }
 

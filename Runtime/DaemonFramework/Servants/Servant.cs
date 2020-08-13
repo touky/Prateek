@@ -5,7 +5,9 @@ namespace Prateek.Runtime.DaemonFramework.Servants
     using Prateek.Runtime.DaemonFramework.Interfaces;
 
     public abstract class Servant<TDaemon, TServant>
-        : IServant, IServantInternal, IPriority
+        : IServant
+        , IServantInternal
+        , IPriority
         where TDaemon : DaemonOverseer<TDaemon, TServant>
         where TServant : class, IServant
     {

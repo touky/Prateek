@@ -81,7 +81,7 @@
             resource = Resources.Load<TResource>(path);
             if (resource == null)
             {
-                Debug.LogError($"Couldn't load settings for {nameof(TSingleton)} at path {path}, using default value.");
+                Debug.LogWarning($"Couldn't load settings for {typeof(TSingleton).Name} at path {path}, using default value.");
                 return false;
             }
 

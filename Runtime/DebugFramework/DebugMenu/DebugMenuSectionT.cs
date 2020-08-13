@@ -5,7 +5,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
 
     public abstract class DebugMenuSection<TOwnerType>
         : DebugMenuSection
-        where TOwnerType : class, IDebugMenuDocumentOwner
+        where TOwnerType : class, IDebugMenuOwner
     {
         #region Properties
         public TOwnerType Owner
@@ -16,6 +16,11 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
 
         #region Constructors
         protected DebugMenuSection(string title) : base(title) { }
+
+        protected DebugMenuSection(TOwnerType owner, string title) : base(title)
+        {
+            SetOwner(owner);
+        }
         #endregion
     }
 }

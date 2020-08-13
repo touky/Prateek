@@ -8,6 +8,11 @@ namespace Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces
         : IGadgetInstantiator
     {
         #region IGadgetInstantiator Members
+        public int Priority
+        {
+            get { return typeof(CommandReceiverInstantiator).GetHashCode(); }
+        }
+
         public void Create(IGadgetOwner owner)
         {
             if (!(owner is ICommandReceiverOwner receiverOwner))

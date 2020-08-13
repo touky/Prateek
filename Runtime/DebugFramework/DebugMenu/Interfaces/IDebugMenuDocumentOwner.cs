@@ -4,6 +4,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu.Interfaces
 
     public interface IDebugMenuDocumentOwner
         : IGadgetOwner
+        , IDebugMenuOwner
     {
         #region Class Methods
         void SetupDebugDocument(DebugMenuDocument document, out string title);

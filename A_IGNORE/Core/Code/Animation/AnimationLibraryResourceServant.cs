@@ -24,6 +24,8 @@ namespace Mayfair.Core.Code.Animation
             get { return KEYWORDS; }
         }
 
+        public override string[] ResourceExtensions => throw new System.NotImplementedException();
+
         protected override ContentAccessRequest CreateContentAccessRequest()
         {
             throw new System.NotImplementedException();

@@ -9,20 +9,6 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
     using UnityEngine.ResourceManagement.ResourceProviders;
     using UnityEngine.SceneManagement;
 
-    public enum LoaderBehaviour
-    {
-        Nothing,
-        Asset,
-        Scene
-    }
-
-    public class AddressableContextParameters : LoaderParameters
-    {
-        #region Fields
-        internal LoaderBehaviour behaviour = LoaderBehaviour.Nothing;
-        #endregion
-    }
-
     internal class AddressableContentLoader : ContentLoader
     {
         #region Fields

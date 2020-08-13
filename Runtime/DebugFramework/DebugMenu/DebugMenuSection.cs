@@ -7,7 +7,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         : DebugMenuObject
     {
         #region Fields
-        private IDebugMenuDocumentOwner owner;
+        private IDebugMenuOwner owner;
         #endregion
 
         #region Constructors
@@ -15,14 +15,17 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         #endregion
 
         #region Class Methods
-        internal void SetOwner(IDebugMenuDocumentOwner owner)
+        internal void SetOwner(IDebugMenuOwner owner)
         {
-            this.owner = owner;
-            DebugField.SetOwnerToAllDebugFields(this, owner);
+            if (this.owner == null)
+            {
+                this.owner = owner;
+                DebugField.SetOwnerToAllDebugFields(this, owner);
+            }
         }
 
         protected TOwner GetOwner<TOwner>()
-            where TOwner : class, IDebugMenuDocumentOwner
+            where TOwner : class, IDebugMenuOwner
         {
             return owner as TOwner;
         }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Prateek.Runtime.Core.AutoRegistration;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public class GadgetForagerWorker
@@ -38,6 +39,8 @@
                     instantiators.Add(Activator.CreateInstance(foundType) as IGadgetInstantiator);
                 }
             }
+
+            instantiators.SortWithPriorities();
         }
 
         protected override bool Validate(IAutoRegister instance)

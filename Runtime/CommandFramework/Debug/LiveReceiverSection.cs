@@ -15,7 +15,7 @@ namespace Prateek.Runtime.CommandFramework.Debug
     {
         #region Fields
         private DebugField<Dictionary<long, HashSet<CommandReceiver>>> receivers = "liveReceivers";
-        private Dictionary<long, Type> commandTypes = new Dictionary<long, Type>();
+        private Dictionary<long, Type> idToTypes = new Dictionary<long, Type>();
         #endregion
 
         #region Constructors
@@ -26,12 +26,12 @@ namespace Prateek.Runtime.CommandFramework.Debug
         public void AddType(Type type)
         {
             var validId = (CommandId) type;
-            if (commandTypes.ContainsKey(validId.Key))
+            if (idToTypes.ContainsKey(validId.Key))
             {
                 return;
             }
 
-            commandTypes.Add(validId.Key, type);
+            idToTypes.Add(validId.Key, type);
         }
 
         protected override void OnDraw(DebugMenuContext context)
@@ -44,9 +44,11 @@ namespace Prateek.Runtime.CommandFramework.Debug
             for (var k = 0; k < receivers.Value.Keys.Count; k++)
             {
                 var key     = Key(k);
-                var cmdName = commandTypes.ContainsKey(key & CommandId.MASK_TYPE) ? commandTypes[key & CommandId.MASK_TYPE].Name : Const.UNDEFINED;
+                var cmdName = idToTypes.ContainsKey(key & CommandId.MASK_TYPE) 
+                    ? idToTypes[key & CommandId.MASK_TYPE].Name 
+                    : Const.UNDEFINED;
 
-                if (ImGui.CollapsingHeader(string.Format("{1}: {0:X}", key, cmdName)))
+                if (ImGui.CollapsingHeader(string.Format("{0:X}: {1}", key, cmdName)))
                 {
                     ImGui.Indent();
                     {

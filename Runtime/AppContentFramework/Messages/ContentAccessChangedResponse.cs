@@ -12,13 +12,6 @@ namespace Prateek.Runtime.AppContentFramework.Messages
         internal ContentAccessRequest request;
         #endregion
 
-        #region Properties
-        public override CommandId CommandId
-        {
-            get { return new CommandId(typeof(ContentAccessChangedResponse), Recipient); }
-        }
-        #endregion
-
         #region Class Methods
         public override void Init(IRequestCommand request, bool requestFailed)
         {

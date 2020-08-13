@@ -83,18 +83,33 @@ namespace Prateek.Runtime.TickableFramework
 
             isQuitting = true;
 
+            if (applicationGroup == null)
+            {
+                return;
+            }
+
             applicationGroup.ApplicationQuit();
         }
 
         ///---------------------------------------------------------------------
         private void OnApplicationFocus(bool focusStatus)
         {
+            if (applicationGroup == null)
+            {
+                return;
+            }
+
             applicationGroup.ApplicationFocus(focusStatus);
         }
 
         ///---------------------------------------------------------------------
         private void OnApplicationPause(bool pauseStatus)
         {
+            if (applicationGroup == null)
+            {
+                return;
+            }
+
             applicationGroup.OnApplicationPause(pauseStatus);
         }
         #endregion

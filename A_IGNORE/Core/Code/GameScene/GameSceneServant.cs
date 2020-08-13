@@ -17,6 +17,8 @@ namespace Mayfair.Core.Code.GameScene
         {
             get { return KEYWORDS; }
         }
+
+        public override string[] ResourceExtensions => throw new System.NotImplementedException();
         #endregion
 
         #region Class Methods
