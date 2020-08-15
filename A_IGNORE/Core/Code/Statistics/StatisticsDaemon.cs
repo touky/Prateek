@@ -7,14 +7,17 @@ namespace Mayfair.Core.Code.Statistics
     using Mayfair.Core.Code.Utils.Debug;
     using Prateek.Runtime.CommandFramework;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
+    using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.KeynameFramework;
 
     using Prateek.Runtime.TickableFramework.Interfaces;
 
     public sealed class StatisticsDaemon
-        : ReceiverDaemonOverseer<StatisticsDaemon, StatisticsServant>
+        : DaemonOverseer<StatisticsDaemon, StatisticsServant>
         , IDebugMenuNotebookOwner
+        , ICommandReceiverOwner
         , IPreUpdateTickable
     {
         #region Fields
@@ -56,7 +59,7 @@ namespace Mayfair.Core.Code.Statistics
         #endregion
 
         #region Messaging
-        public override void DefineReceptionActions(ICommandReceiver receiver)
+        public void DefineReceptionActions(ICommandReceiver receiver)
         {
             receiver.SetActionFor<GameActionCommand>(OnStatisticsMessage);
         }
@@ -84,6 +87,16 @@ namespace Mayfair.Core.Code.Statistics
                 //    servant.ProcessMessage(notice);
                 //}
             }
+        }
+
+        public int Priority(IPriority<IApplicationFeedbackTickable> type)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int Priority(IPriority<IPreUpdateTickable> type)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
     }

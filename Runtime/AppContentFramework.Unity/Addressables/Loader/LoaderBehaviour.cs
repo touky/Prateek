@@ -1,6 +1,6 @@
 namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
 {
-    public enum LoaderBehaviour
+    internal enum LoaderBehaviour
     {
         Nothing,
         Asset,

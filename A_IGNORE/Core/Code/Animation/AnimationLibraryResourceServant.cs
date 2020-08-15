@@ -4,6 +4,7 @@ namespace Mayfair.Core.Code.Animation
     using Mayfair.Core.Code.DebugMenu.Content;
     using Mayfair.Core.Code.Utils.Helpers;
     using Mayfair.Core.Code.VisualAsset.Providers;
+    using Prateek.Runtime.AppContentFramework.Daemons;
     using Prateek.Runtime.AppContentFramework.Messages;
     using Prateek.Runtime.AppContentFramework.Unity.Commands;
 
@@ -19,14 +20,19 @@ namespace Mayfair.Core.Code.Animation
         #endregion
 
         #region Properties
-        public override string[] ResourceKeywords
+        public  string[] ResourceKeywords
         {
             get { return KEYWORDS; }
         }
 
-        public override string[] ResourceExtensions => throw new System.NotImplementedException();
+        public  string[] ResourceExtensions => throw new System.NotImplementedException();
 
-        protected override ContentAccessRequest CreateContentAccessRequest()
+        public override void SetupContentAccess(ContentAccessor contentAccessor)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected  ContentAccessRequest CreateContentAccessRequest()
         {
             throw new System.NotImplementedException();
         }
@@ -48,7 +54,7 @@ namespace Mayfair.Core.Code.Animation
             return response is AnimationLibraryResourceHasChangedResponse;
         }
 
-        protected override void OnContentAccessChangedResponse(ContentAccessChangedResponse response)
+        protected  void OnContentAccessChangedResponse(ContentAccessChangedResponse response)
         {
             throw new System.NotImplementedException();
         }

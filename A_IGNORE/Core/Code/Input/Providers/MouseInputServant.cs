@@ -25,7 +25,7 @@
             }
         }
 
-        public override int Priority
+        public override int DefaultPriority
         {
             get { return Consts.SECOND_ITEM; }
         }

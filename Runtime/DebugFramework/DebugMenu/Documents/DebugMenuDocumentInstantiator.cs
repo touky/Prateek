@@ -7,7 +7,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         : IGadgetInstantiator
     {
         #region IGadgetInstantiator Members
-        public int Priority
+        public int DefaultPriority
         {
             get { return typeof(DebugMenuDocumentInstantiator).GetHashCode(); }
         }

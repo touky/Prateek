@@ -16,7 +16,7 @@ namespace Mayfair.Core.Code.Input.InputLayers
         #endregion
 
         #region Properties
-        public override int Priority
+        public override int DefaultPriority
         {
             get { return 1000; }
         }

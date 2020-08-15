@@ -28,7 +28,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
         #region Class Methods
         protected override void Load(LoaderParameters parameters)
         {
-            if (!(parameters is AddressableContextParameters aParameters))
+            if (!(parameters is AddressableLoaderParameters aParameters))
             {
                 throw new Exception($"{nameof(LoaderParameters)} are of the wrong type: {parameters.GetType().Name}");
             }
@@ -50,7 +50,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
 
         protected override void Unload(LoaderParameters parameters)
         {
-            if (!(parameters is AddressableContextParameters aParameters))
+            if (!(parameters is AddressableLoaderParameters aParameters))
             {
                 throw new Exception($"{nameof(LoaderParameters)} are of the wrong type: {parameters.GetType().Name}");
             }
@@ -89,7 +89,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
             }
         }
 
-        protected void LoadSceneAsync(AddressableContextParameters aParameters)
+        protected void LoadSceneAsync(AddressableLoaderParameters aParameters)
         {
             var assetRef = new AssetReference(path);
             assetReference = assetRef;

@@ -540,6 +540,16 @@ namespace Mayfair.Core.Code.Input
 
             receivers.Add(receiver);
         }
+
+        public int Priority(IPriority<IApplicationFeedbackTickable> type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Priority(IPriority<IPreUpdateTickable> type)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

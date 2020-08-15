@@ -5,7 +5,7 @@ namespace Mayfair.Core.Code.TimeService.ServiceProviders
 
     public class PlayFabTimeServant : BaseTimeServant
     {
-        public override int Priority
+        public override int DefaultPriority
         {
             get => (int)TimeServiceProviderPriority.Server;
         }

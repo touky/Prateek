@@ -9,13 +9,16 @@ namespace Mayfair.Core.Code.SaveGame
     using Mayfair.Core.Code.Utils;
     using Prateek.Runtime.CommandFramework;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
+    using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
     using Prateek.Runtime.TickableFramework.Interfaces;
 
-    public class SaveDaemon
-        : ReceiverDaemonOverseer<SaveDaemon, SaveServant>
+    public sealed class SaveDaemon
+        : DaemonOverseer<SaveDaemon, SaveServant>
+        , ICommandReceiverOwner
         , IPreUpdateTickable
     {
         #region Fields
@@ -91,7 +94,7 @@ namespace Mayfair.Core.Code.SaveGame
             this.loadingRequests.Clear();
         }
 
-        public override void DefineReceptionActions(ICommandReceiver receiver)
+        public void DefineReceptionActions(ICommandReceiver receiver)
         {
             receiver.SetActionFor<LoadDataRequest>(OnLoadingRequest);
         }
@@ -101,6 +104,16 @@ namespace Mayfair.Core.Code.SaveGame
             //TODO: this can be lost
             this.loadingRequests.Add(request);
             this.stateMachine.Trigger(SaveState.LoadLoop);
+        }
+
+        public int Priority(IPriority<IApplicationFeedbackTickable> type)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int Priority(IPriority<IPreUpdateTickable> type)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
 

@@ -19,7 +19,7 @@ namespace Mayfair.Core.Code.Input.Providers
             }
         }
 
-        public override int Priority
+        public override int DefaultPriority
         {
             get { return Consts.FIRST_ITEM; }
         }

@@ -8,14 +8,18 @@ namespace Mayfair.Core.Code.LoadingProcess
     using Mayfair.Core.Code.LoadingProcess.Messages;
     using Mayfair.Core.Code.Service;
     using Mayfair.Core.Code.Utils;
+    using Prateek.Runtime.AppContentFramework.Daemons;
     using Prateek.Runtime.CommandFramework;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
+    using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
     public sealed class LoadingProcessDaemon
-        : ReceiverDaemonOverseer<LoadingProcessDaemon, LoadingProcessServant>
+        : DaemonOverseer<LoadingProcessDaemon, LoadingProcessServant>
         , IDebugMenuNotebookOwner
+        , ICommandReceiverOwner
         , IPreUpdateTickable
     {
         #region Fields
@@ -32,6 +36,8 @@ namespace Mayfair.Core.Code.LoadingProcess
 
         public void PreUpdate()
         {
+            this.Get<ICommandReceiver>().ProcessReceivedCommands();
+
             if (!TryUpdatingProvider())
             {
                 ChangeStatus(LoadingProcessStatus.Idle);
@@ -39,7 +45,7 @@ namespace Mayfair.Core.Code.LoadingProcess
         }
 
         #region Messaging
-        public override void DefineReceptionActions(ICommandReceiver receiver)
+        public void DefineReceptionActions(ICommandReceiver receiver)
         {
             receiver.SetActionFor<TaskLoadingCommand>(OnLoadTaskMessage);
             receiver.SetActionFor<GameLoadingNeedRestart>(OnGameLoadingNeedRestart);
@@ -142,6 +148,16 @@ namespace Mayfair.Core.Code.LoadingProcess
             EmptyMenuPage main = new EmptyMenuPage("MAIN");
             debugNotebook.AddPagesWithParent(main, new TrackedTaskPage(this, "Loading tasks"));
             debugNotebook.Register();
+        }
+
+        public int Priority(IPriority<IApplicationFeedbackTickable> type)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int Priority(IPriority<IPreUpdateTickable> type)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion Debug
         #endregion

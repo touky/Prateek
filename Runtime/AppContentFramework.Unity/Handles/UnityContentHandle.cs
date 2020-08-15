@@ -14,7 +14,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
         #region Constructors
         protected UnityContentHandle(ContentLoader loader) : base(loader)
         {
-            loader.SetLoadContextParameters(new AddressableContextParameters
+            loader.SetLoadContextParameters(new AddressableLoaderParameters
             {
                 behaviour = LoaderBehaviour.Asset
             });

@@ -2,6 +2,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
 {
     using Prateek.Runtime.AppContentFramework.Loader;
     using Prateek.Runtime.Core;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework.Servants;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
@@ -124,6 +125,11 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         public void EarlyUpdate()
         {
             stateMachine.Step();
+        }
+
+        public int Priority(IPriority<IEarlyUpdateTickable> type)
+        {
+            return DefaultPriority;
         }
         #endregion
 

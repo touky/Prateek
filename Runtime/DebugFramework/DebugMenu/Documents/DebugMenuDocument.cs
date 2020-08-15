@@ -31,7 +31,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         internal void Register(string title)
         {
             this.title = title;
-            DebugMenuDaemon.Register(this);
+            DebugMenuRegistry.Register(this);
         }
         #endregion
 
@@ -79,7 +79,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         #region IGadget Members
         public void Kill()
         {
-            DebugMenuDaemon.Unregister(this);
+            DebugMenuRegistry.Unregister(this);
         }
         #endregion
 

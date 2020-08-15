@@ -4,7 +4,7 @@
         "Prateek.Editor.Core",
         "Prateek.Runtime.Core",
         "Prateek.Runtime.DaemonFramework",
-        "Prateek.Runtime.FrameRecorder"
+        "Prateek.Runtime.FrameRecorderFramework"
     ],
     "includePlatforms": [
         "Editor"

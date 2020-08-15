@@ -4,14 +4,10 @@
         "Dear.ImGui",
         "Dear.ImGui.Unity",
         "Prateek.Runtime.Core",
-        "Prateek.Runtime.DaemonFramework",
         "Prateek.Runtime.TickableFramework",
-        "Prateek.Runtime.FrameRecorder",
-        "Prateek.Runtime.GadgetFramework"
+        "Prateek.Runtime.GadgetFramework",
+        "Prateek.Runtime.FrameRecorderFramework"
     ],
-
-
-
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

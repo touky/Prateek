@@ -14,7 +14,7 @@ namespace Mayfair.Core.Code.TimeService.ServiceProviders
             get => true;
         }
 
-        public override int Priority
+        public override int DefaultPriority
         {
             get => (int)TimeServiceProviderPriority.Local;
         }

@@ -14,6 +14,7 @@
     using Prateek.Runtime.AppContentFramework.Daemons;
     using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.KeynameFramework.Enums;
@@ -393,6 +394,11 @@
             {
                 RefreshContentRebuild();
             }
+        }
+
+        public int Priority(IPriority<IPreUpdateTickable> type)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

@@ -8,6 +8,11 @@
 
         public const int NO_ITEM = 0;
         public const int ONE_ITEM = 1;
+        
+        public const int NEXT_ITEM = 1;
+        
+        public const int VERY_EARLY = -1000000;
+        public const int VERY_LATE = 1000000;
 
         public const int X = 0;
         public const int Y = 1;

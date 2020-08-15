@@ -4,7 +4,9 @@ namespace Prateek.Runtime.TickableFramework.TickableGroups
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
-    internal class AliveTickable : IPriority, IEquatable<ITickable>
+    internal class AliveTickable
+        : IPriority
+        , IEquatable<ITickable>
     {
         #region Fields
         public bool alive;
@@ -35,10 +37,7 @@ namespace Prateek.Runtime.TickableFramework.TickableGroups
         #endregion
 
         #region IPriority Members
-        public int Priority
-        {
-            get { return tickable.Priority; }
-        }
+        public int DefaultPriority { get{ throw new NotImplementedException();} }
         #endregion
     }
 }

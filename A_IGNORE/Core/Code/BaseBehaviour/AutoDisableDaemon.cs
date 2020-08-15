@@ -1,6 +1,7 @@
 namespace Mayfair.Core.Code.BaseBehaviour
 {
     using System.Collections.Generic;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework;
 
     using Prateek.Runtime.TickableFramework.Interfaces;
@@ -109,6 +110,16 @@ namespace Mayfair.Core.Code.BaseBehaviour
             }
 
             Instance.InternalRemove(behaviour);
+        }
+
+        public int Priority(IPriority<IApplicationFeedbackTickable> type)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int Priority(IPriority<IPostLateUpdateTickable> type)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
 

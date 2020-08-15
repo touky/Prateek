@@ -35,7 +35,7 @@ namespace Prateek.Runtime.TickableFramework.TickableGroups
             }
 
             tickables.Add(tickable);
-            tickables.SortWithPriorities();
+            tickables.SortWithPriorities<AliveTickable, TTickable>();
         }
         #endregion
 

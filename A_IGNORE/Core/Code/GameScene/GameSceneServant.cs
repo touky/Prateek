@@ -13,12 +13,12 @@ namespace Mayfair.Core.Code.GameScene
         #endregion
 
         #region Properties
-        public override string[] ResourceKeywords
+        public string[] ResourceKeywords
         {
             get { return KEYWORDS; }
         }
 
-        public override string[] ResourceExtensions => throw new System.NotImplementedException();
+        public string[] ResourceExtensions => throw new System.NotImplementedException();
         #endregion
 
         #region Class Methods
@@ -37,12 +37,17 @@ namespace Mayfair.Core.Code.GameScene
             }
         }
 
-        protected override ContentAccessRequest CreateContentAccessRequest()
+        public override void SetupContentAccess(ContentAccessor contentAccessor)
         {
             throw new System.NotImplementedException();
         }
 
-        protected override void OnContentAccessChangedResponse(ContentAccessChangedResponse response)
+        protected  ContentAccessRequest CreateContentAccessRequest()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected  void OnContentAccessChangedResponse(ContentAccessChangedResponse response)
         {
             throw new System.NotImplementedException();
         }

@@ -6,7 +6,7 @@ namespace Prateek.Runtime.AppContentFramework.Messages
         : ContentAccessRequest
     {
         #region Properties
-        protected override Type ContentType
+        protected Type ContentType
         {
             get { return typeof(TContentType); }
         }

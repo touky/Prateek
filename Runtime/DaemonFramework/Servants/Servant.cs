@@ -42,9 +42,9 @@ namespace Prateek.Runtime.DaemonFramework.Servants
             get { return true; }
         }
 
-        public virtual int Priority
+        public virtual int DefaultPriority
         {
-            get { return Overseer.Priority + 1; }
+            get { return Overseer.DefaultPriority + 1; }
         }
 
         public virtual void Startup()

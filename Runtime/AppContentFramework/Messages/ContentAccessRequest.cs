@@ -1,31 +1,24 @@
 namespace Prateek.Runtime.AppContentFramework.Messages
 {
     using System;
+    using Prateek.Runtime.AppContentFramework.Daemons;
     using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
-    public abstract class ContentAccessRequest
+    public class ContentAccessRequest
         : RequestCommand
         , IHierarchicalTreeSearch
     {
         #region Fields
-        private HierarchicalTreeSettingsData settings = null;
-        private string[] contentPaths;
-        private string[] contentExtensions;
+        private ContentAccessSettings accessSettings;
         internal ContentAccessChangedResponse.Storage storage = null;
         #endregion
 
-        #region Properties
-        protected abstract Type ContentType { get; }
-        #endregion
-
         #region Class Methods
-        public void Setup(string[] contentPaths, string[] contentExtensions = null, HierarchicalTreeSettingsData settings = null)
+        public void Setup(ContentAccessSettings accessSettings)
         {
-            this.contentPaths = contentPaths;
-            this.contentExtensions = contentExtensions;
-            this.settings = settings;
+            this.accessSettings = accessSettings;
         }
 
         protected override bool ValidateResponse()
@@ -37,17 +30,17 @@ namespace Prateek.Runtime.AppContentFramework.Messages
         #region IHierarchicalTreeSearch Members
         public string[] SearchPaths
         {
-            get { return contentPaths; }
+            get { return accessSettings.ContentPaths; }
         }
 
         public string[] SearchExtensions
         {
-            get { return contentExtensions; }
+            get { return accessSettings.ContentExtensions; }
         }
 
         public HierarchicalTreeSettingsData Settings
         {
-            get { return null; }
+            get { return accessSettings.Settings.UseAsOverride ? accessSettings.Settings : null; }
         }
 
         public virtual bool AcceptLeaf(IHierarchicalTreeLeaf leaf)

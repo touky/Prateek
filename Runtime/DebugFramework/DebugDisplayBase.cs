@@ -38,41 +38,14 @@ namespace Prateek.Runtime.DebugFramework
     using Prateek.Runtime.FrameRecorder;
 
     ///-------------------------------------------------------------------------
-    public abstract class DebugDisplayManager : FlagManager, FrameRecorderManager.IRecorderBase
+    public abstract class DebugDisplayManager
+        : FlagManager
+        , FrameRecorderRegistry.IRecorderBase
     {
-        ///---------------------------------------------------------------------
-        #region Declarations
-        public struct DebugRecording : FrameRecorderManager.Frame.IData
-        {
-            ///-----------------------------------------------------------------
-            private DebugDisplayManager owner;
-            private List<DebugDraw.PrimitiveSetup> framePrimitives;
-
-            ///-----------------------------------------------------------------
-            public FrameRecorderManager.IRecorderBase Owner { get { return owner; } }
-            public List<DebugDraw.PrimitiveSetup> FramePrimitives
-            {
-                get
-                {
-                    if (framePrimitives == null)
-                        framePrimitives = new List<DebugDraw.PrimitiveSetup>();
-                    return framePrimitives;
-                }
-            }
-
-            ///-----------------------------------------------------------------
-            public DebugRecording(DebugDisplayManager owner)
-            {
-                this.owner = owner;
-                framePrimitives = new List<DebugDraw.PrimitiveSetup>();
-        }
-    }
-        #endregion Declarations
-
         ///---------------------------------------------------------------------
         #region Fields
         private static FlagHierarchy flagHierarchy;
-        private DebugRecording recordings;
+        private DebugDisplayFrame displayFrames;
         private DebugLineDisplayer lineDisplay;
         private List<DebugDraw.PrimitiveSetup> timedPrimitives;
         #endregion Fields
@@ -163,24 +136,24 @@ namespace Prateek.Runtime.DebugFramework
         public void BeginFrame() { }
 
         ///---------------------------------------------------------------------
-        public FrameRecorderManager.Frame.IData EndFrame()
+        public IRecordedFrame EndFrame()
         {
             if (timedPrimitives == null)
                 return null;
 
             for (int p = 0; p < timedPrimitives.Count; p++)
             {
-                recordings.FramePrimitives.Add(timedPrimitives[p]);
+                displayFrames.FramePrimitives.Add(timedPrimitives[p]);
             }
-            var old = recordings;
-            recordings = new DebugRecording(this);
+            var old = displayFrames;
+            displayFrames = new DebugDisplayFrame(this);
             return old;
         }
 
         ///---------------------------------------------------------------------
-        public void PlayFrame(FrameRecorderManager.Frame.IData data)
+        public void PlayFrame(IRecordedFrame recordedFrame)
         {
-            var recordings = (DebugRecording)data;
+            var recordings = (DebugDisplayFrame)recordedFrame;
             for (int r = 0; r < recordings.FramePrimitives.Count; r++)
             {
                 DebugDraw.Render(lineDisplay, recordings.FramePrimitives[r]);
@@ -207,5 +180,58 @@ namespace Prateek.Runtime.DebugFramework
         }
         #endregion Recording datas
     }
+    ///---------------------------------------------------------------------
+    public struct DebugDisplayFrame : IRecordedFrame
+    {
+        ///-----------------------------------------------------------------
+        private DebugDisplayManager owner;
+        private List<DebugDraw.PrimitiveSetup> framePrimitives;
+
+        ///-----------------------------------------------------------------
+        public FrameRecorderRegistry.IRecorderBase Owner { get { return owner; } }
+        public List<DebugDraw.PrimitiveSetup> FramePrimitives
+        {
+            get
+            {
+                if (framePrimitives == null)
+                    framePrimitives = new List<DebugDraw.PrimitiveSetup>();
+                return framePrimitives;
+            }
+        }
+
+        public FrameRecorder SourceRecorder => throw new System.NotImplementedException();
+
+        ///-----------------------------------------------------------------
+        public DebugDisplayFrame(DebugDisplayManager owner)
+        {
+            this.owner = owner;
+            framePrimitives = new List<DebugDraw.PrimitiveSetup>();
+        }
+
+        public void Open()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Close()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Recycle()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IRecordedFrame CloneEmpty()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Play()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }
-#endif //PRATEEK_DEBUG
+#endif

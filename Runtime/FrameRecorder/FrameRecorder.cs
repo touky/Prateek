@@ -1,131 +1,62 @@
 namespace Prateek.Runtime.FrameRecorder
 {
-    using UnityEngine;
+    using Prateek.Runtime.GadgetFramework.Interfaces;
 
-    public static class FrameRecorder
+    public class FrameRecorder
+        : IGadget
     {
-        #region Properties
-        public static FrameRecorderManager.StateType State
-        {
-            get
-            {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return FrameRecorderManager.StateType.Inactive;
-                //return instance.State;
-                return FrameRecorderManager.StateType.Inactive;
-            }
-            set
-            {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return;
-                //instance.State = value;
-            }
-        }
+        #region Fields
+        ///-----------------------------------------------------------------
+        private IFrameRecorderOwner owner;
 
-        ///---------------------------------------------------------------------
-        public static bool PlaybackActive
-        {
-            get
-            {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return false;
-                //return instance.PlaybackActive;
-                return false;
-            }
-        }
+        private IRecordedFrame defaultFrame;
+        private IRecordedFrame activeFrame;
+        #endregion
 
-        ///---------------------------------------------------------------------
-        public static int FrameCount
+        #region Constructors
+        ///-----------------------------------------------------------------
+        public FrameRecorder(IFrameRecorderOwner owner)
         {
-            get
-            {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return 0;
-                //return instance.FrameCount;
-                return 0;
-            }
-        }
+            this.owner = owner;
 
-        ///---------------------------------------------------------------------
-        public static int MaxFrameRecorded
-        {
-            get
-            {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return 0;
-                //return instance.MaxFrameRecorded;
-                return 0;
-            }
-            set
-            {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return;
-                //instance.MaxFrameRecorded = value;
-            }
-        }
-
-        ///---------------------------------------------------------------------
-        public static Vector2Int CurrentFrameRange
-        {
-            get
-            {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return Vector2Int.zero;
-                //return instance.CurrentFrameRange;
-                return Vector2Int.zero;
-            }
-            set
-            {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return;
-                //instance.CurrentFrameRange = value;
-            }
+            owner.GetDefaultFrame(out defaultFrame);
         }
         #endregion
 
         #region Class Methods
-        ///---------------------------------------------------------------------
-        public static void ClearHistory()
+        ///-----------------------------------------------------------------
+        public IRecordedFrame NewFrame()
         {
-            //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-            //if (instance == null)
-            //    return;
+            return defaultFrame.CloneEmpty();
+        }
 
-            //instance.InternalClearHistory();
+        ///-----------------------------------------------------------------
+        public void Open(IRecordedFrame recordedFrame)
+        {
+            activeFrame = recordedFrame;
+            activeFrame.Open();
+        }
+
+        ///-----------------------------------------------------------------
+        public void Close(IRecordedFrame recordedFrame)
+        {
+            activeFrame.Close();
+        }
+
+        ///-----------------------------------------------------------------
+        public void Play(IRecordedFrame recordedFrame)
+        {
+            activeFrame = recordedFrame;
+            activeFrame.Play();
         }
         #endregion
 
-        ///---------------------------------------------------------------------
-
-        ///---------------------------------------------------------------------
-
-        #region External Access
-        public static void Register(FrameRecorderManager.IRecorderBase recorder)
+        #region IGadget Members
+        ///-----------------------------------------------------------------
+        public void Kill()
         {
-            //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-            //if (instance == null)
-            //    return;
-
-            //instance.Register(recorder);
+            FrameRecorderRegistry.Unregister(this);
         }
-
-        ///---------------------------------------------------------------------
-        public static void Unregister(FrameRecorderManager.IRecorderBase recorder)
-        {
-            //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-            //if (instance == null)
-            //    return;
-
-            //instance.Unregister(recorder);
-        }
-        #endregion External Access
+        #endregion
     }
 }

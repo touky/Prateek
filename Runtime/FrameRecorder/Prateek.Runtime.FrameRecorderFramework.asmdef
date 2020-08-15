@@ -1,9 +1,10 @@
 {
-    "name": "Prateek.Runtime.FrameRecorder",
+    "name": "Prateek.Runtime.FrameRecorderFramework",
     "references": [
         "Prateek.Runtime.Core",
         "Prateek.Runtime.DaemonFramework",
-        "Prateek.Runtime.TickableFramework"
+        "Prateek.Runtime.TickableFramework",
+        "Prateek.Runtime.GadgetFramework"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

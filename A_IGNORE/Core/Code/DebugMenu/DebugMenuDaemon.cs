@@ -15,6 +15,7 @@ namespace Mayfair.Core.Code.DebugMenu
     using UnityEngine;
 #if UNITY_EDITOR
     using UnityEditor;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
 
 #endif
 
@@ -421,6 +422,16 @@ namespace Mayfair.Core.Code.DebugMenu
 
             context.Extend.fontSize = extendFontSizeReference;
             context.Close.fontSize = closeFontSizeReference;
+        }
+
+        public int Priority(IPriority<IApplicationFeedbackTickable> type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Priority(IPriority<IPostLateUpdateTickable> type)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

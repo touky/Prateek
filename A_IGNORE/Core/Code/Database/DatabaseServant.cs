@@ -9,7 +9,7 @@ namespace Mayfair.Core.Code.Database
         #endregion
 
         #region Properties
-        public override string[] ResourceKeywords
+        public string[] ResourceKeywords
         {
             get { return KEYWORDS; }
         }

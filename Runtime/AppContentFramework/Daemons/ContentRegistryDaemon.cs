@@ -3,12 +3,12 @@
     using System.Collections.Generic;
     using Prateek.Runtime.AppContentFramework.Loader;
     using Prateek.Runtime.AppContentFramework.Messages;
-    using Prateek.Runtime.CommandFramework;
-    using Prateek.Runtime.CommandFramework.Debug;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
+    using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
     using Prateek.Runtime.GadgetFramework;
@@ -18,8 +18,9 @@
     using UnityEngine;
 
     public sealed class ContentRegistryDaemon
-        : ReceiverDaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
+        : DaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
         , IEnumStepMachineOwner<ContentRegistryDaemon.State>
+        , ICommandReceiverOwner
         , IPreUpdateTickable
         , IDebugMenuDocumentOwner
     {
@@ -93,16 +94,29 @@
             hierarchicalTree.Remove(new RemovalLeaf {Path = path});
         }
 
-        public override void DefineReceptionActions(ICommandReceiver receiver)
-        {
-            receiver.SetActionFor<ContentAccessRequest>(OnContentAccessRequest);
-        }
-
         private void OnContentAccessRequest(ContentAccessRequest request)
         {
             requestReceived = true;
             timeOut = TIMEOUT;
             contentAccessRequests.Add(request);
+        }
+        #endregion
+
+        #region ICommandReceiverOwner Members
+        public void DefineReceptionActions(ICommandReceiver receiver)
+        {
+            receiver.SetActionFor<ContentAccessRequest>(OnContentAccessRequest);
+        }
+        #endregion
+
+        #region IDebugMenuDocumentOwner Members
+        public void SetupDebugDocument(DebugMenuDocument document, out string title)
+        {
+            title = "Content Registry";
+
+            var section = new ContentRegistrySection("Content in registry");
+
+            document.AddSections(section);
         }
         #endregion
 
@@ -170,13 +184,9 @@
             stateMachine.Step();
         }
 
-        public void SetupDebugDocument(DebugMenuDocument document, out string title)
+        public int Priority(IPriority<IPreUpdateTickable> type)
         {
-            title = "Content Registry";
-
-            var section = new ContentRegistrySection("Content in registry");
-
-            document.AddSections(section);
+            return DefaultPriority;
         }
         #endregion
 

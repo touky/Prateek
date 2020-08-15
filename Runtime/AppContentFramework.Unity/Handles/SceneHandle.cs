@@ -13,7 +13,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
         #region Constructors
         public SceneHandle(ContentLoader loader) : base(loader, false)
         {
-            loader.SetLoadContextParameters(new AddressableContextParameters
+            loader.SetLoadContextParameters(new AddressableLoaderParameters
             {
                 behaviour = LoaderBehaviour.Scene
             });

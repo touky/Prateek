@@ -25,7 +25,7 @@ namespace Mayfair.Core.Code.Localization
         #region Properties
         public SystemLanguage Language { get; protected set; }
 
-        public override int Priority
+        public override int DefaultPriority
         {
             get { return Consts.FIRST_ITEM; }
         }

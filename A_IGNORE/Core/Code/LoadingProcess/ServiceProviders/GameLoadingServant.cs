@@ -7,6 +7,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
     using Mayfair.Core.Code.StateMachines.FSM;
     using Mayfair.Core.Code.Utils;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.StateMachineFramework.StandardStateMachines;
 
@@ -22,7 +23,7 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
         #endregion
 
         #region Properties
-        public override int Priority
+        public override int DefaultPriority
         {
             get { return Consts.SECOND_ITEM; }
         }
@@ -110,6 +111,16 @@ namespace Mayfair.Core.Code.LoadingProcess.ServiceProviders
             stateMachine = new StandardStateMachine<LoadingProcessTrigger>(idle);
             stateMachine.Step();
             stateMachine.Trigger(true);
+        }
+
+        public int Priority(IPriority<IApplicationFeedbackTickable> type)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int Priority(IPriority<IPreUpdateTickable> type)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
     }

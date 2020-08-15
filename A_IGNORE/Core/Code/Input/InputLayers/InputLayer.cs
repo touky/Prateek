@@ -63,7 +63,7 @@ namespace Mayfair.Core.Code.Input.InputLayers
         #endregion
 
         #region IPriority Members
-        public abstract int Priority { get; }
+        public abstract int DefaultPriority { get; }
         #endregion
     }
 }

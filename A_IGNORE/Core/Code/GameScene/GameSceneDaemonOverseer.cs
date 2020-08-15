@@ -17,6 +17,7 @@ namespace Mayfair.Core.Code.GameScene
     using Prateek.Runtime.AppContentFramework.Unity.Handles;
     using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
     using UnityEngine.SceneManagement;
@@ -451,6 +452,11 @@ namespace Mayfair.Core.Code.GameScene
 
             receiver.SetActionFor<LoadSceneRequest<LoadSceneResponse>>(OnLoadSceneRequestReceived);
             receiver.SetActionFor<UnloadSceneRequest<UnloadSceneResponse>>(OnUnloadSceneRequestReceived);
+        }
+
+        public int Priority(IPriority<IPreUpdateTickable> type)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

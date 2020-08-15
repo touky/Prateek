@@ -7,6 +7,7 @@ namespace Mayfair.Core.Code.UpdateService
     using Messages;
     using Prateek.Runtime.CommandFramework;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.GadgetFramework;
     using Service;
     using UnityEngine;
@@ -16,7 +17,8 @@ namespace Mayfair.Core.Code.UpdateService
     /// This should not be used as an example of Service/Provider/Messaging interaction
     /// as it violates the asynchronicity goals of our systems.
     /// </summary>
-    public class UpdateDaemon : ReceiverDaemonOverseer<UpdateDaemon, UpdateProvider>
+    public class UpdateDaemon
+        : DaemonOverseer<UpdateDaemon, UpdateProvider>
     {
         private Dictionary<UpdateFrequency, List<HashSet<IUpdatable>>> registeredUpdatables;
         private Dictionary<UpdateFrequency, int> updateFrequencyIndex;
@@ -55,7 +57,7 @@ namespace Mayfair.Core.Code.UpdateService
             registeredUpdatablesToFrequency = new Dictionary<IUpdatable, UpdateFrequency>();
         }
 
-        public override void DefineReceptionActions(ICommandReceiver receiver)
+        public void DefineReceptionActions(ICommandReceiver receiver)
         {
             receiver.SetActionFor<RegisterForUpdate>(OnRegisterForUpdate);
             receiver.SetActionFor<UnregisterForUpdate>(OnUnregisterForUpdate);

@@ -8,6 +8,7 @@ namespace Mayfair.Core.Code.VisualAsset
     using Mayfair.Core.Code.VisualAsset.Providers;
     using Prateek.Runtime.AppContentFramework.Daemons;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
@@ -74,6 +75,11 @@ namespace Mayfair.Core.Code.VisualAsset
             debugNotebook = new DebugMenuNotebook("VSLR", "Visual Resources");
             debugMainPage = new EmptyMenuPage("MAIN");
             debugNotebook.Register();
+        }
+
+        public int Priority(IPriority<IPreUpdateTickable> type)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
         #endregion

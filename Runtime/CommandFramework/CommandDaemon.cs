@@ -6,6 +6,7 @@
     using Prateek.Runtime.CommandFramework.EmitterReceiver;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.CommandFramework.Servants;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
@@ -29,7 +30,10 @@
         #endregion
 
         #region Properties
-        public static ICommandEmitter DefaultEmitter { get { return Instance.defaultEmitter.Emitter; } }
+        public static ICommandEmitter DefaultEmitter
+        {
+            get { return Instance.defaultEmitter.Emitter; }
+        }
         #endregion
 
         #region Class Methods
@@ -96,6 +100,11 @@
         public void EarlyUpdate()
         {
             ProcessReceivedCommands();
+        }
+
+        public int Priority(IPriority<IEarlyUpdateTickable> type)
+        {
+            return DefaultPriority;
         }
         #endregion
 

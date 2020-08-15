@@ -28,9 +28,15 @@
         #endregion
 
         #region Properties
-        internal List<CommandId> ActionsToRegister { get { return actionsToRegister; } }
+        internal List<CommandId> ActionsToRegister
+        {
+            get { return actionsToRegister; }
+        }
 
-        internal List<CommandId> ActionsToUnregister { get { return actionsToUnregister; } }
+        internal List<CommandId> ActionsToUnregister
+        {
+            get { return actionsToUnregister; }
+        }
         #endregion
 
         #region Constructors
@@ -56,12 +62,53 @@
 
             commandReceived.Add(receivedCommand);
         }
+
+        private void Send(Command command)
+        {
+            UnityEngine.Debug.Assert(command != null);
+
+            command.Emitter = this;
+
+            CommandDaemon.CommandReceived(command);
+        }
+
+        private void AddActionForCommand(CommandId commandId, ICommandActionProxy actionProxy)
+        {
+            var id = commandId.Key;
+
+            if (!commandActions.ContainsKey(id))
+            {
+                commandActions.Add(id, actionProxy);
+            }
+            else
+            {
+                commandActions[id] = actionProxy;
+            }
+        }
+
+        private void AddPendingCommandId(CommandId id, bool needToRegister)
+        {
+            var removeList = needToRegister ? actionsToUnregister : actionsToRegister;
+            var addList    = needToRegister ? actionsToRegister : actionsToUnregister;
+
+            if (removeList.Contains(id))
+            {
+                removeList.Remove(id);
+            }
+
+            if (!addList.Contains(id))
+            {
+                addList.Add(id);
+            }
+        }
         #endregion
 
         #region ICommandReceiver Members
-        public ICommandReceiverOwner Owner { get { return owner; } }
+        public ICommandReceiverOwner Owner
+        {
+            get { return owner; }
+        }
 
-        #region Receiving
         public void ProcessReceivedCommands()
         {
             if (commandReceived.Count == 0)
@@ -95,23 +142,7 @@
 
             commandCached.Clear();
         }
-        #endregion
-        #endregion
 
-        #region IGadget Members
-        public void Kill()
-        {
-            if (SingletonBehaviour<CommandDaemon>.IsApplicationQuitting)
-            {
-                return;
-            }
-
-            ClearAllActions();
-            ApplyActionChanges();
-        }
-        #endregion
-
-        #region Sending
         public void Send(BroadcastCommand command)
         {
             Send((Command) command);
@@ -135,17 +166,6 @@
             Send((Command) command);
         }
 
-        private void Send(Command command)
-        {
-            UnityEngine.Debug.Assert(command != null);
-
-            command.Emitter = this;
-
-            CommandDaemon.CommandReceived(command);
-        }
-        #endregion
-
-        #region Callback management
         public void SetActionForReception(Action onCommandReceived)
         {
             this.onCommandReceived = onCommandReceived;
@@ -186,35 +206,18 @@
             ActionsToRegister.Clear();
             ActionsToUnregister.Clear();
         }
+        #endregion
 
-        private void AddActionForCommand(CommandId commandId, ICommandActionProxy actionProxy)
+        #region IGadget Members
+        public void Kill()
         {
-            var id = commandId.Key;
-
-            if (!commandActions.ContainsKey(id))
+            if (SingletonBehaviour<CommandDaemon>.IsApplicationQuitting)
             {
-                commandActions.Add(id, actionProxy);
-            }
-            else
-            {
-                commandActions[id] = actionProxy;
-            }
-        }
-
-        private void AddPendingCommandId(CommandId id, bool needToRegister)
-        {
-            var removeList = needToRegister ? actionsToUnregister : actionsToRegister;
-            var addList    = needToRegister ? actionsToRegister : actionsToUnregister;
-
-            if (removeList.Contains(id))
-            {
-                removeList.Remove(id);
+                return;
             }
 
-            if (!addList.Contains(id))
-            {
-                addList.Add(id);
-            }
+            ClearAllActions();
+            ApplyActionChanges();
         }
         #endregion
     }

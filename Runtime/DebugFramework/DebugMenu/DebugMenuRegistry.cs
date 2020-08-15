@@ -2,9 +2,10 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
 {
     using System.Collections.Generic;
     using ImGuiNET;
-    using Prateek.Runtime.DaemonFramework;
+    using Prateek.Runtime.Core.Singleton;
 
-    public sealed class DebugMenuDaemon : Daemon<DebugMenuDaemon>
+    public sealed class DebugMenuRegistry
+        : SingletonBehaviour<DebugMenuRegistry>
     {
         #region Fields
         private bool isOpen = false;
@@ -14,19 +15,15 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         #endregion
 
         #region Unity Methods
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
             ImGuiUn.Layout -= DrawDebugMenu;
-
-            base.OnDestroy();
         }
         #endregion
 
         #region Register/Unregister
         protected override void OnAwake()
         {
-            base.OnAwake();
-
             ImGuiUn.Layout += DrawDebugMenu;
         }
 
@@ -40,9 +37,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
 
             instance.documents.Add(menuDocument);
         }
-        #endregion
-
-        #region Class Methods
+        
         internal static void Unregister(DebugMenuDocument menuDocument)
         {
             var instance = Instance;
@@ -53,7 +48,9 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
 
             instance.documents.Remove(menuDocument);
         }
+        #endregion
 
+        #region Class Methods
         private void DrawDebugMenu()
         {
             DrawMainMenu();
@@ -113,7 +110,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
 
         private void DrawDockedDocuments()
         {
-            if (ImGui.Begin($"{nameof(DebugMenuDaemon)} window", ref isOpen, ImGuiWindowFlags.MenuBar))
+            if (ImGui.Begin($"{nameof(DebugMenuRegistry)} window", ref isOpen, ImGuiWindowFlags.MenuBar))
             {
                 DrawMenuBar();
 

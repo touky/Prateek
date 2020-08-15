@@ -7,7 +7,7 @@ namespace Mayfair.Core.Code.BaseBehaviour
         : Servant<AutoDisableDaemon, AutoDisableServant>
     {
         #region Properties
-        public override int Priority
+        public override int DefaultPriority
         {
             get { return 0; }
         }

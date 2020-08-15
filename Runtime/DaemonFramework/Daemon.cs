@@ -31,13 +31,22 @@
         #endregion
 
         #region IGadgetOwner Members
-        public GadgetPouch GadgetPouch { get { return gadgetPouch; } }
+        public GadgetPouch GadgetPouch
+        {
+            get { return gadgetPouch; }
+        }
 
-        public string Name { get { return name; } }
+        public string Name
+        {
+            get { return name; }
+        }
         #endregion
 
         #region ITickable Members
-        public virtual int Priority { get { return 0; } }
+        public int DefaultPriority
+        {
+            get { return 0; }
+        }
         #endregion
     }
 }

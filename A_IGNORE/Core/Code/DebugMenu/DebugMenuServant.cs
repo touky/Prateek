@@ -7,7 +7,7 @@ namespace Mayfair.Core.Code.DebugMenu
     public abstract class DebugMenuServant : Servant<DebugMenuDaemon, DebugMenuServant>
     {
         #region Properties
-        public override int Priority
+        public override int DefaultPriority
         {
             get { return 0; }
         }
