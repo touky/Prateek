@@ -228,7 +228,7 @@ namespace Prateek.Runtime.DebugFramework
             throw new System.NotImplementedException();
         }
 
-        public void Play()
+        public void Play(bool isPlayback)
         {
             throw new System.NotImplementedException();
         }

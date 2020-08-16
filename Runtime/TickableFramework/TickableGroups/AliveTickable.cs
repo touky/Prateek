@@ -1,9 +1,11 @@
 namespace Prateek.Runtime.TickableFramework.TickableGroups
 {
     using System;
+    using System.Diagnostics;
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
+    [DebuggerDisplay("Alive: {alive}, {tickable.GetType().Name} / {tickable}")]
     internal class AliveTickable
         : IPriority
         , IEquatable<ITickable>

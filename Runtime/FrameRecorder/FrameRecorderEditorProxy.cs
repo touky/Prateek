@@ -3,38 +3,19 @@ namespace Prateek.Runtime.FrameRecorder
     using Prateek.Runtime.Core.Consts;
     using UnityEngine;
 
-    public static class FrameRecorder__
+#if UNITY_EDITOR
+    public static class FrameRecorderEditorProxy
     {
         #region Properties
         public static RecorderState RecorderState
         {
             get
             {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return FrameRecorderManager.StateType.Inactive;
-                //return instance.State;
-                return RecorderState.Inactive;// FrameRecorderRegistry.CurrentState.Inactive;
+                return FrameRecorderRegistry.EditorInstance.CurrentState;
             }
             set
             {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return;
-                //instance.State = value;
-            }
-        }
-
-        ///---------------------------------------------------------------------
-        public static bool PlaybackActive
-        {
-            get
-            {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return false;
-                //return instance.PlaybackActive;
-                return false;
+                FrameRecorderRegistry.EditorInstance.NextState = value;
             }
         }
 
@@ -43,44 +24,29 @@ namespace Prateek.Runtime.FrameRecorder
         {
             get
             {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return 0;
-                //return instance.FrameCount;
-                return 0;
+                return FrameRecorderRegistry.EditorInstance.FrameCount;
             }
         }
 
         ///---------------------------------------------------------------------
-        public static int MaxFrameRecorded
+        public static int FrameCapacity
         {
             get
             {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return 0;
-                //return instance.MaxFrameRecorded;
-                return 0;
+                return FrameRecorderRegistry.EditorInstance.FrameCapacity;
             }
             set
             {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return;
-                //instance.MaxFrameRecorded = value;
+                FrameRecorderRegistry.EditorInstance.FrameCapacity = value;
             }
         }
 
         ///---------------------------------------------------------------------
-        public static Vector2Int CurrentFrameRange
+        public static Vector2Int PlaybackRange
         {
             get
             {
-                //var instance = TickableRegistry.GetManager<FrameRecorderManager>();
-                //if (instance == null)
-                //    return Vector2Int.zero;
-                //return instance.CurrentFrameRange;
-                return Vector2Int.zero;
+                return FrameRecorderRegistry.EditorInstance.PlaybackRange;
             }
             set
             {
@@ -129,4 +95,5 @@ namespace Prateek.Runtime.FrameRecorder
         }
         #endregion External Access
     }
+#endif
 }

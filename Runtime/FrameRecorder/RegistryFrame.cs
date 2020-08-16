@@ -33,11 +33,11 @@ namespace Prateek.Runtime.FrameRecorder
         }
 
         ///-----------------------------------------------------------------
-        public void Play()
+        public void Play(bool isPlayback)
         {
             foreach (var pair in frames)
             {
-                pair.Key.Play(pair.Value);
+                pair.Key.Play(pair.Value, isPlayback);
             }
         }
         #endregion

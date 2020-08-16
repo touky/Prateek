@@ -11,6 +11,12 @@ namespace Prateek.Runtime.FrameRecorder
 
         private IRecordedFrame defaultFrame;
         private IRecordedFrame activeFrame;
+
+        private bool isPlayback;
+        #endregion
+
+        #region Properties
+        public bool IsPlayback { get { return isPlayback; } }
         #endregion
 
         #region Constructors
@@ -44,10 +50,11 @@ namespace Prateek.Runtime.FrameRecorder
         }
 
         ///-----------------------------------------------------------------
-        public void Play(IRecordedFrame recordedFrame)
+        public void Play(IRecordedFrame recordedFrame, bool isPlayback)
         {
+            this.isPlayback = isPlayback;
             activeFrame = recordedFrame;
-            activeFrame.Play();
+            activeFrame.Play(isPlayback);
         }
         #endregion
 

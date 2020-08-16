@@ -34,6 +34,7 @@
 namespace Prateek.Runtime.FrameRecorder
 {
     using System.Collections.Generic;
+    using Prateek.Runtime.Core.AutoRegistration;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Interfaces.IPriority;
@@ -64,24 +65,49 @@ namespace Prateek.Runtime.FrameRecorder
 
         #region Properties
         ///---------------------------------------------------------------------
+#if UNITY_EDITOR
+        public static FrameRecorderRegistry EditorInstance { get { return Instance; } }
+#endif
+        internal RecorderState CurrentState { get { return currentState; } }
 
-        public RecorderState CurrentState { get { return currentState; } }
+        internal RecorderState NextState { get { return nextState; } set { nextState = value; } }
 
-        public RecorderState NextState { get { return nextState; } set { nextState = value; } }
+        internal bool PlaybackActive { get { return currentState == RecorderState.Playback; } }
 
-        public bool PlaybackActive { get { return currentState == RecorderState.Playback; } }
-
-        public int FrameCount { get { return history.Count; } }
-
-        ///---------------------------------------------------------------------
-        public int MaxFrameRecorded { get { return frameCapacity; } set { frameCapacity = value; } }
 
         ///---------------------------------------------------------------------
-        public Vector2Int CurrentPlaybackRange { get { return playbackRange; } set { playbackRange = clamp(value, 0, frameCapacity - 1); } }
+        internal int FrameCount { get { return history.Count; } }
+
+        internal int FrameCapacity
+        {
+            get
+            {
+                return frameCapacity;
+            }
+            set
+            {
+                frameCapacity = value;
+                if (frameCapacity < history.Count)
+                {
+                    history.RemoveRange(frameCapacity, history.Count - frameCapacity);
+                }
+            }
+        }
+
+        ///---------------------------------------------------------------------
+        internal Vector2Int PlaybackRange { get { return playbackRange; } set { playbackRange = clamp(value, 0, frameCapacity - 1); } }
         #endregion
 
         #region Register/Unregister
-        protected override void OnAwake() { }
+        protected override void OnAwake()
+        {
+            this.AutoRegister();
+        }
+
+        private void OnDestroy()
+        {
+            this.AutoUnregister();
+        }
 
         ///---------------------------------------------------------------------
         internal static void Register(FrameRecorder recorder)
@@ -148,7 +174,13 @@ namespace Prateek.Runtime.FrameRecorder
         ///---------------------------------------------------------------------
         private void Playback()
         {
-            playbackRange = clamp(playbackRange, 0, frameCapacity - 1);
+            if (history.Count == 0)
+            {
+                return;
+            }
+
+            var isPlayback = currentState == RecorderState.Playback;
+            playbackRange = !isPlayback ? vec2i(0) : clamp(playbackRange, 0, frameCapacity - 1);
             for (var h = playbackRange.x; h < min(playbackRange.y + 1, history.Count); h++)
             {
                 var frame = history[history.Count - (1 + h)];
@@ -157,7 +189,7 @@ namespace Prateek.Runtime.FrameRecorder
                     continue;
                 }
 
-                frame.Play();
+                frame.Play(isPlayback);
             }
         }
 
@@ -203,6 +235,7 @@ namespace Prateek.Runtime.FrameRecorder
                 case RecorderState.Recording:
                 {
                     CloseFrame();
+                    Playback();
                     break;
                 }
             }

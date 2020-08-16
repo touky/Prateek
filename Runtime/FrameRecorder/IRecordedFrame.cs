@@ -12,7 +12,7 @@ namespace Prateek.Runtime.FrameRecorder
         void Open();
         void Close();
         void Recycle();
-        void Play();
+        void Play(bool isPlayback);
         #endregion
     }
 }

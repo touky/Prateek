@@ -15,8 +15,8 @@
 
 // -BEGIN_PRATEEK_CSHARP_IFDEF-
 //-----------------------------------------------------------------------------
-#region Prateek Ifdefs
 
+#region Prateek Ifdefs
 //Auto activate some of the prateek defines
 #if UNITY_EDITOR
 
@@ -26,34 +26,172 @@
 #endif //!PRATEEK_DEBUG
 
 #endif //UNITY_EDITOR && !PRATEEK_DEBUG
-
 #endregion Prateek Ifdefs
+
 // -END_PRATEEK_CSHARP_IFDEF-
 
 //-----------------------------------------------------------------------------
 namespace Prateek.Editor.FrameRecorder
 {
-    using System;
-    using Prateek.Editor.Core.EditorPrefs;
-    using Prateek.Editor.Core.GUI;
-    using Prateek.Runtime.Core.Extensions;
+    using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.FrameRecorder;
     using UnityEditor;
     using UnityEditor.UIElements;
-    using UnityEngine;
     using UnityEngine.UIElements;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Runtime.Core.Extensions.Statics;
 
     ///-------------------------------------------------------------------------
-    public partial class FrameRecorderEditorWindow : EditorWindow
+    public class FrameRecorderEditorWindow : EditorWindow
     {
+        #region Static and Constants
+        private const string recordedFramesFormat = "Recorded Frames {0:00}/{1:00}";
+        private const string previewingSingleFormat = "Previewing Frame: {0:00}";
+        private const string previewingMultipleFormat = "Previewing Frames [{0:00} -> {1:00}]";
+        #endregion
+
         #region Fields
         ///---------------------------------------------------------------------
-        private Prefs.Ints maxFrameRecorded;
-        #endregion Fields
+        private VisualElement rootElement;
 
+        /// <summary>
+        /// </summary>
+        private VisualElement controlParent;
+
+        private VisualElement buttonParent;
+        private Button toggleRecording;
+        private Button togglePlayback;
+        private Toggle playbackPauseGame;
+
+        /// <summary>
+        /// </summary>
+        private VisualElement framesParent;
+
+        private Label recordedFrames;
+        private Label previewedFrames;
+        private IntegerField frameCapacity;
+        private Toggle showMultipleFrames;
+
+        /// <summary>
+        /// </summary>
+        private VisualElement playbackParent;
+
+        private SliderInt playbackSingle;
+        private MinMaxSlider playbackMultiple;
+
+        private RecorderState lastState = RecorderState.Nothing;
+        private ToggleStatus lastShowMultipleFrames = ToggleStatus.Nothing;
+        private double timer;
+        #endregion
+
+        #region Unity Methods
+        protected virtual void OnEnable()
+        {
+            // Reference to the root of the window.
+            rootElement = rootVisualElement;
+
+            controlParent = new VisualElement();
+            controlParent.Add(toggleRecording = new Button(ToggleRecording) {text = "--"});
+            buttonParent = new VisualElement();
+            buttonParent.style.flexDirection = new StyleEnum<FlexDirection>(FlexDirection.Row);
+            buttonParent.Add(togglePlayback = new Button(TogglePlayback) {text = "--"});
+            buttonParent.Add(playbackPauseGame = new Toggle("Pause game on playback ?") {viewDataKey = "playbackPauseGame"});
+            controlParent.Add(new Label(" "));
+            controlParent.Add(buttonParent);
+            controlParent.Add(playbackPauseGame);
+            controlParent.Add(new Label(" "));
+            rootElement.Add(controlParent);
+
+            framesParent = new VisualElement();
+            var textParent = new VisualElement();
+            textParent.style.flexDirection = new StyleEnum<FlexDirection>(FlexDirection.Row);
+            textParent.style.alignContent = new StyleEnum<Align>(Align.Center);
+            textParent.Add(recordedFrames = new Label("Recordered --/--"));
+            textParent.Add(previewedFrames = new Label("Previewing --/--"));
+            framesParent.Add(textParent);
+            var recordParent = new VisualElement();
+            recordParent.style.flexDirection = new StyleEnum<FlexDirection>(FlexDirection.Row);
+            recordParent.style.alignContent = new StyleEnum<Align>(Align.Center);
+            recordParent.Add(frameCapacity = new IntegerField("Frame capacity: ") {value = 50, viewDataKey = "frameCapacity"});
+            recordParent.Add(showMultipleFrames = new Toggle("Show multiple frames ?") {viewDataKey = "showMultipleFrames"});
+            framesParent.Add(recordParent);
+            rootElement.Add(framesParent);
+
+            playbackParent = new VisualElement();
+            playbackParent.Add(playbackSingle = new SliderInt(0, 100) {viewDataKey = "playbackSingle"});
+            playbackParent.Add(playbackMultiple = new MinMaxSlider(0, 100, 0, 100) {viewDataKey = "playbackMultiple"});
+            rootElement.Add(playbackParent);
+        }
+
+        private void Update()
+        {
+            if (!EditorApplication.isPlaying)
+            {
+                ChangeState(RecorderState.Inactive);
+                lastState = RecorderState.Nothing;
+
+                rootElement.SetEnabled(false);
+                return;
+            }
+
+            rootElement.SetEnabled(true);
+            if (lastState != FrameRecorderEditorProxy.RecorderState)
+            {
+                ChangeState(FrameRecorderEditorProxy.RecorderState);
+            }
+
+            if (lastState == RecorderState.Recording)
+            {
+                recordedFrames.text = string.Format(recordedFramesFormat, FrameRecorderEditorProxy.FrameCapacity, FrameRecorderEditorProxy.FrameCount);
+                FrameRecorderEditorProxy.FrameCapacity = frameCapacity.value;
+            }
+
+            if (lastState == RecorderState.Playback)
+            {
+                var newShowMultipleFrames = showMultipleFrames.value ? ToggleStatus.ON : ToggleStatus.OFF;
+                if (lastShowMultipleFrames != newShowMultipleFrames)
+                {
+                    switch (newShowMultipleFrames)
+                    {
+                        case ToggleStatus.OFF:
+                        {
+                            playbackSingle.visible = true;
+                            playbackMultiple.visible = false;
+
+                            playbackSingle.value = (int) playbackMultiple.value.x;
+                            break;
+                        }
+                        case ToggleStatus.ON:
+                        {
+                            playbackSingle.visible = false;
+                            playbackMultiple.visible = true;
+
+                            playbackMultiple.value = vec2i(playbackSingle.value);
+                            break;
+                        }
+                    }
+
+                    lastShowMultipleFrames = newShowMultipleFrames;
+                }
+
+                playbackMultiple.highLimit = FrameRecorderEditorProxy.FrameCount;
+                playbackSingle.highValue = FrameRecorderEditorProxy.FrameCount;
+
+                if (showMultipleFrames.value)
+                {
+                    previewedFrames.text = string.Format(previewingMultipleFormat, playbackMultiple.value.x, playbackMultiple.value.y);
+                    FrameRecorderEditorProxy.PlaybackRange = Int(playbackMultiple.value);
+                }
+                else
+                {
+                    previewedFrames.text = string.Format(previewingSingleFormat, playbackMultiple.value.x);
+                    FrameRecorderEditorProxy.PlaybackRange = vec2i(playbackSingle.value);
+                }
+            }
+        }
+        #endregion
+
+        #region Class Methods
         ///---------------------------------------------------------------------
-        #region Unity Defaults
         [MenuItem("Prateek/Window/Frame Recorder Window")]
         private static void CreateWindow()
         {
@@ -61,79 +199,82 @@ namespace Prateek.Editor.FrameRecorder
             window.Show();
         }
 
-        ///---------------------------------------------------------------------
-        private void TryInit()
+        private void ToggleRecording()
         {
-            if (maxFrameRecorded == null)
-            {
-                maxFrameRecorded = new Prefs.Ints("FrameRecorderEditorWindow.maxFrameRecorded", 50);
-            }
+            var nextState = FrameRecorderEditorProxy.RecorderState == RecorderState.Inactive
+                ? RecorderState.Recording
+                : RecorderState.Inactive;
+
+            FrameRecorderEditorProxy.RecorderState = nextState;
         }
 
-        ///---------------------------------------------------------------------
-        private VisualElement rootElement;
-
-        private class test : IBinding
+        private void TogglePlayback()
         {
-            private int i;
-            public void PreUpdate()
-            {
-            }
+            var nextState = FrameRecorderEditorProxy.RecorderState == RecorderState.Recording
+                ? RecorderState.Playback
+                : RecorderState.Recording;
 
-            public void Release()
-            {
-            }
-
-            public void Update()
-            {
-            }
+            FrameRecorderEditorProxy.RecorderState = nextState;
         }
 
-        private Label frameLabel;
-        private Toggle showMultipleFrames;
-        private SliderInt previewSingle;
-        private MinMaxSlider previewMultiple;
-        protected virtual void OnEnable()
+        private void ChangeState(RecorderState nextState)
         {
-            // Reference to the root of the window.
-            rootElement = rootVisualElement;
-            
-            frameLabel = new Label("Frame shown:");
-            previewSingle = new SliderInt(0, 100) {viewDataKey = "previewSingle"};
-            previewMultiple = new MinMaxSlider(0, 100, 0, 100) {viewDataKey = "previewMultiple"};
-            showMultipleFrames = new Toggle("Show multiple frames ?") { viewDataKey = "showMultipleFrames"};
-
-            rootElement.Add(frameLabel);
-            rootElement.Add(previewSingle);
-            rootElement.Add(previewMultiple);
-            rootElement.Add(showMultipleFrames);
-        }
-
-        private double timer;
-        private void Update()
-        {
-            //if (!EditorApplication.isPlaying)
-            //{
-            //    rootElement.SetEnabled(false);
-            //    return;
-            //}
-
-            rootElement.SetEnabled(true);
-
-            if (showMultipleFrames.value)
+            switch (nextState)
             {
-                previewMultiple.visible = false;
-                previewSingle.visible = true;
-                frameLabel.text = $"Frame previewed: {previewSingle.value}";
+                case RecorderState.Inactive:
+                {
+                    togglePlayback.SetEnabled(false);
+                    framesParent.SetEnabled(false);
+                    playbackParent.SetEnabled(false);
+
+                    toggleRecording.text = "Enable Frame Recorder";
+                    break;
+                }
+                case RecorderState.Recording:
+                {
+                    toggleRecording.text = "Disable Frame Recorder";
+                    togglePlayback.text = "Start Playback";
+
+                    if (playbackPauseGame.value && EditorApplication.isPaused)
+                    {
+                        EditorApplication.isPaused = false;
+                    }
+
+                    FrameRecorderEditorProxy.PlaybackRange = vec2i(0);
+                    frameCapacity.value = FrameRecorderEditorProxy.FrameCapacity;
+
+                    togglePlayback.SetEnabled(true);
+                    framesParent.SetEnabled(false);
+                    playbackParent.SetEnabled(false);
+                    break;
+                }
+                case RecorderState.Playback:
+                {
+                    togglePlayback.text = "Stop Playback";
+
+                    if (playbackPauseGame.value && !EditorApplication.isPaused)
+                    {
+                        EditorApplication.isPaused = true;
+                    }
+
+                    frameCapacity.value = FrameRecorderEditorProxy.FrameCapacity;
+
+                    togglePlayback.SetEnabled(true);
+                    framesParent.SetEnabled(true);
+                    playbackParent.SetEnabled(true);
+                    break;
+                }
             }
-            else
+
+            if (EditorApplication.isPlaying)
             {
-                previewMultiple.visible= true;
-                previewSingle.visible = false;
-                previewMultiple.value = vec2i((int)previewMultiple.value.x, (int)previewMultiple.value.y);
-                frameLabel.text = $"Frame previewed: [{previewMultiple.value.x}, {previewMultiple.value.y}]";
+                playbackSingle.value = FrameRecorderEditorProxy.PlaybackRange.x;
+                playbackMultiple.value = FrameRecorderEditorProxy.PlaybackRange;
+
+                lastState = nextState;
             }
         }
+        #endregion
 
         /////---------------------------------------------------------------------
         //private void Update()
@@ -143,121 +284,8 @@ namespace Prateek.Editor.FrameRecorder
         //    if (isRecord || isPlayback)
         //        Repaint();
 
-
         //    //todo if (EditorApplication.isPaused)
         //    //todo     TickableRegistry.GetManager<FrameRecorderManager>().OnFakeUpdate();
         //}
-
-        /////---------------------------------------------------------------------
-        //private void OnGUI()
-        //{
-        //    TryInit();
-
-        //    var isRecord = FrameRecorder__.RecorderState == RecorderState.Recording;
-        //    var isPlayback = FrameRecorder__.RecorderState == RecorderState.Playback;
-        //    using (var enableScope = new GUIStatusScope(Application.isPlaying))
-        //    {
-        //        using (new EditorGUILayout.HorizontalScope(GUILayout.Height(40)))
-        //        {
-        //            var newState = FrameRecorder__.RecorderState;
-
-        //            using (new GUIStatusScope(!isPlayback))
-        //            {
-        //                if (!isRecord)
-        //                {
-        //                    newState = GUILayout.Button("Record") ? RecorderState.Recording : newState;
-        //                }
-        //                else
-        //                {
-        //                    newState = GUILayout.Button("Stop Record") ? RecorderState.Inactive : newState;
-        //                }
-        //            }
-
-        //            {
-        //                if (!isPlayback)
-        //                { newState = GUILayout.Button("|> Playback") ? RecorderState.Playback : newState; }
-        //                else
-        //                { newState = GUILayout.Button("Stop playback") ? RecorderState.Inactive : newState; }
-        //            }
-
-        //            if (GUILayout.Button("X Clear History \u262D"))
-        //            {
-        //                FrameRecorder__.ClearHistory();
-        //            }
-
-        //            FrameRecorder__.RecorderState = newState;
-        //        }
-
-        //        {
-        //            var range = FrameRecorder__.CurrentFrameRange;
-        //            var frameCount = FrameRecorder__.FrameCount;
-        //            var recordLimit = maxFrameRecorded.Value;
-        //            var rX = (float)range.x;
-        //            var rY = (float)range.y;
-        //            var size = rY - rX;
-        //            using (new GUIStatusScope(frameCount > 0 && isPlayback))
-        //            {
-        //                var zone = EditorGUILayout.GetControlRect();
-        //                var width = max(0, zone.width - 55);
-        //                {
-        //                    zone.width = width;
-        //                    using (new GUIStatusScope(Color.black))
-        //                    { GUI.Box(zone, GUIContent.none); }
-
-        //                    if (frameCount > 0)
-        //                    {
-        //                        zone.width = width * ((float)frameCount / (float)recordLimit);
-        //                        using (new GUIStatusScope(new Color(0, 0.6f, 0)))
-        //                        { GUI.Box(zone, GUIContent.none); }
-
-        //                        zone.x += width * ((float)rX / (float)recordLimit);
-        //                        zone.width = width * ((float)(size + 1) / (float)recordLimit);
-        //                        using (new GUIStatusScope(Color.green))
-        //                        { GUI.Box(zone, GUIContent.none); }
-        //                    }
-        //                }
-
-        //                using (new EditorGUILayout.HorizontalScope())
-        //                {
-        //                    var oldX = rX;
-        //                    rX = min(recordLimit - (size + 1), EditorGUILayout.IntSlider((int)rX, 0, recordLimit - 1));
-        //                    rY += rX - oldX;
-        //                }
-
-        //                using (new EditorGUILayout.HorizontalScope())
-        //                {
-        //                    GUILayout.Label("Position:", GUILayout.MaxWidth(60));
-
-        //                    var offset = 0;
-        //                    offset -= GUILayout.Button("|<", GUILayout.MaxWidth(40)) ? 1 : 0;
-        //                    rX = EditorGUILayout.IntField((int)rX, GUILayout.MaxWidth(40));
-        //                    offset += GUILayout.Button(">|", GUILayout.MaxWidth(40)) ? 1 : 0;
-        //                    rX += offset;
-        //                    rY += offset;
-
-        //                    EditorGUILayout.GetControlRect(GUILayout.Width(40));
-
-        //                    GUILayout.Label("Range: ", GUILayout.MaxWidth(40));
-        //                    size = rY - rX;
-        //                    size -= GUILayout.Button("|<", GUILayout.MaxWidth(40)) ? 1 : 0;
-        //                    size = max(0, EditorGUILayout.IntField((int)size, GUILayout.MaxWidth(40)));
-        //                    size += GUILayout.Button(">|", GUILayout.MaxWidth(40)) ? 1 : 0;
-        //                    rY = rX + size;
-
-        //                    EditorGUILayout.GetControlRect(GUILayout.Width(40));
-
-        //                    GUILayout.Label(String.Format("Frame count: {0} / ", frameCount), GUILayout.Width(100));
-        //                    recordLimit = EditorGUILayout.IntField(recordLimit, GUILayout.MaxWidth(80));
-        //                }
-        //            }
-        //            range.x = (int)rX;
-        //            range.y = (int)rY;
-        //            maxFrameRecorded.Value = recordLimit;
-        //            FrameRecorder__.MaxFrameRecorded = recordLimit;
-        //            FrameRecorder__.CurrentFrameRange = range;
-        //        }
-        //    }
-        //}
-        #endregion Unity Defaults
     }
 }

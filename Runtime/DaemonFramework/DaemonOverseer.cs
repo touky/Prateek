@@ -86,13 +86,13 @@
                 return;
             }
 
-            servants.Add(servant);
-            servants.SortWithPriorities();
-
             if (servant is IServantInternal servantInternal)
             {
                 servantInternal.Overseer = this;
             }
+
+            servants.Add(servant);
+            servants.SortWithPriorities();
 
             OnServantRegistered(servant);
         }
