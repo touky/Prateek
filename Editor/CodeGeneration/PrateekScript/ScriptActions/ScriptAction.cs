@@ -150,7 +150,9 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
             KeywordCreator.AddDefine(keywordUsages, codeBlock);
             KeywordCreator.AddUsing(keywordUsages, codeBlock);
             KeywordCreator.AddCodeBlock(keywordUsages, codeBlock);
+
             KeywordCreator.AddClassInfo(keywordUsages, codeBlock);
+            KeywordCreator.AddDefineContainer(keywordUsages, codeBlock);
 
             KeywordCreator.AddCodeImport(keywordUsages, codeBlock);
 

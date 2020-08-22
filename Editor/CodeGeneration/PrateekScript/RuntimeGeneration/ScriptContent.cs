@@ -18,6 +18,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration
         public ScriptAction scriptAction;
         public string blockNamespace;
         public string blockClassName;
+        public string blockClassParent;
         public List<string> blockClassPrefix = new List<string>();
 
         public List<string> defineDirectives = new List<string>();

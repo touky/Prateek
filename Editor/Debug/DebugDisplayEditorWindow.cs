@@ -293,7 +293,7 @@ namespace Prateek.Editor.Debug
         private void Update() { }
 
         ///---------------------------------------------------------------------
-        private bool IsExpanded(int value, ref DebugDisplayManager.FlagHierarchy flagDatas)
+        private bool IsExpanded(int value, ref DebugDisplayRegistry.FlagHierarchy flagDatas)
         {
             int parent = 0;
             while (flagDatas.GetParent(value, ref parent))
@@ -316,7 +316,7 @@ namespace Prateek.Editor.Debug
             TryInit();
 
             #region Main setup
-            var debugFlags = DebugDisplayManager.DebugFlags;
+            var debugFlags = DebugDisplayRegistry.DebugFlags;
             var enumType = debugFlags.maskType;
             if (enumType == null || !enumType.IsEnum)
                 return;

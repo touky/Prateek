@@ -76,30 +76,34 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration
 
             #region Properties
             ///-------------------------------------------------------------
-            public string this[FunctionKeyword functionKeyword]
+            public string this[FunctionKeyword keyword]
             {
                 get
                 {
-                    if (datas.TryGetValue(functionKeyword.ToString(), out string result))
+                    if (datas.TryGetValue(keyword.ToString(), out string result))
                     {
                         return result;
                     }
 
-                    return string.Empty;
+                    AddData(keyword);
+
+                    return this[keyword];
                 }
             }
 
             ///-------------------------------------------------------------
-            public string this[VariableKeyword funcName]
+            public string this[VariableKeyword keyword]
             {
                 get
                 {
-                    if (datas.TryGetValue(funcName.ToString(), out string result))
+                    if (datas.TryGetValue(keyword.ToString(), out string result))
                     {
                         return result;
                     }
 
-                    return string.Empty;
+                    AddData(keyword);
+
+                    return this[keyword];
                 }
             }
 
@@ -150,19 +154,6 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration
                 csharpCommentLine = $"//#{prefix}:";
                 csharpCommentOpen = $"/*#{prefix}:";
                 csharpCommentClose = $":{prefix}#*/";
-
-                AddData(FunctionKeyword.FILE_INFO);
-                AddData(FunctionKeyword.DEFINE);
-                AddData(FunctionKeyword.USING);
-                AddData(FunctionKeyword.CODE_IMPORT);
-                AddData(FunctionKeyword.PREFIX, codeData);
-                AddData(FunctionKeyword.MAIN, codeData);
-                AddData(FunctionKeyword.SUFFIX, codeData);
-                AddData(FunctionKeyword.CLASS_INFO);
-                AddData(FunctionKeyword.DEFAULT);
-                AddData(FunctionKeyword.FUNC);
-                AddData(VariableKeyword.NAMES);
-                AddData(VariableKeyword.VARS);
 
                 srcClass = ClassKeyword.SRC_CLASS.ToString().Keyword();
                 dstClass = ClassKeyword.DST_CLASS.ToString().Keyword();

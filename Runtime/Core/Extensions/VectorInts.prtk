@@ -1,7 +1,13 @@
 PRATEEK_FILE_INFO(Extensions, cs)
 {
-    PRATEEK_BLOCK_SWIZZLE(Prateek.Runtime.Core.Extensions, Extensions, static, partial)
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Runtime.Core.Extensions)
     {
+        PRATEEK_DEFINE_CONTAINER(Extensions)
+        {
+            PRATEEK_TYPE(class)
+            PRATEEK_ATTRIBUTES(public, static, partial)
+        }
+
         PRATEEK_CLASS_INFO(Vector2Int) { PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3Int) { PRATEEK_VARS(x, y, z) }
 
@@ -28,8 +34,14 @@ PRATEEK_FILE_INFO(Extensions, cs)
 
 PRATEEK_FILE_INFO(VectorIntShaderCTor, cs)
 {
-    PRATEEK_BLOCK_MIXED_CONSTRUCTOR(Prateek.Runtime.Core.Extensions, Statics, static, partial)
+    PRATEEK_BLOCK_MIXED_CONSTRUCTOR(Prateek.Runtime.Core.Extensions)
     {
+        PRATEEK_DEFINE_CONTAINER(Statics)
+        {
+            PRATEEK_TYPE(class)
+            PRATEEK_ATTRIBUTES(public, static, partial)
+        }
+
         PRATEEK_CLASS_INFO(Vector2Int) { PRATEEK_NAMES(vec2i) PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3Int) { PRATEEK_NAMES(vec3i) PRATEEK_VARS(x, y, z) }
 
@@ -56,8 +68,14 @@ PRATEEK_FILE_INFO(VectorIntShaderCTor, cs)
 
 PRATEEK_FILE_INFO(VectorIntShaderMath, cs)
 {
-    PRATEEK_BLOCK_MIXED_OVERLOAD(Prateek.Runtime.Core.Extensions, Statics, static, partial)
+    PRATEEK_BLOCK_MIXED_OVERLOAD(Prateek.Runtime.Core.Extensions)
     {
+        PRATEEK_DEFINE_CONTAINER(Statics)
+        {
+            PRATEEK_TYPE(class)
+            PRATEEK_ATTRIBUTES(public, static, partial)
+        }
+
         PRATEEK_CLASS_INFO(Vector2Int) { PRATEEK_VARS(x, y) }
         PRATEEK_CLASS_INFO(Vector3Int) { PRATEEK_VARS(x, y, z) }
 

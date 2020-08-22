@@ -264,7 +264,7 @@ namespace Prateek.Runtime.PersonalLogger {
                                                      Mathf.Clamp(robotPos.y, style.WindowRect.y, style.WindowRect.y + style.WindowRect.height));
                             guiPos.y = Screen.height - guiPos.y;
                             var worldGuiPos = camera.ScreenToWorldPoint(guiPos.xyn(1f));
-                            DebugDraw.Line(DebugDraw.DebugPlace.AToB(worldGuiPos, box.logger.transform.position), new DebugDraw.DebugStyle(DebugDraw.Space.World, Color.white));
+                            //todo DebugDraw.Line(DebugPlace.AToB(worldGuiPos, box.logger.transform.position), new DebugStyle(DebugSpace.World, Color.white));
                         }
                         break;
                     }

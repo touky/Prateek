@@ -36,293 +36,19 @@ namespace Prateek.Runtime.DebugFramework
 {
     using System.Collections.Generic;
     using Prateek.Runtime.Core.Extensions;
-    using Prateek.Runtime.Core.Helpers;
     using UnityEngine;
     using static Prateek.Runtime.Core.Extensions.Statics;
 
     ///-------------------------------------------------------------------------
-    public partial class DebugDraw
+    internal class DebugDrawInternal
     {
         ///---------------------------------------------------------------------
-        #region Declarations
-        public enum Space
-        {
-            World,
-            CameraLocal,
-            CameraRef,
-            CameraViewRatio,
-            CameraViewPixel,
-        }
-
-        ///---------------------------------------------------------------------
-        public class DebugScope : GUI.Scope
-        {
-            ///-----------------------------------------------------------------
-            #region Fields
-            private DebugStyle setup;
-            #endregion Fields
-
-            ///-----------------------------------------------------------------
-            #region Properties
-            public DebugStyle Setup { get { return setup; } }
-            #endregion Properties
-
-            ///-----------------------------------------------------------------
-            #region Scope
-            public DebugScope(DebugStyle setup) : base()
-            {
-                this.setup = setup;
-                Add(this);
-            }
-
-            ///-----------------------------------------------------------------
-            protected override void CloseScope()
-            {
-                Remove(this);
-            }
-            #endregion Scope
-        }
-
-        ///---------------------------------------------------------------------
-        public partial struct DebugStyle
-        {
-            ///-----------------------------------------------------------------
-            public enum InitMode
-            {
-                Reset,
-                UseLast,
-            }
-
-            ///-----------------------------------------------------------------
-            private MaskFlag flag;
-            private Space space;
-            private Matrix4x4 matrix;
-            private Color color;
-            private float duration;
-            private bool depthTest;
-            private int precision;
-
-            ///-----------------------------------------------------------------
-            public MaskFlag Flag { get { return flag; } set { flag = value; } }
-            public Space Space { get { return space; } set { space = value; } }
-            public Matrix4x4 Matrix { get { return matrix; } set { matrix = value; } }
-            public Color Color { get { return color; } set { color = value; } }
-            public float Duration { get { return duration; } set { duration = value; } }
-            public bool DepthTest { get { return depthTest; } set { depthTest = value; } }
-            public int Precision { get { return precision; } set { precision = value; } }
-
-            ///-----------------------------------------------------------------
-            public DebugStyle(InitMode initMode)
-            {
-                switch (initMode)
-                {
-                    case InitMode.UseLast:
-                    {
-                        this = ActiveSetup;
-                        break;
-                    }
-                    default:
-                    {
-                        flag = -1;
-                        space = Space.World;
-                        matrix = Matrix4x4.identity;
-                        color = Color.white;
-                        duration = -1;
-                        depthTest = false;
-                        precision = 8;
-                        break;
-                    }
-                }
-            }
-        }
-
-        ///---------------------------------------------------------------------
-        public partial struct DebugPlace
-        {
-            ///-----------------------------------------------------------------
-            public enum Pivot
-            {
-                Center,
-                Bottom,
-            }
-
-            ///-----------------------------------------------------------------
-            private Vector3 position;
-            private Quaternion rotation;
-            private Vector3 extents;
-
-            ///-----------------------------------------------------------------
-            public Vector3 Start { get { return position - rotation * extents.nnz(); } }
-            public Vector3 End { get { return position + rotation * extents.nnz(); } }
-            public Vector3 Position { get { return position; } }
-            public Quaternion Rotation { get { return rotation; } }
-            public Vector3 Forward { get { return rotation * Vector3.forward; } }
-            public Vector3 Up { get { return rotation * Vector3.up; } }
-            public Vector3 Right { get { return rotation * Vector3.right; } }
-            public Vector3 Extents { get { return extents; } }
-            public Vector3 Size { get { return extents * 2; } }
-
-            ///-----------------------------------------------------------------
-            public DebugPlace(bool none)
-            {
-                this.position = Vector3.zero;
-                this.rotation = Quaternion.identity;
-                this.extents = Vector3.one;
-            }
-
-            ///-----------------------------------------------------------------
-            public static DebugPlace AToB(Vector3 a, Vector3 b) { return AToB(Pivot.Center, a, b, vec3(0), Vector3.up); }
-            public static DebugPlace AToB(Vector3 a, Vector3 b, Vector3 up) { return AToB(Pivot.Center, a, b, vec3(0), Vector3.up); }
-            public static DebugPlace AToB(Vector3 a, Vector3 b, float size) { return AToB(Pivot.Center, a, b, vec3(size), Vector3.up); }
-            public static DebugPlace AToB(Vector3 a, Vector3 b, float size, Vector3 up) { return AToB(Pivot.Center, a, b, vec3(size), up); }
-            public static DebugPlace AToB(Vector3 a, Vector3 b, Vector2 size, Vector3 up) { return AToB(Pivot.Center, a, b, size.yyx() , up); }
-            public static DebugPlace AToB(Vector3 a, Vector3 b, Vector3 size, Vector3 up) { return AToB(Pivot.Center, a, b, size, up); }
-
-            ///-----------------------------------------------------------------
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b) { return AToB(pivot, a, b, vec3(0), Vector3.up); }
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector3 up) { return AToB(pivot, a, b, vec3(0), Vector3.up); }
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, float size) { return AToB(pivot, a, b, vec3(size), Vector3.up); }
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, float size, Vector3 up) { return AToB(pivot, a, b, vec3(size), up); }
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector2 size, Vector3 up) { return AToB(pivot, a, b, size.yyx(), up); }
-            public static DebugPlace AToB(Pivot pivot, Vector3 a, Vector3 b, Vector3 size, Vector3 up)
-            {
-                var offset = pivot == Pivot.Center ? Vector3.zero : up * size.y * 0.5f;
-                var dir = b - a;
-                return new DebugPlace(true)
-                {
-                    position = a + dir * 0.5f + offset,
-                    rotation = Quaternion.LookRotation(normalize(dir), up),
-                    extents = vec3(0, 0, length(dir) * 0.5f) + size * 0.5f
-                };
-            }
-
-            ///-----------------------------------------------------------------
-            public static DebugPlace Ray(Vector3 position, float distance) { return Ray(Pivot.Center, position, Vector3.forward, vec3(distance), Vector3.up); }
-            public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance) { return Ray(Pivot.Center, position, dir, vec3(distance), Vector3.up); }
-            public static DebugPlace Ray(Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(Pivot.Center, position, dir, vec3(distance), up); }
-            public static DebugPlace Ray(Vector3 position, Vector3 dir, Vector2 size, Vector3 up) { return Ray(Pivot.Center, position, dir, size.yyx(), up); }
-            public static DebugPlace Ray(Vector3 position, Vector3 dir, Vector3 size, Vector3 up) { return Ray(Pivot.Center, position, dir, size, up); }
-
-            ///-----------------------------------------------------------------
-            public static DebugPlace Ray(Pivot pivot, Vector3 position, float distance) { return Ray(pivot, position, Vector3.forward, vec3(distance), Vector3.up); }
-            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance) { return Ray(pivot, position, dir, vec3(distance), Vector3.up); }
-            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, float distance, Vector3 up) { return Ray(pivot, position, dir, vec3(distance), up); }
-            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, Vector2 size, Vector3 up) { return Ray(pivot, position, dir, size.yyx(), up); }
-            public static DebugPlace Ray(Pivot pivot, Vector3 position, Vector3 dir, Vector3 size, Vector3 up)
-            {
-                var offset = pivot == Pivot.Center ? Vector3.zero : up * size.y * 0.5f;
-                return new DebugPlace(true)
-                {
-                    position = position + dir * size.z * 0.5f + offset,
-                    rotation = Quaternion.LookRotation(dir, up),
-                    extents = size * 0.5f
-                };
-            }
-
-            ///-----------------------------------------------------------------
-            public static DebugPlace At(float size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, vec3(size)); }
-            public static DebugPlace At(Vector2 size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, size.yyx()); }
-            public static DebugPlace At(Vector3 size) { return At(Pivot.Center, Vector3.zero, Quaternion.identity, size); }
-            public static DebugPlace At(Vector3 position, float size) { return At(Pivot.Center, position, Quaternion.identity, vec3(size)); }
-            public static DebugPlace At(Vector3 position, Vector2 size) { return At(Pivot.Center, position, Quaternion.identity, size.yyx()); }
-            public static DebugPlace At(Vector3 position, Vector3 size) { return At(Pivot.Center, position, Quaternion.identity, size); }
-            public static DebugPlace At(Vector3 position, Quaternion rotation, float size) { return At(Pivot.Center, position, rotation, vec3(size)); }
-            public static DebugPlace At(Vector3 position, Quaternion rotation, Vector2 size) { return At(Pivot.Center, position, rotation, size.yyx()); }
-            public static DebugPlace At(Vector3 position, Quaternion rotation, Vector3 size) { return At(Pivot.Center, position, rotation, size); }
-
-            ///-----------------------------------------------------------------
-            public static DebugPlace At(Pivot pivot, float size) { return At(pivot, Vector3.zero, Quaternion.identity, vec3(size)); }
-            public static DebugPlace At(Pivot pivot, Vector2 size) { return At(pivot, Vector3.zero, Quaternion.identity, size.yyx()); }
-            public static DebugPlace At(Pivot pivot, Vector3 size) { return At(pivot, Vector3.zero, Quaternion.identity, size); }
-            public static DebugPlace At(Pivot pivot, Vector3 position, float size) { return At(pivot, position, Quaternion.identity, vec3(size)); }
-            public static DebugPlace At(Pivot pivot, Vector3 position, Vector2 size) { return At(Pivot.Center, position, Quaternion.identity, size.yyx()); }
-            public static DebugPlace At(Pivot pivot, Vector3 position, Vector3 size) { return At(pivot, position, Quaternion.identity, size); }
-            public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, float size) { return At(pivot, position, rotation, vec3(size)); }
-            public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, Vector2 size) { return At(pivot, position, rotation, size.yyx()); }
-            public static DebugPlace At(Pivot pivot, Vector3 position, Quaternion rotation, Vector3 size)
-            {
-                var offset = pivot == Pivot.Center ? Vector3.zero : rotation * Vector3.up * size.y * 0.5f;
-                return new DebugPlace(true)
-                {
-                    position = position + offset,
-                    rotation = rotation,
-                    extents = size * 0.5f
-                };
-            }
-
-            ///-----------------------------------------------------------------
-            public static DebugPlace Bounds(Bounds bounds) { return Bounds(Pivot.Center, bounds, Quaternion.identity); }
-            public static DebugPlace Bounds(Bounds bounds, Quaternion rotation) { return Bounds(Pivot.Center, bounds, rotation); }
-
-            ///-----------------------------------------------------------------
-            public static DebugPlace Bounds(Pivot pivot, Bounds bounds) { return Bounds(pivot, bounds, Quaternion.identity); }
-            public static DebugPlace Bounds(Pivot pivot, Bounds bounds, Quaternion rotation)
-            {
-                var offset = pivot == Pivot.Center ? Vector3.zero : rotation * Vector3.up * bounds.size.y * 0.5f;
-                return new DebugPlace(true)
-                {
-                    position = bounds.center + offset,
-                    rotation = rotation,
-                    extents = bounds.extents
-                };
-            }
-        }
-
-        ///---------------------------------------------------------------------
-        public enum PrimitiveType
-        {
-            Line,
-            Point,
-            Box,
-            Arc,
-            Circle,
-            Sphere,
-            Capsule,
-
-            Cone,
-            Pie,
-            Arrow,
-
-            Plane,
-            LineCast,
-            SphereCast,
-
-            MAX
-        }
-
-        ///---------------------------------------------------------------------
-        public struct PrimitiveSetup
-        {
-            ///-----------------------------------------------------------------
-            public PrimitiveType type;
-            public DebugStyle setup;
-            public Space endSpace;
-            public Vector3 pos;
-            public Quaternion rot;
-            public Vector4 extents;
-            public Vector2 range;
-
-            ///-----------------------------------------------------------------
-            public PrimitiveSetup(PrimitiveType type, DebugStyle setup)
-            {
-                this.type = type;
-                this.setup = setup;
-                endSpace = Space.World;
-                pos = Vector3.zero;
-                rot = Quaternion.identity;
-                extents = Vector3.one;
-                range = vec2(0, 1);
-            }
-    }
-
-        ///---------------------------------------------------------------------
-        public struct LineSetup
+        internal struct LineSetup
         {
             public Vector3 start;
             public Vector3 end;
             public DebugStyle setup;
         }
-        #endregion Declarations
 
         ///---------------------------------------------------------------------
         #region Fields
@@ -331,7 +57,7 @@ namespace Prateek.Runtime.DebugFramework
 
         ///---------------------------------------------------------------------
         #region Scopes
-        public static DebugStyle ActiveSetup
+        internal static DebugStyle ActiveSetup
         {
             get
             {
@@ -342,27 +68,27 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void Add(DebugScope scope)
+        internal static void Add(DebugScope scope)
         {
             scopes.Add(scope);
         }
 
         ///---------------------------------------------------------------------
-        public static void Remove(DebugScope scope)
+        internal static void Remove(DebugScope scope)
         {
             scopes.Remove(scope);
         }
         #endregion Scopes
 
         ///---------------------------------------------------------------------
-        protected static void Add(PrimitiveSetup primitive)
+        protected static void Add(DebugPrimitiveSetup debugPrimitive)
         {
-            DebugDisplayManager.Add(primitive);
+            DebugDisplayRegistry.Add(debugPrimitive);
         }
 
         ///---------------------------------------------------------------------
         #region Primitives render
-        public static void Render(DebugLineDisplayer d, PrimitiveSetup prim)
+        internal static void Render(DebugLineDisplayer d, DebugPrimitiveSetup prim)
         {
             var pos = prim.pos;
             var wRt = prim.rot * Vector3.right;
@@ -378,11 +104,11 @@ namespace Prateek.Runtime.DebugFramework
             //Adjust axis size if required
             switch (prim.type)
             {
-                case PrimitiveType.Point:
-                case PrimitiveType.Box:
-                case PrimitiveType.Plane:
-                case PrimitiveType.Arc:
-                case PrimitiveType.Cone:
+                case DebugPrimitiveType.Point:
+                case DebugPrimitiveType.Box:
+                case DebugPrimitiveType.Plane:
+                case DebugPrimitiveType.Arc:
+                case DebugPrimitiveType.Cone:
                 {
                     wRt *= prim.extents.x;
                     wUp *= prim.extents.y;
@@ -394,12 +120,12 @@ namespace Prateek.Runtime.DebugFramework
             //Draw the actual primitive
             switch (prim.type)
             {
-                case PrimitiveType.Line:
+                case DebugPrimitiveType.Line:
                 {
                     d.RenderLine(prim.setup, pos, pos + wFw * prim.extents.z);
                     break;
                 }
-                case PrimitiveType.Point:
+                case DebugPrimitiveType.Point:
                 {
                     d.RenderLine(prim.setup, pos - wFw, pos + wFw);
                     d.RenderLine(prim.setup, pos - wUp, pos + wUp);
@@ -424,7 +150,7 @@ namespace Prateek.Runtime.DebugFramework
                     d.RenderLine(prim.setup, pos + wFw * 0.9f, pos + wFw * 0.75f + wRt * 0.25f);
                     break;
                 }
-                case PrimitiveType.Box:
+                case DebugPrimitiveType.Box:
                 {
                     var posUp = pos + wUp;
                     var posDn = pos - wUp;
@@ -445,7 +171,7 @@ namespace Prateek.Runtime.DebugFramework
                     d.RenderLine(prim.setup, posUp + wRt - wFw, posDn + wRt - wFw);
                     break;
                 }
-                case PrimitiveType.Arc:
+                case DebugPrimitiveType.Arc:
                 {
                     var segments = prim.setup.Precision;
                     var step = (prim.range.y - prim.range.x) / segments;
@@ -460,18 +186,18 @@ namespace Prateek.Runtime.DebugFramework
                     }
                     break;
                 }
-                case PrimitiveType.Circle:
+                case DebugPrimitiveType.Circle:
                 {
                     var other = prim;
-                    other.type = PrimitiveType.Arc;
+                    other.type = DebugPrimitiveType.Arc;
                     other.range = vec2(0, 360);
                     Render(d, other);
                     break;
                 }
-                case PrimitiveType.Sphere:
+                case DebugPrimitiveType.Sphere:
                 {
                     var other = prim;
-                    other.type = PrimitiveType.Arc;
+                    other.type = DebugPrimitiveType.Arc;
                     other.range = vec2(0, 360);
                     Render(d, other);
                     other.rot = Quaternion.LookRotation(wUp, wFw);
@@ -482,13 +208,13 @@ namespace Prateek.Runtime.DebugFramework
                     Render(d, other);
                     break;
                 }
-                case PrimitiveType.Capsule:
+                case DebugPrimitiveType.Capsule:
                 {
                     var z = min(min(prim.extents.x, prim.extents.y), abs(prim.extents.z));
                     var h = max(0, prim.extents.z - z);
 
                     var other0 = prim;
-                    other0.type = PrimitiveType.Arc;
+                    other0.type = DebugPrimitiveType.Arc;
                     other0.range = vec2(0, 360);
                     var other1 = other0;
                     other0.pos -= other0.rot * vec3(0, 0, h);
@@ -519,7 +245,7 @@ namespace Prateek.Runtime.DebugFramework
                     break;
                 }
 
-                case PrimitiveType.Cone:
+                case DebugPrimitiveType.Cone:
                 {
                     var start = pos - wFw;
                     for (int i = 0; i < prim.setup.Precision; ++i)
@@ -532,19 +258,19 @@ namespace Prateek.Runtime.DebugFramework
                     }
 
                     var other = prim;
-                    other.type = PrimitiveType.Arc;
+                    other.type = DebugPrimitiveType.Arc;
                     other.range = vec2(0, 360);
                     other.pos = pos + wFw;
                     Render(d, other);
                     break;
                 }
-                case PrimitiveType.Pie:
+                case DebugPrimitiveType.Pie:
                 {
                     var pieDiff = abs(prim.range.y - prim.range.x);
                     if (pieDiff >= 360 && prim.extents.z == 0)
                     {
                         var other = prim;
-                        other.type = PrimitiveType.Arc;
+                        other.type = DebugPrimitiveType.Arc;
                         other.range = vec2(0, 360);
                         Render(d, other);
                         break;
@@ -553,7 +279,7 @@ namespace Prateek.Runtime.DebugFramework
                     //Draw pie arcs
                     {
                         var other = prim;
-                        other.type = PrimitiveType.Arc;
+                        other.type = DebugPrimitiveType.Arc;
                         other.pos -= wFw * prim.extents.z;
                         Render(d, other);
                         other.pos += wFw * prim.extents.z * 2f;
@@ -581,7 +307,7 @@ namespace Prateek.Runtime.DebugFramework
                     }
                     break;
                 }
-                case PrimitiveType.Arrow:
+                case DebugPrimitiveType.Arrow:
                 {
                     var end = pos + wFw * prim.extents.z;
                     d.RenderLine(prim.setup, end, pos);
@@ -598,7 +324,7 @@ namespace Prateek.Runtime.DebugFramework
                     break;
                 }
 
-                case PrimitiveType.Plane:
+                case DebugPrimitiveType.Plane:
                 {
                     d.RenderLine(prim.setup, pos - wRt - wUp, pos + wRt - wUp);
                     d.RenderLine(prim.setup, pos - wRt + wUp, pos + wRt + wUp);
@@ -606,14 +332,14 @@ namespace Prateek.Runtime.DebugFramework
                     d.RenderLine(prim.setup, pos + wRt - wUp, pos + wRt + wUp);
                     break;
                 }
-                case PrimitiveType.LineCast:
+                case DebugPrimitiveType.LineCast:
                 {
                     var a = pos - wFw * prim.extents.z;
                     var b = pos + wFw * prim.extents.z;
                     d.RenderLine(prim.setup, a, b);
 
                     var other = prim;
-                    other.type = PrimitiveType.Sphere;
+                    other.type = DebugPrimitiveType.Sphere;
                     other.extents = vec3(prim.extents.x);
                     other.pos = a;
                     Render(d, other);
@@ -621,13 +347,13 @@ namespace Prateek.Runtime.DebugFramework
                     Render(d, other);
                     break;
                 }
-                case PrimitiveType.SphereCast:
+                case DebugPrimitiveType.SphereCast:
                 {
                     var pos_ = pos;
                     var pos0 = pos_ - wFw * (prim.extents.z - prim.extents.x);
                     var pos1 = pos_ + wFw * (prim.extents.z - prim.extents.x);
                     var other = prim;
-                    other.type = PrimitiveType.Sphere;
+                    other.type = DebugPrimitiveType.Sphere;
                     other.extents = vec3(prim.extents.x);
                     other.pos = pos0;
                     Render(d, other);

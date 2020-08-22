@@ -23,17 +23,17 @@
     //{{
     //    //{Glossary.Macros[FunctionKeyword.CLASS_INFO]}(MyClassInfo) {{ {Glossary.Macros[VariableKeyword.VARS]}(var0, var1, ....) }}
     //
-    //    {Glossary.Macros[FunctionKeyword.PREFIX]}
+    //    {Glossary.Macros[FunctionKeyword.CODE_PREFIX]}
     //    {{
     //        @//Prefix code
     //    }}
     //
-    //    {Glossary.Macros[FunctionKeyword.MAIN]}
+    //    {Glossary.Macros[FunctionKeyword.CODE_MAIN]}
     //    {{
     //        @//Main code, repeated by function
     //    }}
     //    
-    //    {Glossary.Macros[FunctionKeyword.SUFFIX]}
+    //    {Glossary.Macros[FunctionKeyword.CODE_SUFFIX]}
     //    {{
     //        @//Suffix code
     //    }}

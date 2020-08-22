@@ -150,7 +150,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration
                     else
                     {
                         fileBody = scriptContent.fileBody;
-                        swapCodeTabs.Replacement = defaultFileBody.GetTabulation(newCodeInjectIndex);
+                        swapCodeTabs.Replacement = fileBody.GetTabulation(newCodeInjectIndex);
                     }
                 }
 
@@ -174,7 +174,10 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration
                     var generatedContent = codeData.code;
 
                     swapNamespace.Replacement = scriptContent.blockNamespace;
-                    swapClass.Replacement = codeData.className + scriptContent.blockClassName;
+                    swapClass.Replacement = codeData.className +
+                        (string.IsNullOrEmpty(scriptContent.blockClassParent)
+                            ? scriptContent.blockClassName
+                            : $"{scriptContent.blockClassName} : {scriptContent.blockClassParent}");
 
                     swapPrefix = swapPrefix.Original;
                     for (var p = 0; p < scriptContent.blockClassPrefix.Count; p++)

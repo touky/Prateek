@@ -1,7 +1,7 @@
 // -BEGIN_PRATEEK_COPYRIGHT-
 //
 //  Prateek, a library that is "bien pratique"
-//  Header last update date: 02/08/2020
+//  Header last update date: 21/08/2020
 //
 //  Copyright � 2017-2020 "Touky" <touky at prateek dot top>
 //
@@ -44,7 +44,7 @@ namespace Prateek.Runtime.Core.CachedList
     using UnityEngine;
     
     using Prateek;
-    using static Extensions.Statics;
+    using static Prateek.Runtime.Core.Extensions.Statics;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
 

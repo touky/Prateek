@@ -1,0 +1,52 @@
+PRATEEK_FILE_INFO(DebugStyle, cs)
+{
+    PRATEEK_DEFINE(ACTIVE_CODE)
+
+    PRATEEK_BLOCK_METHOD_OVERLOAD(Prateek.Runtime.DebugFramework)
+    {
+        PRATEEK_CLASS_INFO(DebugStyle)
+		{
+			PRATEEK_NAMES(MaskFlag, flag)
+			PRATEEK_NAMES(DebugSpace, debugSpace)
+			PRATEEK_NAMES(Matrix4x4, matrix)
+			PRATEEK_NAMES(Color, color)
+			PRATEEK_NAMES(float, duration)
+			PRATEEK_NAMES(bool, depthTest)
+			PRATEEK_NAMES(int, precision)
+		}
+
+		PRATEEK_FUNC { @#NAMES_0# #NAMES_1#$ }
+		PRATEEK_FUNC
+		{
+		@#TABS#this.#NAMES_1# = #NAMES_1#;
+		}
+
+        PRATEEK_CODE_IMPORT(DebugStyleCode.cs)
+
+        PRATEEK_CODE_PREFIX
+        {
+        @#region DebugStyle CTor Overload
+        }
+        
+        PRATEEK_CODE_MAIN
+        {
+        @
+        @///--
+        @public #SRC_CLASS#(#FUNC_RESULT_0#) : this(InitMode.Reset)
+        @{
+        @#FUNC_RESULT_1#
+        @}
+        @
+        @///--
+        @public #SRC_CLASS#(InitMode mode, #FUNC_RESULT_0#) : this(mode)
+        @{
+        @#FUNC_RESULT_1#
+        @}
+        }
+
+        PRATEEK_CODE_SUFFIX
+        {
+        @#endregion DrawSetup overload
+        }
+    }
+}

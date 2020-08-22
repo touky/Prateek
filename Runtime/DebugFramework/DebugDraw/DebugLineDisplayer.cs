@@ -471,7 +471,7 @@ namespace Prateek.Runtime.DebugFramework
         #endregion //Lines Pool
 
         ///---------------------------------------------------------------------
-        public void RenderLine(DebugDraw.DebugStyle setup, Vector3 start, Vector3 end)
+        public void RenderLine(DebugStyle setup, Vector3 start, Vector3 end)
         {
             //todo var manager = TickableRegistry.GetManager<DebugDisplayManager>();
             //if (manager != null)

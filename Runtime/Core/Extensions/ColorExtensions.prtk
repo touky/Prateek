@@ -4,8 +4,14 @@
 PRATEEK_FILE_INFO(Extensions, cs)
 {
     // Color swizzle
-    PRATEEK_BLOCK_SWIZZLE(Prateek.Runtime.Core.Extensions, ColorExtensions, static)
+    PRATEEK_BLOCK_SWIZZLE(Prateek.Runtime.Core.Extensions)
     {
+        PRATEEK_DEFINE_CONTAINER(Extensions)
+        {
+            PRATEEK_TYPE(class)
+            PRATEEK_ATTRIBUTES(public, static)
+        }
+
         PRATEEK_CLASS_INFO(Color) { PRATEEK_VARS(r, g, b, a) }
 
         PRATEEK_DEFAULT(float, 0)

@@ -175,17 +175,16 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript
                 }
 
                 var genStart   = Glossary.Macros.scriptStartTag;
-                var startIndex = newData.destination.content.IndexOf(genStart);
-                if (startIndex < 0)
+                var genStartIndex = newData.destination.content.IndexOf(genStart);
+                if (genStartIndex < 0)
                 {
                     Profiler.EndSample();
                     Profiler.EndSample();
                     return Error(BuildResult.ValueType.PrateekScriptSourceStartTagInvalid, ref newData);
                 }
 
-
-                var genHeader = newData.destination.content.Substring(0, startIndex);
-                var genCode   = newData.destination.content.Substring(startIndex + genStart.Length);
+                var genHeader = newData.destination.content.Substring(0, genStartIndex);
+                var genCode   = newData.destination.content.Substring(genStartIndex + genStart.Length);
 
                 // Build the actual code
                 var result = codeFile.Generate(genHeader, genCode);

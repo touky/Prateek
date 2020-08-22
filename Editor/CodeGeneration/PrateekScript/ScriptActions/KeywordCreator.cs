@@ -8,6 +8,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
     using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbols;
     using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Utils;
     using Prateek.Runtime.Core.Helpers;
+    using UnityEngine;
 
     ///-------------------------------------------------------------------------
     public static class KeywordCreator
@@ -107,26 +108,57 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
         {
             keywordUsages.Add(new KeywordUsage(codeBlock, Glossary.Macros[FunctionKeyword.FILE_INFO])
             {
-                arguments = ArgumentRange.AtLeast(2), needOpenScope = true, createNewScriptContent = true,
+                arguments = 1, needOpenScope = true, createNewScriptContent = true,
                 onFeedCodeFile = (fileData, codeFile, codeInfos, arguments, data) =>
                 {
                     codeInfos.blockNamespace = arguments[0].Content;
-                    codeInfos.blockClassName = arguments[1].Content;
-                    if (arguments.Count > 2)
-                    {
-                        var additionalArguments = arguments.GetRange(2, arguments.Count - 2);
-                        foreach (var argument in additionalArguments)
-                        {
-                            codeInfos.blockClassPrefix.Add(argument.Content);
-                        }
-                    }
-
                     return true;
                 },
                 onCloseScope = (codeFile, scope) =>
                 {
                     codeFile.Commit();
                     return scope == codeBlock;
+                }
+            });
+        }
+        
+        public static void AddDefineContainer(List<KeywordUsage> keywordUsages, string codeBlock)
+        {
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.DEFINE_CONTAINER], codeBlock)
+            {
+                arguments = 1,
+                needOpenScope = true,
+                onFeedCodeFile = (fileData, codeFile, codeInfos, arguments, data) =>
+                {
+                    codeInfos.blockClassName = arguments[0].Content;
+                    return true;
+                }
+            });
+
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.TYPE], Glossary.Macros[FunctionKeyword.DEFINE_CONTAINER])
+            {
+                arguments = ArgumentRange.Between(1, 2),
+                onFeedCodeFile = (fileData, codeFile, codeInfos, arguments, data) =>
+                {
+                    codeInfos.blockClassPrefix.Add(arguments[0].Content);
+                    if (arguments.Count == 2)
+                    {
+                        codeInfos.blockClassParent = arguments[1].Content;
+                    }
+                    return true;
+                }
+            });
+
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.ATTRIBUTES], Glossary.Macros[FunctionKeyword.DEFINE_CONTAINER])
+            {
+                arguments = ArgumentRange.AtLeast(1),
+                onFeedCodeFile = (fileData, codeFile, codeInfos, arguments, data) =>
+                {
+                    for (int a = arguments.Count - 1; a >= 0; a--)
+                    {
+                        codeInfos.blockClassPrefix.Insert(0, arguments[a].Content);
+                    }
+                    return true;
                 }
             });
         }
@@ -202,7 +234,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 
         public static void AddCodeHeader(List<KeywordUsage> keywordUsages, string codeBlock)
         {
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.PREFIX], codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.CODE_PREFIX], codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
                 onFeedCodeFile = (fileData, codeFile, codeInfos, arguments, data) =>
@@ -216,7 +248,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 
         public static void AddCodeBody(List<KeywordUsage> keywordUsages, string codeBlock)
         {
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.MAIN], codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.CODE_MAIN], codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
                 onFeedCodeFile = (fileData, codeFile, codeInfos, arguments, data) =>
@@ -230,7 +262,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 
         public static void AddCodeFooter(List<KeywordUsage> keywordUsages, string codeBlock)
         {
-            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.SUFFIX], codeBlock)
+            keywordUsages.Add(new KeywordUsage(Glossary.Macros[FunctionKeyword.CODE_SUFFIX], codeBlock)
             {
                 arguments = 0, needOpenScope = true, needScopeData = true,
                 onFeedCodeFile = (fileData, codeFile, codeInfos, arguments, data) =>

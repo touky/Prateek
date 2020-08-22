@@ -37,8 +37,10 @@ namespace Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder
     using System.Collections.Generic;
     using System.IO;
     using Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates;
+    using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Helpers;
     using Prateek.Runtime.Core.Helpers.Files;
+    using Prateek.Runtime.Core.Profiling;
     using UnityEngine;
     using UnityEngine.Profiling;
 
@@ -260,6 +262,22 @@ namespace Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder
         }
 
         ///---------------------------------------------------------------------
+        private delegate BuildResult FileWork(ref FileData file);
+
+        ///---------------------------------------------------------------------
+        private BuildResult Do(FileWork action, ref FileData file)
+        {
+            try
+            {
+                return action(ref file);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"FAILED in {action.Method.Name}(): {e.Message}\n{e.StackTrace}");
+            }
+        }
+
+        ///---------------------------------------------------------------------
         public void Update()
         {
             var f      = currentWorkFile;
@@ -281,27 +299,27 @@ namespace Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder
                         {
                             case 0:
                             {
-                                result = ApplyValidTemplate(ref file);
+                                result = Do(ApplyValidTemplate, ref file);
                                 break;
                             }
                             case 1:
                             {
-                                result = ApplyZonedScript(ref file);
+                                result = Do(ApplyZonedScript, ref file);
                                 break;
                             }
                             case 2:
                             {
-                                result = ApplyKeyword(ref file);
+                                result = Do(ApplyKeyword, ref file);
                                 break;
                             }
                             case 3:
                             {
-                                result = ApplyFixups(ref file);
+                                result = Do(ApplyFixups, ref file);
                                 break;
                             }
                             case 4:
                             {
-                                result = WriteData(ref file);
+                                result = Do(WriteData, ref file);
                                 break;
                             }
                             default:
@@ -361,7 +379,7 @@ namespace Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder
             {
                 currentWorkFile = -1;
                 isWorking = false;
-                Debug.LogError(e.Message);
+                Debug.LogError($"{e.Source}\n{e.Message}");
             }
 
             Profiler.EndSample();
@@ -486,45 +504,44 @@ namespace Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder
             var content   = string.Empty;
             var extension = string.Empty;
 
-            Profiler.BeginSample($"DoApplyValidTemplate()");
-            
-            //Look for the correct script remplacement
-            var scripts = TemplateRegistry.Scripts;
-            for (var r = 0; r < scripts.Count; r++)
+            using (ProfilerScope.Open("DoApplyValidTemplate()"))
             {
-                var script = scripts[r];
-                if (isAutorun && !script.AllowAutorun)
+                //Look for the correct script remplacement
+                var scripts = TemplateRegistry.Scripts;
+                for (var r = 0; r < scripts.Count; r++)
                 {
-                    continue;
+                    var script = scripts[r];
+                    if (isAutorun && !script.AllowAutorun)
+                    {
+                        continue;
+                    }
+
+                    if (script.Match(fileData.source.name, fileData.source.extension, fileData.source.content))
+                    {
+                        content = script.Content.CleanText();
+                        extension = script.ExportExtension;
+                        break;
+                    }
+
+                    if (content != string.Empty)
+                    {
+                        break;
+                    }
                 }
 
-                if (script.Match(fileData.source.name, fileData.source.extension, fileData.source.content))
+                if (content == string.Empty)
                 {
-                    content = script.Content.CleanText();
-                    extension = script.ExportExtension;
-                    break;
+                    return BuildResult.ValueType.Success | BuildResult.ValueType.NoMatchingTemplate;
                 }
 
-                if (content != string.Empty)
-                {
-                    break;
-                }
+                content = content.Replace("#SCRIPTNAME#", fileData.source.name);
+
+                fileData.destination.extension = extension;
+                fileData.destination.SetupFileInfo();
+
+                fileData.destination.content = content;
             }
 
-            if (content == string.Empty)
-            {
-                Profiler.EndSample();
-                return BuildResult.ValueType.Success | BuildResult.ValueType.NoMatchingTemplate;
-            }
-
-            content = content.Replace("#SCRIPTNAME#", fileData.source.name);
-
-            fileData.destination.extension = extension;
-            fileData.destination.SetupFileInfo();
-
-            fileData.destination.content = content;
-
-            Profiler.EndSample();
             return BuildResult.ValueType.Success;
         }
 

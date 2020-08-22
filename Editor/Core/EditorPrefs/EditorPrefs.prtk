@@ -1,7 +1,13 @@
 PRATEEK_FILE_INFO(EditorPrefs, cs)
 {
-    PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Editor.Core.EditorPrefs, Prefs, static, partial)
+    PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Editor.Core.EditorPrefs)
     {
+        PRATEEK_DEFINE_CONTAINER(Prefs)
+        {
+            PRATEEK_TYPE(class)
+            PRATEEK_ATTRIBUTES(public, static, partial)
+        }
+
 		PRATEEK_CLASS_INFO(bool)  { PRATEEK_NAMES(Bools, GetBool, SetBool) }
 		PRATEEK_CLASS_INFO(int)   { PRATEEK_NAMES(Ints, GetInt, SetInt) }
 		PRATEEK_CLASS_INFO(float) { PRATEEK_NAMES(Floats, GetFloat, SetFloat) }
@@ -47,8 +53,14 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
         }
     }
 
-	PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Editor.Core.EditorPrefs, Prefs, static, partial)
-	{
+    PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Editor.Core.EditorPrefs)
+    {
+        PRATEEK_DEFINE_CONTAINER(Prefs)
+        {
+            PRATEEK_TYPE(class)
+            PRATEEK_ATTRIBUTES(public, static, partial)
+        }
+
 		PRATEEK_CLASS_INFO(Vector2Int)
 		{
 			PRATEEK_NAMES(Vector2Ints, Ints)
@@ -148,8 +160,14 @@ PRATEEK_FILE_INFO(EditorPrefs, cs)
 		}
 	}
 
-	PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Editor.Core.EditorPrefs, Prefs, static, partial)
-	{
+    PRATEEK_BLOCK_APPLY_CLASS_INFOS(Prateek.Editor.Core.EditorPrefs)
+    {
+        PRATEEK_DEFINE_CONTAINER(Prefs)
+        {
+            PRATEEK_TYPE(class)
+            PRATEEK_ATTRIBUTES(public, static, partial)
+        }
+
         PRATEEK_USING(Prateek.Runtime.Core.Extensions)
 
 		PRATEEK_CLASS_INFO(string) 	  { PRATEEK_NAMES(Strings) }
