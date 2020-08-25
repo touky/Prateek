@@ -293,21 +293,21 @@ namespace Prateek.Editor.Debug
         private void Update() { }
 
         ///---------------------------------------------------------------------
-        private bool IsExpanded(int value, ref DebugDisplayRegistry.FlagHierarchy flagDatas)
-        {
-            int parent = 0;
-            while (flagDatas.GetParent(value, ref parent))
-            {
-                int i = enumInfos.Find(parent);
-                if (i < 0)
-                    break;
+        //private bool IsExpanded(int value, ref DebugDisplayRegistry.FlagHierarchy flagDatas)
+        //{
+        //    int parent = 0;
+        //    while (flagDatas.GetParent(value, ref parent))
+        //    {
+        //        int i = enumInfos.Find(parent);
+        //        if (i < 0)
+        //            break;
 
-                if (!expandedFlags[i])
-                    return false;
-                value = parent;
-            }
-            return true;
-        }
+        //        if (!expandedFlags[i])
+        //            return false;
+        //        value = parent;
+        //    }
+        //    return true;
+        //}
 
         ///---------------------------------------------------------------------
         public Textures.Drawer d = new Textures.Drawer();
@@ -316,8 +316,8 @@ namespace Prateek.Editor.Debug
             TryInit();
 
             #region Main setup
-            var debugFlags = DebugDisplayRegistry.DebugFlags;
-            var enumType = debugFlags.maskType;
+            //var debugFlags = DebugDisplayRegistry.DebugFlags;
+            var enumType = (Type)null;//debugFlags.maskType;
             if (enumType == null || !enumType.IsEnum)
                 return;
 
@@ -341,8 +341,8 @@ namespace Prateek.Editor.Debug
             for (int e = 0; e < enumInfos.Count; e++)
             {
                 var value = enumInfos[e].value;
-                if (IsExpanded(value, ref debugFlags))
-                    itemCount += 1;
+                //if (IsExpanded(value, ref debugFlags))
+                //    itemCount += 1;
             }
 
             var titleRect = GUIDraw.BackgroundAuto(2, lineMargin, bgMargin, styleSetup.background);
@@ -362,9 +362,9 @@ namespace Prateek.Editor.Debug
                 for (int e = 0; e < enumInfos.Count; e++)
                 {
                     var value = enumInfos[e].value;
-                    var parentCount = debugFlags.CountParent(value);
-                    var hasChildren = debugFlags.HasChildren(value);
-                    if (IsExpanded(value, ref debugFlags))
+                    var parentCount = 0;//debugFlags.CountParent(value);
+                    var hasChildren = 0;//debugFlags.HasChildren(value);
+                    //if (IsExpanded(value, ref debugFlags))
                     {
                         var line = lineRect;
                         var lockSize = 0.8f;
@@ -397,7 +397,7 @@ namespace Prateek.Editor.Debug
                         }
 
                         //Does this option has children 
-                        GUIDraw.Square(ref line, 0, hasChildren ? styleSetup.actives[0] : null);
+                        //GUIDraw.Square(ref line, 0, hasChildren ? styleSetup.actives[0] : null);
 
                         line = line.TruncateX(line.height / 2);
                         GUI.Label(line, enumInfos[e].name, styleSetup.itemText);

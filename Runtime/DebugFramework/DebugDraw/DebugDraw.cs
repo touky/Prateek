@@ -55,7 +55,7 @@ namespace Prateek.Runtime.DebugFramework
         ///---------------------------------------------------------------------
         #region Standard Primitives
         //Point: Three line to mark each axis
-        public static void Line(DebugPlace place) { Line(place, DebugDrawInternal.ActiveSetup); }
+        public static void Line(DebugPlace place) { Line(place, DebugDisplayRegistry.ActiveSetup); }
         public static void Line(DebugPlace place, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Line, setup);
@@ -67,7 +67,7 @@ namespace Prateek.Runtime.DebugFramework
 
         ///---------------------------------------------------------------------
         //Point: Three line to mark each axis
-        public static void Point(DebugPlace place) { Point(place, DebugDrawInternal.ActiveSetup); }
+        public static void Point(DebugPlace place) { Point(place, DebugDisplayRegistry.ActiveSetup); }
         public static void Point(DebugPlace place, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Point, setup);
@@ -79,7 +79,7 @@ namespace Prateek.Runtime.DebugFramework
 
         ///---------------------------------------------------------------------
         //Box: A box, several flavors available
-        public static void Box(DebugPlace place) { Box(place, DebugDrawInternal.ActiveSetup); }
+        public static void Box(DebugPlace place) { Box(place, DebugDisplayRegistry.ActiveSetup); }
         public static void Box(DebugPlace place, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Box, setup);
@@ -91,7 +91,7 @@ namespace Prateek.Runtime.DebugFramework
 
         ///---------------------------------------------------------------------
         //Arc: Vertically aligned if drawn in world, aligned on z-axis if other
-        public static void Arc(DebugPlace place, Vector2 degrees) { Arc(place, degrees, DebugDrawInternal.ActiveSetup); }
+        public static void Arc(DebugPlace place, Vector2 degrees) { Arc(place, degrees, DebugDisplayRegistry.ActiveSetup); }
         public static void Arc(DebugPlace place, Vector2 degrees, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Arc, setup);
@@ -104,7 +104,7 @@ namespace Prateek.Runtime.DebugFramework
 
         ///---------------------------------------------------------------------
         //Circle/Ellipse: Vertically aligned if drawn in world, aligned on z-axis if other
-        public static void Circle(DebugPlace place) { Circle(place, DebugDrawInternal.ActiveSetup); }
+        public static void Circle(DebugPlace place) { Circle(place, DebugDisplayRegistry.ActiveSetup); }
         public static void Circle(DebugPlace place, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Circle, setup);
@@ -115,7 +115,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void Sphere(DebugPlace place) { Sphere(place, DebugDrawInternal.ActiveSetup); }
+        public static void Sphere(DebugPlace place) { Sphere(place, DebugDisplayRegistry.ActiveSetup); }
         public static void Sphere(DebugPlace place, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Sphere, setup);
@@ -126,7 +126,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void Capsule(DebugPlace place) { Capsule(place, DebugDrawInternal.ActiveSetup); }
+        public static void Capsule(DebugPlace place) { Capsule(place, DebugDisplayRegistry.ActiveSetup); }
         public static void Capsule(DebugPlace place, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Capsule, setup);
@@ -139,7 +139,7 @@ namespace Prateek.Runtime.DebugFramework
 
         ///---------------------------------------------------------------------
         #region Complex Primitives
-        public static void Cone(DebugPlace place) { Cone(place, DebugDrawInternal.ActiveSetup); }
+        public static void Cone(DebugPlace place) { Cone(place, DebugDisplayRegistry.ActiveSetup); }
         public static void Cone(DebugPlace place, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Cone, setup);
@@ -150,7 +150,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void Pie(DebugPlace place, Vector2 degrees) { Pie(place, degrees, DebugDrawInternal.ActiveSetup); }
+        public static void Pie(DebugPlace place, Vector2 degrees) { Pie(place, degrees, DebugDisplayRegistry.ActiveSetup); }
         public static void Pie(DebugPlace place, Vector2 degrees, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Pie, setup);
@@ -162,7 +162,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void Arrow(DebugPlace place) { Arrow(place, DebugDrawInternal.ActiveSetup); }
+        public static void Arrow(DebugPlace place) { Arrow(place, DebugDisplayRegistry.ActiveSetup); }
         public static void Arrow(DebugPlace place, DebugStyle setup)
         {
             var prim = new DebugPrimitiveSetup(DebugPrimitiveType.Arrow, setup);
@@ -175,7 +175,7 @@ namespace Prateek.Runtime.DebugFramework
 
         ///---------------------------------------------------------------------
         #region Custom Primitives
-        public static void Box(Vector3[] points) { Box(points, DebugDrawInternal.ActiveSetup); }
+        public static void Box(Vector3[] points) { Box(points, DebugDisplayRegistry.ActiveSetup); }
         public static void Box(Vector3[] points, DebugStyle setup)
         {
             if (points.Length != 8)
@@ -198,7 +198,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void Light(Light light) { var setup = DebugDrawInternal.ActiveSetup; setup.Color = light.color; Light(light, setup); }
+        public static void Light(Light light) { var setup = DebugDisplayRegistry.ActiveSetup; setup.Color = light.color; Light(light, setup); }
         public static void Light(Light light, DebugStyle setup)
         {
             var tr = light.transform;
@@ -214,7 +214,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void Plane(Plane plane, DebugPlace place) { Plane(plane, place, DebugDrawInternal.ActiveSetup); }
+        public static void Plane(Plane plane, DebugPlace place) { Plane(plane, place, DebugDisplayRegistry.ActiveSetup); }
         public static void Plane(Plane plane, DebugPlace place, DebugStyle setup)
         {
             var q = place.Rotation;
@@ -232,7 +232,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void LineCast(Ray ray, float radius, float distance) { SphereCast(ray, radius, distance, DebugDrawInternal.ActiveSetup); }
+        public static void LineCast(Ray ray, float radius, float distance) { SphereCast(ray, radius, distance, DebugDisplayRegistry.ActiveSetup); }
         public static void LineCast(Ray ray, float radius, float distance, DebugStyle setup)
         {
             var place = DebugPlace.AToB(ray.origin, ray.origin + ray.direction * distance);
@@ -244,7 +244,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void LineCastList(RaycastHit[] hits, Ray[] ray, float radius, float distance, bool doLoop = false) { LineCastList(hits, ray, radius, distance, DebugDrawInternal.ActiveSetup, doLoop); }
+        public static void LineCastList(RaycastHit[] hits, Ray[] ray, float radius, float distance, bool doLoop = false) { LineCastList(hits, ray, radius, distance, DebugDisplayRegistry.ActiveSetup, doLoop); }
         public static void LineCastList(RaycastHit[] hits, Ray[] rays, float radius, float distance, DebugStyle setup, bool doLoop = false)
         {
             bool hasHit = false;
@@ -286,7 +286,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void LineCastList(Ray[] ray, float radius, float distance, bool doLoop = false) { LineCastList(ray, radius, distance, DebugDrawInternal.ActiveSetup, doLoop); }
+        public static void LineCastList(Ray[] ray, float radius, float distance, bool doLoop = false) { LineCastList(ray, radius, distance, DebugDisplayRegistry.ActiveSetup, doLoop); }
         public static void LineCastList(Ray[] rays, float radius, float distance, DebugStyle setup, bool doLoop = false)
         {
             for (int h = 0; h < rays.Length; h++)
@@ -302,7 +302,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void LineCast(RaycastHit hit, Ray ray, float radius, float distance) { LineCast(hit, ray, radius, distance, DebugDrawInternal.ActiveSetup); }
+        public static void LineCast(RaycastHit hit, Ray ray, float radius, float distance) { LineCast(hit, ray, radius, distance, DebugDisplayRegistry.ActiveSetup); }
         public static void LineCast(RaycastHit hit, Ray ray, float radius, float distance, DebugStyle setup)
         {
             if (hit.transform == null)
@@ -340,7 +340,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void SphereCast(Ray ray, float radius, float distance) { SphereCast(ray, radius, distance, DebugDrawInternal.ActiveSetup); }
+        public static void SphereCast(Ray ray, float radius, float distance) { SphereCast(ray, radius, distance, DebugDisplayRegistry.ActiveSetup); }
         public static void SphereCast(Ray ray, float radius, float distance, DebugStyle setup)
         {
             var place = DebugPlace.AToB(ray.origin, ray.origin + ray.direction * distance);
@@ -352,7 +352,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static void SphereCast(RaycastHit hit, Ray ray, float radius, float distance) { SphereCast(hit, ray, radius, distance, DebugDrawInternal.ActiveSetup); }
+        public static void SphereCast(RaycastHit hit, Ray ray, float radius, float distance) { SphereCast(hit, ray, radius, distance, DebugDisplayRegistry.ActiveSetup); }
         public static void SphereCast(RaycastHit hit, Ray ray, float radius, float distance, DebugStyle setup)
         {
             {

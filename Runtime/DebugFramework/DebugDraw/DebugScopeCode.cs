@@ -6,6 +6,7 @@ namespace Prateek.Runtime.DebugFramework
 
     //#PRATEEK:#PRATEEK_USING_NAMESPACE#
     using UnityEngine;
+    using ScopeRegistry = DebugDisplayRegistry;
 
     ///---------------------------------------------------------------------
 #if ACTIVE_CODE
@@ -34,7 +35,7 @@ namespace Prateek.Runtime.DebugFramework
         {
             this.setup = setup;
 #if ACTIVE_CODE
-            DebugDraw.Add(this);
+            ScopeRegistry.Add(this);
 #endif
         }
 
@@ -55,7 +56,7 @@ namespace Prateek.Runtime.DebugFramework
         protected override void CloseScope()
         {
 #if ACTIVE_CODE
-            DebugDraw.Remove(this);
+            ScopeRegistry.Remove(this);
 #endif
         }
         #endregion Scope

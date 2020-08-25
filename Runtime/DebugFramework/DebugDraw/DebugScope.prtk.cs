@@ -78,7 +78,7 @@ namespace Prateek.Runtime.DebugFramework
         {
             this.setup = setup;
 #if ACTIVE_CODE
-            DebugDrawInternal.Add(this);
+            DebugDisplayRegistry.Add(this);
 #endif
         }
 
@@ -99,7 +99,7 @@ namespace Prateek.Runtime.DebugFramework
         protected override void CloseScope()
         {
 #if ACTIVE_CODE
-            DebugDrawInternal.Remove(this);
+            DebugDisplayRegistry.Remove(this);
 #endif
         }
         #endregion Scope

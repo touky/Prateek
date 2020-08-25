@@ -35,20 +35,44 @@
 namespace Prateek.Runtime.DebugFramework
 {
     using System.Collections.Generic;
+    using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.FrameRecorder;
 
     ///-------------------------------------------------------------------------
     public abstract class DebugDisplayRegistry
-        : FlagManager
-        , FrameRecorderRegistry.IRecorderBase
+        : FrameRecorderRegistry.IRecorderBase
     {
         ///---------------------------------------------------------------------
         #region Fields
-        private static FlagHierarchy flagHierarchy;
+        //private static FlagHierarchy flagHierarchy;
         private DebugDisplayFrame displayFrames;
         private DebugLineDisplayer lineDisplay;
         private List<DebugPrimitiveSetup> timedPrimitives;
         #endregion Fields
+        private static List<DebugScope> scopes = new List<DebugScope>();
+
+        ///---------------------------------------------------------------------
+        internal static DebugStyle ActiveSetup
+        {
+            get
+            {
+                if (scopes.Count == 0)
+                    return new DebugStyle(DebugStyle.InitMode.Reset);
+                return scopes.Last().Setup;
+            }
+        }
+
+        ///---------------------------------------------------------------------
+        internal static void Add(DebugScope scope)
+        {
+            scopes.Add(scope);
+        }
+
+        ///---------------------------------------------------------------------
+        internal static void Remove(DebugScope scope)
+        {
+            scopes.Remove(scope);
+        }
 
         ///---------------------------------------------------------------------
         #region Properties
@@ -63,7 +87,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public static FlagHierarchy DebugFlags { get { return flagHierarchy; } set { flagHierarchy = value; } }
+        //public static FlagHierarchy DebugFlags { get { return flagHierarchy; } set { flagHierarchy = value; } }
         #endregion Properties
 
         ///---------------------------------------------------------------------
@@ -125,10 +149,10 @@ namespace Prateek.Runtime.DebugFramework
 
         ///---------------------------------------------------------------------
         #region Flags setups
-        protected static void SetupFlags(FlagHierarchy hierarchy)
-        {
-            DebugDisplayRegistry.flagHierarchy = hierarchy;
-        }
+        //protected static void SetupFlags(FlagHierarchy hierarchy)
+        //{
+        //    DebugDisplayRegistry.flagHierarchy = hierarchy;
+        //}
         #endregion Flags setups
 
         ///---------------------------------------------------------------------

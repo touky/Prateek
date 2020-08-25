@@ -105,7 +105,7 @@ namespace Prateek.Runtime.DebugFramework
                 case InitMode.UseLast:
                 {
 #if ACTIVE_CODE
-                    this = DebugDrawInternal.ActiveSetup;
+                    this = DebugDisplayRegistry.ActiveSetup;
 #else
                     this = default;
 #endif

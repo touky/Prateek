@@ -36,164 +36,57 @@ namespace Prateek.Runtime.DebugFramework
 {
     using System;
     using System.Collections.Generic;
+    using Prateek.Runtime.Core.AssemblyForager;
     using Prateek.Runtime.Core.Helpers;
+    using Prateek.Runtime.KeynameFramework;
+    using Prateek.Runtime.KeynameFramework.Interfaces;
+    using UnityEngine.Assertions;
 
     ///-------------------------------------------------------------------------
-    public abstract class FlagManager
+    public sealed class FlagManager<TRootKeyword, TRootMetaword>
+        where TRootKeyword : MasterKeyword
+        where TRootMetaword : IMasterMetaword
     {
         ///---------------------------------------------------------------------
-        #region Declarations
-        public struct FlagHierarchy
+        private class FlagStatus
         {
-            ///-----------------------------------------------------------------
-            public struct Data
+            public Type type;
+            public HashSet<Type> parents;
+            public List<FlagStatus> children;
+            public bool enable = true;
+
+            public FlagStatus(Type type, bool enable)
             {
-                public bool active;
-                public int parent;
-                public List<int> children;
+                this.type = type;
+                this.enable = enable;
+
+                var baseType = type.BaseType;
+                do
+                {
+                    parents.Add(baseType);
+                    baseType = baseType.BaseType;
+                } while (baseType != typeof(TRootKeyword) && baseType != typeof(TRootMetaword));
             }
 
-            ///-----------------------------------------------------------------
-            public Type maskType;
-            public List<Data> datas;
-
-            ///-----------------------------------------------------------------
-            public void Build(ref Mask256 mask)
+            public void Build(Dictionary<Type, FlagStatus> flagStatuses)
             {
-                mask.Reset();
-                for (int h = 0; h < datas.Count; h++)
+                foreach (var flagStatus in flagStatuses.Values)
                 {
-                    if (!IsActive(datas[h].parent))
-                        continue;
-                    mask += datas[h].parent;
-                }
-            }
-
-            ///-----------------------------------------------------------------
-            public void SetStatus(int value, bool enable)
-            {
-                for (int h = 0; h < datas.Count; h++)
-                {
-                    var block = datas[h];
-                    if (block.parent == value)
+                    if (flagStatus.parents.Contains(type)
+                        || type.IsAssignableFrom(flagStatus.type))
                     {
-                        block.active = enable;
-                        datas[h] = block;
-                        break;
+                        children.Add(flagStatus);
                     }
                 }
-            }
-
-            ///-----------------------------------------------------------------
-            public bool IsActive(int value)
-            {
-                for (int h = 0; h < datas.Count; h++)
-                {
-                    if (datas[h].parent == value)
-                    {
-                        if (!datas[h].active)
-                            return false;
-
-                        int parent = 0;
-                        if (GetParent(value, ref parent))
-                        {
-                            return IsActive(parent);
-                        }
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            ///-----------------------------------------------------------------
-            public void Add(int parent, params int[] children)
-            {
-                if (datas == null)
-                    datas = new List<Data>();
-
-                int i = -1;
-                for (int h = 0; h < datas.Count; h++)
-                {
-                    if (datas[h].parent == parent)
-                    {
-                        i = h;
-                        break;
-                    }
-                }
-
-                if (i < 0)
-                {
-                    i = datas.Count;
-                    datas.Add(new Data() { parent = parent, children = new List<int>() } );
-                }
-
-                if (children == null)
-                    return;
-
-                var info = datas[i];
-                {
-                    info.children.AddRange(children);
-                }
-                datas[i] = info;
-
-                for (int c = 0; c < children.Length; c++)
-                {
-                    Add(children[c], null);
-                }
-            }
-
-            ///-----------------------------------------------------------------
-            public bool GetParent(int child, ref int parent)
-            {
-                for (int h = 0; h < datas.Count; h++)
-                {
-                    for (int c = 0; c < datas[h].children.Count; c++)
-                    {
-                        if (datas[h].children[c] == child)
-                        {
-                            parent = datas[h].parent;
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
-            ///-----------------------------------------------------------------
-            public int CountParent(int child)
-            {
-                for (int h = 0; h < datas.Count; h++)
-                {
-                    for (int c = 0; c < datas[h].children.Count; c++)
-                    {
-                        if (datas[h].children[c] == child)
-                        {
-                            return CountParent(datas[h].parent) + 1;
-                        }
-                    }
-                }
-                return 0;
-            }
-
-            ///-----------------------------------------------------------------
-            public bool HasChildren(int parent)
-            {
-                var i = -1;
-                for (int h = 0; h < datas.Count; h++)
-                {
-                    if (datas[h].parent == parent)
-                    {
-                        return datas[h].children.Count > 0;
-                    }
-                }
-                return false;
             }
         }
-        #endregion Declarations
 
         ///---------------------------------------------------------------------
         #region Fields
-        protected FlagHierarchy flagDatas;
+        private Dictionary<Type, FlagStatus> flagStatuses = new Dictionary<Type, FlagStatus>();
+        private HashSet<Type> activeFlags = new HashSet<Type>();
+        private FlagsForagerWorker worker = null;
+
         private Mask256 mask;
         private bool deactivateAll = false;
         #endregion Fields
@@ -231,50 +124,107 @@ namespace Prateek.Runtime.DebugFramework
         #endregion IGlobalManager integration
 
         ///---------------------------------------------------------------------
-        #region Flag manageement
-        public void Build()
+        private void Init()
         {
-            flagDatas.Build(ref mask);
+            if (worker == null)
+            {
+                return;
+            }
+
+            worker = FlagsForagerWorker.Instance;
+
+            foreach (var flag in worker.flags)
+            {
+                flagStatuses.Add(flag, new FlagStatus(flag, true));
+                activeFlags.Add(flag);
+            }
+
+            foreach (var overlay in worker.overlays)
+            {
+                flagStatuses.Add(overlay, new FlagStatus(overlay, false));
+            }
+
+            foreach (var flagStatus in flagStatuses.Values)
+            {
+                flagStatus.Build(flagStatuses);
+            }
         }
 
         ///---------------------------------------------------------------------
-        protected bool IsWrongType<T>() where T : struct, IConvertible
+        private void ValidateType<TFlagKeyword>()
         {
-            if (flagDatas.maskType == null)
-                return true;
-
-            if (typeof(T) != flagDatas.maskType && typeof(T) != typeof(int))
-                return true;
-
-            return false;
+            Assert.IsTrue(typeof(TFlagKeyword).IsSubclassOf(typeof(TRootKeyword))
+                       || typeof(TRootMetaword).IsAssignableFrom(typeof(TFlagKeyword)));
         }
 
         ///---------------------------------------------------------------------
-        public bool IsActive(MaskFlag flag)
+        public bool IsActive<TFlagKeyword>()
+            where TFlagKeyword : IMasterMetaword
         {
-            return mask == flag;
-        }
+            ValidateType<TFlagKeyword>();
 
-        ///---------------------------------------------------------------------
-        protected MaskFlag ToMask<T>(T value) where T : struct, IConvertible
-        {
-            if (IsWrongType<T>())
-                return MaskFlag.zero;
-            return value.GetHashCode();
-        }
+            Init();
 
-        ///---------------------------------------------------------------------
-        public bool IsActive<T>(T value) where T : struct, IConvertible
-        {
-            if (IsWrongType<T>())
+            if (!activeFlags.Contains(typeof(TFlagKeyword)))
+            {
                 return false;
+            }
 
-            if (deactivateAll)
-                return false;
-
-            return IsActive(ToMask(value));
+            return true;
         }
-        #endregion Flag manageement
+
+        ///---------------------------------------------------------------------
+        public void SetStatus<TFlagKeyword>(bool enable)
+            where TFlagKeyword : IMasterMetaword
+        {
+            ValidateType<TFlagKeyword>();
+
+            Init();
+
+            var type = typeof(TFlagKeyword);
+            var status = flagStatuses[type];
+            status.enable = enable;
+            flagStatuses[type] = status;
+        }
+
+        private class FlagsForagerWorker : AssemblyForagerWorker
+        {
+            private static FlagsForagerWorker instance;
+            internal List<Type> flags = new List<Type>(50);
+            internal List<Type> overlays = new List<Type>(50);
+
+            public static FlagsForagerWorker Instance
+            {
+                get { return instance; }
+            }
+
+            #region Class Methods
+            public override void Init()
+            {
+                instance = this;
+
+                Search(typeof(TRootKeyword));
+                Search(typeof(TRootMetaword));
+            }
+
+            public override void WorkDone()
+            {
+                base.WorkDone();
+
+                foreach (var foundType in FoundTypes)
+                {
+                    if (foundType.IsSubclassOf(typeof(TRootKeyword)))
+                    {
+                        flags.Add(foundType);
+                    }
+                    else
+                    {
+                        overlays.Add(foundType);
+                    }
+                }
+            }
+            #endregion
+        }
     }
 }
 #endif //PRATEEK_DEBUG

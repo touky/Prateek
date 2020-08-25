@@ -55,7 +55,7 @@ namespace Prateek.Runtime.KeynameFramework
         /// </summary>
         /// <param name="keyname">The target</param>
         public static void Remove<TKeyword>(ref this Keyname keyname)
-            where TKeyword : IMasterKeywordTag
+            where TKeyword : IMasterMetaword
         {
             keyname.Remove(typeof(TKeyword));
         }
@@ -86,7 +86,7 @@ namespace Prateek.Runtime.KeynameFramework
         /// </summary>
         /// <param name="keyname">The target</param>
         public static void RemoveAll<TKeyword>(ref this Keyname keyname)
-            where TKeyword : IMasterKeywordTag
+            where TKeyword : IMasterMetaword
         {
             keyname.RemoveAll(typeof(TKeyword));
         }
@@ -110,7 +110,7 @@ namespace Prateek.Runtime.KeynameFramework
         /// <param name="keyname">The target</param>
         /// <param name="insert">The Insert</param>
         public static void InsertBefore<TKeyword>(ref this Keyname keyname, Keyword insert)
-            where TKeyword : IMasterKeywordTag
+            where TKeyword : IMasterMetaword
         {
             keyname.InsertBefore(insert, typeof(TKeyword));
         }
@@ -133,7 +133,7 @@ namespace Prateek.Runtime.KeynameFramework
         /// <param name="keyname">The target</param>
         /// <param name="insert">The Insert</param>
         public static void InsertAfter<TKeyword>(ref this Keyname keyname, Keyword insert)
-            where TKeyword : IMasterKeywordTag
+            where TKeyword : IMasterMetaword
         {
             keyname.InsertBefore(insert, typeof(TKeyword));
         }
@@ -166,7 +166,7 @@ namespace Prateek.Runtime.KeynameFramework
         /// <param name="keyname">The target</param>
         /// <returns>The filtered keyname</returns>
         public static Keyname Filter<TKeyword>(this Keyname keyname)
-            where TKeyword : IMasterKeywordTag
+            where TKeyword : IMasterMetaword
         {
             return keyname.Filter(typeof(TKeyword));
         }
@@ -221,7 +221,7 @@ namespace Prateek.Runtime.KeynameFramework
         /// <param name="keyname">The target</param>
         /// <param name="replacement">The replacement</param>
         public static void Replace<TKeyword>(ref this Keyname keyname, Keyword replacement)
-            where TKeyword : IMasterKeywordTag
+            where TKeyword : IMasterMetaword
         {
             keyname.Replace(replacement, typeof(TKeyword));
         }
@@ -244,7 +244,7 @@ namespace Prateek.Runtime.KeynameFramework
         /// <param name="keyname"></param>
         /// <returns></returns>
         public static bool Contains<TKeyword>(this Keyname keyname)
-            where TKeyword : IMasterKeywordTag
+            where TKeyword : IMasterMetaword
         {
             return keyname.Contains(typeof(TKeyword));
         }

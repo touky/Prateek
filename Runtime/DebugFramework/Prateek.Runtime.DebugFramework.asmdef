@@ -6,7 +6,8 @@
         "Prateek.Runtime.Core",
         "Prateek.Runtime.TickableFramework",
         "Prateek.Runtime.GadgetFramework",
-        "Prateek.Runtime.FrameRecorderFramework"
+        "Prateek.Runtime.FrameRecorderFramework",
+        "Prateek.Runtime.KeynameFramework"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

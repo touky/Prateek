@@ -51,36 +51,6 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        #region Fields
-        private static List<DebugScope> scopes = new List<DebugScope>();
-        #endregion Fields
-
-        ///---------------------------------------------------------------------
-        #region Scopes
-        internal static DebugStyle ActiveSetup
-        {
-            get
-            {
-                if (scopes.Count == 0)
-                    return new DebugStyle(DebugStyle.InitMode.Reset);
-                return scopes.Last().Setup;
-            }
-        }
-
-        ///---------------------------------------------------------------------
-        internal static void Add(DebugScope scope)
-        {
-            scopes.Add(scope);
-        }
-
-        ///---------------------------------------------------------------------
-        internal static void Remove(DebugScope scope)
-        {
-            scopes.Remove(scope);
-        }
-        #endregion Scopes
-
-        ///---------------------------------------------------------------------
         protected static void Add(DebugPrimitiveSetup debugPrimitive)
         {
             DebugDisplayRegistry.Add(debugPrimitive);
