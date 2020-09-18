@@ -1,0 +1,85 @@
+#PRATEEK_COPYRIGHT#
+
+#PRATEEK_CSHARP_IFDEF#
+
+//-----------------------------------------------------------------------------
+namespace #NAMESPACE#
+{
+    #PRATEEK_CSHARP_NAMESPACE_CODE#
+
+    //-------------------------------------------------------------------------
+    #region Null#SCRIPTNAME#
+    public sealed class Null#SCRIPTNAME# : GlobalManager
+    {
+        //---------------------------------------------------------------------
+        public override void OnCreate() { }
+
+        //---------------------------------------------------------------------
+        public override void OnRegister() { Registry.Instance.Register(typeof(DebugDisplayBase), this); }
+        public override void OnUnregister() { Registry.Instance.Unregister(typeof(DebugDisplayBase)); }
+
+        //-- Object Lifetime Messages------------------------------------------
+        public override void OnInitialize() { }
+        public override void OnStart() { }
+        public override void OnUpdate(Registry.TickEvent tickEvent, float seconds) { }
+        public override void OnUpdateUnscaled(Registry.TickEvent tickEvent, float seconds) { }
+        public override void OnLateUpdate(Registry.TickEvent tickEvent, float seconds) { }
+        public override void OnFixedUpdate(Registry.TickEvent tickEvent, float seconds) { }
+        public override void OnDispose() { }
+
+        //-- Application Messages----------------------------------------------
+        public override void OnApplicationFocus(bool focusStatus) { }
+        public override void OnApplicationPause(bool pauseStatus) { }
+        public override void OnApplicationQuit() { }
+
+#if UNITY_EDITOR
+        //-- Ui Messages-------------------------------------------------------
+        public override void OnGUI() { }
+#endif //UNITY_EDITOR
+    }
+    #endregion Null#SCRIPTNAME#
+
+    //-------------------------------------------------------------------------
+    public sealed class #SCRIPTNAME# : GlobalManager
+    {
+        //---------------------------------------------------------------------
+        #region Declarations
+        #endregion Declarations
+
+        //---------------------------------------------------------------------
+        #region Settings
+        #endregion Settings
+
+        //---------------------------------------------------------------------
+        #region Fields
+        #endregion Fields
+        
+        //---------------------------------------------------------------------
+        #region Properties
+        #endregion Properties
+
+        //---------------------------------------------------------------------
+        #region IGlobalManager integration
+        public static BuilderBase GetBuilder()
+        {
+            return new Builder<#SCRIPTNAME#, Null#SCRIPTNAME#>();
+        }
+
+        //---------------------------------------------------------------------
+        public override void OnRegister()
+        {
+            base.OnRegister();
+
+            Registry.Instance.Register(typeof(#SCRIPTNAME#), this);
+        }
+
+        //---------------------------------------------------------------------
+        public override void OnUnregister()
+        {
+            Registry.Instance.Unregister(typeof(#SCRIPTNAME#));
+
+            base.OnUnregister();
+        }
+        #endregion IGlobalManager integration
+    }
+}

@@ -1,0 +1,33 @@
+PRATEEK_FILE_INFO(Slot, cs)
+{
+    PRATEEK_BLOCK_REPEAT(UNUSED)
+    {
+        PRATEEK_DEFINE(SIZE_VALID)
+
+        PRATEEK_DEFAULT(T, 10)
+
+        PRATEEK_CLASS_INFO(CachedList) { PRATEEK_NAMES(value) }
+
+		PRATEEK_FUNC
+		{
+		@private #DEF_0# #NAMES_N#;
+		}
+
+		PRATEEK_FUNC
+		{
+        @case #VARS_N#: { return get ? #NAMES_N# : #NAMES_N# = value; }
+		}
+
+		PRATEEK_FUNC
+		{
+        @#NAMES_N# = defaultValue;
+		}
+
+		PRATEEK_FUNC
+		{
+		@#DEF_1#;
+		}
+
+        PRATEEK_CODE_IMPORT(CachedListCode.cs)
+    }
+}

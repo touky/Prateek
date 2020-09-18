@@ -1,0 +1,55 @@
+PRATEEK_FILE_INFO(DebugScope, cs)
+{
+    PRATEEK_DEFINE(ACTIVE_CODE)
+
+    PRATEEK_USING(Prateek.Runtime.Core.Helpers)
+
+    PRATEEK_BLOCK_METHOD_OVERLOAD(Prateek.Runtime.DebugFramework)
+    {
+        PRATEEK_DEFINE_CONTAINER(DebugScope)
+        {
+            PRATEEK_TYPE(class, GUI.Scope)
+            PRATEEK_ATTRIBUTES(public)
+        }
+
+
+        PRATEEK_CLASS_INFO(DebugScope)
+		{
+			PRATEEK_NAMES(MaskFlag, flag)
+			PRATEEK_NAMES(DebugSpace, debugSpace)
+			PRATEEK_NAMES(Matrix4x4, matrix)
+			PRATEEK_NAMES(Color, color)
+			PRATEEK_NAMES(float, duration)
+			PRATEEK_NAMES(bool, depthTest)
+			PRATEEK_NAMES(int, precision)
+		}
+
+		PRATEEK_FUNC { @#NAMES_0# #NAMES_1#$ }
+		PRATEEK_FUNC { @#NAMES_1#$ }
+
+        PRATEEK_CODE_IMPORT(DebugScopeCode.cs)
+
+        PRATEEK_CODE_PREFIX
+        {
+        @#region Open overload
+        }
+        
+        PRATEEK_CODE_MAIN
+        {
+        @
+        @///--
+        @public static #SRC_CLASS# Open(#FUNC_RESULT_0#) 
+		@{ return Open(new DebugStyle(DebugStyle.InitMode.UseLast, #FUNC_RESULT_1#)); }
+        @
+        @///--
+        @public static #SRC_CLASS# Open(DebugStyle.InitMode mode, #FUNC_RESULT_0#)
+        @{ return Open(new DebugStyle(mode, #FUNC_RESULT_1#)); }
+        }
+
+        PRATEEK_CODE_SUFFIX
+        {
+        @#endregion Open overload
+        }
+    }
+}
+
