@@ -1,31 +1,35 @@
 {
-    "name": " com.prateek",
+    "name": "com.prateek",
     "displayName": "Prateek",
     "version": "1.0.0",
     "unity": "2018.3",
     "description": "Touky's useful stuff that are very 'Pratique'.",
-	"dependencies": {
-    "com.havok.physics": "0.1.2-preview",
-    "com.unity.addressables": "1.1.10",
-    "com.unity.burst": "1.1.2",
-    "com.unity.cinemachine": "2.5.0",
-    "com.unity.mathematics": "1.1.0",
-    "com.unity.inputsystem": "1.0.0-preview.4",
-    "com.unity.entities": "0.5.1-preview.11",
-    "com.unity.modules.ui": "1.0.0",
-    "com.unity.timeline": "1.2.10",
-    "com.unity.test-framework": "1.1.11",
-    "com.unity.render-pipelines.core": "7.1.8",
-    "com.unity.shadergraph": "7.1.8",
-    "com.unity.postprocessing": "2.2.2",
-    "com.unity.probuilder": "4.1.2"
+    "keywords": [ "unity", "prateek" ],
+    "author":
+    {
+        "name": "Touky"
+    },
+	"dependencies":
+    {
+        "com.havok.physics": "0.1.2-preview",
+        "com.unity.addressables": "1.1.10",
+        "com.unity.burst": "1.1.2",
+        "com.unity.cinemachine": "2.5.0",
+        "com.unity.mathematics": "1.1.0",
+        "com.unity.inputsystem": "1.0.0-preview.4",
+        "com.unity.entities": "0.5.1-preview.11",
+        "com.unity.modules.ui": "1.0.0",
+        "com.unity.timeline": "1.2.10",
+        "com.unity.test-framework": "1.1.11",
+        "com.unity.render-pipelines.core": "7.1.8",
+        "com.unity.shadergraph": "7.1.8",
+        "com.unity.postprocessing": "2.2.2",
+        "com.unity.probuilder": "4.1.2"
 	},
-    "keywords": [
-        "unity"
-    ],
-    "repository": {
+    "repository":
+    {
         "type": "git",
-        "url": "https://github.com/touky/Prateek/",
+        "url": "https://github.com/touky/Prateek",
         "revision":""
     }
 }
