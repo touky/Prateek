@@ -1,8 +1,8 @@
 {
     "name": "com.prateek",
     "displayName": "Prateek",
-    "version": "1.0.0",
-    "unity": "2018.3",
+    "version": "1.0.1",
+    "unity": "2019.4",
     "description": "Touky's useful stuff that are very 'Pratique'.",
     "keywords": [ "unity", "prateek" ],
     "author":
@@ -11,20 +11,13 @@
     },
 	"dependencies":
     {
-        "com.havok.physics": "0.1.2-preview",
-        "com.unity.addressables": "1.1.10",
-        "com.unity.burst": "1.1.2",
-        "com.unity.cinemachine": "2.5.0",
-        "com.unity.mathematics": "1.1.0",
-        "com.unity.inputsystem": "1.0.0-preview.4",
-        "com.unity.entities": "0.5.1-preview.11",
+        "com.unity.burst": "1.4.1-pre.1",
+        "com.unity.collections": "0.9.0-preview.6",
+        "com.unity.mathematics": "1.2.1",
+        "com.unity.inputsystem": "1.1.0-preview.1",
         "com.unity.modules.ui": "1.0.0",
-        "com.unity.timeline": "1.2.10",
-        "com.unity.test-framework": "1.1.11",
-        "com.unity.render-pipelines.core": "7.1.8",
-        "com.unity.shadergraph": "7.1.8",
-        "com.unity.postprocessing": "2.2.2",
-        "com.unity.probuilder": "4.1.2"
+        "com.unity.test-framework": "1.1.18",
+        "com.unity.addressables": "1.16.7"
 	},
     "repository":
     {
