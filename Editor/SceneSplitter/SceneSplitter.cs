@@ -26,6 +26,7 @@
         #endregion
 
         #region Constructors
+#if USE_SCENE_SPLITTER
         static SceneSplitter()
         {
             EditorSceneManager.sceneOpening += OnSceneOpening;
@@ -33,6 +34,7 @@
             SceneManager.sceneUnloaded += OnSceneUnloaded;
             EditorApplication.quitting += OnQuit;
         }
+#endif
         #endregion
 
         #region Class Methods
