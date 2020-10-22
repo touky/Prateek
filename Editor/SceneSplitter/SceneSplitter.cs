@@ -9,7 +9,9 @@
     using UnityEngine;
     using UnityEngine.SceneManagement;
 
+#if USE_SCENE_SPLITTER
     [InitializeOnLoad]
+#endif
     public static class SceneSplitter
     {
         #region Static and Constants
