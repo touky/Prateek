@@ -1,0 +1,24 @@
+{
+    "name": "Prateek.Runtime.BootStrap",
+    "references": [
+        "Unity.Addressables",
+        "Unity.ResourceManager",
+        "Dear.ImGui",
+        "Dear.ImGui.Unity",
+        "Unity.Mathematics",
+        "Prateek.Runtime.Core",
+        "Prateek.Runtime.DebugFramework",
+        "Prateek.Runtime.DaemonFramework",
+        "Prateek.Runtime.AppContentFramework.Unity",
+        "Prateek.Runtime.CommandFramework"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

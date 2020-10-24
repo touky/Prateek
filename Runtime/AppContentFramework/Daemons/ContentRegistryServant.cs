@@ -39,6 +39,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         #region Fields
         private StateMachine stateMachine;
 
+        protected bool workPending = false;
         private DiffList<string> paths;
         #endregion
 
@@ -147,6 +148,18 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
                 }
                 case State.Idle:
                 {
+                    if (workPending)
+                    {
+                        workPending = false;
+
+                        WorkIsReady();
+                    }
+
+                    break;
+                }
+                case State.StartWork:
+                {
+                    InvalidateAllPaths();
                     break;
                 }
                 case State.ContentTriage:

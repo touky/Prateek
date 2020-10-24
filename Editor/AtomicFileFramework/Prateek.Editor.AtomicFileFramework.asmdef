@@ -1,6 +1,8 @@
 {
-    "name": "Prateek.Editor.SceneSplitter",
-    "references": [],
+    "name": "Prateek.Editor.AtomicFileFramework",
+    "references": [
+        "Prateek.Runtime.Core"
+    ],
     "includePlatforms": [
         "Editor"
     ],

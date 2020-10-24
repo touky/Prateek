@@ -1,5 +1,5 @@
 {
-    "name": "Prateek.Runtime.AppContentFramework.StandAlone",
+    "name": "Prateek.Runtime.AppContentFramework.Local",
     "references": [
         "Dear.ImGui",
         "Dear.ImGui.Unity",
@@ -9,7 +9,7 @@
         "Prateek.Runtime.CommandFramework",
         "Prateek.Runtime.StateMachineFramework",
         "Prateek.Runtime.AppContentFramework",
-        "Prateek.Runtime.TickableFramework",
+        "Prateek.Runtime.TickableFramework"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

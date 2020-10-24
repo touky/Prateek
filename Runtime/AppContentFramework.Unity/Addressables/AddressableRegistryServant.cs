@@ -12,7 +12,6 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
     {
         #region Fields
         private bool addressSystemInitialized = false;
-        private bool workPending = false;
         #endregion
 
         #region Properties
@@ -32,25 +31,9 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
                     Addressables.InitializeAsync().Completed += InitCompleted;
                     break;
                 }
-                case State.Idle:
-                {
-                    if (workPending)
-                    {
-                        workPending = false;
-
-                        WorkIsReady();
-                    }
-
-                    break;
-                }
-                case State.StartWork:
-                {
-                    InvalidateAllPaths();
-                    break;
-                }
                 case State.Working:
                 {
-                    //Go throught the locators and store them in the overseer
+                    //Go through the locators and store them in the overseer
                     foreach (var locator in Addressables.ResourceLocators)
                     {
                         foreach (var key in locator.Keys)
