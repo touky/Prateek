@@ -9,19 +9,46 @@
     internal static class AssemblyForager
     {
         #region Static and Constants
+        private static readonly string[] ASSEMBLY_MATCH = { ".Editor", "-Editor" };
         private const int TYPE_COUNT = 30000;
         internal static List<AssemblyForagerWorker> workers = new List<AssemblyForagerWorker>();
         #endregion
 
         #region Class Methods
-        //todo: editor support [InitializeOnLoadMethod]
+        [InitializeOnLoadMethod]
+        private static void EditorForage()
+        {
+            Execute(false, ASSEMBLY_MATCH);
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        private static void Execute()
+        private static void RuntimeForage()
+        {
+            Execute(true, ASSEMBLY_MATCH);
+        }
+
+        private static void Execute(bool useMatchToIgnore, params string[] assemblyMatch)
         {
             var builder = (StringBuilder) null;
             var types   = new List<Type>(TYPE_COUNT);
             foreach (var domainAssembly in AppDomain.CurrentDomain.GetAssemblies())
             {
+                var ignoreAssembly = !useMatchToIgnore;
+                foreach (var match in assemblyMatch)
+                {
+                    if (domainAssembly.FullName.Contains(match))
+                    {
+                        ignoreAssembly = useMatchToIgnore;
+                        break;
+                    }
+                }
+
+                if (ignoreAssembly)
+                {
+                    builder.Log($"Ignoring {domainAssembly.FullName}");
+                    continue;
+                }
+
                 var assemblyTypes = domainAssembly.GetTypes();
                 foreach (var assemblyType in assemblyTypes)
                 {

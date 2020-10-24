@@ -1,11 +1,11 @@
 {
-    "name": "Prateek.Runtime.PersonalLogger",
+    "name": "Prateek.Editor",
     "references": [
-        "Prateek.Runtime.Core",
-        "Prateek.Runtime.DaemonFramework",
-        "Prateek.Runtime.DebugFramework"
+        "Prateek.Runtime"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

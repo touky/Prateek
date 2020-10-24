@@ -12,23 +12,24 @@
 
         #region Properties
         public List<Type> FoundTypes { get { return foundTypes; } }
+
+        public virtual bool IgnoreAbstract { get { return false; } }
         #endregion
 
         #region Class Methods
-        protected void Search<T>()
-        {
-            searchedTypes.Add(typeof(T));
-        }
+        protected void Search<T>() { searchedTypes.Add(typeof(T)); }
 
-        protected void Search(params Type[] types)
-        {
-            searchedTypes.AddRange(types);
-        }
+        protected void Search(params Type[] types) { searchedTypes.AddRange(types); }
 
         internal void TryStore(Type assemblyType)
         {
             foreach (var searchedType in searchedTypes)
             {
+                if (IgnoreAbstract && assemblyType.IsAbstract)
+                {
+                    continue;
+                }
+
                 if (assemblyType == searchedType
                  || assemblyType.IsSubclassOf(searchedType)
                  || searchedType.IsAssignableFrom(assemblyType))
