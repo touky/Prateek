@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
+namespace Prateek.Runtime.AppContentFramework.Local
 {
     using Prateek.Runtime.DaemonFramework.Servants;
 

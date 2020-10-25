@@ -3,6 +3,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
     using ImGuiNET;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.DebugFramework.Reflection;
+    using UnityEngine;
 
     public static class DebugFieldExtensions
     {
@@ -14,7 +15,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
                 return true;
             }
 
-            ImGui.Text($"Debug field {field.Name} is invalid !");
+            ImGui.Text($"Debug field '{field.Name}' is invalid !");
 
             return false;
         }
@@ -28,7 +29,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
                 if (!target.IsValid)
                 {
                     allValid = false;
-                    ImGui.Text($"Debug field {target.Name} is invalid !");
+                    ImGui.TextColored(Color.red, $"Debug field '{target.Name}' is invalid !");
                 }
             }
 

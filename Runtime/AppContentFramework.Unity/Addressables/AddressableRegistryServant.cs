@@ -49,6 +49,8 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
                         }
                     }
 
+                    workStatus = WorkStatus.Done;
+
                     break;
                 }
             }
@@ -64,7 +66,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
         private void InitCompleted(AsyncOperationHandle<IResourceLocator> obj)
         {
             addressSystemInitialized = true;
-            workPending = true;
+            workStatus = WorkStatus.Pending;
         }
 
         public override void SetupDebugDocument(DebugMenuDocument document)

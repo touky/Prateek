@@ -2,6 +2,7 @@
 {
     using System.IO;
     using System.Text.RegularExpressions;
+    using Prateek.Runtime.Core.Helpers;
 
     public abstract class AtomicFileFormat
     {
@@ -51,8 +52,8 @@
 
         public static FileInfo GetAtomicHeader(FileInfo atomicInfo, string contentExtension, string headerExtension)
         {
-            var sourceInfo = new FileInfo(atomicInfo.DirectoryName.Replace(CONTENT_EXTENSION, string.Empty));
-            var headerInfo = new FileInfo(Path.Combine(atomicInfo.DirectoryName, $"{Path.GetFileNameWithoutExtension(sourceInfo.Name)}{HEADER_EXTENSION}"));
+            var sourceInfo = new FileInfo(atomicInfo.DirectoryName.RemoveExtension(CONTENT_EXTENSION));
+            var headerInfo = new FileInfo(Path.Combine(atomicInfo.DirectoryName, Path.ChangeExtension(sourceInfo.Name, HEADER_EXTENSION)));
             return headerInfo;
         }
         #endregion

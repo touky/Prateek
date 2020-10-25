@@ -1,65 +1,71 @@
-namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
+namespace Prateek.Runtime.AppContentFramework.Local
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
-    using System.Net.Mime;
     using System.Text;
     using Prateek.Runtime.AppContentFramework.Daemons;
-    using Prateek.Runtime.AppContentFramework.Loader;
-    using Prateek.Runtime.AppContentFramework.Loader.Enums;
+    using Prateek.Runtime.AppContentFramework.Local.ContentFormat;
+    using Prateek.Runtime.AppContentFramework.Local.ContentLoader;
+    using Prateek.Runtime.AppContentFramework.Local.Debug;
     using Prateek.Runtime.Core.Consts;
+    using Prateek.Runtime.Core.Helpers;
+    using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using UnityEngine;
 
     public class LocalRegistryServant
         : ContentRegistryServant
     {
-        private class ContentToc
-        {
-            public List<string> folders = new List<string>();
-            public List<string> ignoredFolders = new List<string>();
-            public List<string> ignoredFiles = new List<string>();
-        }
-
+        #region Static and Constants
         private const string EXTRA_CONTENT = "../ExtraContent";
         private const string EXTRA_CONTENT_TOC = "ContentLookUp.json";
-        
+
         private const string SEARCH_PATTERN = "*.*";
         private const char WILDCARD = '*';
-        private static readonly string WILDCARD_S = $"{WILDCARD}";
-        private static readonly char[] WILDCARD_A = {WILDCARD};
 
         private const string ERROR_FILE = "ErrorLog.txt";
+        private static readonly string WILDCARD_S = $"{WILDCARD}";
+        private static readonly char[] WILDCARD_A = {WILDCARD};
+        #endregion
 
         #region Fields
         private bool addressSystemInitialized = false;
-        private bool workPending = false;
 
-        private string contentPath = string.Empty;
-        private string contentTocPath = string.Empty;
+        private string extraContentPath = string.Empty;
+        private string extraContentTocPath = string.Empty;
         private ContentToc contentToc = null;
+        private List<ContentFormat.ContentFormat> contentFormats = new List<ContentFormat.ContentFormat>();
         private List<DirectoryInfo> lookUpInfos = new List<DirectoryInfo>();
-        private Dictionary<string, FileInfo> pathToFileInfos = new Dictionary<string, FileInfo>();
+        private Dictionary<string, ContentPath> pathToContentPaths = new Dictionary<string, ContentPath>();
+        private List<ContentPath> cacheContentPaths = new List<ContentPath>();
         #endregion
 
         #region Properties
-        public override bool IsAlive
-        {
-            get { return base.IsAlive && addressSystemInitialized; }
-        }
+        public override bool IsAlive { get { return base.IsAlive && addressSystemInitialized; } }
         #endregion
 
         #region Class Methods
+        public override void Startup()
+        {
+            base.Startup();
+
+            foreach (var type in ContentFormatForagerWorker.Instance.FoundTypes)
+            {
+                contentFormats.Add(Activator.CreateInstance(type) as ContentFormat.ContentFormat);
+            }
+
+            contentFormats.SortWithPriorities();
+        }
+
         public override void ExecutingState(State state)
         {
             switch (state)
             {
                 case State.Startup:
                 {
-                    contentPath = Path.Combine(Application.dataPath, EXTRA_CONTENT);
-                    var contentInfo = new DirectoryInfo(contentPath);
+                    extraContentPath = Path.Combine(Application.dataPath, EXTRA_CONTENT);
+                    var contentInfo = new DirectoryInfo(extraContentPath);
                     if (!contentInfo.Exists)
                     {
                         break;
@@ -67,10 +73,10 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
 
                     lookUpInfos.Add(contentInfo);
 
-                    contentTocPath = Path.Combine(contentPath, EXTRA_CONTENT_TOC);
+                    extraContentTocPath = Path.Combine(extraContentPath, EXTRA_CONTENT_TOC);
 
-                    var builder = (StringBuilder)null;
-                    var contentTocInfo = new FileInfo(contentTocPath);
+                    var builder        = (StringBuilder) null;
+                    var contentTocInfo = new FileInfo(extraContentTocPath);
                     if (contentTocInfo.Exists)
                     {
                         var json = File.ReadAllText(contentTocInfo.FullName);
@@ -109,17 +115,17 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
 
                     if (builder != null && builder.Length > 0)
                     {
-                        var errorPath = Path.Combine(contentPath, ERROR_FILE);
+                        var errorPath = Path.Combine(extraContentPath, ERROR_FILE);
                         File.WriteAllText(errorPath, builder.ToString());
                     }
 
-                    workPending = lookUpInfos.Count > 0;
+                    workStatus = lookUpInfos.Count > 0 ? WorkStatus.Pending : WorkStatus.Nothing;
 
                     break;
                 }
                 case State.StartWork:
                 {
-                    pathToFileInfos.Clear();
+                    pathToContentPaths.Clear();
                     break;
                 }
                 case State.Working:
@@ -135,20 +141,39 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
                                 continue;
                             }
 
-                            var relativePath = fileInfo.FullName.Replace(lookUpInfo.FullName, string.Empty);
-                            if (pathToFileInfos.ContainsKey(relativePath))
+                            var relativePath = fileInfo.RelativePath(lookUpInfo);
+                            if (pathToContentPaths.ContainsKey(relativePath))
                             {
-                                pathToFileInfos.Remove(relativePath);
+                                pathToContentPaths.Remove(relativePath);
                             }
 
-                            pathToFileInfos.Add(relativePath, fileInfo);
+                            foreach (var contentFormat in contentFormats)
+                            {
+                                if (contentFormat.Extension != string.Empty && contentFormat.Extension != fileInfo.Extension)
+                                {
+                                    continue;
+                                }
+
+                                cacheContentPaths.Clear();
+                                if (contentFormat.ExtractPath(relativePath, fileInfo, cacheContentPaths))
+                                {
+                                    foreach (var contentPath in cacheContentPaths)
+                                    {
+                                        pathToContentPaths.Add(contentPath.StoragePath, contentPath);
+                                    }
+                                }
+
+                                break;
+                            }
                         }
                     }
 
-                    foreach (var relativePath in pathToFileInfos.Keys)
+                    foreach (var relativePath in pathToContentPaths.Keys)
                     {
                         ValidatePath(relativePath);
                     }
+
+                    workStatus = WorkStatus.Done;
 
                     break;
                 }
@@ -157,16 +182,16 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
             base.ExecutingState(state);
         }
 
-        protected override ContentLoader GetNewContentLoader(string path)
+        protected override Loader.ContentLoader GetNewContentLoader(string path)
         {
-            return new LocalContentLoader(path, pathToFileInfos[path]);
+            return new LocalContentLoader(path, pathToContentPaths[path]);
         }
 
         public override void SetupDebugDocument(DebugMenuDocument document)
         {
-            //var section = new AddressableRegistrySection(this, "Addressable Servant");
+            var section = new LocalRegistrySection(this, "Local Servant");
 
-            //document.AddSections(section);
+            document.AddSections(section);
         }
 
         private bool ShouldIgnore(FileInfo fileInfo)
@@ -174,6 +199,11 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
             if (contentToc == null)
             {
                 return false;
+            }
+
+            if (fileInfo.Name == EXTRA_CONTENT_TOC)
+            {
+                return true;
             }
 
             foreach (var folder in contentToc.ignoredFolders)
@@ -185,7 +215,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
                 }
                 else
                 {
-                    splits = new[] { folder };
+                    splits = new[] {folder};
                 }
 
                 var directoryInfo = fileInfo.Directory;
@@ -209,6 +239,8 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
                     {
                         return true;
                     }
+
+                    directoryInfo = directoryInfo.Parent;
                 }
             }
 
@@ -221,7 +253,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
                 }
                 else
                 {
-                    splits = new[] { file };
+                    splits = new[] {file};
                 }
 
                 var index    = Const.INDEX_NONE;
@@ -247,78 +279,16 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
             return false;
         }
         #endregion
-    }
 
-    internal enum LocalAssetFormat
-    {
-        Nothing,
-        Byte,
-        Text,
-        Lines
-    }
-    
-    public class LocalLoaderParameters : LoaderParameters
-    {
-        #region Fields
-        internal LocalAssetFormat format = LocalAssetFormat.Nothing;
+        #region Nested type: ContentToc
+        private class ContentToc
+        {
+            #region Fields
+            public List<string> folders = new List<string>();
+            public List<string> ignoredFolders = new List<string>();
+            public List<string> ignoredFiles = new List<string>();
+            #endregion
+        }
         #endregion
-    }
-
-    internal class LocalContentLoader : ContentLoader
-    {
-        private FileInfo fileInfo;
-        private byte[] byteData;
-        private string textData;
-        private string[] linesData;
-
-        public LocalContentLoader(string path, FileInfo fileInfo)
-            : base(path)
-        {
-            this.fileInfo = fileInfo;
-        }
-
-        protected override void Load(LoaderParameters parameters)
-        {
-            status = ContentAsyncStatus.Loading;
-
-            var tParameters = ValidateParameterType<LocalLoaderParameters>(parameters);
-            if (!fileInfo.Exists)
-            {
-                status = ContentAsyncStatus.Failed;
-                return;
-            }
-
-            status = ContentAsyncStatus.Failed;
-            switch (tParameters.format)
-            {
-                case LocalAssetFormat.Byte:
-                {
-                    byteData = File.ReadAllBytes(fileInfo.FullName);
-                    status = ContentAsyncStatus.Loaded;
-                    break;
-                }
-                case LocalAssetFormat.Text:
-                {
-                    textData = File.ReadAllText(fileInfo.FullName);
-                    status = ContentAsyncStatus.Loaded;
-                    break;
-                }
-                case LocalAssetFormat.Lines:
-                {
-                    linesData = File.ReadAllLines(fileInfo.FullName);
-                    status = ContentAsyncStatus.Loaded;
-                    break;
-                }
-            }
-
-            OnLoadCompleted();
-        }
-
-        protected override void Unload(LoaderParameters parameters)
-        {
-            byteData = null;
-            textData = null;
-            linesData = null;
-        }
     }
 }

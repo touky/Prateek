@@ -2,7 +2,8 @@
 {
     using Prateek.Runtime.Core.AssemblyForager;
 
-    public abstract class AutoRegisterForagerWorker : AssemblyForagerWorker
+    public abstract class AutoRegisterForagerWorker
+        : AssemblyForagerWorker
     {
         #region Register/Unregister
         internal void Register(IAutoRegister instance)
