@@ -1,6 +1,7 @@
 namespace Prateek.Runtime
 {
     using System.Collections.Generic;
+    using Prateek.Runtime.AppContentFramework.Local;
     using Prateek.Runtime.AppContentFramework.Unity.Addressables;
     using Prateek.Runtime.CommandFramework.Servants;
     using UnityEngine;
@@ -13,8 +14,7 @@ namespace Prateek.Runtime
             new Initializer<LocalCommandBoostrap>(),
             new Initializer<AddressableRegistryBoostrap>(),
 #if UNITY_STANDALONE
-
-            //todo add local one: typeof(AddressableRegistryBoostrap),
+            new Initializer<LocalRegistryBoostrap>(),
 #endif
         };
 
