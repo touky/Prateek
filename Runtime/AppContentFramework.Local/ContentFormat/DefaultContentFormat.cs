@@ -2,6 +2,8 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentFormat
 {
     using System.Collections.Generic;
     using System.IO;
+    using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.AppContentFramework.Local.ContentLoader;
 
     public class DefaultContentFormat
         : ContentFormat
@@ -16,6 +18,11 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentFormat
         {
             foundPaths.Add(new ContentPath(relativePath, fileInfo, this));
             return true;
+        }
+
+        public override ContentLoader GetLoader(ContentPath contentPath)
+        {
+            return new LocalContentLoader(contentPath.StoragePath, contentPath);
         }
         #endregion
     }

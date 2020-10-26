@@ -2,6 +2,7 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentFormat
 {
     using System.Collections.Generic;
     using System.IO;
+    using Prateek.Runtime.AppContentFramework.Loader;
     using Prateek.Runtime.Core.Interfaces.IPriority;
 
     public abstract class ContentFormat
@@ -13,6 +14,7 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentFormat
 
         #region Class Methods
         public abstract bool ExtractPath(string relativePath, FileInfo fileInfo, List<ContentPath> foundPaths);
+        public abstract ContentLoader GetLoader(ContentPath contentPath);
         #endregion
 
         #region IPriority Members
