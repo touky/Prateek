@@ -10,6 +10,7 @@
         "Prateek.Runtime.DebugFramework",
         "Prateek.Runtime.DaemonFramework",
         "Prateek.Runtime.AppContentFramework.Unity",
+        "Prateek.Runtime.AppContentFramework.Local",
         "Prateek.Runtime.CommandFramework"
     ],
     "includePlatforms": [],
