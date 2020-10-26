@@ -50,7 +50,7 @@ namespace Prateek.Editor.CodeGeneration.BackendTools
             ///-----------------------------------------------------------------
             public static void OnWillCreateAsset(string path)
             {
-                path = path.Replace(".meta", string.Empty);
+                path = path.RemoveExtension(".meta");
                 int index = path.LastIndexOf(Strings.Separator.FileExtension.C());
                 if (index < 0)
                     return;

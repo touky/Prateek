@@ -29,6 +29,14 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         }
         #endregion
 
+        public enum WorkStatus
+        {
+            Nothing,
+            Pending,
+            Working,
+            Done,
+        }
+
         #region Trigger enum
         protected enum Trigger
         {
@@ -39,6 +47,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         #region Fields
         private StateMachine stateMachine;
 
+        protected WorkStatus workStatus = WorkStatus.Nothing;
         private DiffList<string> paths;
         #endregion
 
@@ -147,6 +156,27 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
                 }
                 case State.Idle:
                 {
+                    if (workStatus == WorkStatus.Pending)
+                    {
+                        WorkIsReady();
+                    }
+
+                    break;
+                }
+                case State.StartWork:
+                {
+                    InvalidateAllPaths();
+
+                    workStatus = WorkStatus.Working;
+                    stateMachine.Trigger(Trigger.NextStep);
+                    break;
+                }
+                case State.Working:
+                {
+                    if (workStatus == WorkStatus.Done)
+                    {
+                        stateMachine.Trigger(Trigger.NextStep);
+                    }
                     break;
                 }
                 case State.ContentTriage:

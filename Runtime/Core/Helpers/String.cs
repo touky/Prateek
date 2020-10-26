@@ -340,8 +340,22 @@ namespace Prateek.Runtime.Core.Helpers
         {
             var index = left.LastIndexOf(fileExtension[0]);
             if (index < 0)
+            {
                 return left;
+            }
+
             return left.Substring(0, index);
+        }
+
+        ///---------------------------------------------------------------------
+        public static string RemoveExtension(this string left, string extension)
+        {
+            if (!left.EndsWith(extension))
+            {
+                return left;
+            }
+
+            return left.RemoveExtension();
         }
 
         ///---------------------------------------------------------------------

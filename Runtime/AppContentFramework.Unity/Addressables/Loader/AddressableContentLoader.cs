@@ -28,12 +28,8 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
         #region Class Methods
         protected override void Load(LoaderParameters parameters)
         {
-            if (!(parameters is AddressableLoaderParameters aParameters))
-            {
-                throw new Exception($"{nameof(LoaderParameters)} are of the wrong type: {parameters.GetType().Name}");
-            }
-
-            switch (aParameters.behaviour)
+            var tParameters = ValidateParameterType<AddressableLoaderParameters>(parameters);
+            switch (tParameters.behaviour)
             {
                 case LoaderBehaviour.Asset:
                 {
@@ -42,7 +38,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
                 }
                 case LoaderBehaviour.Scene:
                 {
-                    LoadSceneAsync(aParameters);
+                    LoadSceneAsync(tParameters);
                     break;
                 }
             }

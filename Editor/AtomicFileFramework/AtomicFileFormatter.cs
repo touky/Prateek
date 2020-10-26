@@ -5,6 +5,7 @@
     using System.IO;
     using Prateek.Editor.AtomicFileFramework.Detection;
     using Prateek.Runtime.Core.Consts;
+    using Prateek.Runtime.Core.Helpers;
     using UnityEditor;
 
     public class AtomicFileFormatter
@@ -133,7 +134,7 @@
                 return;
             }
 
-            var fileInfo = new FileInfo(importInfo.directoryInfo.FullName.Replace(importInfo.format.ContentExtension, string.Empty));
+            var fileInfo = new FileInfo(importInfo.directoryInfo.FullName.RemoveExtension(importInfo.format.ContentExtension));
             File.WriteAllText(fileInfo.FullName, content);
         }
 

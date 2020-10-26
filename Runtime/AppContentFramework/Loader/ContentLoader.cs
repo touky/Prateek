@@ -77,6 +77,17 @@ namespace Prateek.Runtime.AppContentFramework.Loader
             this.parameters = parameters;
         }
 
+        protected TExpectedType ValidateParameterType<TExpectedType>(LoaderParameters parameters)
+            where TExpectedType : LoaderParameters
+        {
+            if (!(parameters is TExpectedType aParameters))
+            {
+                throw new Exception($"{nameof(LoaderParameters)} are of the wrong type: {parameters.GetType().Name}");
+            }
+
+            return aParameters;
+        }
+
         private void Load()
         {
             if (parameters == null)

@@ -11,7 +11,8 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         #endregion
 
         #region Constructors
-        protected DebugMenuSection(string title) : base(title) { }
+        protected DebugMenuSection(string title)
+            : base(title) { }
         #endregion
 
         #region Class Methods

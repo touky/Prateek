@@ -1,17 +1,66 @@
 namespace Prateek.Runtime.DebugFramework.Reflection
 {
+    using System;
     using System.Reflection;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
+    using UnityEngine;
     using UnityEngine.Assertions;
 
     public abstract class DebugField
     {
+        #region Fields
+        private string name;
+        protected object owner;
+        private Type ownerType;
+        private SerializedObject serializedOwner;
+        protected FieldInfo fieldInfo;
+        #endregion
+
         #region Properties
-        public abstract string Name { get; }
-        public abstract bool IsValid { get; }
+        public string Name { get { return name; } }
+
+        public bool IsValid { get { return fieldInfo != null; } }
+
+#if UNITY_EDITOR
+        public SerializedProperty SerializedProperty
+        {
+            get
+            {
+                if (!(owner is UnityEngine.Object unityOwner))
+                {
+                    return null;
+                }
+
+                if (serializedOwner == null)
+                {
+                    serializedOwner = new SerializedObject(unityOwner);
+                }
+
+                return serializedOwner.FindProperty(name);
+            }
+        }
+#endif
         #endregion
 
         #region Class Methods
-        public abstract void SetOwner(object owner);
+        protected void SetName(string name)
+        {
+            this.name = name.Trim();
+        }
+
+        public virtual void SetOwner(object owner)
+        {
+            this.owner = owner;
+            ownerType = this.owner.GetType();
+            fieldInfo = ReflectionHelper.SearchFieldInfo(ownerType, name, true);
+
+            if (fieldInfo == null)
+            {
+                Debug.LogError($"{name} could not be found in {ownerType.Name}");
+            }
+        }
 
         public static void SetOwnerToAllDebugFields(object debugFieldOwner, object contentOwner)
         {
@@ -22,7 +71,7 @@ namespace Prateek.Runtime.DebugFramework.Reflection
             var methodInfo = (MethodInfo) null;
             foreach (var method in methods)
             {
-                if ((method.Attributes & MethodAttributes.Abstract) != 0
+                if ((method.Attributes & MethodAttributes.Virtual) != 0
                  && (method.Attributes & MethodAttributes.SpecialName) == 0)
                 {
                     methodInfo = method;

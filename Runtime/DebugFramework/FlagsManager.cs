@@ -187,7 +187,7 @@ namespace Prateek.Runtime.DebugFramework
             flagStatuses[type] = status;
         }
 
-        private class FlagsForagerWorker : AssemblyForagerWorker
+        private abstract class FlagsForagerWorker : AssemblyForagerWorker
         {
             private static FlagsForagerWorker instance;
             internal List<Type> flags = new List<Type>(50);

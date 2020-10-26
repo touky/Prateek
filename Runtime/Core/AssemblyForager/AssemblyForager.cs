@@ -31,7 +31,8 @@
         {
             var builder = (StringBuilder) null;
             var types   = new List<Type>(TYPE_COUNT);
-            foreach (var domainAssembly in AppDomain.CurrentDomain.GetAssemblies())
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var domainAssembly in assemblies)
             {
                 var ignoreAssembly = !useMatchToIgnore;
                 foreach (var match in assemblyMatch)
