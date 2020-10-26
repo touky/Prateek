@@ -10,8 +10,8 @@ For a more detailed usage, imgui_demo.cpp.txt is available at the root of the re
 - - v1.78.1 is the most recent and supported version
 - - At the moment, Prateek fully relies on dear imgui and requires that integration to compile.
 - - This is a manual process, because unity does not handle package dependencies from git URL
-- [Add package](https://docs.unity3d.com/Manual/upm-ui-giturl.html) from this git URL: https://github.com/touky/Prateek.git#v1.0.2
-- - v1.0.2 is the most recent and supported version
+- [Add package](https://docs.unity3d.com/Manual/upm-ui-giturl.html) from this git URL: https://github.com/touky/Prateek.git#v1.0.3
+- - v1.0.3 is the most recent and supported version
 
 ### See Also
  
