@@ -66,11 +66,10 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
             {
                 if (ImGui.CollapsingHeader(section.Title))
                 {
-                    ImGui.Indent();
+                    using (new ScopeIndent())
                     {
                         section.Draw(context);
                     }
-                    ImGui.Unindent();
                 }
             }
         }

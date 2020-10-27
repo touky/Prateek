@@ -1,6 +1,7 @@
 namespace Prateek.Runtime.AppContentFramework.Messages
 {
     using System;
+    using Prateek.Runtime.AppContentFramework.ContentAccess;
     using Prateek.Runtime.AppContentFramework.Daemons;
     using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.Core.HierarchicalTree;

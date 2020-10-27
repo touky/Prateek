@@ -1,6 +1,6 @@
 namespace Prateek.Runtime.AppContentFramework.Daemons
 {
-    using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.Core;
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework.Servants;

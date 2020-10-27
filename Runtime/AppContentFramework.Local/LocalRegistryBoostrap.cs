@@ -6,6 +6,5 @@ namespace Prateek.Runtime.AppContentFramework.Local
 #if UNITY_STANDALONE || UNITY_EDITOR
         : ServantBootstrap<LocalRegistryServant>
 #endif
-    {
-    }
+    { }
 }

@@ -2,7 +2,8 @@ namespace Prateek.Runtime.AppContentFramework.Local.Debug
 {
     using System.Collections.Generic;
     using ImGuiNET;
-    using Prateek.Runtime.AppContentFramework.Daemons;
+    using Prateek.Runtime.AppContentFramework.Daemons.Debug;
+    using Prateek.Runtime.AppContentFramework.Local.ContentFormats;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.Reflection;
 
@@ -11,10 +12,12 @@ namespace Prateek.Runtime.AppContentFramework.Local.Debug
     {
         #region Fields
         private DebugField<Dictionary<string, ContentPath>> pathToContentPaths = "pathToContentPaths";
+        private DebugField<List<ContentFormat>> contentFormats = "contentFormats";
         #endregion
 
         #region Constructors
-        public LocalRegistrySection(LocalRegistryServant owner, string title) : base(owner, title) { }
+        public LocalRegistrySection(LocalRegistryServant owner, string title)
+            : base(owner, title) { }
         #endregion
 
         #region Class Methods
@@ -23,11 +26,25 @@ namespace Prateek.Runtime.AppContentFramework.Local.Debug
             base.OnDraw(context);
 
             ImGui.Separator();
-            if (pathToContentPaths.AssertDrawable())
+            if (contentFormats.DrawHeader("Found Content formats"))
             {
-                foreach (var pair in pathToContentPaths.Value)
+                using (new ScopeIndent())
                 {
-                    ImGui.Text($"'{pair.Key}': Format '{pair.Value.ContentFormat.GetType().Name}'");
+                    foreach (var contentFormat in contentFormats.Value)
+                    {
+                        ImGui.Text(contentFormat.GetType().Name);
+                    }
+                }
+            }
+
+            if (pathToContentPaths.DrawHeader("Local content"))
+            {
+                using (new ScopeIndent())
+                {
+                    foreach (var pair in pathToContentPaths.Value)
+                    {
+                        ImGui.Text($"'{pair.Key}': Format '{pair.Value.ContentFormat.GetType().Name}'");
+                    }
                 }
             }
         }

@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.AppContentFramework.Local.ContentFormat
+namespace Prateek.Runtime.AppContentFramework.Local.ContentFormats
 {
     using Prateek.Runtime.Core.AssemblyForager;
 

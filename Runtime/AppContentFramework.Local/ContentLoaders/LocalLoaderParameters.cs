@@ -1,6 +1,6 @@
-namespace Prateek.Runtime.AppContentFramework.Local.ContentLoader
+namespace Prateek.Runtime.AppContentFramework.Local.ContentLoaders
 {
-    using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.AppContentFramework.Local.Enums;
 
     public class LocalLoaderParameters : LoaderParameters

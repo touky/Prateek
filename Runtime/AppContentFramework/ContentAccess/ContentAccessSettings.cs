@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.AppContentFramework.Daemons
+namespace Prateek.Runtime.AppContentFramework.ContentAccess
 {
     using System;
     using Prateek.Runtime.Core.HierarchicalTree;

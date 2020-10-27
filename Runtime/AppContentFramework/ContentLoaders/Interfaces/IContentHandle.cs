@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.AppContentFramework.Loader.Interfaces
+namespace Prateek.Runtime.AppContentFramework.ContentLoaders.Interfaces
 {
     using System;
 

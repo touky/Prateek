@@ -1,6 +1,6 @@
-namespace Prateek.Runtime.AppContentFramework.Loader.Interfaces
+namespace Prateek.Runtime.AppContentFramework.ContentLoaders.Interfaces
 {
-    using Prateek.Runtime.AppContentFramework.Loader.Enums;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders.Enums;
 
     public interface IContentLoader
     {

@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
+namespace Prateek.Runtime.AppContentFramework.Unity.Addressables.ContentLoaders
 {
     internal enum LoaderBehaviour
     {

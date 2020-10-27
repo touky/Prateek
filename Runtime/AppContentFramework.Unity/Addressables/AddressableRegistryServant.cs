@@ -1,7 +1,9 @@
 namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
 {
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.AppContentFramework.Daemons;
-    using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.AppContentFramework.Unity.Addressables.ContentLoaders;
+    using Prateek.Runtime.AppContentFramework.Unity.Addressables.Debug;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using UnityEngine.AddressableAssets;
     using UnityEngine.AddressableAssets.ResourceLocators;

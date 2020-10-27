@@ -1,8 +1,8 @@
-namespace Prateek.Runtime.AppContentFramework.Local.ContentLoader
+namespace Prateek.Runtime.AppContentFramework.Local.ContentLoaders
 {
     using System.IO;
-    using Prateek.Runtime.AppContentFramework.Loader;
-    using Prateek.Runtime.AppContentFramework.Loader.Enums;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders.Enums;
     using Prateek.Runtime.AppContentFramework.Local.Enums;
 
     internal class LocalContentLoader : ContentLoader

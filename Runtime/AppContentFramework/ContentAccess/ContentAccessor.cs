@@ -1,5 +1,6 @@
-namespace Prateek.Runtime.AppContentFramework.Daemons
+namespace Prateek.Runtime.AppContentFramework.ContentAccess
 {
+    using Prateek.Runtime.AppContentFramework.ContentAccess.Interfaces;
     using Prateek.Runtime.AppContentFramework.Messages;
     using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.CommandFramework.EmitterReceiver;

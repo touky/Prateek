@@ -1,8 +1,8 @@
-namespace Prateek.Runtime.AppContentFramework.Loader
+namespace Prateek.Runtime.AppContentFramework.ContentLoaders
 {
     using System;
     using System.Diagnostics;
-    using Prateek.Runtime.AppContentFramework.Loader.Interfaces;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders.Interfaces;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.Extensions;
     using UnityEngine.Assertions;
