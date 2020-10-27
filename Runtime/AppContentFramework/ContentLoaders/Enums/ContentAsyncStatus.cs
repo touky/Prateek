@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.AppContentFramework.Loader.Enums
+namespace Prateek.Runtime.AppContentFramework.ContentLoaders.Enums
 {
     public enum ContentAsyncStatus
     {

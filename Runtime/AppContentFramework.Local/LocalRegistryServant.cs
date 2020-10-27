@@ -4,9 +4,9 @@ namespace Prateek.Runtime.AppContentFramework.Local
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.AppContentFramework.Daemons;
-    using Prateek.Runtime.AppContentFramework.Local.ContentFormat;
-    using Prateek.Runtime.AppContentFramework.Local.ContentLoader;
+    using Prateek.Runtime.AppContentFramework.Local.ContentFormats;
     using Prateek.Runtime.AppContentFramework.Local.Debug;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.Helpers;
@@ -35,7 +35,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
         private string extraContentPath = string.Empty;
         private string extraContentTocPath = string.Empty;
         private ContentToc contentToc = null;
-        private List<ContentFormat.ContentFormat> contentFormats = new List<ContentFormat.ContentFormat>();
+        private List<ContentFormat> contentFormats = new List<ContentFormat>();
         private List<DirectoryInfo> lookUpInfos = new List<DirectoryInfo>();
         private Dictionary<string, ContentPath> pathToContentPaths = new Dictionary<string, ContentPath>();
         private List<ContentPath> cacheContentPaths = new List<ContentPath>();
@@ -52,7 +52,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
 
             foreach (var type in ContentFormatForagerWorker.Instance.FoundTypes)
             {
-                contentFormats.Add(Activator.CreateInstance(type) as ContentFormat.ContentFormat);
+                contentFormats.Add(Activator.CreateInstance(type) as ContentFormat);
             }
 
             contentFormats.SortWithPriorities();
@@ -182,9 +182,9 @@ namespace Prateek.Runtime.AppContentFramework.Local
             base.ExecutingState(state);
         }
 
-        protected override Loader.ContentLoader GetNewContentLoader(string path)
+        protected override ContentLoader GetNewContentLoader(string path)
         {
-            return new LocalContentLoader(path, pathToContentPaths[path]);
+            return pathToContentPaths[path].ContentFormat.GetLoader(pathToContentPaths[path]);
         }
 
         public override void SetupDebugDocument(DebugMenuDocument document)

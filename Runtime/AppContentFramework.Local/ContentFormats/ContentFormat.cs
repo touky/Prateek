@@ -1,8 +1,8 @@
-namespace Prateek.Runtime.AppContentFramework.Local.ContentFormat
+namespace Prateek.Runtime.AppContentFramework.Local.ContentFormats
 {
     using System.Collections.Generic;
     using System.IO;
-    using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.Core.Interfaces.IPriority;
 
     public abstract class ContentFormat

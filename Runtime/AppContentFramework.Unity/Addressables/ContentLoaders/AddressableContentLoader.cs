@@ -1,9 +1,9 @@
-namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
+namespace Prateek.Runtime.AppContentFramework.Unity.Addressables.ContentLoaders
 {
     using System;
     using System.Collections;
-    using Prateek.Runtime.AppContentFramework.Loader;
-    using Prateek.Runtime.AppContentFramework.Loader.Enums;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders.Enums;
     using UnityEngine.AddressableAssets;
     using UnityEngine.ResourceManagement.AsyncOperations;
     using UnityEngine.ResourceManagement.ResourceProviders;

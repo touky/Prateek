@@ -1,6 +1,7 @@
 namespace Prateek.Runtime.AppContentFramework.Local
 {
     using System.IO;
+    using Prateek.Runtime.AppContentFramework.Local.ContentFormats;
 
     public class ContentPath
     {
@@ -8,7 +9,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
         private string storagePath;
         private FileInfo fileInfo;
         private FileInfo contentInfo;
-        private ContentFormat.ContentFormat contentFormat;
+        private ContentFormat contentFormat;
         #endregion
 
         #region Properties
@@ -18,11 +19,11 @@ namespace Prateek.Runtime.AppContentFramework.Local
 
         public FileInfo ContentInfo { get { return contentInfo; } }
 
-        public ContentFormat.ContentFormat ContentFormat { get { return contentFormat; } }
+        public ContentFormat ContentFormat { get { return contentFormat; } }
         #endregion
 
         #region Constructors
-        public ContentPath(string storagePath, FileInfo fileInfo, ContentFormat.ContentFormat contentFormat)
+        public ContentPath(string storagePath, FileInfo fileInfo, ContentFormat contentFormat)
         {
             this.storagePath = storagePath;
             this.fileInfo = fileInfo;
@@ -30,7 +31,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
             contentInfo = fileInfo;
         }
 
-        public ContentPath(string storagePath, FileInfo fileInfo, ContentFormat.ContentFormat contentFormat, string contentPath)
+        public ContentPath(string storagePath, FileInfo fileInfo, ContentFormat contentFormat, string contentPath)
             : this(storagePath, fileInfo, contentFormat)
         {
             contentInfo = new FileInfo(contentPath);

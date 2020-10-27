@@ -8,6 +8,16 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
     public static class DebugFieldExtensions
     {
         #region Class Methods
+        public static bool DrawHeader(this DebugField field, string text)
+        {
+            if (!field.AssertDrawable())
+            {
+                return false;
+            }
+
+            return ImGui.CollapsingHeader(text);
+        }
+
         public static bool AssertDrawable(this DebugField field)
         {
             if (field.IsValid)

@@ -1,6 +1,6 @@
-﻿namespace Prateek.Runtime.AppContentFramework.Daemons
+﻿namespace Prateek.Runtime.AppContentFramework.Daemons.Debug
 {
-    using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Drawers;

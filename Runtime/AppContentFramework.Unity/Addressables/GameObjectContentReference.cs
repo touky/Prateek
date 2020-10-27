@@ -1,6 +1,6 @@
 namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
 {
-    using Prateek.Runtime.AppContentFramework.Loader.Interfaces;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders.Interfaces;
     using UnityEngine;
 
     /// <summary>

@@ -1,7 +1,7 @@
 namespace Prateek.Runtime.AppContentFramework.Unity.Handles
 {
     using System.Diagnostics;
-    using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using UnityEngine;
     using UnityEngine.Assertions;
 

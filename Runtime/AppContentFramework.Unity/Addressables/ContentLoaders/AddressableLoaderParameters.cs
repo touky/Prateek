@@ -1,6 +1,6 @@
-namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
+namespace Prateek.Runtime.AppContentFramework.Unity.Addressables.ContentLoaders
 {
-    using Prateek.Runtime.AppContentFramework.Loader;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders;
 
     public class AddressableLoaderParameters : LoaderParameters
     {
