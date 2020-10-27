@@ -149,7 +149,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
 
                             foreach (var contentFormat in contentFormats)
                             {
-                                if (contentFormat.Extension != string.Empty && contentFormat.Extension != fileInfo.Extension)
+                                if (contentFormat.Extension != string.Empty && contentFormat.Extension.ToLower() != fileInfo.Extension.ToLower())
                                 {
                                     continue;
                                 }
