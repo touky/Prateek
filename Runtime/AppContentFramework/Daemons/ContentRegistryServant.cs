@@ -111,7 +111,14 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
             {
                 foreach (var added in paths.Added)
                 {
-                    Overseer.Store(GetNewContentLoader(added));
+                    var contentLoader = GetNewContentLoader(added);
+                    if (contentLoader == null)
+                    {
+                        UnityEngine.Debug.LogError($"Path '{added}' has a null ContentLoader.");
+                        continue;
+                    }
+
+                    Overseer.Store(contentLoader);
                 }
             }
 
