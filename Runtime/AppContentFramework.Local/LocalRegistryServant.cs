@@ -9,6 +9,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
     using Prateek.Runtime.AppContentFramework.Local.ContentFormats;
     using Prateek.Runtime.AppContentFramework.Local.Debug;
     using Prateek.Runtime.Core.Consts;
+    using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Helpers;
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DebugFramework.DebugMenu;
@@ -159,7 +160,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
                                 {
                                     foreach (var contentPath in cacheContentPaths)
                                     {
-                                        pathToContentPaths.Add(contentPath.StoragePath, contentPath);
+                                        pathToContentPaths.Set(contentPath.StoragePath, contentPath);
                                     }
                                 }
 
