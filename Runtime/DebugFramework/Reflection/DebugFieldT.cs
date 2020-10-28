@@ -26,7 +26,7 @@ namespace Prateek.Runtime.DebugFramework.Reflection
         {
             var field = new DebugField<T>();
             field.SetName(pair.Item2);
-            field.SetOwner(pair.Item2);
+            field.SetOwner(pair.Item1);
             return field;
         }
 
