@@ -121,8 +121,8 @@ namespace Prateek.Runtime.KeynameFramework
             var numberMatch = settings.numberRegex.Match(source);
             while (true)
             {
-                var keywordIndex = keywordMatch.Success ? keywordMatch.LastGroup().Index : int.MaxValue;
-                var numberIndex  = numberMatch.Success ? numberMatch.LastGroup().Index : int.MaxValue;
+                var keywordIndex = keywordMatch.Success ? keywordMatch.Index : int.MaxValue;
+                var numberIndex  = numberMatch.Success ? numberMatch.Index : int.MaxValue;
 
                 if (numberIndex < keywordIndex)
                 {
@@ -131,13 +131,13 @@ namespace Prateek.Runtime.KeynameFramework
                         throw new ArithmeticException("Keyname cannot start with a numerical value");
                     }
 
-                    keyname.Add(new Keyword(keyword, int.Parse(numberMatch.LastGroup().Value)));
+                    keyname.Add(new Keyword(keyword, int.Parse(numberMatch.Value)));
                     keyword = new Keyword();
                     numberMatch = numberMatch.NextMatch();
                 }
                 else
                 {
-                    var keywordType = GetKeywordType(keywordMatch.LastGroup().Value);
+                    var keywordType = GetKeywordType(keywordMatch.Value);
                     if (keywordType != null)
                     {
                         if (keyword.Status != KeywordStatus.None)
@@ -151,7 +151,7 @@ namespace Prateek.Runtime.KeynameFramework
                     {
                         if (keyword.Status == KeywordStatus.Name)
                         {
-                            keyword = keyword.Name + keywordMatch.LastGroup().Value;
+                            keyword = keyword.Name + keywordMatch.Value;
                         }
                         else
                         {
@@ -160,7 +160,7 @@ namespace Prateek.Runtime.KeynameFramework
                                 keyname.Add(keyword);
                             }
 
-                            keyword = keywordMatch.LastGroup().Value;
+                            keyword = keywordMatch.Value;
                         }
                     }
 

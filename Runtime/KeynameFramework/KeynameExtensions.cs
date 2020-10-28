@@ -312,14 +312,14 @@ namespace Prateek.Runtime.KeynameFramework
             return Const.INDEX_NONE;
         }
 
-        internal static void Invalidate(this Keyname keyname)
+        internal static void Invalidate(ref this Keyname keyname)
         {
             keyname.state = KeynameState.None;
             keyname.hash = 0;
             keyname.builtKeyname = null;
         }
         
-        internal static void RebuildState(this Keyname keyname)
+        internal static void RebuildState(ref this Keyname keyname)
         {
             KeynameState state = KeynameState.Keywords;
             foreach (var keyword in keyname.keywords)
@@ -334,7 +334,7 @@ namespace Prateek.Runtime.KeynameFramework
             keyname.state = state;
         }
 
-        internal static void GenerateHash(this Keyname keyname)
+        internal static void GenerateHash(ref this Keyname keyname)
         {
             var hash = 1;
             foreach (var keyword in keyname.keywords)
@@ -344,7 +344,7 @@ namespace Prateek.Runtime.KeynameFramework
             keyname.hash = hash;
         }
 
-        internal static void BuildKeyname(this Keyname keyname)
+        internal static void BuildKeyname(ref this Keyname keyname)
         {
             var builder = new StringBuilder();
             var settings = keyname.settings == null ? KeynameSettings.Default.Data : keyname.settings;

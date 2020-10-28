@@ -19,6 +19,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
         : ContentRegistryServant
     {
         #region Static and Constants
+        //todo add this to the settings
         private const string EXTRA_CONTENT = "../ExtraContent";
         private const string EXTRA_CONTENT_TOC = "ContentLookUp.json";
 

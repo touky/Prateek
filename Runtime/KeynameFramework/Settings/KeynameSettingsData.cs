@@ -14,7 +14,7 @@ namespace Prateek.Runtime.KeynameFramework.Settings
         internal string separator = string.Empty;
 
         [SerializeField]
-        internal Regex keywordRegex = new Regex("([A-Z][a-z]+)");
+        internal Regex keywordRegex = new Regex("((^[a-z]+)|([A-Z][a-z]+))");
 
         [SerializeField]
         internal Regex numberRegex = new Regex("([0-9]+)+");

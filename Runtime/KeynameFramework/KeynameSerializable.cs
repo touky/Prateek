@@ -2,9 +2,10 @@ namespace Prateek.Runtime.KeynameFramework
 {
     using System;
     using System.Diagnostics;
+    using Prateek.Runtime.Core.Extensions;
     using UnityEngine;
 
-    [DebuggerDisplay("Keyname: {ToString()}/{IntExtensions.ToHex(savedKeyname.GetHashCode())}")]
+    [DebuggerDisplay("{DebugDisplay,nq}")]
     [Serializable]
     public struct KeynameSerializable
     {
@@ -16,6 +17,10 @@ namespace Prateek.Runtime.KeynameFramework
         #region Fields
         private bool initDone;
         private Keyname internalKeyname;
+        #endregion
+
+        #region Properties
+        private string DebugDisplay { get { return $"Keyname: {ToString()}/{savedKeyname.GetHashCode().ToHex()}"; } }
         #endregion
 
         #region Constructors

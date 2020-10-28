@@ -2,8 +2,9 @@
 {
     using System;
     using System.Diagnostics;
+    using Prateek.Runtime.Core.Extensions;
 
-    [DebuggerDisplay("{type.Name}/{target}: {Key}/{IntExtensions.ToHexString(Key)}")]
+    [DebuggerDisplay("{DebugDisplay,nq}")]
     public struct CommandId
     {
         #region Static and Constants
@@ -18,6 +19,8 @@
         #endregion
 
         #region Properties
+        private string DebugDisplay { get { return $"{type.Name}/{target}: {Key}/{Key.ToHex()}"; } }
+
         public Type Type { get { return type; } }
 
         public long Key

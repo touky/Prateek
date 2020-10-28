@@ -4,12 +4,13 @@ namespace Prateek.Runtime.KeynameFramework
     using System.Diagnostics;
     using System.Text;
     using Prateek.Runtime.Core.CachedList;
+    using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.KeynameFramework.Enums;
     using Prateek.Runtime.KeynameFramework.Interfaces;
     using Prateek.Runtime.KeynameFramework.Settings;
     using UnityEngine.Assertions;
 
-    [DebuggerDisplay("Keyname: {DebugString()}/{IntExtensions.ToHex(hash)}")]
+    [DebuggerDisplay("{DebugDisplay,nq}")]
     public struct Keyname : IEquatable<Keyname>
     {
         #region Fields
@@ -21,6 +22,8 @@ namespace Prateek.Runtime.KeynameFramework
         #endregion
 
         #region Properties
+        private string DebugDisplay { get { return $"Keyname: {DebugString()}/{hash.ToHex()}"; } }
+
         public KeynameState State
         {
             get

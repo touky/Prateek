@@ -9,7 +9,10 @@
     internal static class AssemblyForager
     {
         #region Static and Constants
-        private static readonly string[] ASSEMBLY_MATCH = { ".Editor", "-Editor" };
+        //todo add this to the settings
+        private static readonly string[] EDITOR_MATCH = { ".Editor", "-Editor" };
+        private static readonly string[] EDITOR_IGNORE = { "Unity.", "UnityEngine", "UnityEditor" };
+        private static readonly string[] RUNTIME_IGNORE = { ".Editor", "-Editor", "Mono.", "System.", "Unity.", "UnityEngine", "UnityEditor" };
         private const int TYPE_COUNT = 30000;
         internal static List<AssemblyForagerWorker> workers = new List<AssemblyForagerWorker>();
         #endregion
@@ -18,29 +21,51 @@
         [InitializeOnLoadMethod]
         private static void EditorForage()
         {
-            Execute(false, ASSEMBLY_MATCH);
+            Execute(EDITOR_MATCH, EDITOR_IGNORE);
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RuntimeForage()
         {
-            Execute(true, ASSEMBLY_MATCH);
+            Execute(null, RUNTIME_IGNORE);
         }
 
-        private static void Execute(bool useMatchToIgnore, params string[] assemblyMatch)
+        private static void Execute(string[] assemblyMatch = null, string[] assemblyIgnore = null)
         {
             var builder = (StringBuilder) null;
             var types   = new List<Type>(TYPE_COUNT);
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var domainAssembly in assemblies)
             {
-                var ignoreAssembly = !useMatchToIgnore;
-                foreach (var match in assemblyMatch)
+                var ignoreAssembly = false;
+                if (assemblyIgnore != null && assemblyIgnore.Length > 0)
                 {
-                    if (domainAssembly.FullName.Contains(match))
+                    foreach (var ignore in assemblyIgnore)
                     {
-                        ignoreAssembly = useMatchToIgnore;
-                        break;
+                        if (domainAssembly.FullName.Contains(ignore))
+                        {
+                            ignoreAssembly = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (ignoreAssembly)
+                {
+                    builder.Log($"Ignoring {domainAssembly.FullName}");
+                    continue;
+                }
+
+                if (assemblyMatch != null && assemblyMatch.Length > 0)
+                {
+                    ignoreAssembly = true;
+                    foreach (var match in assemblyMatch)
+                    {
+                        if (domainAssembly.FullName.Contains(match))
+                        {
+                            ignoreAssembly = false;
+                            break;
+                        }
                     }
                 }
 
