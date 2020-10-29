@@ -19,6 +19,8 @@ namespace Prateek.Runtime.CommandFramework.Servants
             {
                 Overseer.FlushCommand(command);
             }
+
+            commandReceived.Clear();
         }
         #endregion
     }

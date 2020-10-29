@@ -12,28 +12,37 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu.Drawers
         public static void Draw<TLeaf>(this HierarchicalTree<TLeaf> tree, bool drawSettings = true)
             where TLeaf : IHierarchicalTreeLeaf
         {
-            var settings   = (DebugField<HierarchicalTreeSettingsData>) "settings";
-            var branchName = (DebugField<string>) "branchName";
-            var branches   = (DebugField<Dictionary<string, HierarchicalTree<TLeaf>>>) "branches";
-            var leaves     = (DebugField<HashSet<TreeLeaf<IHierarchicalTreeLeaf>>>) "leaves";
-
-            DebugField.SetOwner(tree, settings, branchName, branches, leaves);
-            if (!settings.AssertDrawable(branchName, branches, leaves))
+            if (!drawSettings || ImGui.CollapsingHeader($"Hierarchical Tree"))
             {
-                return;
-            }
+                var branchName = (DebugField<string>) "branchName";
+                var branches   = (DebugField<Dictionary<string, HierarchicalTree<TLeaf>>>) "branches";
+                var leaves     = (DebugField<HashSet<TreeLeaf<IHierarchicalTreeLeaf>>>) "leaves";
 
-            var folderRegex = (DebugField<Regex>) "folderRegex" + settings.Value;
-            if (drawSettings && folderRegex.AssertDrawable())
-            {
-                ImGui.Text($"Settings: {folderRegex.Value.ToString()}");
-                ImGui.Separator();
-            }
+                DebugField.SetOwner(tree, branchName, branches, leaves);
 
-            using (var branchNode = ImGuiUn.ScopeTreeNode(branchName.Value))
-            {
-                if (branchNode.IsOpen)
+                if (drawSettings)
                 {
+                    var settings = (DebugField<HierarchicalTreeSettingsData>) (tree, "settings");
+                    if (!settings.AssertDrawable(branchName, branches, leaves))
+                    {
+                        return;
+                    }
+
+                    var folderRegex = (DebugField<Regex>) "folderRegex" + settings.Value;
+                    if (drawSettings && folderRegex.AssertDrawable())
+                    {
+                        ImGui.Text($"Settings: {folderRegex.Value.ToString()}");
+                        ImGui.Separator();
+                    }
+                }
+
+                using (var branchNode = ImGuiUn.ScopeTreeNode(branchName.Value))
+                {
+                    if (!branchNode.IsOpen)
+                    {
+                        return;
+                    }
+
                     if (branches.Value != null)
                     {
                         foreach (var branch in branches.Value.Values)
@@ -46,12 +55,14 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu.Drawers
                     {
                         using (var leafNode = ImGuiUn.ScopeTreeNode(leaves.Name))
                         {
-                            if (leafNode.IsOpen)
+                            if (!leafNode.IsOpen)
                             {
-                                foreach (var leaf in leaves.Value)
-                                {
-                                    ImGui.Text($"- {leaf.Name}{leaf.Extension}");
-                                }
+                                return;
+                            }
+
+                            foreach (var leaf in leaves.Value)
+                            {
+                                ImGui.Text($"- {leaf.Name}{leaf.Extension}");
                             }
                         }
                     }

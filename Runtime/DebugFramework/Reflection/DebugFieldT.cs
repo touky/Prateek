@@ -1,6 +1,6 @@
 namespace Prateek.Runtime.DebugFramework.Reflection
 {
-    using UnityEngine;
+    using System.Diagnostics;
 
     public class DebugField<T> : DebugField
     {
@@ -49,9 +49,14 @@ namespace Prateek.Runtime.DebugFramework.Reflection
         {
             base.SetOwner(owner);
             
+            if (owner == null || string.IsNullOrEmpty(Name))
+            {
+                return;
+            }
+
             if (fieldInfo.FieldType != typeof(T))
             {
-                Debug.LogError($"Field type for '{Name}' is invalid:\n- Is '{fieldInfo.FieldType}'\n- Expected '{typeof(T)}'");
+                UnityEngine.Debug.LogError($"Field type for '{Name}' is invalid:\n- Is '{fieldInfo.FieldType}'\n- Expected '{typeof(T)}'");
                 fieldInfo = null;
             }
         }

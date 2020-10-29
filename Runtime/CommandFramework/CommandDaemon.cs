@@ -175,7 +175,7 @@
         {
             title = "Command daemon";
 
-            var servants = new LiveServantsSection("Registered servants");
+            var servants = new DaemonOverseerSection<CommandDaemon, CommandServant>();
             var receivers = new LiveReceiverSection("Live receivers");
 
             document.AddSections(servants);

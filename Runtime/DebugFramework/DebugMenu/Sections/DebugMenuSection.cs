@@ -21,7 +21,10 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
             if (this.owner == null)
             {
                 this.owner = owner;
+
                 DebugField.SetOwnerToAllDebugFields(this, owner);
+
+                ManualInit();
             }
         }
 
@@ -29,6 +32,10 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
             where TOwner : class, IDebugMenuOwner
         {
             return owner as TOwner;
+        }
+
+        protected virtual void ManualInit()
+        {
         }
         #endregion
     }

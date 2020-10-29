@@ -1,30 +1,32 @@
-namespace Prateek.Runtime.CommandFramework.Debug
+﻿namespace Prateek.Runtime.DaemonFramework
 {
     using System.Collections.Generic;
     using ImGuiNET;
-    using Prateek.Runtime.CommandFramework.Servants;
+    using Prateek.Runtime.DaemonFramework.Interfaces;
     using Prateek.Runtime.DebugFramework.DebugMenu;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
     using Prateek.Runtime.DebugFramework.Reflection;
 
-    internal class LiveServantsSection
-        : DebugMenuSection<CommandDaemon>
+    public class DaemonOverseerSection<TDaemonOverseer, TServant>
+        : DebugMenuSection<TDaemonOverseer>
+        where TDaemonOverseer : DaemonOverseer<TDaemonOverseer, TServant>, IDebugMenuOwner
+        where TServant : class, IServant
     {
+        #region Static and Constants
+        private const string TITLE = "Registered ";
+        #endregion
+
         #region Fields
-        private DebugField<List<CommandServant>> servants = "servants";
+        private DebugField<List<TServant>> servants = "servants";
         #endregion
 
         #region Constructors
-        public LiveServantsSection(string title)
-            : base(title) { }
+        public DaemonOverseerSection()
+            : base($"{TITLE}{typeof(TServant).Name}") { }
         #endregion
 
         #region Class Methods
         protected override void OnDraw(DebugMenuContext context)
-        {
-            DrawServants(context);
-        }
-
-        private void DrawServants(DebugMenuContext context)
         {
             if (!servants.AssertDrawable())
             {

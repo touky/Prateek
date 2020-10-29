@@ -4,6 +4,7 @@
     using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.AppContentFramework.Daemons.Debug;
     using Prateek.Runtime.AppContentFramework.Messages;
+    using Prateek.Runtime.CommandFramework.EmitterReceiver;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.HierarchicalTree;
@@ -83,6 +84,7 @@
                 .Connect(State.Idle, Trigger.NextStep, State.WaitForTimeout)
                 .Connect(State.WaitForTimeout, Trigger.NextStep, State.SendAccessResponses)
                 .Connect(State.SendAccessResponses, Trigger.NextStep, State.Idle);
+            stateMachine.Reboot();
         }
 
         internal void Store(ContentLoader loader)
@@ -115,9 +117,13 @@
         {
             title = "Content Registry";
 
-            var section = new ContentRegistrySection("Content in registry");
+            var servants = new DaemonOverseerSection<ContentRegistryDaemon, ContentRegistryServant>();
+            var machine = new EnumTriggerMachineSection<ContentRegistryDaemon, StateMachine, State, Trigger>();
+            var content = new ContentRegistrySection();
 
-            document.AddSections(section);
+            document.AddSections(servants);
+            document.AddSections(machine);
+            document.AddSections(content);
         }
         #endregion
 
@@ -182,6 +188,8 @@
         #region IPreUpdateTickable Members
         public void PreUpdate()
         {
+            this.Get<CommandReceiver>().ProcessReceivedCommands();
+
             stateMachine.Step();
         }
 

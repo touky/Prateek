@@ -33,15 +33,9 @@
             }
         }
 
-        protected ServantEnumerator<TServant> AllAliveServants
-        {
-            get { return new ServantEnumerator<TServant>(servants, false); }
-        }
+        protected ServantEnumerator<TServant> AllAliveServants { get { return new ServantEnumerator<TServant>(servants, false); } }
 
-        protected ServantEnumerator<TServant> AllServants
-        {
-            get { return new ServantEnumerator<TServant>(servants, true); }
-        }
+        protected ServantEnumerator<TServant> AllServants { get { return new ServantEnumerator<TServant>(servants, true); } }
         #endregion
 
         #region Class Methods
@@ -78,7 +72,7 @@
         protected virtual void OnServantUnregistered(TServant servant) { }
         #endregion
 
-        #region IDaemon<TServant> Members
+        #region IDaemonOverseer<TServant> Members
         void IDaemonOverseer<TServant>.Register(TServant servant)
         {
             if (servants.Contains(servant))
@@ -103,7 +97,7 @@
             {
                 return;
             }
-            
+
             if (servant is IServantInternal servantInternal)
             {
                 servantInternal.Overseer = null;

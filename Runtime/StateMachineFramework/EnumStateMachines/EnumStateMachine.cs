@@ -84,7 +84,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 
         public TState IncomingState
         {
-            get { return states[incomingState]; }
+            get { return incomingState < 0 ? default : states[incomingState]; }
         }
 
         public abstract bool IsActive { get; }
