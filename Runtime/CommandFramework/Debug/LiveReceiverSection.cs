@@ -2,6 +2,7 @@ namespace Prateek.Runtime.CommandFramework.Debug
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
     using ImGuiNET;
     using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.CommandFramework.EmitterReceiver;
@@ -36,6 +37,11 @@ namespace Prateek.Runtime.CommandFramework.Debug
 
         protected override void OnDraw(DebugMenuContext context)
         {
+            DrawReceivers(context);
+        }
+
+        private void DrawReceivers(DebugMenuContext context)
+        {
             if (!receivers.AssertDrawable())
             {
                 return;
@@ -43,12 +49,13 @@ namespace Prateek.Runtime.CommandFramework.Debug
 
             for (var k = 0; k < receivers.Value.Keys.Count; k++)
             {
-                var key     = Key(k);
+                var key = Key(k);
                 var cmdName = idToTypes.ContainsKey(key & CommandId.MASK_TYPE) 
                     ? idToTypes[key & CommandId.MASK_TYPE].Name 
                     : Const.UNDEFINED;
 
-                if (ImGui.CollapsingHeader(string.Format("{0:X}: {1}", key, cmdName)))
+                var commandId = (CommandId) key;
+                if (ImGui.CollapsingHeader($"{commandId.KeyDebugDisplay}: {cmdName}"))
                 {
                     ImGui.Indent();
                     {
