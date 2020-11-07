@@ -8,9 +8,9 @@
 
         public const int NO_ITEM = 0;
         public const int ONE_ITEM = 1;
-        
+
         public const int NEXT_ITEM = 1;
-        
+
         public const int VERY_EARLY = -1000000;
         public const int VERY_LATE = 1000000;
 
@@ -29,5 +29,10 @@
 
         public const string UNDEFINED = "!UNDEFINED!";
         public const string EMPTY = "-EMPTY-";
+
+        public const char COMMA_C =  ',';
+        public const char DOT_C =  '.';
+        public static readonly char[] DOT_A =  {DOT_C};
+        public const string DOT_S = ".";
     }
 }

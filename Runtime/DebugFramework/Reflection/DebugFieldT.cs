@@ -1,7 +1,13 @@
 namespace Prateek.Runtime.DebugFramework.Reflection
 {
-    using System.Diagnostics;
+    using UnityEngine;
 
+    ///----
+    /// <summary>
+    /// DebugField uses reflection to retrieve a field inside of the given owner.
+    /// Usage: var myField = (DebugField<MyType>)(owner, "fieldName");
+    /// Notes: Any DebugField declared as field in a DebugMenuSection is automatically init on section Ctor call
+    /// </summary>
     public class DebugField<T> : DebugField
     {
         #region Properties
@@ -32,6 +38,11 @@ namespace Prateek.Runtime.DebugFramework.Reflection
 
         public static implicit operator T(DebugField<T> other)
         {
+            if (!other.IsValid)
+            {
+                Debug.LogError("Trying to access invalid debug field:\n- Either test IsValid before accessing it\n- Use AssertDrawable in the DebugMenu to show an invalidity warning.");
+            }
+
             return other.fieldInfo == null ? default : (T) other.fieldInfo.GetValue(other.owner);
         }
 
@@ -48,7 +59,7 @@ namespace Prateek.Runtime.DebugFramework.Reflection
         public override void SetOwner(object owner)
         {
             base.SetOwner(owner);
-            
+
             if (owner == null || string.IsNullOrEmpty(Name))
             {
                 return;
@@ -56,7 +67,7 @@ namespace Prateek.Runtime.DebugFramework.Reflection
 
             if (fieldInfo.FieldType != typeof(T))
             {
-                UnityEngine.Debug.LogError($"Field type for '{Name}' is invalid:\n- Is '{fieldInfo.FieldType}'\n- Expected '{typeof(T)}'");
+                Debug.LogError($"Field type for '{Name}' is invalid:\n- Is '{fieldInfo.FieldType}'\n- Expected '{typeof(T)}'");
                 fieldInfo = null;
             }
         }

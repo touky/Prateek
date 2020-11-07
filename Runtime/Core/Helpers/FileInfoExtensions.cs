@@ -36,7 +36,7 @@ namespace Prateek.Runtime.Core.Helpers
     using Prateek.Runtime.Core.Consts;
 
     ///-------------------------------------------------------------------------
-    public static class FileInfos
+    public static class FileInfoExtensions
     {
         ///-------------------------------------------------------------------------
         public static string RelativePath(this FileInfo fileInfo, DirectoryInfo rootInfo)
@@ -53,6 +53,30 @@ namespace Prateek.Runtime.Core.Helpers
         public static string NameWithoutExtension(this FileInfo fileInfo)
         {
             return Path.GetFileNameWithoutExtension(fileInfo.Name);
+        }
+
+        ///-------------------------------------------------------------------------
+        ///<summary>
+        /// extension is always expected to be lowerCase
+        ///</summary>
+        public static bool HasExtension(this FileInfo fileInfo, string extension)
+        {
+            if (fileInfo.Extension == extension)
+            {
+                return true;
+            }
+
+            if (fileInfo.Extension.ToLowerInvariant() == extension)
+            {
+                return true;
+            }
+
+            if (!fileInfo.Extension.StartsWith(Const.DOT_S) || !extension.StartsWith(Const.DOT_S))
+            {
+                return fileInfo.Extension.TrimStart(Const.DOT_A) == extension.TrimStart(Const.DOT_A);
+            }
+
+            return false;
         }
     }
 }

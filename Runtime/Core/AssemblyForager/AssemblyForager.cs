@@ -3,73 +3,54 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Prateek.Runtime.Core.Consts;
     using UnityEditor;
     using UnityEngine;
 
     internal static class AssemblyForager
     {
         #region Static and Constants
-        //todo add this to the settings
-        private static readonly string[] EDITOR_MATCH = { ".Editor", "-Editor" };
-        private static readonly string[] EDITOR_IGNORE = { "Unity.", "UnityEngine", "UnityEditor" };
-        private static readonly string[] RUNTIME_IGNORE = { ".Editor", "-Editor", "Mono.", "System.", "Unity.", "UnityEngine", "UnityEditor" };
         private const int TYPE_COUNT = 30000;
+
+        private static readonly string FORAGE_INSTRUCTION = $"{ConstFolder.PRATEEK}/{nameof(AssemblyForager)}{nameof(LookupInstructions)}{ConstExtension.JSON}";
+
         internal static List<AssemblyForagerWorker> workers = new List<AssemblyForagerWorker>();
         #endregion
 
         #region Class Methods
+#if UNITY_EDITOR
         [InitializeOnLoadMethod]
         private static void EditorForage()
         {
-            Execute(EDITOR_MATCH, EDITOR_IGNORE);
+            Forage();
         }
+#endif
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RuntimeForage()
         {
-            Execute(null, RUNTIME_IGNORE);
+            Forage();
         }
 
-        private static void Execute(string[] assemblyMatch = null, string[] assemblyIgnore = null)
+        private static void Forage()
         {
-            var builder = (StringBuilder) null;
-            var types   = new List<Type>(TYPE_COUNT);
+            var instructions = LookupInstructions.Load(FORAGE_INSTRUCTION, () => new PrateekDefaultInstructions());
+
+            Execute(instructions);
+
+#if UNITY_EDITOR
+            instructions.Save(FORAGE_INSTRUCTION);
+#endif
+        }
+
+        private static void Execute(LookupInstructions instructions)
+        {
+            var builder    = (StringBuilder) null;
+            var types      = new List<Type>(TYPE_COUNT);
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var domainAssembly in assemblies)
             {
-                var ignoreAssembly = false;
-                if (assemblyIgnore != null && assemblyIgnore.Length > 0)
-                {
-                    foreach (var ignore in assemblyIgnore)
-                    {
-                        if (domainAssembly.FullName.Contains(ignore))
-                        {
-                            ignoreAssembly = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (ignoreAssembly)
-                {
-                    builder.Log($"Ignoring {domainAssembly.FullName}");
-                    continue;
-                }
-
-                if (assemblyMatch != null && assemblyMatch.Length > 0)
-                {
-                    ignoreAssembly = true;
-                    foreach (var match in assemblyMatch)
-                    {
-                        if (domainAssembly.FullName.Contains(match))
-                        {
-                            ignoreAssembly = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (ignoreAssembly)
+                if (!instructions.Allow(domainAssembly.FullName.Substring(0, domainAssembly.FullName.IndexOf(Const.COMMA_C))))
                 {
                     builder.Log($"Ignoring {domainAssembly.FullName}");
                     continue;

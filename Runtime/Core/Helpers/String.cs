@@ -428,6 +428,34 @@ namespace Prateek.Runtime.Core.Helpers
         {
             return string.Format("// -END_{0}-", left);
         }
+
+        ///---------------------------------------------------------------------
+        public static bool Contains(this string value, string[] array)
+        {
+            foreach (var search in array)
+            {
+                if (value.Contains(search))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        ///---------------------------------------------------------------------
+        public static bool Contains(this string value, List<string> list)
+        {
+            foreach (var search in list)
+            {
+                if (value.Contains(search))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
 
