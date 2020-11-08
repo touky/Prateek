@@ -11,7 +11,9 @@ namespace Prateek.Runtime.AppContentFramework.Messages
         #region Properties
         public DiffList<TContentHandle> Content
         {
-            get { return (request.storage as StorageDiff<TContentHandle>).content; }
+            get { return request.storage != null
+                    ? (request.storage as StorageDiff<TContentHandle>).content
+                    : default; }
         }
         #endregion
 
