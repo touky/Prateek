@@ -11,7 +11,7 @@ namespace Prateek.Runtime.Core.Helpers.Files
         /// 
         /// </summary>
         /// <param name="path"></param>
-        public static DirectoryInfo GetExistingDirectory(string path)
+        public static DirectoryInfo DirectoryMustExist(string path)
         {
             if (!Directory.Exists(path))
             {

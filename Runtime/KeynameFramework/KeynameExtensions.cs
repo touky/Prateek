@@ -348,7 +348,7 @@ namespace Prateek.Runtime.KeynameFramework
         {
             var builder = new StringBuilder();
             var settings = keyname.settings == null ? KeynameSettings.Default.Data : keyname.settings;
-            if (string.IsNullOrEmpty(settings.separator))
+            if (string.IsNullOrEmpty(settings.separatorForRebuild))
             {
                 settings = null;
             }
@@ -357,7 +357,7 @@ namespace Prateek.Runtime.KeynameFramework
             {
                 if (settings != null && builder.Length > 0)
                 {
-                    builder.Append(settings.separator);
+                    builder.Append(settings.separatorForRebuild);
                 }
 
                 builder.Append(keyword);

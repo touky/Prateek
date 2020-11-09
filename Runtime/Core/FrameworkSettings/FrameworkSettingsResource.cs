@@ -12,7 +12,8 @@
         where TData : FrameworkSettingsData, new()
     {
         #region Fields
-        protected TData data = null;
+        [SerializeField]
+        protected TData data;
         #endregion
 
         #region Properties

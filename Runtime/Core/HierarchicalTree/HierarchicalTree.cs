@@ -85,7 +85,7 @@
             GetSettings(ref customSettings);
 
             var parentBranch = this;
-            var folderMatches      = customSettings.folderRegex.Matches(leadData.Path);
+            var folderMatches      = customSettings.FolderRegex.Matches(leadData.Path);
 
             for (var m = 0; m < folderMatches.Count; m++)
             {
@@ -95,7 +95,7 @@
                 {
                     var name = value;
                     var extension = string.Empty;
-                    var nameMatch = customSettings.extensionRegex.Match(value);
+                    var nameMatch = customSettings.ExtensionRegex.Match(value);
                     if (nameMatch.Success)
                     {
                         name = nameMatch.Groups[1].Value;
@@ -188,7 +188,7 @@
             GetSettings(ref customSettings);
 
             var activeBranch = this;
-            var matches      = customSettings.folderRegex.Matches(searchPath);
+            var matches      = customSettings.FolderRegex.Matches(searchPath);
             for (var m = 0; m < matches.Count; m++)
             {
                 if (searchPathIsLeaf && m == matches.Count - 1)

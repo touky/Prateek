@@ -1,5 +1,6 @@
 ﻿namespace Prateek.Runtime.Core.HierarchicalTree
 {
+    using System;
     using System.Text.RegularExpressions;
     using Prateek.Runtime.Core.FrameworkSettings;
     using UnityEngine;
@@ -7,6 +8,7 @@
     /// <summary>
     ///     Defines the settings used by a hierarchical tree to sort datas
     /// </summary>
+    [Serializable]
     public class HierarchicalTreeSettingsData : FrameworkSettingsData
     {
         #region Settings
@@ -14,17 +16,45 @@
         internal bool useAsOverride = false;
 
         [SerializeField]
-        internal Regex folderRegex = new Regex("([^\\\\/]+)(?:[\\\\/]*)");
+        internal string folderMatch = "([^\\\\/]+)(?:[\\\\/]*)";
 
         [SerializeField]
-        internal Regex extensionRegex = new Regex("([^\\\\/]+)(\\.[^\\\\/]+)$");
+        internal string extensionMatch = "([^\\\\/]+)(\\.[^\\\\/]+)$";
+        #endregion
+
+        #region Fields
+        private Regex folderRegex = null;
+        private Regex extensionRegex = null;
         #endregion
 
         #region Properties
-        public bool UseAsOverride
+        internal Regex FolderRegex
         {
-            get { return useAsOverride; }
+            get
+            {
+                if (folderRegex == null)
+                {
+                    folderRegex = new Regex(folderMatch);
+                }
+
+                return folderRegex;
+            }
         }
+
+        internal Regex ExtensionRegex
+        {
+            get
+            {
+                if (extensionRegex == null)
+                {
+                    extensionRegex = new Regex(extensionMatch);
+                }
+
+                return extensionRegex;
+            }
+        }
+
+        public bool UseAsOverride { get { return useAsOverride; } }
         #endregion
     }
 }

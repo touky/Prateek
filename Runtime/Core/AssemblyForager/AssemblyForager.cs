@@ -12,7 +12,7 @@
         #region Static and Constants
         private const int TYPE_COUNT = 30000;
 
-        private static readonly string FORAGE_INSTRUCTION = $"{ConstFolder.PRATEEK}/{nameof(AssemblyForager)}{nameof(LookupInstructions)}{ConstExtension.JSON}";
+        private static readonly string FORAGE_INSTRUCTION = $"{ConstFolder.PRATEEK_SETTINGS}/{nameof(AssemblyForager)}{nameof(LookupInstructions)}{ConstExtension.JSON}";
 
         internal static List<AssemblyForagerWorker> workers = new List<AssemblyForagerWorker>();
         #endregion
@@ -50,19 +50,34 @@
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var domainAssembly in assemblies)
             {
-                if (!instructions.Allow(domainAssembly.FullName.Substring(0, domainAssembly.FullName.IndexOf(Const.COMMA_C))))
+                var assemblyTypes = (Type[]) null;
+                var shortName = domainAssembly.FullName.Substring(0, domainAssembly.FullName.IndexOf(Const.COMMA_C));
+                var allowWorkerLookup = instructions.Allow(shortName);
+                var allowTypeLookup = instructions.Allow(shortName, true);
+                if (!allowWorkerLookup)
                 {
                     builder.Log($"Ignoring {domainAssembly.FullName}");
+                    if (allowTypeLookup)
+                    {
+                        assemblyTypes = domainAssembly.GetTypes();
+                        foreach (var assemblyType in assemblyTypes)
+                        {
+                            if (!assemblyType.IsSubclassOf(typeof(AssemblyForagerWorker)))
+                            {
+                                types.Add(assemblyType);
+                                continue;
+                            }
+                        }
+                    }
                     continue;
                 }
 
-                var assemblyTypes = domainAssembly.GetTypes();
+                assemblyTypes = domainAssembly.GetTypes();
                 foreach (var assemblyType in assemblyTypes)
                 {
-                    types.Add(assemblyType);
-
                     if (!assemblyType.IsSubclassOf(typeof(AssemblyForagerWorker)))
                     {
+                        types.Add(assemblyType);
                         continue;
                     }
 
@@ -74,6 +89,7 @@
                     var worker = Activator.CreateInstance(assemblyType) as AssemblyForagerWorker;
                     worker.Init();
                     workers.Add(worker);
+
                     LogWorker(ref builder, worker);
                 }
             }

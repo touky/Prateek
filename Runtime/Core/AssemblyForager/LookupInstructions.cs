@@ -54,11 +54,11 @@
             var isEditor = Application.isEditor && !Application.isPlaying;
 
             var assetPath = isEditor
-                ? Path.Combine(ConstFolder.ASSETS, ConstFolder.RESOURCES, resourcePath)
+                ? Path.Combine(ConstFolder.ASSETS_RESOURCES, resourcePath)
                 : resourcePath;
             var textAsset = isEditor
                 ? AssetDatabase.LoadAssetAtPath<TextAsset>(assetPath)
-                : Resources.Load<TextAsset>(assetPath);
+                : Resources.Load<TextAsset>(Path.Combine(Path.GetDirectoryName(assetPath), Path.GetFileNameWithoutExtension(assetPath)));
 
             var instructions = (LookupInstructions) null;
             if (textAsset == null)
@@ -77,7 +77,7 @@
         public void Save(string resourcePath)
         {
 #if UNITY_EDITOR
-            var assetPath = Path.Combine(ConstFolder.ASSETS, ConstFolder.RESOURCES, resourcePath);
+            var assetPath = Path.Combine(ConstFolder.ASSETS_RESOURCES, resourcePath);
 
             Sort();
 
@@ -89,11 +89,11 @@
 #endif
         }
 
-        public virtual bool Allow(string value)
+        public bool Allow(string value, bool checkBoth = false)
         {
             var lookup = isEditor ? editor : ingame;
             var other  = !isEditor ? editor : ingame;
-            if (lookup.Contains(value))
+            if (lookup.Contains(value) || (checkBoth && other.Contains(value)))
             {
                 return true;
             }

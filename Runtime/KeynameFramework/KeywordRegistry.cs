@@ -110,7 +110,7 @@ namespace Prateek.Runtime.KeynameFramework
                 return keyname;
             }
 
-            var keywordMatch = settings.keywordRegex.Match(source);
+            var keywordMatch = settings.KeywordRegex.Match(source);
             if (!keywordMatch.Success)
             {
                 return keyname;
@@ -118,7 +118,7 @@ namespace Prateek.Runtime.KeynameFramework
 
             var firstLoop   = true;
             var keyword     = new Keyword();
-            var numberMatch = settings.numberRegex.Match(source);
+            var numberMatch = settings.NumberRegex.Match(source);
             while (true)
             {
                 var keywordIndex = keywordMatch.Success ? keywordMatch.Index : int.MaxValue;

@@ -18,7 +18,7 @@
         #endregion
 
         #region Class Methods
-        public override void Init()
+        public override void PrepareSearch()
         {
             AutoRegisterRegistry.Singleton.workers.Add(this);
         }

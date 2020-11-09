@@ -68,7 +68,7 @@ namespace Prateek.Runtime.Core.Helpers.Files
             var directoryInfo = fileInfo.Directory;
             if (!directoryInfo.Exists)
             {
-                directoryInfo = DirectoryHelper.GetExistingDirectory(directoryInfo.FullName);
+                directoryInfo = DirectoryHelper.DirectoryMustExist(directoryInfo.FullName);
                 if (!directoryInfo.Exists)
                 {
                     return false;

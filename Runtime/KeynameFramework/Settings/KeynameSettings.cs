@@ -8,7 +8,7 @@ namespace Prateek.Runtime.KeynameFramework.Settings
     public class KeynameSettings : FrameworkSettings<KeynameSettings, KeynameSettingsData, KeynameSettingsResource>
     {
         #region Properties
-        protected override string DefaultPath
+        public override string DefaultPath
         {
             get { return KeynameSettingsResource.DEFAULT_PATH; }
         }

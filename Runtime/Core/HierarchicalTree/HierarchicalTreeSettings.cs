@@ -8,7 +8,7 @@
     public class HierarchicalTreeSettings : FrameworkSettings<HierarchicalTreeSettings, HierarchicalTreeSettingsData, HierarchicalTreeSettingsResource>
     {
         #region Properties
-        protected override string DefaultPath
+        public override string DefaultPath
         {
             get { return HierarchicalTreeSettingsResource.DEFAULT_PATH; }
         }
