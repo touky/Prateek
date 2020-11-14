@@ -6,7 +6,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Commands
     using UnityEngine;
 
     public abstract class ComponentContentAccessResponse<TContentType>
-        : ContentAccessChangedResponse<GameObjectHandle, GameObject>
+        : ContentAccessChangedResponse<GameObject, GameObjectHandle>
         where TContentType : Component
     {
         #region Class Methods
