@@ -4,7 +4,7 @@ namespace Prateek.Runtime.AppContentFramework.Messages
     using Prateek.Runtime.Core;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
-    public abstract class ContentAccessChangedResponse<TContentHandle, TContentType>
+    public abstract class ContentAccessChangedResponse<TContentType, TContentHandle>
         : ContentAccessChangedResponse
         where TContentHandle : ContentHandle<TContentType, TContentHandle>
     {

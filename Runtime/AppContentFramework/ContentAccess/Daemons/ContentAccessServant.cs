@@ -1,5 +1,6 @@
 namespace Prateek.Runtime.AppContentFramework.ContentAccess.Daemons
 {
+    using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.DaemonFramework.Servants;
     using UnityEngine;
 
