@@ -7,7 +7,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
     using Prateek.Runtime.Core.Extensions;
     using UnityEngine.Assertions;
 
-    [DebuggerDisplay("{typeof(TContentType).Name}, {loader.content.ToString()}, Location: {loader.path}")]
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public abstract class ContentHandle<TContentType, TContentHandle>
         : IContentHandle
         where TContentHandle : ContentHandle<TContentType, TContentHandle>
@@ -29,6 +29,18 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         protected TContentType TypedContent
         {
             get { return content; }
+        }
+
+        private string DebuggerDisplay { get { return $"{DebuggerDisplayType}, {DebuggerDisplayFile}"; } }
+
+        protected string DebuggerDisplayType
+        {
+            get { return $"{typeof(TContentHandle).Name}<{typeof(TContentType).Name}>"; }
+        }
+        
+        protected string DebuggerDisplayFile
+        {
+            get { return $"{(content != null ? content.ToString() : "Not loaded")}, Location: {loader.Path}"; }
         }
         #endregion
 

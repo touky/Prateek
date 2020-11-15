@@ -62,6 +62,17 @@ namespace Prateek.Runtime.Core.Extensions
 
             return empty as IReadOnlyList<T>;
         }
+        
+        ///---------------------------------------------------------------------
+        public static int SafeCount(this IList list)
+        {
+            if (list == null)
+            {
+                return 0;
+            }
+
+            return list.Count;
+        }
 
         ///---------------------------------------------------------------------
         public static void SafeClear<T>(this List<T> list)

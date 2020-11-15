@@ -29,7 +29,8 @@ namespace Prateek.Runtime.AppContentFramework.Messages
             var content = leaf as ContentLoader;
             if (content != null)
             {
-                storage.content.Add(GetHandle(content));
+                var handle = GetHandle(content);
+                storage.content.Add(handle);
             }
         }
 
