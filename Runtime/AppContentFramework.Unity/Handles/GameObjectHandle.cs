@@ -11,7 +11,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
         : UnityContentHandle<GameObject, GameObjectHandle>
     {
         #region Constructors
-        public GameObjectHandle(ContentLoader loader) : base(loader) { }
+        public GameObjectHandle() : base() { }
         #endregion
 
         #region Class Methods

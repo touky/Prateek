@@ -1,7 +1,6 @@
 namespace Prateek.Runtime.AppContentFramework.Unity.Handles
 {
     using Prateek.Runtime.AppContentFramework.ContentLoaders;
-    using Prateek.Runtime.AppContentFramework.Unity.Addressables;
     using Prateek.Runtime.AppContentFramework.Unity.Addressables.ContentLoaders;
     using UnityEngine.ResourceManagement.ResourceProviders;
 
@@ -11,12 +10,14 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
         public SceneInstance Resource { get { return TypedContent; } }
         #endregion
 
-        #region Constructors
-        public SceneHandle(ContentLoader loader) : base(loader, false)
+        #region Class Methods
+        public override void Init(ContentLoader loader)
         {
+            base.Init(loader);
+
             loader.SetLoadContextParameters(new AddressableLoaderParameters
             {
-                behaviour = LoaderBehaviour.Scene
+                behaviour = LoaderBehaviour.Asset
             });
         }
         #endregion

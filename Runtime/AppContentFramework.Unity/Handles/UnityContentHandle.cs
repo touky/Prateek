@@ -2,7 +2,6 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
 {
     using System.Diagnostics;
     using Prateek.Runtime.AppContentFramework.ContentLoaders;
-    using Prateek.Runtime.AppContentFramework.Unity.Addressables;
     using Prateek.Runtime.AppContentFramework.Unity.Addressables.ContentLoaders;
     using UnityEngine;
 
@@ -12,9 +11,11 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
         where TContentType : Object
         where TContentHandle : ContentHandle<TContentType, TContentHandle>
     {
-        #region Constructors
-        protected UnityContentHandle(ContentLoader loader) : base(loader)
+        #region Class Methods
+        public override void Init(ContentLoader loader)
         {
+            base.Init(loader);
+
             loader.SetLoadContextParameters(new AddressableLoaderParameters
             {
                 behaviour = LoaderBehaviour.Asset

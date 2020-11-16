@@ -6,7 +6,7 @@ namespace Prateek.Runtime.AppContentFramework.Messages
 
     public abstract class ContentAccessChangedResponse<TContentType, TContentHandle>
         : ContentAccessChangedResponse
-        where TContentHandle : ContentHandle<TContentType, TContentHandle>
+        where TContentHandle : ContentHandle<TContentType, TContentHandle>, new()
     {
         #region Properties
         public DiffList<TContentHandle> Content
@@ -34,7 +34,17 @@ namespace Prateek.Runtime.AppContentFramework.Messages
             }
         }
 
-        protected abstract TContentHandle GetHandle(ContentLoader loader);
+        protected TContentHandle GetHandle(ContentLoader loader)
+        {
+            var handle = GetHandle();
+            handle.Init(loader);
+            return handle;
+        }
+
+        protected virtual TContentHandle GetHandle()
+        {
+            return new TContentHandle();
+        }
         #endregion
 
         #region Nested type: StorageDiff

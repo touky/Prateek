@@ -45,11 +45,13 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         #endregion
 
         #region Constructors
-        protected ContentHandle(ContentLoader loader, bool autoUnload = true)
+        protected ContentHandle()
+            : this(true)
+        { }
+
+        protected ContentHandle(bool autoUnload)
         {
             this.autoUnload = autoUnload;
-            this.loader = loader;
-            this.loader.LoadCompleted = OnAsyncCompleted;
         }
 
         ~ContentHandle()
@@ -61,6 +63,12 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         #endregion
 
         #region Class Methods
+        public virtual void Init(ContentLoader loader)
+        {
+            this.loader = loader;
+            this.loader.LoadCompleted = OnAsyncCompleted;
+        }
+
         protected void OnAsyncCompleted()
         {
             RetrieveContent();
