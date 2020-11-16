@@ -9,9 +9,9 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Commands
         : ContentAccessChangedResponse<SceneInstance, SceneHandle>
     {
         #region Class Methods
-        protected override SceneHandle GetHandle(ContentLoader loader)
+        protected override SceneHandle GetHandle()
         {
-            return new SceneHandle(loader);
+            return new SceneHandle();
         }
         #endregion
     }

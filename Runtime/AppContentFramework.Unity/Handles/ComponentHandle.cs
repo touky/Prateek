@@ -19,7 +19,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
         #endregion
 
         #region Constructors
-        public ComponentHandle(ContentLoader loader) : base(loader) { }
+        public ComponentHandle() : base() { }
         #endregion
 
         #region Class Methods

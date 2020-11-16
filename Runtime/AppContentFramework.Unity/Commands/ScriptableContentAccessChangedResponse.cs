@@ -14,9 +14,9 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Commands
         where TContentType : ScriptableObject
     {
         #region Class Methods
-        protected override ScriptableObjectHandle<TContentType> GetHandle(ContentLoader loader)
+        protected override ScriptableObjectHandle<TContentType> GetHandle()
         {
-            return new ScriptableObjectHandle<TContentType>(loader);
+            return new ScriptableObjectHandle<TContentType>();
         }
         #endregion
     }

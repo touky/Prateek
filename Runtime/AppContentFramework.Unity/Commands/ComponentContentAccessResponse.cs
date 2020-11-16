@@ -10,9 +10,9 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Commands
         where TContentType : Component
     {
         #region Class Methods
-        protected override GameObjectHandle GetHandle(ContentLoader loader)
+        protected override GameObjectHandle GetHandle()
         {
-            return new ComponentHandle<TContentType>(loader);
+            return new ComponentHandle<TContentType>();
         }
         #endregion
     }
