@@ -11,7 +11,7 @@
     /// The term "Daemon" is derived from the unix one, but can also be refered as "Service" in the microsoft ecosystem
     /// - Daemon embark a <seealso cref="GadgetPouch"/> and use <seealso cref="AutoRegisterExtensions.AutoRegister"/> and the <seealso cref="ITickable"/> interface
     /// </summary>
-    /// <typeparam name="TDaemon"></typeparam>
+    /// <typeparam name="TDaemon">The Deamon class type inheriting from this class</typeparam>
     public abstract class Daemon<TDaemon>
         : SingletonBehaviour<TDaemon>
         , ITickable

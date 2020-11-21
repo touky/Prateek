@@ -4,6 +4,11 @@ namespace Prateek.Runtime.DaemonFramework.Servants
     using Prateek.Runtime.DaemonFramework.Interfaces;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
+    /// <summary>
+    /// This servant implements the <seealso cref="ITickable"/> interface for all your tickable needs
+    /// </summary>
+    /// <typeparam name="TDaemon">The Deamon class type class is registering to</typeparam>
+    /// <typeparam name="TServant">The Servant class type inheriting from this class</typeparam>
     public abstract class TickableServant<TDaemon, TServant>
         : Servant<TDaemon, TServant>
         , ITickable

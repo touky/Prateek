@@ -4,6 +4,13 @@ namespace Prateek.Runtime.DaemonFramework.Servants
     using Prateek.Runtime.DaemonFramework.Enums;
     using Prateek.Runtime.DaemonFramework.Interfaces;
 
+    /// <summary>
+    /// Servants are tied to the <see cref="DaemonOverseer{TDaemon,TServant}"/> system meant to represent a
+    /// specialization of the Overseer behaviour.
+    /// They implement the <see cref="IPriority"/> interface to be ordered in the overseer access list
+    /// </summary>
+    /// <typeparam name="TDaemon">The Deamon class type class is registering to</typeparam>
+    /// <typeparam name="TServant">The Servant class type inheriting from this class</typeparam>
     public abstract class Servant<TDaemon, TServant>
         : IServant
         , IServantInternal
