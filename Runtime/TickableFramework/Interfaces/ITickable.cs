@@ -5,6 +5,12 @@ namespace Prateek.Runtime.TickableFramework.Interfaces
 
     /// <summary>
     ///     Base interface for the tickable framework
+    ///     Prateek player loop order:
+    ///     - <seealso cref="IEarlyUpdateTickable"/>
+    ///     - <seealso cref="IPreUpdateTickable"/>
+    ///     - <seealso cref="IPreLateUpdateTickable"/>
+    ///     - <seealso cref="IPostLateUpdateTickable"/>
+    ///     - <seealso cref="IApplicationFeedbackTickable"/>
     /// </summary>
     public interface ITickable
         : IPriority

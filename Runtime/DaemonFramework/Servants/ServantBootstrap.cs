@@ -10,17 +10,22 @@ namespace Prateek.Runtime.DaemonFramework.Servants
         protected TServant servant;
 
         #region Unity Methods
-        private void Awake()
+        protected virtual void Awake()
         {
             servant = new TServant();
             if (servant is IServantInternal internalServant)
             {
                 internalServant.Name = name;
             }
+
+            BeforeStartup();
+
             servant.Startup();
         }
 
-        private void OnDestroy()
+        protected virtual void BeforeStartup() { }
+
+        protected virtual void OnDestroy()
         {
             servant.Shutdown();
         }
