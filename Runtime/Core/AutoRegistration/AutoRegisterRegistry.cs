@@ -3,7 +3,8 @@
     using System.Collections.Generic;
     using Prateek.Runtime.Core.Singleton;
 
-    public class AutoRegisterRegistry : SingletonBehaviour<AutoRegisterRegistry>
+    public class AutoRegisterRegistry
+        : Registry<AutoRegisterRegistry>
     {
         #region Fields
         internal List<AutoRegisterForagerWorker> workers = new List<AutoRegisterForagerWorker>();

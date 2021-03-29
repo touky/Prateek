@@ -23,6 +23,8 @@
         #endregion
 
         #region Properties
+        protected override string ParentName { get { return "Overseer"; } }
+
         protected TServant FirstAliveServant
         {
             get

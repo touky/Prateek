@@ -4,7 +4,8 @@ namespace Prateek.Runtime.Core.Singleton
 
     //New Rule: 18/11/19
     //All services need to be ServiceSingleton, and can support multiple Provider
-    public abstract class SingletonBehaviour<TInstance> : MonoBehaviour
+    public abstract class SingletonBehaviour<TInstance>
+        : MonoBehaviour
         where TInstance : MonoBehaviour
     {
         #region Static and Constants
@@ -50,6 +51,8 @@ namespace Prateek.Runtime.Core.Singleton
                 }
             }
         }
+
+        protected abstract string ParentName { get; }
         #endregion
 
         #region Unity Methods
@@ -61,6 +64,8 @@ namespace Prateek.Runtime.Core.Singleton
             {
                 DontDestroyOnLoad(gameObject);
             }
+            
+            SetParent();
 
             OnAwake();
         }
@@ -78,6 +83,17 @@ namespace Prateek.Runtime.Core.Singleton
         #endregion
 
         #region Class Methods
+        private void SetParent()
+        {
+            var parentName = ParentName;
+            if (string.IsNullOrEmpty(parentName))
+            {
+                parentName = "UNNAMED";
+            }
+
+            ParentProvider.SetParent(transform, parentName);
+        }
+
         private void RegisterInstanceFor<TSubClass>(TSubClass registeringInstance) where TSubClass : TInstance
         {
             if (GetType() != typeof(TSubClass) && !GetType().IsSubclassOf(typeof(TSubClass)))

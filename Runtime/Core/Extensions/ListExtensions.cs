@@ -467,6 +467,18 @@ namespace Prateek.Runtime.Core.Extensions
 
             return selected_item;
         }
+
+        ///---------------------------------------------------------------------
+        public static bool TryAdd<TList, TItem>(this IList<TList> list, TItem item)
+        {
+            if (item is TList tItem)
+            {
+                list.Add(tItem);
+                return true;
+            }
+
+            return false;
+        }
         #endregion Select
     }
 }

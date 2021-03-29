@@ -8,7 +8,8 @@ namespace Prateek.Runtime.KeynameFramework
     using Prateek.Runtime.KeynameFramework.Interfaces;
     using Prateek.Runtime.KeynameFramework.Settings;
 
-    internal class KeywordRegistry : SingletonBehaviour<KeywordRegistry>
+    internal class KeywordRegistry
+        : Registry<KeywordRegistry>
     {
         #region Fields
         internal KeywordForagerWorker foragerWorker;

@@ -42,7 +42,8 @@ namespace Prateek.Runtime.TickableFramework
     using UnityEngine.LowLevel;
 
     ///-------------------------------------------------------------------------
-    internal sealed class TickableRegistry : SingletonBehaviour<TickableRegistry>
+    internal sealed class TickableRegistry
+        : Registry<TickableRegistry>
     {
         #region Fields
         ///---------------------------------------------------------------------
@@ -209,7 +210,7 @@ namespace Prateek.Runtime.TickableFramework
             {
                 var system = playerLoop.subSystemList[s];
                 var subSystemList = new List<PlayerLoopSystem>(system.subSystemList);
-                for (int l = 0; l < subSystemList.Count; l++)
+                for (var l = 0; l < subSystemList.Count; l++)
                 {
                     if (!subSystemList[l].type.IsSubclassOf(typeof(TickableGroup)))
                     {

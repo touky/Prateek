@@ -22,6 +22,10 @@
         private GadgetPouch gadgetPouch = new GadgetPouch();
         #endregion
 
+        #region Properties
+        protected override string ParentName { get { return "Daemon"; } }
+        #endregion
+
         #region Unity Methods
         protected virtual void OnDestroy()
         {

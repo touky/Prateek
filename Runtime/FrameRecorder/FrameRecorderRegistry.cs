@@ -45,9 +45,9 @@ namespace Prateek.Runtime.FrameRecorder
 
     ///-------------------------------------------------------------------------
     public sealed class FrameRecorderRegistry
-        : SingletonBehaviour<FrameRecorderRegistry>
-        , IEarlyUpdateTickable
-        , IPostLateUpdateTickable
+        : Registry<FrameRecorderRegistry>
+          , IEarlyUpdateTickable
+          , IPostLateUpdateTickable
     {
         #region Fields
         ///---------------------------------------------------------------------
