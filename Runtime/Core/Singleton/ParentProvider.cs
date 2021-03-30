@@ -51,7 +51,7 @@ namespace Prateek.Runtime.Core.Singleton
         internal static void SetParent(Transform transform, string parentName)
         {
             var parent = GetParent(parentName);
-            parent.SetParent(transform);
+            transform.SetParent(parent);
         }
         #endregion
     }
