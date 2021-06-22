@@ -20,12 +20,17 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         private int instanceCount = Const.INDEX_NONE;
         private bool autoUnload = true;
 
-        protected ContentLoader loader;
-        protected TContentType content;
-        protected Action<TContentHandle> asyncCompletedAction;
+        private ContentLoader loader;
+        private TContentType content;
+        private Action<TContentHandle> asyncCompletedAction;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Child classes must use this property to access the content once loaded
+        /// This is deliberately not public to give the possibility to tinker with the content
+        /// (See GameObject & Component instance count management)
+        /// </summary>
         protected TContentType TypedContent
         {
             get { return content; }

@@ -27,7 +27,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
         {
             base.RetrieveContent();
 
-            component = content.GetComponent<TContentType>();
+            component = TypedContent.GetComponent<TContentType>();
 
             Assert.IsNotNull(component);
         }
