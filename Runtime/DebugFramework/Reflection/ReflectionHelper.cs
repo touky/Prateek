@@ -56,12 +56,13 @@ namespace Prateek.Runtime.DebugFramework.Reflection
             do
             {
                 result = containerType.GetField(fieldName, BINDING_FLAGS);
-                containerType = containerType.BaseType;
 
-                if (!exploreInheritance)
+                if (result != null && !exploreInheritance)
                 {
                     break;
                 }
+
+                containerType = containerType.BaseType;
             } while (result == null && containerType != null);
 
             return result;

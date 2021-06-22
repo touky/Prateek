@@ -1,25 +1,15 @@
 namespace Prateek.Runtime.AppContentFramework.Local.ContentFormats
 {
+    using System.Reflection;
     using Prateek.Runtime.Core.AssemblyForager;
 
-    internal class ContentFormatForagerWorker : AssemblyForagerWorker
+    internal class ContentFormatForagerWorker
+        : AssemblyForagerWorker<ContentFormatForagerWorker>
     {
-        #region Static and Constants
-        private static ContentFormatForagerWorker instance;
-        #endregion
-
-        #region Properties
-        public static ContentFormatForagerWorker Instance { get { return instance; } }
-
-        public override bool IgnoreAbstract { get { return true; } }
-        #endregion
-
         #region Class Methods
-        public override void Init()
+        public override void PrepareSearch()
         {
-            instance = this;
-
-            Search<ContentFormat>();
+            Search<ContentFormat>(SearchFlag.Abstract);
         }
         #endregion
     }

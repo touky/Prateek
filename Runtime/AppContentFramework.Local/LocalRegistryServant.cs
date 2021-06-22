@@ -9,7 +9,9 @@ namespace Prateek.Runtime.AppContentFramework.Local
     using Prateek.Runtime.AppContentFramework.Local.ContentFormats;
     using Prateek.Runtime.AppContentFramework.Local.Debug;
     using Prateek.Runtime.Core.Consts;
+    using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Helpers;
+    using Prateek.Runtime.Core.Helpers.Files;
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using UnityEngine;
@@ -18,6 +20,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
         : ContentRegistryServant
     {
         #region Static and Constants
+        //todo add this to the settings
         private const string EXTRA_CONTENT = "../ExtraContent";
         private const string EXTRA_CONTENT_TOC = "ContentLookUp.json";
 
@@ -79,8 +82,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
                     var contentTocInfo = new FileInfo(extraContentTocPath);
                     if (contentTocInfo.Exists)
                     {
-                        var json = File.ReadAllText(contentTocInfo.FullName);
-                        contentToc = JsonUtility.FromJson<ContentToc>(json);
+                        contentToc = FileHelper.Read<ContentToc>(contentTocInfo);
                         if (contentToc != null && contentToc.folders != null && contentToc.folders.Count > 0)
                         {
                             foreach (var folder in contentToc.folders)
@@ -159,7 +161,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
                                 {
                                     foreach (var contentPath in cacheContentPaths)
                                     {
-                                        pathToContentPaths.Add(contentPath.StoragePath, contentPath);
+                                        pathToContentPaths.Set(contentPath.StoragePath, contentPath);
                                     }
                                 }
 

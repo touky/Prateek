@@ -1,13 +1,14 @@
 namespace Prateek.Runtime.DebugFramework.Reflection
 {
     using System;
+    using System.Diagnostics;
     using System.Reflection;
 #if UNITY_EDITOR
     using UnityEditor;
 #endif
-    using UnityEngine;
     using UnityEngine.Assertions;
 
+    [DebuggerDisplay("'{name}' ({ownerType.Name})")]
     public abstract class DebugField
     {
         #region Fields
@@ -48,17 +49,33 @@ namespace Prateek.Runtime.DebugFramework.Reflection
         protected void SetName(string name)
         {
             this.name = name.Trim();
+
+            if (owner != null)
+            {
+                SetOwner(owner);
+            }
         }
 
         public virtual void SetOwner(object owner)
         {
+            if (owner == null)
+            {
+                return;
+            }
+
             this.owner = owner;
+
+            if (string.IsNullOrEmpty(name))
+            {
+                return;
+            }
+
             ownerType = this.owner.GetType();
             fieldInfo = ReflectionHelper.SearchFieldInfo(ownerType, name, true);
 
             if (fieldInfo == null)
             {
-                Debug.LogError($"{name} could not be found in {ownerType.Name}");
+                UnityEngine.Debug.LogError($"{name} could not be found in {ownerType.Name}");
             }
         }
 

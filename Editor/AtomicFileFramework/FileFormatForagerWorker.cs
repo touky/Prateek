@@ -1,18 +1,15 @@
 ﻿namespace Prateek.Editor.AtomicFileFramework
 {
+    using System.Reflection;
     using Prateek.Runtime.Core.AssemblyForager;
 
 #if USE_SCENE_SPLITTER
     internal class FileFormatForagerWorker : AssemblyForagerWorker
     {
-        #region Properties
-        public override bool IgnoreAbstract { get { return true; } }
-        #endregion
-
         #region Class Methods
-        public override void Init()
+        public override void PrepareSearch()
         {
-            Search(typeof(AtomicFileFormat));
+            Search<AtomicFileFormat>(SearchFlag.Abstract);
         }
 
         public override void WorkDone()

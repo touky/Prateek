@@ -6,13 +6,6 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Commands
     using UnityEngine;
 
     public abstract class GameObjectContentAccessResponse
-        : ContentAccessChangedResponse<GameObjectHandle, GameObject>
-    {
-        #region Class Methods
-        protected override GameObjectHandle GetHandle(ContentLoader loader)
-        {
-            return new GameObjectHandle(loader);
-        }
-        #endregion
-    }
+        : ContentAccessChangedResponse<GameObject, GameObjectHandle>
+    { }
 }

@@ -16,11 +16,6 @@
         private static TSingleton defaultInstance;
         #endregion
 
-        #region Settings
-        [SerializeField]
-        private string settingsPath = string.Empty;
-        #endregion
-
         #region Fields
         protected TData data = null;
         protected TResource resource = null;
@@ -46,21 +41,18 @@
             get { return data != null; }
         }
 
+        public override Type ResourceType { get { return typeof(TResource); } }
+
         public TData Data
         {
             get { return data; }
-        }
-
-        protected virtual string DefaultPath
-        {
-            get { return string.Empty; }
         }
         #endregion
 
         #region Class Methods
         protected override void Init()
         {
-            var path = string.IsNullOrEmpty(settingsPath) ? DefaultPath : settingsPath;
+            var path = DefaultPath;
             if (data == null && LoadResource(path))
             {
                 data = resource.Data;

@@ -34,12 +34,46 @@
 namespace Prateek.Runtime.Core.Extensions
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
 
     ///-------------------------------------------------------------------------
     public static class ListExtensions
     {
+        #region Static and Constants
+        private static Dictionary<Type, IList> emptyLists = new Dictionary<Type, IList>();
+        #endregion
+
         #region Class Methods
+        ///---------------------------------------------------------------------
+        public static IReadOnlyList<T> SafeReadOnly<T>(this List<T> list)
+        {
+            if (list != null)
+            {
+                return list;
+            }
+
+            var type = typeof(T);
+            if (!emptyLists.TryGetValue(type, out var empty))
+            {
+                empty = new List<T>();
+                emptyLists.Add(type, empty);
+            }
+
+            return empty as IReadOnlyList<T>;
+        }
+        
+        ///---------------------------------------------------------------------
+        public static int SafeCount(this IList list)
+        {
+            if (list == null)
+            {
+                return 0;
+            }
+
+            return list.Count;
+        }
+
         ///---------------------------------------------------------------------
         public static void SafeClear<T>(this List<T> list)
         {
@@ -123,7 +157,8 @@ namespace Prateek.Runtime.Core.Extensions
         }
 
         ///---------------------------------------------------------------------
-        public static T GetOrInsert<T>(this List<T> list, int index) where T : new()
+        public static T GetOrInsert<T>(this List<T> list, int index)
+            where T : new()
         {
             if (index >= list.Count)
             {
@@ -221,7 +256,8 @@ namespace Prateek.Runtime.Core.Extensions
         }
 
         ///---------------------------------------------------------------------
-        public static V GetOrInsert<K, V>(this Dictionary<K, V> dictionary, K key) where V : new()
+        public static V GetOrInsert<K, V>(this Dictionary<K, V> dictionary, K key)
+            where V : new()
         {
             V value;
             if (dictionary.TryGetValue(key, out value))
@@ -430,6 +466,18 @@ namespace Prateek.Runtime.Core.Extensions
             }
 
             return selected_item;
+        }
+
+        ///---------------------------------------------------------------------
+        public static bool TryAdd<TList, TItem>(this IList<TList> list, TItem item)
+        {
+            if (item is TList tItem)
+            {
+                list.Add(tItem);
+                return true;
+            }
+
+            return false;
         }
         #endregion Select
     }

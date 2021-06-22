@@ -7,7 +7,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
     using Prateek.Runtime.Core.Extensions;
     using UnityEngine.Assertions;
 
-    [DebuggerDisplay("{typeof(TContentType).Name}, {loader.content.ToString()}, Location: {loader.path}")]
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public abstract class ContentHandle<TContentType, TContentHandle>
         : IContentHandle
         where TContentHandle : ContentHandle<TContentType, TContentHandle>
@@ -20,24 +20,43 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         private int instanceCount = Const.INDEX_NONE;
         private bool autoUnload = true;
 
-        protected ContentLoader loader;
-        protected TContentType content;
-        protected Action<TContentHandle> asyncCompletedAction;
+        private ContentLoader loader;
+        private TContentType content;
+        private Action<TContentHandle> asyncCompletedAction;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Child classes must use this property to access the content once loaded
+        /// This is deliberately not public to give the possibility to tinker with the content
+        /// (See GameObject & Component instance count management)
+        /// </summary>
         protected TContentType TypedContent
         {
             get { return content; }
         }
+
+        private string DebuggerDisplay { get { return $"{DebuggerDisplayType}, {DebuggerDisplayFile}"; } }
+
+        protected string DebuggerDisplayType
+        {
+            get { return $"{typeof(TContentHandle).Name}<{typeof(TContentType).Name}>"; }
+        }
+        
+        protected string DebuggerDisplayFile
+        {
+            get { return $"{(content != null ? content.ToString() : "Not loaded")}, Location: {loader.Path}"; }
+        }
         #endregion
 
         #region Constructors
-        protected ContentHandle(ContentLoader loader, bool autoUnload = true)
+        protected ContentHandle()
+            : this(true)
+        { }
+
+        protected ContentHandle(bool autoUnload)
         {
             this.autoUnload = autoUnload;
-            this.loader = loader;
-            this.loader.LoadCompleted = OnAsyncCompleted;
         }
 
         ~ContentHandle()
@@ -49,6 +68,12 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         #endregion
 
         #region Class Methods
+        public virtual void Init(ContentLoader loader)
+        {
+            this.loader = loader;
+            this.loader.LoadCompleted = OnAsyncCompleted;
+        }
+
         protected void OnAsyncCompleted()
         {
             RetrieveContent();

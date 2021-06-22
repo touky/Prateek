@@ -175,9 +175,11 @@
         {
             title = "Command daemon";
 
-            var section = new LiveReceiverSection("Live receivers");
+            var servants = new DaemonOverseerSection<CommandDaemon, CommandServant>();
+            var receivers = new LiveReceiverSection("Live receivers");
 
-            document.AddSections(section);
+            document.AddSections(servants);
+            document.AddSections(receivers);
         }
         #endregion
     }

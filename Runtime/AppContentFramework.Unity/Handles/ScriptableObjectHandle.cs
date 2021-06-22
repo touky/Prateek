@@ -12,9 +12,5 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
         #region Properties
         public TContentType Content { get { return TypedContent; } }
         #endregion
-
-        #region Constructors
-        public ScriptableObjectHandle(ContentLoader loader) : base(loader) { }
-        #endregion
     }
 }

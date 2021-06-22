@@ -5,7 +5,7 @@ namespace Prateek.Runtime.KeynameFramework
     public class KeywordForagerWorker : AssemblyForagerWorker
     {
         #region Class Methods
-        public override void Init()
+        public override void PrepareSearch()
         {
             Search(KeywordRegistry.MasterKeyword);
 

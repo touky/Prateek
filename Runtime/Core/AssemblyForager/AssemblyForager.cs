@@ -3,60 +3,81 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Prateek.Runtime.Core.Consts;
     using UnityEditor;
     using UnityEngine;
 
     internal static class AssemblyForager
     {
         #region Static and Constants
-        private static readonly string[] ASSEMBLY_MATCH = { ".Editor", "-Editor" };
         private const int TYPE_COUNT = 30000;
+
+        private static readonly string FORAGE_INSTRUCTION = $"{ConstFolder.PRATEEK_SETTINGS}/{nameof(AssemblyForager)}{nameof(LookupInstructions)}{ConstExtension.JSON}";
+
         internal static List<AssemblyForagerWorker> workers = new List<AssemblyForagerWorker>();
         #endregion
 
         #region Class Methods
+#if UNITY_EDITOR
         [InitializeOnLoadMethod]
         private static void EditorForage()
         {
-            Execute(false, ASSEMBLY_MATCH);
+            Forage();
         }
+#endif
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RuntimeForage()
         {
-            Execute(true, ASSEMBLY_MATCH);
+            Forage();
         }
 
-        private static void Execute(bool useMatchToIgnore, params string[] assemblyMatch)
+        private static void Forage()
         {
-            var builder = (StringBuilder) null;
-            var types   = new List<Type>(TYPE_COUNT);
+            var instructions = LookupInstructions.Load(FORAGE_INSTRUCTION, () => new PrateekDefaultInstructions());
+
+            Execute(instructions);
+
+#if UNITY_EDITOR
+            instructions.Save(FORAGE_INSTRUCTION);
+#endif
+        }
+
+        private static void Execute(LookupInstructions instructions)
+        {
+            var builder    = (StringBuilder) null;
+            var types      = new List<Type>(TYPE_COUNT);
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var domainAssembly in assemblies)
             {
-                var ignoreAssembly = !useMatchToIgnore;
-                foreach (var match in assemblyMatch)
-                {
-                    if (domainAssembly.FullName.Contains(match))
-                    {
-                        ignoreAssembly = useMatchToIgnore;
-                        break;
-                    }
-                }
-
-                if (ignoreAssembly)
+                var assemblyTypes = (Type[]) null;
+                var shortName = domainAssembly.FullName.Substring(0, domainAssembly.FullName.IndexOf(Const.COMMA_C));
+                var allowWorkerLookup = instructions.Allow(shortName);
+                var allowTypeLookup = instructions.Allow(shortName, true);
+                if (!allowWorkerLookup)
                 {
                     builder.Log($"Ignoring {domainAssembly.FullName}");
+                    if (allowTypeLookup)
+                    {
+                        assemblyTypes = domainAssembly.GetTypes();
+                        foreach (var assemblyType in assemblyTypes)
+                        {
+                            if (!assemblyType.IsSubclassOf(typeof(AssemblyForagerWorker)))
+                            {
+                                types.Add(assemblyType);
+                                continue;
+                            }
+                        }
+                    }
                     continue;
                 }
 
-                var assemblyTypes = domainAssembly.GetTypes();
+                assemblyTypes = domainAssembly.GetTypes();
                 foreach (var assemblyType in assemblyTypes)
                 {
-                    types.Add(assemblyType);
-
                     if (!assemblyType.IsSubclassOf(typeof(AssemblyForagerWorker)))
                     {
+                        types.Add(assemblyType);
                         continue;
                     }
 
@@ -68,6 +89,7 @@
                     var worker = Activator.CreateInstance(assemblyType) as AssemblyForagerWorker;
                     worker.Init();
                     workers.Add(worker);
+
                     LogWorker(ref builder, worker);
                 }
             }

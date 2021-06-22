@@ -41,7 +41,13 @@ namespace Prateek.Runtime.AppContentFramework.Messages
 
         public HierarchicalTreeSettingsData Settings
         {
-            get { return accessSettings.Settings.UseAsOverride ? accessSettings.Settings : null; }
+            get
+            {
+                return (accessSettings.Settings != null
+                     && accessSettings.Settings.UseAsOverride)
+                    ? accessSettings.Settings
+                    : null;
+            }
         }
 
         public virtual bool AcceptLeaf(IHierarchicalTreeLeaf leaf)

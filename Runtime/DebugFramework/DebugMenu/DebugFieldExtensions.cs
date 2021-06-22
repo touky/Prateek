@@ -25,7 +25,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
                 return true;
             }
 
-            ImGui.Text($"Debug field '{field.Name}' is invalid !");
+            ImGui.TextColored(Color.red, $"Debug field '{field.Name}' is invalid !");
 
             return false;
         }

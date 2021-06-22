@@ -2,11 +2,12 @@ namespace Prateek.Runtime.KeynameFramework
 {
     using System;
     using System.Diagnostics;
+    using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.KeynameFramework.Enums;
     using Prateek.Runtime.KeynameFramework.Interfaces;
     using UnityEngine.Assertions;
 
-    [DebuggerDisplay("Keyword: {ToString()}:{IntExtensions.ToHex(hash)}")]
+    [DebuggerDisplay("{DebugDisplay,nq}")]
     public struct Keyword : IEquatable<Keyword>
     {
         #region Fields
@@ -17,9 +18,15 @@ namespace Prateek.Runtime.KeynameFramework
         #endregion
 
         #region Properties
+        private string DebugDisplay { get { return $"{ToString()}:{hash.ToHex()}"; } }
+
         public KeywordStatus Status
         {
-            get { return type != null ? KeywordStatus.Type : KeywordStatus.Name; }
+            get { return type != null
+                    ? KeywordStatus.Type
+                    : (!string.IsNullOrEmpty(name)
+                    ? KeywordStatus.Name
+                    : KeywordStatus.None); }
         }
 
         public Type Type

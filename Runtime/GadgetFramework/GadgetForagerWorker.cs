@@ -15,9 +15,9 @@
         #endregion
 
         #region Class Methods
-        public override void Init()
+        public override void PrepareSearch()
         {
-            base.Init();
+            base.PrepareSearch();
 
             Search<IGadgetOwner>();
             Search<IGadgetInstantiator>();

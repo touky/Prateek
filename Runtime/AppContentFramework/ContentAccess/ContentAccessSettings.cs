@@ -12,26 +12,42 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess
         private HierarchicalTreeSettingsData settings = null;
 
         [SerializeField]
-        private string[] contentPaths;
+        private string[] contentPaths = new string[0];
 
         [SerializeField]
-        private string[] contentExtensions;
+        private string[] contentExtensions = new string[0];
         #endregion
 
         #region Properties
-        public string[] ContentPaths
+        public string[] ContentPaths { get { return contentPaths; } }
+
+        public string[] ContentExtensions { get { return contentExtensions; } }
+
+        public HierarchicalTreeSettingsData Settings { get { return settings; } }
+        #endregion
+
+        #region Class Methods
+        public void AddContentPath(params string[] contentPaths)
         {
-            get { return contentPaths; }
+            Concatenate(ref this.contentPaths, contentPaths);
         }
 
-        public string[] ContentExtensions
+        public void AddContentExtensions(params string[] contentExtensions)
         {
-            get { return contentExtensions; }
+            Concatenate(ref this.contentExtensions, contentExtensions);
         }
 
-        public HierarchicalTreeSettingsData Settings
+        private static void Concatenate(ref string[] destination, string[] source)
         {
-            get { return settings; }
+            var newPaths = new string[destination.Length + source.Length];
+            for (var i = 0; i < newPaths.Length; i++)
+            {
+                newPaths[i] = i < destination.Length
+                    ? destination[i]
+                    : source[i - destination.Length];
+            }
+
+            destination = newPaths;
         }
         #endregion
     }

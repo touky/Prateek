@@ -5,7 +5,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
     using Prateek.Runtime.Core.Singleton;
 
     public sealed class DebugMenuRegistry
-        : SingletonBehaviour<DebugMenuRegistry>
+        : Registry<DebugMenuRegistry>
     {
         #region Fields
         private bool isOpen = false;

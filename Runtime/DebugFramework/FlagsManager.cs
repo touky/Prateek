@@ -199,7 +199,7 @@ namespace Prateek.Runtime.DebugFramework
             }
 
             #region Class Methods
-            public override void Init()
+            public override void PrepareSearch()
             {
                 instance = this;
 

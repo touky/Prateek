@@ -6,6 +6,12 @@
     using Prateek.Runtime.GadgetFramework.Interfaces;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
+    /// <summary>
+    /// Daemons are <seealso cref="SingletonBehaviour{TInstance}"/> that acts as backend independent system
+    /// The term "Daemon" is derived from the unix one, but can also be refered as "Service" in the microsoft ecosystem
+    /// - Daemon embark a <seealso cref="GadgetPouch"/> and use <seealso cref="AutoRegisterExtensions.AutoRegister"/> and the <seealso cref="ITickable"/> interface
+    /// </summary>
+    /// <typeparam name="TDaemon">The Deamon class type inheriting from this class</typeparam>
     public abstract class Daemon<TDaemon>
         : SingletonBehaviour<TDaemon>
         , ITickable
@@ -14,6 +20,10 @@
     {
         #region Fields
         private GadgetPouch gadgetPouch = new GadgetPouch();
+        #endregion
+
+        #region Properties
+        protected override string ParentName { get { return "Daemon"; } }
         #endregion
 
         #region Unity Methods

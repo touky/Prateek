@@ -7,6 +7,12 @@
     using Prateek.Runtime.DaemonFramework.Enums;
     using Prateek.Runtime.DaemonFramework.Interfaces;
 
+    /// <summary>
+    /// This Daemon automatically creates itself when a <typeparam name="TServant"/> servant's method <see cref="IServant.Startup()"/> is called
+    /// and it registers itself to this Daemon
+    /// </summary>
+    /// <typeparam name="TDaemon">The Deamon class type inheriting from this class</typeparam>
+    /// <typeparam name="TServant">The Base class for this Daemon Overseer</typeparam>
     public abstract class DaemonOverseer<TDaemon, TServant>
         : Daemon<TDaemon>, IDaemonOverseer<TServant>
         where TDaemon : DaemonOverseer<TDaemon, TServant>
@@ -17,6 +23,8 @@
         #endregion
 
         #region Properties
+        protected override string ParentName { get { return "Overseer"; } }
+
         protected TServant FirstAliveServant
         {
             get
@@ -33,15 +41,9 @@
             }
         }
 
-        protected ServantEnumerator<TServant> AllAliveServants
-        {
-            get { return new ServantEnumerator<TServant>(servants, false); }
-        }
+        protected ServantEnumerator<TServant> AllAliveServants { get { return new ServantEnumerator<TServant>(servants, false); } }
 
-        protected ServantEnumerator<TServant> AllServants
-        {
-            get { return new ServantEnumerator<TServant>(servants, true); }
-        }
+        protected ServantEnumerator<TServant> AllServants { get { return new ServantEnumerator<TServant>(servants, true); } }
         #endregion
 
         #region Class Methods
@@ -74,11 +76,30 @@
             }
         }
 
-        protected virtual void OnServantRegistered(TServant servant) { }
-        protected virtual void OnServantUnregistered(TServant servant) { }
+        /// <summary>
+        /// Callback to indicate a new servant registered
+        /// - It is always called after adding it to the <see cref="servants"/>
+        /// - This call also performs the <seealso cref="PriorityExtensions.SortWithPriorities{TPriority}(List{TPriority})"/>
+        /// </summary>
+        /// <param name="servant">The registering servant</param>
+        protected virtual void OnServantRegistered(TServant servant)
+        {
+            servants.SortWithPriorities();
+        }
+
+        /// <summary>
+        /// Callback to indicate a new servant registered
+        /// - It is always called after removing it to the <see cref="servants"/>
+        /// - This call also performs the <seealso cref="PriorityExtensions.SortWithPriorities{TPriority}(List{TPriority})"/>
+        /// </summary>
+        /// <param name="servant">The registering servant</param>
+        protected virtual void OnServantUnregistered(TServant servant)
+        {
+            servants.SortWithPriorities();
+        }
         #endregion
 
-        #region IDaemon<TServant> Members
+        #region IDaemonOverseer<TServant> Members
         void IDaemonOverseer<TServant>.Register(TServant servant)
         {
             if (servants.Contains(servant))
@@ -92,7 +113,6 @@
             }
 
             servants.Add(servant);
-            servants.SortWithPriorities();
 
             OnServantRegistered(servant);
         }
@@ -103,14 +123,13 @@
             {
                 return;
             }
-            
+
             if (servant is IServantInternal servantInternal)
             {
                 servantInternal.Overseer = null;
             }
 
             servants.Remove(servant);
-            servants.SortWithPriorities();
 
             OnServantUnregistered(servant);
         }

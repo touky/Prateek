@@ -2,11 +2,13 @@
 {
     using System;
     using System.Diagnostics;
+    using Prateek.Runtime.Core.Extensions;
 
-    [DebuggerDisplay("{type.Name}/{target}: {Key}/{IntExtensions.ToHexString(Key)}")]
+    [DebuggerDisplay("{DebugDisplay,nq}")]
     public struct CommandId
     {
         #region Static and Constants
+        public const int TYPE_OFFSET = 32;
         public const long MASK_TARGET = 0xFFFFFFFF;
         public const long MASK_TYPE = ~MASK_TARGET;
         #endregion
@@ -18,6 +20,18 @@
         #endregion
 
         #region Properties
+        private string DebugDisplay { get { return $"{type.Name}/{target}: {Key}/{KeyDebugDisplay}"; } }
+
+        internal string KeyDebugDisplay
+        {
+            get
+            {
+                var left = ((Int32) ((Key & MASK_TYPE) >> 32)).ToHex();
+                var right = ((Int32) (Key & MASK_TARGET)).ToHex();
+                return $"{left}-{right}";
+            }
+        }
+
         public Type Type { get { return type; } }
 
         public long Key
@@ -69,7 +83,7 @@
             long id = 0;
             if (type != null)
             {
-                id = ((long) type.GetHashCode() << 32) & MASK_TYPE;
+                id = ((long) type.GetHashCode() << TYPE_OFFSET) & MASK_TYPE;
             }
 
             if (target != null)
