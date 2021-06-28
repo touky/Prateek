@@ -1,0 +1,18 @@
+{
+    "name": "Prateek.Runtime.StateMachineFramework",
+    "references": [
+        "Prateek.Runtime.Core",
+        "Prateek.Runtime.DebugFramework",
+        "Dear.ImGui.Unity",
+        "Dear.ImGui"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
