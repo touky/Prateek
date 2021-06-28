@@ -1,12 +1,12 @@
 {
-    "name": "Prateek.Runtime.StateMachineFramework",
+    "name": "Prateek.Editor.Settings",
     "references": [
         "Prateek.Runtime.Core",
-        "Prateek.Runtime.DebugFramework",
-        "Dear.ImGui.Unity",
-        "Dear.ImGui"
+        "Prateek.Editor.Core"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
