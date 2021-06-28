@@ -11,13 +11,13 @@
     },
 	"dependencies":
     {
-        "com.unity.burst": "1.4.1-pre.1",
+        "com.unity.burst": "1.5.4",
         "com.unity.collections": "0.9.0-preview.6",
         "com.unity.mathematics": "1.2.1",
         "com.unity.inputsystem": "1.1.0-preview.1",
         "com.unity.modules.ui": "1.0.0",
         "com.unity.test-framework": "1.1.18",
-        "com.unity.addressables": "1.16.7"
+        "com.unity.addressables": "1.18.9"
 	},
     "repository":
     {
