@@ -6,7 +6,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public class ContentAccessorInstantiator
-        : IGadgetInstantiator
+        //: IGadgetInstantiator
     {
         #region IGadgetInstantiator Members
         public int DefaultPriority

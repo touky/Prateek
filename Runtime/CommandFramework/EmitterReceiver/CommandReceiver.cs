@@ -15,7 +15,6 @@
         , ICommandReceiver
     {
         #region Fields
-        private ICommandReceiverOwner owner;
         private Action onCommandReceived;
 
         private bool commandReadLock = false;
@@ -40,10 +39,7 @@
         #endregion
 
         #region Constructors
-        internal CommandReceiver(ICommandReceiverOwner owner)
-        {
-            this.owner = owner;
-        }
+        internal CommandReceiver() { }
         #endregion
 
         #region Class Methods
@@ -104,10 +100,7 @@
         #endregion
 
         #region ICommandReceiver Members
-        public ICommandReceiverOwner Owner
-        {
-            get { return owner; }
-        }
+        public ICommandReceiverOwner Owner { get; private set; }
 
         public void ProcessReceivedCommands()
         {
@@ -209,6 +202,12 @@
         #endregion
 
         #region IGadget Members
+        public void Awake()
+        {
+            Owner.DefineReceptionActions(this);
+            ApplyActionChanges();
+        }
+
         public void Kill()
         {
             if (SingletonBehaviour<CommandDaemon>.IsApplicationQuitting)

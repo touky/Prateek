@@ -7,7 +7,7 @@
     {
         #region Properties
         string Name { get; }
-        GadgetPouch GadgetPouch { get; }
+        IGadgetPouch GadgetPouch { get; }
         #endregion
     }
 }

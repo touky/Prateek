@@ -1,6 +1,7 @@
 namespace Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces
 {
     using JetBrains.Annotations;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     [UsedImplicitly]
@@ -12,22 +13,18 @@ namespace Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces
         {
             get { return typeof(CommandReceiverInstantiator).GetHashCode(); }
         }
-
-        public void Create(IGadgetOwner owner)
+        
+        public void Declare(IInstantiatorBinder binder)
         {
-            if (!(owner is ICommandReceiverOwner receiverOwner))
-            {
-                return;
-            }
+            binder.BindTo<ICommandReceiverOwner>();
+            binder.InjectGadgetTo<ICommandReceiver>();
+            binder.AddGadgetAs<ICommandEmitter>();
+            binder.AddGadgetAs<ICommandReceiver>();
+        }
 
-            var receiver = new CommandReceiver(receiverOwner);
-            {
-                owner.GadgetPouch.Add<ICommandEmitter>(receiver);
-                owner.GadgetPouch.Add<ICommandReceiver>(receiver);
-                owner.GadgetPouch.Add(receiver);
-            }
-            receiverOwner.DefineReceptionActions(receiver);
-            receiver.ApplyActionChanges();
+        public void Bind(IGadgetBinder binder)
+        {
+            binder.Bind(new CommandReceiver());
         }
         #endregion
     }

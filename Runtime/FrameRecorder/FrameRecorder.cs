@@ -7,7 +7,7 @@ namespace Prateek.Runtime.FrameRecorder
     {
         #region Fields
         ///-----------------------------------------------------------------
-        private IFrameRecorderOwner owner;
+        private IFrameRecorderOwner Owner { get; set; }
 
         private IRecordedFrame defaultFrame;
         private IRecordedFrame activeFrame;
@@ -23,8 +23,6 @@ namespace Prateek.Runtime.FrameRecorder
         ///-----------------------------------------------------------------
         public FrameRecorder(IFrameRecorderOwner owner)
         {
-            this.owner = owner;
-
             owner.GetDefaultFrame(out defaultFrame);
         }
         #endregion
@@ -59,7 +57,11 @@ namespace Prateek.Runtime.FrameRecorder
         #endregion
 
         #region IGadget Members
-        ///-----------------------------------------------------------------
+        public void Awake()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Kill()
         {
             FrameRecorderRegistry.Unregister(this);

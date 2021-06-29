@@ -3,7 +3,7 @@ namespace Prateek.Runtime.FrameRecorder
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public class FrameRecorderInstantiator
-        : IGadgetInstantiator
+        //: IGadgetInstantiator
     {
         #region IGadgetInstantiator Members
         ///-----------------------------------------------------------------

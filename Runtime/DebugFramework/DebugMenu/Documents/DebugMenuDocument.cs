@@ -76,6 +76,11 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         #endregion
 
         #region IGadget Members
+        public void Awake()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Kill()
         {
             DebugMenuRegistry.Unregister(this);

@@ -12,12 +12,22 @@
         {
             Assert.IsNotNull(owner.GadgetPouch);
 
-            if (owner.GadgetPouch.gadgets.TryGetValue(typeof(TGadget), out var gadget))
-            {
-                return gadget as TGadget;
-            }
+            //if (owner.GadgetPouch.Gadgets.TryGetValue(typeof(TGadget), out var gadget))
+            //{
+            //    return gadget as TGadget;
+            //}
 
             throw new KeyNotFoundException($"Gadget of type {typeof(TGadget).Name} does not exist in the {owner.Name}'s pouch.\nCheck if the AutoRegister has been called properly, or check its gadget instantiator.");
+        }
+        #endregion
+    }
+
+    public static class GadgetInstantiatorExtensions
+    {
+        #region Class Methods
+        public static void Bind<TGadget>(this IGadgetInstantiator instantiator, IGadgetOwner gadgetOwner, TGadget gadget)
+            where TGadget : class, IGadget
+        {
         }
         #endregion
     }

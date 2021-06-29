@@ -4,7 +4,14 @@
     using System.Collections.Generic;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
-    public class GadgetPouch
+    public interface IGadgetPouch
+    {
+        void Add<TGadget>(TGadget gadget)
+            where TGadget : IGadget;
+    }
+
+    internal class GadgetPouch
+        : IGadgetPouch
     {
         #region Fields
         internal Dictionary<Type, IGadget> gadgets = new Dictionary<Type, IGadget>();

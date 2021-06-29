@@ -41,15 +41,9 @@
         #endregion
 
         #region IGadgetOwner Members
-        public GadgetPouch GadgetPouch
-        {
-            get { return gadgetPouch; }
-        }
+        public string Name { get { return name; } }
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public IGadgetPouch GadgetPouch { get; private set; }
         #endregion
 
         #region ITickable Members

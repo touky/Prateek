@@ -48,6 +48,11 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess
         #endregion
 
         #region IGadget Members
+        public void Awake()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Kill()
         {
             //todo: unregister

@@ -4,7 +4,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public class DebugMenuDocumentInstantiator
-        : IGadgetInstantiator
+        //: IGadgetInstantiator
     {
         #region IGadgetInstantiator Members
         public int DefaultPriority
