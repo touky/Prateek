@@ -4,33 +4,26 @@
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.AutoRegistration;
     using Prateek.Runtime.GadgetFramework;
+    using Prateek.Runtime.GadgetFramework.Interfaces;
 
     [Obsolete("validate this")]
     internal class DefaultCommandEmitter
         : ICommandReceiverOwner
     {
-        #region Fields
-        private GadgetPouch gadgetPouch = new GadgetPouch();
-        private ICommandEmitter emitter = null;
-        #endregion
-
-        #region Properties
-        public ICommandEmitter Emitter { get { return emitter; } }
-        #endregion
-
         #region Constructors
         public DefaultCommandEmitter()
         {
             this.AutoRegister();
-
-            emitter = this.Get<ICommandEmitter>();
         }
         #endregion
 
         #region ICommandReceiverOwner Members
-        public string Name { get { return GetType().Name; } }
+        private ICommandReceiver Receiver { get; set; }
+        ICommandReceiver ICommandReceiverOwner.Receiver { get { return Receiver; } }
+        public ICommandEmitter Emitter { get { return Receiver; } }
+        public IGadgetPouch GadgetPouch { get; private set; }
 
-        public IGadgetPouch GadgetPouch { get { return gadgetPouch; } }
+        public string Name { get { return GetType().Name; } }
 
         public void DefineReceptionActions(ICommandReceiver receiver) { }
         #endregion

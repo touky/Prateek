@@ -3,27 +3,28 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess
     using Prateek.Runtime.AppContentFramework.ContentAccess.Interfaces;
     using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
     using Prateek.Runtime.Core.Consts;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public class ContentAccessorInstantiator
-        //: IGadgetInstantiator
+        : IGadgetInstantiator
     {
         #region IGadgetInstantiator Members
         public int DefaultPriority
         {
             get { return typeof(CommandReceiverInstantiator).GetHashCode() + Const.NEXT_ITEM; }
         }
-
-        public void Create(IGadgetOwner owner)
+        
+        public void Declare(IInstantiatorBinder binder)
         {
-            if (!(owner is IContentAccessorOwner contentUser))
-            {
-                return;
-            }
+            binder.BindTo<IContentAccessorOwner>();
+            binder.InjectGadgetTo<ContentAccessor>();
+            binder.AddGadgetAs<ContentAccessor>();
+        }
 
-            var contentAccess = new ContentAccessor(contentUser);
-            owner.GadgetPouch.Add(contentAccess);
-            contentUser.SetupContentAccess(contentAccess);
+        public void Bind(IGadgetBinder binder)
+        {
+            binder.Bind(new ContentAccessor());
         }
         #endregion
     }

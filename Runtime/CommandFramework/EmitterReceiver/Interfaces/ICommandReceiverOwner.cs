@@ -6,6 +6,7 @@ namespace Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces
         : IGadgetOwner
     {
         #region Class Methods
+        ICommandReceiver Receiver { get; }
         void DefineReceptionActions(ICommandReceiver receiver);
         #endregion
     }

@@ -1,25 +1,24 @@
 namespace Prateek.Runtime.FrameRecorder
 {
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public class FrameRecorderInstantiator
-        //: IGadgetInstantiator
+        : IGadgetInstantiator
     {
         #region IGadgetInstantiator Members
-        ///-----------------------------------------------------------------
         public int DefaultPriority { get { return typeof(FrameRecorderInstantiator).GetHashCode(); } }
-
-        ///-----------------------------------------------------------------
-        public void Create(IGadgetOwner owner)
+                
+        public void Declare(IInstantiatorBinder binder)
         {
-            if (!(owner is IFrameRecorderOwner typedOwner))
-            {
-                return;
-            }
+            binder.BindTo<IFrameRecorderOwner>();
+            binder.InjectGadgetTo<FrameRecorder>();
+            binder.AddGadgetAs<FrameRecorder>();
+        }
 
-            var recorder = new FrameRecorder(typedOwner);
-            owner.GadgetPouch.Add(recorder);
-            FrameRecorderRegistry.Register(recorder);
+        public void Bind(IGadgetBinder binder)
+        {
+            binder.Bind(new FrameRecorder());
         }
         #endregion
     }

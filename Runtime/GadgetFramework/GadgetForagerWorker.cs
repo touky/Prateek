@@ -3,43 +3,31 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using ICSharpCode.NRefactory.Ast;
-    using JetBrains.Annotations;
     using Prateek.Runtime.Core.AutoRegistration;
-    using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Interfaces.IPriority;
+    using Prateek.Runtime.DebugFramework.Reflection;
+    using Prateek.Runtime.GadgetFramework.Binding;
     using Prateek.Runtime.GadgetFramework.Interfaces;
-
-    public interface IInstantiatorBinder
-    {
-        void BindTo<TOwner>()
-            where TOwner : IGadgetOwner;
-        
-        void InjectGadgetTo<TGadget>()
-            where TGadget : class, IGadget;
-
-        void AddGadgetAs<TGadget>()
-            where TGadget : class, IGadget;
-
-        void AddGadgetAs<TGadget1, TGadget2>()
-            where TGadget1 : class, IGadget
-            where TGadget2 : class, IGadget;
-    }
-
-    public interface IGadgetBinder
-    {
-        void Bind(IGadget gadget);
-    }
+    using UnityEngine;
+    using UnityEngine.Assertions;
 
     public class GadgetForagerWorker
         : AutoRegisterForagerWorker
+        , IPouchProxy
     {
+        private const string FIELD_OWNER = "Owner";
+        private const BindingFlags BINDING_FLAGS = BindingFlags.Instance | BindingFlags.SetProperty | BindingFlags.FlattenHierarchy | BindingFlags.NonPublic | BindingFlags.Public;
+        private static readonly HashSet<Type> highestParents = new HashSet<Type>()
+        {
+            typeof(MonoBehaviour), typeof(Component), typeof(UnityEngine.Object)
+        };
+
         #region Fields
-        private Dictionary<Type, PropertyInfo> ownerSetters = new Dictionary<Type, PropertyInfo>(50);
-        private Dictionary<Type, PropertyInfo> gadgetSetters = new Dictionary<Type, PropertyInfo>(50);
+        private SetterCache cache = new SetterCache();
         private List<IGadgetInstantiator> instantiators = new List<IGadgetInstantiator>();
         private List<InstantiatorBinder> binders = new List<InstantiatorBinder>();
         private GadgetBinder gadgetBinder = new GadgetBinder();
+        private object[] injectedData = new object[1];
         #endregion
 
         #region Class Methods
@@ -56,22 +44,37 @@
         {
             base.WorkDone();
 
+            var pouchSetters = new List<PropertyInfo>();
             var ownerType = typeof(IGadgetOwner);
+            var pouchType = typeof(IGadgetPouch);
             var gadgetType = typeof(IGadget);
             foreach (var foundType in FoundTypes)
             {
-                if (ownerType.IsAssignableFrom(foundType))
+                if (!foundType.IsInterface && ownerType.IsAssignableFrom(foundType))
                 {
-                    ownerSetters.Add(foundType, null);
+                    cache.pouchSetters.Add(foundType, null);
+
+                    var ownerSetters = new List<PropertyInfo>();
+                    if (ReflectionHelper.FindProperties<IGadget>(foundType, ownerSetters, BINDING_FLAGS, highestParents, true))
+                    {
+                        cache.ownerSetters.Add(foundType, ownerSetters);
+                    }
+
+                    pouchSetters.Clear();
+                    if (ReflectionHelper.FindProperties<IGadgetPouch>(foundType, pouchSetters, BINDING_FLAGS, highestParents, true))
+                    {
+                        cache.pouchSetters[foundType] = pouchSetters[0];
+                    }
+
+                    Assert.IsNotNull(cache.pouchSetters[foundType], $"Gadget Owner of type {foundType.Name} does not implement a setter for {pouchType.Name}");
                 }
                 else if (gadgetType.IsAssignableFrom(foundType))
                 {
-                    var setter = foundType.GetProperty("Owner", BindingFlags.Instance | BindingFlags.NonPublic);
-                    if (setter == null)
-                    {
-                        throw new KeyNotFoundException($"Gadget of type '{foundType}' does not have a private setter for its owner.");
-                    }
-                    gadgetSetters.Add(foundType, setter);
+                    var setter = foundType.GetProperty(FIELD_OWNER, BINDING_FLAGS);
+
+                    Assert.IsNotNull(setter, $"Gadget of type '{foundType}' does not have a private setter for its owner.");
+
+                    cache.gadgetSetters.Add(foundType, setter);
                 }
                 else if (!foundType.IsAbstract && !foundType.IsInterface)
                 {
@@ -84,8 +87,10 @@
             foreach (var instantiator in instantiators)
             {
                 var binder = new InstantiatorBinder();
-                instantiator.Declare(binder);
+                binder.pouchProxy = this;
                 binders.Add(binder);
+
+                instantiator.Declare(binder);
             }
         }
 
@@ -109,96 +114,33 @@
                     continue;
                 }
 
+                if (owner.GadgetPouch == null)
+                {
+                    var pouch = new GadgetPouch(owner);
+
+                    injectedData[0] = pouch;
+                    cache.pouchSetters[owner.GetType()].SetMethod.Invoke(owner, injectedData);
+
+                }
+
                 var instantiator = instantiators[i];
 
                 gadgetBinder.owner = owner;
-                gadgetBinder.binder = binder;
+                gadgetBinder.instantiator = binder;
+                gadgetBinder.cache = cache;
 
                 instantiator.Bind(gadgetBinder);
             }
         }
 
         protected override void OnUnregister(IAutoRegister instance) { }
+
+        public void AddToPouch<TGadget>(TGadget gadget, IGadgetPouch pouch)
+            where TGadget : class, IGadget
+        {
+            Assert.IsNotNull(pouch as GadgetPouch);
+            (pouch as GadgetPouch).Add(gadget);
+        }
         #endregion
-        
-        private class InstantiatorBinder
-            : IInstantiatorBinder
-        {
-            public Type ownerType;
-            public Func<IGadgetOwner, bool> ownerValidation;
-            public Action<IGadget, IGadgetOwner> gadgetInjection;
-            public List<Action<IGadget, IGadgetOwner>> GadgetAddition = new List<Action<IGadget, IGadgetOwner>>();
-            private object[] injectedGadget = new object[1];
-
-            public void BindTo<TOwner>()
-                where TOwner : IGadgetOwner
-            {
-                ownerType = typeof(TOwner);
-                ownerValidation = (owner) => { return owner is TOwner; };
-            }
-            
-            public void InjectGadgetTo<TGadget>()
-                where TGadget : class, IGadget
-            {
-                var foundProperty = default(PropertyInfo);
-                foreach (var propertyInfo in ownerType.GetProperties(BindingFlags.Instance | BindingFlags.SetProperty | BindingFlags.NonPublic))
-                {
-                    if (propertyInfo.SetMethod.ReturnType == typeof(TGadget))
-                    {
-                        foundProperty = propertyInfo;
-                        break;
-                    }
-                }
-
-                if (foundProperty == null)
-                {
-                    throw new KeyNotFoundException($"Gadget Owner of type '{ownerType}' does not have a private setter for '{typeof(TGadget)}'.\nFix the owner or do not use InjectGadgetTo()");
-                }
-                
-                gadgetInjection = (gadget, owner) =>
-                {
-                    injectedGadget[0] = gadget;
-                    foundProperty.SetMethod.Invoke(owner, injectedGadget);
-                };
-            }
-
-            public void AddGadgetAs<TGadget>()
-                where TGadget : class, IGadget
-            {
-                GadgetAddition.Add((gadget, owner) => { owner.GadgetPouch.Add(gadget as TGadget); });
-            }
-
-            public void AddGadgetAs<TGadget1, TGadget2>()
-                where TGadget1 : class, IGadget
-                where TGadget2 : class, IGadget
-            {
-                AddGadgetAs<TGadget1>();
-                AddGadgetAs<TGadget2>();
-            }
-        }
-
-        private class GadgetBinder
-            : IGadgetBinder
-        {
-            public InstantiatorBinder binder;
-            public IGadgetOwner owner;
-            public Dictionary<Type, PropertyInfo> gadgetSetters;
-            private object[] injectedOwner = new object[1];
-
-            public void Bind(IGadget gadget)
-            {
-                injectedOwner[0] = owner;
-                gadgetSetters[gadget.GetType()].SetMethod.Invoke(gadget, injectedOwner);
-
-                binder.gadgetInjection.SafeInvoke(gadget, owner);
-
-                for (var ga = 0; ga < binder.GadgetAddition.Count; ga++)
-                {
-                    binder.GadgetAddition[ga](gadget, owner);
-                }
-
-                gadget.Awake();
-            }
-        }
     }
 }

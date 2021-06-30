@@ -14,13 +14,12 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess
     {
         #region Fields
         private ContentAccessRequest accessRequest;
-        private IContentAccessorOwner owner;
+        private IContentAccessorOwner Owner { get; set; }
         #endregion
 
         #region Constructors
-        public ContentAccessor(IContentAccessorOwner owner)
+        public ContentAccessor()
         {
-            this.owner = owner;
         }
         #endregion
 
@@ -35,7 +34,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess
             where TRequest : ContentAccessRequest, new()
             where TResponse : ContentAccessChangedResponse, new()
         {
-            var receiver = owner.Get<ICommandReceiver>();
+            var receiver = Owner.Get<ICommandReceiver>();
             Assert.IsNotNull(receiver);
 
             receiver.SetActionFor(responseAction);
@@ -50,7 +49,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess
         #region IGadget Members
         public void Awake()
         {
-            throw new System.NotImplementedException();
+            Owner.SetupContentAccess(this);
         }
 
         public void Kill()

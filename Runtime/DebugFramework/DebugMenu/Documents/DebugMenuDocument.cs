@@ -11,7 +11,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         , IGadget
     {
         #region Fields
-        private IDebugMenuDocumentOwner owner;
+        private IDebugMenuDocumentOwner Owner { get; set; }
         private bool isDocked = true;
         private List<DebugMenuSection> sections = new List<DebugMenuSection>();
         #endregion
@@ -21,17 +21,8 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         #endregion
 
         #region Constructors
-        public DebugMenuDocument(IDebugMenuDocumentOwner owner) : base()
+        public DebugMenuDocument() : base()
         {
-            this.owner = owner;
-        }
-        #endregion
-
-        #region Register/Unregister
-        internal void Register(string title)
-        {
-            this.title = title;
-            DebugMenuRegistry.Register(this);
         }
         #endregion
 
@@ -50,7 +41,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
                     continue;
                 }
 
-                section.SetOwner(owner);
+                section.SetOwner(Owner);
                 sections.Add(section);
             }
         }
@@ -78,7 +69,10 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         #region IGadget Members
         public void Awake()
         {
-            throw new System.NotImplementedException();
+            Owner.SetupDebugDocument(this, out var title);
+
+            this.title = title;
+            DebugMenuRegistry.Register(this);
         }
 
         public void Kill()

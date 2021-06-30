@@ -24,6 +24,9 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess.Daemons
         #endregion
 
         #region IContentAccessorOwner Members
+        public ContentAccessor ContentAccessor { get; private set; }
+        public ICommandReceiver Receiver { get; private set; }
+
         public virtual void DefineReceptionActions(ICommandReceiver receiver) { }
 
         public virtual void SetupContentAccess(ContentAccessor contentAccessor) { }

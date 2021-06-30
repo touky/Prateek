@@ -5,11 +5,12 @@ namespace Prateek.Runtime.DebugFramework.Reflection
     using System.Diagnostics;
     using System.Reflection;
     using Prateek.Runtime.Core.Consts;
+    using Prateek.Runtime.Core.Extensions;
 
     public static class ReflectionHelper
     {
         #region Static and Constants
-        private static readonly BindingFlags BINDING_FLAGS =
+        private const BindingFlags BINDING_FLAGS =
             BindingFlags.Public |
             BindingFlags.NonPublic |
             BindingFlags.Instance |
@@ -18,10 +19,42 @@ namespace Prateek.Runtime.DebugFramework.Reflection
         #endregion
 
         #region Class Methods
-        public static FieldInfo[] GetAllFieldInfo<TFieldType>(Type classType, bool allHierarchy = false)
+        public static bool FindProperties<TType>(Type owner, List<PropertyInfo> foundProperties, BindingFlags bindingFlags = BINDING_FLAGS, HashSet<Type> highestParents = null, bool searchParent = false)
+        {
+            var type = typeof(TType);
+            var parentType = owner;
+            while (parentType != null)
+            {
+                var properties = parentType.GetProperties(bindingFlags);
+                foreach (var propertyInfo in properties)
+                {
+                    if (bindingFlags.HasFlag(BindingFlags.SetProperty) && propertyInfo.SetMethod == null)
+                    {
+                        continue;
+                    }
+
+                    if (propertyInfo.GetMethod.ReturnType.IsSubclassOf(type)
+                     || type.IsAssignableFrom(propertyInfo.GetMethod.ReturnType))
+                    {
+                        foundProperties.AddUnique(propertyInfo);
+                    }
+                }
+
+                parentType = parentType.BaseType;
+
+                if (highestParents.Contains(parentType))
+                {
+                    break;
+                }
+            }
+
+            return foundProperties.Count > 0;
+        }
+
+        public static FieldInfo[] GetAllFieldInfo<TFieldType>(Type classType, bool searchParent = false)
         {
             var searchType = typeof(TFieldType);
-            if (allHierarchy)
+            if (searchParent)
             {
                 var fieldInfos = new List<FieldInfo>();
                 var baseType   = classType;
@@ -50,14 +83,14 @@ namespace Prateek.Runtime.DebugFramework.Reflection
             return classType.GetFields(BINDING_FLAGS);
         }
 
-        public static FieldInfo SearchFieldInfo(Type containerType, string fieldName, bool exploreInheritance = false)
+        public static FieldInfo SearchFieldInfo(Type containerType, string fieldName, bool searchParent = false)
         {
             var result = (FieldInfo) null;
             do
             {
                 result = containerType.GetField(fieldName, BINDING_FLAGS);
 
-                if (result != null && !exploreInheritance)
+                if (result != null && !searchParent)
                 {
                     break;
                 }

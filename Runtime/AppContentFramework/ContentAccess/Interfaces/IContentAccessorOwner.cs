@@ -6,6 +6,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess.Interfaces
         : ICommandReceiverOwner
     {
         #region Class Methods
+        ContentAccessor ContentAccessor { get; }
         void SetupContentAccess(ContentAccessor contentAccessor);
         #endregion
     }

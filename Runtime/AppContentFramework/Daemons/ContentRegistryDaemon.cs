@@ -106,6 +106,8 @@
         #endregion
 
         #region ICommandReceiverOwner Members
+        public ICommandReceiver Receiver { get; private set; }
+
         public void DefineReceptionActions(ICommandReceiver receiver)
         {
             receiver.SetActionFor<ContentAccessRequest>(OnContentAccessRequest);
@@ -188,7 +190,7 @@
         #region IPreUpdateTickable Members
         public void PreUpdate()
         {
-            this.Get<CommandReceiver>().ProcessReceivedCommands();
+            Receiver.ProcessReceivedCommands();
 
             stateMachine.Step();
         }

@@ -21,9 +21,8 @@ namespace Prateek.Runtime.FrameRecorder
 
         #region Constructors
         ///-----------------------------------------------------------------
-        public FrameRecorder(IFrameRecorderOwner owner)
+        public FrameRecorder()
         {
-            owner.GetDefaultFrame(out defaultFrame);
         }
         #endregion
 
@@ -59,7 +58,9 @@ namespace Prateek.Runtime.FrameRecorder
         #region IGadget Members
         public void Awake()
         {
-            throw new System.NotImplementedException();
+            Owner.GetDefaultFrame(out defaultFrame);
+
+            FrameRecorderRegistry.Register(this);
         }
 
         public void Kill()
