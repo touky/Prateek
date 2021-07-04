@@ -40,7 +40,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration
 
         #region Class Methods
         ///-------------------------------------------------------------
-        public bool SetClassNames(List<Keyword> arguments)
+        public bool SetClassNames(List<IKeyword> arguments)
         {
             if (classInfos.Count == 0)
             {
@@ -64,7 +64,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.RuntimeGeneration
         }
 
         ///-------------------------------------------------------------
-        public bool SetClassVars(List<Keyword> arguments)
+        public bool SetClassVars(List<IKeyword> arguments)
         {
             if (classInfos.Count == 0)
             {

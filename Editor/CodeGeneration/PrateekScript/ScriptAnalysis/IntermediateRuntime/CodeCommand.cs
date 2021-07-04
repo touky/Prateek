@@ -1,6 +1,7 @@
 namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.IntermediateRuntime
 {
     using System.Collections.Generic;
+    using Mono.Cecil.Cil;
     using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbols;
 
     public abstract class CodeCommand
@@ -17,6 +18,11 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Intermediat
         #endregion
 
         #region Class Methods
+        public virtual bool CanAbsorb(Symbol symbol)
+        {
+            return false;
+        }
+
         public virtual void Add(CodeCommand other)
         {
             if (other.comments.Count > 0)
@@ -26,9 +32,8 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Intermediat
             }
         }
 
-        public void Set(IComment comment)
+        public virtual void Add(Symbol symbol)
         {
-            comments.Add(comment);
         }
         #endregion
     }

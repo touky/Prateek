@@ -20,7 +20,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Utils
         public bool needOpenScope;
         public bool needScopeData;
         public bool createNewScriptContent;
-        public Func<FileData, CodeFile, ScriptContent, List<Keyword>, string, bool> onFeedCodeFile;
+        public Func<FileData, CodeFile, ScriptContent, List<IKeyword>, string, bool> onFeedCodeFile;
         public Func<CodeFile, string, bool> onCloseScope;
 
         ///-------------------------------------------------------------
@@ -70,7 +70,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Utils
                     return false;
                 }
 
-                if (codeKeyword.scopeContent.commands.Count == 0)
+                if (codeKeyword.scopeContent.innerCommands.Count == 0)
                 {
                     return false;
                 }

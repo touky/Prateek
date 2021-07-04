@@ -2,12 +2,11 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbo
 {
     using System.Text.RegularExpressions;
 
-    public class VariableSeparator
-        : Symbol<VariableSeparator>
-        , ISeparator
+    public class ScopeCode : Scope<ScopeCode>
     {
         #region Static and Constants
-        private static readonly Regex START = new Regex(",");
+        private static readonly Regex START = new Regex("{");
+        private static readonly Regex END = new Regex("}");
         #endregion
 
         #region Properties
@@ -18,7 +17,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbo
 
         public override Regex End
         {
-            get { return null; }
+            get { return END; }
         }
         #endregion
     }

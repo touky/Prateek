@@ -2,7 +2,9 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbo
 {
     using System.Text.RegularExpressions;
 
-    public class Value : Symbol<Keyword>
+    public class Value
+        : Symbol<Value>
+        , IKeyword
     {
         #region Static and Constants
         private static readonly Regex START = new Regex("([0-9]+)");

@@ -2,12 +2,12 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbo
 {
     using System.Text.RegularExpressions;
 
-    public class VariableSeparator
-        : Symbol<VariableSeparator>
-        , ISeparator
+    public class EndCommandSeparator
+        : Symbol<EndCommandSeparator>
+            , IClearCommand
     {
         #region Static and Constants
-        private static readonly Regex START = new Regex(",");
+        private static readonly Regex START = new Regex(";");
         #endregion
 
         #region Properties

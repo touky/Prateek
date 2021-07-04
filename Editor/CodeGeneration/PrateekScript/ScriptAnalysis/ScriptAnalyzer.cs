@@ -5,7 +5,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
     using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.IntermediateRuntime;
     using Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbols;
 
-    internal class ScriptAnalyzer
+    public class ScriptAnalyzer
     {
         #region Fields
         ///-----------------------------------------------------------------
@@ -20,6 +20,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
         ///-----------------------------------------------------------------
         private Regex endOfLine = new Regex(@"([\r\n$]+)");
 
+        private SymbolRegistry registry;
         private List<Symbol> contentSymbols = new List<Symbol>();
         private CodeScope contentRootScope = null;
 
@@ -68,7 +69,13 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
         #endregion
 
         #region Class Methods
-        ///-----------------------------------------------------------------
+        ///--
+        public ScriptAnalyzer(SymbolRegistry registry)
+        {
+            this.registry = registry;
+        }
+
+        ///--
         public void Init(string content)
         {
             position = 0;
@@ -87,7 +94,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
             {
                 var closestMatch  = (Match) null;
                 var closestSymbol = (Symbol) null;
-                foreach (var symbol in SymbolRegistry.Symbols)
+                foreach (var symbol in registry.Symbols)
                 {
                     var match = symbol.Start.Match(content, position);
                     if (match.Success && (closestMatch == null || match.Index < closestMatch.Index))
@@ -143,20 +150,167 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
         }
 
         ///--
+        public struct CodeContext
+        {
+            public CodeComment latestComments;
+            public CodeScope activeScope;
+            public CodeCommand latestCommand;
+        }
+
         public bool BuildCodeCommands()
         {
             var scopes = new Stack<CodeScope>();
 
-            var latestComments = new CodeComment();
-            var activeScope    = contentRootScope = new CodeScope();
-            var latestCommand  = (CodeCommand) null;
+            contentRootScope = new CodeScope();
+            var ctx = new CodeContext()
+            {
+                latestComments = null,
+                activeScope = contentRootScope,
+                latestCommand = null
+            };
 
+#if true
+            while (CurrentSymbol != null)
+            {
+                var currentSymbol = CurrentSymbol;
+                if (currentSymbol is ISeparator)
+                {
+                    if (ctx.latestCommand == null)
+                    {
+                        return false;
+                    }
+                }
+
+                if (ctx.latestCommand != null
+                     && ctx.latestCommand.CanAbsorb(currentSymbol))
+                {
+                    ctx.latestCommand.Add(currentSymbol);
+                    cursorSymbol++;
+                    continue;
+                }
+
+                if (ctx.activeScope != null
+                    && ctx.activeScope.CanAbsorb(currentSymbol))
+                {
+                    cursorSymbol++;
+                    continue;
+                }
+
+                switch (currentSymbol)
+                {
+                    case ISeparator separator:
+                    {
+                        //If the separator has not been absorbed, it's considered a failure
+                        return false;
+                    }
+                    case IScopeOpen opener:
+                    {
+                        if (ctx.latestCommand != null && !ctx.latestCommand.AllowInternalScope)
+                        {
+                            return false;
+                        }
+
+                        var newScope = registry.SymbolToCommand[currentSymbol.GetType()]() as CodeScope;
+                        if (newScope == null)
+                        {
+                            return false;
+                        }
+
+                        newScope.opener = opener;
+                        newScope.Add(ctx.latestComments);
+                        if (ctx.latestCommand != null)
+                        {
+                            newScope.owner = ctx.latestCommand;
+                            ctx.latestCommand.Add(newScope);
+                        }
+                        else
+                        {
+                            newScope.owner = ctx.activeScope;
+                            ctx.activeScope.Add(newScope);
+                        }
+
+                        scopes.Push(ctx.activeScope);
+                        ctx.activeScope = newScope;
+                        ctx.latestCommand = null;
+
+                        break;
+                    }
+                    case IScopeClose closer:
+                    {
+                        if (scopes.Count == 0)
+                        {
+                            return false;
+                        }
+
+                        if (!ctx.activeScope.Match(closer))
+                        {
+                            return false;
+                        }
+
+                        ctx.activeScope.Close();
+                        ctx.activeScope = scopes.Pop();
+                        ctx.latestComments = new CodeComment();
+                        ctx.latestCommand = null;
+
+                        break;
+                    }
+                    case IComment keywordComment:
+                    case LiteralValue literalValue:
+                    {
+                        var newCommand = registry.SymbolToCommand[currentSymbol.GetType()]() as CodeCommand;
+                        if (newCommand == null)
+                        {
+                            return false;
+                        }
+
+                        if (currentSymbol is IComment)
+                        {
+                            if (ctx.latestComments == null)
+                            {
+                                ctx.latestComments = newCommand as CodeComment;
+                            }
+                        }
+                        else
+                        {
+                            ctx.latestCommand = newCommand;
+                        }
+
+                        newCommand.Add(currentSymbol);
+                        break;
+                    }
+                    case IKeyword keywordSymbol:
+                    {
+                        var newKeyword = registry.SymbolToCommand[currentSymbol.GetType()]() as CodeKeyword;
+                        if (newKeyword == null)
+                        {
+                            return false;
+                        }
+
+                        newKeyword.keyword = keywordSymbol;
+                        newKeyword.Add(ctx.latestComments);
+                        ctx.activeScope.Add(newKeyword);
+
+                        ctx.latestCommand = newKeyword;
+
+                        break;
+                    }
+                    case IClearCommand clearCommand:
+                    {
+                        ctx.latestCommand = null;
+
+                        break;
+                    }
+                }
+
+                cursorSymbol++;
+            }
+#else
             while (CurrentSymbol != null)
             {
                 var currentSymbol = CurrentSymbol;
                 if (currentSymbol is IComment commentSymbol)
                 {
-                    latestComments.Set(commentSymbol);
+                    ctx.latestComments.Set(commentSymbol);
 
                     cursorSymbol++;
                     continue;
@@ -164,25 +318,25 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
 
                 if (currentSymbol is ScopeCodeBegin)
                 {
-                    if (latestCommand != null && !latestCommand.AllowInternalScope)
+                    if (ctx.latestCommand != null && !ctx.latestCommand.AllowInternalScope)
                     {
                         return false;
                     }
 
                     var newScope = new CodeScope();
-                    newScope.Add(latestComments);
-                    if (latestCommand != null)
+                    newScope.Add(ctx.latestComments);
+                    if (ctx.latestCommand != null)
                     {
-                        latestCommand.Add(newScope);
+                        ctx.latestCommand.Add(newScope);
                     }
                     else
                     {
-                        activeScope.Add(newScope);
+                        ctx.activeScope.Add(newScope);
                     }
 
-                    scopes.Push(activeScope);
-                    activeScope = newScope;
-                    latestCommand = null;
+                    scopes.Push(ctx.activeScope);
+                    ctx.activeScope = newScope;
+                    ctx.latestCommand = null;
                 }
                 else if (currentSymbol is ScopeCodeEnd)
                 {
@@ -191,18 +345,18 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
                         return false;
                     }
 
-                    activeScope = scopes.Pop();
-                    latestComments = new CodeComment();
-                    latestCommand = null;
+                    ctx.activeScope = scopes.Pop();
+                    ctx.latestComments = new CodeComment();
+                    ctx.latestCommand = null;
                 }
 
                 if (currentSymbol is Keyword keywordSymbol)
                 {
                     var newKeyword = new CodeKeyword {keyword = keywordSymbol};
-                    newKeyword.Add(latestComments);
-                    activeScope.Add(newKeyword);
+                    newKeyword.Add(ctx.latestComments);
+                    ctx.activeScope.Add(newKeyword);
 
-                    latestCommand = newKeyword;
+                    ctx.latestCommand = newKeyword;
 
                     if (!(NextSymbol is ScopeInvokeBegin))
                     {
@@ -264,7 +418,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
                     var newLiteral = new CodeLiteral();
                     newLiteral.Add(literalSymbol);
 
-                    activeScope.Add(newLiteral);
+                    ctx.activeScope.Add(newLiteral);
 
                     if (!(NextSymbol is LiteralValue))
                     {
@@ -297,9 +451,10 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis
 
                 cursorSymbol++;
             }
+#endif
 
             return true;
         }
-        #endregion
+#endregion
     }
 }

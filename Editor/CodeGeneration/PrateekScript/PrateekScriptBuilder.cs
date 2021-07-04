@@ -87,7 +87,8 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript
                 return BuildResult.ValueType.Success | BuildResult.ValueType.Ignored;
             }
 
-            var analyzer       = new ScriptAnalyzer();
+            var registry       = new PrateekScriptSymbolRegistry();
+            var analyzer       = new ScriptAnalyzer(registry);
             var activeCodeFile = (CodeFile) null;
             var activeScope    = string.Empty;
             var codeFiles      = new List<CodeFile>();
@@ -98,9 +99,10 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript
             {
                 analyzer.FindAllSymbols();
                 analyzer.BuildCodeCommands();
+                return BuildResult.ValueType.LoadingFailed;
 
                 var rootScope = analyzer.ContentRootScope;
-                foreach (var codeCommand in rootScope.commands)
+                foreach (var codeCommand in rootScope.innerCommands)
                 {
                     Profiler.BeginSample($"foreach (var codeCommand in rootScope.commands)");
 
@@ -279,7 +281,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript
             for (var s = 0; scopes != null && s < scopes.Count; s++)
             {
                 var scope = scopes[s];
-                foreach (var codeCommand in scope.commands)
+                foreach (var codeCommand in scope.innerCommands)
                 {
                     if (!(codeCommand is CodeKeyword innerKeyword))
                     {
@@ -293,12 +295,12 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript
                     }
                 }
 
-                if (scope.scopeContent.Count == 0)
+                if (scope.innerScopes.Count == 0)
                 {
                     continue;
                 }
 
-                scopes.InsertRange(s + 1, scope.scopeContent);
+                scopes.InsertRange(s + 1, scope.innerScopes);
             }
 
             if (scopeRule.keywordUsageType != KeywordUsageType.None && scopeRule.onCloseScope != null)

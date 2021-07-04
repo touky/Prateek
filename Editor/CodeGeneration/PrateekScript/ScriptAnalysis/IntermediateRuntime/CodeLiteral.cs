@@ -8,11 +8,19 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Intermediat
         #region Fields
         public List<LiteralValue> literals = new List<LiteralValue>();
         #endregion
-
+        
         #region Class Methods
-        public void Add(LiteralValue literalSymbol)
+        public override bool CanAbsorb(Symbol symbol)
         {
-            literals.Add(literalSymbol);
+            return symbol is LiteralValue;
+        }
+
+        public override void Add(Symbol symbol)
+        {
+            if (symbol is LiteralValue literalValue)
+            {
+                literals.Add(literalValue);
+            }
         }
         #endregion
     }

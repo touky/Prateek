@@ -2,7 +2,9 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbo
 {
     using System.Text.RegularExpressions;
 
-    public class Keyword : Symbol<Keyword>
+    public class Keyword
+        : Symbol<Keyword>
+        , IKeyword
     {
         #region Static and Constants
         private static readonly Regex START = new Regex("([a-zA-Z]+[a-zA-Z0-9_.]*)");

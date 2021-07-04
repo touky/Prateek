@@ -8,8 +8,8 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Intermediat
     public class CodeKeyword : CodeCommand
     {
         #region Fields
-        public Keyword keyword;
-        public List<Keyword> arguments = new List<Keyword>();
+        public IKeyword keyword;
+        public List<IKeyword> arguments = new List<IKeyword>();
         public CodeScope scopeContent;
         #endregion
 
@@ -25,13 +25,28 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.Intermediat
         {
             base.Add(other);
 
-            if (other is CodeScope scope)
+            if (other is CodeScope code)
             {
-                scopeContent = scope;
+                if (scopeContent == code && code.Separator != null)
+                {
+                    foreach (var command in code.innerCommands)
+                    {
+                        if (command is CodeKeyword argument)
+                        {
+                            arguments.Add(argument.keyword);
+                        }
+                    }
+
+                    scopeContent = null;
+                }
+                else
+                {
+                    scopeContent = code;
+                }
             }
         }
 
-        public void Add(Keyword argument)
+        public void Add(IKeyword argument)
         {
             arguments.Add(argument);
         }

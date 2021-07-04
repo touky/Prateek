@@ -188,7 +188,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
             var data = string.Empty;
             if (keywordUsage.needScopeData)
             {
-                foreach (var codeCommand in rootKeyword.scopeContent.commands)
+                foreach (var codeCommand in rootKeyword.scopeContent.innerCommands)
                 {
                     if (!(codeCommand is CodeLiteral codeLiteral))
                     {

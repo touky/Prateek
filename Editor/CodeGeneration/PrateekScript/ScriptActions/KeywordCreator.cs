@@ -46,7 +46,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 
         public static void AddUsing(List<KeywordUsage> keywordUsages, string codeBlock)
         {
-            Func<List<Keyword>, string> feedMethod = (arguments) =>
+            Func<List<IKeyword>, string> feedMethod = (arguments) =>
             {
                 var content = string.Empty;
                 foreach (var argument in arguments)

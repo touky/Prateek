@@ -2,7 +2,9 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptAnalysis.SyntaxSymbo
 {
     using System.Text.RegularExpressions;
 
-    public class CommentMultiline : Symbol<CommentMultiline>, IComment
+    public class CommentMultiline
+        : Symbol<CommentMultiline>
+        , IComment
     {
         #region Static and Constants
         private static readonly Regex START = new Regex(@"/\*");
