@@ -1,5 +1,7 @@
-namespace Prateek.Runtime.DebugFramework.DebugMenu
+namespace Prateek.Runtime.DebugFramework.DebugMenu.Documents
 {
+    using Prateek.Runtime.DebugFramework.DebugMenu.Sections;
+
     public static class DebugMenuDocumentExtensions
     {
         #region Class Methods

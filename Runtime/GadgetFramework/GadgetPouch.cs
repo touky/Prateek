@@ -9,12 +9,12 @@
         : IGadgetPouch
     {
         #region Fields
-        private IGadgetOwner owner;
-        internal Dictionary<Type, IGadget> gadgets = new Dictionary<Type, IGadget>();
+        private GadgetTools.IOwner owner;
+        internal Dictionary<Type, GadgetTools.IGadget> gadgets = new Dictionary<Type, GadgetTools.IGadget>();
         #endregion
 
         #region Constructors
-        public GadgetPouch(IGadgetOwner owner)
+        public GadgetPouch(GadgetTools.IOwner owner)
         {
             this.owner = owner;
         }
@@ -35,7 +35,7 @@
 
         #region Class Methods
         internal void Add<TGadget>(TGadget gadget)
-            where TGadget : IGadget
+            where TGadget : GadgetTools.IGadget
         {
             var key = typeof(TGadget);
             if (gadgets.ContainsKey(key))
@@ -49,7 +49,7 @@
         }
 
         public TGadget Get<TGadget>()
-            where TGadget : class, IGadget
+            where TGadget : class, GadgetTools.IGadget
         {
             if (gadgets.TryGetValue(typeof(TGadget), out var gadget))
             {

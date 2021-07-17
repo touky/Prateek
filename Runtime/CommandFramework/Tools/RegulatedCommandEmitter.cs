@@ -1,12 +1,12 @@
 namespace Prateek.Runtime.CommandFramework.Tools
 {
     using Prateek.Runtime.CommandFramework.Commands.Core;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Gadgets;
     using UnityEngine;
 
     public abstract class RegulatedCommandEmitter<TCommand, TCommandEmitter>
         where TCommand : Command, new()
-        where TCommandEmitter : ICommandEmitter
+        where TCommandEmitter : CommandTools.IEmitter
     {
         #region Static and Constants
         private const float DEFAULT_COOLDOWN = 0.1f;

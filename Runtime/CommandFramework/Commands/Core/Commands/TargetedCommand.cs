@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.CommandFramework.Commands.Core
+namespace Prateek.Runtime.CommandFramework.Commands.Core.Commands
 {
     using System.Diagnostics;
 

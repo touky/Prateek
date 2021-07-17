@@ -1,11 +1,12 @@
-namespace Prateek.Runtime.CommandFramework.Commands.Core
+namespace Prateek.Runtime.CommandFramework.Commands.Core.Interfaces
 {
-    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Commands.Core.Commands;
+    using Prateek.Runtime.CommandFramework.Gadgets;
 
     public interface IRequestCommand
     {
         #region Properties
-        ICommandEmitter Emitter { get; }
+        CommandTools.IEmitter Emitter { get; }
         #endregion
 
         #region Class Methods

@@ -1,7 +1,8 @@
-namespace Prateek.Runtime.CommandFramework.Commands.Core
+namespace Prateek.Runtime.CommandFramework.Commands.Core.Commands
 {
     using System.Diagnostics;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Commands.Core.Interfaces;
+    using Prateek.Runtime.CommandFramework.Gadgets;
 
     /// <summary>
     ///     Sent as a result of a request, a response is sent to the receiver that sent the request
@@ -11,13 +12,13 @@ namespace Prateek.Runtime.CommandFramework.Commands.Core
     {
         #region Fields
         private bool requestFailed = false;
-        private ICommandEmitter recipient = null;
+        private CommandTools.IEmitter recipient = null;
         #endregion
 
         #region Properties
         public bool RequestFailed { get { return requestFailed; } }
 
-        public ICommandEmitter Recipient { get { return recipient; } }
+        public CommandTools.IEmitter Recipient { get { return recipient; } }
 
         //We allow notice type spoofing for Children notices
         public override CommandId CommandId { get { return new CommandId(GetType(), recipient); } }

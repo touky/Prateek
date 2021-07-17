@@ -5,17 +5,18 @@ namespace Prateek.Runtime.CommandFramework.Debug
     using System.Runtime.CompilerServices;
     using ImGuiNET;
     using Prateek.Runtime.CommandFramework.Commands.Core;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Gadgets;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.DebugFramework.DebugMenu;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Sections;
     using Prateek.Runtime.DebugFramework.Reflection;
 
     internal class LiveReceiverSection
         : DebugMenuSection<CommandDaemon>
     {
         #region Fields
-        private DebugField<Dictionary<long, HashSet<CommandReceiver>>> receivers = "liveReceivers";
+        private DebugField<Dictionary<long, HashSet<Receiver>>> receivers = "liveReceivers";
         private Dictionary<long, Type> idToTypes = new Dictionary<long, Type>();
         #endregion
 
@@ -88,7 +89,7 @@ namespace Prateek.Runtime.CommandFramework.Debug
             return 0;
         }
 
-        protected ICommandReceiver GetReceiver(long key, int index)
+        protected CommandTools.IReceiver GetReceiver(long key, int index)
         {
             if (this.receivers.Value.TryGetValue(key, out var receivers))
             {

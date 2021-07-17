@@ -1,6 +1,7 @@
-namespace Prateek.Runtime.DebugFramework.DebugMenu
+namespace Prateek.Runtime.DebugFramework.DebugMenu.Sections
 {
     using ImGuiNET;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
 
     public class DefaultMenuSection : DebugMenuSection
     {

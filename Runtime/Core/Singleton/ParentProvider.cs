@@ -3,6 +3,10 @@ namespace Prateek.Runtime.Core.Singleton
     using System.Collections.Generic;
     using UnityEngine;
 
+    /// <summary>
+    /// Provides a 'DontDestroyOnLoad' storage system to set children to a specific parent.
+    /// Use AddChildToParent() to add a transform to the named parent.
+    /// </summary>
     internal class ParentProvider
         : MonoBehaviour
     {
@@ -36,6 +40,12 @@ namespace Prateek.Runtime.Core.Singleton
             Destroy(gameObject);
         }
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void DomainReload()
+        {
+            instance = null;
+        }
+
         private static Transform GetParent(string parentName)
         {
             if (!Instance.parents.TryGetValue(parentName, out var parent))
@@ -48,7 +58,7 @@ namespace Prateek.Runtime.Core.Singleton
             return parent;
         }
 
-        internal static void SetParent(Transform transform, string parentName)
+        internal static void AddChildToParent(Transform transform, string parentName)
         {
             var parent = GetParent(parentName);
             transform.SetParent(parent);

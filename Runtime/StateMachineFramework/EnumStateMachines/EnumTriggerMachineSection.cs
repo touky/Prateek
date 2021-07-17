@@ -4,13 +4,14 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     using System.Collections.Generic;
     using ImGuiNET;
     using Prateek.Runtime.DebugFramework.DebugMenu;
-    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
     using Prateek.Runtime.DebugFramework.Reflection;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
 
     public class EnumTriggerMachineSection<TOwner, TStateMachine, TState, TTrigger>
         : EnumStateMachineSection<TOwner, TStateMachine, TState, TTrigger>
-        where TOwner : class, IDebugMenuOwner, IEnumStepMachineOwner<TState>
+        where TOwner : class, DebugMenu.IDebugMenuOwner, IEnumStepMachineOwner<TState>
         where TStateMachine : IStateMachine<TState, TTrigger>
         where TState : struct, IConvertible
         where TTrigger : struct, IConvertible

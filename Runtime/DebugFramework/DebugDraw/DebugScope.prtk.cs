@@ -32,24 +32,17 @@
 
 #define ACTIVE_CODE
 
-namespace Prateek.Runtime.DebugFramework
+namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     // -BEGIN_PRATEEK_CSHARP_NAMESPACE_CODE-
     ///------------------------------------------------------------------------
-    #region Prateek Code Namespaces
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    
+
+    using Prateek.Runtime.Core.Helpers;
     using UnityEngine;
-    
-    using Prateek;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+
+    #region Prateek Code Namespaces
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
-
-    using  Prateek.Runtime.Core.Helpers;
-    using UnityEngine;
 
     ///------------------------------------------------------------------------
 #if ACTIVE_CODE

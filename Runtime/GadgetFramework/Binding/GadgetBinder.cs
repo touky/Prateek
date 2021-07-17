@@ -7,11 +7,11 @@
         : IGadgetBinder
     {
         public InstantiatorBinder instantiator;
-        public IGadgetOwner owner;
+        public GadgetTools.IOwner owner;
         public SetterCache cache;
         private object[] injectedData = new object[1];
 
-        public void Bind(IGadget gadget)
+        public void Bind(GadgetTools.IGadget gadget)
         {
             injectedData[0] = owner;
             cache.gadgetSetters[gadget.GetType()].SetMethod.Invoke(gadget, injectedData);

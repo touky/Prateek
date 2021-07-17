@@ -39,6 +39,42 @@ namespace Prateek.Runtime.Core.Helpers
     public class Fonts : SharedStorage
     {
         ///---------------------------------------------------------------------
+        private static Fonts instance = null;
+
+        private Setup setup;
+
+        ///---------------------------------------------------------------------
+        private static Fonts Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new Fonts();
+                return instance;
+            }
+        }
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void DomainReload()
+        {
+            instance = null;
+        }
+
+        ///---------------------------------------------------------------------
+        public static Font Get(string name, int size)
+        {
+            Instance.setup = new Setup() { name = name, size = size };
+            return Instance.GetInstance(Instance.setup.ToString()) as Font;
+        }
+
+        ///---------------------------------------------------------------------
+        protected override object CreateInstance(string key)
+        {
+            var font = Font.CreateDynamicFontFromOSFont(setup.name, setup.size);
+            font.name = key;
+            return font;
+        }
+
         public struct Setup
         {
             public string name;
@@ -48,34 +84,6 @@ namespace Prateek.Runtime.Core.Helpers
             {
                 return string.Format("{0}_{1}", name, size);
             }
-        }
-        private Setup m_setup;
-
-        ///---------------------------------------------------------------------
-        private static Fonts m_instance = null;
-        private static Fonts Instance
-        {
-            get
-            {
-                if (m_instance == null)
-                    m_instance = new Fonts();
-                return m_instance;
-            }
-        }
-
-        ///---------------------------------------------------------------------
-        public static Font Get(string name, int size)
-        {
-            Instance.m_setup = new Setup() { name = name, size = size };
-            return Instance.GetInstance(Instance.m_setup.ToString()) as Font;
-        }
-
-        ///---------------------------------------------------------------------
-        protected override object CreateInstance(string key)
-        {
-            var font = Font.CreateDynamicFontFromOSFont(m_setup.name, m_setup.size);
-            font.name = key;
-            return font;
         }
     }
 }

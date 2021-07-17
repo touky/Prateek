@@ -2,6 +2,6 @@
 {
     public interface IGadgetBinder
     {
-        void Bind(IGadget gadget);
+        void Bind(GadgetTools.IGadget gadget);
     }
 }

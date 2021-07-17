@@ -1,4 +1,4 @@
-﻿namespace Prateek.Runtime.Core
+﻿namespace Prateek.Runtime.Core.Helpers
 {
     using System.Collections.Generic;
     using System.Diagnostics;

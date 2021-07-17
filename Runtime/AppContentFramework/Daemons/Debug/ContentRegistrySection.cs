@@ -6,7 +6,9 @@
     using Prateek.Runtime.AppContentFramework.Messages;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.DebugFramework.DebugMenu;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
     using Prateek.Runtime.DebugFramework.DebugMenu.Drawers;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Sections;
     using Prateek.Runtime.DebugFramework.Reflection;
 
     internal class ContentRegistrySection
@@ -19,6 +21,10 @@
         #region Fields
         private DebugField<HierarchicalTree<ContentLoader>> hierarchicalTree = "hierarchicalTree";
         private DebugField<HashSet<ContentAccessRequest>> contentAccessRequests = "contentAccessRequests";
+        #endregion
+
+        #region Properties
+        public override Setting Settings { get { return Setting.AddSeparatorAfter; } }
         #endregion
 
         #region Constructors
@@ -47,6 +53,8 @@
             {
                 hierarchicalTree.Value.Draw();
             }
+
+            ImGui.Separator();
         }
         #endregion
     }

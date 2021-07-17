@@ -95,24 +95,6 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         {
             return this as TContentHandle;
         }
-        #endregion
-
-        #region IContentHandle Members
-        public bool HasReferences
-        {
-            get { return instanceCount > 0; }
-        }
-
-        public IContentLoader Loader
-        {
-            get { return loader; }
-        }
-
-        public Action<IContentHandle> LoadCompleted
-        {
-            set { asyncCompletedAction = value; }
-        }
-        #endregion
 
         public void Load()
         {
@@ -137,6 +119,24 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
                 DecrementReferences();
             }
         }
+        #endregion
+
+        #region IContentHandle Members
+        public bool HasReferences
+        {
+            get { return instanceCount > 0; }
+        }
+
+        public IContentLoader Loader
+        {
+            get { return loader; }
+        }
+
+        public Action<IContentHandle> LoadCompleted
+        {
+            set { asyncCompletedAction = value; }
+        }
+        #endregion
 
         #region IInstanceRef Members
         public void IncrementReferences()

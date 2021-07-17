@@ -1,17 +1,18 @@
 namespace Prateek.Runtime.CommandFramework.Tools
 {
     using Prateek.Runtime.CommandFramework.Commands.Core;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Commands.Core.Commands;
+    using Prateek.Runtime.CommandFramework.Gadgets;
 
     public struct BottledCommandBroadcaster<TNotice>
         where TNotice : BroadcastCommand, new()
     {
         #region Fields
-        private ICommandEmitter emitter;
+        private CommandTools.IEmitter emitter;
         #endregion
 
         #region Constructors
-        public BottledCommandBroadcaster(ICommandEmitter emitter)
+        public BottledCommandBroadcaster(CommandTools.IEmitter emitter)
         {
             this.emitter = emitter;
         }

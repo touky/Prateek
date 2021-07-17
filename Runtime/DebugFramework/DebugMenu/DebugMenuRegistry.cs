@@ -3,6 +3,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
     using System.Collections.Generic;
     using ImGuiNET;
     using Prateek.Runtime.Core.Singleton;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
 
     public sealed class DebugMenuRegistry
         : Registry<DebugMenuRegistry>

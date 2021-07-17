@@ -1,5 +1,6 @@
 namespace Prateek.Runtime.CommandFramework.Commands.Core
 {
+    using Prateek.Runtime.CommandFramework.Commands.Core.Commands;
     using UnityEngine.Assertions;
 
     public static class CommandHelper

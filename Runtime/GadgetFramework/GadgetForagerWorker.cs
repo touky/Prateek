@@ -24,7 +24,7 @@
 
         #region Fields
         private SetterCache cache = new SetterCache();
-        private List<IGadgetInstantiator> instantiators = new List<IGadgetInstantiator>();
+        private List<GadgetTools.IInstantiator> instantiators = new List<GadgetTools.IInstantiator>();
         private List<InstantiatorBinder> binders = new List<InstantiatorBinder>();
         private GadgetBinder gadgetBinder = new GadgetBinder();
         private object[] injectedData = new object[1];
@@ -35,9 +35,9 @@
         {
             base.PrepareSearch();
 
-            Search<IGadget>(SearchFlag.Interface);
-            Search<IGadgetOwner>();
-            Search<IGadgetInstantiator>();
+            Search<GadgetTools.IGadget>(SearchFlag.Interface);
+            Search<GadgetTools.IOwner>();
+            Search<GadgetTools.IInstantiator>();
         }
 
         public override void WorkDone()
@@ -45,9 +45,9 @@
             base.WorkDone();
 
             var pouchSetters = new List<PropertyInfo>();
-            var ownerType = typeof(IGadgetOwner);
+            var ownerType = typeof(GadgetTools.IOwner);
             var pouchType = typeof(IGadgetPouch);
-            var gadgetType = typeof(IGadget);
+            var gadgetType = typeof(GadgetTools.IGadget);
             foreach (var foundType in FoundTypes)
             {
                 if (!foundType.IsInterface && ownerType.IsAssignableFrom(foundType))
@@ -55,7 +55,7 @@
                     cache.pouchSetters.Add(foundType, null);
 
                     var ownerSetters = new List<PropertyInfo>();
-                    if (ReflectionHelper.FindProperties<IGadget>(foundType, ownerSetters, BINDING_FLAGS, highestParents, true))
+                    if (ReflectionHelper.FindProperties<GadgetTools.IGadget>(foundType, ownerSetters, BINDING_FLAGS, highestParents, true))
                     {
                         cache.ownerSetters.Add(foundType, ownerSetters);
                     }
@@ -78,7 +78,7 @@
                 }
                 else if (!foundType.IsAbstract && !foundType.IsInterface)
                 {
-                    instantiators.Add(Activator.CreateInstance(foundType) as IGadgetInstantiator);
+                    instantiators.Add(Activator.CreateInstance(foundType) as GadgetTools.IInstantiator);
                 }
             }
 
@@ -96,12 +96,12 @@
 
         protected override bool Validate(IAutoRegister instance)
         {
-            return instance is IGadgetOwner;
+            return instance is GadgetTools.IOwner;
         }
 
         protected override void OnRegister(IAutoRegister instance)
         {
-            if (!(instance is IGadgetOwner owner))
+            if (!(instance is GadgetTools.IOwner owner))
             {
                 return;
             }
@@ -136,7 +136,7 @@
         protected override void OnUnregister(IAutoRegister instance) { }
 
         public void AddToPouch<TGadget>(TGadget gadget, IGadgetPouch pouch)
-            where TGadget : class, IGadget
+            where TGadget : class, GadgetTools.IGadget
         {
             Assert.IsNotNull(pouch as GadgetPouch);
             (pouch as GadgetPouch).Add(gadget);

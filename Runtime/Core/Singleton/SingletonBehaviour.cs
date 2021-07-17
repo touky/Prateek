@@ -56,6 +56,13 @@ namespace Prateek.Runtime.Core.Singleton
         #endregion
 
         #region Unity Methods
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void DomainReload()
+        {
+            instance = null;
+            isApplicationQuitting = false;
+        }
+
         protected virtual void Awake()
         {
             RegisterInstanceFor(this as TInstance);
@@ -91,7 +98,7 @@ namespace Prateek.Runtime.Core.Singleton
                 parentName = "UNNAMED";
             }
 
-            ParentProvider.SetParent(transform, parentName);
+            ParentProvider.AddChildToParent(transform, parentName);
         }
 
         private void RegisterInstanceFor<TSubClass>(TSubClass registeringInstance) where TSubClass : TInstance

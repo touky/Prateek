@@ -1,4 +1,4 @@
-namespace Prateek.Runtime
+namespace Prateek.Runtime.BootStrap
 {
     using System.Collections.Generic;
     using Prateek.Runtime.AppContentFramework.Local;

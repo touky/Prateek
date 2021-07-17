@@ -7,8 +7,8 @@
     public static class GadgetOwnerExtensions
     {
         #region Class Methods
-        public static TGadget Get<TGadget>(this IGadgetOwner owner)
-            where TGadget : class, IGadget
+        public static TGadget Get<TGadget>(this GadgetTools.IOwner owner)
+            where TGadget : class, GadgetTools.IGadget
         {
             Assert.IsNotNull(owner);
             Assert.IsNotNull(owner.GadgetPouch);

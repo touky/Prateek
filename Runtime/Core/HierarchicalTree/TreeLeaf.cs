@@ -32,7 +32,7 @@
         public TreeLeaf(string name, string extension, TLeaf leafData)
         {
             this.name = name;
-            this.extension = $".{extension.TrimStart('.')}";
+            this.extension = string.IsNullOrEmpty(extension) ? string.Empty : $".{extension.TrimStart('.')}";
             this.leafData = leafData;
         }
         #endregion

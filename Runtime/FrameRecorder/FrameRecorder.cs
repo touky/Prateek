@@ -2,15 +2,15 @@ namespace Prateek.Runtime.FrameRecorder
 {
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
-    public class FrameRecorder
-        : IGadget
+    internal class FrameRecorder
+        : FrameRecord.IRecorder
     {
         #region Fields
         ///-----------------------------------------------------------------
-        private IFrameRecorderOwner Owner { get; set; }
+        private FrameRecord.IOwner Owner { get; set; }
 
-        private IRecordedFrame defaultFrame;
-        private IRecordedFrame activeFrame;
+        private FrameRecord.IRecordedFrame defaultFrame;
+        private FrameRecord.IRecordedFrame activeFrame;
 
         private bool isPlayback;
         #endregion
@@ -28,26 +28,26 @@ namespace Prateek.Runtime.FrameRecorder
 
         #region Class Methods
         ///-----------------------------------------------------------------
-        public IRecordedFrame NewFrame()
+        public FrameRecord.IRecordedFrame NewFrame()
         {
             return defaultFrame.CloneEmpty();
         }
 
         ///-----------------------------------------------------------------
-        public void Open(IRecordedFrame recordedFrame)
+        public void Open(FrameRecord.IRecordedFrame recordedFrame)
         {
             activeFrame = recordedFrame;
             activeFrame.Open();
         }
 
         ///-----------------------------------------------------------------
-        public void Close(IRecordedFrame recordedFrame)
+        public void Close(FrameRecord.IRecordedFrame recordedFrame)
         {
             activeFrame.Close();
         }
 
         ///-----------------------------------------------------------------
-        public void Play(IRecordedFrame recordedFrame, bool isPlayback)
+        public void Play(FrameRecord.IRecordedFrame recordedFrame, bool isPlayback)
         {
             this.isPlayback = isPlayback;
             activeFrame = recordedFrame;

@@ -32,7 +32,7 @@
 
 //-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG
-namespace Prateek.Runtime.DebugFramework
+namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     using UnityEngine;
     using static Prateek.Runtime.Core.Extensions.Statics;

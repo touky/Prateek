@@ -1,13 +1,18 @@
-namespace Prateek.Runtime.DebugFramework.DebugMenu
+namespace Prateek.Runtime.DebugFramework.DebugMenu.Sections
 {
-    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using System;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
     using Prateek.Runtime.DebugFramework.Reflection;
 
     public abstract class DebugMenuSection
         : DebugMenuObject
     {
         #region Fields
-        private IDebugMenuOwner owner;
+        private DebugMenu.IDebugMenuOwner owner;
+        #endregion
+
+        #region Properties
+        public virtual Setting Settings { get { return Setting.Nothing; } }
         #endregion
 
         #region Constructors
@@ -16,7 +21,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         #endregion
 
         #region Class Methods
-        internal void SetOwner(IDebugMenuOwner owner)
+        internal void SetOwner(DebugMenu.IDebugMenuOwner owner)
         {
             if (this.owner == null)
             {
@@ -29,7 +34,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         }
 
         protected TOwner GetOwner<TOwner>()
-            where TOwner : class, IDebugMenuOwner
+            where TOwner : class, DebugMenu.IDebugMenuOwner
         {
             return owner as TOwner;
         }
@@ -38,5 +43,14 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
         {
         }
         #endregion
+
+        [Flags]
+        public enum Setting
+        {
+            Nothing = 0,
+
+            AddSeparatorBefore = 1 << 0,
+            AddSeparatorAfter = 1 << 1,
+        }
     }
 }

@@ -1,12 +1,11 @@
 //#PRATEEK:#PRATEEK_DEFINE_SECTION#
 
-namespace Prateek.Runtime.DebugFramework
+namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     //#PRATEEK:#PRATEEK_CSHARP_NAMESPACE_CODE#
 
     //#PRATEEK:#PRATEEK_USING_NAMESPACE#
     using UnityEngine;
-    using ScopeRegistry = DebugDisplayRegistry;
 
     ///---------------------------------------------------------------------
 #if ACTIVE_CODE

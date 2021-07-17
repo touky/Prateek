@@ -2,26 +2,27 @@
 {
     using System.Collections.Generic;
     using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.Core.Commands;
     using Prateek.Runtime.CommandFramework.Debug;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Gadgets;
     using Prateek.Runtime.CommandFramework.Servants;
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.DebugFramework.DebugMenu;
-    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.TickableFramework.Interfaces;
 
     #region Nested type: MessageService
     public sealed class CommandDaemon
         : DaemonOverseer<CommandDaemon, CommandServant>
-        , IDebugMenuDocumentOwner
+        , DebugMenu.IDocumentOwner
         , IEarlyUpdateTickable
     {
         #region Fields
         private readonly object noticeLock = new object();
-        private Dictionary<long, HashSet<CommandReceiver>> liveReceivers;
+        private Dictionary<long, HashSet<Receiver>> liveReceivers;
 
         private DefaultCommandEmitter defaultEmitter;
 
@@ -30,7 +31,7 @@
         #endregion
 
         #region Properties
-        public static ICommandEmitter DefaultEmitter
+        public static CommandTools.IEmitter DefaultEmitter
         {
             get { return Instance.defaultEmitter.Emitter; }
         }
@@ -115,7 +116,7 @@
 
             if (liveReceivers == null)
             {
-                liveReceivers = new Dictionary<long, HashSet<CommandReceiver>>();
+                liveReceivers = new Dictionary<long, HashSet<Receiver>>();
             }
 
             commandCached = new List<Command>();
@@ -128,45 +129,45 @@
             defaultEmitter = new DefaultCommandEmitter();
         }
 
-        internal static void FlushPendingActions(CommandReceiver commandReceiver)
+        internal static void FlushPendingActions(Receiver receiver)
         {
-            Instance.Unregister(commandReceiver);
-            Instance.Register(commandReceiver);
+            Instance.Unregister(receiver);
+            Instance.Register(receiver);
         }
 
-        private void Register(CommandReceiver commandReceiver)
+        private void Register(Receiver receiver)
         {
-            foreach (var commandId in commandReceiver.ActionsToRegister)
+            foreach (var commandId in receiver.ActionsToRegister)
             {
                 var keyId = commandId.Key;
                 if (!liveReceivers.TryGetValue(keyId, out var receivers))
                 {
-                    receivers = new HashSet<CommandReceiver>();
+                    receivers = new HashSet<Receiver>();
                     liveReceivers.Add(keyId, receivers);
                 }
 
                 if (commandId.Type.IsSubclassOf(typeof(TargetedCommand)))
                 {
-                    if (receivers.Count > 0 && !receivers.Contains(commandReceiver))
+                    if (receivers.Count > 0 && !receivers.Contains(receiver))
                     {
                         //This should not happen
                         System.Diagnostics.Debug.Assert(false, $"{keyId}: Another noticeReceiver is already registered on this notice !!!!");
                     }
                 }
 
-                receivers.Add(commandReceiver);
+                receivers.Add(receiver);
 
                 this.Get<DebugMenuDocument>().Section<LiveReceiverSection>().AddCommandType(commandId.Type);
             }
         }
 
-        private void Unregister(CommandReceiver commandReceiver)
+        private void Unregister(Receiver receiver)
         {
-            foreach (var commandId in commandReceiver.ActionsToUnregister)
+            foreach (var commandId in receiver.ActionsToUnregister)
             {
                 if (liveReceivers.TryGetValue(commandId.Key, out var receivers))
                 {
-                    receivers.Remove(commandReceiver);
+                    receivers.Remove(receiver);
                 }
             }
         }

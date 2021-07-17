@@ -8,21 +8,21 @@
         : IInstantiatorBinder
     {
         public Type ownerType;
-        public Func<IGadgetOwner, bool> ownerValidation;
-        public Action<IGadget, GadgetBinder> gadgetInjection;
+        public Func<GadgetTools.IOwner, bool> ownerValidation;
+        public Action<GadgetTools.IGadget, GadgetBinder> gadgetInjection;
         public IPouchProxy pouchProxy;
-        public List<Action<IGadget, IGadgetOwner>> GadgetAddition = new List<Action<IGadget, IGadgetOwner>>();
+        public List<Action<GadgetTools.IGadget, GadgetTools.IOwner>> GadgetAddition = new List<Action<GadgetTools.IGadget, GadgetTools.IOwner>>();
         private object[] injectedGadget = new object[1];
 
         public void BindTo<TOwner>()
-            where TOwner : IGadgetOwner
+            where TOwner : GadgetTools.IOwner
         {
             ownerType = typeof(TOwner);
             ownerValidation = (owner) => { return owner is TOwner; };
         }
             
         public void InjectGadgetTo<TGadget>()
-            where TGadget : class, IGadget
+            where TGadget : class, GadgetTools.IGadget
         {
             gadgetInjection = (gadget, binder) =>
             {
@@ -46,14 +46,14 @@
         }
 
         public void AddGadgetAs<TGadget>()
-            where TGadget : class, IGadget
+            where TGadget : class, GadgetTools.IGadget
         {
             GadgetAddition.Add((gadget, owner) => { pouchProxy.AddToPouch(gadget as TGadget, owner.GadgetPouch); });
         }
 
         public void AddGadgetAs<TGadget1, TGadget2>()
-            where TGadget1 : class, IGadget
-            where TGadget2 : class, IGadget
+            where TGadget1 : class, GadgetTools.IGadget
+            where TGadget2 : class, GadgetTools.IGadget
         {
             AddGadgetAs<TGadget1>();
             AddGadgetAs<TGadget2>();

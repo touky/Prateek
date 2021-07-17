@@ -4,12 +4,14 @@
     using ImGuiNET;
     using Prateek.Runtime.DaemonFramework.Interfaces;
     using Prateek.Runtime.DebugFramework.DebugMenu;
-    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Sections;
     using Prateek.Runtime.DebugFramework.Reflection;
 
     public class DaemonOverseerSection<TDaemonOverseer, TServant>
         : DebugMenuSection<TDaemonOverseer>
-        where TDaemonOverseer : DaemonOverseer<TDaemonOverseer, TServant>, IDebugMenuOwner
+        where TDaemonOverseer : DaemonOverseer<TDaemonOverseer, TServant>, DebugMenu.IDebugMenuOwner
         where TServant : class, IServant
     {
         #region Static and Constants

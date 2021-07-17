@@ -1,6 +1,8 @@
 namespace Prateek.Runtime.AppContentFramework.Messages
 {
     using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.Core.Commands;
+    using Prateek.Runtime.CommandFramework.Commands.Core.Interfaces;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
     using UnityEngine.Assertions;
 

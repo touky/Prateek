@@ -4,6 +4,7 @@ namespace Prateek.Runtime.CommandFramework.Commands.ContentById
     using System.Diagnostics;
     using Prateek.Runtime.CommandFramework.Commands.ContentById.Interfaces;
     using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.Core.Commands;
     using Prateek.Runtime.KeynameFramework;
     using Prateek.Runtime.KeynameFramework.Enums;
 

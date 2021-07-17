@@ -1,11 +1,13 @@
 namespace Prateek.Runtime.AppContentFramework.ContentAccess
 {
     using System;
+    using Prateek.Runtime.AppContentFramework.ContentAccess.Interfaces;
     using Prateek.Runtime.Core.HierarchicalTree;
     using UnityEngine;
 
     [Serializable]
     public class ContentAccessSettings
+        : IContentAccessSettings
     {
         #region Settings
         [SerializeField]

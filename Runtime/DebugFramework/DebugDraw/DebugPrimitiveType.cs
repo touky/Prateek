@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.DebugFramework
+namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     ///---------------------------------------------------------------------
     public enum DebugPrimitiveType

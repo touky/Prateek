@@ -3,6 +3,6 @@
     public interface IGadgetPouch
     {
         TGadget Get<TGadget>()
-            where TGadget : class, IGadget;
+            where TGadget : class, GadgetTools.IGadget;
     }
 }

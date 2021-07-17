@@ -1,7 +1,7 @@
 namespace Prateek.Runtime.CommandFramework.Commands.Core
 {
     using System.Diagnostics;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Gadgets;
     using Prateek.Runtime.Core.Extensions;
 
     /// <summary>
@@ -11,11 +11,11 @@ namespace Prateek.Runtime.CommandFramework.Commands.Core
     public abstract class Command
     {
         #region Fields
-        private ICommandEmitter emitter;
+        private CommandTools.IEmitter emitter;
         #endregion
 
         #region Properties
-        public ICommandEmitter Emitter { get { return emitter; } set { emitter = value; } }
+        public CommandTools.IEmitter Emitter { get { return emitter; } set { emitter = value; } }
 
         //We allow notice type spoofing for Children commands ids
         public virtual CommandId CommandId { get { return GetType(); } }

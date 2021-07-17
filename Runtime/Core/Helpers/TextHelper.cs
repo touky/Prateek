@@ -35,6 +35,7 @@ namespace Prateek.Runtime.Core.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using UnityEngine;
     using UnityEngine.Serialization;
 
     ///-------------------------------------------------------------------------
@@ -48,6 +49,12 @@ namespace Prateek.Runtime.Core.Helpers
 
         ///---------------------------------------------------------------------
         private static Dictionary<Id, string> m_texts = new Dictionary<Id, string>();
+                
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void DomainReload()
+        {
+            m_texts.Clear();
+        }
 
         ///---------------------------------------------------------------------
         static StaticText()

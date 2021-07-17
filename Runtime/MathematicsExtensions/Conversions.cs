@@ -1,9 +1,12 @@
-using UnityEngine;
+
 
 //#pragma warning disable 0660, 0661
 
-namespace Unity.Mathematics
+namespace Prateek.Runtime.MathematicsExtensions
 {
+    using Unity.Mathematics;
+    using UnityEngine;
+
     public static class MathematicsExtensions
     {
         public static Vector2Int Unity(int2 v) { return new Vector2Int(v.x, v.y); }

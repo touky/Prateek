@@ -32,7 +32,7 @@
 
 #if PRATEEK_DEBUG
 ///-----------------------------------------------------------------------------
-namespace Prateek.Runtime.DebugFramework
+namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     using System.Collections.Generic;
     using Prateek.Runtime.Core.Extensions;
@@ -160,7 +160,7 @@ namespace Prateek.Runtime.DebugFramework
         public void BeginFrame() { }
 
         ///---------------------------------------------------------------------
-        public IRecordedFrame EndFrame()
+        public FrameRecord.IRecordedFrame EndFrame()
         {
             if (timedPrimitives == null)
                 return null;
@@ -175,7 +175,7 @@ namespace Prateek.Runtime.DebugFramework
         }
 
         ///---------------------------------------------------------------------
-        public void PlayFrame(IRecordedFrame recordedFrame)
+        public void PlayFrame(FrameRecord.IRecordedFrame recordedFrame)
         {
             var recordings = (DebugDisplayFrame)recordedFrame;
             for (int r = 0; r < recordings.FramePrimitives.Count; r++)

@@ -1,7 +1,8 @@
 namespace Prateek.Runtime.AppContentFramework.ContentAccess.Daemons
 {
+    using Prateek.Runtime.AppContentFramework.ContentAccess.Gadgets;
     using Prateek.Runtime.AppContentFramework.ContentAccess.Interfaces;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Gadgets;
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.GadgetFramework;
@@ -10,7 +11,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess.Daemons
     public abstract class ContentAccessDaemonOverseer<TDaemon, TServant>
         : DaemonOverseer<TDaemon, TServant>
         , IEarlyUpdateTickable
-        , IContentAccessorOwner
+        , ContentAccess.IAccessorOwner
         where TDaemon : ContentAccessDaemonOverseer<TDaemon, TServant>
         where TServant : ContentAccessServant<TDaemon, TServant>
     {
@@ -24,18 +25,18 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess.Daemons
         #endregion
 
         #region IContentAccessorOwner Members
-        public ContentAccessor ContentAccessor { get; private set; }
-        public ICommandReceiver Receiver { get; private set; }
+        public ContentAccess.IAccessor ContentAccessor { get; private set; }
+        public CommandTools.IReceiver Receiver { get; private set; }
 
-        public virtual void DefineReceptionActions(ICommandReceiver receiver) { }
+        public virtual void DefineReceptionActions(CommandTools.IReceiver receiver) { }
 
-        public virtual void SetupContentAccess(ContentAccessor contentAccessor) { }
+        public virtual void SetupContentAccess(ContentAccess.IAccessor contentAccessor) { }
         #endregion
 
         #region IEarlyUpdateTickable Members
         public virtual void EarlyUpdate()
         {
-            this.Get<ICommandReceiver>().ProcessReceivedCommands();
+            this.Get<CommandTools.IReceiver>().ProcessReceivedCommands();
         }
 
         public int Priority(IPriority<IEarlyUpdateTickable> type)

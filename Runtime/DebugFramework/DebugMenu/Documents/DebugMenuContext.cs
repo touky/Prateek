@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.DebugFramework.DebugMenu
+namespace Prateek.Runtime.DebugFramework.DebugMenu.Documents
 {
     public class DebugMenuContext { }
 }

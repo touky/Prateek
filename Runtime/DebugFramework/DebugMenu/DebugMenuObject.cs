@@ -1,5 +1,7 @@
 namespace Prateek.Runtime.DebugFramework.DebugMenu
 {
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+
     public abstract class DebugMenuObject
     {
         #region Fields

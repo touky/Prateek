@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.DebugFramework
+namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     using Prateek.Runtime.Core.Extensions;
     using UnityEngine;

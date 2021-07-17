@@ -3,6 +3,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables.Debug
     using ImGuiNET;
     using Prateek.Runtime.AppContentFramework.Daemons.Debug;
     using Prateek.Runtime.DebugFramework.DebugMenu;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
     using Prateek.Runtime.DebugFramework.Reflection;
 
     public class AddressableRegistrySection

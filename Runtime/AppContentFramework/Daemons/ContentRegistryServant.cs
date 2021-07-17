@@ -2,10 +2,12 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
 {
     using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.Core;
+    using Prateek.Runtime.Core.Helpers;
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework.Servants;
     using Prateek.Runtime.DebugFramework.DebugMenu;
-    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
@@ -16,7 +18,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         : TickableServant<ContentRegistryDaemon, ContentRegistryServant>
         , IEnumStepMachineOwner<ContentRegistryServant.State>
         , IEarlyUpdateTickable
-        , IDebugMenuDocumentServant
+        , DebugMenu.IDocumentServant
     {
         #region State enum
         public enum State
@@ -58,7 +60,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
 
             InitStateMachine();
 
-            (this as IDebugMenuDocumentServant).SetupDebugDocument();
+            (this as DebugMenu.IDocumentServant).SetupDebugDocument();
         }
 
         private void InitStateMachine()
@@ -129,7 +131,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         #endregion
 
         #region IDebugMenuDocumentServant Members
-        void IDebugMenuDocumentServant.SetupDebugDocument()
+        void DebugMenu.IDocumentServant.SetupDebugDocument()
         {
             SetupDebugDocument(Overseer.Get<DebugMenuDocument>());
         }

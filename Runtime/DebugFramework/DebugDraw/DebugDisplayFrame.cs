@@ -1,10 +1,11 @@
-namespace Prateek.Runtime.DebugFramework
+namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     using System.Collections.Generic;
     using Prateek.Runtime.FrameRecorder;
 
     ///---------------------------------------------------------------------
-    internal struct DebugDisplayFrame : IRecordedFrame
+    internal struct DebugDisplayFrame
+        : FrameRecord.IRecordedFrame
     {
         ///-----------------------------------------------------------------
         private DebugDisplayRegistry owner;
@@ -22,7 +23,7 @@ namespace Prateek.Runtime.DebugFramework
             }
         }
 
-        public FrameRecorder SourceRecorder => throw new System.NotImplementedException();
+        public FrameRecord.IRecorder SourceRecorder => throw new System.NotImplementedException();
 
         ///-----------------------------------------------------------------
         public DebugDisplayFrame(DebugDisplayRegistry owner)
@@ -46,7 +47,7 @@ namespace Prateek.Runtime.DebugFramework
             throw new System.NotImplementedException();
         }
 
-        public IRecordedFrame CloneEmpty()
+        public FrameRecord.IRecordedFrame CloneEmpty()
         {
             throw new System.NotImplementedException();
         }

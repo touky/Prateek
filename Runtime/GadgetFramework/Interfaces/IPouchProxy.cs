@@ -3,6 +3,6 @@
     internal interface IPouchProxy
     {
         void AddToPouch<TGadget>(TGadget gadget, IGadgetPouch pouch)
-            where TGadget : class, IGadget;
+            where TGadget : class, GadgetTools.IGadget;
     }
 }

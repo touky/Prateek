@@ -7,7 +7,7 @@ namespace Prateek.Runtime.FrameRecorder
     {
         #region Fields
         ///-----------------------------------------------------------------
-        public Dictionary<FrameRecorder, IRecordedFrame> frames = new Dictionary<FrameRecorder, IRecordedFrame>();
+        public Dictionary<FrameRecorder, FrameRecord.IRecordedFrame> frames = new Dictionary<FrameRecorder, FrameRecord.IRecordedFrame>();
         #endregion
 
         #region Class Methods

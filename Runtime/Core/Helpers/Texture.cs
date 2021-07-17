@@ -42,32 +42,24 @@ namespace Prateek.Runtime.Core.Helpers
     public class Textures : SharedStorage
     {
         ///---------------------------------------------------------------------
-        public struct Setup
-        {
-            public Rect inner_rect;
-            public Color content;
-            public Color border;
-
-            public override string ToString()
-            {
-                return string.Format("{0:F2}_{1:F2}_{2:F2}_{3:F2}_{4}_{5}",
-                                    inner_rect.x, inner_rect.y, inner_rect.width, inner_rect.height,
-                                    Format.ToRichText(content),
-                                    Format.ToRichText(border));
-            }
-        }
-        private Setup m_setup;
+        private static Textures instance = null;
+        private Setup setup;
 
         ///---------------------------------------------------------------------
-        private static Textures m_instance = null;
         private static Textures Instance
         {
             get
             {
-                if (m_instance == null)
-                    m_instance = new Textures();
-                return m_instance;
+                if (instance == null)
+                    instance = new Textures();
+                return instance;
             }
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void DomainReload()
+        {
+            instance = null;
         }
 
         ///---------------------------------------------------------------------
@@ -85,25 +77,25 @@ namespace Prateek.Runtime.Core.Helpers
         ///---------------------------------------------------------------------
         public static Texture2D Make(Rect inner_rect, Color content, Color border)
         {
-            Instance.m_setup = new Setup()
+            Instance.setup = new Setup()
             {
                 inner_rect = inner_rect,
                 content = content,
                 border = border
             };
-            return Instance.GetInstance(Instance.m_setup.ToString()) as Texture2D;
+            return Instance.GetInstance(Instance.setup.ToString()) as Texture2D;
         }
 
         ///---------------------------------------------------------------------
         protected override object CreateInstance(string key)
         {
-            Vector2 size = new Vector2((int)(m_setup.inner_rect.x * 2 + m_setup.inner_rect.width),
-                                       (int)(m_setup.inner_rect.y * 2 + m_setup.inner_rect.height));
+            Vector2 size = new Vector2((int)(setup.inner_rect.x * 2 + setup.inner_rect.width),
+                                       (int)(setup.inner_rect.y * 2 + setup.inner_rect.height));
             Color[] pix = new Color[(int)(size.Area())];
 
             for (int i = 0; i < pix.Length; ++i)
             {
-                pix[i] = m_setup.inner_rect.Contains(i.FromIndex(size)) ? m_setup.content : m_setup.border;
+                pix[i] = setup.inner_rect.Contains(i.FromIndex(size)) ? setup.content : setup.border;
             }
 
             Texture2D result = new Texture2D((int)size.x, (int)size.y);
@@ -112,6 +104,22 @@ namespace Prateek.Runtime.Core.Helpers
             result.Apply();
             result.filterMode = FilterMode.Point;
             return result;
+        }
+
+        ///---------------------------------------------------------------------
+        public struct Setup
+        {
+            public Rect inner_rect;
+            public Color content;
+            public Color border;
+
+            public override string ToString()
+            {
+                return string.Format("{0:F2}_{1:F2}_{2:F2}_{3:F2}_{4}_{5}",
+                    inner_rect.x, inner_rect.y, inner_rect.width, inner_rect.height,
+                    Format.ToRichText(content),
+                    Format.ToRichText(border));
+            }
         }
 
         ///---------------------------------------------------------------------

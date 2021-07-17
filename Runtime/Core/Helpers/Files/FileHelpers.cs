@@ -44,13 +44,30 @@ namespace Prateek.Runtime.Core.Helpers.Files
     public static class FileHelpers
     {
         ///---------------------------------------------------------------------
+        private static string applicationDataPath;
+        private static string applicationStreamingAssetsPath;
+        private static string applicationPersistentDataPath;
+        private static string applicationTemporaryCachePath;
+        private static string editorApplicationApplicationContentsPath;
+        private static string editorApplicationApplicationPath;
+        private static string[] prateekInternalFolders;
+
+        ///---------------------------------------------------------------------
         public interface IExtensionMatcher { string Extension { get; } }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void DomainReload()
+        {
+            InitIO();
+        }
+
         public static string BuildExtensionMatch(string extension) { return string.Format("\\.({0})$", extension); }
 
         public static string BuildExtensionMatch<T>(IList<T> list) where T : IExtensionMatcher
         {
             return BuildExtensionMatch((IReadOnlyList<T>)list);
         }
+
         public static string BuildExtensionMatch<T>(IReadOnlyList<T> list) where T : IExtensionMatcher
         {
             if (list == null)
@@ -189,15 +206,6 @@ namespace Prateek.Runtime.Core.Helpers.Files
 
         public static string GetValidDirectory(string path) { return GetValidIO(path, false); }
         public static string GetValidFile(string path) { return GetValidIO(path, true); }
-
-        ///---------------------------------------------------------------------
-        private static string applicationDataPath;
-        private static string applicationStreamingAssetsPath;
-        private static string applicationPersistentDataPath;
-        private static string applicationTemporaryCachePath;
-        private static string editorApplicationApplicationContentsPath;
-        private static string editorApplicationApplicationPath;
-        private static string[] prateekInternalFolders;
 
         ///---------------------------------------------------------------------
         ///todo check if still valid

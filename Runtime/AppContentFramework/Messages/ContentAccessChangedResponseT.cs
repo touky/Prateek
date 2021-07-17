@@ -2,6 +2,7 @@ namespace Prateek.Runtime.AppContentFramework.Messages
 {
     using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.Core;
+    using Prateek.Runtime.Core.Helpers;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
     public abstract class ContentAccessChangedResponse<TContentType, TContentHandle>

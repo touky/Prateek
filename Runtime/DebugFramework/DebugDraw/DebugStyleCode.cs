@@ -1,6 +1,6 @@
 //#PRATEEK:#PRATEEK_DEFINE_SECTION#
 
-namespace Prateek.Runtime.DebugFramework
+namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     //#PRATEEK:#PRATEEK_CSHARP_NAMESPACE_CODE#
 

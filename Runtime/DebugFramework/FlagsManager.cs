@@ -43,6 +43,7 @@ namespace Prateek.Runtime.DebugFramework
     using UnityEngine.Assertions;
 
     ///-------------------------------------------------------------------------
+    /// Debug flag manager to keep track of the debug flags
     public sealed class FlagManager<TRootKeyword, TRootMetaword>
         where TRootKeyword : MasterKeyword
         where TRootMetaword : IMasterMetaword

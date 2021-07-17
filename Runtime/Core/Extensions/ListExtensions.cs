@@ -36,6 +36,7 @@ namespace Prateek.Runtime.Core.Extensions
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using UnityEngine;
 
     ///-------------------------------------------------------------------------
     public static class ListExtensions
@@ -45,6 +46,12 @@ namespace Prateek.Runtime.Core.Extensions
         #endregion
 
         #region Class Methods
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void DomainReload()
+        {
+            emptyLists = new Dictionary<Type, IList>();
+        }
+
         ///---------------------------------------------------------------------
         public static IReadOnlyList<T> SafeReadOnly<T>(this List<T> list)
         {

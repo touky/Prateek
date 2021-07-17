@@ -53,9 +53,9 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu.Drawers
 
                     if (leaves.Value != null)
                     {
-                        using (var leafNode = ImGuiUn.ScopeTreeNode(leaves.Name))
+                        using (var leafNode = branches.Value != null ? ImGuiUn.ScopeTreeNode(leaves.Name) : null)
                         {
-                            if (!leafNode.IsOpen)
+                            if (leafNode != null && !leafNode.IsOpen)
                             {
                                 return;
                             }

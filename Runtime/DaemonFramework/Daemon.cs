@@ -15,7 +15,7 @@
     public abstract class Daemon<TDaemon>
         : SingletonBehaviour<TDaemon>
         , ITickable
-        , IGadgetOwner
+        , GadgetTools.IOwner
         where TDaemon : Daemon<TDaemon>
     {
         #region Properties

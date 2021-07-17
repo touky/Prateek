@@ -1,11 +1,10 @@
-namespace Prateek.Runtime.DebugFramework.DebugMenu
+namespace Prateek.Runtime.DebugFramework.DebugMenu.Sections
 {
-    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
-    using Prateek.Runtime.DebugFramework.Reflection;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
 
     public abstract class DebugMenuSection<TOwnerType>
         : DebugMenuSection
-        where TOwnerType : class, IDebugMenuOwner
+        where TOwnerType : class, DebugMenu.IDebugMenuOwner
     {
         #region Properties
         public TOwnerType Owner

@@ -4,6 +4,7 @@ namespace Prateek.Runtime.CommandFramework.Commands.ContentById
     using System.Collections.Generic;
     using Prateek.Runtime.CommandFramework.Commands.ContentById.Interfaces;
     using Prateek.Runtime.CommandFramework.Commands.Core;
+    using Prateek.Runtime.CommandFramework.Commands.Core.Commands;
 
     /// <summary>
     ///     Base response for any system that implement ContentByKeynameRequest

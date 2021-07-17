@@ -255,8 +255,8 @@ namespace Prateek.Runtime.FrameRecorder
             ///-----------------------------------------------------------------
             void BeginFrame();
 
-            IRecordedFrame EndFrame();
-            void PlayFrame(IRecordedFrame recordedFrame);
+            FrameRecord.IRecordedFrame EndFrame();
+            void PlayFrame(FrameRecord.IRecordedFrame recordedFrame);
             #endregion
         }
         #endregion

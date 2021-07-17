@@ -1,6 +1,8 @@
 ﻿namespace Prateek.Runtime.Core.FrameworkSettings
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using UnityEngine;
 
     /// <summary>
@@ -50,6 +52,12 @@
         #endregion
 
         #region Class Methods
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void DomainReload()
+        {
+            defaultInstance = null;
+        }
+
         protected override void Init()
         {
             var path = DefaultPath;

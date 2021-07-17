@@ -4,15 +4,15 @@
     using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.AppContentFramework.Daemons.Debug;
     using Prateek.Runtime.AppContentFramework.Messages;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver;
-    using Prateek.Runtime.CommandFramework.EmitterReceiver.Interfaces;
+    using Prateek.Runtime.CommandFramework.Gadgets;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DaemonFramework;
     using Prateek.Runtime.DebugFramework.DebugMenu;
-    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
@@ -22,9 +22,9 @@
     public sealed class ContentRegistryDaemon
         : DaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
         , IEnumStepMachineOwner<ContentRegistryDaemon.State>
-        , ICommandReceiverOwner
+        , CommandTools.IReceiverOwner
         , IPreUpdateTickable
-        , IDebugMenuDocumentOwner
+        , DebugMenu.IDocumentOwner
     {
         #region State enum
         public enum State
@@ -106,9 +106,9 @@
         #endregion
 
         #region ICommandReceiverOwner Members
-        public ICommandReceiver Receiver { get; private set; }
+        public CommandTools.IReceiver Receiver { get; private set; }
 
-        public void DefineReceptionActions(ICommandReceiver receiver)
+        public void DefineReceptionActions(CommandTools.IReceiver receiver)
         {
             receiver.SetActionFor<ContentAccessRequest>(OnContentAccessRequest);
         }
@@ -177,7 +177,7 @@
                     {
                         var response = accessRequest.GetResponse<ContentAccessChangedResponse>();
                         hierarchicalTree.SearchTree(accessRequest, response);
-                        this.Get<ICommandReceiver>().Send(response);
+                        this.Get<CommandTools.IReceiver>().Send(response);
                     }
 
                     stateMachine.Trigger(Trigger.NextStep);

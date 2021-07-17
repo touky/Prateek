@@ -1,17 +1,17 @@
-namespace Prateek.Runtime.DebugFramework.DebugMenu
+namespace Prateek.Runtime.DebugFramework.DebugMenu.Documents
 {
     using System.Collections.Generic;
     using ImGuiNET;
-    using Prateek.Runtime.DebugFramework.DebugMenu.Interfaces;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
+    using Prateek.Runtime.DebugFramework.DebugMenu.Sections;
     using Prateek.Runtime.GadgetFramework.Interfaces;
-    using UnityEngine;
 
     public class DebugMenuDocument
         : DebugMenuObject
-        , IGadget
+        , GadgetTools.IGadget
     {
         #region Fields
-        private IDebugMenuDocumentOwner Owner { get; set; }
+        private DebugMenu.IDocumentOwner Owner { get; set; }
         private bool isDocked = true;
         private List<DebugMenuSection> sections = new List<DebugMenuSection>();
         #endregion
@@ -53,14 +53,25 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu
                 isDocked = !isDocked;
             }
 
-            foreach (var section in sections)
+            for (int s = 0; s < sections.Count; s++)
             {
+                var section = sections[s];
+                if (s > 0 && section.Settings.HasFlag(DebugMenuSection.Setting.AddSeparatorBefore))
+                {
+                    ImGui.Separator();
+                }
+
                 if (ImGui.CollapsingHeader(section.Title))
                 {
                     using (new ScopeIndent())
                     {
                         section.Draw(context);
                     }
+                }
+
+                if (s < sections.Count - 1 && section.Settings.HasFlag(DebugMenuSection.Setting.AddSeparatorAfter))
+                {
+                    ImGui.Separator();
                 }
             }
         }
