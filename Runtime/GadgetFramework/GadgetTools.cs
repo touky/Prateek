@@ -1,7 +1,8 @@
-﻿namespace Prateek.Runtime.GadgetFramework.Interfaces
+﻿namespace Prateek.Runtime.GadgetFramework
 {
     using Prateek.Runtime.Core.AutoRegistration;
     using Prateek.Runtime.Core.Interfaces.IPriority;
+    using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public abstract class GadgetTools
     {

@@ -4,6 +4,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess.Gadgets
     using Prateek.Runtime.AppContentFramework.Messages;
     using Prateek.Runtime.CommandFramework.Gadgets;
     using Prateek.Runtime.Core.Consts;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public abstract class ContentAccess

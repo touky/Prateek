@@ -1,6 +1,7 @@
 namespace Prateek.Runtime.FrameRecorder
 {
     using JetBrains.Annotations;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public abstract class FrameRecord

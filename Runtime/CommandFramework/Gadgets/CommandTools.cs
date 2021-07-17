@@ -3,6 +3,7 @@
     using System;
     using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.CommandFramework.Commands.Core.Commands;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public abstract class CommandTools

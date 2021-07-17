@@ -2,6 +2,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu.Gadgets
 {
     using JetBrains.Annotations;
     using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public abstract class DebugMenu

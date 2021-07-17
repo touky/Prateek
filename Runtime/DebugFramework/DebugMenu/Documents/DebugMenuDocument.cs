@@ -4,6 +4,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu.Documents
     using ImGuiNET;
     using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
     using Prateek.Runtime.DebugFramework.DebugMenu.Sections;
+    using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
 
     public class DebugMenuDocument
