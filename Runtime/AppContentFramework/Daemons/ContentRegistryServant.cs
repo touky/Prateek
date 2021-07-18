@@ -10,7 +10,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
     using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
-    using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
+    using Prateek.Runtime.StateMachineFramework.DelegateStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
     using Prateek.Runtime.TickableFramework.Interfaces;
     using UnityEngine.Assertions;

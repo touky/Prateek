@@ -6,7 +6,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Addressables
     using Prateek.Runtime.AppContentFramework.Unity.Addressables.Debug;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
-    using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
+    using Prateek.Runtime.StateMachineFramework.DelegateStateMachines;
     using UnityEngine.AddressableAssets;
     using UnityEngine.AddressableAssets.ResourceLocators;
     using UnityEngine.ResourceManagement.AsyncOperations;

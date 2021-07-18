@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
+namespace Prateek.Runtime.StateMachineFramework.DelegateStateMachines
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,6 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.Profiling;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
-    using UnityEngine;
 
     [Serializable]
     public abstract class DelegateStateMachine<TTrigger, TEnumComparer>

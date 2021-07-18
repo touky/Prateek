@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
+namespace Prateek.Runtime.StateMachineFramework.DelegateStateMachines
 {
     public enum StateStatus
     {

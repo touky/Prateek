@@ -1,11 +1,10 @@
-namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
+namespace Prateek.Runtime.StateMachineFramework.DelegateStateMachines
 {
     using System;
     using System.Reflection;
     using JetBrains.Annotations;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
-    using Prateek.Runtime.StateMachineFramework.Interfaces;
 
     public abstract class StateMachine
         : GadgetTools
@@ -38,7 +37,6 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 
         public new interface IOwner
             : GadgetTools.IOwner
-                , IStateMachineOwner
         {
             IMachine CreateStateMachine();
             void Setup(IMachine stateMachine);

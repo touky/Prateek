@@ -1,6 +1,5 @@
-namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
+namespace Prateek.Runtime.StateMachineFramework.DelegateStateMachines
 {
-    using System;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
 
     public class MachineStepTriggerComparer

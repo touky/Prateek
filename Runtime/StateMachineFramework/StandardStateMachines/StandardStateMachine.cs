@@ -1,7 +1,7 @@
 namespace Prateek.Runtime.StateMachineFramework.StandardStateMachines
 {
     using System.Collections.Generic;
-    using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
+    using Prateek.Runtime.StateMachineFramework.DelegateStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
     using UnityEngine;
 

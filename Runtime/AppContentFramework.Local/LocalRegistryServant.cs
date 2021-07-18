@@ -15,7 +15,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
-    using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
+    using Prateek.Runtime.StateMachineFramework.DelegateStateMachines;
     using UnityEngine;
 
     public class LocalRegistryServant
