@@ -12,11 +12,12 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     using Prateek.Runtime.StateMachineFramework.Interfaces;
     using UnityEngine;
 
-    public class DelegateStateMachineSection<TOwner, TStateMachine, TTrigger>
+    public class DelegateStateMachineSection<TOwner, TStateMachine, TTrigger, TEnumComparer>
         : DebugMenuSection<TOwner>
-        where TOwner : class, DebugMenu.IDebugMenuOwner, DelegateStateMachine.IOwner
-        where TStateMachine : IStateMachine<MethodInfo, TTrigger>
+        where TOwner : class, DebugMenu.IDebugMenuOwner, StateMachine.IOwner
+        where TStateMachine : StateMachine.IStateMachine<MethodInfo, TTrigger>
         where TTrigger : struct, IConvertible
+        where TEnumComparer : IEnumComparer<TTrigger>, new()
     {
         #region Static and Constants
         protected const string STATEMACHINE_FIELD = "StateMachine";
@@ -24,7 +25,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 
         #region Fields
         protected DebugField<TStateMachine> stateMachine = string.Empty;
-        protected DebugField<List<MethodInfo>> states = string.Empty;
+        protected DebugField<List<DelegateStateMachine<TTrigger, TEnumComparer>.StateInfo>> states = string.Empty;
         #endregion
 
         #region Constructors
@@ -50,8 +51,8 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         {
             if (stateMachine.AssertDrawable())
             {
-                ImGui.TextColored(Color.green, $"Active state: {stateMachine.Value.ActiveState.ToString()}");
-                ImGui.TextColored(Color.cyan, $"-> Incoming state: {stateMachine.Value.IncomingState.ToString()}");
+                ImGui.TextColored(Color.green, $"Active state: {(stateMachine.Value.ActiveState == null ? "NONE" : stateMachine.Value.ActiveState.ToString())}");
+                ImGui.TextColored(Color.cyan, $"-> Incoming state: {(stateMachine.Value.IncomingState == null ? "NONE" : stateMachine.Value.IncomingState.ToString())}");
                 ImGui.Separator();
             }
 
@@ -67,7 +68,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
                 {
                     foreach (var state in states.Value)
                     {
-                        ImGui.Text($"- {state.ToString()}");
+                        ImGui.Text($"- {state.methodInfo.Name}");
                     }
                 }
             }

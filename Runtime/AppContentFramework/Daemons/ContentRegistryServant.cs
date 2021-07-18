@@ -17,7 +17,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
 
     public abstract class ContentRegistryServant
         : TickableServant<ContentRegistryDaemon, ContentRegistryServant>
-        , DelegateStateMachine.IOwner<ContentRegistryServant.InternalMachine, ContentRegistryServant.Trigger>
+        , StateMachine.IDelegateOwner<ContentRegistryServant.InternalMachine, ContentRegistryServant.Trigger>
         , IEarlyUpdateTickable
         , DebugMenu.IDocumentServant
     {
@@ -123,12 +123,12 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         public IGadgetPouch GadgetPouch { get; private set; }
         public InternalMachine StateMachine { get; private set; }
 
-        DelegateStateMachine.IMachine DelegateStateMachine.IOwner.CreateStateMachine()
+        StateMachine.IMachine StateMachine.IOwner.CreateStateMachine()
         {
             return new InternalMachine();
         }
 
-        void DelegateStateMachine.IOwner.Setup(DelegateStateMachine.IMachine stateMachine)
+        void StateMachine.IOwner.Setup(StateMachine.IMachine stateMachine)
         {
             StateMachine
                 .Connect(Startup, Trigger.NextStep, Idle)

@@ -10,11 +10,12 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     using Prateek.Runtime.DebugFramework.Reflection;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
 
-    public class DelegateTriggerMachineSection<TOwner, TStateMachine, TTrigger>
-        : DelegateStateMachineSection<TOwner, TStateMachine, TTrigger>
-        where TOwner : class, DebugMenu.IDebugMenuOwner, DelegateStateMachine.IOwner
-        where TStateMachine : IStateMachine<MethodInfo, TTrigger>
+    public class DelegateTriggerMachineSection<TOwner, TStateMachine, TTrigger, TEnumComparer>
+        : DelegateStateMachineSection<TOwner, TStateMachine, TTrigger, TEnumComparer>
+        where TOwner : class, DebugMenu.IDebugMenuOwner, StateMachine.IOwner
+        where TStateMachine : StateMachine.IStateMachine<MethodInfo, TTrigger>
         where TTrigger : struct, IConvertible
+        where TEnumComparer : IEnumComparer<TTrigger>, new()
     {
         #region Fields
         private DebugField<Dictionary<MethodInfo, Dictionary<TTrigger, MethodInfo>>> connections = string.Empty;
@@ -54,12 +55,12 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
                 {
                     foreach (var connectionPair in connections.Value)
                     {
-                        ImGui.Text($"- {connectionPair.Key.ToString()}");
+                        ImGui.Text($"- {connectionPair.Key.Name}");
                         using (new ScopeIndent())
                         {
                             foreach (var pair in connectionPair.Value)
                             {
-                                ImGui.Text($"-> {pair.Key.ToString()} > {pair.Value.ToString()}");
+                                ImGui.Text($"-> {pair.Key.ToString()} > {pair.Value.Name}");
                             }
                         }
                     }

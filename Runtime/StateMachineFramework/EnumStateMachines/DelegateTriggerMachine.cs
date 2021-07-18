@@ -6,7 +6,6 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
-    using UnityEditor.VersionControl;
     using UnityEngine.Assertions;
 
     /// <summary>

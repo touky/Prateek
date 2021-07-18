@@ -10,8 +10,8 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 
     [Serializable]
     public abstract class DelegateStateMachine<TTrigger, TEnumComparer>
-        : IStateMachine<MethodInfo, TTrigger>
-        , DelegateStateMachine.IMachine
+        : StateMachine.IStateMachine<MethodInfo, TTrigger>
+        , StateMachine.IMachine
         where TTrigger : struct, IConvertible
         where TEnumComparer : IEnumComparer<TTrigger>, new()
     {
@@ -37,23 +37,6 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 
         #region Constructors
         protected DelegateStateMachine() { }
-
-        //protected DelegateStateMachine(DelegateStateMachine.IOwner owner) : this()
-        //{
-        //    if (states != null)
-        //    {
-        //        return;
-        //    }
-
-        //    var values = Enum.GetValues(typeof(TState));
-        //    var initStates = new TState[values.Length];
-        //    values.CopyTo(initStates, 0);
-
-        //    var sortedStates = new List<TState>(initStates);
-        //    sortedStates.Sort((a, b) => { return Convert.ToInt32(a) - Convert.ToInt32(b); });
-
-        //    Init(owner, sortedStates);
-        //}
         #endregion
 
         #region Class Methods
@@ -96,7 +79,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         #endregion
 
         #region IStateMachine<TState,TTrigger> Members
-        public DelegateStateMachine.IOwner Owner { get; private set; }
+        public StateMachine.IOwner Owner { get; private set; }
 
         public MethodInfo ActiveState
         {
@@ -158,7 +141,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         }
         #endregion
 
-        protected struct StateInfo
+        public struct StateInfo
         {
             public MethodInfo methodInfo;
             public StateDelegate state;

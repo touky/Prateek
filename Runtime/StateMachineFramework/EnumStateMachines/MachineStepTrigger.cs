@@ -1,6 +1,6 @@
 namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 {
-    public enum EnumStepTrigger
+    public enum MachineStepTrigger
     {
         SkipToEnd,
         IgnoreStateChange,

@@ -20,7 +20,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     /// <typeparam name="TState">The enum type used for the state machine</typeparam>
     [Serializable]
     public abstract class DelegateStepMachine
-        : DelegateStateMachine<EnumStepTrigger, EnumStepTriggerComparer>
+        : DelegateStateMachine<MachineStepTrigger, MachineStepTriggerComparer>
     {
         #region Fields
         private bool ignoreStateChange = false;
@@ -74,26 +74,26 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
             ignoreStateChange = false;
         }
 
-        public override void Trigger(EnumStepTrigger trigger)
+        public override void Trigger(MachineStepTrigger trigger)
         {
             Trigger(trigger, default);
         }
 
-        public void Trigger(EnumStepTrigger trigger, StateDelegate selectedState)
+        public void Trigger(MachineStepTrigger trigger, StateDelegate selectedState)
         {
             switch (trigger)
             {
-                case EnumStepTrigger.IgnoreStateChange:
+                case MachineStepTrigger.IgnoreStateChange:
                 {
                     ignoreStateChange = true;
                     break;
                 }
-                case EnumStepTrigger.SkipToEnd:
+                case MachineStepTrigger.SkipToEnd:
                 {
                     incomingState = states.Count - 1;
                     break;
                 }
-                case EnumStepTrigger.SelectState:
+                case MachineStepTrigger.SelectState:
                 {
                     incomingState = IndexOf(selectedState.Method);
                     break;

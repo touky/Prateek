@@ -3,13 +3,11 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     using System;
     using System.Reflection;
     using JetBrains.Annotations;
-    using Prateek.Runtime.CommandFramework.Gadgets;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
-    using UnityEngine.Assertions;
 
-    public abstract class DelegateStateMachine
+    public abstract class StateMachine
         : GadgetTools
     {
         private const string StateMachineProperty = "StateMachine";
@@ -40,13 +38,13 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 
         public new interface IOwner
             : GadgetTools.IOwner
-            , IStateMachineOwner
+                , IStateMachineOwner
         {
             IMachine CreateStateMachine();
             void Setup(IMachine stateMachine);
         }
 
-        public interface IOwner<TStateMachine, TTrigger>
+        public interface IDelegateOwner<TStateMachine, TTrigger>
             : IOwner
             where TStateMachine : IStateMachine<MethodInfo, TTrigger>
             where TTrigger : struct, IConvertible
@@ -65,25 +63,21 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         {
             void Reboot();
         }
-    }
 
-    public interface IEnumStateMachineOwner<TState>
-        : IStateMachineOwner
-        where TState : struct, IConvertible
-    {
-        #region Class Methods
-        /// <summary>
-        ///     Callback to inform the owner of a state change.
-        /// </summary>
-        /// <param name="endingState"></param>
-        /// <param name="beginningState"></param>
-        void ChangingState(TState endingState, TState beginningState);
+        public interface IStateMachine<TState, TTrigger>
+            : StateMachine.IMachine
+        {
+            #region Properties
+            TState ActiveState { get; }
+            TState IncomingState { get; }
+            bool IsActive { get; }
+            #endregion
 
-        /// <summary>
-        ///     Callback to inform the owner that this state is executing
-        /// </summary>
-        /// <param name="state"></param>
-        void ExecutingState(TState state);
-        #endregion
+            #region Class Methods
+            void Reboot();
+            void Step();
+            void Trigger(TTrigger trigger);
+            #endregion
+        }
     }
 }

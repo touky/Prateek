@@ -11,7 +11,17 @@ namespace Prateek.Runtime.DebugFramework.Reflection
     public class DebugField<T> : DebugField
     {
         #region Properties
-        public T Value { get { return fieldInfo == null ? default(T) : this; } set { Set(value); } }
+        public T Value
+        {
+            get
+            {
+                return fieldInfo == null ? (propertyInfo == null ? default(T) : this) : this;
+            }
+            set
+            {
+                Set(value);
+            }
+        }
         #endregion
 
         #region Class Methods

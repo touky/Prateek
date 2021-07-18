@@ -6,7 +6,7 @@ namespace Prateek.Runtime.StateMachineFramework.StandardStateMachines
     using UnityEngine;
 
     public class StandardStateMachine<TTrigger>
-        : IStateMachine<StandardState<TTrigger>, TTrigger>
+        : StateMachine.IStateMachine<StandardState<TTrigger>, TTrigger>
     {
         #region Fields
         private StandardState<TTrigger> startState;
@@ -47,7 +47,7 @@ namespace Prateek.Runtime.StateMachineFramework.StandardStateMachines
         #endregion
 
         #region IStateMachine<StandardState<TTrigger>,TTrigger> Members
-        public DelegateStateMachine.IOwner Owner { get; private set; }
+        public StateMachine.IOwner Owner { get; private set; }
 
         public StandardState<TTrigger> ActiveState
         {

@@ -21,7 +21,7 @@
 
     public sealed class ContentRegistryDaemon
         : DaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
-        , DelegateStateMachine.IOwner<ContentRegistryDaemon.InternalMachine, ContentRegistryDaemon.Trigger>
+        , StateMachine.IDelegateOwner<ContentRegistryDaemon.InternalMachine, ContentRegistryDaemon.Trigger>
         , CommandTools.IReceiverOwner
         , IPreUpdateTickable
         , DebugMenu.IDocumentOwner
@@ -95,7 +95,7 @@
             title = "Content Registry";
 
             var servants = new DaemonOverseerSection<ContentRegistryDaemon, ContentRegistryServant>();
-            var machine = new DelegateTriggerMachineSection<ContentRegistryDaemon, InternalMachine, Trigger>();
+            var machine = new DelegateTriggerMachineSection<ContentRegistryDaemon, InternalMachine, Trigger, EnumComparer>();
             var content = new ContentRegistrySection();
 
             document.AddSections(servants);
@@ -107,12 +107,12 @@
         #region IEnumStepMachineOwner<State> Members
         public InternalMachine StateMachine { get; private set; }
 
-        DelegateStateMachine.IMachine DelegateStateMachine.IOwner.CreateStateMachine()
+        StateMachine.IMachine StateMachine.IOwner.CreateStateMachine()
         {
             return new InternalMachine();
         }
 
-        void DelegateStateMachine.IOwner.Setup(DelegateStateMachine.IMachine stateMachine)
+        void StateMachine.IOwner.Setup(StateMachine.IMachine stateMachine)
         {
             StateMachine
                 .Connect(Startup, Trigger.NextStep, Idle)
