@@ -44,7 +44,7 @@ namespace Prateek.Runtime.Core.CachedList
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Statics.Statics;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
 

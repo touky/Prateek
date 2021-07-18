@@ -1,7 +1,7 @@
 namespace Prateek.Runtime.Core.Extensions
 {
     using UnityEngine;
-    using static Statics;
+    using static Core.Statics.Statics;
 
     ///-----------------------------------------------------------------------------
     public static partial class Vector2IntExtensions

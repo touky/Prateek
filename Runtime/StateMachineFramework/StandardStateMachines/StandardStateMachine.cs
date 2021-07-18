@@ -1,6 +1,7 @@
 namespace Prateek.Runtime.StateMachineFramework.StandardStateMachines
 {
     using System.Collections.Generic;
+    using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
     using UnityEngine;
 
@@ -46,6 +47,8 @@ namespace Prateek.Runtime.StateMachineFramework.StandardStateMachines
         #endregion
 
         #region IStateMachine<StandardState<TTrigger>,TTrigger> Members
+        public DelegateStateMachine.IOwner Owner { get; private set; }
+
         public StandardState<TTrigger> ActiveState
         {
             get { return activeState; }
@@ -120,6 +123,18 @@ namespace Prateek.Runtime.StateMachineFramework.StandardStateMachines
             }
 
             activeState.Trigger(trigger);
+        }
+        #endregion
+
+        #region IGadget
+        public void Awake()
+        {
+            Reboot();
+        }
+
+        public void Kill()
+        {
+            activeState = null;
         }
         #endregion
 

@@ -44,7 +44,7 @@
         {
             base.WorkDone();
 
-            var pouchSetters = new List<PropertyInfo>();
+            var foundProperties = new List<PropertyInfo>();
             var ownerType = typeof(GadgetTools.IOwner);
             var pouchType = typeof(IGadgetPouch);
             var gadgetType = typeof(GadgetTools.IGadget);
@@ -60,17 +60,33 @@
                         cache.ownerSetters.Add(foundType, ownerSetters);
                     }
 
-                    pouchSetters.Clear();
-                    if (ReflectionHelper.FindProperties<IGadgetPouch>(foundType, pouchSetters, BINDING_FLAGS, highestParents, true))
+                    foundProperties.Clear();
+                    if (ReflectionHelper.FindProperties<IGadgetPouch>(foundType, foundProperties, BINDING_FLAGS, highestParents, true))
                     {
-                        cache.pouchSetters[foundType] = pouchSetters[0];
+                        cache.pouchSetters[foundType] = foundProperties[0];
                     }
 
                     Assert.IsNotNull(cache.pouchSetters[foundType], $"Gadget Owner of type {foundType.Name} does not implement a setter for {pouchType.Name}");
                 }
                 else if (gadgetType.IsAssignableFrom(foundType))
                 {
-                    var setter = foundType.GetProperty(FIELD_OWNER, BINDING_FLAGS);
+                    foundProperties.Clear();
+                    if (!ReflectionHelper.FindProperties(FIELD_OWNER, foundType, foundProperties, BINDING_FLAGS, highestParents, true))
+                    {
+                        Assert.IsTrue(false, $"Gadget of type '{foundType}' does not have a property for its owner.");
+                    }
+
+                    var setter = (PropertyInfo) null;
+                    foreach (var foundProperty in foundProperties)
+                    {
+                        if (foundProperty.SetMethod == null)
+                        {
+                            continue;
+                        }
+
+                        setter = foundProperty;
+                        break;
+                    }
 
                     Assert.IsNotNull(setter, $"Gadget of type '{foundType}' does not have a private setter for its owner.");
 
@@ -108,7 +124,10 @@
 
             for (int i = 0; i < instantiators.Count; i++)
             {
+                var instantiator = instantiators[i];
                 var binder = binders[i];
+
+                Assert.IsNotNull(binder.ownerValidation, $"Instantiator of type '{instantiator.GetType().Name}' has not Bound its gadget to a owner type. Do so in the 'Declare' method");
                 if (!binder.ownerValidation(owner))
                 {
                     continue;
@@ -123,7 +142,6 @@
 
                 }
 
-                var instantiator = instantiators[i];
 
                 gadgetBinder.owner = owner;
                 gadgetBinder.instantiator = binder;

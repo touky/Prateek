@@ -1,6 +1,7 @@
 ﻿namespace Prateek.Runtime.CommandFramework.Gadgets
 {
     using System;
+    using JetBrains.Annotations;
     using Prateek.Runtime.CommandFramework.Commands.Core;
     using Prateek.Runtime.CommandFramework.Commands.Core.Commands;
     using Prateek.Runtime.GadgetFramework;
@@ -14,6 +15,7 @@
             return typeof(Instantiator).GetHashCode();
         }
 
+        [UsedImplicitly]
         internal class Instantiator
             : IInstantiator
         {
@@ -25,7 +27,7 @@
         
             public void Declare(IInstantiatorBinder binder)
             {
-                binder.BindTo<IReceiverOwner>();
+                binder.BindGadgetTo<IReceiverOwner>();
                 binder.InjectGadgetTo<IReceiver>();
                 binder.AddGadgetAs<IEmitter>();
                 binder.AddGadgetAs<IReceiver>();

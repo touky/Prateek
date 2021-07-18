@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.Core.Extensions
+namespace Prateek.Runtime.Core.Statics
 {
     using UnityEngine;
 
@@ -34,7 +34,7 @@ namespace Prateek.Runtime.Core.Extensions
         public static Vector3Int Int(Vector4 v, out int w)
         {
             w = (int) v.w;
-            return vec3i((int) v.x, (int) v.y, (int) v.z);
+            return Statics.vec3i((int) v.x, (int) v.y, (int) v.z);
         }
         #endregion
     }

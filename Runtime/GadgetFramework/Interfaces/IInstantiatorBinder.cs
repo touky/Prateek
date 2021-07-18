@@ -2,11 +2,13 @@
 {
     public interface IInstantiatorBinder
     {
-        void BindTo<TOwner>()
+        void BindGadgetTo<TOwner>()
             where TOwner : GadgetTools.IOwner;
         
         void InjectGadgetTo<TGadget>()
             where TGadget : class, GadgetTools.IGadget;
+
+        void InjectGadgetTo(string propertyName);
 
         void AddGadgetAs<TGadget>()
             where TGadget : class, GadgetTools.IGadget;

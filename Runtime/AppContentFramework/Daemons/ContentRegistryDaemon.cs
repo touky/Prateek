@@ -21,23 +21,13 @@
 
     public sealed class ContentRegistryDaemon
         : DaemonOverseer<ContentRegistryDaemon, ContentRegistryServant>
-        , IEnumStepMachineOwner<ContentRegistryDaemon.State>
+        , DelegateStateMachine.IOwner<ContentRegistryDaemon.InternalMachine, ContentRegistryDaemon.Trigger>
         , CommandTools.IReceiverOwner
         , IPreUpdateTickable
         , DebugMenu.IDocumentOwner
     {
-        #region State enum
-        public enum State
-        {
-            Startup,
-            Idle,
-            WaitForTimeout,
-            SendAccessResponses
-        }
-        #endregion
-
         #region Trigger enum
-        private enum Trigger
+        public enum Trigger
         {
             NextStep
         }
@@ -48,9 +38,7 @@
         #endregion
 
         #region Fields
-        private StateMachine stateMachine;
         private HierarchicalTree<ContentLoader> hierarchicalTree = new HierarchicalTree<ContentLoader>();
-
         private HashSet<ContentAccessRequest> contentAccessRequests = new HashSet<ContentAccessRequest>();
 
         private bool requestReceived = false;
@@ -63,8 +51,6 @@
             base.Awake();
 
             hierarchicalTree.Setup();
-
-            InitStateMachine();
         }
         #endregion
 
@@ -76,17 +62,6 @@
         #endregion
 
         #region Class Methods
-        private void InitStateMachine()
-        {
-            stateMachine = new StateMachine(this, State.Startup);
-            stateMachine
-                .Connect(State.Startup, Trigger.NextStep, State.Idle)
-                .Connect(State.Idle, Trigger.NextStep, State.WaitForTimeout)
-                .Connect(State.WaitForTimeout, Trigger.NextStep, State.SendAccessResponses)
-                .Connect(State.SendAccessResponses, Trigger.NextStep, State.Idle);
-            stateMachine.Reboot();
-        }
-
         internal void Store(ContentLoader loader)
         {
             hierarchicalTree.Store(loader);
@@ -120,7 +95,7 @@
             title = "Content Registry";
 
             var servants = new DaemonOverseerSection<ContentRegistryDaemon, ContentRegistryServant>();
-            var machine = new EnumTriggerMachineSection<ContentRegistryDaemon, StateMachine, State, Trigger>();
+            var machine = new DelegateTriggerMachineSection<ContentRegistryDaemon, InternalMachine, Trigger>();
             var content = new ContentRegistrySection();
 
             document.AddSections(servants);
@@ -130,60 +105,84 @@
         #endregion
 
         #region IEnumStepMachineOwner<State> Members
-        public void ChangingState(State endingState, State beginningState)
+        public InternalMachine StateMachine { get; private set; }
+
+        DelegateStateMachine.IMachine DelegateStateMachine.IOwner.CreateStateMachine()
         {
-            switch (beginningState)
+            return new InternalMachine();
+        }
+
+        void DelegateStateMachine.IOwner.Setup(DelegateStateMachine.IMachine stateMachine)
+        {
+            StateMachine
+                .Connect(Startup, Trigger.NextStep, Idle)
+                .Connect(Idle, Trigger.NextStep, WaitForTimeout)
+                .Connect(WaitForTimeout, Trigger.NextStep, SendAccessResponses)
+                .Connect(SendAccessResponses, Trigger.NextStep, Idle)
+                .Init(Startup);
+        }
+
+        private void Startup(StateStatus stateStatus)
+        {
+            if (stateStatus != StateStatus.Execute)
             {
-                case State.WaitForTimeout:
+                return;
+            }
+
+            StateMachine.Trigger(Trigger.NextStep);
+        }
+
+        private void Idle(StateStatus stateStatus)
+        {
+            if (stateStatus != StateStatus.Execute)
+            {
+                return;
+            }
+
+            if (requestReceived)
+            {
+                requestReceived = false;
+                StateMachine.Trigger(Trigger.NextStep);
+            }
+
+        }
+
+        private void WaitForTimeout(StateStatus stateStatus)
+        {
+            switch (stateStatus)
+            {
+                case StateStatus.Begin:
                 {
                     timeOut = TIMEOUT;
+                    break;
+                }
+                case StateStatus.Execute:
+                {
+                    timeOut -= Time.unscaledDeltaTime;
+                    if (timeOut < 0)
+                    {
+                        StateMachine.Trigger(Trigger.NextStep);
+                    }
                     break;
                 }
             }
         }
 
-        public void ExecutingState(State state)
+        private void SendAccessResponses(StateStatus stateStatus)
         {
-            switch (state)
+            if (stateStatus != StateStatus.Execute)
             {
-                case State.Startup:
-                {
-                    stateMachine.Trigger(Trigger.NextStep);
-                    break;
-                }
-                case State.Idle:
-                {
-                    if (requestReceived)
-                    {
-                        requestReceived = false;
-                        stateMachine.Trigger(Trigger.NextStep);
-                    }
-
-                    break;
-                }
-                case State.WaitForTimeout:
-                {
-                    timeOut -= Time.unscaledDeltaTime;
-                    if (timeOut < 0)
-                    {
-                        stateMachine.Trigger(Trigger.NextStep);
-                    }
-
-                    break;
-                }
-                case State.SendAccessResponses:
-                {
-                    foreach (var accessRequest in contentAccessRequests)
-                    {
-                        var response = accessRequest.GetResponse<ContentAccessChangedResponse>();
-                        hierarchicalTree.SearchTree(accessRequest, response);
-                        this.Get<CommandTools.IReceiver>().Send(response);
-                    }
-
-                    stateMachine.Trigger(Trigger.NextStep);
-                    break;
-                }
+                return;
             }
+
+            foreach (var accessRequest in contentAccessRequests)
+            {
+                var response = accessRequest.GetResponse<ContentAccessChangedResponse>();
+                hierarchicalTree.SearchTree(accessRequest, response);
+                this.Get<CommandTools.IReceiver>().Send(response);
+            }
+
+            StateMachine.Trigger(Trigger.NextStep);
         }
         #endregion
 
@@ -192,7 +191,7 @@
         {
             Receiver.ProcessReceivedCommands();
 
-            stateMachine.Step();
+            StateMachine.Step();
         }
 
         public int Priority(IPriority<IPreUpdateTickable> type)
@@ -202,34 +201,33 @@
         #endregion
 
         #region Nested type: EnumComparer
-        private class EnumComparer : IEnumComparer<State, Trigger>
+        public class EnumComparer
+            : IEnumComparer<Trigger>
         {
             #region IEnumComparer<State,Trigger> Members
-            public bool Compare(State state0, State state1)
+            public bool Compare(Trigger enum0, Trigger enum1)
             {
-                return state0 == state1;
-            }
-
-            public bool Compare(Trigger trigger0, Trigger trigger1)
-            {
-                return trigger0 == trigger1;
+                return enum0 == enum1;
             }
             #endregion
         }
         #endregion
 
         #region Nested type: RemovalLeaf
-        private struct RemovalLeaf : IHierarchicalTreeLeaf
+        private struct RemovalLeaf
+            : IHierarchicalTreeLeaf
         {
             public string Path { get; set; }
         }
         #endregion
 
         #region Nested type: StateMachine
-        private class StateMachine : EnumTriggerMachine<State, Trigger, EnumComparer>
+        public class InternalMachine
+            : DelegateTriggerMachine<Trigger, EnumComparer>
         {
             #region Constructors
-            public StateMachine(IEnumStateMachineOwner<State> owner, State startState) : base(owner, startState) { }
+            public InternalMachine()
+                : base() { }
             #endregion
         }
         #endregion

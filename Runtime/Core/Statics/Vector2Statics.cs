@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.Core.Extensions
+namespace Prateek.Runtime.Core.Statics
 {
     using UnityEngine;
 
@@ -10,6 +10,6 @@ namespace Prateek.Runtime.Core.Extensions
         public static float dot(Vector2 v0, Vector2 v1) { return Vector2.Dot(v0, v1); }
         public static Vector2 lerp(Vector2 v0, Vector2 v1, float alpha) { return Vector2.Lerp(v0, v1, alpha); }
         public static Vector2 mix(Vector2 v0, Vector2 v1, float alpha) { return Vector2.Lerp(v0, v1, alpha); }
-        public static Vector2Int Int(Vector2 v) { return vec2i((int)v.x, (int)v.y); }
+        public static Vector2Int Int(Vector2 v) { return Statics.vec2i((int)v.x, (int)v.y); }
     }
 }

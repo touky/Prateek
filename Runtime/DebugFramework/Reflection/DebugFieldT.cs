@@ -43,17 +43,28 @@ namespace Prateek.Runtime.DebugFramework.Reflection
                 Debug.LogError("Trying to access invalid debug field:\n- Either test IsValid before accessing it\n- Use AssertDrawable in the DebugMenu to show an invalidity warning.");
             }
 
-            return other.fieldInfo == null ? default : (T) other.fieldInfo.GetValue(other.owner);
+            if (other.fieldInfo != null)
+            {
+                return (T) other.fieldInfo.GetValue(other.owner);
+            }
+            else if (other.propertyInfo != null)
+            {
+                return (T) other.propertyInfo.GetValue(other.owner);
+            }
+
+            return default;
         }
 
         private void Set(T value)
         {
-            if (fieldInfo == null)
+            if (fieldInfo != null)
             {
-                return;
+                fieldInfo.SetValue(owner, value);
             }
-
-            fieldInfo.SetValue(owner, value);
+            else if (propertyInfo != null && propertyInfo.SetMethod != null)
+            {
+                propertyInfo.SetValue(owner, value);
+            }
         }
 
         public override void SetOwner(object owner)
@@ -65,10 +76,15 @@ namespace Prateek.Runtime.DebugFramework.Reflection
                 return;
             }
 
-            if (fieldInfo.FieldType != typeof(T))
+            if (fieldInfo != null && fieldInfo.FieldType != typeof(T))
             {
                 Debug.LogError($"Field type for '{Name}' is invalid:\n- Is '{fieldInfo.FieldType}'\n- Expected '{typeof(T)}'");
                 fieldInfo = null;
+            }
+            else if (propertyInfo != null && propertyInfo.PropertyType != typeof(T))
+            {
+                Debug.LogError($"Field type for '{Name}' is invalid:\n- Is '{propertyInfo.PropertyType}'\n- Expected '{typeof(T)}'");
+                propertyInfo = null;
             }
         }
         #endregion

@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.Core.Extensions
+namespace Prateek.Runtime.Core.Statics
 {
     using UnityEngine;
 
@@ -12,7 +12,7 @@ namespace Prateek.Runtime.Core.Extensions
 
         public static Vector2 Float(Vector2Int v)
         {
-            return vec2(v.x, v.y);
+            return Statics.vec2(v.x, v.y);
         }
         #endregion
     }

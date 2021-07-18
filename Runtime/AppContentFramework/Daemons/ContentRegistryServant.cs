@@ -9,6 +9,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
     using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
     using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
     using Prateek.Runtime.GadgetFramework;
+    using Prateek.Runtime.GadgetFramework.Interfaces;
     using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
     using Prateek.Runtime.TickableFramework.Interfaces;
@@ -16,21 +17,10 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
 
     public abstract class ContentRegistryServant
         : TickableServant<ContentRegistryDaemon, ContentRegistryServant>
-        , IEnumStepMachineOwner<ContentRegistryServant.State>
+        , DelegateStateMachine.IOwner<ContentRegistryServant.InternalMachine, ContentRegistryServant.Trigger>
         , IEarlyUpdateTickable
         , DebugMenu.IDocumentServant
     {
-        #region State enum
-        public enum State
-        {
-            Startup,
-            Idle,
-            StartWork,
-            Working,
-            ContentTriage,
-        }
-        #endregion
-
         public enum WorkStatus
         {
             Nothing,
@@ -39,16 +29,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
             Done,
         }
 
-        #region Trigger enum
-        protected enum Trigger
-        {
-            NextStep,
-        }
-        #endregion
-
         #region Fields
-        private StateMachine stateMachine;
-
         protected WorkStatus workStatus = WorkStatus.Nothing;
         private DiffList<string> paths;
         #endregion
@@ -58,30 +39,17 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         {
             base.Startup();
 
-            InitStateMachine();
-
+            //todo fix
             (this as DebugMenu.IDocumentServant).SetupDebugDocument();
-        }
-
-        private void InitStateMachine()
-        {
-            stateMachine = new StateMachine(this, State.Startup);
-            stateMachine
-                .Connect(State.Startup, Trigger.NextStep, State.Idle)
-                .Connect(State.Idle, Trigger.NextStep, State.StartWork)
-                .Connect(State.StartWork, Trigger.NextStep, State.Working)
-                .Connect(State.Working, Trigger.NextStep, State.ContentTriage)
-                .Connect(State.ContentTriage, Trigger.NextStep, State.Idle);
-            stateMachine.Reboot();
         }
 
         protected abstract ContentLoader GetNewContentLoader(string path);
 
         protected void WorkIsReady()
         {
-            Assert.IsTrue(stateMachine.ActiveState == State.Idle);
+            Assert.IsTrue(StateMachine.ActiveState == ((InternalMachine.StateDelegate) Idle).Method);
 
-            stateMachine.Trigger(Trigger.NextStep);
+            StateMachine.Trigger(Trigger.NextStep);
         }
 
         protected void InvalidatePath(string path)
@@ -126,7 +94,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
 
             paths.FlushDiff();
 
-            stateMachine.Trigger(Trigger.NextStep);
+            StateMachine.Trigger(Trigger.NextStep);
         }
         #endregion
 
@@ -142,7 +110,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         #region IEarlyUpdateTickable Members
         public void EarlyUpdate()
         {
-            stateMachine.Step();
+            StateMachine.Step();
         }
 
         public int Priority(IPriority<IEarlyUpdateTickable> type)
@@ -152,81 +120,116 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         #endregion
 
         #region IEnumStepMachineOwner<State> Members
-        public virtual void ChangingState(State endingState, State beginningState) { }
+        public IGadgetPouch GadgetPouch { get; private set; }
+        public InternalMachine StateMachine { get; private set; }
 
-        public virtual void ExecutingState(State state)
+        DelegateStateMachine.IMachine DelegateStateMachine.IOwner.CreateStateMachine()
         {
-            switch (state)
+            return new InternalMachine();
+        }
+
+        void DelegateStateMachine.IOwner.Setup(DelegateStateMachine.IMachine stateMachine)
+        {
+            StateMachine
+                .Connect(Startup, Trigger.NextStep, Idle)
+                .Connect(Idle, Trigger.NextStep, StartWork)
+                .Connect(StartWork, Trigger.NextStep, Working)
+                .Connect(Working, Trigger.NextStep, ContentTriage)
+                .Connect(ContentTriage, Trigger.NextStep, Idle)
+                .Init(Startup);
+        }
+
+        protected virtual void Startup(StateStatus stateStatus)
+        {
+            if (stateStatus != StateStatus.Execute)
             {
-                case State.Startup:
-                {
-                    stateMachine.Trigger(Trigger.NextStep);
-                    break;
-                }
-                case State.Idle:
-                {
-                    if (workStatus == WorkStatus.Pending)
-                    {
-                        WorkIsReady();
-                    }
-
-                    break;
-                }
-                case State.StartWork:
-                {
-                    InvalidateAllPaths();
-
-                    workStatus = WorkStatus.Working;
-                    stateMachine.Trigger(Trigger.NextStep);
-                    break;
-                }
-                case State.Working:
-                {
-                    if (workStatus == WorkStatus.Done)
-                    {
-                        stateMachine.Trigger(Trigger.NextStep);
-                    }
-                    break;
-                }
-                case State.ContentTriage:
-                {
-                    DoContentTriage();
-
-                    stateMachine.Trigger(Trigger.NextStep);
-                    break;
-                }
-                default:
-                {
-                    stateMachine.Trigger(Trigger.NextStep);
-                    break;
-                }
+                return;
             }
+
+            StateMachine.Trigger(Trigger.NextStep);
+        }
+
+        protected void Idle(StateStatus stateStatus)
+        {
+            if (stateStatus != StateStatus.Execute)
+            {
+                return;
+            }
+
+            if (workStatus == WorkStatus.Pending)
+            {
+                WorkIsReady();
+            }
+        }
+
+        protected virtual void StartWork(StateStatus stateStatus)
+        {
+            if (stateStatus != StateStatus.Execute)
+            {
+                return;
+            }
+
+            InvalidateAllPaths();
+
+            workStatus = WorkStatus.Working;
+            StateMachine.Trigger(Trigger.NextStep);
+        }
+
+        protected virtual void Working(StateStatus stateStatus)
+        {
+            if (stateStatus != StateStatus.Execute)
+            {
+                return;
+            }
+
+            if (workStatus == WorkStatus.Done)
+            {
+                StateMachine.Trigger(Trigger.NextStep);
+            }
+        }
+
+        protected void ContentTriage(StateStatus stateStatus)
+        {
+            if (stateStatus != StateStatus.Execute)
+            {
+                return;
+            }
+
+            DoContentTriage();
+
+            StateMachine.Trigger(Trigger.NextStep);
         }
         #endregion
 
         #region Nested type: EnumComparer
-        private class EnumComparer : IEnumComparer<State, Trigger>
+        public class EnumComparer : IEnumComparer<Trigger>
         {
             #region IEnumComparer<State,Trigger> Members
-            public bool Compare(State state0, State state1)
-            {
-                return state0 == state1;
-            }
+            public EnumComparer() { }
 
-            public bool Compare(Trigger trigger0, Trigger trigger1)
+            public bool Compare(Trigger enum0, Trigger enum1)
             {
-                return trigger0 == trigger1;
+                return enum0 == enum1;
             }
             #endregion
         }
         #endregion
 
         #region Nested type: StateMachine
-        private class StateMachine : EnumTriggerMachine<State, Trigger, EnumComparer>
+        public class InternalMachine
+            : DelegateTriggerMachine<Trigger, EnumComparer>
         {
             #region Constructors
-            public StateMachine(IEnumStateMachineOwner<State> owner, State startState) : base(owner, startState) { }
+            public InternalMachine()
+                : base() { }
             #endregion
+        }
+        #endregion
+
+        #region Trigger enum
+        public enum Trigger
+        {
+            NextStep,
         }
         #endregion
     }

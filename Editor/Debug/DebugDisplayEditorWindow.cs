@@ -42,6 +42,7 @@ namespace Prateek.Editor.Debug
     using Prateek.Runtime.DebugFramework;
     using UnityEditor;
     using UnityEngine;
+    using Statics = Prateek.Runtime.Core.Statics.Statics;
 
     ///-------------------------------------------------------------------------
     public class DebugDisplayEditorWindow : EditorWindow

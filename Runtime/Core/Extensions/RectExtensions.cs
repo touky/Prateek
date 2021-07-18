@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 namespace Prateek.Runtime.Core.Extensions
 {
-    using static Statics;
+    using static Core.Statics.Statics;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------

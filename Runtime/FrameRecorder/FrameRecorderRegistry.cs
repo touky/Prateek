@@ -41,7 +41,7 @@ namespace Prateek.Runtime.FrameRecorder
     using Prateek.Runtime.Core.Singleton;
     using Prateek.Runtime.TickableFramework.Interfaces;
     using UnityEngine;
-    using static Core.Extensions.Statics;
+    using static Core.Statics.Statics;
 
     ///-------------------------------------------------------------------------
     public sealed class FrameRecorderRegistry

@@ -35,7 +35,7 @@ namespace Prateek.Runtime.Core.Helpers
 {
     using System.Collections.Generic;
     using Prateek.Runtime.Core.Extensions;
-    using static Extensions.Statics;
+    using static Statics.Statics;
     using UnityEngine;
 
     ///-------------------------------------------------------------------------

@@ -20,7 +20,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu.Gadgets
                         
             public void Declare(IInstantiatorBinder binder)
             {
-                binder.BindTo<IDocumentOwner>();
+                binder.BindGadgetTo<IDocumentOwner>();
                 //todo binder.InjectGadgetTo<DebugMenuDocument>();
                 binder.AddGadgetAs<DebugMenuDocument>();
             }

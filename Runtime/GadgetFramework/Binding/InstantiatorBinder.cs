@@ -14,7 +14,7 @@
         public List<Action<GadgetTools.IGadget, GadgetTools.IOwner>> GadgetAddition = new List<Action<GadgetTools.IGadget, GadgetTools.IOwner>>();
         private object[] injectedGadget = new object[1];
 
-        public void BindTo<TOwner>()
+        public void BindGadgetTo<TOwner>()
             where TOwner : GadgetTools.IOwner
         {
             ownerType = typeof(TOwner);
@@ -32,6 +32,31 @@
                     foreach (var propertyInfo in setters)
                     {
                         if (propertyInfo.GetMethod.ReturnType == gadgetType)
+                        {
+                            injectedGadget[0] = gadget;
+                            propertyInfo.SetMethod.Invoke(binder.owner, injectedGadget);
+                            break;
+                        }
+                    }
+                    return;
+                }
+
+                throw new KeyNotFoundException($"Can't inject Gadget of type '{gadgetType.Name}' in owner of type {binder.owner.GetType().Name}.");
+            };
+        }
+                    
+        public void InjectGadgetTo(string propertyName)
+        {
+            gadgetInjection = (gadget, binder) =>
+            {
+                var gadgetType = gadget.GetType();
+                if (binder.cache.ownerSetters.TryGetValue(binder.owner.GetType(), out var setters))
+                {
+                    foreach (var propertyInfo in setters)
+                    {
+                        if (propertyInfo.Name == propertyName 
+                         && (gadgetType.IsSubclassOf(propertyInfo.GetMethod.ReturnType)
+                             || propertyInfo.GetMethod.ReturnType.IsAssignableFrom(gadgetType)))
                         {
                             injectedGadget[0] = gadget;
                             propertyInfo.SetMethod.Invoke(binder.owner, injectedGadget);

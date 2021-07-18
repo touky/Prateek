@@ -21,7 +21,11 @@ namespace Prateek.Runtime.DebugFramework.Reflection
         #region Class Methods
         public static bool FindProperties<TType>(Type owner, List<PropertyInfo> foundProperties, BindingFlags bindingFlags = BINDING_FLAGS, HashSet<Type> highestParents = null, bool searchParent = false)
         {
-            var type = typeof(TType);
+            return FindProperties(typeof(TType), owner, foundProperties, bindingFlags, highestParents, searchParent);
+        }
+
+        public static bool FindProperties(Type searchType, Type owner, List<PropertyInfo> foundProperties, BindingFlags bindingFlags = BINDING_FLAGS, HashSet<Type> highestParents = null, bool searchParent = false)
+        {
             var parentType = owner;
             while (parentType != null)
             {
@@ -33,8 +37,13 @@ namespace Prateek.Runtime.DebugFramework.Reflection
                         continue;
                     }
 
-                    if (propertyInfo.GetMethod.ReturnType.IsSubclassOf(type)
-                     || type.IsAssignableFrom(propertyInfo.GetMethod.ReturnType))
+                    if (propertyInfo.GetMethod == null)
+                    {
+                        continue;
+                    }
+
+                    if (propertyInfo.GetMethod.ReturnType.IsSubclassOf(searchType)
+                     || searchType.IsAssignableFrom(propertyInfo.GetMethod.ReturnType))
                     {
                         foundProperties.AddUnique(propertyInfo);
                     }
@@ -50,7 +59,41 @@ namespace Prateek.Runtime.DebugFramework.Reflection
 
             return foundProperties.Count > 0;
         }
+        
+        public static bool FindProperties(string name, Type owner, List<PropertyInfo> foundProperties, BindingFlags bindingFlags = BINDING_FLAGS, HashSet<Type> highestParents = null, bool searchParent = false)
+        {
+            var parentType = owner;
+            while (parentType != null)
+            {
+                var properties = parentType.GetProperties(bindingFlags);
+                foreach (var propertyInfo in properties)
+                {
+                    if (bindingFlags.HasFlag(BindingFlags.SetProperty) && propertyInfo.SetMethod == null)
+                    {
+                        continue;
+                    }
 
+                    if (propertyInfo.GetMethod == null)
+                    {
+                        continue;
+                    }
+
+                    if (propertyInfo.Name == name)
+                    {
+                        foundProperties.AddUnique(propertyInfo);
+                    }
+                }
+
+                parentType = parentType.BaseType;
+
+                if (highestParents.Contains(parentType))
+                {
+                    break;
+                }
+            }
+
+            return foundProperties.Count > 0;
+        }
         public static FieldInfo[] GetAllFieldInfo<TFieldType>(Type classType, bool searchParent = false)
         {
             var searchType = typeof(TFieldType);
@@ -81,6 +124,23 @@ namespace Prateek.Runtime.DebugFramework.Reflection
             }
 
             return classType.GetFields(BINDING_FLAGS);
+        }
+        
+        public static PropertyInfo SearchPropertyInfo(Type containerType, string fieldName, bool searchParent = false)
+        {
+            var result = (PropertyInfo) null;
+            do
+            {
+                result = containerType.GetProperty(fieldName, BINDING_FLAGS);
+                if (result != null && !searchParent)
+                {
+                    break;
+                }
+
+                containerType = containerType.BaseType;
+            } while (result == null && containerType != null);
+
+            return result;
         }
 
         public static FieldInfo SearchFieldInfo(Type containerType, string fieldName, bool searchParent = false)

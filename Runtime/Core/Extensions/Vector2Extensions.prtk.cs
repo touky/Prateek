@@ -47,7 +47,7 @@ namespace Prateek.Runtime.Core.Extensions
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Core.Statics.Statics;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
     

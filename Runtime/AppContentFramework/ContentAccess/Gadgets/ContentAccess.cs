@@ -22,7 +22,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentAccess.Gadgets
         
             public void Declare(IInstantiatorBinder binder)
             {
-                binder.BindTo<IAccessorOwner>();
+                binder.BindGadgetTo<IAccessorOwner>();
                 binder.InjectGadgetTo<ContentAccessor>();
                 binder.AddGadgetAs<ContentAccessor>();
             }

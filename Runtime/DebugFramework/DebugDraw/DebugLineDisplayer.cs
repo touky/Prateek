@@ -37,7 +37,7 @@ namespace Prateek.Runtime.DebugFramework.DebugDraw
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Core.Statics.Statics;
 
     public class DebugLineDisplayer : MonoBehaviour
     {

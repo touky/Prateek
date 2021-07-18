@@ -47,7 +47,7 @@ namespace Prateek.Editor.Core.EditorPrefs
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Runtime.Core.Statics.Statics;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
     
@@ -216,7 +216,7 @@ namespace Prateek.Editor.Core.EditorPrefs
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Runtime.Core.Statics.Statics;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
     
@@ -598,7 +598,7 @@ namespace Prateek.Editor.Core.EditorPrefs
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Runtime.Core.Statics.Statics;
     #endregion Prateek Code Namespaces
 // -END_PRATEEK_CSHARP_NAMESPACE_CODE-
     

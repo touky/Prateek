@@ -2,6 +2,7 @@ namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     using Prateek.Runtime.Core.Extensions;
     using UnityEngine;
+    using Statics = Core.Statics.Statics;
 
     ///---------------------------------------------------------------------
     public struct DebugPlace

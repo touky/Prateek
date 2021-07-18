@@ -19,10 +19,8 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     /// </summary>
     /// <typeparam name="TState">The enum type used for the state machine</typeparam>
     [Serializable]
-    public abstract class EnumStepMachine<TState, TEnumComparer>
-        : EnumStateMachine<TState, EnumStepTrigger, TEnumComparer>
-        where TState : struct, IConvertible
-        where TEnumComparer : EnumStepTriggerComparer<TState>, new()
+    public abstract class DelegateStepMachine
+        : DelegateStateMachine<EnumStepTrigger, EnumStepTriggerComparer>
     {
         #region Fields
         private bool ignoreStateChange = false;
@@ -40,21 +38,21 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         ///     This constructor will use all states in the enum from the first to the last as default
         /// </summary>
         /// <param name="owner">The state machine owner</param>
-        protected EnumStepMachine(IEnumStateMachineOwner<TState> owner)
-            : base(owner) { }
-
-        /// <summary>
-        ///     This constructor will use the list given in stateSequence as the sequence of states
-        /// </summary>
-        /// <param name="owner">The state machine owner</param>
-        /// <param name="stepSequence">List of the sequence of states</param>
-        protected EnumStepMachine(IEnumStateMachineOwner<TState> owner, params TState[] stepSequence)
-        {
-            Init(owner, new List<TState>(stepSequence));
-        }
+        protected DelegateStepMachine()
+            : base() { }
         #endregion
 
         #region Class Methods
+        /// <summary>
+        ///     This method will use the list given in stateSequence as the sequence of states
+        /// </summary>
+        /// <param name="owner">The state machine owner</param>
+        /// <param name="stepSequence">List of the sequence of states</param>
+        public void Init(params StateDelegate[] stepSequence)
+        {
+            Init(new List<StateDelegate>(stepSequence));
+        }
+
         /// <summary>
         ///     Reboot the state machine
         /// </summary>
@@ -81,7 +79,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
             Trigger(trigger, default);
         }
 
-        public void Trigger(EnumStepTrigger trigger, TState selectedState)
+        public void Trigger(EnumStepTrigger trigger, StateDelegate selectedState)
         {
             switch (trigger)
             {
@@ -97,7 +95,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
                 }
                 case EnumStepTrigger.SelectState:
                 {
-                    incomingState = IndexOf(selectedState);
+                    incomingState = IndexOf(selectedState.Method);
                     break;
                 }
             }

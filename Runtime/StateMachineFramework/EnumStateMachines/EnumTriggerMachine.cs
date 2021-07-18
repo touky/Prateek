@@ -2,20 +2,24 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
+    using Prateek.Runtime.Core.Consts;
+    using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
+    using UnityEditor.VersionControl;
+    using UnityEngine.Assertions;
 
     /// <summary>
     ///     EnumTriggerMachine is a state machine with enum states and triggers
     /// </summary>
     [Serializable]
-    public abstract class EnumTriggerMachine<TState, TTrigger, TEnumComparer>
-        : EnumStateMachine<TState, TTrigger, TEnumComparer>
-        where TState : struct, IConvertible
+    public abstract class DelegateTriggerMachine<TTrigger, TEnumComparer>
+        : DelegateStateMachine<TTrigger, TEnumComparer>
         where TTrigger : struct, IConvertible
-        where TEnumComparer : IEnumComparer<TState, TTrigger>, new()
+        where TEnumComparer : IEnumComparer<TTrigger>, new()
     {
         #region Fields
-        private Dictionary<TState, Dictionary<TTrigger, TState>> connections = new Dictionary<TState, Dictionary<TTrigger, TState>>();
+        private Dictionary<MethodInfo, Dictionary<TTrigger, MethodInfo>> connections = new Dictionary<MethodInfo, Dictionary<TTrigger, MethodInfo>>();
         private int startState = -1;
         #endregion
 
@@ -32,23 +36,25 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         /// </summary>
         /// <param name="owner"></param>
         /// <param name="startState"></param>
-        protected EnumTriggerMachine(IEnumStateMachineOwner<TState> owner, TState startState)
-            : base(owner)
-        {
-            this.startState = IndexOf(startState);
-        }
+        protected DelegateTriggerMachine()
+            : base()
+        { }
         #endregion
 
         #region Class Methods
-        public EnumTriggerMachine<TState, TTrigger, TEnumComparer> Connect(TState source, TTrigger trigger, TState destination)
+        public void Init(StateDelegate startState)
         {
-            if (!connections.TryGetValue(source, out var transitions))
-            {
-                transitions = new Dictionary<TTrigger, TState>();
-                connections.Add(source, transitions);
-            }
+            this.startState = IndexOf(startState.Method);
+            Assert.IsTrue(this.startState != Const.INDEX_NONE, "Init() MUST be called at the end of the connection setup");
+        }
 
-            transitions[trigger] = destination;
+        public DelegateTriggerMachine<TTrigger, TEnumComparer> Connect(StateDelegate source, TTrigger trigger, StateDelegate destination)
+        {
+            Add(source);
+            Add(destination);
+
+            var transitions = connections.SafeGet(source.Method);
+            transitions[trigger] = destination.Method;
 
             return this;
         }
@@ -56,6 +62,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
         public override void Reboot()
         {
             activeState = -1;
+            Assert.IsTrue(this.startState != Const.INDEX_NONE, "Init() MUST be called at the end of the connection setup");
             incomingState = startState;
         }
 

@@ -39,7 +39,7 @@ namespace Prateek.Runtime.PersonalLogger {
     using Prateek.Runtime.DebugFramework;
     using UnityEditor;
     using UnityEngine;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Core.Statics.Statics;
 
     ///-----------------------------------------------------------------------------
 #if PRATEEK_DEBUG

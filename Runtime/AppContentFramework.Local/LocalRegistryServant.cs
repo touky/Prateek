@@ -15,6 +15,7 @@ namespace Prateek.Runtime.AppContentFramework.Local
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+    using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
     using UnityEngine;
 
     public class LocalRegistryServant
@@ -62,127 +63,131 @@ namespace Prateek.Runtime.AppContentFramework.Local
             contentFormats.SortWithPriorities();
         }
 
-        public override void ExecutingState(State state)
+        protected override void Startup(StateStatus stateStatus)
         {
-            switch (state)
+            if (stateStatus == StateStatus.Execute)
             {
-                case State.Startup:
+                extraContentPath = Path.Combine(Application.dataPath, EXTRA_CONTENT);
+                var contentInfo = new DirectoryInfo(extraContentPath);
+                if (!contentInfo.Exists)
                 {
-                    extraContentPath = Path.Combine(Application.dataPath, EXTRA_CONTENT);
-                    var contentInfo = new DirectoryInfo(extraContentPath);
-                    if (!contentInfo.Exists)
+                    return;
+                }
+
+                lookUpInfos.Add(contentInfo);
+
+                extraContentTocPath = Path.Combine(extraContentPath, EXTRA_CONTENT_TOC);
+
+                var builder = (StringBuilder) null;
+                var contentTocInfo = new FileInfo(extraContentTocPath);
+                if (contentTocInfo.Exists)
+                {
+                    contentToc = FileHelper.Read<ContentToc>(contentTocInfo);
+                    if (contentToc != null && contentToc.folders != null && contentToc.folders.Count > 0)
                     {
-                        break;
-                    }
-
-                    lookUpInfos.Add(contentInfo);
-
-                    extraContentTocPath = Path.Combine(extraContentPath, EXTRA_CONTENT_TOC);
-
-                    var builder        = (StringBuilder) null;
-                    var contentTocInfo = new FileInfo(extraContentTocPath);
-                    if (contentTocInfo.Exists)
-                    {
-                        contentToc = FileHelper.Read<ContentToc>(contentTocInfo);
-                        if (contentToc != null && contentToc.folders != null && contentToc.folders.Count > 0)
+                        foreach (var folder in contentToc.folders)
                         {
-                            foreach (var folder in contentToc.folders)
+                            var directoryInfo = new DirectoryInfo(folder);
+                            if (!directoryInfo.Exists)
                             {
-                                var directoryInfo = new DirectoryInfo(folder);
+                                directoryInfo = new DirectoryInfo(Path.Combine(Application.dataPath, folder));
                                 if (!directoryInfo.Exists)
                                 {
-                                    directoryInfo = new DirectoryInfo(Path.Combine(Application.dataPath, folder));
-                                    if (!directoryInfo.Exists)
+                                    if (builder == null)
                                     {
-                                        if (builder == null)
-                                        {
-                                            builder = new StringBuilder();
-                                            builder.AppendLine("Some errors were found");
-                                        }
-
-                                        builder.AppendLine($"- Couldn't resolve {folder}");
-                                        continue;
+                                        builder = new StringBuilder();
+                                        builder.AppendLine("Some errors were found");
                                     }
-                                }
 
-                                lookUpInfos.Add(directoryInfo);
+                                    builder.AppendLine($"- Couldn't resolve {folder}");
+                                    continue;
+                                }
                             }
+
+                            lookUpInfos.Add(directoryInfo);
                         }
                     }
-                    else
-                    {
-                        contentToc = new ContentToc();
-                        var json = JsonUtility.ToJson(contentToc, true);
-                        File.WriteAllText(contentTocInfo.FullName, json);
-                    }
-
-                    if (builder != null && builder.Length > 0)
-                    {
-                        var errorPath = Path.Combine(extraContentPath, ERROR_FILE);
-                        File.WriteAllText(errorPath, builder.ToString());
-                    }
-
-                    workStatus = lookUpInfos.Count > 0 ? WorkStatus.Pending : WorkStatus.Nothing;
-
-                    break;
                 }
-                case State.StartWork:
+                else
                 {
-                    pathToContentPaths.Clear();
-                    break;
+                    contentToc = new ContentToc();
+                    var json = JsonUtility.ToJson(contentToc, true);
+                    File.WriteAllText(contentTocInfo.FullName, json);
                 }
-                case State.Working:
+
+                if (builder != null && builder.Length > 0)
                 {
-                    foreach (var lookUpInfo in lookUpInfos)
+                    var errorPath = Path.Combine(extraContentPath, ERROR_FILE);
+                    File.WriteAllText(errorPath, builder.ToString());
+                }
+
+                workStatus = lookUpInfos.Count > 0 ? WorkStatus.Pending : WorkStatus.Nothing;
+            }
+
+            base.Startup(stateStatus);
+        }
+
+        protected override void StartWork(StateStatus stateStatus)
+        {
+            if (stateStatus == StateStatus.Execute)
+            {
+                pathToContentPaths.Clear();
+            }
+
+            base.Startup(stateStatus);
+        }
+
+        protected override void Working(StateStatus stateStatus)
+        {
+            if (stateStatus == StateStatus.Execute)
+            {
+                foreach (var lookUpInfo in lookUpInfos)
+                {
+                    var filePaths = Directory.GetFiles(lookUpInfo.FullName, SEARCH_PATTERN, SearchOption.AllDirectories);
+                    foreach (var filePath in filePaths)
                     {
-                        var filePaths = Directory.GetFiles(lookUpInfo.FullName, SEARCH_PATTERN, SearchOption.AllDirectories);
-                        foreach (var filePath in filePaths)
+                        var fileInfo = new FileInfo(filePath);
+                        if (ShouldIgnore(fileInfo))
                         {
-                            var fileInfo = new FileInfo(filePath);
-                            if (ShouldIgnore(fileInfo))
+                            continue;
+                        }
+
+                        var relativePath = fileInfo.RelativePath(lookUpInfo);
+                        if (pathToContentPaths.ContainsKey(relativePath))
+                        {
+                            pathToContentPaths.Remove(relativePath);
+                        }
+
+                        foreach (var contentFormat in contentFormats)
+                        {
+                            if (contentFormat.Extension != string.Empty && contentFormat.Extension.ToLower() != fileInfo.Extension.ToLower())
                             {
                                 continue;
                             }
 
-                            var relativePath = fileInfo.RelativePath(lookUpInfo);
-                            if (pathToContentPaths.ContainsKey(relativePath))
+                            cacheContentPaths.Clear();
+                            if (contentFormat.ExtractPath(relativePath, fileInfo, cacheContentPaths))
                             {
-                                pathToContentPaths.Remove(relativePath);
+                                foreach (var contentPath in cacheContentPaths)
+                                {
+                                    pathToContentPaths.SafeAdd(contentPath.StoragePath, contentPath);
+                                }
                             }
 
-                            foreach (var contentFormat in contentFormats)
-                            {
-                                if (contentFormat.Extension != string.Empty && contentFormat.Extension.ToLower() != fileInfo.Extension.ToLower())
-                                {
-                                    continue;
-                                }
-
-                                cacheContentPaths.Clear();
-                                if (contentFormat.ExtractPath(relativePath, fileInfo, cacheContentPaths))
-                                {
-                                    foreach (var contentPath in cacheContentPaths)
-                                    {
-                                        pathToContentPaths.Set(contentPath.StoragePath, contentPath);
-                                    }
-                                }
-
-                                break;
-                            }
+                            break;
                         }
                     }
-
-                    foreach (var relativePath in pathToContentPaths.Keys)
-                    {
-                        ValidatePath(relativePath);
-                    }
-
-                    workStatus = WorkStatus.Done;
-
-                    break;
                 }
+
+                foreach (var relativePath in pathToContentPaths.Keys)
+                {
+                    ValidatePath(relativePath);
+                }
+
+                workStatus = WorkStatus.Done;
             }
 
-            base.ExecutingState(state);
+            base.Startup(stateStatus);
         }
 
         protected override ContentLoader GetNewContentLoader(string path)

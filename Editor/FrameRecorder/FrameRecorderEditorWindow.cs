@@ -38,7 +38,7 @@ namespace Prateek.Editor.FrameRecorder
     using UnityEditor;
     using UnityEditor.UIElements;
     using UnityEngine.UIElements;
-    using static Runtime.Core.Extensions.Statics;
+    using static Runtime.Core.Statics.Statics;
 
     ///-------------------------------------------------------------------------
     public class FrameRecorderEditorWindow : EditorWindow

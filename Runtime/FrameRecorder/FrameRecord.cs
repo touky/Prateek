@@ -16,7 +16,7 @@ namespace Prateek.Runtime.FrameRecorder
                 
             public void Declare(IInstantiatorBinder binder)
             {
-                binder.BindTo<IOwner>();
+                binder.BindGadgetTo<IOwner>();
                 binder.InjectGadgetTo<FrameRecorder>();
                 binder.AddGadgetAs<FrameRecorder>();
             }

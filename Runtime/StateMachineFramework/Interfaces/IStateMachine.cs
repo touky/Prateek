@@ -1,6 +1,9 @@
 namespace Prateek.Runtime.StateMachineFramework.Interfaces
 {
+    using Prateek.Runtime.StateMachineFramework.EnumStateMachines;
+
     public interface IStateMachine<TState, TTrigger>
+        : DelegateStateMachine.IMachine
     {
         #region Properties
         TState ActiveState { get; }
@@ -14,25 +17,38 @@ namespace Prateek.Runtime.StateMachineFramework.Interfaces
         void Trigger(TTrigger trigger);
         #endregion
     }
-
-    public interface IEnumComparer<TState, TTrigger>
+    
+    public interface IEnumComparer<TEnum>
     {
         #region Class Methods
         /// <summary>
         ///     This Compare method is needed because C# generic are a pain to make work without GC
         /// </summary>
-        /// <param name="state0"></param>
-        /// <param name="state1"></param>
+        /// <param name="enum0"></param>
+        /// <param name="enum1"></param>
         /// <returns></returns>
-        bool Compare(TState state0, TState state1);
+        bool Compare(TEnum enum0, TEnum enum1);
+        #endregion
+    }
+
+    public interface IEnumComparer<TEnum0, TEnum1>
+    {
+        #region Class Methods
+        /// <summary>
+        ///     This Compare method is needed because C# generic are a pain to make work without GC
+        /// </summary>
+        /// <param name="enum0"></param>
+        /// <param name="enum1"></param>
+        /// <returns></returns>
+        bool Compare(TEnum0 enum0, TEnum0 enum1);
 
         /// <summary>
         ///     This Compare method is needed because C# generic are a pain to make work without GC
         /// </summary>
-        /// <param name="trigger0"></param>
-        /// <param name="trigger1"></param>
+        /// <param name="enum0"></param>
+        /// <param name="enum1"></param>
         /// <returns></returns>
-        bool Compare(TTrigger trigger0, TTrigger trigger1);
+        bool Compare(TEnum1 enum0, TEnum1 enum1);
         #endregion
     }
 }

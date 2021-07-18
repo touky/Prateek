@@ -4,6 +4,8 @@ namespace Prateek.Runtime.StateMachineFramework
 
     public class StateMachineProfilingScope<TState, TTrigger> : ProfilerScope
     {
+        private const string NullScope = "NULL_SCOPE";
+
         #region Constructors
         protected StateMachineProfilingScope(string state) : base(state) { }
         protected StateMachineProfilingScope(TState state) : base($"State {typeof(TState).Name}") { }
@@ -13,7 +15,7 @@ namespace Prateek.Runtime.StateMachineFramework
         public static ProfilerScope Open(TState state)
         {
 #if ENABLE_PROFILER
-            return new StateMachineProfilingScope<TState, TTrigger>(state);
+            return new StateMachineProfilingScope<TState, TTrigger>(state.Equals(null) ? NullScope : state.ToString());
 #else
             return null;
 #endif //ENABLE_PROFILER

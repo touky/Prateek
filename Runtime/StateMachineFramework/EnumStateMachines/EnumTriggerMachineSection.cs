@@ -2,6 +2,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using ImGuiNET;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
@@ -9,19 +10,18 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     using Prateek.Runtime.DebugFramework.Reflection;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
 
-    public class EnumTriggerMachineSection<TOwner, TStateMachine, TState, TTrigger>
-        : EnumStateMachineSection<TOwner, TStateMachine, TState, TTrigger>
-        where TOwner : class, DebugMenu.IDebugMenuOwner, IEnumStepMachineOwner<TState>
-        where TStateMachine : IStateMachine<TState, TTrigger>
-        where TState : struct, IConvertible
+    public class DelegateTriggerMachineSection<TOwner, TStateMachine, TTrigger>
+        : DelegateStateMachineSection<TOwner, TStateMachine, TTrigger>
+        where TOwner : class, DebugMenu.IDebugMenuOwner, DelegateStateMachine.IOwner
+        where TStateMachine : IStateMachine<MethodInfo, TTrigger>
         where TTrigger : struct, IConvertible
     {
         #region Fields
-        private DebugField<Dictionary<TState, Dictionary<TTrigger, TState>>> connections = string.Empty;
+        private DebugField<Dictionary<MethodInfo, Dictionary<TTrigger, MethodInfo>>> connections = string.Empty;
         #endregion
 
         #region Constructors
-        public EnumTriggerMachineSection(string stateMachineFieldName = STATEMACHINE_FIELD)
+        public DelegateTriggerMachineSection(string stateMachineFieldName = STATEMACHINE_FIELD)
             : base(stateMachineFieldName) { }
         #endregion
 

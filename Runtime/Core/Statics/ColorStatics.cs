@@ -1,4 +1,4 @@
-namespace Prateek.Runtime.Core.Extensions
+namespace Prateek.Runtime.Core.Statics
 {
     using UnityEngine;
 

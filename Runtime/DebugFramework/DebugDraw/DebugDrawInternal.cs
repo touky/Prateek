@@ -36,7 +36,7 @@ namespace Prateek.Runtime.DebugFramework.DebugDraw
 {
     using Prateek.Runtime.Core.Extensions;
     using UnityEngine;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Core.Statics.Statics;
 
     ///-------------------------------------------------------------------------
     internal class DebugDrawInternal

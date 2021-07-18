@@ -2,6 +2,7 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using ImGuiNET;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
@@ -11,25 +12,24 @@ namespace Prateek.Runtime.StateMachineFramework.EnumStateMachines
     using Prateek.Runtime.StateMachineFramework.Interfaces;
     using UnityEngine;
 
-    public class EnumStateMachineSection<TOwner, TStateMachine, TState, TTrigger>
+    public class DelegateStateMachineSection<TOwner, TStateMachine, TTrigger>
         : DebugMenuSection<TOwner>
-        where TOwner : class, DebugMenu.IDebugMenuOwner, IEnumStepMachineOwner<TState>
-        where TStateMachine : IStateMachine<TState, TTrigger>
-        where TState : struct, IConvertible
+        where TOwner : class, DebugMenu.IDebugMenuOwner, DelegateStateMachine.IOwner
+        where TStateMachine : IStateMachine<MethodInfo, TTrigger>
         where TTrigger : struct, IConvertible
     {
         #region Static and Constants
-        protected const string STATEMACHINE_FIELD = "stateMachine";
+        protected const string STATEMACHINE_FIELD = "StateMachine";
         #endregion
 
         #region Fields
         protected DebugField<TStateMachine> stateMachine = string.Empty;
-        protected DebugField<List<TState>> states = string.Empty;
+        protected DebugField<List<MethodInfo>> states = string.Empty;
         #endregion
 
         #region Constructors
-        public EnumStateMachineSection(string stateMachineFieldName = STATEMACHINE_FIELD)
-            : base($"State machine <{typeof(TState).Name}, {typeof(TTrigger).Name}>")
+        public DelegateStateMachineSection(string stateMachineFieldName = STATEMACHINE_FIELD)
+            : base($"State machine <{typeof(TTrigger).Name}>")
         {
             stateMachine = stateMachineFieldName;
         }

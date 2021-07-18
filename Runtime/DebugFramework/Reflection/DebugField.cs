@@ -16,13 +16,15 @@ namespace Prateek.Runtime.DebugFramework.Reflection
         protected object owner;
         private Type ownerType;
         private SerializedObject serializedOwner;
+        private MemberInfo memberInfo;
         protected FieldInfo fieldInfo;
+        protected PropertyInfo propertyInfo;
         #endregion
 
         #region Properties
         public string Name { get { return name; } }
 
-        public bool IsValid { get { return fieldInfo != null; } }
+        public bool IsValid { get { return memberInfo != null; } }
 
 #if UNITY_EDITOR
         public SerializedProperty SerializedProperty
@@ -71,11 +73,15 @@ namespace Prateek.Runtime.DebugFramework.Reflection
             }
 
             ownerType = this.owner.GetType();
-            fieldInfo = ReflectionHelper.SearchFieldInfo(ownerType, name, true);
-
+            memberInfo = fieldInfo = ReflectionHelper.SearchFieldInfo(ownerType, name, true);
             if (fieldInfo == null)
             {
-                UnityEngine.Debug.LogError($"{name} could not be found in {ownerType.Name}");
+                memberInfo = propertyInfo = ReflectionHelper.SearchPropertyInfo(ownerType, name, true);
+
+                if (memberInfo == null)
+                {
+                    UnityEngine.Debug.LogError($"{name} could not be found in {ownerType.Name}");
+                }
             }
         }
 

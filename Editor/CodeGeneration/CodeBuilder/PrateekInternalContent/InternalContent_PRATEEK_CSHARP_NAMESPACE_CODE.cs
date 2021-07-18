@@ -8,5 +8,5 @@
     using UnityEngine;
     
     using Prateek;
-    using static Prateek.Runtime.Core.Extensions.Statics;
+    using static Prateek.Runtime.Core.Statics.Statics;
     #endregion Prateek Code Namespaces
