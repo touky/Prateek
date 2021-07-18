@@ -3,7 +3,7 @@ namespace Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder
     using Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates;
     using Prateek.Editor.EditorJobSystem;
 
-    public class TemplateLoadJob : ThreadedJob
+    public class TemplateLoadJob : EditorJob
     {
         #region Fields
         public string contentPath;

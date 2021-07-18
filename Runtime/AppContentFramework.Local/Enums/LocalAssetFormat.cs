@@ -1,6 +1,6 @@
 namespace Prateek.Runtime.AppContentFramework.Local.Enums
 {
-    internal enum LocalAssetFormat
+    public enum LocalAssetFormat
     {
         Nothing,
         Byte,

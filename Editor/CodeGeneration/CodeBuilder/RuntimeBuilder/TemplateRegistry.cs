@@ -3,6 +3,7 @@ namespace Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder
     using System.Collections.Generic;
     using Prateek.Editor.CodeGeneration.CodeBuilder.ScriptTemplates;
     using Prateek.Editor.EditorJobSystem;
+    using Prateek.Runtime.JobFramework;
 
     public static class TemplateRegistry
     {

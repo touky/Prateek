@@ -10,6 +10,7 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
     using Prateek.Runtime.DebugFramework.DebugMenu.Gadgets;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
+    using Prateek.Runtime.StateMachineFramework;
     using Prateek.Runtime.StateMachineFramework.DelegateStateMachines;
     using Prateek.Runtime.StateMachineFramework.Interfaces;
     using Prateek.Runtime.TickableFramework.Interfaces;
@@ -108,12 +109,12 @@ namespace Prateek.Runtime.AppContentFramework.Daemons
         #endregion
 
         #region IEarlyUpdateTickable Members
-        public void EarlyUpdate()
+        public virtual void EarlyUpdate()
         {
             StateMachine.Step();
         }
 
-        public int Priority(IPriority<IEarlyUpdateTickable> type)
+        public virtual int Priority(IPriority<IEarlyUpdateTickable> type)
         {
             return DefaultPriority;
         }

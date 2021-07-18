@@ -6,7 +6,7 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentLoaders
     public class LocalLoaderParameters : LoaderParameters
     {
         #region Fields
-        internal LocalAssetFormat format = LocalAssetFormat.Nothing;
+        public LocalAssetFormat format = LocalAssetFormat.Nothing;
         #endregion
     }
 }

@@ -1,13 +1,12 @@
 namespace Prateek.Editor.EditorJobSystem
 {
-    public abstract class ThreadedJob
+    using Prateek.Runtime.JobFramework;
+
+    public abstract class EditorJob
+        : RuntimeJob
     {
         #region Properties
         public abstract bool DispatchInOrder { get; }
-        #endregion
-
-        #region Class Methods
-        public abstract bool Execute();
         #endregion
     }
 }

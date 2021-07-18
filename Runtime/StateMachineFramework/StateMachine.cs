@@ -1,10 +1,11 @@
-namespace Prateek.Runtime.StateMachineFramework.DelegateStateMachines
+namespace Prateek.Runtime.StateMachineFramework
 {
     using System;
     using System.Reflection;
     using JetBrains.Annotations;
     using Prateek.Runtime.GadgetFramework;
     using Prateek.Runtime.GadgetFramework.Interfaces;
+    using Prateek.Runtime.StateMachineFramework.DelegateStateMachines;
 
     public abstract class StateMachine
         : GadgetTools

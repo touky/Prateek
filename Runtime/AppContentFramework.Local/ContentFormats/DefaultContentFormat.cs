@@ -20,9 +20,9 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentFormats
             return true;
         }
 
-        public override ContentLoader GetLoader(ContentPath contentPath)
+        public override LocalContentLoader GetLoader(ContentPath contentPath)
         {
-            return new LocalContentLoader(contentPath.StoragePath, contentPath);
+            return new DefaultLocalContentLoader(contentPath.StoragePath, contentPath);
         }
         #endregion
     }

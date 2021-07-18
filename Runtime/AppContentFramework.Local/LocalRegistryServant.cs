@@ -4,10 +4,13 @@ namespace Prateek.Runtime.AppContentFramework.Local
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
+    using global::Unity.Jobs;
     using Prateek.Runtime.AppContentFramework.ContentLoaders;
     using Prateek.Runtime.AppContentFramework.Daemons;
     using Prateek.Runtime.AppContentFramework.Local.ContentFormats;
+    using Prateek.Runtime.AppContentFramework.Local.ContentLoaders;
     using Prateek.Runtime.AppContentFramework.Local.Debug;
+    using Prateek.Runtime.AppContentFramework.Local.Interfaces;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.Helpers;
@@ -15,11 +18,15 @@ namespace Prateek.Runtime.AppContentFramework.Local
     using Prateek.Runtime.Core.Interfaces.IPriority;
     using Prateek.Runtime.DebugFramework.DebugMenu;
     using Prateek.Runtime.DebugFramework.DebugMenu.Documents;
+    using Prateek.Runtime.JobFramework;
     using Prateek.Runtime.StateMachineFramework.DelegateStateMachines;
     using UnityEngine;
+    using UnityEngine.PlayerLoop;
+    using UnityEngine.ResourceManagement.AsyncOperations;
 
     public class LocalRegistryServant
         : ContentRegistryServant
+        , IJobHandler
     {
         #region Static and Constants
         //todo add this to the settings
@@ -44,6 +51,10 @@ namespace Prateek.Runtime.AppContentFramework.Local
         private List<DirectoryInfo> lookUpInfos = new List<DirectoryInfo>();
         private Dictionary<string, ContentPath> pathToContentPaths = new Dictionary<string, ContentPath>();
         private List<ContentPath> cacheContentPaths = new List<ContentPath>();
+        private Dictionary<LoadJob, LocalContentLoader> runningJobs = new Dictionary<LoadJob, LocalContentLoader>();
+
+        private RuntimeJobSystem jobSystem = new RuntimeJobSystem();
+        private List<LoadJob> finishedJobs = new List<LoadJob>();
         #endregion
 
         #region Properties
@@ -51,6 +62,13 @@ namespace Prateek.Runtime.AppContentFramework.Local
         #endregion
 
         #region Class Methods
+        public override void EarlyUpdate()
+        {
+            base.EarlyUpdate();
+
+            UpdateRunningJobs();
+        }
+
         public override void Startup()
         {
             base.Startup();
@@ -192,7 +210,37 @@ namespace Prateek.Runtime.AppContentFramework.Local
 
         protected override ContentLoader GetNewContentLoader(string path)
         {
-            return pathToContentPaths[path].ContentFormat.GetLoader(pathToContentPaths[path]);
+            var loader = pathToContentPaths[path].ContentFormat.GetLoader(pathToContentPaths[path]);
+            loader.Set(this);
+            return loader;
+        }
+
+        public void Schedule(LocalContentLoader jobOwner, LoadJob job)
+        {
+            runningJobs.Add(job, jobOwner);
+
+            jobSystem.AddWork(job);
+        }
+
+        private void UpdateRunningJobs()
+        {
+            if (runningJobs.Count == 0)
+            {
+                return;
+            }
+
+            finishedJobs.Clear();
+            jobSystem.GetFinishedWork(finishedJobs);
+
+            for (int j = 0; j < finishedJobs.Count; j++)
+            {
+                var job = finishedJobs[j];
+                var owner = runningJobs[job];
+
+                runningJobs.Remove(job);
+
+                owner.JobCompleted(job);
+            }
         }
 
         public override void SetupDebugDocument(DebugMenuDocument document)

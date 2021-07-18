@@ -2,6 +2,7 @@ namespace Prateek.Editor.EditorJobSystem
 {
     using System.Collections.Generic;
     using System.Threading;
+    using Prateek.Runtime.JobFramework;
     using UnityEngine;
 
     public static class EditorJobSystem
@@ -20,67 +21,26 @@ namespace Prateek.Editor.EditorJobSystem
         private static object outOfOrderLock = new object();
         private static List<Thread> outOfOrderThreads = new List<Thread>();
 
-        private static JobContainer jobEntering = new JobContainer();
-        private static JobContainer jobInOrder = new JobContainer();
-        private static JobContainer jobOutOfOrder = new JobContainer();
-        private static JobContainer jobFinished = new JobContainer();
-        private static JobContainer jobExiting = new JobContainer();
+        private static JobQueue jobEntering = new JobQueue();
+        private static JobQueue jobInOrder = new JobQueue();
+        private static JobQueue jobOutOfOrder = new JobQueue();
+        private static JobQueue jobFinished = new JobQueue();
+        private static JobQueue jobExiting = new JobQueue();
         #endregion
 
         #region Class Methods
-        public static void AddWork(ThreadedJob job)
+        public static void AddWork(EditorJob job)
         {
             if (mainThread == null)
             {
                 emergencyExit = false;
 
                 mainThread = new Thread(DispatchThread);
-                mainThread.Name = "TemplateRegistry.ThreadUpdate";
+                mainThread.Name = $"EditorJobSystem.ThreadUpdate";
                 mainThread.Start();
             }
 
-
             jobEntering.Enqueue(job);
-        }
-
-        private static void StartInOrderThread()
-        {
-            lock (inOrderLock)
-            {
-                if (inOrderThread == null || !inOrderThread.IsAlive)
-                {
-                    var thread = new Thread(WorkThreadInOrder);
-
-                    thread.Name = "TemplateRegistry.WorkThreadInOrder";
-                    thread.Start();
-
-                    inOrderThread = thread;
-                }
-            }
-        }
-
-        private static void StartOutOfOrderThreads()
-        {
-            lock (outOfOrderLock)
-            {
-                UnsafeCleanOutOfOrderThreads();
-
-                int threadAdded = Mathf.Max(0, Mathf.Min(workThreadCount - outOfOrderThreads.Count, workThreadCount));
-                if (threadAdded == 0)
-                {
-                    return;
-                }
-
-                for (var t = 0; t < threadAdded; t++)
-                {
-                    var thread = new Thread(WorkThreadOutOfOrder);
-
-                    thread.Name = "TemplateRegistry.WorkThreadOutOfOrder";
-                    thread.Start();
-
-                    outOfOrderThreads.Add(thread);
-                }
-            }
         }
 
         private static void UnsafeCleanOutOfOrderThreads()
@@ -88,7 +48,7 @@ namespace Prateek.Editor.EditorJobSystem
             outOfOrderThreads.RemoveAll(x => { return x == null || x.IsAlive; });
         }
 
-        public static void JoinWork(Queue<ThreadedJob> resultJobs = null)
+        public static void JoinWork(Queue<EditorJob> resultJobs = null)
         {
             if (mainThread == null)
             {
@@ -108,11 +68,11 @@ namespace Prateek.Editor.EditorJobSystem
             var frameCount = exitMainFrameCount;
             while (true)
             {
-                var tempJobs = new Queue<ThreadedJob>();
+                var tempJobs = new Queue<EditorJob>();
                 jobEntering.Dequeue(tempJobs);
 
-                var inOrderJobs    = new Queue<ThreadedJob>();
-                var outOfOrderJobs = new Queue<ThreadedJob>();
+                var inOrderJobs    = new Queue<EditorJob>();
+                var outOfOrderJobs = new Queue<EditorJob>();
                 while (tempJobs.Count > 0)
                 {
                     var job = tempJobs.Dequeue();
@@ -126,6 +86,9 @@ namespace Prateek.Editor.EditorJobSystem
                     }
                 }
 
+                jobInOrder.Enqueue(inOrderJobs);
+                jobOutOfOrder.Enqueue(outOfOrderJobs);
+
                 if (inOrderJobs.Count > 0)
                 {
                     StartInOrderThread();
@@ -135,9 +98,6 @@ namespace Prateek.Editor.EditorJobSystem
                 {
                     StartOutOfOrderThreads();
                 }
-
-                jobInOrder.Enqueue(inOrderJobs);
-                jobOutOfOrder.Enqueue(outOfOrderJobs);
 
                 jobFinished.Dequeue(tempJobs);
                 jobExiting.Enqueue(tempJobs);
@@ -180,6 +140,46 @@ namespace Prateek.Editor.EditorJobSystem
             }
 
             mainThread = null;
+        }
+
+        private static void StartInOrderThread()
+        {
+            lock (inOrderLock)
+            {
+                if (inOrderThread == null || !inOrderThread.IsAlive)
+                {
+                    var thread = new Thread(WorkThreadInOrder);
+
+                    thread.Name = $"EditorJobSystem.WorkThreadInOrder";
+                    thread.Start();
+
+                    inOrderThread = thread;
+                }
+            }
+        }
+
+        private static void StartOutOfOrderThreads()
+        {
+            lock (outOfOrderLock)
+            {
+                UnsafeCleanOutOfOrderThreads();
+
+                int threadAdded = Mathf.Max(0, Mathf.Min(workThreadCount - outOfOrderThreads.Count, workThreadCount));
+                if (threadAdded == 0)
+                {
+                    return;
+                }
+
+                for (var t = 0; t < threadAdded; t++)
+                {
+                    var thread = new Thread(WorkThreadOutOfOrder);
+
+                    thread.Name = $"EditorJobSystem.WorkThreadOutOfOrder";
+                    thread.Start();
+
+                    outOfOrderThreads.Add(thread);
+                }
+            }
         }
 
         private static void WorkThreadInOrder()

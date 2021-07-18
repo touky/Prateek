@@ -1,4 +1,4 @@
-namespace Prateek.Editor.EditorJobSystem
+namespace Prateek.Runtime.JobFramework
 {
     using System.Collections.Generic;
 

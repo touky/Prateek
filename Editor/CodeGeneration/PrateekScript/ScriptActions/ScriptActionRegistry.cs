@@ -2,6 +2,7 @@ namespace Prateek.Editor.CodeGeneration.PrateekScript.ScriptActions
 {
     using System.Collections.Generic;
     using Prateek.Editor.EditorJobSystem;
+    using Prateek.Runtime.JobFramework;
 
     public class ScriptActionRegistry
     {
