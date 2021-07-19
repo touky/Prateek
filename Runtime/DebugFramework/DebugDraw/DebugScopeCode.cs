@@ -38,13 +38,13 @@ namespace Prateek.Runtime.DebugFramework.DebugDraw
 #endif
         }
 
-#if PRATEEK_DEBUG
+#if PRATEEK_DEBUG && ACTIVE_CODE
         public static DebugScope Open(DebugStyle setup)
 #else
         public static DebugScopeCode Open(DebugStyle setup)
 #endif
         {
-#if PRATEEK_DEBUG
+#if PRATEEK_DEBUG && ACTIVE_CODE
             return new DebugScope(setup);
 #else
             return null;
