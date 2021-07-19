@@ -11,7 +11,7 @@ namespace Prateek.Runtime.DebugFramework.DebugDraw
 #if ACTIVE_CODE
     public class DebugScope : GUI.Scope
 #else
-    internal class DebugScopeCode : GUI.Scope
+    public class DebugScopeCode : GUI.Scope
 #endif
     {
         ///-----------------------------------------------------------------
