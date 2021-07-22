@@ -1,7 +1,10 @@
 namespace Prateek.Runtime.JobFramework
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading;
+    using Prateek.Runtime.Core.Singleton;
+    using UnityEngine;
 
     public class RuntimeJobSystem
     {
@@ -11,7 +14,8 @@ namespace Prateek.Runtime.JobFramework
 
         private bool emergencyExit = true;
 
-        private Thread mainThread = null;
+        private Thread thread = null;
+        private MainThreadJobSystem mainThreadScheduler;
 
         private JobQueue jobEntering = new JobQueue();
         private JobQueue jobFinished = new JobQueue();
@@ -20,14 +24,10 @@ namespace Prateek.Runtime.JobFramework
         #region Class Methods
         public void AddWork(RuntimeJob job)
         {
-            if (mainThread == null || !mainThread.IsAlive)
-            {
-                emergencyExit = false;
+            StartThread();
+            StartMainThreadScheduler();
 
-                mainThread = new Thread(WorkThread);
-                mainThread.Name = $"RuntimeJobSystem.ThreadUpdate";
-                mainThread.Start();
-            }
+            job.mainThreadScheduler = mainThreadScheduler;
 
             jobEntering.Enqueue(job);
         }
@@ -36,6 +36,30 @@ namespace Prateek.Runtime.JobFramework
             where TRuntimeJob : RuntimeJob
         {
             jobFinished.Dequeue(resultJobs);
+        }
+
+        private void StartThread()
+        {
+            if (thread == null || !thread.IsAlive)
+            {
+                emergencyExit = false;
+
+                thread = new Thread(WorkThread);
+                thread.Name = $"RuntimeJobSystem.ThreadUpdate";
+                thread.Start();
+            }
+        }
+
+        private void StartMainThreadScheduler()
+        {
+            if (mainThreadScheduler != null)
+            {
+                return;
+            }
+
+            mainThreadScheduler = new GameObject($"{nameof(MainThreadJobSystem)}").AddComponent<MainThreadJobSystem>();
+            ParentProvider.AddChildToParent(mainThreadScheduler.transform, "MultiThreading-Coroutine");
+            GameObject.DontDestroyOnLoad(mainThreadScheduler);
         }
 
         private void WorkThread()

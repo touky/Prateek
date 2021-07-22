@@ -1,5 +1,6 @@
 namespace Prateek.Runtime.JobFramework
 {
+    using System;
     using System.Collections.Generic;
 
     public class JobQueue
@@ -8,6 +9,17 @@ namespace Prateek.Runtime.JobFramework
         private Queue<RuntimeJob> jobQueue = new Queue<RuntimeJob>();
         private object jobLock = new object();
         #endregion
+
+        public int Count
+        {
+            get
+            {
+                lock (jobLock)
+                {
+                    return jobQueue.Count;
+                }
+            }
+        }
 
         #region Class Methods
         public void Enqueue(RuntimeJob job)
