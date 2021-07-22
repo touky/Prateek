@@ -3,6 +3,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu.Drawers
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
     using ImGuiNET;
+    using Prateek.Runtime.Core.Helpers;
     using Prateek.Runtime.Core.HierarchicalTree;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
     using Prateek.Runtime.DebugFramework.Reflection;
@@ -62,7 +63,7 @@ namespace Prateek.Runtime.DebugFramework.DebugMenu.Drawers
 
                             foreach (var leaf in leaves.Value)
                             {
-                                ImGui.Text($"- {leaf.Name}{leaf.Extension}");
+                                ImGui.Text($"- {leaf.Name}{leaf.Extension}{(leaf.LeafData.Size < 0 ? string.Empty : $" ({leaf.LeafData.Size.ToReadableSize()})")}");
                             }
                         }
                     }

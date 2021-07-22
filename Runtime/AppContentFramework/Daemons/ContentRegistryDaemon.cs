@@ -219,6 +219,7 @@
             : IHierarchicalTreeLeaf
         {
             public string Path { get; set; }
+            public long Size { get { return Const.INDEX_NONE; } }
         }
         #endregion
 

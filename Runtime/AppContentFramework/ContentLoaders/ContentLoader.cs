@@ -4,6 +4,7 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
     using System.Diagnostics;
     using Prateek.Runtime.AppContentFramework.ContentLoaders.Enums;
     using Prateek.Runtime.AppContentFramework.ContentLoaders.Interfaces;
+    using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
@@ -160,6 +161,11 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         public string Path
         {
             get { return path; }
+        }
+
+        public virtual long Size
+        {
+            get { return Const.INDEX_NONE; }
         }
         #endregion
     }

@@ -44,6 +44,7 @@ namespace Prateek.Runtime.JobFramework
             while (true)
             {
                 var workJobs = new Queue<RuntimeJob>();
+                var workingJobs = new Queue<RuntimeJob>();
                 var doneJobs = new Queue<RuntimeJob>();
                 jobEntering.Dequeue(workJobs);
 
@@ -53,12 +54,18 @@ namespace Prateek.Runtime.JobFramework
                     resetFrameCount = true;
 
                     var job = workJobs.Dequeue();
-                    if (job.Execute())
+                    var jobStatus = job.Execute();
+                    if (jobStatus != RuntimeJob.JobStatus.Working)
                     {
                         doneJobs.Enqueue(job);
                     }
+                    else
+                    {
+                        workingJobs.Enqueue(job);
+                    }
                 }
 
+                jobEntering.Enqueue(workingJobs);
                 jobFinished.Enqueue(doneJobs);
 
                 if (resetFrameCount)

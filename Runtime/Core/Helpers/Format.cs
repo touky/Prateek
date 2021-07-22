@@ -121,5 +121,41 @@ namespace Prateek.Runtime.Core.Helpers
             return ToRichText(col) + text + "</color>";
         }
         #endregion Text coloring
+
+        ///---------------------------------------------------------------------
+
+        #region File size
+        public static string ToReadableSize(this long size)
+        {
+            if (size < 0)
+            {
+                return string.Empty;
+            }
+
+            if (size < 1000)
+            {
+                return $"{size}b";
+            }
+
+            var rest = (size % 1000) / 100;
+            size = size / 1000;
+            if (size < 1000)
+            {
+                return $"{size}.{rest}Kb";
+            }
+            
+            rest = (size % 1000) / 100;
+            size = size / 1000;
+            if (size < 1000)
+            {
+                return $"{size}.{rest}Mb";
+            }
+            
+            rest = (size % 1000) / 100;
+            size = size / 1000;
+
+            return $"{size}.{rest}Gb";
+        }
+        #endregion
     }
 }

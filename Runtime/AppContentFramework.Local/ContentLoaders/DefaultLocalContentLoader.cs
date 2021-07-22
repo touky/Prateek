@@ -89,10 +89,10 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentLoaders
                 byteData = null;
             }
             
-            protected override bool ExecuteLoad()
+            protected override JobStatus ExecuteLoad()
             {
                 byteData = File.ReadAllBytes(path);
-                return true;
+                return JobStatus.Done;
             }
         }
 
@@ -110,10 +110,10 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentLoaders
                 textData = null;
             }
 
-            protected override bool ExecuteLoad()
+            protected override JobStatus ExecuteLoad()
             {
                 textData = File.ReadAllText(path);
-                return true;
+                return JobStatus.Done;
             }
         }
 
@@ -131,10 +131,10 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentLoaders
                 linesData = null;
             }
 
-            protected override bool ExecuteLoad()
+            protected override JobStatus ExecuteLoad()
             {
                 linesData = File.ReadAllLines(path);
-                return true;
+                return JobStatus.Done;
             }
         }
         #endregion

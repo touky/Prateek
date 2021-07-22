@@ -4,6 +4,7 @@
     {
         #region Properties
         string Path { get; }
+        long Size { get; }
         #endregion
     }
 }

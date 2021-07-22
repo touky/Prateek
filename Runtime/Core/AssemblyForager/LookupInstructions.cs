@@ -81,12 +81,7 @@
 
             Sort();
 
-            //todo trello
             FileHelper.Write(this, assetPath);
-            if (!EditorApplication.isPlaying)
-            {
-                AssetDatabase.Refresh();
-            }
 #else
             throw new NotImplementedException($"{nameof(LookupInstructions)}: Save() is not supported outside of the editor");
 #endif

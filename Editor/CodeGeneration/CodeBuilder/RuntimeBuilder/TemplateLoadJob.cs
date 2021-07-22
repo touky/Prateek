@@ -23,10 +23,10 @@ namespace Prateek.Editor.CodeGeneration.CodeBuilder.RuntimeBuilder
             EditorJobSystem.AddWork(this);
         }
 
-        public override bool Execute()
+        public override JobStatus Execute()
         {
             template.LoadFile(contentPath).Commit();
-            return true;
+            return JobStatus.Done;
         }
         #endregion
     }

@@ -190,9 +190,14 @@ namespace Prateek.Editor.EditorJobSystem
                 var newJob = jobInOrder.Dequeue();
                 if (newJob != null)
                 {
-                    if (newJob.Execute())
+                    var jobStatus = newJob.Execute();
+                    if (jobStatus != RuntimeJob.JobStatus.Working)
                     {
                         jobFinished.Enqueue(newJob);
+                    }
+                    else
+                    {
+                        jobInOrder.Enqueue(newJob);
                     }
 
                     frameCount = exitChildFrameCount;
@@ -221,9 +226,14 @@ namespace Prateek.Editor.EditorJobSystem
                 var newJob = jobOutOfOrder.Dequeue();
                 if (newJob != null)
                 {
-                    if (newJob.Execute())
+                    var jobStatus = newJob.Execute();
+                    if (jobStatus != RuntimeJob.JobStatus.Working)
                     {
                         jobFinished.Enqueue(newJob);
+                    }
+                    else
+                    {
+                        jobOutOfOrder.Enqueue(newJob);
                     }
 
                     frameCount = exitChildFrameCount;

@@ -9,6 +9,11 @@ namespace Prateek.Runtime.AppContentFramework.Local.ContentLoaders
         private IJobHandler handler;
 
         protected ContentPath contentPath;
+        
+        public override long Size
+        {
+            get { return (contentPath != null && contentPath.FileInfo != null) ? contentPath.FileInfo.Length : 0; }
+        }
 
         protected LocalContentLoader(string path, ContentPath contentPath)
             : base(path)

@@ -1,5 +1,6 @@
 namespace Prateek.Runtime.AppContentFramework.Local
 {
+    using System.Runtime.InteropServices.ComTypes;
     using Prateek.Runtime.AppContentFramework.ContentLoaders.Enums;
     using Prateek.Runtime.JobFramework;
 
@@ -8,18 +9,25 @@ namespace Prateek.Runtime.AppContentFramework.Local
     {
         public ContentAsyncStatus Status { get; private set; }
 
-        public override bool Execute()
+        public override JobStatus Execute()
         {
-            if (ExecuteLoad())
+            var status = ExecuteLoad();
+            if (status == JobStatus.Working)
+            {
+                return JobStatus.Working;
+            }
+
+            if (status == JobStatus.Done)
             {
                 Status = ContentAsyncStatus.Loaded;
-                return true;
+                return JobStatus.Done;
+
             }
 
             Status = ContentAsyncStatus.Failed;
-            return true;
+            return JobStatus.Failed;
         }
 
-        protected abstract bool ExecuteLoad();
+        protected abstract JobStatus ExecuteLoad();
     }
 }
