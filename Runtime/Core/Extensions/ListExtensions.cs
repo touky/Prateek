@@ -164,6 +164,17 @@ namespace Prateek.Runtime.Core.Extensions
         }
 
         ///---------------------------------------------------------------------
+        public static T First<T>(this List<T> list)
+        {
+            if (list.Count > 0)
+            {
+                return list[0];
+            }
+
+            return default;
+        }
+
+        ///---------------------------------------------------------------------
         public static T GetOrInsert<T>(this List<T> list, int index)
             where T : new()
         {

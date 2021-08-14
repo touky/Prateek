@@ -94,9 +94,19 @@ namespace Prateek.Runtime.DebugFramework.Reflection
 
             return foundProperties.Count > 0;
         }
+
+        public static FieldInfo[] GetAllFieldInfo(Type classType, bool searchParent = false)
+        {
+            return GetAllFieldInfo(null, classType, searchParent);
+        }
+
         public static FieldInfo[] GetAllFieldInfo<TFieldType>(Type classType, bool searchParent = false)
         {
-            var searchType = typeof(TFieldType);
+            return GetAllFieldInfo(typeof(TFieldType), classType, searchParent);
+        }
+
+        public static FieldInfo[] GetAllFieldInfo(Type searchType, Type classType, bool searchParent = false)
+        {
             if (searchParent)
             {
                 var fieldInfos = new List<FieldInfo>();
@@ -111,8 +121,9 @@ namespace Prateek.Runtime.DebugFramework.Reflection
                 for (var f = 0; f < fieldInfos.Count; f++)
                 {
                     var fieldType = fieldInfos[f].FieldType;
-                    if (fieldType.IsSubclassOf(searchType)
-                     || searchType.IsAssignableFrom(fieldType))
+                    if (searchType != null
+                        && (fieldType.IsSubclassOf(searchType)
+                        || searchType.IsAssignableFrom(fieldType)))
                     {
                         continue;
                     }
