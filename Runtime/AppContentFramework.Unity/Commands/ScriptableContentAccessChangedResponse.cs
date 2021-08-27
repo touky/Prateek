@@ -10,7 +10,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Commands
     /// </summary>
     /// <typeparam name="TContentType">The type of the resource</typeparam>
     public abstract class ScriptableContentAccessChangedResponse<TContentType>
-        : ContentAccessChangedResponse<TContentType, ScriptableObjectHandle<TContentType>>
+        : ContentAccessChangedResponse<ScriptableObjectHandle<TContentType>>
         where TContentType : ScriptableObject
     {
         #region Class Methods

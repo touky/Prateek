@@ -2,15 +2,18 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
 {
     using System;
     using System.Diagnostics;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders.Enums;
     using Prateek.Runtime.AppContentFramework.ContentLoaders.Interfaces;
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.Extensions;
+    using Prateek.Runtime.Core.Interfaces.IDebuggerDisplay;
     using UnityEngine.Assertions;
 
-    [DebuggerDisplay("{DebuggerDisplay,nq}")]
-    public abstract class ContentHandle<TContentType, TContentHandle>
-        : IContentHandle
-        where TContentHandle : ContentHandle<TContentType, TContentHandle>
+    [DebuggerDisplay(ConstDebuggerDisplay.Key)]
+    public abstract class ContentHandle<TContent>
+        : IContentHandleInit
+        , IContentHandle
+        , IDebuggerDisplay
     {
         #region Static and Constants
         private const int NO_INSTANCE = 0;
@@ -21,31 +24,35 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         private bool autoUnload = true;
 
         private ContentLoader loader;
-        private TContentType content;
-        private Action<TContentHandle> asyncCompletedAction;
+        private Action<IContentHandle> asyncCompletedAction;
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Child classes must use this property to access the content once loaded
-        /// This is deliberately not public to give the possibility to tinker with the content
-        /// (See GameObject & Component instance count management)
-        /// </summary>
-        protected TContentType TypedContent
+        protected TContent TypedContent
         {
-            get { return content; }
-        }
+            get
+            {
+                if (loader.IsContentValid<TContent>())
+                {
+                    return loader.GetContent<TContent>();
+                }
 
-        private string DebuggerDisplay { get { return $"{DebuggerDisplayType}, {DebuggerDisplayFile}"; } }
+                return default;
+            }
+        }
+        #endregion
+
+        #region DebuggerDisplay
+        public string DebuggerDisplay { get { return $"{DebuggerDisplayType}, {DebuggerDisplayFile}"; } }
 
         protected string DebuggerDisplayType
         {
-            get { return $"{typeof(TContentHandle).Name}<{typeof(TContentType).Name}>"; }
+            get { return $"{GetType().Name}<{(loader != null ? loader.GetType().Name : "-NO LOADER-")}>"; }
         }
         
         protected string DebuggerDisplayFile
         {
-            get { return $"{(content != null ? content.ToString() : "Not loaded")}, Location: {loader.Path}"; }
+            get { return $"[Inst{instanceCount}]{(autoUnload ? string.Empty : "[MANUAL-UNLOAD]")} {loader.DebuggerDisplay}"; }
         }
         #endregion
 
@@ -68,26 +75,21 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
         #endregion
 
         #region Class Methods
-        public virtual void Init(ContentLoader loader)
+        void IContentHandleInit.Init(ContentLoader loader)
         {
             this.loader = loader;
             this.loader.LoadCompleted = OnAsyncCompleted;
+
+            OnInit(loader);
+        }
+
+        protected virtual void OnInit(ContentLoader loader)
+        {
         }
 
         protected void OnAsyncCompleted()
         {
-            RetrieveContent();
-
-            asyncCompletedAction.SafeInvoke(this as TContentHandle);
-        }
-
-        protected virtual void RetrieveContent()
-        {
-            content = default;
-            if (loader.IsContentValid<TContentType>())
-            {
-                content = loader.GetContent<TContentType>();
-            }
+            asyncCompletedAction.SafeInvoke(this);
         }
 
         public TContentHandle As<TContentHandle>()
@@ -103,16 +105,12 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
                 return;
             }
 
-            content = default;
-
             IncrementReferences();
         }
 
         public void Unload()
         {
             Assert.IsFalse(autoUnload, $"{GetType().Name} is trying to unload manually when it is setup to do it automatically");
-            
-            content = default;
 
             while (instanceCount > Const.INDEX_NONE)
             {

@@ -8,7 +8,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
 
     [DebuggerDisplay("{typeof(TContentType).Name}, {loader.content.ToString()}, Location: {loader.path}")]
     public class GameObjectHandle
-        : UnityContentHandle<GameObject, GameObjectHandle>
+        : UnityContentHandle<GameObject>
     {
         #region Constructors
         public GameObjectHandle() : base() { }

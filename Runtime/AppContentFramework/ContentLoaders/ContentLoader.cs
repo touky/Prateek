@@ -7,9 +7,13 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
     using Prateek.Runtime.Core.Consts;
     using Prateek.Runtime.Core.Extensions;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
+    using Prateek.Runtime.Core.Interfaces.IDebuggerDisplay;
 
-    [DebuggerDisplay("{content.ToString()}, Location: {path}, Status: {status}")]
-    public abstract class ContentLoader : IContentLoader, IHierarchicalTreeLeaf
+    [DebuggerDisplay(ConstDebuggerDisplay.Key)]
+    public abstract class ContentLoader
+        : IContentLoader
+        , IHierarchicalTreeLeaf
+        , IDebuggerDisplay
     {
         #region Fields
         /// <summary>
@@ -61,6 +65,8 @@ namespace Prateek.Runtime.AppContentFramework.ContentLoaders
                 }
             }
         }
+        
+        public string DebuggerDisplay { get { return $"Status: {status}, {content}, Location: {path}"; } }
         #endregion
 
         #region Constructors

@@ -6,7 +6,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Commands
     using UnityEngine.ResourceManagement.ResourceProviders;
 
     public abstract class SceneContentAccessResponse
-        : ContentAccessChangedResponse<SceneInstance, SceneHandle>
+        : ContentAccessChangedResponse<SceneHandle>
     {
         #region Class Methods
         protected override SceneHandle GetHandle()

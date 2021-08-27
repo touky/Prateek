@@ -6,20 +6,14 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
     using UnityEngine;
 
     [DebuggerDisplay("{typeof(TContentType).Name}, {loader.content.ToString()}, Location: {loader.path}")]
-    public abstract class UnityContentHandle<TContentType, TContentHandle>
-        : ContentHandle<TContentType, TContentHandle>
+    public abstract class UnityContentHandle<TContentType>
+        : ContentHandle<TContentType>
         where TContentType : Object
-        where TContentHandle : ContentHandle<TContentType, TContentHandle>
     {
         #region Class Methods
-        public override void Init(ContentLoader loader)
+        protected override void OnInit(ContentLoader loader)
         {
-            base.Init(loader);
-
-            loader.SetLoadContextParameters(new AddressableLoaderParameters
-            {
-                behaviour = LoaderBehaviour.Asset
-            });
+            loader.SetLoadContextParameters(new AddressableLoaderParameters { behaviour = LoaderBehaviour.Asset });
         }
         #endregion
     }

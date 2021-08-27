@@ -6,7 +6,7 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
 
     [DebuggerDisplay("{typeof(TContentType).Name}, {loader.content.ToString()}, Location: {loader.path}")]
     public class ScriptableObjectHandle<TContentType>
-        : UnityContentHandle<TContentType, ScriptableObjectHandle<TContentType>>
+        : UnityContentHandle<TContentType>
         where TContentType : ScriptableObject
     {
         #region Properties

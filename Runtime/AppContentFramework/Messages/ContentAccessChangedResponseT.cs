@@ -1,13 +1,14 @@
 namespace Prateek.Runtime.AppContentFramework.Messages
 {
     using Prateek.Runtime.AppContentFramework.ContentLoaders;
+    using Prateek.Runtime.AppContentFramework.ContentLoaders.Interfaces;
     using Prateek.Runtime.Core;
     using Prateek.Runtime.Core.Helpers;
     using Prateek.Runtime.Core.HierarchicalTree.Interfaces;
 
-    public abstract class ContentAccessChangedResponse<TContentType, TContentHandle>
+    public abstract class ContentAccessChangedResponse<TContentHandle>
         : ContentAccessChangedResponse
-        where TContentHandle : ContentHandle<TContentType, TContentHandle>, new()
+        where TContentHandle : IContentHandle, new()
     {
         #region Properties
         public DiffList<TContentHandle> Content
@@ -38,7 +39,10 @@ namespace Prateek.Runtime.AppContentFramework.Messages
         protected TContentHandle GetHandle(ContentLoader loader)
         {
             var handle = GetHandle();
-            handle.Init(loader);
+            if (handle is IContentHandleInit init)
+            {
+                init.Init(loader);
+            }
             return handle;
         }
 

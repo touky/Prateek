@@ -15,22 +15,25 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Handles
         #endregion
 
         #region Properties
-        public TContentType Component { get { return component; } }
+        public TContentType Component
+        {
+            get
+            {
+                if (component == null)
+                {
+                    var content = TypedContent;
+                    if (content != null)
+                    {
+                        component = content.GetComponent<TContentType>();
+                    }
+                }
+                return component;
+            }
+        }
         #endregion
 
         #region Constructors
         public ComponentHandle() : base() { }
-        #endregion
-
-        #region Class Methods
-        protected override void RetrieveContent()
-        {
-            base.RetrieveContent();
-
-            component = TypedContent.GetComponent<TContentType>();
-
-            Assert.IsNotNull(component);
-        }
         #endregion
 
         #region UnityEngine.Object

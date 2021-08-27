@@ -6,6 +6,6 @@ namespace Prateek.Runtime.AppContentFramework.Unity.Commands
     using UnityEngine;
 
     public abstract class GameObjectContentAccessResponse
-        : ContentAccessChangedResponse<GameObject, GameObjectHandle>
+        : ContentAccessChangedResponse<GameObjectHandle>
     { }
 }
